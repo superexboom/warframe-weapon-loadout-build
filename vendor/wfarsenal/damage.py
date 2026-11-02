@@ -1704,6 +1704,8 @@ def _apply_mods_spec_py(
             "is out of range"
         )
     mode = modes[fire_mode]
+    if mode.get("behaviorKind")=="ability-action":
+        raise ValueError(mode.get("unavailableReason") or "non-damage ability action")
     if (mode.get('behaviorKind') == 'auxiliary-melee'
             and weapon.get('slot') in ('primary','secondary','arch_gun')):
         raise ValueError(f"fire mode {fire_mode} is auxiliary melee, outside nonmelee scope")
@@ -1729,12 +1731,13 @@ def _apply_mods_spec_py(
         raise ValueError(f"{weapon.get('name')} fire mode {fire_mode} has no damage data")
 
     skipped = list(effect_list.skipped)
+    skipped.extend(f"{weapon.get('path')}: unsupported[{reason}]" for reason in weapon.get("exaltedUnsupported") or ())
     effects = list(effect_list)
     # Zoom buffs are the weapon's own upgrades and join the mod buckets.
     from .sniper import ZOOM_SOURCE, zoom_effects
     if not any(str(e.source_path or '').startswith(ZOOM_SOURCE) for e in effects):
         effects.extend(zoom_effects(weapon, fire_mode, scenario))
-    unsupported: set[str] = set()
+    unsupported: set[str] = set(weapon.get("exaltedUnsupported") or ())
     weapon_types = {
         str(path).rstrip("/")
         for path in (*tuple(weapon.get("ancestry") or ()), weapon.get("path"))
@@ -2200,7 +2203,7 @@ def _apply_mods_spec_py(
         continuous=continuous,
         status_chance=status_chance,
         multishot=multishot,
-        fire_rate=fire_rate,
+        fire_rate=min(fire_rate,1./mode["nativeFireCooldownSeconds"]) if mode.get("nativeFireCooldownSeconds") else fire_rate,
         magazine=magazine,
         # 装填时长在上方按灵化口径预计算（reload_time 局部变量）。
         reload_time=reload_time,
@@ -2212,7 +2215,7 @@ def _apply_mods_spec_py(
         recoil_multiplier=_combine(1.0, buckets["WEAPON_RECOIL"]),
         ammo_max_multiplier=_combine(1.0, buckets["WEAPON_AMMO_MAX"]),
         # 每扳机弹药消耗（Twin Grakatas 类）：sustained_attack_rate 折算用。
-        ammo_cost=_capped_ammo_cost(float(mode.get("ammoCost") or 1), buckets["WEAPON_AMMO_CONSUME_RATE"], compression_ammo),
+        ammo_cost=0. if mode.get("nativeAmmoFree") else _capped_ammo_cost(float(mode.get("ammoCost") or 1), buckets["WEAPON_AMMO_CONSUME_RATE"], compression_ammo),
         headshot_bonus_multiplier=_combine(
             1.0, buckets["WEAPON_HEADSHOT_MULTIPLIER"]
         ),

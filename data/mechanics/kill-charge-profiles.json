@@ -22,7 +22,33 @@
         "RequireFullCharges": null
       },
       "nativeSha256": "274a7096a887b20a0bbcba33b65d9a2ffd0bd94b0e7d0a9f14a217c7eba3d241",
-      "sourceModeKillChargeTrue": true
+      "sourceModeKillChargeTrue": true,
+      "damageScale": 5.0,
+      "damageScaleSource": "native acceptedfire140d4f102 ->1406c89a0 ->5f8 ->completefixedconsume141377080 storesstateac5 BEFOREfirec01400ebdf0 ->14133e460 ray submission; stategetter1403b99c0 applies5 tobothpackets",
+      "nativeScaleEvidence": {
+        "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+        "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+        "sources": [
+          {
+            "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
+            "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+            "rawAttributesSha256": "228816a723e14e397806f72bc023a4d402c5b820467961794cf62553c55f1a59",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+            "parent": "/Lotus/Types/Game/LotusWeapon",
+            "rawAttributesSha256": "cc06e93ed07418ffeb897430531ce364815d2088a237b3486319eca4d0f4e356",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Types/Game/LotusWeapon",
+            "parent": "",
+            "rawAttributesSha256": "4e4ff3b358962ff188c9bf130961eb1814eec7c47858234dd6f8b746f4dd9881",
+            "attributeRecord": true
+          }
+        ]
+      }
     },
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher": {
       "name": "Morgha",

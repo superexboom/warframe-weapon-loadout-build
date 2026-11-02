@@ -83,6 +83,8 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
     if fire_mode >= len(modes):
         raise Unsupported("fire mode out of range")  # the reference raises its own error
     mode = modes[fire_mode]
+    if mode.get("behaviorKind")=="ability-action":
+        raise Unsupported("non-damage ability action")
     if mode.get('nativeIgnoreFireIterations') and not getattr(wfcore,'NATIVE_FIRE_ITERATION_LOCK',0):
         raise Unsupported('native projectile count lock needs updated core')
     if (mode.get('behaviorKind') == 'auxiliary-melee'
@@ -141,7 +143,7 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
                        compression_profile.get('stacking') == 'adds')
 
     innate_entries, innate_candidates = _read_innate_elements(weapon)
-    notes: list[tuple[str, str]] = []  # (unsupported code, skipped line) in the reference's order
+    notes: list[tuple[str, str]] = [(reason, f"{label}: unsupported[{reason}]") for reason in weapon.get("exaltedUnsupported") or ()]  # explicit source limits
     if innate_candidates and not innate_entries:
         notes.append(("innate-element-instance-required", f"{label}: unsupported[innate-element-instance-required]"))
     damage = mode["damage"]
@@ -276,6 +278,10 @@ def apply(weapon, effects, fire_mode, scenario, *, need_spec=True):
     prep = prep_for(weapon, fire_mode, scenario)
     fields, spec_parts = wfcore.apply_mods(prep.core, effects, skipped, scenario.victim_status_count, need_spec)
     fields["innate_element_candidates"] = prep.candidates
+    source_mode=weapon['fireModes'][fire_mode]
+    if source_mode.get('nativeAmmoFree'):fields['ammo_cost']=0.
+    if source_mode.get('nativeFireCooldownSeconds'):
+        fields['fire_rate']=min(fields['fire_rate'],1./source_mode['nativeFireCooldownSeconds'])
     from .event_profiles import ignores_headshot_bonus
     ignored = ignores_headshot_bonus(weapon, fire_mode)
     fields = {name:value for key,value in fields.items() for name,value in

@@ -10,7 +10,7 @@ from collections import Counter
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 RANGED_SLOTS={'primary','secondary','arch_gun'}
-GAP=re.compile(r'unmodeled|unverified|unresolved|unavailable|not-modeled|not-implemented|not-supported|unapplied|unknown|approximate|idealized|ideal-projectile|boundary|order-fixed',re.I)
+GAP=re.compile(r'unmodeled|unverified|unresolved|unavailable|not-modeled|not-implemented|not-supported|unapplied|unknown|approximat|idealized|ideal-projectile|boundary|order-fixed',re.I)
 CONTEXT_GAPS={'syndicate-affinity-unavailable'}
 NATIVE_KEYS={'nativeSources','nativeSha256','nativeField','packageSha256','packagesSha256','packagesBinSha256','nativeSource','clientSha256','rawSources','rawSha256'}
 
@@ -36,6 +36,7 @@ def source_kinds(value):
 
 def mode_status(mode):
     if mode.get('behaviorKind')=='auxiliary-melee':return 'auxiliary-melee-excluded'
+    if mode.get('behaviorKind')=='ability-action':return 'ability-action-excluded'
     damage=mode.get('damage')
     if not isinstance(damage,dict):return 'missing-damage-data'
     if sum(float(v or 0.) for v in (damage.get('types') or {}).values())<=0:return 'no-positive-direct-payload'
@@ -69,7 +70,7 @@ def summarize(rows):
 
 def inventory(include_companions=False):
     import app
-    from wfarsenal import optimizer as opt,event_profiles as ep
+    from wfarsenal import optimizer as opt,event_profiles as ep,exalted
     from wfarsenal.manual_combat import prepare,reference
     from wfarsenal.damage import Scenario,ModEffect
     from wfarsenal.combat_replay import replay
@@ -77,6 +78,8 @@ def inventory(include_companions=False):
     for weapon in app.EXPORTS['weapons']:
         slot=weapon.get('slot')
         if slot not in RANGED_SLOTS and not (include_companions and slot=='companion'):continue
+        if exalted.meta(weapon):
+            weapon=exalted.apply_damage_rules(weapon,{'panel':{'abilityStrength':1.}})
         row=dict(path=weapon['path'],name=weapon.get('nameEn'),nameZh=weapon.get('nameZh'),slot=slot,modes=[])
         for index,mode in enumerate(weapon.get('fireModes') or []):
             item=dict(mode=index,nativeMode=mode.get('index',index),status=mode_status(mode),incarnon=bool(mode.get('isIncarnonForm')))
@@ -85,7 +88,7 @@ def inventory(include_companions=False):
                 selected=opt._select_fire_mode(weapon,index,weapon_type=opt._weapon_type(None,weapon))[0]
                 profile=ep.base_profile(selected,0)
                 co=ep.co_profile(selected,0)
-                kinds=source_kinds(profile)
+                kinds=sorted(set(source_kinds(profile))|set(source_kinds(weapon.get('nativeModeAudit',{}))))
                 inc=refs.get('incarnon',{}).get(weapon['path'],{}) if item['incarnon'] else {}
                 kinds=sorted(set(kinds)|set(source_kinds(inc)))
                 item.update(sourceKinds=kinds,coSourceKinds=source_kinds(co),
@@ -96,6 +99,7 @@ def inventory(include_companions=False):
                 for assumed,probe in ((False,False),(True,False),(False,True)):
                     effects=([ModEffect('WEAPON_FIRE_ITERATIONS','STACKING_MULTIPLY',1.2),
                               ModEffect('WEAPON_PROC_CHANCE','STACKING_MULTIPLY',.6)] if probe else [])
+                    effects.extend(exalted.weapon_effects(weapon))
                     fight=prepare(dict(weapon=weapon,fire_mode=index,effects=effects,scenario=Scenario(trigger_policy='assumed_max' if assumed else 'emergent')),[],[],assumed=assumed)
                     stats,radial=fight['resolve']('selected',{},0.)
                     notes.update(fight.get('unsupported') or [])

@@ -183,7 +183,7 @@ fn c_math(name: &str, x: f64, y: f64) -> f64 {
 #[pymodule]
 fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("ABI", 1)?;
-    m.add("ALT_EMBEDDED_LIFECYCLE", 2)?;
+    m.add("ALT_EMBEDDED_LIFECYCLE", 3)?;
     m.add("MELEE_INITIAL_COMBO_RECOVERY", 1)?;
     m.add("COMPANION_PROJECTILE_SEQUENCE", 1)?;
     m.add("PHYSICAL_PROJECTILE_LANES", 1)?;
@@ -207,6 +207,7 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("ADMITTED_PHYSICAL_PACKETS", 1)?;
     m.add("GRIMOIRE_SELECTED_COVERAGE", 1)?;
     m.add("SOURCE_OWNED_EMBED", 1)?;
+    m.add("NOX_AVATAR_LIFECYCLE", 1)?;
     m.add("SOURCE_MODE_KILL_CHARGE", 1)?;
     m.add("NATIVE_TYPE_QUANTIZATION", 1)?;
     m.add("ENERVATE_PROBABILISTIC_HITS", 1)?;

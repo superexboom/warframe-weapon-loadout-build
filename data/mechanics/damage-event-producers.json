@@ -1421,6 +1421,56 @@
         },
         "evidence": "docs/projectile-qualification-20261030/MUTALIST-LIVE-SOURCE.md; current-template-controls7, charge-transition-controls4"
       }
+    ],
+    "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun": [
+      {
+        "nativeField": "RadialDamage",
+        "nativeRoute": "heavy-mode0-ray-hit-avatar",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "ray-hit-avatar",
+        "evidence": "docs/mechanics-followthrough-20261102/MAUSOLON.md",
+        "componentOverrides": {
+          "takes_victim_crit": false,
+          "takes_condition_overload": true,
+          "takes_victim_stack_damage": true,
+          "coProfile": {
+            "behavior": "additive_with_base_damage",
+            "baseFraction": 2.5,
+            "excludeFlatSources": []
+          }
+        }
+      },
+      {
+        "nativeField": "RadialDamage",
+        "nativeRoute": "heavy-mode1-ray-hit-avatar",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "ray-hit-avatar",
+        "evidence": "docs/mechanics-followthrough-20261102/MAUSOLON.md",
+        "componentOverrides": {
+          "takes_victim_crit": false,
+          "takes_condition_overload": true,
+          "takes_victim_stack_damage": true,
+          "coProfile": {
+            "behavior": "additive_with_base_damage",
+            "baseFraction": 0.3333333333333333,
+            "excludeFlatSources": []
+          }
+        }
+      }
     ]
   }
 }

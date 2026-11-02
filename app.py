@@ -1330,7 +1330,8 @@ def _fire_mode_options(
             continue
         damage = mode.get("damage") if isinstance(mode.get("damage"), Mapping) else {}
         auxiliary = mode.get("behaviorKind") == "auxiliary-melee" and weapon.get("slot") in ("primary","secondary","arch_gun")
-        available = bool(damage.get("types")) and not auxiliary
+        action = mode.get("behaviorKind") == "ability-action"
+        available = bool(damage.get("types")) and not auxiliary and not action
         rows.append(
             {
                 "index": index,
@@ -1339,7 +1340,7 @@ def _fire_mode_options(
                 "isIncarnonForm": optimizer._select_fire_mode(weapon,index,weapon_type=weapon_type)[0].get('isIncarnonForm',False) if available else False,
                 "damageTotal": _finite_positive(damage.get("total")),
                 "available": available,
-                "issue": None if available else (f"fire mode {index} is auxiliary melee, outside nonmelee scope" if auxiliary else f"fire mode {index} has no direct damage types"),
+                "issue": None if available else (mode.get("unavailableReason") if action else f"fire mode {index} is auxiliary melee, outside nonmelee scope" if auxiliary else f"fire mode {index} has no direct damage types"),
                 "metricAvailability": _metric_availability(
                     weapon, weapon_type, index
                 ) if available else {},
@@ -2111,7 +2112,8 @@ def _exalted_catalog_payload(block: Mapping[str, Any] | None, weapon: Mapping[st
         "family": block.get("family"),
         "tier": block.get("tier"),
         "abilitySlot": block.get("abilitySlot"),
-        "headshotIssue": exalted_weapons.NO_HEADSHOT.get(str(block.get("family") or "")),
+        "headshotIssue": exalted_weapons.headshot_issue(weapon or {"exalted": block}),
+        "headshotLocked": exalted_weapons.locks_headshot_aim(weapon or {"exalted": block}),
         "frames": [
             {
                 "id": path,
@@ -3897,7 +3899,7 @@ def warframe_calculate_payload(payload: Any) -> dict[str, Any]:
 def _exalted_payload(payload: Mapping[str, Any], weapon: Mapping[str, Any]) -> Mapping[str, Any]:
     """Pin a request for an exalted weapon to its linked Warframe.
 
-    * no headshots where the weapon cannot land one (exalted.NO_HEADSHOT);
+    * no headshots for automatic torso targeting; damage flags stay independent;
     * the Warframe Arcane slots are the linked config's, not the weapon page's:
       only the ones the weapon calculation already supports count, the rest
       are listed as display-only;
@@ -3910,7 +3912,7 @@ def _exalted_payload(payload: Mapping[str, Any], weapon: Mapping[str, Any]) -> M
     loadout: dict[str, Any] = {"arcanes": [], "aura": None, "headshotIssue": exalted_weapons.headshot_issue(weapon)}
     names = {str(row.get("path")): row.get("nameZh") or row.get("nameEn")
              for key in ("arcanes", "mods") for row in WARFRAME_CATALOG.get(key) or () if isinstance(row, Mapping)}
-    if loadout["headshotIssue"]:
+    if exalted_weapons.locks_headshot_aim(weapon):
         out["headshotChance"] = 0.0
     link = payload.get("exaltedFrame") if isinstance(payload.get("exaltedFrame"), Mapping) else {}
     config = link.get("config") if isinstance(link.get("config"), Mapping) else {}
@@ -4062,6 +4064,8 @@ def build_weapon_payload(
     exalted_context = _exalted_context(payload, weapon_record)
     if exalted_context is not None:
         selected_weapon = exalted_weapons.apply_damage_rules(selected_weapon, exalted_context)
+        if selected_weapon["fireModes"][0].get("behaviorKind")=="ability-action":
+            raise SimulationError(selected_weapon["fireModes"][0]["unavailableReason"])
     catalog_mode = next(
         (
             mode
@@ -5772,7 +5776,7 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
         weapon_override["innateElements"] = [innate_selection]
     if isinstance(payload.get("specialSlotPolarities"), Mapping) and payload.get("specialSlotPolarities"):
         weapon_override["polarities"] = list(selected_weapon.get("polarities") or ())
-    for key in ("fireModes", "exaltedStrength", "exaltedDamageRule", "exaltedCast"):
+    for key in ("fireModes", "exaltedStrength", "exaltedDamageRule", "exaltedCast", "exaltedUnsupported"):
         if weapon_record.get("exaltedCast") is not None or weapon_record.get("exaltedStrength") is not None:
             if key in weapon_record:
                 weapon_override[key] = weapon_record[key]

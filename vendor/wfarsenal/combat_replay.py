@@ -1617,6 +1617,9 @@ def _reference_trajectory(
                 vec,_,_,_=attack_data(part,0.)
                 if not take({k:v*damage_rate_multiplier for k,v in vec.items()},t,'direct',cv2=spread(part,0.)):
                     add_procs(part,0.,t)
+        elif kind == 'nox-payload':
+            part,weight=payload
+            radial_hit(part,1.,t,weight=weight)
         elif kind == 'owned-embed':
             token,part=payload
             if token!=source_field_token:
@@ -2018,6 +2021,7 @@ def _reference_trajectory(
             finite_fields=getattr(active,'_finite_fields',())
             source_owned_fields=getattr(active,'_source_owned_fields',())
             owned_embed=getattr(active,'_owned_embed',None)
+            nox_projectile=getattr(active,'_nox_projectile',None)
             if source_owned_fields or owned_embed:
                 # New arrow replaces the previous arrow even if its direct hit
                 # kills; all old owner callbacks then fail this token check.
@@ -2030,6 +2034,7 @@ def _reference_trajectory(
             ):
                 active = replace(active, multishot=active.multishot * 6.0)
             physical_first_round=first_round
+            refreshed_contact_first_factor=(1.+active.first_shot_damage_bonus if first_round and getattr(active,'_live_hit_refresh',None) else 1.)
             if first_round and active.first_shot_damage_bonus:
                 active = copy(active)
                 factor = 1.0 + active.first_shot_damage_bonus
@@ -2110,6 +2115,25 @@ def _reference_trajectory(
                                 add_procs(lane_radial,0.,t,rp)
                             noncrit_no_proc_hit(lane_radial,0.,t)
                 died=gen!=generation
+            elif nox_projectile:
+                ms=max(0.,active.multishot);whole=math.floor(ms)
+                for slot in range(whole+int(ms>whole)):
+                    weight=1. if slot<whole else ms-whole
+                    if gen!=generation:
+                        stale+=1
+                        continue
+                    radial_hit(active,damage_rate_multiplier*sniper_factor*refreshed_contact_first_factor,t,weight=weight,aim=aim,contact=True)
+                    signal('on-body-hit',t,(1.-aim)*weight)
+                    signal('on-headshot',t,aim*weight)
+                    one=copy(active);one.multishot=weight
+                    enervate_hit(one,t,shot_puncture,aim)
+                    if gen!=generation:continue
+                    tick_part,blast_part=nox_projectile
+                    radial_hit(tick_part,1.,t,weight=weight)
+                    for age,survival in ((1.,1.),(2.,1.),(3.,.5)):
+                        push(t+age,'nox-payload',(tick_part,weight*survival),generation)
+                    push(t+3.1125,'nox-payload',(blast_part,weight),generation)
+                died=gen!=generation
             elif stackable:
                 if projectiles is None:
                     from .stackable_projectiles import StackableProjectiles
@@ -2152,7 +2176,7 @@ def _reference_trajectory(
                 spread(active,aim),
                 )
                 noncrit_no_proc_hit(active, aim, t)
-            if finite_fields and active.multishot>0 and not physical_lanes and not manual_detonation and not primary_delay and not stackable and not no_contact:
+            if finite_fields and active.multishot>0 and not nox_projectile and not physical_lanes and not manual_detonation and not primary_delay and not stackable and not no_contact:
                 # The spatial field survives death; modeled coverage remains
                 # bound to the original victim generation, never the next target.
                 finite_field_activations+=1
@@ -2175,7 +2199,7 @@ def _reference_trajectory(
                     if gen!=generation:
                         stale+=1
                         break
-                    radial_hit(active,damage_rate_multiplier*sniper_factor,t,weight=weight,aim=aim,contact=True)
+                    radial_hit(active,damage_rate_multiplier*sniper_factor*refreshed_contact_first_factor,t,weight=weight,aim=aim,contact=True)
                     signal('on-body-hit',t,(1.-aim)*weight)
                     signal('on-headshot',t,aim*weight)
                     contact=copy(active);contact.multishot=weight
@@ -2198,7 +2222,7 @@ def _reference_trajectory(
                     last_death=max(last_death,lifetime+death_delay)
                 died=gen!=generation
                 projectile_wait=max(0.,last_death-1./speed)
-            if not physical_lanes and not died and not manual_detonation and not primary_delay and not stackable and not no_contact:
+            if not nox_projectile and not physical_lanes and not died and not manual_detonation and not primary_delay and not stackable and not no_contact:
                 add_procs(active, aim, t, direct_packet, damage_scale=sniper_factor)
                 if source_owned_fields and gen==generation and active.multishot>0:
                     source_field_activations+=1
@@ -2223,7 +2247,7 @@ def _reference_trajectory(
                     for tick in range(int(math.ceil(duration * tick_rate - 1e-9))):
                         push(t + tick / tick_rate, 'lingering', part, gen)
             # A remote mine's blast waits for its detonation (queued with the mine).
-            radial_parts = (radial, *getattr(radial, '_additional_radials', ())) if radial and not physical_lanes and not stackable and not manual_detonation else ()
+            radial_parts = (radial, *getattr(radial, '_additional_radials', ())) if radial and not nox_projectile and not physical_lanes and not stackable and not manual_detonation else ()
             for part in radial_parts:
                 if gen != generation and not getattr(part,'_persist_after_kill',False):
                     stale += 1
@@ -2261,7 +2285,7 @@ def _reference_trajectory(
                 if burst_round==burst_size-1:
                     signal('on-burst-headshot',t,burst_head_probability)
                     burst_head_probability=1.
-            if not physical_lanes and not manual_detonation and not primary_delay and not stackable and not no_contact:
+            if not nox_projectile and not physical_lanes and not manual_detonation and not primary_delay and not stackable and not no_contact:
                 enervate_hit(active,t,shot_puncture,aim)
             signal('on-fire', t)
             through=(combat.get('projectileState') or {}).get('punchthroughTargets',0)
@@ -2277,7 +2301,7 @@ def _reference_trajectory(
                 onos_condition_hits-=completed*2.
                 if completed:
                     signal('on-onos-damage-condition',t,completed)
-            if not physical_lanes and not manual_detonation and not primary_delay and not stackable and not no_contact:
+            if not nox_projectile and not physical_lanes and not manual_detonation and not primary_delay and not stackable and not no_contact:
                 signal("on-hit", t, hit_count)
                 if aim<1.:
                     signal('on-body-hit',t,(1.-aim)*hit_count)

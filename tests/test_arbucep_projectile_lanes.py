@@ -160,7 +160,7 @@ def test_fractional_trajectory_keeps_representative_phase_discrete(prepare):
     assert all(isinstance(v,int) for v in result['projectileLaneBranches']['phaseByBranch'])
 
 
-def test_hash_pinned_importer_recovers_six_packets_and_rejects_source_drift():
+def test_hash_pinned_importer_recovers_six_packets_and_rejects_source_drift(tmp_path):
     from types import SimpleNamespace
     from tools import import_arbucep_projectile_lanes as importer
     lanes=lane_contract()['lanes']
@@ -183,6 +183,18 @@ def test_hash_pinned_importer_recovers_six_packets_and_rejects_source_drift():
     assert entry['packageSha256']=='00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06'
     assert [next(iter(lane['direct']['types'])) for lane in entry['projectileLanes']['lanes']]==list(TYPES)
     assert len(entry['nativeSources'])==7
+    assert 'arbucep-innate-mushroom-and-ammo-deco-script-unmodeled' not in entry['unmodeled']
+    assert 'arbucep-nokko-owner-mushroom-empowerment-requires-existing-ability-state' in entry['unmodeled']
+    audit=entry['scriptAudit']
+    assert audit['contact']['arguments']==['projectile-owner','nearby-mushroom',None,True]
+    assert audit['contact']['stateWrites']=={'isEmpowered':True,'doEmissive':True}
+    assert audit['contact']['preservesChargeAmount'] and audit['contact']['additionalWeaponDamage'] is False
+    assert audit['ammoDeco']['createsDamagePayload'] is False
+    assert {r['path']:r['sha256'] for r in audit['scripts']}==importer.SCRIPT_SOURCES
+    assert not any(key in entry for key in ('radials','lingering','periodicTriggers'))
+    changed_body=tmp_path/'changed.lua_B';changed_body.write_bytes(b'changed source')
+    with pytest.raises(ValueError,match='script identity changed'):
+        importer.verify_script_bodies(changed_body,changed_body)
     selector['projectileType']='other'
     with pytest.raises(ValueError,match='selector'):importer.extract(pkg)
     selector['projectileType']=''

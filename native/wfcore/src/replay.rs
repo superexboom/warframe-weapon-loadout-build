@@ -264,6 +264,7 @@ struct Stats {
     persist_after_kill: bool,
     lingering: Option<(usize, f64, f64)>,
     owned_embed: Option<(usize,f64,f64)>,
+    nox_projectile: Option<(usize,usize)>,
     live_co_unit: Option<usize>,
     source_fields: Vec<(usize,f64,f64,usize)>,
     finite_fields: Vec<(usize,f64,f64,usize)>,
@@ -301,6 +302,7 @@ impl Stats {
         self.primary_delay = 0.0;
         self.lingering = None;
         self.owned_embed=None;
+        self.nox_projectile=None;
         self.source_fields.clear();
         self.finite_fields.clear();
         self.embedded = None;
@@ -389,6 +391,7 @@ impl Stats {
             persist_after_kill: self.persist_after_kill,
             lingering: self.lingering,
             owned_embed:self.owned_embed,
+            nox_projectile:self.nox_projectile,
             live_co_unit: self.live_co_unit,
             source_fields:self.source_fields.clone(),
             finite_fields:self.finite_fields.clone(),
@@ -459,6 +462,7 @@ enum Kind {
     ReloadShell(f64, f64),
     Transform(u8),
     DelayedRadial(usize, f64),
+    NoxPayload(usize,f64),
     QuantaPrimary(f64),
     ZymosCarrier(usize, f64),
     ZymosSpawn(usize, Rc<Py<PyAny>>, f64),
@@ -1240,7 +1244,7 @@ impl<'py> Replay<'py> {
             body_only: match opt_attr(obj, "_body_only")? { Some(v) => v.is_truthy()?, None => false },
             impact_delay: match opt_attr(obj, "_impact_delay")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
             persist_after_kill: match opt_attr(obj, "_persist_after_kill")? { Some(v) => v.is_truthy()?, None => false },
-            lingering: None,owned_embed:None,live_co_unit:None,source_fields:Vec::new(),finite_fields:Vec::new(),
+            lingering: None,owned_embed:None,nox_projectile:None,live_co_unit:None,source_fields:Vec::new(),finite_fields:Vec::new(),
             embedded: None,
             primary_delay: match opt_attr(obj, "_primary_delay_seconds")? {
                 Some(v) if v.is_truthy()? => v.extract::<f64>()?,
@@ -1331,6 +1335,12 @@ impl<'py> Replay<'py> {
                 let part=self.view(&row.get_item(0)?)?;
                 self.stats[i].source_fields.push((part,row.get_item(1)?.extract()?,row.get_item(2)?.extract()?,row.get_item(3)?.extract()?));
             }
+        }
+        if let Some(parts)=opt_attr(obj,"_nox_projectile")? {
+            let row=parts.cast::<PyTuple>()?;
+            let tick=self.view(&row.get_item(0)?)?;
+            let blast=self.view(&row.get_item(1)?)?;
+            self.stats[i].nox_projectile=Some((tick,blast));
         }
         if let Some(field)=opt_attr(obj,"_owned_embed")? {
             let tuple=field.cast::<PyTuple>()?;
@@ -3715,6 +3725,9 @@ impl<'py> Replay<'py> {
                     self.ammo -= pmax(cost, 0.0);
                     self.signal("on-fire", t, 1.0);
                 }
+                Kind::NoxPayload(part,weight) => {
+                    self.radial_hit_at(part,1.0,t,true,Some(weight),0.0)?;
+                }
                 Kind::DelayedRadial(part, sniper_factor) => {
                     self.delayed_attacks += 1;
                     self.radial_hit(part, sniper_factor, t, true)?;
@@ -4280,6 +4293,7 @@ impl<'py> Replay<'py> {
                     let finite_fields=self.stats[active].finite_fields.clone();
                     let source_owned_fields=self.stats[active].source_fields.clone();
                     let owned_embed=self.stats[active].owned_embed;
+                    let nox_projectile=self.stats[active].nox_projectile;
                     if !source_owned_fields.is_empty() || owned_embed.is_some() {self.source_field_token+=1;}
                     if self.last_burst && self.form == BASE && self.ammo <= 3.0 {
                         active = self.derive(active, 10, 0.0, |v| {
@@ -4289,6 +4303,7 @@ impl<'py> Replay<'py> {
                         });
                     }
                     let physical_first_round = first_round;
+                    let refreshed_contact_first_factor=if first_round && opt_attr(self.stats[active].obj.bind(self.py),"_live_hit_refresh")?.is_some() {1.0+self.stats[active].first_shot_damage_bonus}else{1.0};
                     if first_round && self.stats[active].first_shot_damage_bonus != 0.0 {
                         let factor = 1.0 + self.stats[active].first_shot_damage_bonus;
                         active = self.derive(active, 1, factor, |v| {
@@ -4407,6 +4422,24 @@ impl<'py> Replay<'py> {
                             }}
                         }
                         self.physical_lane_selected=None;
+                    } else if let Some((tick_part,blast_part))=nox_projectile {
+                        let ms=pmax(0.0,self.stats[active].multishot);
+                        let whole=ms.floor() as usize;
+                        for slot in 0..whole+if ms>whole as f64 {1}else{0} {
+                            let weight=if slot<whole {1.0}else{ms-whole as f64};
+                            if self.gen!=generation {self.stale+=1;continue;}
+                            self.radial_hit_at(active,self.damage_rate_multiplier*sniper_factor*refreshed_contact_first_factor,t,true,Some(weight),aim)?;
+                            self.signal("on-body-hit",t,(1.0-aim)*weight);
+                            self.signal("on-headshot",t,aim*weight);
+                            let contact=self.derive(active,34,weight,|v| {v.multishot=weight;v.core.multishot=weight;});
+                            self.enervate_hit(contact,t,shot_puncture,aim);
+                            if self.gen!=generation {continue;}
+                            self.radial_hit_at(tick_part,1.0,t,true,Some(weight),0.0)?;
+                            for (age,survival) in [(1.0,1.0),(2.0,1.0),(3.0,0.5)] {
+                                self.push(t+age,Kind::NoxPayload(tick_part,weight*survival),Some(generation));
+                            }
+                            self.push(t+3.1125,Kind::NoxPayload(blast_part,weight),Some(generation));
+                        }
                     } else if let Some((profile, parts)) = stack.clone() {
                         if self.projectiles.is_none() {
                             self.projectiles = Some(Projectiles::new(self.projectile_state.clone()));
@@ -4514,7 +4547,7 @@ impl<'py> Replay<'py> {
                         for slot in 0..count {
                             let weight=if slot<whole {1.0}else{ms-whole as f64};
                             if self.gen!=generation {self.stale+=1;break;}
-                            self.radial_hit_at(active,self.damage_rate_multiplier*sniper_factor,t,true,Some(weight),aim)?;
+                            self.radial_hit_at(active,self.damage_rate_multiplier*sniper_factor*refreshed_contact_first_factor,t,true,Some(weight),aim)?;
                             self.signal("on-body-hit",t,(1.0-aim)*weight);
                             self.signal("on-headshot",t,aim*weight);
                             let contact=self.derive(active,34,weight,|v| {v.multishot=weight;v.core.multishot=weight;});
@@ -4535,7 +4568,7 @@ impl<'py> Replay<'py> {
                         projectile_wait=pmax(0.0,last_death-1.0/speed);
                     }
                     let mut parts: Vec<usize> = Vec::new();
-                    if let (Some(r), None, true) = (radial, self.mines, stack.is_none() && self.physical_lane_length==0) {
+                    if let (Some(r), None, true) = (radial, self.mines, nox_projectile.is_none() && stack.is_none() && self.physical_lane_length==0) {
                         parts.push(r);
                         parts.extend(self.stats[r].additional.iter().copied());
                     }
@@ -4587,7 +4620,7 @@ impl<'py> Replay<'py> {
                             burst_head_probability = 1.0;
                         }
                     }
-                    if !no_contact && self.physical_lane_length==0 && primary_delay == 0.0 && self.mines.is_none() && stack.is_none() {
+                    if nox_projectile.is_none() && !no_contact && self.physical_lane_length==0 && primary_delay == 0.0 && self.mines.is_none() && stack.is_none() {
                         self.enervate_hit(active, t, shot_puncture, aim);
                     }
                     if let Some((cost, fire_seconds, _)) = quanta {
@@ -4615,7 +4648,7 @@ impl<'py> Replay<'py> {
                             }
                         }
                     }
-                    if !no_contact && !delayed && self.physical_lane_length==0 {
+                    if nox_projectile.is_none() && !no_contact && !delayed && self.physical_lane_length==0 {
                     self.signal("on-hit", t, hit_count);
                     if aim < 1.0 {
                         self.signal("on-body-hit", t, (1.0 - aim) * hit_count);

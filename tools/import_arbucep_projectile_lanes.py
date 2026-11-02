@@ -12,7 +12,35 @@ except ImportError:  # direct CLI invocation
 PATH='/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGun'
 ELEMENTS=('EXPLOSION','CORROSIVE','GAS','MAGNETIC','RADIATION','VIRAL')
 BOUNDS=['arbucep-projectile-contact-and-radial-centre-coverage-idealized',
-        'arbucep-innate-mushroom-and-ammo-deco-script-unmodeled']
+        'arbucep-nokko-owner-mushroom-empowerment-requires-existing-ability-state',
+        'arbucep-flight-target-retiming-idealized']
+SCRIPT_SOURCES={
+    '/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunInnateMod.lua':
+        '9921dd92e1168e869471e701240abda1f3964249dd2138a3aa14b5b6c1f218d7',
+    '/Lotus/Scripts/Libs/NokkoUtilsLib.lua':
+        '6d3d3b3ea9fa06b611a7b738fd27ab9efd03fb7649850fc06e07c3dae7b6af07',
+}
+
+def verify_script_bodies(innate_body,utility_body):
+    for (script,expected),body in zip(SCRIPT_SOURCES.items(),(innate_body,utility_body)):
+        if hashlib.sha256(Path(body).read_bytes()).hexdigest()!=expected:
+            raise ValueError('Arbucep script identity changed: '+script)
+
+def script_audit():
+    return dict(status='weapon-source-closure-with-external-ability-state',
+        scripts=[dict(path=path,sha256=digest) for path,digest in SCRIPT_SOURCES.items()],
+        contact=dict(function='CheckForNokkoMushroomHit',utilityFunction='TriggerMushroom',
+            requirement='projectile owner has an existing matching Nokko ToxicShrooms or PowerShrooms entry',
+            arguments=['projectile-owner','nearby-mushroom',None,True],
+            stateWrites=dict(isEmpowered=True,doEmissive=True),
+            preservesChargeAmount=True,additionalWeaponDamage=False,
+            consumers='Nokko ability damage and charge rate belong to the registered mushroom owner'),
+        ammoDeco=dict(path=PATH.rsplit('/',1)[0]+'/NokkoArchgunAmmoDeco',
+            consumer='ScaleProjectileDecos -> 0x141971770 -> attachment virtual328 visual scale',
+            createsDamagePayload=False),
+        flight=dict(consumer='OnProjectileStart -> 0x141988400 -> exact0x141290180 writes171c',
+            policy='existing single-target contact-centre timing remains idealized'),
+        evidence='docs/mechanics-followthrough-20261102/SCRIPT-PAYLOADS.md')
 
 def extract(pkg):
     raw=pkg.resolve(PATH);b=raw['HeavyBehaviors'][0];f=b['fire:LotusWeaponProjectileFireBehavior']
@@ -39,7 +67,8 @@ def extract(pkg):
         apply_native_contract(radial)
         lanes.append(dict(index=i,projectile=path,direct=packet,radial=radial));paths.append(path)
     entry=dict(name='Arbucep',fireMode=0,projectileLanes=dict(kind='cyclic-physical-projectile',length=6,rawFireIterations=6,
-        extraPolicy='continue-sequence',initialPhase=0,lanes=lanes),unmodeled=BOUNDS,
+        extraPolicy='continue-sequence',initialPhase=0,lanes=lanes),unmodeled=list(BOUNDS),
+        scriptAudit=script_audit(),
         nativeSources=source_rows(pkg,[PATH,*paths]),packageSha256=PACKAGE_SHA256,
         nativeEvidence=dict(clientSha256=CLIENT_SHA256,selector='0x140e496d0 -> 0x141809340; null+6c8 blocks MS override',
             advance='0x14126e103..0x14126e13f every physical spawn',count='0x140f75d71..0x140f75e16 floor + Bernoulli',
@@ -47,9 +76,10 @@ def extract(pkg):
     return dict(schemaVersion=1,kind='auditedAttacks-mode-merge',weapons={PATH:{'0':entry}})
 
 def main():
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--packages-bin',type=Path,required=True);ap.add_argument('--client-exe',type=Path,required=True);ap.add_argument('--output',type=Path,required=True);a=ap.parse_args()
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--packages-bin',type=Path,required=True);ap.add_argument('--client-exe',type=Path,required=True);ap.add_argument('--output',type=Path,required=True);ap.add_argument('--innate-script-body',type=Path,required=True);ap.add_argument('--nokko-utils-script-body',type=Path,required=True);a=ap.parse_args()
     if a.output.exists():ap.error('preserve evidence: output already exists')
     if hashlib.sha256(a.client_exe.read_bytes()).hexdigest()!=CLIENT_SHA256:raise ValueError('native client changed')
+    verify_script_bodies(a.innate_script_body,a.nokko_utils_script_body)
     pkg=AuditedPackages(a.packages_bin);pkg.own=lru_cache(maxsize=None)(pkg.own);patch=extract(pkg)
     a.output.parent.mkdir(parents=True,exist_ok=True)
     with a.output.open('x',encoding='utf8') as f:json.dump(patch,f,ensure_ascii=False,indent=2);f.write('\n')

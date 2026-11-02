@@ -277,6 +277,9 @@ def build_entry(file, spec, attack, radial, row, mode_index, pkg, reference):
         impact_delay_seconds=delay, nativeSource=native_path, nativeField=field,
         damageTypeSource=type_source, multishotSource=('one native attack per spawned projectile' if field in ('ExplosiveAttack','EmbedDeathAttack') else 'native hitscan impact contract'),
         referenceTakesMultishot=radial.get('takes_multishot', True))
+    if (row['path']=='/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun'
+            and field=='RadialDamage' and (row.get('fireModeSource') or 'HeavyBehaviors')=='HeavyBehaviors'):
+        component['nativeRoute']=f"heavy-mode{mode['index']}-ray-hit-avatar"
     apply_native_contract(component)
     sources = []
     for path in dict.fromkeys((row['path'], native_path)):

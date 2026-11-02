@@ -284,6 +284,7 @@ def kill_charge_cycle(weapon, fire_mode):
     return dict(hits=float(entry['killsPerUse']), pool=float(entry['shotsPerGauge']),
                 enterSeconds=float(entry['switchInSeconds']), exitSeconds=float(entry['switchOutSeconds']),
                 chargeOn='kills', killCharged=True,
+                **({'damageScale':float(entry['damageScale'])} if 'damageScale' in entry else {}),
                 **({'sourceModeKillChargeTrue':True} if entry.get('sourceModeKillChargeTrue') else {}),
                 **({'chargeBeforeFire': True} if entry.get('chargeBeforeFire') else {}))
 
@@ -414,6 +415,12 @@ def _mode_profile(weapon, fire_mode=0):
 
 def base_profile(weapon, fire_mode=0):
     profile = with_native_charge(_mode_profile(weapon, fire_mode), weapon, weapon.get('__selectedFireMode__', fire_mode))
+    mode=(weapon.get('fireModes') or [{}])[fire_mode]
+    if mode.get('nativeFireCooldownSeconds'):
+        cooldown=float(mode['nativeFireCooldownSeconds'])
+        profile={**profile,'nativeFireCooldownSeconds':cooldown,
+            'nativeFireGate':dict(kind='instant-overheat',initiallyReady=True,cooldownSeconds=cooldown,
+                affectedByFireRate=False,primaryRecoveryEnabledInSingleMode=False)}
     if weapon.get('isIncarnonForm'):
         return profile
     battery = battery_profiles().get(weapon.get('path'))

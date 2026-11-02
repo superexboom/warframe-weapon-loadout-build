@@ -11270,7 +11270,7 @@ function sentinelChanged() {
 // 守护武器（AI 只瞄躯干、不开镜）与无法爆头的显赫武器：爆头率锁定为 0。
 function syncHeadshotLock() {
   const companion = isCompanionWeapon();
-  const exaltedIssue = state.buildWeapon?.exalted?.headshotIssue || "";
+  const exaltedIssue = state.buildWeapon?.exalted?.headshotLocked ? state.buildWeapon.exalted.headshotIssue : "";
   const locks = {
     "build-headshot-chance": companion ? "守护只瞄准躯干、不会开镜，对守护武器无效" : exaltedIssue ? `${exaltedIssue}，爆头率固定为 0` : "",
     "build-aiming": companion ? "守护只瞄准躯干、不会开镜，对守护武器无效" : "",

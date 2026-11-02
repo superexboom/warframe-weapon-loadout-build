@@ -89,6 +89,43 @@ def suit_items(index: packages_mod.PackageIndex, suit: str) -> set[str]:
     return {n if n.startswith("/") else f"{folder}/{n}" for n in names if isinstance(n, str) and n}
 
 
+
+def ranger_source_mode(index, path, native, mode):
+    """RangerBow equips sequence slot0; alternate sequence entries are Quiver."""
+    fire=extract_mod._sub_behaviour(native['Behaviors'][0],'fire:')
+    source=(fire.get('projectileSequenceList') or [])[0]
+    if fire.get('advanceProjectileSequenceOnFire')!=0:
+        raise ValueError('Artemis selected sequence contract changed')
+    data=extract_mod._resolve_damage(index,path,{**fire,'projectileType':source},
+        extract_mod._sub_behaviour(native['Behaviors'][0],'impact:') or {})
+    return {**mode,'damage':data}
+
+
+
+def exalted_resource_contract(record, native):
+    """Only audited zero-debit modes; charged/between-shot/heat actions stay separate."""
+    family=(record.get('exalted') or {}).get('family')
+    if family not in ('Choir','Pagemaster','Cowgirl'):
+        return
+    for mode in record['fireModes']:
+        source=native['Behaviors'][mode['index']]
+        fire=extract_mod._sub_behaviour(source,'fire:') or {}
+        state=extract_mod._sub_behaviour(source,'state:') or {}
+        if (state.get('UseReloadTimeBetweenShots',0)!=0 or fire.get('ConsumesChargesForFire',0)!=0
+                or (fire.get('UseAmmo',1)!=0 and fire.get('ammoRequirement',1)!=0)):
+            raise ValueError('exalted zero-ammo source contract changed: '+record['path'])
+        mode['nativeAmmoFree']=True
+        if family=='Pagemaster' and mode['index']==1:
+            signature=dict(InstantOverheat=1,OverheatStyle='OS_PLATEAU',OverheatTime=60,
+                ReduceOverheatAmount=1,OverheatCooldownModifier=1)
+            if (source.get('state:Type')!='/Lotus/Types/Weapon/LotusFireAndToggleStateBehavior'
+                    or any(state.get(k)!=v for k,v in signature.items())
+                    or native.get('AddingChargesReducesOverheat')!=1
+                    or native.get('AddCharges')!=[{'Conditions':['PRIMARY_DIRECT_HIT'],'NumCharges':1}]):
+                raise ValueError('Noctua alternate native cooldown changed')
+            mode['nativeFireCooldownSeconds']=60.
+
+
 def build(raw: Path, languages: Path) -> list[dict[str, Any]]:
     index = packages_mod.load(raw)
     catalogs = {lang: LocalizationCatalog.from_file(languages / f"{lang}.json") for lang in ("en", "zh")}
@@ -129,8 +166,62 @@ def build(raw: Path, languages: Path) -> list[dict[str, Any]]:
             "meleeTree": weapon.get("MeleeTreeType") or None,
             "icon": weapon.get("Icon") or None,
         }
+        if family=='Ranger':
+            record['fireModes'][0]=ranger_source_mode(index,path,weapon,record['fireModes'][0])
+            record['fireModes'][1].update(behaviorKind='ability-action',
+                unavailableReason='月神狩弓副操作释放箭袋技能，不是独立伤害射击')
+        exalted_resource_contract(record,weapon)
         rows.append(record)
     return rows
+
+
+
+def refresh_native_flags(packages_bin: Path, client_exe: Path) -> list[dict[str, Any]]:
+    """Refresh reviewed ranged descriptors without changing ability source amounts."""
+    from copy import deepcopy
+    from functools import lru_cache
+    import hashlib
+    sys.path.insert(0,str(REPO))
+    from tools.import_native_secondary_payloads import AuditedPackages,CLIENT_SHA256,source_rows,ancestry
+    from tools.refresh_spread_talons import preserve_lines
+    if hashlib.sha256(client_exe.read_bytes()).hexdigest()!=CLIENT_SHA256:
+        raise ValueError('exalted native consumers require re-audit for this client')
+    pkg=AuditedPackages(packages_bin);pkg.own=lru_cache(None)(pkg.own)
+    pkg.ancestry=lambda path:ancestry(pkg,path)
+    old=SIDECAR.read_bytes();payload=json.loads(old);changed=[]
+    for row in payload['data']:
+        if row.get('slot') not in ('primary','secondary'):
+            continue
+        modes=extract_mod._extract_fire_modes(pkg,row['path'],pkg.resolve(row['path']))
+        if len(modes)!=len(row['fireModes']):raise ValueError('exalted native mode count changed: '+row['path'])
+        for prior,current in zip(row['fireModes'],modes):
+            for key in ('nativeIgnoreFireIterations','nativeEventDeclarations'):
+                if key in current:prior[key]=deepcopy(current[key])
+            for key in ('ignoreHeadshotBonus','impactIgnoreHeadshotBonus','sourceHitType','forcedProcs'):
+                if key in (current.get('damage') or {}):prior['damage'][key]=current['damage'][key]
+            # Keep the same provenance in any existing component preview.
+            for old_part in prior['damage'].get('components',()):
+                matching=next((part for part in current['damage'].get('components',())
+                    if part.get('source')==old_part.get('source')),None)
+                if matching:
+                    for key in ('forcedProcs','sourceHitType'):
+                        if key in matching:old_part[key]=deepcopy(matching[key])
+            if prior['damage'].get('radial') and current['damage'].get('radial'):
+                for key in ('forcedProcs','sourceHitType'):
+                    if key in current['damage']['radial']:prior['damage']['radial'][key]=deepcopy(current['damage']['radial'][key])
+        if row['exalted']['family']=='Ranger':
+            row['fireModes'][0]=ranger_source_mode(pkg,row['path'],pkg.resolve(row['path']),row['fireModes'][0])
+            modes[0]=row['fireModes'][0]
+            row['fireModes'][1].update(behaviorKind='ability-action',
+                unavailableReason='月神狩弓副操作释放箭袋技能，不是独立伤害射击')
+        exalted_resource_contract(row,pkg.resolve(row['path']))
+        row['nativeModeAudit']=dict(clientSha256=CLIENT_SHA256,packagesBinSha256=pkg.sha256,
+            fields=['nativeIgnoreFireIterations','nativeEventDeclarations','headshot flags','sourceHitType','forced status counts','nativeAmmoFree','nativeFireCooldownSeconds'],
+            nativeSources=source_rows(pkg,[row['path'],*(m['damage']['projectile'] for m in modes if m.get('damage',{}).get('projectile'))]))
+        changed.append(row)
+    candidate=(json.dumps(payload,ensure_ascii=False,indent=1,sort_keys=True)+'\n').encode('utf8')
+    SIDECAR.write_bytes(preserve_lines(old,candidate))
+    return changed
 
 
 def apply(rows: list[dict[str, Any]]) -> None:
@@ -151,13 +242,18 @@ def main() -> int:
     parser.add_argument("--raw", type=Path, default=DEFAULT_RAW)
     parser.add_argument("--languages", type=Path, default=DEFAULT_LANGUAGES)
     parser.add_argument("--apply", action="store_true")
+    parser.add_argument("--refresh-native-flags",action="store_true")
+    parser.add_argument("--packages-bin",type=Path)
+    parser.add_argument("--client-exe",type=Path)
     args = parser.parse_args()
-    if args.apply and MERGE_FILE.is_file():
-        rows = json.loads(MERGE_FILE.read_text(encoding="utf-8"))
-    else:
-        rows = build(args.raw, args.languages)
-        MERGE_FILE.parent.mkdir(parents=True, exist_ok=True)
-        MERGE_FILE.write_text(json.dumps(rows, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
+    if args.refresh_native_flags:
+        if not args.packages_bin or not args.client_exe:parser.error("native refresh requires --packages-bin and --client-exe")
+        rows=refresh_native_flags(args.packages_bin,args.client_exe)
+        print(f"refreshed native flags for {len(rows)} ranged exalted records")
+        return 0
+    rows = build(args.raw, args.languages)
+    MERGE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    MERGE_FILE.write_text(json.dumps(rows, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
     for row in rows:
         ex = row["exalted"]
         modes = row.get("fireModes") or []

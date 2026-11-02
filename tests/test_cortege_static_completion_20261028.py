@@ -172,7 +172,7 @@ def test_importer_legacy_positive_consumption_preserved():
 def test_python_actual_cycle_charges_only_on_kills_and_spends_one_alt_use(monkeypatch):
     monkeypatch.setattr(native_replay, 'ENABLED', False)
     fight = combat()
-    assert fight['cycle'] == dict(hits=5.,pool=1.,enterSeconds=0.,exitSeconds=0.,chargeOn='kills',killCharged=True)
+    assert fight['cycle'] == dict(hits=5.,pool=1.,enterSeconds=0.,exitSeconds=0.,chargeOn='kills',killCharged=True,sourceModeKillChargeTrue=True)
     direct, _ = fight['resolve']('base', {}, 0)
     no_kills = replay(direct, enemy(), attacks_per_second=direct.fire_rate, window_seconds=1.,
                       combat=fight, collect_timeline=True)

@@ -1026,6 +1026,7 @@
       "critMultiplier": 2.0,
       "falloff": 0.75,
       "flightSpeed": 100,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.2,
       "projectile": "/Lotus/Powersuits/Choir/ChoirEruptProjectile",
       "radial": {
@@ -1061,6 +1062,22 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeAmmoFree": true,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      },
+      "projectile": {
+       "fields": {
+        "DealDamageThroughImpactBehavior": 1,
+        "SendEvents": 0
+       },
+       "path": "/Lotus/Powersuits/Choir/ChoirEruptProjectile"
+      }
+     },
      "reloadTime": 2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
     }
@@ -1075,6 +1092,51 @@
    "nameInternal": "ChoirEruptWeapon",
    "nameTag": "/Lotus/Language/Weapons/ChoirEruptWeaponName",
    "nameZh": "荣耀",
+   "nativeModeAudit": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "fields": [
+     "nativeIgnoreFireIterations",
+     "nativeEventDeclarations",
+     "headshot flags",
+     "sourceHitType",
+     "forced status counts",
+     "nativeAmmoFree",
+     "nativeFireCooldownSeconds"
+    ],
+    "nativeSources": [
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Choir/ChoirEruptWeaponBase",
+      "path": "/Lotus/Powersuits/Choir/ChoirEruptWeapon",
+      "rawAttributesSha256": "d37a27c3eb4da7736396ea27939305e70a5592abb3b69fe9ee301833abffdcde"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "path": "/Lotus/Powersuits/Choir/ChoirEruptWeaponBase",
+      "rawAttributesSha256": "6c6f97d5d94de6392f15941552fd4c760a47130b57fca64fd0d0f2651da0ad05"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "rawAttributesSha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/EE/Types/Engine/Projectile",
+      "path": "/Lotus/Powersuits/Choir/ChoirEruptProjectile",
+      "rawAttributesSha256": "c44fec2b9a75e44faf0d104f7849a6e0818c75604922426d578a8f3db96119e4"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/EE/Types/Engine/Projectile",
+      "rawAttributesSha256": "8b5fe36bc4e7e28d621d2b59a52648b98d1ca7738ca0fb4d85436ecd03548d2e"
+     }
+    ],
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+   },
    "omegaAttenuation": 1,
    "path": "/Lotus/Powersuits/Choir/ChoirEruptWeapon",
    "polarities": [
@@ -1125,12 +1187,14 @@
      "damage": {
       "critChance": 0.25,
       "critMultiplier": 3.0,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.1,
       "shares": {
        "DT_IMPACT": 0.5,
        "DT_PUNCTURE": 0.25,
        "DT_SLASH": 0.25
       },
+      "sourceHitType": "DHT_NONE",
       "total": 50.0,
       "types": {
        "DT_IMPACT": 25.0,
@@ -1148,6 +1212,15 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeAmmoFree": true,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      }
+     },
      "reloadTime": 1.75,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
     }
@@ -1162,6 +1235,39 @@
    "nameInternal": "PrimeSlingerPistols",
    "nameTag": "/Lotus/Language/Primes/PrimeSlingerPistolsName",
    "nameZh": "监察者双枪 Prime",
+   "nativeModeAudit": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "fields": [
+     "nativeIgnoreFireIterations",
+     "nativeEventDeclarations",
+     "headshot flags",
+     "sourceHitType",
+     "forced status counts",
+     "nativeAmmoFree",
+     "nativeFireCooldownSeconds"
+    ],
+    "nativeSources": [
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Cowgirl/SlingerPistolsBase",
+      "path": "/Lotus/Powersuits/Cowgirl/PrimeSlingerPistols",
+      "rawAttributesSha256": "8c2dc25e674d30516ef8b587d5beec8fa01005338ba56f20dc711da83fd0b9c7"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Types/Weapon/LotusCustomAimWeapon",
+      "path": "/Lotus/Powersuits/Cowgirl/SlingerPistolsBase",
+      "rawAttributesSha256": "c51bb83dbb9173baa4b39a6d8849b94e14c9c05a077c46ee0054c62e7500a3c9"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Types/Weapon/LotusCustomAimWeapon",
+      "rawAttributesSha256": "40ee169678fc0a5b528e5675e411849627c4d56c3a13ecadf52fc7ca687d48e7"
+     }
+    ],
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+   },
    "omegaAttenuation": null,
    "path": "/Lotus/Powersuits/Cowgirl/PrimeSlingerPistols",
    "polarities": [
@@ -1212,12 +1318,14 @@
      "damage": {
       "critChance": 0.25,
       "critMultiplier": 3.0,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.1,
       "shares": {
        "DT_IMPACT": 0.5,
        "DT_PUNCTURE": 0.25,
        "DT_SLASH": 0.25
       },
+      "sourceHitType": "DHT_NONE",
       "total": 50.0,
       "types": {
        "DT_IMPACT": 25.0,
@@ -1235,6 +1343,15 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeAmmoFree": true,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      }
+     },
      "reloadTime": 1.75,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
     }
@@ -1249,6 +1366,39 @@
    "nameInternal": "SlingerPistols",
    "nameTag": "/Lotus/Language/Items/GunFuGunName",
    "nameZh": "监察者双枪",
+   "nativeModeAudit": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "fields": [
+     "nativeIgnoreFireIterations",
+     "nativeEventDeclarations",
+     "headshot flags",
+     "sourceHitType",
+     "forced status counts",
+     "nativeAmmoFree",
+     "nativeFireCooldownSeconds"
+    ],
+    "nativeSources": [
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Cowgirl/SlingerPistolsBase",
+      "path": "/Lotus/Powersuits/Cowgirl/SlingerPistols",
+      "rawAttributesSha256": "8a09c473df0eef0984de22ca794a2eec51f4af352019a682f8c5743a6592a6dc"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Types/Weapon/LotusCustomAimWeapon",
+      "path": "/Lotus/Powersuits/Cowgirl/SlingerPistolsBase",
+      "rawAttributesSha256": "c51bb83dbb9173baa4b39a6d8849b94e14c9c05a077c46ee0054c62e7500a3c9"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Types/Weapon/LotusCustomAimWeapon",
+      "rawAttributesSha256": "40ee169678fc0a5b528e5675e411849627c4d56c3a13ecadf52fc7ca687d48e7"
+     }
+    ],
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+   },
    "omegaAttenuation": null,
    "path": "/Lotus/Powersuits/Cowgirl/SlingerPistols",
    "polarities": [
@@ -1774,12 +1924,14 @@
      "damage": {
       "critChance": 0.1,
       "critMultiplier": 2.0,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.25,
       "shares": {
        "DT_IMPACT": 0.1,
        "DT_PUNCTURE": 0.1,
        "DT_SLASH": 0.8
       },
+      "sourceHitType": "DHT_NONE",
       "total": 85.0,
       "types": {
        "DT_IMPACT": 8.5,
@@ -1797,6 +1949,14 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      }
+     },
      "reloadTime": 2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
     }
@@ -1811,6 +1971,39 @@
    "nameInternal": "FlightPistols",
    "nameTag": "/Lotus/Language/Items/FairyArchwingPistols",
    "nameZh": "Dex 妖精",
+   "nativeModeAudit": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "fields": [
+     "nativeIgnoreFireIterations",
+     "nativeEventDeclarations",
+     "headshot flags",
+     "sourceHitType",
+     "forced status counts",
+     "nativeAmmoFree",
+     "nativeFireCooldownSeconds"
+    ],
+    "nativeSources": [
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Fairy/BaseFlightPistols",
+      "path": "/Lotus/Powersuits/Fairy/FlightPistols",
+      "rawAttributesSha256": "8a09c473df0eef0984de22ca794a2eec51f4af352019a682f8c5743a6592a6dc"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "path": "/Lotus/Powersuits/Fairy/BaseFlightPistols",
+      "rawAttributesSha256": "63d5b4c722842b819d474a8cd5cbce661e40b6efbe8cf1ce0c447d4726491c67"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "rawAttributesSha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614"
+     }
+    ],
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+   },
    "omegaAttenuation": 1,
    "path": "/Lotus/Powersuits/Fairy/FlightPistols",
    "polarities": [
@@ -1950,12 +2143,14 @@
      "damage": {
       "critChance": 0.1,
       "critMultiplier": 2.0,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.25,
       "shares": {
        "DT_IMPACT": 0.1,
        "DT_PUNCTURE": 0.1,
        "DT_SLASH": 0.8
       },
+      "sourceHitType": "DHT_NONE",
       "total": 85.0,
       "types": {
        "DT_IMPACT": 8.5,
@@ -1973,6 +2168,14 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      }
+     },
      "reloadTime": 2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
     }
@@ -1987,6 +2190,39 @@
    "nameInternal": "PrimeFlightPistols",
    "nameTag": "/Lotus/Language/Primes/PrimeFlightPistolsName",
    "nameZh": "Dex 妖精 Prime",
+   "nativeModeAudit": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "fields": [
+     "nativeIgnoreFireIterations",
+     "nativeEventDeclarations",
+     "headshot flags",
+     "sourceHitType",
+     "forced status counts",
+     "nativeAmmoFree",
+     "nativeFireCooldownSeconds"
+    ],
+    "nativeSources": [
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Fairy/BaseFlightPistols",
+      "path": "/Lotus/Powersuits/Fairy/PrimeFlightPistols",
+      "rawAttributesSha256": "abbd277aa2f4378e5ea03a4edaeba07409c9e3a3f659132ba01c17da4798ed93"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "path": "/Lotus/Powersuits/Fairy/BaseFlightPistols",
+      "rawAttributesSha256": "63d5b4c722842b819d474a8cd5cbce661e40b6efbe8cf1ce0c447d4726491c67"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "rawAttributesSha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614"
+     }
+    ],
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+   },
    "omegaAttenuation": 1,
    "path": "/Lotus/Powersuits/Fairy/PrimeFlightPistols",
    "polarities": [
@@ -2130,12 +2366,14 @@
      "damage": {
       "critChance": 0.44999999,
       "critMultiplier": 3.0,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.1,
       "shares": {
        "DT_IMPACT": 0.05,
        "DT_PUNCTURE": 0.85,
        "DT_SLASH": 0.1
       },
+      "sourceHitType": "DHT_NONE",
       "total": 255.0,
       "types": {
        "DT_IMPACT": 12.75,
@@ -2153,6 +2391,14 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      }
+     },
      "reloadTime": 2.25,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     },
@@ -2165,6 +2411,15 @@
        {
         "falloff": 0.60000002,
         "forcedProcs": [
+         "PT_CHILLED",
+         "PT_CHILLED",
+         "PT_CHILLED",
+         "PT_CHILLED",
+         "PT_CHILLED",
+         "PT_CHILLED",
+         "PT_CHILLED",
+         "PT_CHILLED",
+         "PT_CHILLED",
          "PT_CHILLED"
         ],
         "procChance": 0,
@@ -2173,6 +2428,7 @@
          "DT_FREEZE": 1.0
         },
         "source": "ExplosiveAttack",
+        "sourceHitType": "DHT_RADIAL",
         "total": 20.0,
         "types": {
          "DT_FREEZE": 20.0
@@ -2184,13 +2440,32 @@
       "falloff": 0.60000002,
       "flightSpeed": 35,
       "forcedProcs": [
+       "PT_CHILLED",
+       "PT_CHILLED",
+       "PT_CHILLED",
+       "PT_CHILLED",
+       "PT_CHILLED",
+       "PT_CHILLED",
+       "PT_CHILLED",
+       "PT_CHILLED",
+       "PT_CHILLED",
        "PT_CHILLED"
       ],
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0,
       "projectile": "/Lotus/Powersuits/Frumentarius/ExaltedSniperAltProjectile",
       "radial": {
        "falloff": 0.60000002,
        "forcedProcs": [
+        "PT_CHILLED",
+        "PT_CHILLED",
+        "PT_CHILLED",
+        "PT_CHILLED",
+        "PT_CHILLED",
+        "PT_CHILLED",
+        "PT_CHILLED",
+        "PT_CHILLED",
+        "PT_CHILLED",
         "PT_CHILLED"
        ],
        "procChance": 0,
@@ -2199,6 +2474,7 @@
         "DT_FREEZE": 1.0
        },
        "source": "ExplosiveAttack",
+       "sourceHitType": "DHT_RADIAL",
        "total": 20.0,
        "types": {
         "DT_FREEZE": 20.0
@@ -2209,6 +2485,7 @@
        "DT_FREEZE": 1.0
       },
       "source": "ExplosiveAttack",
+      "sourceHitType": "DHT_RADIAL",
       "total": 20.0,
       "types": {
        "DT_FREEZE": 20.0
@@ -2224,6 +2501,20 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      },
+      "projectile": {
+       "fields": {
+        "DealDamageThroughImpactBehavior": 1
+       },
+       "path": "/Lotus/Powersuits/Frumentarius/ExaltedSniperAltProjectile"
+      }
+     },
      "reloadTime": 2.25,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }
@@ -2238,6 +2529,75 @@
    "nameInternal": "ExaltedSniper",
    "nameTag": "/Lotus/Language/Weapons/TnExaltedSniperName",
    "nameZh": "肃清者",
+   "nativeModeAudit": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "fields": [
+     "nativeIgnoreFireIterations",
+     "nativeEventDeclarations",
+     "headshot flags",
+     "sourceHitType",
+     "forced status counts",
+     "nativeAmmoFree",
+     "nativeFireCooldownSeconds"
+    ],
+    "nativeSources": [
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Frumentarius/ExaltedSniperBase",
+      "path": "/Lotus/Powersuits/Frumentarius/ExaltedSniper",
+      "rawAttributesSha256": "896a1bfc29f7682bb2f7d8b513491966ba15b3c581a7692d254623949f29d9cd"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Rifle/LotusSniperRifle",
+      "path": "/Lotus/Powersuits/Frumentarius/ExaltedSniperBase",
+      "rawAttributesSha256": "54298cb78c4f171fd632f34747d400b7efdebfb93bfb5539becab4c1628f82c8"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "path": "/Lotus/Weapons/Tenno/Rifle/LotusSniperRifle",
+      "rawAttributesSha256": "59871d81dc1e383d2062ab6bce1f8301bad93c71cbc37af39075d5693ad3d9dc"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+      "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+      "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+      "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+      "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Types/Weapons/GunProjectile",
+      "path": "/Lotus/Powersuits/Frumentarius/ExaltedSniperAltProjectile",
+      "rawAttributesSha256": "a2fbf95374ae6960937b2aaa40d745136b09d66810d1bf4e8ba8e82c7be8f416"
+     },
+     {
+      "attributeRecord": false,
+      "parent": "/EE/Types/Engine/Projectile",
+      "path": "/Lotus/Types/Weapons/GunProjectile",
+      "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/EE/Types/Engine/Projectile",
+      "rawAttributesSha256": "8b5fe36bc4e7e28d621d2b59a52648b98d1ca7738ca0fb4d85436ecd03548d2e"
+     }
+    ],
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+   },
    "omegaAttenuation": 1.3,
    "path": "/Lotus/Powersuits/Frumentarius/ExaltedSniper",
    "polarities": [
@@ -2932,10 +3292,12 @@
      "damage": {
       "critChance": 0.050000001,
       "critMultiplier": 2.0,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.059999999,
       "shares": {
        "DT_IMPACT": 1.0
       },
+      "sourceHitType": "DHT_NONE",
       "total": 10.0,
       "types": {
        "DT_IMPACT": 10.0
@@ -2951,6 +3313,20 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      },
+      "projectile": {
+       "fields": {
+        "DealDamageThroughImpactBehavior": 1
+       },
+       "path": "/Lotus/Powersuits/IronFrame/BlastEruptionProjectile"
+      }
+     },
      "reloadTime": 1,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge"
     },
@@ -2961,12 +3337,14 @@
      "damage": {
       "critChance": 0.0,
       "critMultiplier": 2.0,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.1,
       "shares": {
        "DT_IMPACT": 0.333333,
        "DT_PUNCTURE": 0.333333,
        "DT_SLASH": 0.333334
       },
+      "sourceHitType": "DHT_NONE",
       "total": 10.0,
       "types": {
        "DT_IMPACT": 3.33333,
@@ -2984,6 +3362,20 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      },
+      "projectile": {
+       "fields": {
+        "DealDamageThroughImpactBehavior": 1
+       },
+       "path": "/Lotus/Powersuits/IronFrame/BlastAugmentProjectile"
+      }
+     },
      "reloadTime": 2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst"
     }
@@ -2998,6 +3390,39 @@
    "nameInternal": "BlastWeapon",
    "nameTag": "/Lotus/Language/Suits/IronFrameBlasterName",
    "nameZh": "野火充能",
+   "nativeModeAudit": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "fields": [
+     "nativeIgnoreFireIterations",
+     "nativeEventDeclarations",
+     "headshot flags",
+     "sourceHitType",
+     "forced status counts",
+     "nativeAmmoFree",
+     "nativeFireCooldownSeconds"
+    ],
+    "nativeSources": [
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/IronFrame/BlastWeaponBase",
+      "path": "/Lotus/Powersuits/IronFrame/BlastWeapon",
+      "rawAttributesSha256": "8a09c473df0eef0984de22ca794a2eec51f4af352019a682f8c5743a6592a6dc"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "path": "/Lotus/Powersuits/IronFrame/BlastWeaponBase",
+      "rawAttributesSha256": "ee15ceb32d101b2051bfe34902b1ff7ee35cb6bb00090dd4517fc61d76debcbe"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "rawAttributesSha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614"
+     }
+    ],
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+   },
    "omegaAttenuation": 1,
    "path": "/Lotus/Powersuits/IronFrame/BlastWeapon",
    "polarities": [
@@ -3049,10 +3474,12 @@
      "damage": {
       "critChance": 0.050000001,
       "critMultiplier": 2.0,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.059999999,
       "shares": {
        "DT_IMPACT": 1.0
       },
+      "sourceHitType": "DHT_NONE",
       "total": 10.0,
       "types": {
        "DT_IMPACT": 10.0
@@ -3068,6 +3495,20 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      },
+      "projectile": {
+       "fields": {
+        "DealDamageThroughImpactBehavior": 1
+       },
+       "path": "/Lotus/Powersuits/IronFrame/BlastEruptionProjectile"
+      }
+     },
      "reloadTime": 1,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge"
     },
@@ -3078,12 +3519,14 @@
      "damage": {
       "critChance": 0.0,
       "critMultiplier": 2.0,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.1,
       "shares": {
        "DT_IMPACT": 0.333333,
        "DT_PUNCTURE": 0.333333,
        "DT_SLASH": 0.333334
       },
+      "sourceHitType": "DHT_NONE",
       "total": 10.0,
       "types": {
        "DT_IMPACT": 3.33333,
@@ -3101,6 +3544,20 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      },
+      "projectile": {
+       "fields": {
+        "DealDamageThroughImpactBehavior": 1
+       },
+       "path": "/Lotus/Powersuits/IronFrame/BlastAugmentProjectile"
+      }
+     },
      "reloadTime": 2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst"
     }
@@ -3115,6 +3572,39 @@
    "nameInternal": "BlastWeaponPrime",
    "nameTag": "/Lotus/Language/Primes/BlastWeaponPrimeName",
    "nameZh": "野火充能 Prime",
+   "nativeModeAudit": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "fields": [
+     "nativeIgnoreFireIterations",
+     "nativeEventDeclarations",
+     "headshot flags",
+     "sourceHitType",
+     "forced status counts",
+     "nativeAmmoFree",
+     "nativeFireCooldownSeconds"
+    ],
+    "nativeSources": [
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/IronFrame/BlastWeaponBase",
+      "path": "/Lotus/Powersuits/IronFrame/BlastWeaponPrime",
+      "rawAttributesSha256": "b7c640eff6fda886f7657babac7bcc21bc4843ed0ebcefcebfef92c8adca2e44"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "path": "/Lotus/Powersuits/IronFrame/BlastWeaponBase",
+      "rawAttributesSha256": "ee15ceb32d101b2051bfe34902b1ff7ee35cb6bb00090dd4517fc61d76debcbe"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "rawAttributesSha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614"
+     }
+    ],
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+   },
    "omegaAttenuation": 1,
    "path": "/Lotus/Powersuits/IronFrame/BlastWeaponPrime",
    "polarities": [
@@ -4950,6 +5440,7 @@
       "critChance": 0.30000001,
       "critMultiplier": 2.0,
       "flightSpeed": 80,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.25,
       "projectile": "/Lotus/Powersuits/Pagemaster/ExaltedBookProj",
       "shares": {
@@ -4970,6 +5461,21 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeAmmoFree": true,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      },
+      "projectile": {
+       "fields": {
+        "DealDamageThroughImpactBehavior": 1
+       },
+       "path": "/Lotus/Powersuits/Pagemaster/ExaltedBookProj"
+      }
+     },
      "reloadTime": 0.0099999998,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
     },
@@ -4984,12 +5490,15 @@
       "forcedProcs": [
        "PT_STAGGERED"
       ],
+      "ignoreHeadshotBonus": true,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.44999999,
       "projectile": "/Lotus/Powersuits/Pagemaster/ExaltedBookAltFireProj",
       "shares": {
        "DT_IMPACT": 0.4,
        "DT_RADIATION": 0.6
       },
+      "sourceHitType": "DHT_PROJECTILE",
       "total": 2500.0,
       "types": {
        "DT_IMPACT": 1000.0,
@@ -5006,6 +5515,24 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeAmmoFree": true,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      },
+      "projectile": {
+       "fields": {
+        "DealDamageThroughImpactBehavior": 1,
+        "IgnoreHeadShotBonus": 1
+       },
+       "path": "/Lotus/Powersuits/Pagemaster/ExaltedBookAltFireProj"
+      }
+     },
+     "nativeFireCooldownSeconds": 60.0,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 0.0099999998,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }
@@ -5020,6 +5547,75 @@
    "nameInternal": "ExaltedBook",
    "nameTag": "/Lotus/Language/Weapons/TnNoctuaName",
    "nameZh": "夜枭",
+   "nativeModeAudit": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "fields": [
+     "nativeIgnoreFireIterations",
+     "nativeEventDeclarations",
+     "headshot flags",
+     "sourceHitType",
+     "forced status counts",
+     "nativeAmmoFree",
+     "nativeFireCooldownSeconds"
+    ],
+    "nativeSources": [
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Pagemaster/ExaltedBookBase",
+      "path": "/Lotus/Powersuits/Pagemaster/ExaltedBook",
+      "rawAttributesSha256": "aaedc8023cf7d73b0715956aebcb3926f8d6302c76e87e6b03b7dbe79af0495e"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+      "path": "/Lotus/Powersuits/Pagemaster/ExaltedBookBase",
+      "rawAttributesSha256": "95aaf556409572fa739dc540b362c749c46248b769e4e2db36e41f3e4a950f3e"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Pistol/LotusGrimoire",
+      "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+      "rawAttributesSha256": "1e95522336887a989dfe376263e394f5d4e4713658e6a37c485b7d498ea0fd2c"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "path": "/Lotus/Weapons/Tenno/Pistol/LotusGrimoire",
+      "rawAttributesSha256": "f64b74e200709cd9c855552a9f547f366c50a1f0fe94e13449e067a930ab7e35"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "rawAttributesSha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/EE/Types/Engine/GuidedProjectile",
+      "path": "/Lotus/Powersuits/Pagemaster/ExaltedBookProj",
+      "rawAttributesSha256": "5aca1608833e79f7892d051bfd6b491141df2939c6712214629e3832054d97f7"
+     },
+     {
+      "attributeRecord": false,
+      "parent": "",
+      "path": "/EE/Types/Engine/GuidedProjectile",
+      "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Types/Weapon/WaveProjectile",
+      "path": "/Lotus/Powersuits/Pagemaster/ExaltedBookAltFireProj",
+      "rawAttributesSha256": "1f15cbdb99dca899faf0ef241614c613984c35722634c700e4188a6e8875d107"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Types/Weapon/WaveProjectile",
+      "rawAttributesSha256": "d9f3f1dd60ea8b5e69ea5dc5ddc88817826f8b6a60061ea7ed2ece450fb42cfd"
+     }
+    ],
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+   },
    "omegaAttenuation": 0.60000002,
    "path": "/Lotus/Powersuits/Pagemaster/ExaltedBook",
    "polarities": [
@@ -5071,19 +5667,22 @@
      "ammoType": "",
      "chargeTime": 1,
      "damage": {
-      "critChance": 0.2,
-      "critMultiplier": 1.5,
-      "procChance": 0.1,
+      "critChance": 0.25,
+      "critMultiplier": 2.0,
+      "flightSpeed": 100,
+      "impactIgnoreHeadshotBonus": false,
+      "procChance": 0.2,
+      "projectile": "/Lotus/Powersuits/Ranger/Projectiles/ExaltedArrow",
       "shares": {
-       "DT_IMPACT": 0.333333,
-       "DT_PUNCTURE": 0.333333,
-       "DT_SLASH": 0.333334
+       "DT_IMPACT": 0.14,
+       "DT_PUNCTURE": 0.8,
+       "DT_SLASH": 0.06
       },
-      "total": 8.0,
+      "total": 75.0,
       "types": {
-       "DT_IMPACT": 2.666664,
-       "DT_PUNCTURE": 2.666664,
-       "DT_SLASH": 2.666672
+       "DT_IMPACT": 10.5,
+       "DT_PUNCTURE": 60.000001,
+       "DT_SLASH": 4.5
       }
      },
      "falloffMinDamage": 0,
@@ -5096,22 +5695,33 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      }
+     },
      "reloadTime": 0.85000002,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge"
     },
     {
      "ammoCost": 0,
      "ammoType": "",
+     "behaviorKind": "ability-action",
      "chargeTime": null,
      "damage": {
       "critChance": 0.2,
       "critMultiplier": 1.5,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.1,
       "shares": {
        "DT_IMPACT": 0.333333,
        "DT_PUNCTURE": 0.333333,
        "DT_SLASH": 0.333334
       },
+      "sourceHitType": "DHT_NONE",
       "total": 8.0,
       "types": {
        "DT_IMPACT": 2.666664,
@@ -5129,8 +5739,18 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      }
+     },
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 0.69999999,
-     "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+     "unavailableReason": "月神狩弓副操作释放箭袋技能，不是独立伤害射击"
     }
    ],
    "gripType": "BOW",
@@ -5143,6 +5763,81 @@
    "nameInternal": "ExaltedBow",
    "nameTag": "/Lotus/Language/Suits/RangerBowAbilityName",
    "nameZh": "月神狩弓",
+   "nativeModeAudit": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "fields": [
+     "nativeIgnoreFireIterations",
+     "nativeEventDeclarations",
+     "headshot flags",
+     "sourceHitType",
+     "forced status counts",
+     "nativeAmmoFree",
+     "nativeFireCooldownSeconds"
+    ],
+    "nativeSources": [
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Ranger/ExaltedBowBase",
+      "path": "/Lotus/Powersuits/Ranger/ExaltedBow",
+      "rawAttributesSha256": "4ea393709535ac6ff6178c910edb25435ee8051c97052f9a71cb867530463d12"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Bows/LotusLongBow",
+      "path": "/Lotus/Powersuits/Ranger/ExaltedBowBase",
+      "rawAttributesSha256": "f9156694ed86fd489979739e7b30bf4934cd71deabb5f1cccf735bb1241a48c1"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Bows/LotusBow",
+      "path": "/Lotus/Weapons/Tenno/Bows/LotusLongBow",
+      "rawAttributesSha256": "6ef8b164b797e2893f88a36cc63af2d906fa3e9d91f3385a9ba4c13255675d69"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "path": "/Lotus/Weapons/Tenno/Bows/LotusBow",
+      "rawAttributesSha256": "d4f2257c6f6dcaab3f3ade462818d7e8f5877bb4ca2e7cff28f031b952454859"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+      "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+      "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+      "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+      "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Types/Weapons/BoltoProjectile",
+      "path": "/Lotus/Powersuits/Ranger/Projectiles/ExaltedArrow",
+      "rawAttributesSha256": "c6507fe1671609efe6ae899233e2bf1e832c9f1f2daf802e9a6257872dee0369"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Types/Weapon/BoltoProjectile",
+      "path": "/Lotus/Types/Weapons/BoltoProjectile",
+      "rawAttributesSha256": "d329d792d64ba673cbfb09954ddfd2529e6c128ff9c44d8f037e0f2238618808"
+     },
+     {
+      "attributeRecord": false,
+      "parent": "",
+      "path": "/Lotus/Types/Weapon/BoltoProjectile",
+      "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+     }
+    ],
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+   },
    "omegaAttenuation": 1,
    "path": "/Lotus/Powersuits/Ranger/ExaltedBow",
    "polarities": [
@@ -5194,19 +5889,22 @@
      "ammoType": "",
      "chargeTime": 1,
      "damage": {
-      "critChance": 0.2,
-      "critMultiplier": 1.5,
-      "procChance": 0.1,
+      "critChance": 0.25,
+      "critMultiplier": 2.0,
+      "flightSpeed": 100,
+      "impactIgnoreHeadshotBonus": false,
+      "procChance": 0.2,
+      "projectile": "/Lotus/Powersuits/Ranger/Projectiles/PrimeExaltedArrow",
       "shares": {
-       "DT_IMPACT": 0.333333,
-       "DT_PUNCTURE": 0.333333,
-       "DT_SLASH": 0.333334
+       "DT_IMPACT": 0.14,
+       "DT_PUNCTURE": 0.8,
+       "DT_SLASH": 0.06
       },
-      "total": 8.0,
+      "total": 75.0,
       "types": {
-       "DT_IMPACT": 2.666664,
-       "DT_PUNCTURE": 2.666664,
-       "DT_SLASH": 2.666672
+       "DT_IMPACT": 10.5,
+       "DT_PUNCTURE": 60.000001,
+       "DT_SLASH": 4.5
       }
      },
      "falloffMinDamage": 0,
@@ -5219,22 +5917,33 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      }
+     },
      "reloadTime": 0.85000002,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge"
     },
     {
      "ammoCost": 0,
      "ammoType": "",
+     "behaviorKind": "ability-action",
      "chargeTime": null,
      "damage": {
       "critChance": 0.2,
       "critMultiplier": 1.5,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.1,
       "shares": {
        "DT_IMPACT": 0.333333,
        "DT_PUNCTURE": 0.333333,
        "DT_SLASH": 0.333334
       },
+      "sourceHitType": "DHT_NONE",
       "total": 8.0,
       "types": {
        "DT_IMPACT": 2.666664,
@@ -5252,8 +5961,18 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      }
+     },
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 0.69999999,
-     "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+     "unavailableReason": "月神狩弓副操作释放箭袋技能，不是独立伤害射击"
     }
    ],
    "gripType": "BOW",
@@ -5266,6 +5985,81 @@
    "nameInternal": "PrimeExaltedBow",
    "nameTag": "/Lotus/Language/Primes/IvaraPrimeExaltedBowName",
    "nameZh": "月神狩弓 Prime",
+   "nativeModeAudit": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "fields": [
+     "nativeIgnoreFireIterations",
+     "nativeEventDeclarations",
+     "headshot flags",
+     "sourceHitType",
+     "forced status counts",
+     "nativeAmmoFree",
+     "nativeFireCooldownSeconds"
+    ],
+    "nativeSources": [
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Ranger/ExaltedBowBase",
+      "path": "/Lotus/Powersuits/Ranger/PrimeExaltedBow",
+      "rawAttributesSha256": "4bc31f0797f8465695d9eaddcfb2d812e77cd1ca4dfbc87222e2c9869930b543"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Bows/LotusLongBow",
+      "path": "/Lotus/Powersuits/Ranger/ExaltedBowBase",
+      "rawAttributesSha256": "f9156694ed86fd489979739e7b30bf4934cd71deabb5f1cccf735bb1241a48c1"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Bows/LotusBow",
+      "path": "/Lotus/Weapons/Tenno/Bows/LotusLongBow",
+      "rawAttributesSha256": "6ef8b164b797e2893f88a36cc63af2d906fa3e9d91f3385a9ba4c13255675d69"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "path": "/Lotus/Weapons/Tenno/Bows/LotusBow",
+      "rawAttributesSha256": "d4f2257c6f6dcaab3f3ade462818d7e8f5877bb4ca2e7cff28f031b952454859"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+      "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+      "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+      "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+      "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Types/Weapons/BoltoProjectile",
+      "path": "/Lotus/Powersuits/Ranger/Projectiles/PrimeExaltedArrow",
+      "rawAttributesSha256": "f93651569e61fc6bfe008e147a0907ee0dc26be10db25d45514ca8e94f78af87"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Types/Weapon/BoltoProjectile",
+      "path": "/Lotus/Types/Weapons/BoltoProjectile",
+      "rawAttributesSha256": "d329d792d64ba673cbfb09954ddfd2529e6c128ff9c44d8f037e0f2238618808"
+     },
+     {
+      "attributeRecord": false,
+      "parent": "",
+      "path": "/Lotus/Types/Weapon/BoltoProjectile",
+      "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+     }
+    ],
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+   },
    "omegaAttenuation": 1,
    "path": "/Lotus/Powersuits/Ranger/PrimeExaltedBow",
    "polarities": [
@@ -5319,10 +6113,12 @@
      "damage": {
       "critChance": 0.34999999,
       "critMultiplier": 2.3,
+      "impactIgnoreHeadshotBonus": true,
       "procChance": 0.34999999,
       "shares": {
        "DT_FIRE": 1.0
       },
+      "sourceHitType": "DHT_NONE",
       "total": 85.0,
       "types": {
        "DT_FIRE": 85.0
@@ -5338,6 +6134,14 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 1
+      }
+     },
      "reloadTime": 0.0099999998,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerContinous"
     },
@@ -5352,11 +6156,14 @@
       "forcedProcs": [
        "PT_INFECTED"
       ],
+      "ignoreHeadshotBonus": true,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.25,
       "projectile": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileOne",
       "shares": {
        "DT_VIRAL": 1.0
       },
+      "sourceHitType": "DHT_PROJECTILE",
       "total": 20.0,
       "types": {
        "DT_VIRAL": 20.0
@@ -5372,6 +6179,21 @@
      "index": 1,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      },
+      "projectile": {
+       "fields": {
+        "DealDamageThroughImpactBehavior": 0,
+        "IgnoreHeadShotBonus": 1
+       },
+       "path": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileOne"
+      }
+     },
      "reloadTime": 0.0099999998,
      "trigger": ""
     },
@@ -5386,11 +6208,14 @@
       "forcedProcs": [
        "PT_MAGNETIZED"
       ],
+      "ignoreHeadshotBonus": true,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.25,
       "projectile": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileTwo",
       "shares": {
        "DT_MAGNETIC": 1.0
       },
+      "sourceHitType": "DHT_PROJECTILE",
       "total": 20.0,
       "types": {
        "DT_MAGNETIC": 20.0
@@ -5406,6 +6231,21 @@
      "index": 2,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      },
+      "projectile": {
+       "fields": {
+        "DealDamageThroughImpactBehavior": 0,
+        "IgnoreHeadShotBonus": 1
+       },
+       "path": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileTwo"
+      }
+     },
      "reloadTime": 0.0099999998,
      "trigger": ""
     },
@@ -5420,11 +6260,14 @@
       "forcedProcs": [
        "PT_CHILLED"
       ],
+      "ignoreHeadshotBonus": true,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.25,
       "projectile": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileThree",
       "shares": {
        "DT_FREEZE": 1.0
       },
+      "sourceHitType": "DHT_PROJECTILE",
       "total": 20.0,
       "types": {
        "DT_FREEZE": 20.0
@@ -5440,6 +6283,21 @@
      "index": 3,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      },
+      "projectile": {
+       "fields": {
+        "DealDamageThroughImpactBehavior": 0,
+        "IgnoreHeadShotBonus": 1
+       },
+       "path": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileThree"
+      }
+     },
      "reloadTime": 0.0099999998,
      "trigger": ""
     },
@@ -5454,11 +6312,14 @@
       "forcedProcs": [
        "PT_CAUSTIC_BURN"
       ],
+      "ignoreHeadshotBonus": true,
+      "impactIgnoreHeadshotBonus": false,
       "procChance": 0.25,
       "projectile": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileFour",
       "shares": {
        "DT_CORROSIVE": 1.0
       },
+      "sourceHitType": "DHT_PROJECTILE",
       "total": 20.0,
       "types": {
        "DT_CORROSIVE": 20.0
@@ -5474,6 +6335,21 @@
      "index": 4,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeEventDeclarations": {
+      "impact": {
+       "DamageUpgradeTypes": [
+        "WEAPON_DAMAGE_AMOUNT"
+       ],
+       "IgnoreHeadshotBonus": 0
+      },
+      "projectile": {
+       "fields": {
+        "DealDamageThroughImpactBehavior": 0,
+        "IgnoreHeadShotBonus": 1
+       },
+       "path": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileFour"
+      }
+     },
      "reloadTime": 0.0099999998,
      "trigger": ""
     }
@@ -5488,6 +6364,105 @@
    "nameInternal": "ExaltedGuitar",
    "nameTag": "/Lotus/Language/Weapons/TnExaltedGuitarName",
    "nameZh": "丽兹",
+   "nativeModeAudit": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "fields": [
+     "nativeIgnoreFireIterations",
+     "nativeEventDeclarations",
+     "headshot flags",
+     "sourceHitType",
+     "forced status counts",
+     "nativeAmmoFree",
+     "nativeFireCooldownSeconds"
+    ],
+    "nativeSources": [
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Temple/ExaltedGuitarBase",
+      "path": "/Lotus/Powersuits/Temple/ExaltedGuitar",
+      "rawAttributesSha256": "fea8c26b6f788fb6497d9212c55c4e812e4ea67bce5ff0face3680bd4a970eed"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+      "path": "/Lotus/Powersuits/Temple/ExaltedGuitarBase",
+      "rawAttributesSha256": "43c2a52d95f2c5f3538eaa08230d72791159a620198682c839265e9b53fbbd8a"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+      "path": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+      "rawAttributesSha256": "3db6e5de699b734a774a44fd3ab122725933c98347117b2d17e9e6abd60fcc5e"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+      "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+      "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+      "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+      "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+      "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileBase",
+      "path": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileOne",
+      "rawAttributesSha256": "b60b62f458a3ecdc71e4d4788e2c6346e99becdb36a347a016c43ade6bab07f9"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Weapons/Tenno/Pistol/LexAltFireProjectile",
+      "path": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileBase",
+      "rawAttributesSha256": "e61ca69d15b191269258805c1e0c1a7d8bb56828a6156b2f49412c36b4208a6c"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Types/Weapon/WaveProjectile",
+      "path": "/Lotus/Weapons/Tenno/Pistol/LexAltFireProjectile",
+      "rawAttributesSha256": "e89facd1b19607e6e211dc0d8e877e5d418a0460ccce04d1491b92d85d4659a5"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "",
+      "path": "/Lotus/Types/Weapon/WaveProjectile",
+      "rawAttributesSha256": "d9f3f1dd60ea8b5e69ea5dc5ddc88817826f8b6a60061ea7ed2ece450fb42cfd"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileBase",
+      "path": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileTwo",
+      "rawAttributesSha256": "ee628e763b5bdfd83fedc4372bf1ac78d158b2f31c5834094186adbe000a4980"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileBase",
+      "path": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileThree",
+      "rawAttributesSha256": "40b30cb8cc79cabe1cf34f068c247850680bafc809552b34d8adf18da688e1a0"
+     },
+     {
+      "attributeRecord": true,
+      "parent": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileBase",
+      "path": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileFour",
+      "rawAttributesSha256": "094a282eb3132acd61cd2482474de40d1f2c3db371a842f41ce4962aa5ebf891"
+     }
+    ],
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+   },
    "omegaAttenuation": 1,
    "path": "/Lotus/Powersuits/Temple/ExaltedGuitar",
    "polarities": [

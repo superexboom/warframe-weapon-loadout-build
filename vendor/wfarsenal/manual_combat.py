@@ -290,7 +290,7 @@ def prepare(
     form_dynamic = []
     actor_effects = []
     excluded = set()
-    notes = []
+    notes = list(weapon.get("exaltedUnsupported") or ())
     branches = []
     from .runtime_adapters import verified_crux_condition, verified_incarnon_condition, verified_torid_field_duration
     for tier in (weapon.get("incarnon") or {}).get("tiers") or []:
@@ -1011,6 +1011,10 @@ def prepare(
                 count=lane['count'], parentMultishotPolicy=kind, impact_delay_seconds=arrival)
                 for kind in ('normal-parent', 'extra-ms-parent')
                 for lane in (children[kind],) for component in lane['packets'])]
+        nox_policy=extra.get('noxAvatarLifecycle')
+        nox_parts=[]
+        if nox_policy:
+            components=[*components,dict(nox_policy['attachedTicks'],__noxPart=0),dict(nox_policy['radial'],__noxPart=1)]
         radial_parts = []
         child_groups = {}
         if extra.get('embedded'):
@@ -1054,9 +1058,9 @@ def prepare(
                                           else e for e in part_fx)
                 else:
                     part_fx=ModEffectList(e for e in part_fx if e.upgrade_type!='RUNTIME_COLD_STACK_DAMAGE')
-                if component.get('__ownedEmbed'):
+                if component.get('__ownedEmbed') or component.get('__noxPart')==0:
                     part_fx=ModEffectList(e for e in part_fx if e.upgrade_type!='WEAPON_DAMAGE_TYPE_FLAT_AMOUNT')
-                if not component.get('__ownedEmbed') and component.get('__grimoirePart') is None and (component.get('__embedded') or not (extra.get('radial') or extra.get('radials'))):
+                if component.get('__noxPart') is None and not component.get('__ownedEmbed') and component.get('__grimoirePart') is None and (component.get('__embedded') or not (extra.get('radial') or extra.get('radials'))):
                     # A lingering field has its own native base damage: flat
                     # "+N base damage" belongs to the shot (WFSim Torid: field
                     # ticks 40 x crit with Plentiful Mayhem's +31 base). The
@@ -1182,7 +1186,11 @@ def prepare(
                             cache[key]=out
                         return cache[key]
                     part._live_hit_refresh=refresh_field
-                if component.get('__ownedEmbed'):
+                if component.get('__noxPart') is not None:
+                    part.delayed_radial_hit_event=True
+                    part.multishot=1.
+                    nox_parts.append(part)
+                elif component.get('__ownedEmbed'):
                     st._owned_embed=(part,float(component['tick_rate']),float(component['duration_seconds']))
                 elif component.get('__embedded'):
                     st._embedded = (part, component['tick_rate'], component['duration_seconds'])
@@ -1195,6 +1203,21 @@ def prepare(
                     radial_parts.append(part)
                 else:
                     st._lingering = (part, component['tick_rate'], component['duration_seconds'])
+        if nox_policy:
+            st._nox_projectile=tuple(nox_parts)
+            for slot,part in enumerate(nox_parts):
+                launch=copy(part);refreshed={}
+                def refresh_nox(stacks,live,slot=slot,launch=launch,source_form=form,cache=refreshed):
+                    key=(tuple(sorted(stacks.items())),live)
+                    if key not in cache:
+                        current,_=entry(source_form,stacks,live,False)
+                        out=copy(current._nox_projectile[slot])
+                        for field in ('crit_chance','crit_multiplier','base_crit_chance','low_crit_threshold','low_crit_damage_base','low_crit_damage_bonus'):
+                            setattr(out,field,getattr(launch,field))
+                        out.__dict__.pop('_live_hit_refresh',None)
+                        cache[key]=out
+                    return cache[key]
+                part._live_hit_refresh=refresh_nox
         for child_packets in child_groups.values():
             # Resolve MODs once, then preserve each physical child's contact ->
             # explosion order. Aggregating all contacts first can retire the
@@ -1487,7 +1510,7 @@ def prepare(
                 return tuple(packets)
             st._zymos_carrier=carrier
             st._zymos_children=children
-        if (extra.get('manualDetonation') or {}).get('impactThenEmbed') and st._co_spec is not None:
+        if ((extra.get('manualDetonation') or {}).get('impactThenEmbed') or nox_policy) and st._co_spec is not None:
             # Same-shot entities retain launch damage/crit, but +818 queries
             # current CO upgrades and victim statuses at EACH contact.
             unit=copy(st);unit._co_spec=copy(st._co_spec)
@@ -1618,13 +1641,14 @@ def prepare(
         quantaStrategy=paid_cube,
         grimoireStrategy=chain_orb,
         ownedEmbed=bool(selected_attack.get('attachedTicks')),
+        noxAvatarLifecycle=bool(selected_attack.get('noxAvatarLifecycle')),
         zymosChildren=bool(zymos_policy),
         chargeVolley=any(attack.get('chargeVolley') for attack in (base_attack, selected_attack)),
         chargeBeforeFire=bool(selected_attack.get('fullClipCharge') or (selected_attack.get('charge') or {}).get('beforeFire')),
         nativeFireGate=bool(selected_attack.get('nativeFireCooldownSeconds')),
-        delayedRadialEvents=bool(paid_cube or zymos_policy or chain_orb or selected_attack.get('attachedTicks')) or any(profile_admitted(attack) for attack in (base_attack, selected_attack)),
+        delayedRadialEvents=bool(paid_cube or zymos_policy or chain_orb or selected_attack.get('attachedTicks') or selected_attack.get('noxAvatarLifecycle')) or any(profile_admitted(attack) for attack in (base_attack, selected_attack)),
         victimStackParts=bool(zymos_policy) or bool(selected_attack.get('directTakesVictimStackDamage')) or any(part.get('takes_victim_stack_damage') for attack in (base_attack,selected_attack) for part in event_components(attack)),
-        radialCritStatus=bool(zymos_policy or chain_orb) or any(part.get('takes_victim_crit') for attack in (base_attack,selected_attack)
+        radialCritStatus=bool(zymos_policy or chain_orb or selected_attack.get('noxAvatarLifecycle')) or any(part.get('takes_victim_crit') for attack in (base_attack,selected_attack)
                              for part in event_components(attack)),
         melee=melee,
         comboTierKeys=combo_tier_keys,

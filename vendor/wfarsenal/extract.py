@@ -1387,7 +1387,7 @@ def _projectile_damage_components(projectile: Mapping[str, Any]) -> list[dict[st
         block["falloff"] = projectile.get("ExplosionFallOff")
         block["source"] = field
         if attack.get("ForcedProcs"):
-            block["forcedProcs"] = attack["ForcedProcs"]
+            block["forcedProcs"] = _forced_proc_entries(attack)
         components.append(block)
     return components
 
@@ -1840,6 +1840,13 @@ def _sequence_average_damage(
     return result
 
 
+
+def _forced_proc_entries(attack: Mapping[str, Any]) -> list[str]:
+    # AttackData ForcedProcs is a native bitset; ForcedProcCount byte+24
+    # repeats each set bit into DamageInfo's per-type counters (+218).
+    return list(dict.fromkeys(attack.get('ForcedProcs') or ())) * int(attack.get('ForcedProcCount',1))
+
+
 def _attack_data(obj: dict[str, Any]) -> dict[str, Any] | None:
     """Build a damage block from an object's AttackData plus its critical stats.
 
@@ -1855,7 +1862,7 @@ def _attack_data(obj: dict[str, Any]) -> dict[str, Any] | None:
         _first_number(obj, "CriticalMultiplier", "criticalHitDamageMultiplier") or 1.0
     )
     if attack.get("ForcedProcs"):
-        block["forcedProcs"] = attack["ForcedProcs"]
+        block["forcedProcs"] = _forced_proc_entries(attack)
     return block
 
 

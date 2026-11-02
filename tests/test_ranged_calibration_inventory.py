@@ -7,6 +7,7 @@ def test_empty_and_auxiliary_modes_remain_in_denominator():
     data=json.loads((Path(__file__).resolve().parents[1]/'data/export/2026.08.13.13.24/weapons.json').read_bytes())['data']
     pox=next(w for w in data if w.get('nameEn')=='Pox')
     assert mode_status(pox['fireModes'][1])=='auxiliary-melee-excluded'
+    assert mode_status({'behaviorKind':'ability-action'})=='ability-action-excluded'
     assert mode_status({})=='missing-damage-data'
     assert mode_status({'damage':{'types':{}}})=='no-positive-direct-payload'
 
@@ -17,6 +18,7 @@ def test_native_and_reference_sources_are_independent_not_full_correctness():
 
 def test_count_weapon_gaps_once_and_modes_and_reasons_separately():
     assert GAP.search('external-context-not-supported')
+    assert GAP.search('peacemaker-full-ramp-held-at-maximum-startup-approximation')
     rows=[dict(path='/w',modes=[dict(mode=0,status='evaluable',gaps=['unmodeled-A','unverified-B']),dict(mode=1,status='evaluable',gaps=['unmodeled-A'])]),dict(path='/x',modes=[dict(mode=0,status='evaluable',gaps=[])])]
     result=summarize(rows)
     assert result['weaponRecords']==2 and result['evaluableModes']==3

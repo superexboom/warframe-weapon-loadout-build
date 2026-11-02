@@ -52,18 +52,23 @@ def linked_frame_paths(catalog: Mapping[str, Any], weapon: Mapping[str, Any]) ->
     return result
 
 
-# Exalted weapons that never land a headshot bonus (client Packages.bin):
+# Headshot notes are not all aim restrictions (client Packages.bin):
 # Regulators fire through LotusCustomAimFireBehavior (RequiresTarget=1), which
 # locks a target and aims at its aimAtPart = TORSO; Lizzie's impact behaviour
 # sets IgnoreHeadshotBonus=1.
-NO_HEADSHOT: dict[str, str] = {
+HEADSHOT_NOTES: dict[str, str] = {
     "Cowgirl": "自动锁定目标并瞄准躯干，无法爆头",
     "Temple": "命中头部没有爆头加成",
 }
 
 
 def headshot_issue(weapon: Mapping[str, Any]) -> str | None:
-    return NO_HEADSHOT.get(str((meta(weapon) or {}).get("family") or ""))
+    return HEADSHOT_NOTES.get(str((meta(weapon) or {}).get("family") or ""))
+
+
+def locks_headshot_aim(weapon: Mapping[str, Any]) -> bool:
+    """Automatic torso targeting is distinct from a head-damage suppression flag."""
+    return (meta(weapon) or {}).get('family') == 'Cowgirl'
 
 
 def _number(value: Any) -> float | None:
@@ -154,6 +159,8 @@ def context_from_result(result: Mapping[str, Any], weapon: Mapping[str, Any], fr
         "formKind": frame.get("formKind"),
         "configName": link.get("configName") if isinstance(link.get("configName"), str) else None,
         "configured": isinstance(link.get("config"), Mapping),
+        "abilityModPaths": [row['path'] for row in (result.get('capacityBreakdown') or {}).get('assignments',())
+                            if row.get('path')],
         "panel": {key: _number(panel.get(key)) for key in (
             "abilityStrength", "abilityDuration", "abilityEfficiency", "abilityRange", "energy", "shield", "castingSpeed")},
         "ability": {
@@ -273,11 +280,11 @@ DAMAGE_RULES: dict[tuple[str, str], Mapping[str, Any]] = {
     ("Berserker", "melee"): {"base": [250], "source": "ability-data"},
     ("MonkeyKing", "melee"): {"base": [300], "source": "ability-data"},
     ("Pacifist", "melee"): {"base": [250], "source": "ability-data"},
-    ("Fairy", "melee"): {"base": [200], "source": "ability-data"},
-    ("Fairy", "secondary"): {"base": [160], "source": "wiki"},
-    ("Ranger", "primary"): {"base": [240, 240], "source": "ability-data"},
-    ("Choir", "secondary"): {"base": [150], "source": "ability-data"},
-    ("Pagemaster", "secondary"): {"base": [250, 2750], "source": "ability-data"},
+    ("Fairy", "melee"): {"base": [200], "source": "native-FairyFlight.lua"},
+    ("Fairy", "secondary"): {"base": [160], "source": "native-FairyFlight.lua"},
+    ("Ranger", "primary"): {"base": [240], "source": "native-RangerBow.lua"},
+    ("Choir", "secondary"): {"base": [150], "source": "native-ChoirErupt.lua"},
+    ("Pagemaster", "secondary"): {"base": [250, 2750], "source": "native-PagemasterBook.lua"},
     # 500 per bolt; the engine's charge multiplier makes the full charge 1500.
     ("IronFrame", "secondary"): {"base": [500, 500], "source": "ability-data"},
     ("Wraith", "melee"): {"base": [250], "source": "wiki"},
@@ -288,8 +295,8 @@ DAMAGE_RULES: dict[tuple[str, str], Mapping[str, Any]] = {
     # Peacemaker: Base x (1 + 150% ramp x bursts/20) x (1 + 1.5 x Strength + mods);
     # the replay holds the ramp full (20 bursts in).
     ("Cowgirl", "secondary"): {"bonus": 1.5, "multiplier": 2.5, "source": "wiki"},
-    ("Frumentarius", "primary"): {"bonus": 0.25, "source": "ability-data"},
-    ("Temple", "primary"): {"base": [85, 100, 100, 100, 100], "strength": False, "bonus": 0.25, "source": "ability-data"},
+    ("Frumentarius", "primary"): {"bonusMultiplier": 1.25, "source": "native-FrumentariusSniper.lua"},
+    ("Temple", "primary"): {"base": [85, 100, 100, 100, 100], "strength": False, "bonusMultiplier": 1.25, "source": "native-TempleGuitar.lua"},
 }
 
 # Cast-type weapons: one attack per cast. Seconds per cast come from the cast
@@ -322,6 +329,15 @@ def apply_damage_rules(weapon: Mapping[str, Any], context: Mapping[str, Any]) ->
     block = meta(weapon) or {}
     rule = damage_rule(weapon)
     out = dict(weapon)
+    if block.get('family')=='Cowgirl':
+        out['exaltedUnsupported']=['peacemaker-full-ramp-held-at-maximum-startup-approximation']
+    elif block.get('family')=='Choir':
+        out['exaltedUnsupported']=['glory-secondary-ability-detonation-unmodeled']
+    elif block.get('family')=='Temple':
+        out['exaltedUnsupported']=['lizzie-ability-charge-resource-cycle-unmodeled']
+    if (block.get('family')=='Ranger' and '/Lotus/Powersuits/Ranger/RangerBowAugmentCard'
+            in (context.get('abilityModPaths') or ())):
+        out['exaltedUnsupported']=['artemis-concentrated-arrow-not-supported-normal-arrow-policy-used']
     if block.get("tier") == "cast" and block.get("family") in CAST_SECONDS:
         # Casting Speed (Natural Talent, Arcane ... ) plays the cast animation
         # faster: seconds / (1 + bonus).
@@ -342,6 +358,12 @@ def apply_damage_rules(weapon: Mapping[str, Any], context: Mapping[str, Any]) ->
     bases = list(rule.get("base") or ())
     modes = []
     for position, mode in enumerate(weapon.get("fireModes") or ()):
+        if block.get('family')=='Ranger' and mode.get('index',position)==1:
+            # RangerBow's equipped callback selects and casts Quiver here;
+            # inherited impact8 is not a second Artemis damage source.
+            modes.append({**mode,'behaviorKind':'ability-action',
+                'unavailableReason':'月神狩弓副操作释放箭袋技能，不是独立伤害射击'})
+            continue
         damage = dict(mode.get("damage") or {})
         types = {k: float(v) for k, v in (damage.get("types") or {}).items() if isinstance(v, (int, float))}
         if rule.get("types") or sum(types.values()) <= 0:
@@ -352,13 +374,27 @@ def apply_damage_rules(weapon: Mapping[str, Any], context: Mapping[str, Any]) ->
         per = (target / total if target is not None and total > 0 else 1.0) * multiplier
         damage["types"] = {k: v * per for k, v in types.items()}
         damage["total"] = sum(damage["types"].values())
+        if block.get('family')=='Choir' and index==0:
+            # ChoirErupt writes ExplosiveAttack.Amount(+5c8); contact stays0.
+            # The exported primary lane already is this one radial packet.
+            damage['components']=[{**part,'types':dict(damage['types']),'total':damage['total']}
+                if part.get('source')=='ExplosiveAttack' else part
+                for part in damage.get('components',())]
+            if damage.get('radial',{}).get('source')=='ExplosiveAttack':
+                damage['radial']={**damage['radial'],'types':dict(damage['types']),'total':damage['total']}
+        if block.get('family')=='Ranger' and index==0:
+            # Equipped callback sets seven arrows; FiredArrow multiplies the
+            # source .2 proc chance by7 before native raw-iteration division.
+            mode={**mode,'multishot':7}
+            damage['procChance']=1.4
         modes.append({**mode, "damage": damage})
     out.update({
         "fireModes": modes,
         "exaltedStrength": round(strength, 6),
         "exaltedDamageRule": {
             "base": bases or None, "strengthScaled": bool(rule.get("strength", True)) and bool(bases),
-            "bonus": (float(rule["bonus"]) * strength) if rule.get("bonus") else None,
+            "bonus": (float(rule["bonusMultiplier"])*strength-1. if rule.get("bonusMultiplier") is not None
+                      else float(rule["bonus"])*strength if rule.get("bonus") else None),
             "multiplier": multiplier if multiplier != 1.0 else None,
             "strength": strength, "source": rule.get("source"),
         },

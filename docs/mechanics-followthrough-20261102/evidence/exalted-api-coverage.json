@@ -1,0 +1,561 @@
+{
+  "scope": "actual default-frame manual API coverage; not all gameplay/augment proof",
+  "records": 35,
+  "rows": [
+    {
+      "path": "/Lotus/Powersuits/Berserker/BerserkerMelee",
+      "name": "Valkyr Talons",
+      "mode": 0,
+      "available": true,
+      "total": 250.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.5,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Berserker/Berserker"
+    },
+    {
+      "path": "/Lotus/Powersuits/Berserker/BerserkerMeleePrime",
+      "name": "Valkyr Prime Talons",
+      "mode": 0,
+      "available": true,
+      "total": 250.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.5,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Berserker/ValkyrPrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/Brawler/AtlasPunchWeapon",
+      "name": "Landslide Fists",
+      "mode": 0,
+      "available": true,
+      "total": 350.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "exalted-cast-loop"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Brawler/Brawler"
+    },
+    {
+      "path": "/Lotus/Powersuits/Brawler/AtlasPunchWeaponPrime",
+      "name": "Landslide Fists Prime",
+      "mode": 0,
+      "available": true,
+      "total": 350.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "exalted-cast-loop"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Brawler/AtlasPrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/Choir/ChoirEruptWeapon",
+      "name": "Glory",
+      "mode": 0,
+      "available": true,
+      "total": 150.0,
+      "ammoCost": 0.0,
+      "fireRate": 1.666667,
+      "unsupported": [
+        "glory-secondary-ability-detonation-unmodeled",
+        "projectile-component-damage-unapplied"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Choir/Choir"
+    },
+    {
+      "path": "/Lotus/Powersuits/Cowgirl/PrimeSlingerPistols",
+      "name": "Regulators Prime",
+      "mode": 0,
+      "available": true,
+      "total": 312.5,
+      "ammoCost": 0.0,
+      "fireRate": 14.8,
+      "unsupported": [
+        "peacemaker-full-ramp-held-at-maximum-startup-approximation"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Cowgirl/MesaPrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/Cowgirl/SlingerPistols",
+      "name": "Regulators",
+      "mode": 0,
+      "available": true,
+      "total": 312.5,
+      "ammoCost": 0.0,
+      "fireRate": 14.8,
+      "unsupported": [
+        "peacemaker-full-ramp-held-at-maximum-startup-approximation"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Cowgirl/Cowgirl"
+    },
+    {
+      "path": "/Lotus/Powersuits/Excalibur/DoomSword",
+      "name": "Exalted Blade",
+      "mode": 0,
+      "available": true,
+      "total": 250.0,
+      "ammoCost": 1.0,
+      "fireRate": 0.833333,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Excalibur/Excalibur"
+    },
+    {
+      "path": "/Lotus/Powersuits/Excalibur/DoomSwordPrime",
+      "name": "Exalted Prime Blade",
+      "mode": 0,
+      "available": true,
+      "total": 250.0,
+      "ammoCost": 1.0,
+      "fireRate": 0.833333,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Excalibur/ExcaliburPrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/Excalibur/DoomSwordUmbra",
+      "name": "Exalted Umbra Blade",
+      "mode": 0,
+      "available": true,
+      "total": 250.0,
+      "ammoCost": 1.0,
+      "fireRate": 0.833333,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Excalibur/ExcaliburUmbra"
+    },
+    {
+      "path": "/Lotus/Powersuits/Fairy/FlightPistols",
+      "name": "Dex Pixia",
+      "mode": 0,
+      "available": true,
+      "total": 160.0,
+      "ammoCost": 1.0,
+      "fireRate": 5.833333,
+      "unsupported": [],
+      "boundFrame": "/Lotus/Powersuits/Fairy/Fairy"
+    },
+    {
+      "path": "/Lotus/Powersuits/Fairy/FlightSword",
+      "name": "Diwata",
+      "mode": 0,
+      "available": true,
+      "total": 200.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.083333,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Fairy/Fairy"
+    },
+    {
+      "path": "/Lotus/Powersuits/Fairy/PrimeFlightPistols",
+      "name": "Dex Pixia Prime",
+      "mode": 0,
+      "available": true,
+      "total": 160.0,
+      "ammoCost": 1.0,
+      "fireRate": 5.833333,
+      "unsupported": [],
+      "boundFrame": "/Lotus/Powersuits/Fairy/TitaniaPrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/Fairy/PrimeFlightSword",
+      "name": "Diwata Prime",
+      "mode": 0,
+      "available": true,
+      "total": 200.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.083333,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Fairy/TitaniaPrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/Frumentarius/ExaltedSniper",
+      "name": "Neutralizer",
+      "mode": 0,
+      "available": true,
+      "total": 318.74999499999996,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [],
+      "boundFrame": "/Lotus/Powersuits/Frumentarius/Frumentarius"
+    },
+    {
+      "path": "/Lotus/Powersuits/Frumentarius/ExaltedSniper",
+      "name": "Neutralizer",
+      "mode": 1,
+      "available": true,
+      "total": 25.0,
+      "ammoCost": 3.0,
+      "fireRate": 1.333333,
+      "unsupported": [
+        "projectile-component-damage-unapplied"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Frumentarius/Frumentarius"
+    },
+    {
+      "path": "/Lotus/Powersuits/Garuda/GarudaClaws",
+      "name": "Garuda Talons",
+      "mode": 0,
+      "available": true,
+      "total": 247.999998,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Garuda/Garuda"
+    },
+    {
+      "path": "/Lotus/Powersuits/Garuda/GarudaPrimeClaws",
+      "name": "Garuda Prime Talons",
+      "mode": 0,
+      "available": true,
+      "total": 280.000006,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Garuda/GarudaPrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/Glass/GaraShankWeapon",
+      "name": "Shattered Lash",
+      "mode": 0,
+      "available": true,
+      "total": 400.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "exalted-cast-loop"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Glass/Glass"
+    },
+    {
+      "path": "/Lotus/Powersuits/Glass/GaraShankWeaponPrime",
+      "name": "Shattered Lash Prime",
+      "mode": 0,
+      "available": true,
+      "total": 400.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "exalted-cast-loop"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Glass/GaraPrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/IronFrame/BlastWeapon",
+      "name": "Balefire Charger",
+      "mode": 0,
+      "available": true,
+      "total": 1500.0,
+      "ammoCost": 1.0,
+      "fireRate": 0.833333,
+      "unsupported": [],
+      "boundFrame": "/Lotus/Powersuits/IronFrame/IronFrame"
+    },
+    {
+      "path": "/Lotus/Powersuits/IronFrame/BlastWeapon",
+      "name": "Balefire Charger",
+      "mode": 1,
+      "available": true,
+      "total": 500.0,
+      "ammoCost": 1.0,
+      "fireRate": 0.75,
+      "unsupported": [],
+      "boundFrame": "/Lotus/Powersuits/IronFrame/IronFrame"
+    },
+    {
+      "path": "/Lotus/Powersuits/IronFrame/BlastWeaponPrime",
+      "name": "Balefire Charger Prime",
+      "mode": 0,
+      "available": true,
+      "total": 1500.0,
+      "ammoCost": 1.0,
+      "fireRate": 0.833333,
+      "unsupported": [],
+      "boundFrame": "/Lotus/Powersuits/IronFrame/IronFramePrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/IronFrame/BlastWeaponPrime",
+      "name": "Balefire Charger Prime",
+      "mode": 1,
+      "available": true,
+      "total": 500.0,
+      "ammoCost": 1.0,
+      "fireRate": 0.75,
+      "unsupported": [],
+      "boundFrame": "/Lotus/Powersuits/IronFrame/IronFramePrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/Khora/KhoraWhipclawWeapon",
+      "name": "Whipclaw",
+      "mode": 0,
+      "available": true,
+      "total": 150.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "exalted-cast-loop"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Khora/Khora"
+    },
+    {
+      "path": "/Lotus/Powersuits/Khora/KhoraWhipclawWeaponPrime",
+      "name": "Whipclaw Prime",
+      "mode": 0,
+      "available": true,
+      "total": 150.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "exalted-cast-loop"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Khora/KhoraPrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/MonkeyKing/MonkeyKingStaff",
+      "name": "Iron Staff",
+      "mode": 0,
+      "available": true,
+      "total": 300.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/MonkeyKing/MonkeyKing"
+    },
+    {
+      "path": "/Lotus/Powersuits/MonkeyKing/WukongPrimeStaff",
+      "name": "Iron Staff Prime",
+      "mode": 0,
+      "available": true,
+      "total": 300.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/MonkeyKing/WukongPrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/Ninja/NinjaStormWeapon",
+      "name": "Shadow Clones",
+      "mode": 0,
+      "available": true,
+      "total": 1500.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "exalted-cast-loop"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Ninja/Ninja"
+    },
+    {
+      "path": "/Lotus/Powersuits/Ninja/NinjaStormWeaponPrime",
+      "name": "Shadow Clones Prime",
+      "mode": 0,
+      "available": true,
+      "total": 1500.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "exalted-cast-loop"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Ninja/AshPrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/Pacifist/PacifistFist",
+      "name": "Desert Wind",
+      "mode": 0,
+      "available": true,
+      "total": 250.00000000000003,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Pacifist/Pacifist"
+    },
+    {
+      "path": "/Lotus/Powersuits/Pacifist/PacifistFistPrime",
+      "name": "Desert Wind Prime",
+      "mode": 0,
+      "available": true,
+      "total": 250.00000000000003,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Pacifist/BaruukPrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/Pagemaster/ExaltedBook",
+      "name": "Noctua",
+      "mode": 0,
+      "available": true,
+      "total": 250.0,
+      "ammoCost": 0.0,
+      "fireRate": 1.5,
+      "unsupported": [],
+      "boundFrame": "/Lotus/Powersuits/Pagemaster/Pagemaster"
+    },
+    {
+      "path": "/Lotus/Powersuits/Pagemaster/ExaltedBook",
+      "name": "Noctua",
+      "mode": 1,
+      "available": true,
+      "total": 2750.0,
+      "ammoCost": 0.0,
+      "fireRate": 0.016666666666666666,
+      "unsupported": [],
+      "boundFrame": "/Lotus/Powersuits/Pagemaster/Pagemaster"
+    },
+    {
+      "path": "/Lotus/Powersuits/Ranger/ExaltedBow",
+      "name": "Artemis Bow",
+      "mode": 0,
+      "available": true,
+      "total": 1680.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [],
+      "boundFrame": "/Lotus/Powersuits/Ranger/Ranger"
+    },
+    {
+      "path": "/Lotus/Powersuits/Ranger/ExaltedBow",
+      "name": "Artemis Bow",
+      "mode": 1,
+      "available": false,
+      "excluded": "月神狩弓副操作释放箭袋技能，不是独立伤害射击"
+    },
+    {
+      "path": "/Lotus/Powersuits/Ranger/PrimeExaltedBow",
+      "name": "Artemis Bow Prime",
+      "mode": 0,
+      "available": true,
+      "total": 1680.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [],
+      "boundFrame": "/Lotus/Powersuits/Ranger/IvaraPrime"
+    },
+    {
+      "path": "/Lotus/Powersuits/Ranger/PrimeExaltedBow",
+      "name": "Artemis Bow Prime",
+      "mode": 1,
+      "available": false,
+      "excluded": "月神狩弓副操作释放箭袋技能，不是独立伤害射击"
+    },
+    {
+      "path": "/Lotus/Powersuits/Temple/ExaltedGuitar",
+      "name": "Lizzie",
+      "mode": 0,
+      "available": true,
+      "total": 106.25,
+      "ammoCost": 1.0,
+      "fireRate": 8.0,
+      "unsupported": [
+        "lizzie-ability-charge-resource-cycle-unmodeled"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Temple/Temple"
+    },
+    {
+      "path": "/Lotus/Powersuits/Temple/ExaltedGuitar",
+      "name": "Lizzie",
+      "mode": 1,
+      "available": true,
+      "total": 125.0,
+      "ammoCost": 1.0,
+      "fireRate": 5.333333,
+      "unsupported": [
+        "lizzie-ability-charge-resource-cycle-unmodeled"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Temple/Temple"
+    },
+    {
+      "path": "/Lotus/Powersuits/Temple/ExaltedGuitar",
+      "name": "Lizzie",
+      "mode": 2,
+      "available": true,
+      "total": 125.0,
+      "ammoCost": 1.0,
+      "fireRate": 5.333333,
+      "unsupported": [
+        "lizzie-ability-charge-resource-cycle-unmodeled"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Temple/Temple"
+    },
+    {
+      "path": "/Lotus/Powersuits/Temple/ExaltedGuitar",
+      "name": "Lizzie",
+      "mode": 3,
+      "available": true,
+      "total": 125.0,
+      "ammoCost": 1.0,
+      "fireRate": 5.333333,
+      "unsupported": [
+        "lizzie-ability-charge-resource-cycle-unmodeled"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Temple/Temple"
+    },
+    {
+      "path": "/Lotus/Powersuits/Temple/ExaltedGuitar",
+      "name": "Lizzie",
+      "mode": 4,
+      "available": true,
+      "total": 125.0,
+      "ammoCost": 1.0,
+      "fireRate": 5.333333,
+      "unsupported": [
+        "lizzie-ability-charge-resource-cycle-unmodeled"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Temple/Temple"
+    },
+    {
+      "path": "/Lotus/Powersuits/Wraith/ReaperMeleeWeapon",
+      "name": "Shadow Claws",
+      "mode": 0,
+      "available": true,
+      "total": 250.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Wraith/Reaper"
+    },
+    {
+      "path": "/Lotus/Powersuits/Wraith/SevagothShadowPrimeClawsWeapon",
+      "name": "Shadow Claws Prime",
+      "mode": 0,
+      "available": true,
+      "total": 250.0,
+      "ammoCost": 1.0,
+      "fireRate": 1.0,
+      "unsupported": [
+        "melee-combo-recovery-event-integration-and-impact-consumption"
+      ],
+      "boundFrame": "/Lotus/Powersuits/Wraith/SevagothShadowPrime"
+    }
+  ],
+  "executed": 43,
+  "excluded": 2,
+  "errors": []
+}

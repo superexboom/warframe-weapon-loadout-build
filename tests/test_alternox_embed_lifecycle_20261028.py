@@ -47,7 +47,7 @@ def test_ordered_clock_contract_for_both_native_payloads(monkeypatch):
     assert natural['directWindow']==pytest.approx(69.999999+11*70+140)
     assert natural['manualDetonation']['events'][0]['time']==pytest.approx(10.1125)
     assert run("Alternox",5.,5.01)['manualDetonation']['pendingMines']==1.
-    assert getattr(native_replay.wfcore,'ALT_EMBEDDED_LIFECYCLE',0)>=2
+    assert getattr(native_replay.wfcore,'ALT_EMBEDDED_LIFECYCLE',0)>=3
     monkeypatch.setattr(native_replay,"ENABLED",True)
     monkeypatch.setattr(native_replay,"SHADOW",True)
     before=native_replay.STATS['native']
@@ -107,7 +107,7 @@ def test_fractional_batch_order_and_real_arcane_live_callback(monkeypatch):
         dict(health=1e12,armour=0.,shield=0.,overguard=0.,baseLevel=1),
         attacks_per_second=co_stats.fire_rate,window_seconds=.1,combat=co,collect_timeline=True)
     assert co_result['directWindow']==pytest.approx(365.,abs=1e-4)
-    assert getattr(native_replay.wfcore,'ALT_EMBEDDED_LIFECYCLE',0)>=2
+    assert getattr(native_replay.wfcore,'ALT_EMBEDDED_LIFECYCLE',0)>=3
     monkeypatch.setattr(native_replay,"ENABLED",True)
     monkeypatch.setattr(native_replay,"SHADOW",True)
     before=native_replay.STATS['native']
@@ -129,7 +129,7 @@ def test_original_victim_retirement_and_legacy_capability_gate(monkeypatch):
         assert result['totalWindowDamage']==health
         assert result['manualDetonation']['pendingMines']==0.
         assert result['manualDetonation']['detonations']==0
-    monkeypatch.setattr(native_replay,"wfcore",SimpleNamespace(ABI=1,NATIVE_TYPE_QUANTIZATION=1,ALT_EMBEDDED_LIFECYCLE=1))
+    monkeypatch.setattr(native_replay,"wfcore",SimpleNamespace(ABI=1,NATIVE_TYPE_QUANTIZATION=1,ALT_EMBEDDED_LIFECYCLE=2))
     monkeypatch.setattr(native_replay,"ENABLED",True)
     assert not native_replay.supported(None,dict(collect_timeline=False,
         combat={"resolve":lambda:None,"manualDetonation":{"impactThenEmbed":True}}))

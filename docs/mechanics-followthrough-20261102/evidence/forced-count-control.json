@@ -1,0 +1,19 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "entry": "0x140c80378",
+  "stop": "0x140c805cd",
+  "codeSha256": "c1fb0efc20bc2bf792ca807f685640296967334d21a91b12df88d8ce0845aee7",
+  "controls": [
+    {
+      "forcedCount": 1,
+      "selectedBit": 5,
+      "actualPacketCounter": 1
+    },
+    {
+      "forcedCount": 10,
+      "selectedBit": 5,
+      "actualPacketCounter": 10
+    }
+  ],
+  "limits": "unchanged converter forced-proc loop; controlled bitset and packet storage, no game scene or target processing"
+}

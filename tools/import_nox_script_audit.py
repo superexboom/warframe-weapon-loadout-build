@@ -20,8 +20,8 @@ WARNINGS=['nox-player-embed-tick-and-death-clock-unmodeled','nox-player-overlap-
 
 def audit(pkg):
     p=pkg.resolve(PROJECTILE);t=pkg.resolve(TRIGGER);w=pkg.resolve(WEAPON)
-    if (p.get('Embed')!=1 or p.get('EmbedTime')!=[2,4]
-            or p.get('AttackData',{}).get('Amount')!=30 or p.get('EmbedAttack',{}).get('Amount')!=3
+    if (p.get('Embed')!=1 or p.get('EmbedTime')!=[2,4] or p.get('DamageRadius')!=.75
+            or p.get('EmbedDamageRadius',0)!=0 or p.get('AttackData',{}).get('Amount')!=30 or p.get('EmbedAttack',{}).get('Amount')!=3
             or p.get('EmbedDeathAttack',{}).get('Amount')!=30 or p.get('EmbedDeathAttack',{}).get('HitType')!='DHT_PROJECTILE'):
         raise ValueError('Nox prototype damage/lifecycle changed')
     stop=p.get('OnProjectileStoppedScript') or {}
@@ -33,22 +33,61 @@ def audit(pkg):
         raise ValueError('Nox overlap trigger is not the audited nondamaging trigger')
     callback=t['Scripts'][0].get('Script') or {}
     if callback.get('Script')!=SCRIPT or callback.get('Function')!='OnOverlap':raise ValueError('Nox overlap callback changed')
-    return dict(status='script-declaration-and-partial-consumer-no-added-damage',clientSha256=CLIENT_SHA256,
+    return dict(status='source-closed-stable-avatar-profile-implemented',clientSha256=CLIENT_SHA256,
         packagesSha256=PACKAGE_SHA256,script=SCRIPT,scriptSha256=SCRIPT_SHA,nativeSources=source_rows(pkg,[WEAPON,PROJECTILE,TRIGGER]),
         displayIdentity=dict(path=WEAPON,localizeTag=w.get('LocalizeTag'),marketMode=w.get('MarketMode'),availability='not-established-from-MarketMode'),
         nonDamageTrigger=dict(path=TRIGGER,hasAttackData=False,behavior='OnOverlap obtains parent and requests parent death; not another damage field'),
         declaredPayloads=dict(contact=deepcopy(p['AttackData']),embeddedTick=deepcopy(p['EmbedAttack']),embeddedDeath=deepcopy(p['EmbedDeathAttack']),embedTimeRange=[2,4]),
         consumers=dict(radius='OnStop P0pc131..135 Lua atomf6e051dd ->0x141981f90 writesProjectile+63c using script1.5; subsequent visualScale setter is independent',
             overlap='OnOverlap P2pc0..11 atom557c9672 ->0x14196cbb0 readsEntity+3a0;atom9c6a9ac9 ->0x14196e520 callsparent+418 death',
-            branch='OnStop first branch tests private class atom0xae46e6de, alive and slow tracking; resolved class identity not yet established'),
-        unresolved=['same-victim-overlap-and-host-class-branch','embed-tick-and-early-death-versus-uniform-expiry','weapon-context-and-final-event-consumers','script-raw0-loop-backedge-not-independently-decoded'],
-        interpretation='No mean3s explosion or independent3toxin field admitted; overlap may end the owner before its native expiry')
+            branch='OnStop first branch tests Avatar* atom0xae46e6de: descriptor1427a6cc0 ->registration1427aef50; living Avatar host enters slow loop and returns before terrain growth trigger',
+            bytecode='current VM table14192ee08 raw00 ->handler14192e471: interrupt-aware signedD JUMPBACK; Nox body zero unknown opcodes and zero invalid jumps',
+            timing='base142101120 slots738/418: immediate tick then1s; natural2..4s EmbeddedDie request; actualDie deferred.075..15s; early host/status/weapon changes request418 death'),
+        avatarBranch=dict(type='Avatar',typeAtom='0xae46e6de',typeDescriptor='0x1427a6cc0',registration='0x1427aef50',
+            liveHostRadius=float(p['DamageRadius']),createsGrowthTrigger=False,
+            scope='valid living Avatar host at OnStop; host/status/weapon changes may request early death'),
+        stableAvatarTickContract=dict(nativeSource=PROJECTILE,nativeField='EmbedAttack',nativeRoute='attached-target',
+            damage={'toxin':3.},statusChance=0.,tickRate=1.,firstTickDelaySeconds=0.,
+            embedDamageRadius=0.,radiusSource='ctor140fbaa7b zero960; serializer140da1f88 mEmbedDamageRadius; no source override',
+            damageHitType=7,damageHitTypeName='DHT_DOT',takesConditionOverload=False,
+            takesVictimStackDamage=False,takesVictimCrit=False,genericHit=True,genericCriticalHit=True,
+            recipient='original attached live Avatar only',
+            consumer='140a58cb0 zero960 branch140a58dcd ->628 caller7 at140a58ea1 ->victim340 at140a58f2d; bypasses790/818',
+            lifetimePolicy='uniform2..4 natural request, cancel future ticks at request; mean3 is an explicit representative, not exact expected tick count',
+            eventPolicy='host340 ->authority AGC accepts DOT7 generic hit/crit; no head bonus or victim crit from type7'),
+        stableAvatarProfile=dict(policy='stable-living-avatar-host-uniform-expiry',
+            assumptions=['accepted contact embeds into original living Avatar','owner/host/status/weapon remain valid until natural expiry',
+                'original host remains inside death radius at explosion; no replacement-target delivery'],
+            attachedTicks=dict(damage={'toxin':3.},status_chance=0.,crit_chance=.15000001,crit_multiplier=1.5,
+                nativeSource=PROJECTILE,nativeField='EmbedAttack',nativeRoute='attached-target',nativeHitType=7,
+                takes_condition_overload=False,takes_victim_stack_damage=False,takes_victim_crit=False,
+                coProfile=dict(behavior='none'),typedFlatDamage=False,liveSourceDamageAtTick=True,
+                retainsLaunchCrit=True,takes_multishot=True,tick_rate=1.,duration_seconds=3.,
+                tickAgesSeconds=[0.,1.,2.,3.],tickSurvivalWeights=[1.,1.,1.,.5],expectedTicksPerProjectile=3.5,
+                recipientPolicy='original-attached-host',initial_tick=True,endpointPolicy='uniform-expiry-survival-weighted'),
+            radial=dict(damage={'toxin':30.},status_chance=.25,crit_chance=.15000001,crit_multiplier=1.5,
+                nativeSource=PROJECTILE,nativeField='EmbedDeathAttack',nativeRoute='delayed-embed-explosion',
+                nativeHitType=2,impact_delay_seconds=3.1125,radius_m=.75,falloff_start_m=0.,falloff_reduction=0.,
+                takes_condition_overload=False,takes_victim_stack_damage=False,takes_victim_crit=True,takes_multishot=True,
+                coProfile=dict(behavior='none'),recipientPolicy='original-host-centre-at-death'),
+            unmodeled=['nox-stable-avatar-host-status-weapon-continuity-assumed',
+                'nox-natural-expiry-and-death-delay-represented-by-mean3.1125',
+                'nox-uniform-tick-survival-weights-ignore-frame-jitter-and-cross-packet-correlation',
+                'nox-death-original-host-centre-coverage-idealized']),
+        evidence='docs/mechanics-followthrough-20261102/SCRIPT-PAYLOADS.md',
+        unresolved=['terrain-trigger-overlap-recipients','avatar-host-status-and-weapon-change-early-death-outside-selected-policy','frame-jitter-and-expiry-tick-correlation'],
+        interpretation='Selected stable living Avatar profile separates original-host DOT7 ticks from death30 projectile radial; runtime implements survival weights and stated policy with explicit mean-death/frame-correlation bounds')
 
 
 def merge(reference,evidence):
     result=deepcopy(reference);entry=result.setdefault('auditedAttacks',{}).setdefault(WEAPON,{})
     entry['noxScriptAudit']=deepcopy(evidence)
-    entry['unmodeled']=list(dict.fromkeys([*(entry.get('unmodeled') or []),*WARNINGS]))
+    policy=evidence.get('stableAvatarProfile')
+    if evidence.get('status')=='source-closed-stable-avatar-profile-implemented' and policy:
+        entry['noxAvatarLifecycle']=deepcopy(policy)
+        entry['unmodeled']=list(dict.fromkeys([*(v for v in entry.get('unmodeled',[]) if v not in WARNINGS),*policy['unmodeled']]))
+    else:
+        entry['unmodeled']=list(dict.fromkeys([*(entry.get('unmodeled') or []),*WARNINGS]))
     return result
 
 
@@ -62,7 +101,7 @@ def main():
     with a.output.open('x',encoding='utf8') as f:json.dump(result,f,ensure_ascii=False,indent=2);f.write('\n')
     if a.apply_to:
         original=a.apply_to.read_bytes();a.apply_to.write_bytes(preserve_lines(original,(json.dumps(merge(json.loads(original),result),ensure_ascii=False,indent=2)+'\n').encode('utf8')))
-    print('Nox exact-path audit: no added damage; overlap and native expiry remain separate')
+    print('Nox exact-path audit: stable Avatar ticks/death contract; terrain overlap remains separate')
 
 
 if __name__=='__main__':main()

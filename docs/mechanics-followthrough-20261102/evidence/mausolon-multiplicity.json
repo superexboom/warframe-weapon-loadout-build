@@ -1,0 +1,185 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "modes": [
+    {
+      "mode": 0,
+      "sourceBank": "HeavyBehaviors",
+      "baseRadial": 72.0,
+      "controls": [
+        {
+          "trace": {
+            "requestedMultishot": 1,
+            "nativeFireIterationCount": 1,
+            "rays": 1,
+            "spread": 0.0,
+            "jobs": [
+              0
+            ]
+          },
+          "collection": {
+            "collisionKinds": [
+              "hit"
+            ],
+            "collected": 1,
+            "radialCallbacks": 1,
+            "localBefore": [
+              {
+                "pointer": "0x3002bf70",
+                "size": 0
+              }
+            ],
+            "dedupFlags": [
+              false
+            ],
+            "dispatch": "collector suffix -> weapon+650 -> impact+b8 -> impact+f8 -> radial builder"
+          },
+          "packet": {
+            "multishot": 1.0,
+            "MultiShotBuffsRadialDamage": 0,
+            "packetDamage": 72.0
+          }
+        },
+        {
+          "trace": {
+            "requestedMultishot": 3,
+            "nativeFireIterationCount": 3,
+            "rays": 3,
+            "spread": 0.0,
+            "jobs": [
+              0,
+              1,
+              2
+            ]
+          },
+          "collection": {
+            "collisionKinds": [
+              "hit",
+              "hit",
+              "hit"
+            ],
+            "collected": 3,
+            "radialCallbacks": 3,
+            "localBefore": [
+              {
+                "pointer": "0x3002bf70",
+                "size": 0
+              },
+              {
+                "pointer": "0x3002bf70",
+                "size": 0
+              },
+              {
+                "pointer": "0x3002bf70",
+                "size": 0
+              }
+            ],
+            "dedupFlags": [
+              false,
+              false,
+              false
+            ],
+            "dispatch": "collector suffix -> weapon+650 -> impact+b8 -> impact+f8 -> radial builder"
+          },
+          "packet": {
+            "multishot": 3.0,
+            "MultiShotBuffsRadialDamage": 0,
+            "packetDamage": 72.0
+          }
+        }
+      ]
+    },
+    {
+      "mode": 1,
+      "sourceBank": "HeavyBehaviors",
+      "baseRadial": 4500.0,
+      "controls": [
+        {
+          "trace": {
+            "requestedMultishot": 1,
+            "nativeFireIterationCount": 1,
+            "rays": 1,
+            "spread": 0.0,
+            "jobs": [
+              0
+            ]
+          },
+          "collection": {
+            "collisionKinds": [
+              "hit"
+            ],
+            "collected": 1,
+            "radialCallbacks": 1,
+            "localBefore": [
+              {
+                "pointer": "0x3002bf70",
+                "size": 0
+              }
+            ],
+            "dedupFlags": [
+              false
+            ],
+            "dispatch": "collector suffix -> weapon+650 -> impact+b8 -> impact+f8 -> radial builder"
+          },
+          "packet": {
+            "multishot": 1.0,
+            "MultiShotBuffsRadialDamage": 0,
+            "packetDamage": 4500.0
+          }
+        },
+        {
+          "trace": {
+            "requestedMultishot": 3,
+            "nativeFireIterationCount": 3,
+            "rays": 3,
+            "spread": 0.0,
+            "jobs": [
+              0,
+              1,
+              2
+            ]
+          },
+          "collection": {
+            "collisionKinds": [
+              "hit",
+              "hit",
+              "hit"
+            ],
+            "collected": 3,
+            "radialCallbacks": 3,
+            "localBefore": [
+              {
+                "pointer": "0x3002bf70",
+                "size": 0
+              },
+              {
+                "pointer": "0x3002bf70",
+                "size": 0
+              },
+              {
+                "pointer": "0x3002bf70",
+                "size": 0
+              }
+            ],
+            "dedupFlags": [
+              false,
+              false,
+              false
+            ],
+            "dispatch": "collector suffix -> weapon+650 -> impact+b8 -> impact+f8 -> radial builder"
+          },
+          "packet": {
+            "multishot": 3.0,
+            "MultiShotBuffsRadialDamage": 0,
+            "packetDamage": 4500.0
+          }
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Scene acceptance and native optional query numbers are controlled.",
+    "Existing original-byte harness reused in memory; no new script.",
+    "Only source amount and bank/mode selection changed; no EXE instruction byte changes.",
+    "Result counts from original trace count/emission, collection and impact dispatch; radial amount branch is original but full radial modifier builder is not executed."
+  ]
+}

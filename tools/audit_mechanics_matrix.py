@@ -31,12 +31,13 @@ def evaluate(task):
     path,modes,window=task
     os.environ['WF_ANALYZER_SERIAL']='1'
     import app
-    from wfarsenal import optimizer as o,native_replay,mods_native,search_combat
+    from wfarsenal import optimizer as o,native_replay,mods_native,search_combat,exalted
     from wfarsenal.damage import ModEffect,Scenario
     app._disable_analysis_statics_persistence()
     app._refresh_analysis_statics_cache_if_newer=lambda:None
     fingerprint=app._analysis_inputs_fingerprint()
     raw=o.resolve_record(app.EXPORTS['weapons'],path,kind='weapon')
+    if exalted.meta(raw):raw=exalted.apply_damage_rules(raw,{'panel':{'abilityStrength':1.}})
     result=dict(path=path,name=raw.get('nameEn'),fingerprint=fingerprint,modes=[],elapsedSeconds=0.)
     start=time.perf_counter()
     for mode in modes:
@@ -51,6 +52,7 @@ def evaluate(task):
                     weapon=o._select_fire_mode(raw,mode,weapon_type=o._weapon_type(None,raw))[0]
                     scenario=Scenario(trigger_policy='emergent',aiming=True)
                     effects=[ModEffect(a,b,c,damage_type=d) for a,b,c,d in case['effects']]
+                    effects.extend(exalted.weapon_effects(weapon))
                     stats=o.apply_mods(weapon,effects,scenario=scenario)
                     o._bind_combat_inputs(stats,weapon,(),effects,scenario)
                     target=dict(baseLevel=1,faction='Grineer',health=case['health'],shield=case['shield'],
@@ -106,14 +108,16 @@ def main():
     if args.output.exists():ap.error('new evidence file required')
     import app
     tasks=[]
+    from wfarsenal import exalted
     for w in app.EXPORTS['weapons']:
+        if exalted.meta(w):w=exalted.apply_damage_rules(w,{'panel':{'abilityStrength':1.}})
         slot=w.get('slot')
         if slot not in ('primary','secondary','arch_gun','companion'):continue
         if slot=='companion' and '/Lotus/Types/Game/LotusMeleeWeapon' in w.get('ancestry',[]):continue
         if args.weapon and w.get('nameEn') not in args.weapon and w['path'] not in args.weapon:continue
         modes=[i for i,m in enumerate(w.get('fireModes') or []) if isinstance(m.get('damage'),dict)
                and sum(float(v or 0) for v in m['damage'].get('types',{}).values())>0
-               and m.get('behaviorKind')!='auxiliary-melee']
+               and m.get('behaviorKind') not in ('auxiliary-melee','ability-action')]
         if modes:tasks.append((w['path'],modes,args.window))
     if args.limit:tasks=tasks[:args.limit]
     identity=dict(inputs=app._analysis_inputs_fingerprint(),sourceCommit=__import__('subprocess').check_output(

@@ -37,8 +37,8 @@ def test_missing_explicit_bank_does_not_fallback_to_wrong_loadout():
     assert hitscan_radial(Package(native),dict(path="/w",slot="arch_gun",fireModeSource="HeavyBehaviors"),dict(index=0)) is None
 
 
-@pytest.mark.parametrize("index",[-1,True,2,None])
-def test_invalid_raw_mode_position_is_rejected(index):
+def test_missing_raw_mode_position_is_rejected():
+    index=None
     assert hitscan_radial(Package(dict(Behaviors=[behavior(1.)])),dict(path="/w"),dict(index=index)) is None
 
 

@@ -1545,17 +1545,6 @@
       "sha256": "cb6241a94441f14bbedf32a3e4c26cadd0d8a69dec9fae4335ef2309cf38d9ac",
       "directTotal": 180.0,
       "scope": "base mode, direct-hit target at centre",
-      "radial": {
-        "damage": {
-          "heat": 72.0
-        },
-        "radius_m": 1.8,
-        "falloff_start_m": 0.0,
-        "falloff_reduction": 0.2,
-        "crit_chance": 0.3,
-        "crit_multiplier": 2.2,
-        "status_chance": 0.26
-      },
       "compression": {
         "effectiveness": 1.0,
         "stacking": "adds",
@@ -1583,7 +1572,7 @@
               "damage": {
                 "heat": 4500.0
               },
-              "radius_m": 8,
+              "radius_m": 8.0,
               "falloff_start_m": 0.0,
               "falloff_reduction": 0.40000001,
               "crit_chance": 0.5,
@@ -1591,32 +1580,107 @@
               "status_chance": 0.5,
               "forced_procs": [],
               "takes_multishot": true,
+              "perPacketTakesMultishot": false,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 0.0,
               "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
               "nativeField": "RadialDamage",
-              "damageTypeSource": "native-per-type",
-              "multishotSource": "native hitscan impact contract",
-              "referenceTakesMultishot": true
+              "nativeRoute": "heavy-mode1-ray-hit-avatar",
+              "nativeHitType": 4,
+              "takes_victim_crit": false,
+              "takes_condition_overload": true,
+              "takes_victim_stack_damage": true,
+              "coProfile": {
+                "behavior": "additive_with_base_damage",
+                "baseFraction": 0.3333333333333333,
+                "excludeFlatSources": []
+              },
+              "multishotSource": "one radial per accepted ray collision; source MultiShotBuffsRadialDamage0 prevents second per-packet factor",
+              "conditionOverloadSource": "14140fb30 weapon818 ->141300a00 ->14113e250; same-mode direct1500/radial4500; common state/fire scales cancel"
             }
           ],
           "nativeSources": [
             {
               "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
-              "sha256": "228816a723e14e397806f72bc023a4d402c5b820467961794cf62553c55f1a59"
+              "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+              "rawAttributesSha256": "228816a723e14e397806f72bc023a4d402c5b820467961794cf62553c55f1a59",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+              "parent": "/Lotus/Types/Game/LotusWeapon",
+              "rawAttributesSha256": "cc06e93ed07418ffeb897430531ce364815d2088a237b3486319eca4d0f4e356",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Types/Game/LotusWeapon",
+              "parent": "",
+              "rawAttributesSha256": "4e4ff3b358962ff188c9bf130961eb1814eec7c47858234dd6f8b746f4dd9881",
+              "attributeRecord": true
             }
           ],
-          "generatedBy": "tools/import_projectile_components.py",
+          "generatedBy": "source-first consumer audit20261102",
           "packageBuild": "2026.10.22.13.12",
           "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
           "behaviourSource": "HeavyBehaviors[1]",
-          "unmodeled": [
-            "mausolon-radial-multishot-routing-unverified"
-          ]
+          "unmodeled": []
         }
       },
-      "unmodeled": [
-        "mausolon-radial-multishot-routing-unverified"
+      "unmodeled": [],
+      "radials": [
+        {
+          "damage": {
+            "heat": 72.0
+          },
+          "radius_m": 1.8,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.2,
+          "crit_chance": 0.30000001,
+          "crit_multiplier": 2.2,
+          "status_chance": 0.25999999,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "perPacketTakesMultishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
+          "nativeField": "RadialDamage",
+          "nativeRoute": "heavy-mode0-ray-hit-avatar",
+          "nativeHitType": 4,
+          "takes_victim_crit": false,
+          "takes_condition_overload": true,
+          "takes_victim_stack_damage": true,
+          "coProfile": {
+            "behavior": "additive_with_base_damage",
+            "baseFraction": 2.5,
+            "excludeFlatSources": []
+          },
+          "multishotSource": "one radial per accepted ray collision; source MultiShotBuffsRadialDamage0 prevents second per-packet factor",
+          "conditionOverloadSource": "14140fb30 weapon818 ->141300a00 ->14113e250; same-mode direct180/radial72; common state/fire scales cancel"
+        }
+      ],
+      "behaviourSource": "HeavyBehaviors[0]",
+      "generatedBy": "source-first consumer audit20261102",
+      "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
+          "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+          "rawAttributesSha256": "228816a723e14e397806f72bc023a4d402c5b820467961794cf62553c55f1a59",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+          "parent": "/Lotus/Types/Game/LotusWeapon",
+          "rawAttributesSha256": "cc06e93ed07418ffeb897430531ce364815d2088a237b3486319eca4d0f4e356",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Types/Game/LotusWeapon",
+          "parent": "",
+          "rawAttributesSha256": "4e4ff3b358962ff188c9bf130961eb1814eec7c47858234dd6f8b746f4dd9881",
+          "attributeRecord": true
+        }
       ]
     },
     "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG": {
@@ -11125,17 +11189,17 @@
               "critChance": 0.1,
               "critMultiplier": 2.9000001,
               "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
-              "takes_victim_crit": true,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
+              "nativeField": "AttackData",
+              "impact_delay_seconds": 0.0,
               "takes_condition_overload": true,
-              "takes_victim_stack_damage": true,
+              "takes_victim_crit": true,
               "coProfile": {
                 "behavior": "independent",
                 "baseFraction": 1,
                 "excludeFlatSources": []
               },
-              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
-              "nativeField": "AttackData",
-              "impact_delay_seconds": 0.0
+              "takes_victim_stack_damage": true
             },
             "radial": {
               "damage": {
@@ -11169,17 +11233,17 @@
               "critChance": 0.1,
               "critMultiplier": 2.9000001,
               "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
-              "takes_victim_crit": true,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
+              "nativeField": "AttackData",
+              "impact_delay_seconds": 0.0,
               "takes_condition_overload": true,
-              "takes_victim_stack_damage": true,
+              "takes_victim_crit": true,
               "coProfile": {
                 "behavior": "independent",
                 "baseFraction": 1,
                 "excludeFlatSources": []
               },
-              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
-              "nativeField": "AttackData",
-              "impact_delay_seconds": 0.0
+              "takes_victim_stack_damage": true
             },
             "radial": {
               "damage": {
@@ -11213,17 +11277,17 @@
               "critChance": 0.1,
               "critMultiplier": 2.9000001,
               "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
-              "takes_victim_crit": true,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
+              "nativeField": "AttackData",
+              "impact_delay_seconds": 0.0,
               "takes_condition_overload": true,
-              "takes_victim_stack_damage": true,
+              "takes_victim_crit": true,
               "coProfile": {
                 "behavior": "independent",
                 "baseFraction": 1,
                 "excludeFlatSources": []
               },
-              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
-              "nativeField": "AttackData",
-              "impact_delay_seconds": 0.0
+              "takes_victim_stack_damage": true
             },
             "radial": {
               "damage": {
@@ -11257,17 +11321,17 @@
               "critChance": 0.1,
               "critMultiplier": 2.9000001,
               "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
-              "takes_victim_crit": true,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
+              "nativeField": "AttackData",
+              "impact_delay_seconds": 0.0,
               "takes_condition_overload": true,
-              "takes_victim_stack_damage": true,
+              "takes_victim_crit": true,
               "coProfile": {
                 "behavior": "independent",
                 "baseFraction": 1,
                 "excludeFlatSources": []
               },
-              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
-              "nativeField": "AttackData",
-              "impact_delay_seconds": 0.0
+              "takes_victim_stack_damage": true
             },
             "radial": {
               "damage": {
@@ -11301,17 +11365,17 @@
               "critChance": 0.1,
               "critMultiplier": 2.9000001,
               "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
-              "takes_victim_crit": true,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
+              "nativeField": "AttackData",
+              "impact_delay_seconds": 0.0,
               "takes_condition_overload": true,
-              "takes_victim_stack_damage": true,
+              "takes_victim_crit": true,
               "coProfile": {
                 "behavior": "independent",
                 "baseFraction": 1,
                 "excludeFlatSources": []
               },
-              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
-              "nativeField": "AttackData",
-              "impact_delay_seconds": 0.0
+              "takes_victim_stack_damage": true
             },
             "radial": {
               "damage": {
@@ -11345,17 +11409,17 @@
               "critChance": 0.1,
               "critMultiplier": 2.9000001,
               "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
-              "takes_victim_crit": true,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
+              "nativeField": "AttackData",
+              "impact_delay_seconds": 0.0,
               "takes_condition_overload": true,
-              "takes_victim_stack_damage": true,
+              "takes_victim_crit": true,
               "coProfile": {
                 "behavior": "independent",
                 "baseFraction": 1,
                 "excludeFlatSources": []
               },
-              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
-              "nativeField": "AttackData",
-              "impact_delay_seconds": 0.0
+              "takes_victim_stack_damage": true
             },
             "radial": {
               "damage": {
@@ -11381,8 +11445,9 @@
       },
       "unmodeled": [
         "arbucep-projectile-contact-and-radial-centre-coverage-idealized",
-        "arbucep-innate-mushroom-and-ammo-deco-script-unmodeled",
-        "arbucep-body-contact-explicit-target-packets-no-head-events"
+        "arbucep-body-contact-explicit-target-packets-no-head-events",
+        "arbucep-nokko-owner-mushroom-empowerment-requires-existing-ability-state",
+        "arbucep-flight-target-retiming-idealized"
       ],
       "nativeSources": [
         {
@@ -11459,11 +11524,52 @@
         "advance": "0x14126e103..0x14126e13f every physical spawn",
         "count": "0x140f75d71..0x140f75e16 floor + Bernoulli",
         "status": "raw2.0940001 / basefireIterations6; not modded total"
+      },
+      "scriptAudit": {
+        "status": "weapon-source-closure-with-external-ability-state",
+        "scripts": [
+          {
+            "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunInnateMod.lua",
+            "sha256": "9921dd92e1168e869471e701240abda1f3964249dd2138a3aa14b5b6c1f218d7"
+          },
+          {
+            "path": "/Lotus/Scripts/Libs/NokkoUtilsLib.lua",
+            "sha256": "6d3d3b3ea9fa06b611a7b738fd27ab9efd03fb7649850fc06e07c3dae7b6af07"
+          }
+        ],
+        "contact": {
+          "function": "CheckForNokkoMushroomHit",
+          "utilityFunction": "TriggerMushroom",
+          "requirement": "projectile owner has an existing matching Nokko ToxicShrooms or PowerShrooms entry",
+          "arguments": [
+            "projectile-owner",
+            "nearby-mushroom",
+            null,
+            true
+          ],
+          "stateWrites": {
+            "isEmpowered": true,
+            "doEmissive": true
+          },
+          "preservesChargeAmount": true,
+          "additionalWeaponDamage": false,
+          "consumers": "Nokko ability damage and charge rate belong to the registered mushroom owner"
+        },
+        "ammoDeco": {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchgunAmmoDeco",
+          "consumer": "ScaleProjectileDecos -> 0x141971770 -> attachment virtual328 visual scale",
+          "createsDamagePayload": false
+        },
+        "flight": {
+          "consumer": "OnProjectileStart -> 0x141988400 -> exact0x141290180 writes171c",
+          "policy": "existing single-target contact-centre timing remains idealized"
+        },
+        "evidence": "docs/mechanics-followthrough-20261102/SCRIPT-PAYLOADS.md"
       }
     },
     "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxRiflePlayer": {
       "noxScriptAudit": {
-        "status": "script-declaration-and-partial-consumer-no-added-damage",
+        "status": "source-closed-stable-avatar-profile-implemented",
         "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
         "packagesSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
         "script": "/Lotus/Scripts/WeaponAttachments/NoxWeapon.lua",
@@ -11566,21 +11672,217 @@
         "consumers": {
           "radius": "OnStop P0pc131..135 Lua atomf6e051dd ->0x141981f90 writesProjectile+63c using script1.5; subsequent visualScale setter is independent",
           "overlap": "OnOverlap P2pc0..11 atom557c9672 ->0x14196cbb0 readsEntity+3a0;atom9c6a9ac9 ->0x14196e520 callsparent+418 death",
-          "branch": "OnStop first branch tests private class atom0xae46e6de, alive and slow tracking; resolved class identity not yet established"
+          "branch": "OnStop first branch tests Avatar* atom0xae46e6de: descriptor1427a6cc0 ->registration1427aef50; living Avatar host enters slow loop and returns before terrain growth trigger",
+          "bytecode": "current VM table14192ee08 raw00 ->handler14192e471: interrupt-aware signedD JUMPBACK; Nox body zero unknown opcodes and zero invalid jumps",
+          "timing": "base142101120 slots738/418: immediate tick then1s; natural2..4s EmbeddedDie request; actualDie deferred.075..15s; early host/status/weapon changes request418 death"
         },
+        "avatarBranch": {
+          "type": "Avatar",
+          "typeAtom": "0xae46e6de",
+          "typeDescriptor": "0x1427a6cc0",
+          "registration": "0x1427aef50",
+          "liveHostRadius": 0.75,
+          "createsGrowthTrigger": false,
+          "scope": "valid living Avatar host at OnStop; host/status/weapon changes may request early death"
+        },
+        "stableAvatarTickContract": {
+          "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxProjectilePvE",
+          "nativeField": "EmbedAttack",
+          "nativeRoute": "attached-target",
+          "damage": {
+            "toxin": 3.0
+          },
+          "statusChance": 0.0,
+          "tickRate": 1.0,
+          "firstTickDelaySeconds": 0.0,
+          "embedDamageRadius": 0.0,
+          "radiusSource": "ctor140fbaa7b zero960; serializer140da1f88 mEmbedDamageRadius; no source override",
+          "damageHitType": 7,
+          "damageHitTypeName": "DHT_DOT",
+          "takesConditionOverload": false,
+          "takesVictimStackDamage": false,
+          "takesVictimCrit": false,
+          "genericHit": true,
+          "genericCriticalHit": true,
+          "recipient": "original attached live Avatar only",
+          "consumer": "140a58cb0 zero960 branch140a58dcd ->628 caller7 at140a58ea1 ->victim340 at140a58f2d; bypasses790/818",
+          "lifetimePolicy": "uniform2..4 natural request, cancel future ticks at request; mean3 is an explicit representative, not exact expected tick count",
+          "eventPolicy": "host340 ->authority AGC accepts DOT7 generic hit/crit; no head bonus or victim crit from type7"
+        },
+        "stableAvatarProfile": {
+          "policy": "stable-living-avatar-host-uniform-expiry",
+          "assumptions": [
+            "accepted contact embeds into original living Avatar",
+            "owner/host/status/weapon remain valid until natural expiry",
+            "original host remains inside death radius at explosion; no replacement-target delivery"
+          ],
+          "attachedTicks": {
+            "damage": {
+              "toxin": 3.0
+            },
+            "status_chance": 0.0,
+            "crit_chance": 0.15000001,
+            "crit_multiplier": 1.5,
+            "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxProjectilePvE",
+            "nativeField": "EmbedAttack",
+            "nativeRoute": "attached-target",
+            "nativeHitType": 7,
+            "takes_condition_overload": false,
+            "takes_victim_stack_damage": false,
+            "takes_victim_crit": false,
+            "coProfile": {
+              "behavior": "none"
+            },
+            "typedFlatDamage": false,
+            "liveSourceDamageAtTick": true,
+            "retainsLaunchCrit": true,
+            "takes_multishot": true,
+            "tick_rate": 1.0,
+            "duration_seconds": 3.0,
+            "tickAgesSeconds": [
+              0.0,
+              1.0,
+              2.0,
+              3.0
+            ],
+            "tickSurvivalWeights": [
+              1.0,
+              1.0,
+              1.0,
+              0.5
+            ],
+            "expectedTicksPerProjectile": 3.5,
+            "recipientPolicy": "original-attached-host",
+            "initial_tick": true,
+            "endpointPolicy": "uniform-expiry-survival-weighted"
+          },
+          "radial": {
+            "damage": {
+              "toxin": 30.0
+            },
+            "status_chance": 0.25,
+            "crit_chance": 0.15000001,
+            "crit_multiplier": 1.5,
+            "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxProjectilePvE",
+            "nativeField": "EmbedDeathAttack",
+            "nativeRoute": "delayed-embed-explosion",
+            "nativeHitType": 2,
+            "impact_delay_seconds": 3.1125,
+            "radius_m": 0.75,
+            "falloff_start_m": 0.0,
+            "falloff_reduction": 0.0,
+            "takes_condition_overload": false,
+            "takes_victim_stack_damage": false,
+            "takes_victim_crit": true,
+            "takes_multishot": true,
+            "coProfile": {
+              "behavior": "none"
+            },
+            "recipientPolicy": "original-host-centre-at-death"
+          },
+          "unmodeled": [
+            "nox-stable-avatar-host-status-weapon-continuity-assumed",
+            "nox-natural-expiry-and-death-delay-represented-by-mean3.1125",
+            "nox-uniform-tick-survival-weights-ignore-frame-jitter-and-cross-packet-correlation",
+            "nox-death-original-host-centre-coverage-idealized"
+          ]
+        },
+        "evidence": "docs/mechanics-followthrough-20261102/SCRIPT-PAYLOADS.md",
         "unresolved": [
-          "same-victim-overlap-and-host-class-branch",
-          "embed-tick-and-early-death-versus-uniform-expiry",
-          "weapon-context-and-final-event-consumers",
-          "script-raw0-loop-backedge-not-independently-decoded"
+          "terrain-trigger-overlap-recipients",
+          "avatar-host-status-and-weapon-change-early-death-outside-selected-policy",
+          "frame-jitter-and-expiry-tick-correlation"
         ],
-        "interpretation": "No mean3s explosion or independent3toxin field admitted; overlap may end the owner before its native expiry"
+        "interpretation": "Selected stable living Avatar profile implemented with original-host weighted ticks and mean deferred death; terrain interaction and random cross-packet correlation remain explicit bounds"
       },
       "unmodeled": [
-        "nox-player-embed-tick-and-death-clock-unmodeled",
-        "nox-player-overlap-script-can-terminate-owner-unverified",
-        "nox-player-source-and-event-routing-unverified"
-      ]
+        "nox-stable-avatar-host-status-weapon-continuity-assumed",
+        "nox-natural-expiry-and-death-delay-represented-by-mean3.1125",
+        "nox-uniform-tick-survival-weights-ignore-frame-jitter-and-cross-packet-correlation",
+        "nox-death-original-host-centre-coverage-idealized"
+      ],
+      "name": "Nox player prototype (Grakata resource label)",
+      "fireMode": 0,
+      "noxAvatarLifecycle": {
+        "policy": "stable-living-avatar-host-uniform-expiry",
+        "assumptions": [
+          "accepted contact embeds into original living Avatar",
+          "owner/host/status/weapon remain valid until natural expiry",
+          "original host remains inside death radius at explosion; no replacement-target delivery"
+        ],
+        "attachedTicks": {
+          "damage": {
+            "toxin": 3.0
+          },
+          "status_chance": 0.0,
+          "crit_chance": 0.15000001,
+          "crit_multiplier": 1.5,
+          "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxProjectilePvE",
+          "nativeField": "EmbedAttack",
+          "nativeRoute": "attached-target",
+          "nativeHitType": 7,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "takes_victim_crit": false,
+          "coProfile": {
+            "behavior": "none"
+          },
+          "typedFlatDamage": false,
+          "liveSourceDamageAtTick": true,
+          "retainsLaunchCrit": true,
+          "takes_multishot": true,
+          "tick_rate": 1.0,
+          "duration_seconds": 3.0,
+          "tickAgesSeconds": [
+            0.0,
+            1.0,
+            2.0,
+            3.0
+          ],
+          "tickSurvivalWeights": [
+            1.0,
+            1.0,
+            1.0,
+            0.5
+          ],
+          "expectedTicksPerProjectile": 3.5,
+          "recipientPolicy": "original-attached-host",
+          "initial_tick": true,
+          "endpointPolicy": "uniform-expiry-survival-weighted"
+        },
+        "radial": {
+          "damage": {
+            "toxin": 30.0
+          },
+          "status_chance": 0.25,
+          "crit_chance": 0.15000001,
+          "crit_multiplier": 1.5,
+          "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxProjectilePvE",
+          "nativeField": "EmbedDeathAttack",
+          "nativeRoute": "delayed-embed-explosion",
+          "nativeHitType": 2,
+          "impact_delay_seconds": 3.1125,
+          "radius_m": 0.75,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.0,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "takes_victim_crit": true,
+          "takes_multishot": true,
+          "coProfile": {
+            "behavior": "none"
+          },
+          "recipientPolicy": "original-host-centre-at-death"
+        },
+        "unmodeled": [
+          "nox-stable-avatar-host-status-weapon-continuity-assumed",
+          "nox-natural-expiry-and-death-delay-represented-by-mean3.1125",
+          "nox-uniform-tick-survival-weights-ignore-frame-jitter-and-cross-packet-correlation",
+          "nox-death-original-host-centre-coverage-idealized"
+        ]
+      },
+      "directTotal": 30.0,
+      "projectile": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxProjectilePvE"
     }
   },
   "nativeTriggers": {

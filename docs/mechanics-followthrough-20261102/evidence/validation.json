@@ -1,0 +1,78 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "2b84fd40e26d4a7b647e78290bb413de120029b4",
+  "identity": {
+    "inputs": "4e7866024df63405",
+    "sourceCommit": "2b84fd40e26d4a7b647e78290bb413de120029b4",
+    "nativeSha256": "3db1c25d19c1bd7eef297c3e6216099d3e8a03b090e2bf9a0d4fade7ab324d06",
+    "toolSha256": "df31557f730e285c3884c4dd82ab37762833af0ea04c91e58f658b508fe70dc1"
+  },
+  "focused": {
+    "tests": "165",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "12.497"
+  },
+  "selectedMatrix": {
+    "weapons": 15,
+    "cases": 104,
+    "failed": 0,
+    "workerErrors": 0,
+    "nativeFallback": 0,
+    "nativeCoverageComplete": true,
+    "changedInputs": false,
+    "coverageComplete": true,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "passed": true
+  },
+  "exaltedApi": {
+    "scope": "actual default-frame manual API coverage; not all gameplay/augment proof",
+    "records": 35,
+    "executed": 43,
+    "excluded": 2,
+    "errors": []
+  },
+  "collection": {
+    "before": 2164,
+    "after": 2163,
+    "delta": -1,
+    "newTestModules": 0
+  },
+  "inventory": {
+    "weaponRecords": 423,
+    "weaponRecordsWithNoModes": 6,
+    "explicitModes": 631,
+    "evaluableModes": 621,
+    "excludedOrMissing": {
+      "auxiliary-melee-excluded": 7,
+      "missing-damage-data": 1,
+      "ability-action-excluded": 2
+    },
+    "weaponsWithExplicitGaps": 42,
+    "evaluableModesWithExplicitGaps": 46,
+    "modesWithNoReportedGap": 575,
+    "nativeStaticSpecialEvidenceModes": 133,
+    "referenceOnlySpecialEvidenceModes": 85,
+    "modesWithCOReference": 518,
+    "contextRequiredModes": 17,
+    "prepareErrors": 0,
+    "fullGameplayCalibration": "not-established-by-this-inventory"
+  },
+  "hashes": {
+    "focused-complete.xml": "b412b988d410b2f7b0113d5f13e9948069e3106bf54425aa88a1601943803a38",
+    "selected-complete.json": "94b148603b1cbbd34dfa8e5b9fbf5652588384958dc5478b7030bd039dc43c7d",
+    "inventory-complete.json": "fe4d86bb24a4afad40e35e38fbb8d1002f6ab9a760a83de5231fd44add5c7672",
+    "collection-complete.txt": "04800d0434c06672ba2acc537063677d104c144fa207a590e3badb8bf79aa2aa",
+    "root/exalted-api-complete.json": "b0f34a1b599bcb2d70c7e9c975531985c4c5f1cd2a1836bae485420d8fa6ba93"
+  },
+  "scope": "native source consumers and selected bounded strategies; not full gameplay/all augment calibration or full-suite execution",
+  "publication": {
+    "portableSource": true,
+    "bake": false,
+    "botMigration": false,
+    "release": false
+  }
+}

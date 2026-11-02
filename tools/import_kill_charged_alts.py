@@ -136,6 +136,18 @@ def build_profile(pkg, row, *, native_image=None):
     sha = raw_source_sha(pkg, row['path'])
     if sha:
         entry['nativeSha256'] = sha
+    if row['path']=='/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun':
+        expected=('228816a723e14e397806f72bc023a4d402c5b820467961794cf62553c55f1a59',
+                  'cc06e93ed07418ffeb897430531ce364815d2088a237b3486319eca4d0f4e356',
+                  '4e4ff3b358962ff188c9bf130961eb1814eec7c47858234dd6f8b746f4dd9881')
+        from tools.import_native_secondary_payloads import CLIENT_SHA256,PACKAGE_SHA256
+        if (native_image is None or hashlib.sha256(Path(native_image).read_bytes()).hexdigest()!=CLIENT_SHA256
+                or tuple(raw_source_sha(pkg,p) for p in pkg.ancestry(row['path']))!=expected):
+            raise ValueError('Mausolon fixed-charge scalar requires audited native image and source ancestry')
+        if consume!=5 or alt_state.get('ApplyNumChargesToDamageMultiplier')!=1:
+            raise ValueError('Mausolon charge scalar contract changed')
+        entry.update(damageScale=5.,damageScaleSource='native accepted fire consumes/snapshots5 before trace submission',
+            nativeScaleEvidence=dict(clientSha256=CLIENT_SHA256,packagesBinSha256=PACKAGE_SHA256))
     if proof:
         entry['native']['effectiveMaxCharges'] = maximum
         entry['native']['zeroConsumptionMeans'] = 'consume-all-current-charges'

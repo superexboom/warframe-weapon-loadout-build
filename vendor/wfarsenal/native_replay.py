@@ -42,7 +42,7 @@ def supported(stats, options) -> bool:
     if not combat or not combat.get("resolve"):
         return False
     if ((combat.get('manualDetonation') or {}).get('impactThenEmbed')
-            and getattr(wfcore,'ALT_EMBEDDED_LIFECYCLE',0)<2):
+            and getattr(wfcore,'ALT_EMBEDDED_LIFECYCLE',0)<3):
         return False
     if combat.get('enervate') and not getattr(wfcore, 'ENERVATE_PROBABILISTIC_HITS', 0):
         return False  # Older cores treat every expected Blast proc as a real hit.
@@ -67,6 +67,8 @@ def supported(stats, options) -> bool:
     if (combat.get('radialCritStatus') or stats.radial_victim_crit) and not getattr(wfcore, 'RADIAL_VICTIM_CRIT', 0):
         return False
     if combat.get('victimStackParts') and not getattr(wfcore,'RADIAL_VICTIM_STACKS',0):
+        return False
+    if combat.get('noxAvatarLifecycle') and not getattr(wfcore,'NOX_AVATAR_LIFECYCLE',0):
         return False
     if combat.get('ownedEmbed') and not getattr(wfcore,'SOURCE_OWNED_EMBED',0):
         return False

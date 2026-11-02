@@ -1,0 +1,17 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "result": {
+    "atActualFireC0Entry": {
+      "snapshot": 5.0,
+      "currentCharges": 0
+    },
+    "stateFactor": 5.0,
+    "directAfterState": 7500.0,
+    "radialAfterState": 22500.0
+  },
+  "limits": [
+    "Accepted-fire suffix starts140d4f0ff after eligibility. Neutral upgrade query returns input. Full consume wrapper, completefixedconsume and actualselectors/getters execute unchanged.",
+    "Sourcebase1500/4500 and cachedfactor1 supplied; full regular modifier builder not emulated.",
+    "Stop at actualMausolonfirec0 beforeitsrayemission; staticleaf1400ebdf0 tailcall14133e460 provesfollowingemission."
+  ]
+}

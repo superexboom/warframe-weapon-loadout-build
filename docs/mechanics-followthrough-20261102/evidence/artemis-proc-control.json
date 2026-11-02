@@ -1,0 +1,9 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "function": "0x141586f50",
+  "nativeLinearFlag": 1,
+  "inputProc": 1.4,
+  "rawIterations": 7,
+  "perArrow": 0.20000000298023224,
+  "limits": "unchanged native helper; source7 from actual script, divisor path source6c8 already audited; no world-hit sampling"
+}

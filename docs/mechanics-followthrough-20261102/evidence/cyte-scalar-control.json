@@ -1,0 +1,25 @@
+{
+  "scope": "Original scalar query1416d07b0 plus unchanged bucket application140d12e30; matching strengthbucket3 is controlled contextual input, not full live game trace",
+  "cases": [
+    {
+      "strength": 0.5,
+      "query": 0.625,
+      "scriptMinusOne": -0.375
+    },
+    {
+      "strength": 1,
+      "query": 1.25,
+      "scriptMinusOne": 0.25
+    },
+    {
+      "strength": 2,
+      "query": 2.5,
+      "scriptMinusOne": 1.5
+    },
+    {
+      "strength": 3,
+      "query": 3.75,
+      "scriptMinusOne": 2.75
+    }
+  ]
+}
