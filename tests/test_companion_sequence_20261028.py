@@ -39,6 +39,12 @@ def test_audited_package_data_keeps_three_distinct_launch_lanes(name, amount):
     assert [next(suffix for suffix in ("Front","Rear","Mid") if lane["projectile"].endswith(suffix))
             for lane in sequence["lanes"]] == ["Front","Rear","Mid"]
     assert sequence["sourceFields"]["maxActiveProjectiles"] == 3
+    lifecycle = sequence["lifecycleContract"]
+    assert lifecycle["maxActiveProjectiles"] == 3
+    assert lifecycle["blockedState"] == "WS_FIRE_DISABLED"
+    assert lifecycle["spaceAvailableState"] == "WS_REFIRE_WAIT"
+    assert lifecycle["returnSeconds"] is None
+    assert lifecycle["replayAdmission"] == "metadata-only-no-flight-or-catch-events"
 
 
 def test_sequence_lookup_respects_selected_mode_and_returns_an_isolated_profile():
@@ -67,8 +73,8 @@ def test_resolver_selects_source_ips_before_applying_typed_and_elemental_mods(na
         assert radial is None
     assert weapon == source_before
     assert "companion-projectile-damage-sequence-unmodeled" not in combat["unsupported"]
-    assert {"companion-projectile-bounce-return-timing-unverified",
-            "companion-active-projectile-refire-limit-unmodeled"}.issubset(combat["unsupported"])
+    assert {"companion-projectile-flight-catch-schedule-unmodeled",
+            "companion-active-count-gate-and-refire-recovery-not-replayed"}.issubset(combat["unsupported"])
 
 
 def test_importer_validates_literal_source_lanes_with_a_local_fixture():
@@ -94,6 +100,7 @@ def test_importer_validates_literal_source_lanes_with_a_local_fixture():
     imported = weapon_sequence(LocalPackages(),WEAPONS[0])
     assert [row["damageTypes"] for row in imported["lanes"]] == [
         {"DT_IMPACT":130.},{"DT_PUNCTURE":130.},{"DT_SLASH":130.}]
+    assert imported["lifecycleContract"] == companion.projectile_sequence(_weapon("Deconstructor"))["lifecycleContract"]
     sources = companion.projectile_sequence_reference()["sources"]
     assert sources["packagesBinSha256"] == PACKAGE_SHA256
     assert sources["clientSha256"] == CLIENT_SHA256

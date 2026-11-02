@@ -26,9 +26,26 @@ WEAPONS = (
     "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
 )
 UNVERIFIED = [
-    "companion-projectile-bounce-return-timing-unverified",
-    "companion-active-projectile-refire-limit-unmodeled",
+    "companion-projectile-flight-catch-schedule-unmodeled",
+    "companion-active-count-gate-and-refire-recovery-not-replayed",
 ]
+
+
+def lifecycle_contract(state):
+    """Source-proved consumers; informational until flight/removal events exist."""
+    return dict(
+        replayAdmission="metadata-only-no-flight-or-catch-events",
+        maxActiveProjectiles=int(state["MaxNumProjectiles"]),
+        countUnit="actual-tracked-projectile", countDecrement="matched-projectile-removal",
+        blocksReadyAndFireAtLimit=True, blockedState="WS_FIRE_DISABLED",
+        spaceAvailableState="WS_REFIRE_WAIT" if state["ResetRefireWhenActiveProjectiles"] else "WS_READY",
+        recovery="effective-fire-rate-reciprocal-with-negative-clock-carry",
+        returnSeconds=None,
+        remainingInputs=["projectile-movement-and-reflection-history", "physical-catch-or-destruction-event", "native-frame-event-order"],
+        native=dict(stateVtable="0x14218c230", limit="0x14173efc0", route="0x140592870",
+                    spaceAvailable="0x14113fc80", removal="0x141050a70", weaponRemovalForward="0x140ef2970",
+                    stateDuration="0x141386060", clock="0x1412678a0", refireWait="0x140338300",
+                    recallPredicate="0x1416a9db3..0x1416a9e53"))
 
 
 class AuditedPackages(Packages):
@@ -86,6 +103,7 @@ def weapon_sequence(packages, path):
     return dict(initialIndex=0, advanceOn="projectile-spawn",
                 pelletCountPolicy="integer-floor-plus-Bernoulli-extra", lanes=lanes,
                 fireIterations=int(fire["fireIterations"]),
+                lifecycleContract=lifecycle_contract(state),
                 unverified=list(UNVERIFIED),
                 sourceFields=dict(projectileSequenceList=list(projectiles),
                                   advanceProjectileSequenceOnFire=True,
@@ -105,7 +123,9 @@ def extract(packages_path, client_path, build_label):
                              fireConsumer="0x14126d1f0", selectThenAdvance="0x14126e0e4..0x14126e13f",
                              sequenceGetter="0x141809340", initialIndex="0x140fd516f",
                              actualSpawnCount="0x140f75d20", moddedSpawnCount="0x1416a5ed0",
-                             evidence="companion-followthrough native static audit 2026-10-28"),
+                             evidence="companion-followthrough native static audit 2026-10-28",
+                             lifecycleEvidence="docs/deconstructor-native-lifecycle-20261103.md",
+                             stateEnum="0x14003f4c0: WS_REFIRE_WAIT=7, WS_FIRE_DISABLED=20"),
                 weapons={path: {"modes": {"0": weapon_sequence(packages, path)}} for path in WEAPONS})
 
 

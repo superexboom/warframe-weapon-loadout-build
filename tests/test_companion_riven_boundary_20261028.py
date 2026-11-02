@@ -5,8 +5,9 @@ import app
 from tests.test_riven_disposition_20261023 import _engine_request
 
 
-COMPANIONS=[w for w in app.CATALOG['weapons'] if w.get('weaponType')=='companion'
-            and w.get('available') and w.get('analysisAvailable')]
+# One actual weapon per Riven family; variants use the same boundary branch.
+COMPANIONS=[w for w in app.CATALOG['weapons']
+            if w.get('nameEn') in {'Artax', 'Sweeper', 'Burst Laser', 'Deconstructor'}]
 
 
 @pytest.mark.parametrize('weapon',COMPANIONS,ids=lambda w:w['nameEn'])
@@ -25,6 +26,20 @@ def test_riven_entry_pins_companion_actor_policy_before_optimizer(weapon,player_
     assert scenario.combat_state['companion'] is True
     assert scenario.combat_state['companionPlayerStacks'] is player_stacks
     assert payload==original
+
+    source = next(w for w in app.EXPORTS['weapons'] if w['path'] == weapon['path'])
+    for negative in (False, True):
+        legal = app.optimizer._riven_allowed_codes(app.EXPORTS['rivenTemplates'], family, source, negative=negative)
+        candidates, _ = app.optimizer._candidate_lines(family, 1.2, (), negative=negative, allowed_codes=legal)
+        assert not {'H', 'M', 'Z', 'N', 'X', 'U', 'B', 'Q'} & {line.code for line in candidates}
+        assert {'0', '1'} <= legal  # supported combat stats remain available
+    forbidden = 'X' if family == 'melee' else 'H'
+    malformed = deepcopy(payload)
+    for stat in malformed['stats']:
+        stat['value'] = bases[stat['code']] * 1.2 * 1.2375
+    malformed['stats'].append(dict(code=forbidden, value=20., negative=True))
+    with pytest.raises(app.SimulationError, match='not allowed'):
+        _engine_request(malformed)
 
 
 def test_new_companion_mechanics_dependencies_invalidate_statics(monkeypatch):

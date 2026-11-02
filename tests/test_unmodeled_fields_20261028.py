@@ -25,7 +25,7 @@ def test_alternox_remaining_lifecycle_assumptions_are_reported_by_both_score_pat
     ('Angstrum',0,{'angstrum-full-charge-ideal-projectile-coverage','angstrum-charge-release-and-flight-timing-unverified','angstrum-charge-completion-buff-snapshot-boundary-unverified'}),
     ('Prisma Angstrum',0,{'angstrum-full-charge-ideal-projectile-coverage','angstrum-charge-release-and-flight-timing-unverified','angstrum-charge-completion-buff-snapshot-boundary-unverified'}),
     ('Cryotra',0,{'cryotra-field-host-death-and-spatial-persistence-unverified','cryotra-field-overlap-unverified'}),
-    ('Deconstructor',0,{'companion-projectile-bounce-return-timing-unverified','companion-active-projectile-refire-limit-unmodeled'})])
+    ('Deconstructor',0,{'companion-projectile-flight-catch-schedule-unmodeled','companion-active-count-gate-and-refire-recovery-not-replayed'})])
 def test_partial_weapon_damage_is_visible_to_api_clients_without_timeline_read(name,mode,expected):
     weapon=next(w for w in app.EXPORTS['weapons'] if w['nameEn']==name)
     result=app.simulate_manual_payload(dict(weapon=weapon['path'],fireMode=mode,

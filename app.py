@@ -3368,6 +3368,9 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
     # Catalog companion rows retain ``weaponType=companion`` for UI grouping,
     # but their Riven rules follow the canonical optimizer family.
     bases = RIVEN_BASE_VALUES.get(portable_weapon_type, {})
+    source_record = optimizer.resolve_record(EXPORTS["weapons"], weapon["path"], kind="weapon")
+    allowed = {negative: optimizer._riven_allowed_codes(EXPORTS.get("rivenTemplates") or {},
+               portable_weapon_type, source_record, negative=negative) for negative in (False, True)}
     normalized_stats = []
     for raw in raw_stats:
         code = str(raw.get("code") or "").strip().upper()
@@ -3376,6 +3379,8 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
         if base is None or value is None:
             raise SimulationError(f"Riven stat {code or '?'} has no valid portable range")
         negative = raw.get("negative") is True
+        if code not in allowed[negative]:
+            raise SimulationError(f"Riven stat {code} is not allowed for this weapon")
         _nominal, low, high = optimizer.riven_stat_window(
             base, source_disposition, positive_count, negative_count, negative=negative
         )
@@ -4684,10 +4689,12 @@ def recommend_riven_payload(payload: Any) -> dict[str, Any]:
     positive_candidates, _ = optimizer._candidate_lines(
         weapon_type, disposition, (), negative=False, bases=template_bases, available_fusion_codes=fusable,
         structure_scale=optimizer.theoretical_structure_scale(3, False),
+        allowed_codes=optimizer._riven_allowed_codes(EXPORTS.get("rivenTemplates") or {}, weapon_type, weapon_record, negative=False),
     )
     negative_candidates, _ = optimizer._candidate_lines(
         weapon_type, disposition, (), negative=True, bases=template_bases, available_fusion_codes=fusable,
         structure_scale=optimizer.theoretical_structure_scale(3, False, negative=True),
+        allowed_codes=optimizer._riven_allowed_codes(EXPORTS.get("rivenTemplates") or {}, weapon_type, weapon_record, negative=True),
     )
     special = build_result.get('exilus')
     special_card = _utility_card_at_rank(special, engine['scenario'], special['rank']) if special else None

@@ -98,10 +98,10 @@
   "missingLocalizationTags": 0,
   "missingWeaponPaths": 64,
   "omegaMismatches": 3,
-  "statEntries": 263,
+  "statEntries": 264,
   "templates": 7,
   "uniqueDispositionPaths": 696,
-  "upgradeRows": 272
+  "upgradeRows": 273
  },
  "fusionRecipes": [
   {
@@ -13935,6 +13935,44 @@
        "smallerIsBetter": 0,
        "symbolFilter": "Scaldra",
        "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
+      }
+     ]
+    },
+    {
+     "buffRestrictions": [
+      "NotSentinel"
+     ],
+     "canBeBuff": true,
+     "canBeCurse": true,
+     "compatibilityTags": [],
+     "curseRestrictions": [
+      "NotSentinel"
+     ],
+     "icon": "/Lotus/Interface/Cards/Images/Rifle/RifleZoomMod.png",
+     "prefix": "hera",
+     "prefixTag": "/Lotus/Language/Omega/ZoomPrefix",
+     "rarity": "COMMON",
+     "sourceSha256": "a301aad4e5a59df91a4d7309a1e428e849f99d62f7000a6925b45de0fdfb1061",
+     "sourceTemplate": "LotusShotgunRandomModRare",
+     "suffix": "lis",
+     "suffixTag": "/Lotus/Language/Omega/ZoomSuffix",
+     "tag": "WeaponZoomFovMod",
+     "upgrades": [
+      {
+       "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponZoomModDesc",
+       "localizedText": "|val|% 变焦",
+       "operation": "STACKING_MULTIPLY",
+       "rawValue": 0.0046660001,
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_ZOOM",
        "validModifiers": [],
        "validPostures": [],
        "validProcTypes": [],

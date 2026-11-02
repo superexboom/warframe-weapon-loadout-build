@@ -3726,6 +3726,36 @@ def _fusion_codes_from_templates(
 
 
 
+def _riven_allowed_codes(
+    templates: Mapping[str, Any], weapon_type: str, weapon: Mapping[str, Any], *, negative: bool
+) -> frozenset[str]:
+    """Template roll flags and weapon restrictions, independent of effect support."""
+    rows = {code: stat for code, _unit, stat, _upgrade in
+            _template_stats(templates, weapon_type, lenient=True)}
+    # These special upgrade shapes retain their existing wire rules.
+    for template in templates.get("templates") or ():
+        if template.get("weaponType") == weapon_type:
+            for stat in template.get("stats") or ():
+                code = _FACE_TAG_CODES.get(str(stat.get("tag") or ""))
+                if code and code not in rows:
+                    rows[code] = stat
+    sentinel = str(weapon.get("slot") or "").casefold() == "companion"
+    allowed = set()
+    for code in set(RIVEN_BASE_VALUES.get(weapon_type, {})) | rows.keys():
+        rule = RIVEN_RULES.get(code)
+        if not rule or not rule[8 if negative else 7]:
+            continue
+        stat = rows.get(code)
+        if stat is not None:
+            if not stat.get("canBeCurse" if negative else "canBeBuff", True):
+                continue
+            restrictions = stat.get("curseRestrictions" if negative else "buffRestrictions") or ()
+            if "NotSentinel" in restrictions and sentinel:
+                continue
+        allowed.add(code)
+    return frozenset(allowed)
+
+
 def _candidate_lines(
     weapon_type: str,
     disposition: float,
@@ -3735,6 +3765,7 @@ def _candidate_lines(
     bases: Mapping[str, float] | None = None,
     structure_scale: float | None = None,
     available_fusion_codes: frozenset[str] | None = None,
+    allowed_codes: frozenset[str] | None = None,
 ) -> tuple[list[_RivenLine], bool]:
     bases = dict(bases or RIVEN_BASE_VALUES[weapon_type])
     ratios = []
@@ -3764,6 +3795,8 @@ def _candidate_lines(
     lines: list[_RivenLine] = []
     # Candidate availability follows advanced-trait templates, not recipe coverage.
     for code, base in bases.items():
+        if allowed_codes is not None and code not in allowed_codes:
+            continue
         rule = RIVEN_RULES.get(code)
         if rule is None:
             continue
@@ -5191,6 +5224,11 @@ def analyze_riven_request(
     )
     # A missing handler means the card is only partially represented.  Do not
     # turn that partial card into an apparently authoritative score.
+    legal_positive = _riven_allowed_codes(exports.get("rivenTemplates") or {}, riven_type, weapon_record, negative=False)
+    legal_negative = _riven_allowed_codes(exports.get("rivenTemplates") or {}, riven_type, weapon_record, negative=True)
+    for line in actual_lines:
+        if line.code not in (legal_negative if line.negative else legal_positive):
+            raise SimulationError(f"Riven stat {line.code} is not allowed for this weapon")
     fatal_riven_unsupported = [
         item for item in riven_unsupported if not item.endswith("-not-evaluated")
     ]
@@ -5980,12 +6018,12 @@ def analyze_riven_request(
     )
     positive_candidates, _ = _candidate_lines(
         riven_type, disposition, (), negative=False, bases=template_bases,
-        available_fusion_codes=_fusable,
+        available_fusion_codes=_fusable, allowed_codes=legal_positive,
     )
     candidate_by_code = {line.code: line for line in positive_candidates}
     negative_candidates, _ = _candidate_lines(
         riven_type, disposition, (), negative=True, bases=template_bases,
-        available_fusion_codes=_fusable,
+        available_fusion_codes=_fusable, allowed_codes=legal_negative,
     )
     negative_by_code = {line.code: line for line in negative_candidates}
 
@@ -6099,9 +6137,9 @@ def analyze_riven_request(
     negative_ranked: list[tuple[float, _RivenLine]] = []
     from .riven_recommendation import negative_rolls
     ranked_positive, _ = _candidate_lines(riven_type,disposition,(),negative=False,bases=template_bases,
-        structure_scale=theoretical_structure_scale(positive_count,True),available_fusion_codes=_fusable)
+        structure_scale=theoretical_structure_scale(positive_count,True),available_fusion_codes=_fusable,allowed_codes=legal_positive)
     ranked_negative, _ = _candidate_lines(riven_type,disposition,(),negative=True,bases=template_bases,
-        structure_scale=theoretical_structure_scale(positive_count,True,negative=True),available_fusion_codes=_fusable)
+        structure_scale=theoretical_structure_scale(positive_count,True,negative=True),available_fusion_codes=_fusable,allowed_codes=legal_negative)
     positive_map = {line.code:line for line in ranked_positive}
     negative_seed = [positive_map[line.code] for line in recommended]
     negative_map = {line.code: line for line in ranked_negative}

@@ -1,4 +1,4 @@
-"""Refresh advanced traits from a package snapshot without replacing dispositions.
+"""Refresh advanced traits and newly added ordinary traits without replacing dispositions.
 
 Usage: python tools/refresh_riven_fusion.py --raw-packages <packages> --output <riven_templates.json>
 """
@@ -17,6 +17,15 @@ from generate_riven_templates import _upgrade_rows
 
 def refresh(payload, raw_packages, build_label=None):
     templates = payload["templates"]
+    localization = {}
+    for template in templates:
+        for stat in template.get("stats") or ():
+            for tag, label in (("prefixTag", "prefix"), ("suffixTag", "suffix")):
+                if stat.get(tag) and stat.get(label):
+                    localization[stat[tag]] = stat[label]
+            for upgrade in stat.get("upgrades") or ():
+                if upgrade.get("locTag") and upgrade.get("localizedText"):
+                    localization[upgrade["locTag"]] = upgrade["localizedText"]
     raw = {}
     hashes = {}
     for t in templates:
@@ -41,8 +50,32 @@ def refresh(payload, raw_packages, build_label=None):
         if "ModularPistol" in source:
             source = "LotusPistolRandomModRare"
         advanced = []
+        ordinary = {s.get("tag") for s in t["stats"]
+                    if not s.get("isAdvancedTrait") and not s.get("fusionOnly")}
+        additions = []
         for entry in raw[source].get("UpgradeEntries") or []:
             if not entry.get("IsAdvancedTrait"):
+                # Updates can add ordinary traits too (shotgun zoom arrived
+                # alongside MergeOptions). Preserve the frozen rows and import
+                # new tags from this family, never from another gun template.
+                if entry.get("Tag") not in ordinary:
+                    additions.append({
+                        "tag": entry["Tag"],
+                        "canBeBuff": bool(entry.get("CanBeBuff")),
+                        "canBeCurse": bool(entry.get("CanBeCurse")),
+                        "rarity": entry.get("Rarity"),
+                        "icon": entry.get("Icon"),
+                        "prefixTag": entry.get("LocalizePrefixTag"),
+                        "prefix": localization.get(entry.get("LocalizePrefixTag")),
+                        "suffixTag": entry.get("LocalizeSuffixTag"),
+                        "suffix": localization.get(entry.get("LocalizeSuffixTag")),
+                        "compatibilityTags": list(entry.get("CompatibilityTags") or ()),
+                        "buffRestrictions": list(entry.get("BuffRestrictions") or ()),
+                        "curseRestrictions": list(entry.get("CurseRestrictions") or ()),
+                        "upgrades": _upgrade_rows(entry, localization),
+                        "sourceTemplate": source,
+                        "sourceSha256": hashes[source],
+                    })
                 continue
             code = TAG_CODES.get(entry.get("Tag"))
             if not code:
@@ -67,7 +100,7 @@ def refresh(payload, raw_packages, build_label=None):
             s
             for s in t["stats"]
             if not s.get("isAdvancedTrait") and not s.get("fusionOnly")
-        ] + advanced
+        ] + additions + advanced
         t["advancedTraitSource"] = {
             "template": source,
             "sha256": hashes[source],

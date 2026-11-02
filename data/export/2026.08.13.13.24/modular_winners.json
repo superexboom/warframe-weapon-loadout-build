@@ -151,7 +151,7 @@
      "parts": [
       "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelEgg/InfModularBarrelEggPart",
       "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleCPart",
-      "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfSmallClip/InfModularClipSmallCritStatPart"
+      "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigCritStatPart"
      ],
      "partNames": [
       {
@@ -165,24 +165,24 @@
        "nameZh": "重拳"
       },
       {
-       "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfSmallClip/InfModularClipSmallCritStatPart",
-       "nameEn": "Arcroid",
-       "nameZh": "弃脓"
+       "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigCritStatPart",
+       "nameEn": "Macro Thymoid",
+       "nameZh": "巨匣 抑脓"
       }
      ],
-     "kpm": 6.96785,
+     "kpm": 6.978343,
      "mods": [
       "火焰装填 Prime",
       "半自动手枪炮轰",
       "敏锐手枪",
       "灼痕焦点",
       "弱点专精 Prime",
-      "手枪元素师",
       "黄蜂螫刺",
-      "手枪精通 Prime"
+      "手枪元素师",
+      "匍匐靶心"
      ],
      "screened": 100,
-     "verified": 4
+     "verified": 5
     }
    }
   },
@@ -216,12 +216,12 @@
        "nameZh": "巨匣 弃脓"
       }
      ],
-     "kpm": 8.818421,
+     "kpm": 10.762341,
      "mods": [
       "急冻控场 Prime",
       "毒素弹幕",
       "烈焰",
-      "地狱弹膛",
+      "镀层 地狱弹膛",
       "抵近射击 Prime",
       "霰弹弹幕",
       "降速暴击",
@@ -562,16 +562,16 @@
        "nameZh": "厄克瓦纳 II ·贾依"
       }
      ],
-     "kpm": 8.068422,
+     "kpm": 15.673756,
      "mods": [
       "剑风 Prime",
       "蚀骨寒霜",
       "热病打击 Prime",
-      "异况超量",
       "压迫点 Prime",
-      "励磁加速",
+      "异况超量",
+      "爆裂刀刃",
       "狂暴 Prime",
-      "爆裂刀刃"
+      "励磁加速"
      ],
      "screened": 160,
      "verified": 4
@@ -608,16 +608,16 @@
        "nameZh": "厄克瓦纳 II ·贾依"
       }
      ],
-     "kpm": 6.686098,
+     "kpm": 13.54476,
      "mods": [
       "剑风 Prime",
       "蚀骨寒霜",
-      "励磁加速",
-      "热病打击 Prime",
       "压迫点 Prime",
+      "热病打击 Prime",
       "异况超量",
       "狂暴 Prime",
-      "爆裂刀刃"
+      "爆裂刀刃",
+      "励磁加速"
      ],
      "screened": 160,
      "verified": 5
@@ -635,7 +635,7 @@
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipOne",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
      ],
      "partNames": [
       {
@@ -649,21 +649,21 @@
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII",
-       "nameEn": "Ekwana II Jai",
-       "nameZh": "厄克瓦纳 II ·贾依"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
+       "nameEn": "Ekwana Jai II",
+       "nameZh": "厄克瓦纳·贾依 II"
       }
      ],
-     "kpm": 3.910179,
+     "kpm": 18.726903,
      "mods": [
       "剑风 Prime",
       "蚀骨寒霜",
-      "励磁加速",
-      "压迫点 Prime",
+      "热病打击 Prime",
       "异况超量",
-      "剧毒灾害",
+      "压迫点 Prime",
+      "爆裂刀刃",
       "狂暴 Prime",
-      "爆裂刀刃"
+      "创口溃烂"
      ],
      "screened": 160,
      "verified": 5
@@ -681,7 +681,7 @@
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipSix",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
      ],
      "partNames": [
       {
@@ -695,12 +695,12 @@
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII",
-       "nameEn": "Ekwana II Jai",
-       "nameZh": "厄克瓦纳 II ·贾依"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
+       "nameEn": "Ekwana Jai II",
+       "nameZh": "厄克瓦纳·贾依 II"
       }
      ],
-     "kpm": 6.135322,
+     "kpm": 12.556338,
      "mods": [
       "剑风 Prime",
       "热病打击 Prime",
@@ -708,8 +708,8 @@
       "蚀骨寒霜",
       "异况超量",
       "爆裂刀刃",
-      "励磁加速",
-      "狂暴 Prime"
+      "狂暴 Prime",
+      "急进猛突"
      ],
      "screened": 160,
      "verified": 5
@@ -727,7 +727,7 @@
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipThree",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
      ],
      "partNames": [
       {
@@ -741,21 +741,21 @@
        "nameZh": "佩耶"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
-       "nameEn": "Vargeet Jai II",
-       "nameZh": "瓦吉·贾依 II"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
+       "nameEn": "Ekwana Jai II",
+       "nameZh": "厄克瓦纳·贾依 II"
       }
      ],
-     "kpm": 8.113065,
+     "kpm": 13.897246,
      "mods": [
       "剑风 Prime",
-      "热病打击 Prime",
-      "压迫点 Prime",
       "蚀骨寒霜",
+      "热病打击 Prime",
       "异况超量",
-      "爆裂刀刃",
+      "压迫点 Prime",
       "狂暴 Prime",
-      "牺牲 斩铁"
+      "爆裂刀刃",
+      "创口溃烂"
      ],
      "screened": 160,
      "verified": 5
@@ -772,8 +772,8 @@
      "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipTwo",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII"
      ],
      "partNames": [
       {
@@ -782,26 +782,26 @@
        "nameZh": "棍击"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
-       "nameEn": "Peye",
-       "nameZh": "佩耶"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
+       "nameEn": "Seekalla",
+       "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
-       "nameEn": "Vargeet Jai II",
-       "nameZh": "瓦吉·贾依 II"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII",
+       "nameEn": "Ekwana II Jai",
+       "nameZh": "厄克瓦纳 II ·贾依"
       }
      ],
-     "kpm": 8.508591,
+     "kpm": 17.015502,
      "mods": [
       "剑风 Prime",
+      "蚀骨寒霜",
       "热病打击 Prime",
       "压迫点 Prime",
-      "蚀骨寒霜",
       "异况超量",
       "爆裂刀刃",
       "狂暴 Prime",
-      "牺牲 斩铁"
+      "创口溃烂"
      ],
      "screened": 160,
      "verified": 5
@@ -838,15 +838,15 @@
        "nameZh": "厄克瓦纳·贾依 II"
       }
      ],
-     "kpm": 11.180635,
+     "kpm": 16.824927,
      "mods": [
       "剑风 Prime",
       "蚀骨寒霜",
+      "热病打击 Prime",
       "压迫点 Prime",
-      "剧毒灾害",
       "异况超量",
-      "爆裂刀刃",
       "狂暴 Prime",
+      "爆裂刀刃",
       "创口溃烂"
      ],
      "screened": 160,
@@ -864,7 +864,7 @@
      "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipNine",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
      ],
      "partNames": [
@@ -874,9 +874,9 @@
        "nameZh": " sep"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
-       "nameEn": "Peye",
-       "nameZh": "佩耶"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
+       "nameEn": "Seekalla",
+       "nameZh": "希卡拉"
       },
       {
        "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
@@ -884,15 +884,15 @@
        "nameZh": "厄克瓦纳·贾依 II"
       }
      ],
-     "kpm": 8.100078,
+     "kpm": 18.089646,
      "mods": [
       "剑风 Prime",
       "蚀骨寒霜",
-      "压迫点 Prime",
       "热病打击 Prime",
+      "压迫点 Prime",
       "异况超量",
       "狂暴 Prime",
-      "励磁加速",
+      "急进猛突",
       "爆裂刀刃"
      ],
      "screened": 160,
@@ -911,7 +911,7 @@
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipTen",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII"
      ],
      "partNames": [
       {
@@ -925,20 +925,20 @@
        "nameZh": "佩耶"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
-       "nameEn": "Ekwana Jai II",
-       "nameZh": "厄克瓦纳·贾依 II"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII",
+       "nameEn": "Ekwana II Jai",
+       "nameZh": "厄克瓦纳 II ·贾依"
       }
      ],
-     "kpm": 4.796549,
+     "kpm": 11.780082,
      "mods": [
       "剑风 Prime",
       "蚀骨寒霜",
       "压迫点 Prime",
-      "励磁加速",
+      "热病打击 Prime",
       "异况超量",
-      "剧毒灾害",
       "狂暴 Prime",
+      "励磁加速",
       "爆裂刀刃"
      ],
      "screened": 160,
@@ -957,7 +957,7 @@
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipOne",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
      ],
      "partNames": [
       {
@@ -971,24 +971,24 @@
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII",
-       "nameEn": "Ekwana II Jai",
-       "nameZh": "厄克瓦纳 II ·贾依"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
+       "nameEn": "Ekwana Jai II",
+       "nameZh": "厄克瓦纳·贾依 II"
       }
      ],
-     "kpm": 8.144369,
+     "kpm": 18.522601,
      "mods": [
       "剑风 Prime",
       "伏打电能",
-      "励磁加速",
       "异况超量",
       "压迫点 Prime",
       "狂暴 Prime",
-      "剧毒灾害",
-      "爆裂刀刃"
+      "创口溃烂",
+      "热病打击 Prime",
+      "励磁加速"
      ],
      "screened": 160,
-     "verified": 5
+     "verified": 4
     }
    }
   },
@@ -1002,8 +1002,8 @@
      "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipTwo",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedICritII"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
      ],
      "partNames": [
       {
@@ -1012,26 +1012,26 @@
        "nameZh": "瘟疫克瓦尔"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
-       "nameEn": "Peye",
-       "nameZh": "佩耶"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
+       "nameEn": "Seekalla",
+       "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedICritII",
-       "nameEn": "Vargeet II Jai",
-       "nameZh": "瓦吉 II ·贾依"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
+       "nameEn": "Ekwana Jai II",
+       "nameZh": "厄克瓦纳·贾依 II"
       }
      ],
-     "kpm": 6.635946,
+     "kpm": 21.020495,
      "mods": [
       "剑风 Prime",
-      "蚀骨寒霜",
+      "伏打电能",
       "压迫点 Prime",
+      "创口溃烂",
       "狂暴 Prime",
       "异况超量",
-      "剧毒灾害",
-      "爆裂刀刃",
-      "牺牲 斩铁"
+      "热病打击 Prime",
+      "励磁加速"
      ],
      "screened": 160,
      "verified": 5

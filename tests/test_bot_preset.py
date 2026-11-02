@@ -63,3 +63,24 @@ def test_ultra_reads_the_entry_baked_at_the_catalog_disposition():
     assert "ultra-profile-baseline-approximate" in miss["unsupported"]
     assert "ultra-profile-baseline-approximate" not in hit["unsupported"]
     assert any(item.startswith("cache: ") for item in hit["skipped"])
+
+
+def test_shotgun_zoom_uses_its_own_new_ordinary_template():
+    import pytest
+    from tests.test_riven_disposition_20261023 import _engine_request
+
+    rows = list(optimizer._template_stats(app.EXPORTS["rivenTemplates"], "shotgun"))
+    row = next(s for code, _, s, _ in rows if code == "H")
+    assert row["tag"] == "WeaponZoomFovMod" and row["canBeBuff"] and row["canBeCurse"]
+    assert app.RIVEN_BASE_VALUES["shotgun"]["H"] == pytest.approx(41.9940009)
+    weapon = next(w for w in app.CATALOG["weapons"] if w.get("nameEn") == "Bubonico")
+    card = dict(weapon=weapon["path"], disposition=1.2, stats=[
+        dict(code="1", value=108.6, negative=False), dict(code="CO", value=110.9, negative=False),
+        dict(code="D", value=200.3, negative=False), dict(code="H", value=38.2, negative=True)])
+    result = _engine_request(card)
+    assert [s["value"] for s in result["stats"]] == [108.6, 110.9, 200.3, 38.2]
+    assert result["stats"][-1]["negative"] is True
+    assert "H" not in app.RIVEN_BASE_VALUES["melee"]
+    card["stats"][-1]["value"] = 90
+    with pytest.raises(app.SimulationError, match="outside"):
+        _engine_request(card)
