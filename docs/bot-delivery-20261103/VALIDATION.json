@@ -1,0 +1,85 @@
+{
+  "inputs": "3164abcf09794105",
+  "targets": 658,
+  "complete": 658,
+  "contexts": 658,
+  "entries": 658,
+  "routes": 98,
+  "routeTargets": 98,
+  "missing": {},
+  "routeMissing": [],
+  "illegalRecommendations": [],
+  "manifestErrors": [],
+  "finite": true,
+  "fatalLabels": 253,
+  "fatalThresholds": 219,
+  "samples": [
+    {
+      "weapon": "Bubonico",
+      "seconds": 0.29997110000113025,
+      "cached": true,
+      "damageScore": 100.0,
+      "actualKpm": 80.26665914615084,
+      "mods": 7,
+      "native": 75,
+      "fallback": 0
+    },
+    {
+      "weapon": "Larkspur",
+      "seconds": 0.2607731000025524,
+      "cached": true,
+      "damageScore": 37.19624790863201,
+      "actualKpm": 28.690613724416682,
+      "mods": 7,
+      "native": 75,
+      "fallback": 0
+    }
+  ],
+  "nativeSha256": "3db1c25d19c1bd7eef297c3e6216099d3e8a03b090e2bf9a0d4fade7ab324d06",
+  "sourceRevision": "5b7901423511994e67538c01bb35b2cfcd4391c6",
+  "manifestFiles": 92,
+  "cacheSha256": "e64c8231320cf5f188ae1179d85a31927a443738c718da168aa4a74e0a455257",
+  "sourceTreeSha256": "feefb7a9f51178fba859ef8159786893bc3408c8f17bc2c8313218569bfd3bc6",
+  "scope": "complete Bot preset only; not full-game mechanics calibration",
+  "bake": {
+    "exitCode": 0,
+    "elapsedSeconds": 12245.054728984833,
+    "deepStageSeconds": 11600,
+    "pilotSeconds": 126,
+    "pilotReused": 3,
+    "workers": 10,
+    "cpuAffinity": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      1,
+      3
+    ],
+    "gpuEnabled": false,
+    "rerunFullBake": false
+  },
+  "tests": {
+    "botPython": 39,
+    "goPackages": [
+      "service/rarsenal",
+      "domain/riven",
+      "app/ocr",
+      "feature/ocr"
+    ],
+    "portableCollection": 2124,
+    "previousCollection": 2163,
+    "delta": -39,
+    "newTestFiles": 0,
+    "fullPortableSuiteExecuted": false
+  },
+  "incremental": {
+    "inputs": "3164abcf09794105",
+    "object": "66dee63378b1df53b875f8a3c4e60da141702d839f8ab817b799e78273a4d7b4",
+    "saved": 658
+  }
+}
