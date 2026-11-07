@@ -78,6 +78,10 @@ python tools/compare_wfsim_boards.py summarize --runtime .local/wfsim-reference 
 
 省略 `--window-seconds` 使用官方榜单的窗口。`cross-window --window-seconds 180` 可将已有搜索结果放到 180 秒条件复测，不重新搜索。报告保留不能映射的样例、超时及两个模型的排序差异；它衡量固定赋能、灵化路线和紫卡数值下的 MOD 搜索，不证明全局最优。默认使用官方 WASM；提供带匹配构建清单的 simfleet 原生库时，会校验引擎标识和文件哈希后使用它。
 
+## 技术文档
+
+- [Portable 预烘焙缓存与 WFSim 分布式接入建议](docs/PREBAKED-CACHE-DISTRIBUTION-FOR-WFSIM.md)：缓存分层、实际收益边界、增量失效，以及候选起点、准备数据和评分结果的分发条件。
+
 ## 项目结构
 
 ```text
