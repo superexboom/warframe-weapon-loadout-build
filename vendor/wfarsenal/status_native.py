@@ -70,10 +70,12 @@ def _target(target: Mapping[str, Any], target_kwargs: Mapping[str, Any]):
 
         def location(name):
             where, hit_multiplier, critical_multiplier, _unsupported, _metadata = _hit_location_info(target, name)
-            return (float(hit_multiplier), float(critical_multiplier), _normalise_hit_location(where) == "head")
+            valid_head = (_normalise_hit_location(where) == "head"
+                          and not any("unavailable" in str(x) or "invalid" in str(x) for x in _unsupported))
+            return ((float(hit_multiplier), float(critical_multiplier), _normalise_hit_location(where) == "head"), valid_head)
 
-        body = location("body")
-        located = location(target_kwargs.get("hit_location"))
+        body, _ = location("body")
+        located, head_eligible = location(target_kwargs.get("hit_location"))
     except Exception as exc:  # the reference raises its own error for these
         raise Unsupported(str(exc)) from exc
     # The armour the native side derives must be the reference's own.
@@ -92,6 +94,7 @@ def _target(target: Mapping[str, Any], target_kwargs: Mapping[str, Any]):
         armourBypass=sorted(_damage_type_set(target.get("armourBypassDamageTypes"), DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES)),
         shieldBypass=sorted(_damage_type_set(target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES)),
         targetFaction=str(target.get("faction") or ""), factionBracket=faction_bracket(target), body=body, located=located,
+        headEligible=head_eligible,
         existingMagnetic=int((enhancements or {}).get("magneticStacks") or 0),
     ))
     if len(_TARGETS) >= 256:
@@ -105,6 +108,8 @@ def score(stats, target: Mapping[str, Any], target_kwargs: Mapping[str, Any], *,
     """``sustained_status_damage(...)["totalDps" if total else "directDps"]``."""
     if not isinstance(target, Mapping):
         raise Unsupported("no target")
+    if not getattr(wfcore, 'ELECTRIC_GAS_PROC_PILE', 0):
+        raise Unsupported('core predates electric/gas seed and landing contract')
     if getattr(stats,'ignore_headshot_bonus',False) and not getattr(wfcore,'IGNORE_HEADSHOT_BONUS',0):
         raise Unsupported('core predates native projectile headshot rules')
     if getattr(stats, 'area_direct', False) and not getattr(wfcore, 'STUG_AREA_DIRECT', 0):

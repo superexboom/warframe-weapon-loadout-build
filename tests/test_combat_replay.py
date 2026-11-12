@@ -275,14 +275,44 @@ def test_immediate_dot_survives_short_positive_duration(dtype):
         damage_types={dtype: 100.0}, fire_rate=1.0, proc_duration_multiplier=0.01
     )
     r = run(st, window_seconds=0.5)
-    assert r["dotWindow"] == pytest.approx(50.0)
+    assert r["dotWindow"] == pytest.approx(50.5)
 
 
 def test_gas_discards_oldest_damage_instances_at_ten():
     st = stats(damage_types={"DT_GAS": 100.0}, fire_rate=100.0, status_chance=1.0)
     r = run(st, window_seconds=2.0)
-    # 200 immediate procs plus at most ten retained one-second ticks.
-    assert r["dotWindow"] <= 210 * 50.0 + 1e-6
+    # One immediate shared tick, then ten retained seeds at t=1 and t=2.
+    assert r["dotWindow"] == pytest.approx(50.5 + 2 * 500.5)
+    from wfarsenal.proc_probability import ProcPile
+    pile = ProcPile(10)
+    for source in range(11):
+        pile.add(0., 6., [(1., 1, 50., .5, 1., False)], source=source)
+    assert pile.tick(0., pile.token)[5] == 1  # The capped-out first seed is not the breaking weapon.
+
+
+def test_electric_gas_pile_retains_latest_landing_correlation():
+    from wfarsenal.proc_probability import ProcPile
+    # Pinned M100: the same three applying hits differ only in their order.
+    values = []
+    for order in ('HHB', 'BHH'):
+        pile = ProcPile()
+        for mark in order:
+            head = mark == 'H'
+            pile.add(0., 6., [(1., 1, 1296. if head else 240., 1.5, 1.8 if head else 1., head)])
+        values.append(pile.moments(0.)[:2])
+    assert values == [(2833.5, 0.), (5100.3, 5100.3)]
+    # Mixed success and landing must retain their joint damage moment.
+    pile = ProcPile()
+    outcomes = [(0.5, 0, 0., 0., 1., False), (.25, 1, 1., .5, 1., False), (.25, 1, 3., .5, 2., True)]
+    for _ in range(2):
+        pile.add(0., 6., outcomes)
+    assert pile.moments(0.) == pytest.approx((3.9375, 3.125, 1., .75))
+    pile = ProcPile(10)
+    pile.add(0., 6., [(1., 9, 1., .5, 1., False)])
+    pile.add(0., 6., [(0.5, 0, 0., 0., 1., False)] + [
+        (.125, n, 3. if head else 1., .5, 2. if head else 1., head)
+        for n in (1, 2) for head in (False, True)])
+    assert pile.moments(0.) == pytest.approx((14.125, 6.75, 9.5, 1.))
 
 
 def test_blast_fuse_scales_with_duration_and_ten_stacks_detonate():

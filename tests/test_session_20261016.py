@@ -119,9 +119,10 @@ def test_electricity_and_gas_ticks_take_headshot_bonuses_again(dtype, extra):
     bonus = stats(damage_types={dtype: 100.0}, headshot_bonus_multiplier=2.0)
 
     def seed(st, location):
-        return expected_dot_damage(st, tg, hit_location=location)["perType"][dtype]["seedPerSecondPerProc"]
+        row = expected_dot_damage(st, tg, hit_location=location)["perType"][dtype]
+        return row["seedPerSecondPerProc"] * row.get("landingMultiplier", 1.)
     # Every DoT seeds from the head hit (headshot bonuses once); Electricity
-    # and Gas ticks also land on the head and take them again.
+    # and Gas ticks take the latest successful landing separately.
     assert seed(bonus, "head") / seed(plain, "head") == pytest.approx(2. * extra, rel=1e-9)
     assert seed(bonus, "body") == pytest.approx(seed(plain, "body"))
 

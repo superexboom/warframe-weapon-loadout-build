@@ -372,6 +372,140 @@ def _fold(dist, kernel, cap):
     return out
 
 
+def proc_pile_outcomes(stats, branches, expected_count):
+    """Ordered pellet kernels; retain conditional head/body proc probability.
+
+    Uses the same absence + adjacent integer count approximation as the
+    existing capped pools. A fractional last pellet is one Bernoulli event;
+    a merged beam is one opportunity. Crit-conditioned seed expectations are
+    supplied by the producer, not re-rolled here.
+    """
+    pellets = max(float(stats.multishot), 0.)
+    if pellets <= 0.:
+        return []
+    instances = 1. if stats.continuous else pellets
+    declared = sum(b['weight'] * b['procs'] for b in branches)
+    if declared <= 0. or expected_count <= 0.:
+        return []
+    scale = expected_count / declared
+    outcomes = []
+    for b in branches:
+        weight = b['weight']
+        n = b['procs'] / instances * scale
+        a = b['absence'] ** scale
+        if a >= 1. and n > 0.:
+            a = 1. - min(n, 1.)
+        kernel = _arrival_kernel(a, n, max(1, int(math.ceil(n/max(1.-a,1e-300)))))
+        if kernel is None:
+            outcomes.append((weight, 0, 0., 0., 1., False))
+        else:
+            outcomes.extend((weight*q, j, b['seed'], b['accumulator'], b['landing'], b['weak'])
+                            for j,q in kernel)
+    whole = int(math.floor(instances))
+    result = [tuple(outcomes)] * whole
+    fraction = instances - whole
+    if fraction > 0.:
+        result.append(tuple([(1.-fraction,0,0.,0.,1.,False),
+                             *((q*fraction,n,seed,acc,land,weak) for q,n,seed,acc,land,weak in outcomes)]))
+    return result
+
+
+class ProcPile:
+    """Electric/Gas conditional moments on one shared expected clock.
+
+    Each event is an ordered pellet opportunity: (probability, integer count,
+    seed per stack, accumulator, landing multiplier, weak eligibility).
+    The reverse DP retains E[seed * latest landing], including no-proc worlds
+    and Gas FIFO rank, rather than multiplying independent means. Count draws
+    use the engine's existing adjacent-integer arrival approximation. The
+    clock starts at the first possible application; random first-clock phases
+    are not split. Latest landing does not roll back when its seed expires.
+    """
+    def __init__(self, cap=None):
+        self.cap = cap
+        self.reset()
+
+    def reset(self):
+        self.events = []
+        self.next = None
+        self.token = getattr(self, 'token', 0) + 1
+        self._cached = None
+
+    def add(self, t, duration, outcomes, origin=None, source=None):
+        if duration <= 0 or not any(p > 0 and n > 0 for p, n, *_ in outcomes):
+            return None
+        if self.next is None:
+            self.next = t
+            self.token += 1
+            schedule = (t, self.token)
+        else:
+            schedule = None
+        # The source clock preserves tick count even for a short positive
+        # duration joining a later shared boundary.
+        end = self.next + max(1, int(math.ceil(duration - 1e-9))) - 1
+        self.events.append((end, tuple(outcomes), origin, source))
+        self._cached = None
+        return schedule
+
+    def moments(self, t):
+        if self._cached is not None and self._cached[0] == t:
+            return self._cached[1]
+        cap = self.cap or 1
+        # probability, landing, weak landing, seeds, weak seeds,
+        # accumulator, weak accumulator, live count, live probability
+        dp = [[0.] * 9 for _ in range(cap + 1)]
+        dp[0][0] = 1.
+        origin = source = None
+        for end, outcomes, event_origin, event_source in reversed(self.events):
+            nxt = [[0.] * 9 for _ in range(cap + 1)]
+            for k, row in enumerate(dp):
+                if row[0] == 0.:
+                    continue
+                for q, n, seed, accumulator, landing, weak in outcomes:
+                    if q <= 0.:
+                        continue
+                    dest = min(cap, k + n) if self.cap else int(k > 0 or n > 0)
+                    values = list(row)
+                    if n and k == 0:
+                        values[1] = landing * row[0]
+                        values[2] = values[1] if weak else 0.
+                    kept = min(n, cap-k) if self.cap else n
+                    if kept and end >= t - 1e-9:
+                        origin, source = event_origin, event_source
+                        values[3] += kept * seed * values[1]
+                        values[4] += kept * seed * values[2]
+                        # Oldest surviving seed supplies the one accumulator.
+                        values[5] = accumulator * values[1]
+                        values[6] = accumulator * values[2]
+                        values[7] += kept * row[0]
+                        values[8] = row[0]
+                    for i, value in enumerate(values):
+                        nxt[dest][i] += q * value
+            dp = nxt
+        totals = [sum(row[i] for row in dp) for i in range(9)]
+        result = (totals[3] + totals[5], totals[4] + totals[6], totals[7], totals[8])
+        self._cached = (t, result, origin, source)
+        return result
+
+    def tick(self, t, token):
+        if token != self.token or self.next is None or abs(t-self.next) > 1e-8:
+            return None
+        result = self.moments(t)
+        # Matches the existing single-weapon source convention. A grouped
+        # packet has one victim interaction even when several forms seeded it.
+        origin, source = self._cached[2:]
+        self.next = t + 1.
+        oldest = next((i for i, e in enumerate(self.events) if e[0] >= self.next-1e-9), None)
+        if oldest is None:
+            self.reset()
+            schedule = None
+        else:
+            self.events = self.events[oldest:]
+            self._cached = None
+            schedule = (self.next, self.token)
+        return (*result, origin, source, schedule)
+
+
 class CappedPool:
     """Exact live stacks of a replace-oldest pool with independent durations.
 

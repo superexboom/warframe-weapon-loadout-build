@@ -94,11 +94,12 @@ def test_native_status_score_retains_exact_projectile_head_semantics(name,mode,m
     status_native.score(stats,target(),dict(hit_location='head'),status_rate_multiplier=1.,damage_rate_multiplier=1.,total=True)
 
 
-def test_electric_head_seed_still_receives_deadhead_twice_after_flag_recovery():
+def test_electric_head_seed_and_landing_receive_deadhead_separately():
     _,stats,_=bound('Alternox',0)
-    plain=expected_dot_damage(stats,target(),hit_location='head')['perType']['DT_ELECTRICITY']['seedPerSecondPerProc']
-    boosted=expected_dot_damage(replace(stats,headshot_bonus_multiplier=1.3),target(),hit_location='head')['perType']['DT_ELECTRICITY']['seedPerSecondPerProc']
-    assert boosted/plain==pytest.approx(1.3**2)
+    plain=expected_dot_damage(stats,target(),hit_location='head')['perType']['DT_ELECTRICITY']
+    boosted=expected_dot_damage(replace(stats,headshot_bonus_multiplier=1.3),target(),hit_location='head')['perType']['DT_ELECTRICITY']
+    assert boosted['seedPerSecondPerProc']/plain['seedPerSecondPerProc']==pytest.approx(1.3)
+    assert boosted['landingMultiplier']/plain['landingMultiplier']==pytest.approx(1.3)
 
 
 @pytest.mark.parametrize('value',[False,True])

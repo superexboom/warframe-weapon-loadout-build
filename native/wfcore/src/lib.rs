@@ -183,6 +183,7 @@ fn c_math(name: &str, x: f64, y: f64) -> f64 {
 #[pymodule]
 fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("ABI", 1)?;
+    m.add("ELECTRIC_GAS_PROC_PILE", 1)?;
     m.add("ALT_EMBEDDED_LIFECYCLE", 3)?;
     m.add("MELEE_INITIAL_COMBO_RECOVERY", 1)?;
     m.add("COMPANION_PROJECTILE_SEQUENCE", 1)?;

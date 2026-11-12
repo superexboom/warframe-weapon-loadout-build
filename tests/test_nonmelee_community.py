@@ -67,15 +67,20 @@ def test_conditional_gunco_arms_after_kill_with_zero_initial_bucket():
     assert live.dot_base_damage==pytest.approx(zero.dot_base_damage)
 
 @pytest.mark.parametrize('pool',['overguard','shield'])
-def test_magnetic_break_emits_six_pool_based_electric_ticks(pool):
+def test_magnetic_break_uses_ordinary_electric_context(pool):
     tg=target();tg[pool]=500
-    st=stats(damage_types={'DT_MAGNETIC':100},status_chance=1,fire_rate=1,proc_damage_multiplier=2)
+    st=stats(damage_types={'DT_MAGNETIC':100},status_chance=1,fire_rate=1,
+             proc_damage_multiplier=2,proc_duration_multiplier=.5,
+             dot_elemental_multipliers={'DT_ELECTRICITY':3.})
     result=replay(st,tg,attacks_per_second=1,window_seconds=9,level=1)
     events=result['magneticBreaks']
     assert len(events)==1 and events[0]['pool']==pool
     assert events[0]['stacks']==2
-    assert events[0]['seedPerTick']==pytest.approx(500*.03*2*4/6)
-    assert result['dotByType']['DT_ELECTRICITY']==pytest.approx(500*.03*2*4)
+    seed=500*.03*2/6*2*3
+    assert events[0]['seedPerTick']==pytest.approx(seed)
+    # Proc damage once; electric element and duration now apply, with one
+    # ordinary group accumulator. Half duration gives three shared ticks.
+    assert result['dotByType']['DT_ELECTRICITY']==pytest.approx((seed+.5*2*3)*3)
 
 def test_battery_recharge_is_not_a_reload_trigger():
     weapon=raw('weapons','Tenet Cycron');sc=Scenario(trigger_policy='emergent')

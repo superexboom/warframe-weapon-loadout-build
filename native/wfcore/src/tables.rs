@@ -5,7 +5,7 @@
 //! and come precomputed from Python (`TargetTables`); everything here is the
 //! reference's arithmetic over the stats, in the same order.
 
-use crate::pymath::{pmax, pmin, pow, psum, trunc_i, PySum};
+use crate::pymath::{pmax, pmin, pow, psum, trunc_i, floor_i, PySum};
 
 pub type D = u32;
 pub type Vector = Vec<(D, f64)>;
@@ -68,6 +68,7 @@ pub struct TargetTables {
     pub damage: [Location; 2],
     /// Unit DoT target locations (body, head).
     pub dot: [Location; 2],
+    pub dot_head_eligible: [bool; 2],
     /// Unit DoT target multiplier per interaction type.
     pub dot_multiplier: Vec<(D, f64)>,
     pub forced_procs: Vector,
@@ -341,6 +342,42 @@ pub fn expected_status_procs(s: &Core, forced: &Vector, head: bool) -> Vector {
     result
 }
 
+/// No application probability from the actual packet view. `multishot` is
+/// one ordinary pellet, or the merged beam roll; `extra` is forced per instance.
+pub fn no_status_probability(s: &Core, d: D, aim: f64, multishot: f64, extra: f64) -> f64 {
+    let crit = if s.crit_proc_chances.iter().any(|x| x.0 == d) {
+        (1.0 - aim) * crit_proc_probability(s, d, false) + aim * crit_proc_probability(s, d, true)
+    } else { 0.0 };
+    let weights: Vec<(D, f64)> = s.damage_types.iter().map(|(k, v)| (*k, pmax(*v, 0.0))).collect();
+    let total = psum(weights.iter().map(|x| x.1));
+    let share = if total != 0.0 {
+        weights.iter().find(|x| x.0 == d).map(|x| x.1).unwrap_or(0.0) / total
+    } else { 0.0 };
+    let chance = pmax(s.status_chance, 0.0);
+    let multishot = pmax(multishot, 0.0);
+    let forced_per = s.native_forced_procs.iter().find(|x| x.0 == d).map(|x| x.1).unwrap_or(0.0);
+    let independent = pmax(s.independent_proc_chances.iter().find(|x| x.0 == d).map(|x| x.1).unwrap_or(0.0), 0.0);
+    let independent = 1.0 - (1.0 - pmin(1.0, independent)) * (1.0 - crit);
+    let continuous = s.continuous;
+    let zero_rolls = |chance: f64| -> f64 {
+        let whole = chance.floor();
+        pow(1.0 - share, whole) * (1.0 - (chance - whole) * share)
+    };
+    let zero_for_pellets = |pellets: i64| -> f64 {
+        if pellets <= 0 { return 1.0; }
+        let instances = if continuous { 1.0 } else { pellets as f64 };
+        let natural = if continuous {
+            zero_rolls(chance * pellets as f64)
+        } else { pow(zero_rolls(chance), pellets as f64) };
+        natural * pow(1.0 - pmin(1.0, forced_per), instances) * pow(1.0 - pmin(1.0, independent), instances)
+    };
+    let whole = floor_i(multishot);
+    let fraction = multishot - whole as f64;
+    let zero = (1.0 - fraction) * zero_for_pellets(whole) + fraction * zero_for_pellets(whole + 1);
+    let extra = pmax(extra, 0.0);
+    pmin(1.0, pmax(0.0, zero * (1.0 - pmin(1.0, extra))))
+}
+
 fn seed_merge(s: &Core, d: D, forced: &Vector) -> f64 {
     if !s.continuous || s.multishot <= 0.0 {
         return 1.0;
@@ -368,13 +405,32 @@ fn seed_merge(s: &Core, d: D, forced: &Vector) -> f64 {
     }
 }
 
+/// Conditional applying-hit mark, kept until the shared pile consumes it.
 #[derive(Clone, Copy)]
+pub struct LandingBranch {
+    pub weight: f64,
+    pub procs: f64,
+    pub absence: f64,
+    pub seed: f64,
+    pub accumulator: f64,
+    pub landing: f64,
+    pub aim: f64,
+    pub head: bool,
+    pub weak: bool,
+}
+
+#[derive(Clone)]
 pub struct Row {
     pub duration: f64,
+    pub absence: f64,
     pub seed: f64,
     pub accumulator: f64,
     pub shared: bool,
     pub coefficient: f64,
+    pub landing: f64,
+    pub landing_head: bool,
+    pub landing_weak_eligible: bool,
+    pub branches: Vec<LandingBranch>,
 }
 
 pub struct Status {
@@ -435,14 +491,16 @@ pub(crate) fn status(s: &Core, loc_index: usize, tables: &TargetTables) -> Statu
         let elemental_factor = if d == SLASH || d == IMPACT || d == PUNCTURE { 1.0 } else { pmax(elemental, 0.0) };
         let shared = d == FIRE || d == ELECTRICITY || d == GAS;
         let accumulator = if shared { 1.0 } else { pmin(count, 10.0) };
-        let accumulator_multiplier = pmax(elemental, 0.0) * proc_damage;
-        let mut unit = coefficient * seed_basis * seed_merge(s, d, forced) * elemental_factor * proc_damage
+        let part_landing = d == ELECTRICITY || d == GAS;
+        let landing_head = part_landing && !s.radial_only && tables.dot_head_eligible[loc_index];
+        // ignore_headshot_bonus suppresses raw part/crit multipliers, not
+        // the head event or its independent Deadhead-like landing bracket.
+        let landing_weak_eligible = landing_head;
+        let landing = if landing_weak_eligible { s.headshot_bonus_multiplier } else { 1.0 };
+        let accumulator_multiplier = pmax(elemental, 0.0) * proc_damage
+            * if part_landing { coefficient * pmax(faction_mod, 0.0) * target_multiplier } else { 1.0 };
+        let unit = coefficient * seed_basis * seed_merge(s, d, forced) * elemental_factor * proc_damage
             * s.falloff_multiplier * applied_hm * target_multiplier * pow(pmax(faction_mod, 0.0), 2.0);
-        if (d == ELECTRICITY || d == GAS) && !s.radial_only && hm > 1.0 + 1e-9 {
-            // WFSim M100: an Electricity / Gas tick lands on a head with the
-            // headshot bonuses once more (Python reference, same order).
-            unit *= s.headshot_bonus_multiplier;
-        }
         let mut crit_share = 0.0;
         if get(&s.crit_proc_chances, d).is_some() && !crit_seed_tiers.is_empty() {
             let shots = if s.continuous { 1.0 } else { pmax(s.multishot, 0.0) };
@@ -453,7 +511,20 @@ pub(crate) fn status(s: &Core, loc_index: usize, tables: &TargetTables) -> Statu
         tiers.retain(|e| e.0 > 0.0);
         let seed = psum(tiers.iter().map(|(w, ps)| w * ps));
         let duration = 6.0 * s.duration_scale(d);
-        rows.push((d, Row { duration, seed, accumulator: accumulator * accumulator_multiplier, shared, coefficient }));
+        let accumulator = accumulator * accumulator_multiplier;
+        let pellets = pmax(s.multishot, 0.0);
+        let instances = if s.continuous { 1.0 } else { pellets };
+        let extra = if instances > 0.0 { get(forced, d).unwrap_or(0.0) / instances } else { 0.0 };
+        let absence = if part_landing {
+            no_status_probability(s, d, if loc.head { 1.0 } else { 0.0 },
+                                  if s.continuous { pellets } else { 1.0 }, extra)
+        } else { 1.0 };
+        let branches = if part_landing {
+            vec![LandingBranch { weight: 1.0, procs: count, absence, seed, accumulator, landing,
+                                 aim: loc_index as f64, head: landing_head, weak: landing_weak_eligible }]
+        } else { Vec::new() };
+        rows.push((d, Row { duration, absence, seed, accumulator, shared, coefficient,
+                           landing, landing_head, landing_weak_eligible, branches }));
     }
     let mut non = Vec::new();
     let blast = get(&procs, EXPLOSION).unwrap_or(0.0);
@@ -485,14 +556,49 @@ pub fn attack_data(s: &Core, aim: f64, tables: &TargetTables) -> (Vector, Vector
     let b = status(s, 0, tables);
     let h = if aim != 0.0 { Some(status(s, 1, tables)) } else { None };
     let h = h.as_ref().unwrap_or(&b);
-    let rows: Vec<(D, Row)> = b
-        .rows
-        .iter()
-        .map(|(d, r)| {
-            let hr = h.rows.iter().find(|x| x.0 == *d).map(|x| x.1).unwrap_or(*r);
-            (*d, Row { seed: r.seed * (1.0 - aim) + hr.seed * aim, ..*r })
-        })
-        .collect();
+    // Include head-only status types (e.g. a weak-point conditioned proc).
+    // The legacy scalar row is proc-weighted; E/G consumers use the conditional
+    // branches, never E[seed] * E[landing].
+    let mut row_keys: Vec<D> = b.rows.iter().map(|e| e.0).collect();
+    for (d, _) in &h.rows {
+        if (*d == ELECTRICITY || *d == GAS) && !row_keys.contains(d) { row_keys.push(*d); }
+    }
+    let rows: Vec<(D, Row)> = row_keys.into_iter().map(|d| {
+        let br = b.rows.iter().find(|e| e.0 == d).map(|e| &e.1);
+        let hr = h.rows.iter().find(|e| e.0 == d).map(|e| &e.1);
+        let mut row = br.or(hr).unwrap().clone();
+        let bp = get(&b.procs, d).unwrap_or(0.0);
+        let hp = get(&h.procs, d).unwrap_or(0.0);
+        let count = (1.0 - aim) * bp + aim * hp;
+        row.seed = if d == ELECTRICITY || d == GAS {
+            if count > 0.0 {
+                ((1.0 - aim) * bp * br.map_or(0.0, |r| r.seed)
+                 + aim * hp * hr.map_or(0.0, |r| r.seed)) / count
+            } else { 0.0 }
+        } else {
+            let body_seed = br.unwrap().seed;
+            body_seed * (1.0 - aim) + hr.map_or(body_seed, |r| r.seed) * aim
+        };
+        row.branches.clear();
+        if d == ELECTRICITY || d == GAS {
+            for (weight, conditional, procs, branch_aim) in [(1.0 - aim, br, bp, 0.0), (aim, hr, hp, 1.0)] {
+                if weight > 0.0 {
+                    if let Some(r) = conditional {
+                        row.branches.push(LandingBranch { weight, procs, absence: r.absence, seed: r.seed,
+                            accumulator: r.accumulator, landing: r.landing, aim: branch_aim,
+                            head: r.landing_head, weak: r.landing_weak_eligible });
+                    } else {
+                        // An aim branch with no proc row still owns its
+                        // no-application probability mass.
+                        row.branches.push(LandingBranch { weight, procs: 0.0, absence: 1.0, seed: 0.0,
+                            accumulator: 0.0, landing: 1.0, aim: branch_aim,
+                            head: false, weak: false });
+                    }
+                }
+            }
+        }
+        (d, row)
+    }).collect();
     let mut keys: Vec<D> = b.procs.iter().map(|e| e.0).collect();
     for e in &h.procs {
         if !keys.contains(&e.0) {
@@ -555,7 +661,7 @@ pub fn crit_view_packet(s: &Core, aim: f64, puncture: f64, cold: f64, shiver: f6
             let pk = get(&p, *d).unwrap_or(0.0);
             let sum = 0.0 + 1.0 * pk * row.seed;
             let total = get(&procs, *d).unwrap_or(0.0);
-            (*d, Row { seed: if total != 0.0 { sum / total } else { 0.0 }, ..*row })
+            (*d, Row { seed: if total != 0.0 { sum / total } else { 0.0 }, ..row.clone() })
         })
         .collect();
     let non = n

@@ -180,12 +180,14 @@ def test_beam_floor_uses_exact_audited_weapon_profile(name,floor):
     assert combat['beamRampFloors']['selected']==floor
 
 
-@pytest.mark.parametrize('dtype,expected',[('DT_ELECTRICITY',0.),('DT_GAS',0.),('DT_FIRE',0.),('DT_POISON',0.)])
-def test_dot_kills_never_trigger_weakpoint_kill_buffs(dtype,expected):
-    # WFSim pellet.rs weakpoint_kill: only a direct weak-point hit that kills.
+@pytest.mark.parametrize('dtype,expected',[('DT_ELECTRICITY',1.),('DT_GAS',1.),('DT_POISON',0.)])
+def test_dot_kill_eligibility_follows_shared_pile_landing(dtype,expected):
+    # Latest successful electric/gas head application remains a weak landing,
+    # including proxies whose numerical multiplier is exactly one.
     st=stats(damage_types={dtype:1.},status_chance=1.,dot_base_damage=100.,fire_rate=.1)
     source=dict(id='weak-kill',label='Weakpoint kill',kind='on-headshot-kill',maxStacks=3.,perEvent=1.,duration=24.)
-    result=run(st,target(15.),headshot_chance=1.,window_seconds=1.1,trigger_sources=[source])
+    result=run(st,target(15.,hitProxies=[dict(part='HEAD',damageMultiplier=1.)]),
+               headshot_chance=1.,window_seconds=1.1,trigger_sources=[source])
     assert result['killEvents']==1
     assert result['triggerSeries'][0]['series'][-1]==expected
 

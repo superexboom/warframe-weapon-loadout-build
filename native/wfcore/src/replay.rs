@@ -10,7 +10,7 @@
 //! Every float operation keeps the reference's order.
 
 use crate::heat::HeatChains;
-use crate::proc::{capped_stack_add, stack_alive, CappedPool, DotInstance, KillAttribution, StatusPresence};
+use crate::proc::{stack_alive, CappedPool, DotInstance, KillAttribution, StatusPresence, ProcPile, PileOutcome, arrival_kernel};
 use crate::pymath::{ceil_i, floor_i, pmax, pmin, pow, psum, trunc_i, PySum};
 use crate::tables::{self, Core, Location, TargetTables};
 use crate::co;
@@ -455,6 +455,7 @@ enum Kind {
     Blast(usize),
     BlastAll,
     IndependentDot(usize),
+    GroupedDot(D, u64),
     Dot(D, f64, f64, u8),
     Actor(String),
     Energy(usize),
@@ -594,13 +595,14 @@ struct Packet {
     rows: FxIndexMap<D, Row>,
     non: FxIndexMap<D, f64>,
 }
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 struct Row {
     duration: f64,
     seed: f64,
     accumulator: f64,
     shared: bool,
     coefficient: f64,
+    branches: Vec<tables::LandingBranch>,
 }
 
 #[derive(Clone)]
@@ -610,6 +612,7 @@ struct Blast {
     end: f64,
     hit_probability: f64,
     origin_mode: u8,
+    proc_source: usize,
 }
 
 #[derive(Clone)]
@@ -708,9 +711,13 @@ pub struct Replay<'py> {
     states: FxIndexMap<D, VecDeque<(f64, f64)>>,
     pooled: [CappedPool; 4],
     presence: FxIndexMap<D, StatusPresence>,
-    gas_procs: Vec<usize>,
+    proc_piles: FxIndexMap<D, ProcPile>,
     dots: Vec<DotInstance>,
     dot_modes: Vec<u8>,
+    dot_sources: Vec<usize>,
+    proc_source: Option<usize>,
+    heat_proc_source: Option<usize>,
+    heat_mode_sources: [Option<usize>; 2],
     damage_origin: Option<u8>,
     blasts: Vec<Blast>,
     blast_procs: VecDeque<usize>,
@@ -895,7 +902,7 @@ impl<'py> Replay<'py> {
             delayed_attacks, reload_shell_events, derived, selected_incarnon, projectile_sequence_length, projectile_sequence_index, source_field_token, source_field_packets, source_field_activations, finite_field_packets, finite_field_activations, physical_lane_length, physical_lane_phase, physical_lane_selected, lane_stratum, volley_rounds, volley_shot_resume, melee_count, melee_heavy_multiplier,
             melee_last_hit, melee_combo_at, melee_recovery_token, melee_recovery_initial, melee_buff_boundary, melee_pending, melee_index, heavy_flag, no_co_flag, melee_heavy_now,
             affinity_per_kill, affinity, syndicate_ready, syndicate_events, pools, states,
-            pooled, presence, gas_procs, dots, dot_modes, damage_origin, blasts, blast_procs,
+            pooled, presence, proc_piles, dots, dot_modes, dot_sources, proc_source, heat_proc_source, heat_mode_sources, damage_origin, blasts, blast_procs,
             heat_acc, heat_token, heat_chains, heat_sources, heat_source_acc, attribution, puncture_strip, frozen_until,
             frozen_scale, heap, seq, gen, kills, weak_kill_events,
             weak_draw, weak_index, weak_uncertainty, attacks, stale, first_kill,
@@ -1397,10 +1404,10 @@ impl<'py> Replay<'py> {
         if d == FREEZE && self.frozen_until > self.current_time {
             return 10.0;
         }
-        if d == GAS {
-            let a = psum(self.gas_procs.iter().map(|&i| self.dots[i].count * stack_alive(&self.dots[i])));
-            let b = match self.states.get(&d) { Some(r) => psum(r.iter().map(|x| x.1)), None => psum(std::iter::empty()) };
-            return a + b;
+        if d == GAS || d == ELECTRICITY {
+            let pile = self.proc_piles.get_mut(&d).map(|pile| pile.moments(self.current_time)[2]).unwrap_or(0.0);
+            let other = self.states.get(&d).map(|r| psum(r.iter().map(|x| x.1))).unwrap_or(0.0);
+            return pile + other;
         }
         if d == EXPLOSION {
             return psum(self.blast_procs.iter().map(|&i| self.blasts[i].count));
@@ -1434,13 +1441,6 @@ impl<'py> Replay<'py> {
             self.states.insert(FREEZE, rows);
             self.presence.entry(FREEZE).or_default().add(end, 0.0);
             self.frozen_until = -1.0;
-        }
-        while let Some(&front) = self.gas_procs.first() {
-            if self.dots[front].end < t - 1e-9 {
-                self.gas_procs.remove(0);
-            } else {
-                break;
-            }
         }
         for rows in self.states.values_mut() {
             while let Some(&(end, _)) = rows.front() {
@@ -1867,7 +1867,7 @@ impl<'py> Replay<'py> {
                 procs,
                 rows: rows.into_iter().map(|(d, r)| (d, Row {
                     duration: r.duration, seed: r.seed, accumulator: r.accumulator, shared: r.shared,
-                    coefficient: r.coefficient,
+                    coefficient: r.coefficient, branches: r.branches,
                 })).collect(),
                 non: non.into_iter().collect(),
             };
@@ -1906,7 +1906,7 @@ impl<'py> Replay<'py> {
                         procs: p,
                         rows: r.into_iter().map(|(d, r)| (d, Row {
                             duration: r.duration, seed: r.seed, accumulator: r.accumulator, shared: r.shared,
-                            coefficient: r.coefficient,
+                            coefficient: r.coefficient, branches: r.branches,
                         })).collect(),
                         non: n.into_iter().collect(),
                     });
@@ -1921,7 +1921,16 @@ impl<'py> Replay<'py> {
                 ordered_add(&mut procs, k, weight * value);
             }
             for (&k, row) in &view.rows {
-                rows.insert(k, *row);
+                let entry = rows.entry(k).or_insert_with(|| {
+                    let mut base = row.clone();
+                    base.branches.clear();
+                    base
+                });
+                entry.branches.extend(row.branches.iter().map(|branch| {
+                    let mut branch = *branch;
+                    branch.weight *= weight;
+                    branch
+                }));
                 let pk = view.procs.iter().find(|e| e.0 == k).map(|e| e.1).unwrap_or(0.0);
                 ordered_add(&mut seed_sums, k, weight * pk * row.seed);
             }
@@ -1982,7 +1991,7 @@ impl<'py> Replay<'py> {
                 procs,
                 rows: rows.into_iter().map(|(d, r)| (d, Row {
                     duration: r.duration, seed: r.seed, accumulator: r.accumulator, shared: r.shared,
-                    coefficient: r.coefficient,
+                    coefficient: r.coefficient, branches: r.branches,
                 })).collect(),
                 non: non.into_iter().collect(),
             };
@@ -2007,6 +2016,24 @@ impl<'py> Replay<'py> {
                     accumulator: get_f(r, "accumulatorPerSecondPerAttack", 0.0)?,
                     shared: truthy(r, "accumulatorSharedGroup")?,
                     coefficient: get_f(r, "coefficient", 0.0)?,
+                    branches: match r.get_item("landingBranches")? {
+                        Some(branches) => branches.try_iter()?.map(|value| {
+                            let value = value?;
+                            let branch = value.downcast::<PyDict>()?;
+                            Ok(tables::LandingBranch {
+                                weight: get_f(branch, "weight", 0.0)?,
+                                procs: get_f(branch, "procs", 0.0)?,
+                                seed: get_f(branch, "seed", 0.0)?,
+                                accumulator: get_f(branch, "accumulator", 0.0)?,
+                                landing: get_f(branch, "landing", 1.0)?,
+                                head: truthy(branch, "head")?,
+                                weak: truthy(branch, "weak")?,
+                                aim: get_f(branch, "aim", 0.0)?,
+                                absence: get_f(branch, "absence", 1.0)?,
+                            })
+                        }).collect::<PyResult<Vec<_>>>()?,
+                        None => Vec::new(),
+                    },
                 },
             );
         }
@@ -2299,47 +2326,9 @@ impl<'py> Replay<'py> {
     /// A pure function of the view, the type and the aim (forced procs are
     /// fixed for the replay), so it is memoised per replay.
     fn no_status_probability_uncached(&self, st: usize, d: D, aim: f64) -> f64 {
-        let crit = if self.stats[st].has_crit_procs && self.stats[st].core.crit_proc_chances.iter().any(|x| x.0 == d) {
-            let core = &self.stats[st].core;
-            (1.0 - aim) * tables::crit_proc_probability(core, d, false) + aim * tables::crit_proc_probability(core, d, true)
-        } else {
-            0.0
-        };
-        let s = &self.stats[st];
-        let weights: Vec<(D, f64)> = s.damage_types.iter().map(|(k, v)| (*k, pmax(*v, 0.0))).collect();
-        let total = psum(weights.iter().map(|x| x.1));
-        let share = if total != 0.0 {
-            weights.iter().find(|x| x.0 == d).map(|x| x.1).unwrap_or(0.0) / total
-        } else {
-            0.0
-        };
-        let chance = pmax(s.status_chance, 0.0);
-        let multishot = pmax(s.multishot, 0.0);
-        let forced_per = s.native_forced_procs.iter().find(|x| x.0 == d).map(|x| x.1).unwrap_or(0.0);
-        let independent = pmax(s.independent_proc_chances.iter().find(|x| x.0 == d).map(|x| x.1).unwrap_or(0.0), 0.0);
-        let independent = 1.0 - (1.0 - pmin(1.0, independent)) * (1.0 - crit);
-        let continuous = s.continuous;
-        let zero_rolls = |chance: f64| -> f64 {
-            let whole = chance.floor();
-            pow(1.0 - share, whole) * (1.0 - (chance - whole) * share)
-        };
-        let zero_for_pellets = |pellets: i64| -> f64 {
-            if pellets <= 0 {
-                return 1.0;
-            }
-            let instances = if continuous { 1.0 } else { pellets as f64 };
-            let natural = if continuous {
-                zero_rolls(chance * pellets as f64)
-            } else {
-                pow(zero_rolls(chance), pellets as f64)
-            };
-            natural * pow(1.0 - pmin(1.0, forced_per), instances) * pow(1.0 - pmin(1.0, independent), instances)
-        };
-        let whole = floor_i(multishot);
-        let fraction = multishot - whole as f64;
-        let zero = (1.0 - fraction) * zero_for_pellets(whole) + fraction * zero_for_pellets(whole + 1);
-        let extra = pmax(self.forced_procs.iter().find(|x| x.0 == d).map(|x| x.1).unwrap_or(0.0), 0.0);
-        pmin(1.0, pmax(0.0, zero * (1.0 - pmin(1.0, extra))))
+        let multishot = self.stats[st].multishot;
+        let extra = self.forced_procs.iter().find(|x| x.0 == d).map(|x| x.1).unwrap_or(0.0);
+        tables::no_status_probability(&self.stats[st].core, d, aim, multishot, extra)
     }
 
     // ── damage ──────────────────────────────────────────────────────────
@@ -2377,27 +2366,27 @@ impl<'py> Replay<'py> {
 
     fn magnetic_break(&mut self, t: f64, pool_index: usize) -> PyResult<()> {
         let stacks = pmin(self.count(MAGNETIC), 10.0);
-        if stacks <= 0.0 {
-            return Ok(());
-        }
-        let (active, _) = self.model(t)?;
-        let multiplier = pmax(self.stats[active].proc_damage_multiplier, 0.0);
-        let per_tick = self.full[pool_index] * 0.03 * stacks * pow(multiplier, 2.0) / 6.0;
-        self.magnetic_breaks.push((t, pool_index, stacks, per_tick, self.gen));
-        let probability = match self.presence.get_mut(&MAGNETIC) {
-            Some(p) => p.probability(t),
-            None => 1.0,
-        };
-        self.states.entry(ELECTRICITY).or_default().push_back((t + 6.0, probability));
-        self.presence.entry(ELECTRICITY).or_default().add(t + 6.0, 1.0 - probability);
-        let prev = self.proc_counts.get(&ELECTRICITY).copied();
-        self.proc_counts.insert(ELECTRICITY, match prev {
-            Some(v) => v + probability,
-            None => 0.0 + probability,
-        });
-        for tick in 0..6 {
-            self.push(t + tick as f64, Kind::Dot(ELECTRICITY, per_tick, t + 6.0, self.damage_origin.unwrap_or(self.form)), Some(self.gen));
-        }
+        if stacks <= 0.0 { return Ok(()); }
+        let active = match self.proc_source { Some(st)=>st, None=>self.model(t)?.0 };
+        let core=&self.stats[active].core;
+        let scale=core.duration_scale(ELECTRICITY);
+        if scale<=0.0 {return Ok(());}
+        let faction=core.faction_all*core.faction_target*core.faction_bracket;
+        let bracket=pmax(core.dot_elemental_multipliers.iter().find(|e|e.0==ELECTRICITY).map(|e|e.1).unwrap_or(1.0),0.0)*pmax(core.proc_damage_multiplier,0.0);
+        let per_tick=self.full[pool_index]*0.03*stacks/6.0*pow(faction,2.0)*bracket;
+        let accumulator=0.5*faction*bracket;
+        self.magnetic_breaks.push((t,pool_index,stacks,per_tick,self.gen));
+        let duration=6.0*scale;
+        let probability=self.presence.get_mut(&MAGNETIC).map(|p|p.probability(t)).unwrap_or(1.0);
+        self.presence.entry(ELECTRICITY).or_default().add(t+duration,1.0-probability);
+        *self.proc_counts.entry(ELECTRICITY).or_insert(0.0)+=probability;
+        self.add_pile(ELECTRICITY,t,duration,vec![vec![
+            PileOutcome {probability:1.0-probability,count:0,seed:0.0,accumulator:0.0,landing:1.0,weak:false},
+            PileOutcome {probability,count:1,seed:per_tick,accumulator,landing:1.0,weak:false},
+        ]],active);
+        let signal=self.proc_signal(ELECTRICITY);
+        self.signal(&signal,t,probability);
+        self.signal("on-proc",t,probability);
         Ok(())
     }
 
@@ -2595,10 +2584,12 @@ impl<'py> Replay<'py> {
         self.presence.clear();
         self.attribution.reset();
         self.frozen_until = -1.0;
-        self.gas_procs.clear();
+        for pile in self.proc_piles.values_mut() { pile.reset(); }
         self.blast_procs.clear();
         self.heat_token += 1;
         self.heat_chains.reset();
+        self.heat_proc_source = None;
+        self.heat_mode_sources = [None; 2];
         for chain in self.heat_sources.iter_mut() { chain.reset(); }
         self.puncture_strip = 0.0;
         if !allow_kill_triggers { return Ok(()); }
@@ -2668,7 +2659,14 @@ impl<'py> Replay<'py> {
         }
         let mut scaled = Packet { vector: Vec::new(), procs: data.procs.clone(),
                                   rows: data.rows.clone(), non: data.non.clone() };
-        for row in scaled.rows.values_mut() { row.seed *= scale; row.accumulator *= scale; }
+        for row in scaled.rows.values_mut() {
+            row.seed *= scale;
+            row.accumulator *= scale;
+            for branch in &mut row.branches {
+                branch.seed *= scale;
+                branch.accumulator *= scale;
+            }
+        }
         for value in scaled.non.values_mut() { *value *= scale; }
         self.add_procs_data(st, aim, t, &scaled, true)
     }
@@ -2799,6 +2797,7 @@ impl<'py> Replay<'py> {
                         }));
                         Some((s.multishot,critical*s.multishot))
                     } else { None };
+                    self.proc_source = Some(part);
                     if !self.take_with_event(&packet.vector, t, DIRECT, WeakKill::Value(aim), cv2, false, damage_event)? {
                         self.add_procs(part, aim, t, key)?;
                     }
@@ -2882,11 +2881,54 @@ impl<'py> Replay<'py> {
         let faction = core.faction_all * core.faction_target * core.faction_bracket;
         self.empowered_count += n;
         let before = self.totals[ARCANE];
+        let previous_source = self.proc_source;
+        self.proc_source = Some(st);
         let died = self.take(&vec![(d, n * damage * faction)], t, ARCANE, WeakKill::Flag(false), 0.0, false)?;
+        self.proc_source = previous_source;
         // The reference's `get(d, 0.0) + totals['arcane'] - before`, left to right.
         let prev = *self.empowered_by_type.get(&d).unwrap_or(&0.0);
         self.empowered_by_type.insert(d, prev + self.totals[ARCANE] - before);
         Ok(died)
+    }
+
+    fn pile_outcomes(&self, st: usize, branches: &[tables::LandingBranch], expected_count: f64) -> Vec<Vec<PileOutcome>> {
+        let s = &self.stats[st];
+        let pellets = pmax(s.multishot, 0.0);
+        if pellets <= 0.0 { return Vec::new(); }
+        let instances = if s.continuous { 1.0 } else { pellets };
+        let declared = psum(branches.iter().map(|b| b.weight*b.procs));
+        if declared <= 0.0 || expected_count <= 0.0 { return Vec::new(); }
+        let scale = expected_count / declared;
+        let mut outcomes = Vec::new();
+        for b in branches {
+            let n = b.procs / instances * scale;
+            let mut a = pow(b.absence,scale);
+            if a >= 1.0 && n > 0.0 { a = 1.0 - pmin(n,1.0); }
+            let cap = ceil_i(n / pmax(1.0-a,1e-300)).max(1) as usize;
+            match arrival_kernel(a,n,cap) {
+                None => outcomes.push(PileOutcome { probability:b.weight,count:0,seed:0.0,accumulator:0.0,landing:1.0,weak:false }),
+                Some(kernel) => for (j,q) in kernel {
+                    outcomes.push(PileOutcome { probability:b.weight*q,count:j,seed:b.seed,accumulator:b.accumulator,landing:b.landing,weak:b.weak });
+                }
+            }
+        }
+        let whole = floor_i(instances) as usize;
+        let mut result = vec![outcomes.clone(); whole];
+        let fraction = instances - whole as f64;
+        if fraction > 0.0 {
+            let mut last = vec![PileOutcome { probability:1.0-fraction,count:0,seed:0.0,accumulator:0.0,landing:1.0,weak:false }];
+            last.extend(outcomes.into_iter().map(|mut o| { o.probability *= fraction; o }));
+            result.push(last);
+        }
+        result
+    }
+
+    fn add_pile(&mut self, d:D, t:f64, duration:f64, outcomes:Vec<Vec<PileOutcome>>, source:usize) {
+        for outcome in outcomes {
+            let schedule = self.proc_piles.entry(d).or_insert_with(||ProcPile::new(if d==GAS {Some(10)} else {None}))
+                .add(t,duration,outcome,Some(self.damage_origin.unwrap_or(self.form)),Some(source));
+            if let Some((when,token))=schedule { self.push(when,Kind::GroupedDot(d,token),Some(self.gen)); }
+        }
     }
 
     /// `add_procs` for one packet's statuses; `weapon` is false for derived
@@ -2943,6 +2985,7 @@ impl<'py> Replay<'py> {
                     let mut rows = probed.rows.clone();
                     for r in rows.values_mut() {
                         r.seed *= merged_seed;
+                        for branch in &mut r.branches { branch.seed *= merged_seed; }
                     }
                     let mut non = probed.non.clone();
                     for v in non.values_mut() {
@@ -2985,8 +3028,8 @@ impl<'py> Replay<'py> {
                 }
                 continue;
             }
-            let row = data.rows.get(&d).copied();
-            let duration = match row {
+            let row = data.rows.get(&d).cloned();
+            let duration = match &row {
                 Some(r) => r.duration,
                 None => duration_of(d).unwrap_or(6.0) * scale,
             };
@@ -3005,6 +3048,14 @@ impl<'py> Replay<'py> {
             if !weapon {
                 absence = pmax(absence, 1.0 - pmin(n, 1.0));
             }
+            let pile_events = if d == GAS || d == ELECTRICITY {
+                row.as_ref().map(|r| self.pile_outcomes(st, &r.branches, n))
+            } else { None };
+            if let Some(ref events) = pile_events {
+                absence = events.iter().map(|outcomes|
+                    psum(outcomes.iter().filter(|o| o.count == 0).map(|o| o.probability)))
+                    .fold(1.0, |a, b| a * b);
+            }
             { let _t = crate::counters::Timer::start(crate::counters::PRESENCE); self.presence.entry(d).or_default().add(t + duration, absence); }
             if d == FIRE && row.is_some() {
                 let r = row.unwrap();
@@ -3015,13 +3066,17 @@ impl<'py> Replay<'py> {
                 }
                 { let _t = crate::counters::Timer::start(crate::counters::HEAT); self.heat_chains.add(t, absence, n, n * r.seed, duration, scale); }
                 self.heat_acc = r.accumulator;
+                self.heat_proc_source = Some(st);
                 if self.cycle.map(|c|c.source_mode_charge).unwrap_or(false) {
                     let own=if self.form==BASE {0} else {1};
                     for i in 0..2 {
                         self.heat_sources[i].add_source(t,absence,if i==own {n} else {0.0},if i==own {n*r.seed} else {0.0},duration,scale,i!=own);
                     }
                     self.heat_source_acc[own]=r.accumulator;
+                    self.heat_mode_sources[own]=Some(st);
                 }
+            } else if (d == GAS || d == ELECTRICITY) && row.is_some() {
+                self.add_pile(d,t,duration,pile_events.unwrap(),st);
             } else if let Some(p) = pooled_index(d) {
                 { let _t = crate::counters::Timer::start(crate::counters::POOLED); self.pooled[p].add(t + duration, absence, n); }
             } else {
@@ -3046,25 +3101,16 @@ impl<'py> Replay<'py> {
                     self.frozen_scale = scale;
                 }
                 if let Some(r) = row {
-                    let immediate = d == GAS || d == ELECTRICITY;
-                    let (first_tick, end_tick) = if immediate {
-                        (0, ceil_i(duration - 1e-9).max(1))
-                    } else {
-                        (1, floor_i(duration + 1e-9) + 1)
-                    };
+                    let first_tick = 1;
+                    let end_tick = floor_i(duration + 1e-9) + 1;
                     let mut per = r.seed;
                     if !r.shared {
                         per += r.coefficient;
                     }
                     self.dots.push(DotInstance { dtype: d, per, count: n, end: t + duration, dist: None });
                     self.dot_modes.push(self.form);
+                    self.dot_sources.push(st);
                     let instance = self.dots.len() - 1;
-                    if d == GAS {
-                        self.states.get_mut(&d).unwrap().pop_back();
-                        let mut live = self.gas_procs.clone();
-                        capped_stack_add(&mut live, &mut self.dots, absence, n, instance, 10);
-                        self.gas_procs = live;
-                    }
                     // The ticks keep the sequence numbers they would take if all
                     // were pushed now (the reference pushes them together), but
                     // enter the heap one at a time as the previous one pops:
@@ -3095,7 +3141,7 @@ impl<'py> Replay<'py> {
                     let kept = pmin(n, room);
                     if kept > 0.0 {
                         let hit_probability = pmin(kept, 1.0 - self.no_status_probability(st, d, aim)?);
-                        self.blasts.push(Blast { count: kept, per, end: t + 1.5 * scale, hit_probability, origin_mode:self.form });
+                        self.blasts.push(Blast { count: kept, per, end: t + 1.5 * scale, hit_probability, origin_mode:self.form, proc_source: st });
                         let blast = self.blasts.len() - 1;
                         self.blast_procs.push_back(blast);
                         let end = self.blasts[blast].end;
@@ -3173,6 +3219,7 @@ impl<'py> Replay<'py> {
                 +aim*pmin(pmax(cc+*stacks as f64*0.1+weak,0.0),1.0))));
             Some((s.multishot, critical*s.multishot))
         } else { None };
+        self.proc_source = Some(part);
         if !self.take_with_event(&rvector, t, DIRECT, WeakKill::Value(aim), cv2, false, damage_event)? {
             self.add_procs_scaled(part, aim, t, rkey, sniper_factor)?;
         }
@@ -3540,6 +3587,7 @@ impl<'py> Replay<'py> {
                 return Err(Self::unsupported("replay-clock-went-backwards"));
             }
             self.current_time = t;
+            self.proc_source = None;
             self.melee_heavy_now = false;
             if self.melee_pending.is_some() {
                 self.advance_melee_recovery(t,self.melee_recovery_initial,None);
@@ -3576,12 +3624,14 @@ impl<'py> Replay<'py> {
                                 if amount>0.0 {
                                     self.damage_origin=Some(if i==0 {BASE} else {INCARNON});
                                     let variance=1.0/pmax(self.heat_sources[i].count(),1e-9);
+                                    self.proc_source = self.heat_mode_sources[i];
                                     self.take(&vec![(FIRE,amount)],t,DOT,WeakKill::Flag(false),variance,false)?;
                                     self.damage_origin=None;
                                 }
                                 if self.gen!=generation {break;}
                             }
                         } else {
+                            self.proc_source = self.heat_proc_source;
                             self.take(&vec![(FIRE, value)], t, DOT, WeakKill::Flag(false), cv2, false)?;
                         }
                         if self.gen == generation {
@@ -3612,6 +3662,7 @@ impl<'py> Replay<'py> {
                     }
                     if value != 0.0 {
                         self.damage_origin=origin;
+                        self.proc_source = affected.last().map(|&i| self.blasts[i].proc_source);
                         self.take(&vec![(EXPLOSION, value)], t, NONDOT, WeakKill::Flag(false), 1.0 / procs, false)?;
                         self.damage_origin=None;
                         // Only natural expiration is an Enervate hit, not the 10-stack detonation.
@@ -3622,12 +3673,29 @@ impl<'py> Replay<'py> {
                         }
                     }
                 }
+                Kind::GroupedDot(d, token) => {
+                    let tick = self.proc_piles.get_mut(&d).and_then(|pile|pile.tick(t,token));
+                    if let Some(tick) = tick {
+                        let generation=self.gen;
+                        if tick.damage > 0.0 {
+                            self.damage_origin=tick.origin;
+                            self.proc_source=tick.source;
+                            self.take(&vec![(d,tick.damage)],t,DOT,WeakKill::Value(tick.weak_damage/tick.damage),1.0/pmax(tick.count,1e-9),false)?;
+                            self.damage_origin=None;
+                            self.proc_source=None;
+                        }
+                        if self.gen==generation {
+                            if let Some((when,next_token))=tick.schedule { self.push(when,Kind::GroupedDot(d,next_token),Some(self.gen)); }
+                        }
+                    }
+                }
                 Kind::IndependentDot(i) => {
                     let alive = stack_alive(&self.dots[i]);
                     let (count, per, end, d) = (self.dots[i].count, self.dots[i].per, self.dots[i].end, self.dots[i].dtype);
                     if count * alive > 0.0 && t <= end + 1e-9 {
                         let dtype = if d == SLASH { CINEMATIC } else { d };
                         self.damage_origin=Some(self.dot_modes[i]);
+                        self.proc_source = Some(self.dot_sources[i]);
                         self.take(&vec![(dtype, count * alive * per)], t, DOT, WeakKill::Flag(false), 1.0 / count, false)?;
                         self.damage_origin=None;
                     }
@@ -3738,6 +3806,7 @@ impl<'py> Replay<'py> {
                     let vector: Vector = self.packets[&key].vector.iter().map(|(k, v)| (*k, v * self.damage_rate_multiplier)).collect();
                     let cv2 = self.spread(part, aim);
                     let radial_only = self.stats[part].radial_only;
+                    self.proc_source = Some(part);
                     if !self.take(&vector, t, DIRECT, WeakKill::Flag(!radial_only), cv2, false)? {
                         self.add_procs(part, aim, t, key)?;
                     }
@@ -3773,6 +3842,7 @@ impl<'py> Replay<'py> {
                     let raw=self.raw_packet(part,0.0);
                     let vector:Vector=self.packets[&raw].vector.iter().map(|(d,v)|(*d,v*self.damage_rate_multiplier)).collect();
                     let cv2=self.spread(part,0.0);
+                    self.proc_source = Some(part);
                     if !self.take_with_source_credit(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false,None,false)? {
                         let statuses=self.packets[&raw].clone();
                         self.add_procs_data(part,0.0,t,&statuses,false)?;
@@ -3795,6 +3865,7 @@ impl<'py> Replay<'py> {
                         let raw=self.raw_packet(part,0.0);
                         let vector:Vector=self.packets[&raw].vector.iter().map(|(d,v)|(*d,v*self.damage_rate_multiplier)).collect();
                         let cv2=self.spread(part,0.0);
+                        self.proc_source = Some(part);
                         if !self.take(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false)? {
                             self.add_procs(part,0.0,t,raw)?;
                         }
@@ -3825,6 +3896,7 @@ impl<'py> Replay<'py> {
                     let raw = self.raw_packet(part, 0.0);
                     let packet = self.packets[&raw].clone();
                     let cv2 = self.spread(part, 0.0);
+                    self.proc_source = Some(part);
                     if !self.take(&packet.vector, t, DIRECT, WeakKill::Flag(false), cv2, false)? {
                         let key = self.packet(part, 0.0)?;
                         self.add_procs(part, 0.0, t, key)?;
@@ -3856,6 +3928,7 @@ impl<'py> Replay<'py> {
                         let key = self.packet(part, 0.0)?;
                         let packet = self.packets[&key].clone();
                         let cv2 = self.spread(part, 0.0);
+                        self.proc_source = Some(part);
                         if !self.take(&packet.vector, t, DIRECT, WeakKill::Flag(false), cv2, false)? {
                             self.add_procs(part, 0.0, t, key)?;
                         }
@@ -4405,6 +4478,7 @@ impl<'py> Replay<'py> {
                                 let key=self.packet(part,0.0)?;
                                 let vector:Vector=self.packets[&key].vector.iter().map(|(d,v)|(*d,v*self.damage_rate_multiplier)).collect();
                                 let cv2=self.spread(part,0.0);
+                                self.proc_source = Some(part);
                                 let died=self.take(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false)?;
                                 self.noncrit_no_proc_hit(part,0.0,t);
                                 if !died {self.add_procs_scaled(part,0.0,t,key,1.0)?;}
@@ -4494,6 +4568,7 @@ impl<'py> Replay<'py> {
                             .map(|(k, v)| (*k, v * self.damage_rate_multiplier * ramp * sniper_factor))
                             .collect();
                         let cv2 = self.spread(active, aim);
+                        self.proc_source = Some(active);
                         let died = self.take(&vector, t, DIRECT, WeakKill::Flag(!radial_only), cv2, false)?;
                         self.noncrit_no_proc_hit(active, aim, t);
                         if !finite_fields.is_empty() && self.stats[active].multishot>0.0 {
@@ -5061,6 +5136,7 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
             target_faction: !target_faction.is_empty(),
             damage,
             dot,
+            dot_head_eligible: t.get_item("dotHeadEligible")?.unwrap().extract()?,
             dot_multiplier,
             forced_procs: forced_procs.clone(),
         }
@@ -5357,9 +5433,13 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         pooled: [CappedPool::new(10.0), CappedPool::new(10.0), CappedPool::new(10.0),
                  CappedPool::new(item("punctureCap")?.extract()?)],
         presence: FxIndexMap::default(),
-        gas_procs: Vec::new(),
+        proc_piles: FxIndexMap::default(),
         dots: Vec::new(),
         dot_modes: Vec::new(),
+        dot_sources: Vec::new(),
+        proc_source: None,
+        heat_proc_source: None,
+        heat_mode_sources: [None; 2],
         damage_origin: None,
         blasts: Vec::new(),
         blast_procs: VecDeque::new(),

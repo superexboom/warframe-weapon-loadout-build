@@ -45,7 +45,8 @@ The following parts of this project's engine are ports of WFSim code, or
 transcriptions of mechanics documented in WFSim's `docs/MECHANICS.md`,
 `docs/OPTIMIZER.md`, `docs/BUFFS.md` and `docs/UI.md`. Source comments in the
 code name the WFSim file, section or commit each rule comes from (pinned commits
-include `b98b3d4`, `69e6a139`, `7399c9e`, `5809c383` and `c993d6ffc`).
+include `b98b3d4`, `69e6a139`, `7399c9e`, `5809c383`, `c993d6ffc`,
+`ef4fa11f7284` and `d12163712546`).
 
 - `vendor/wfarsenal/damage.py` — windowed status-stack ramp and InstantRespawn
   semantics; DoT tick groups with the +1 accumulator; the single-target Gas
@@ -64,6 +65,12 @@ include `b98b3d4`, `69e6a139`, `7399c9e`, `5809c383` and `c993d6ffc`).
 - `vendor/wfarsenal/sniper.py`, `event_profiles.py`, `status_arcanes.py`,
   `arcane_runtime.py`, `deferred_spread.py` — sniper combo, battery and spin-up
   semantics, the Encumber pool, Arcane stacking and spread sampling.
+- `vendor/wfarsenal/proc_probability.py`, `combat_replay.py`, `damage.py` —
+  Electricity/Gas shared clocks, latest successful proc landing (M100), and
+  ordinary Electricity on Magnetic shield/Overguard break (M08), based on
+  WFSim `fight/dot.rs`, `debuffs.rs`, `ticks.rs` and `stacks.rs` at
+  `ad5849ddce87c2934efdb2c65edfb0c0340483c8`. Portable supplies its own conditional
+  expected-moment implementation and documents its approximation boundaries.
 - `native/wfcore/src/` — the Rust ports of the rules above.
 - `app.py`, `frontend/app.js` — Archgun-on-ground Arcane slots and the KPM
   replay view follow WFSim's conventions.

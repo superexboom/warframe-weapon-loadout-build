@@ -6,6 +6,125 @@ use crate::pymath::{erfc, expm1, floor_i, log, pmax, pmin, pow, psum, sqrt, ceil
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, VecDeque};
 
+// Electricity/Gas conditional moments, in reference operation order.
+#[derive(Clone, Copy)]
+pub struct PileOutcome {
+    pub probability: f64,
+    pub count: usize,
+    pub seed: f64,
+    pub accumulator: f64,
+    pub landing: f64,
+    pub weak: bool,
+}
+
+#[derive(Clone)]
+struct PileEvent {
+    end: f64,
+    outcomes: Vec<PileOutcome>,
+    origin: Option<u8>,
+    source: Option<usize>,
+}
+
+#[derive(Clone)]
+pub struct ProcPile {
+    cap: Option<usize>,
+    events: Vec<PileEvent>,
+    pub next: Option<f64>,
+    pub token: u64,
+    cached: Option<(f64, [f64; 4], Option<u8>, Option<usize>)>,
+}
+
+pub struct PileTick {
+    pub damage: f64,
+    pub weak_damage: f64,
+    pub count: f64,
+    pub presence: f64,
+    pub origin: Option<u8>,
+    pub source: Option<usize>,
+    pub schedule: Option<(f64, u64)>,
+}
+
+impl ProcPile {
+    pub fn new(cap: Option<usize>) -> Self {
+        Self { cap, events: Vec::new(), next: None, token: 1, cached: None }
+    }
+    pub fn reset(&mut self) {
+        self.events.clear();
+        self.next = None;
+        self.token += 1;
+        self.cached = None;
+    }
+    pub fn add(&mut self, t: f64, duration: f64, outcomes: Vec<PileOutcome>, origin: Option<u8>, source: Option<usize>) -> Option<(f64, u64)> {
+        if duration <= 0.0 || !outcomes.iter().any(|o| o.probability > 0.0 && o.count > 0) { return None; }
+        let schedule = if self.next.is_none() {
+            self.next = Some(t);
+            self.token += 1;
+            Some((t, self.token))
+        } else { None };
+        let end = self.next.unwrap() + (ceil_i(duration - 1e-9).max(1) as f64) - 1.0;
+        self.events.push(PileEvent { end, outcomes, origin, source });
+        self.cached = None;
+        schedule
+    }
+    pub fn moments(&mut self, t: f64) -> [f64; 4] {
+        if let Some((when, value, _, _)) = self.cached { if when == t { return value; } }
+        let cap = self.cap.unwrap_or(1);
+        let mut dp = [[0.0; 9]; 11];
+        dp[0][0] = 1.0;
+        let (mut origin, mut source) = (None, None);
+        for event in self.events.iter().rev() {
+            let mut next = [[0.0; 9]; 11];
+            for (k, row) in dp[..=cap].iter().enumerate() {
+                if row[0] == 0.0 { continue; }
+                for outcome in &event.outcomes {
+                    let q = outcome.probability;
+                    if q <= 0.0 { continue; }
+                    let n = outcome.count;
+                    let dest = if self.cap.is_some() { cap.min(k + n) } else { usize::from(k > 0 || n > 0) };
+                    let mut values = *row;
+                    if n > 0 && k == 0 {
+                        values[1] = outcome.landing * row[0];
+                        values[2] = if outcome.weak { values[1] } else { 0.0 };
+                    }
+                    let kept = if self.cap.is_some() { n.min(cap-k) } else { n };
+                    if kept > 0 && event.end >= t - 1e-9 {
+                        origin = event.origin; source = event.source;
+                        values[3] += kept as f64 * outcome.seed * values[1];
+                        values[4] += kept as f64 * outcome.seed * values[2];
+                        values[5] = outcome.accumulator * values[1];
+                        values[6] = outcome.accumulator * values[2];
+                        values[7] += kept as f64 * row[0];
+                        values[8] = row[0];
+                    }
+                    for (i, value) in values.iter().enumerate() { next[dest][i] += q * value; }
+                }
+            }
+            dp = next;
+        }
+        let mut totals = [0.0; 9];
+        for i in 0..9 { totals[i] = psum(dp[..=cap].iter().map(|row| row[i])); }
+        let result = [totals[3] + totals[5], totals[4] + totals[6], totals[7], totals[8]];
+        self.cached = Some((t, result, origin, source));
+        result
+    }
+    pub fn tick(&mut self, t: f64, token: u64) -> Option<PileTick> {
+        if token != self.token || self.next.is_none() || (t-self.next.unwrap()).abs() > 1e-8 { return None; }
+        let result = self.moments(t);
+        let (_, _, origin, source) = self.cached.unwrap();
+        self.next = Some(t + 1.0);
+        let oldest = self.events.iter().position(|e| e.end >= t+1.0-1e-9);
+        let schedule = match oldest {
+            None => { self.reset(); None },
+            Some(i) => {
+                self.events.drain(..i);
+                self.cached = None;
+                Some((t + 1.0, self.token))
+            }
+        };
+        Some(PileTick { damage: result[0], weak_damage: result[1], count: result[2], presence: result[3], origin, source, schedule })
+    }
+}
+
 // ── CappedPool ────────────────────────────────────────────────────────────
 
 pub type Kernel = Vec<(usize, f64)>;

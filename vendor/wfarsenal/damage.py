@@ -4014,6 +4014,19 @@ def expected_dot_damage(
         shared_group = dtype in {"DT_FIRE", "DT_ELECTRICITY", "DT_GAS"}
         accumulator = 1.0 if shared_group else min(count, 10.0)
         accumulator_multiplier = max(float(elemental), 0.0) * proc_damage
+        part_landing = dtype in {"DT_ELECTRICITY", "DT_GAS"}
+        landing_head = (part_landing and not stats.radial_only and location == "head"
+                        and not any("unavailable" in str(x) or "invalid" in str(x)
+                                    for x in hit_unsupported))
+        # ignore_headshot_bonus suppresses the raw part/critical multiplier,
+        # not the head event or its Deadhead-like bonus (e.g. Alternox).
+        landing_weak = landing_head
+        landing_multiplier = (float(stats.headshot_bonus_multiplier)
+                              if landing_weak else 1.0)
+        if part_landing:
+            # M58/M100: the accumulator gets C and one faction layer; the
+            # applying hit's seed already carries the other faction layer.
+            accumulator_multiplier *= coefficient * max(float(faction_mod), 0.0) * target_multiplier
         # Per-tier seed: each tier's procs tick at their own seed factor.
         # The M58 +1 accumulator rides M (elemental/proc-damage), not the
         # seed, so it is added once per tick group at the averaged tier only
@@ -4031,11 +4044,6 @@ def expected_dot_damage(
             * target_multiplier
             * max(float(faction_mod), 0.0) ** 2
         )
-        if dtype in ("DT_ELECTRICITY", "DT_GAS") and not stats.radial_only and hit_multiplier > 1.0 + 1e-9:
-            # WFSim M100 (in game): an Electricity or Gas tick LANDS on the part
-            # the hit struck, and on a head the headshot bonuses (Deadhead-like,
-            # not Acuity-like) apply to the tick once more.
-            unit *= float(stats.headshot_bonus_multiplier)
         crit_share = 0.0
         if dtype in stats.crit_proc_chances and crit_seed_tiers:
             shots = 1.0 if stats.continuous else max(float(stats.multishot), 0.0)
@@ -4051,10 +4059,17 @@ def expected_dot_damage(
         ]
         per_second_by_tier = [(w, ps) for w, ps in per_second_by_tier if w > 0.0]
         seed_per_second_no_acc = sum(weight * ps for weight, ps in per_second_by_tier)
-        per_second = seed_per_second_no_acc + (accumulator * accumulator_multiplier)
+        per_second = (seed_per_second_no_acc + accumulator * accumulator_multiplier) * landing_multiplier
         type_duration = DOT_BASE_DURATION_SECONDS * proc_duration_scale(stats, dtype)
         damage = per_second * type_duration
-        expected = damage * count
+        if part_landing:
+            from .proc_probability import no_status_probability
+            presence = 1.0 - no_status_probability(
+                stats, dtype, forced_procs, aim=1.0 if location == "head" else 0.0)
+            expected = ((seed_per_second_no_acc * count + accumulator_multiplier * presence)
+                        * landing_multiplier * type_duration)
+        else:
+            expected = damage * count
         breakdown[dtype] = {
             "expectedProcs": count,
             "coefficient": coefficient,
@@ -4083,6 +4098,11 @@ def expected_dot_damage(
             #     一份，accumulator 变量已按 count 计）。
             #   durationSeconds 已经是「基础时长 × proc_duration_multiplier」
             #     的最终值（F03：消费端不得再乘一次）。
+            # Stored seeds exclude the second landing bracket. Consumers must
+            # apply the latest successful proc's landing to the entire group.
+            "landingMultiplier": landing_multiplier,
+            "landingHead": landing_head,
+            "landingWeakEligible": landing_weak,
             "seedPerSecondPerProc": seed_per_second_no_acc,
             "accumulatorPerSecondPerAttack": accumulator * accumulator_multiplier,
             "accumulatorSharedGroup": shared_group,
@@ -4429,18 +4449,22 @@ def sustained_status_damage(
         expected_procs = max(float(row.get("expectedProcs") or 0.0), 0.0)
         interaction_type = "DT_CINEMATIC" if dtype == "DT_SLASH" else dtype
         damage_multiplier = pool_multiplier(interaction_type)
-        if dtype == "DT_GAS":
-            active_procs = min(
-                expected_procs * proc_rate * float(row.get("durationSeconds") or 0.0),
-                10.0,
-            )
+        if dtype in {"DT_ELECTRICITY", "DT_GAS"}:
+            active_procs = expected_procs * proc_rate * float(row.get("durationSeconds") or 0.0)
+            if dtype == "DT_GAS":
+                active_procs = min(active_procs, 10.0)
             average_hit_multiplier = (
                 max(float(damage_rate_multiplier), 0.0)
                 / max(float(status_rate_multiplier), 0.0)
                 if status_rate_multiplier
                 else 0.0
             )
-            value = float(row.get("perSecond") or 0.0) * active_procs * average_hit_multiplier
+            # Preserve the steady model's average-live-stack approximation:
+            # a positive mean count represents a present group. The windowed
+            # event kernel resolves occupancy and latest-landing correlation.
+            value = ((float(row["seedPerSecondPerProc"]) * active_procs
+                      + (float(row["accumulatorPerSecondPerAttack"]) if active_procs > 0.0 else 0.0))
+                     * float(row["landingMultiplier"]) * average_hit_multiplier)
         else:
             value = float(row.get("expectedDamage") or 0.0) * damage_rate
         dot_by_type[dtype] = value * damage_multiplier
@@ -4605,10 +4629,12 @@ def windowed_status_damage(
       mitigation is a tick-time input (§6 boundary rule); Bleed stays armour-
       blind (Cinematic).
     """
-    # Heat is a refreshable tick entity, not continuous damage in a time bin.
-    # Use the same event kernel as manual replay for Heat-bearing candidates.
-    # A stat-only search has no loadout event context: its buffs stay panel-assumed.
-    if stats.damage_types.get('DT_FIRE', 0) > 0 and isinstance(target, Mapping) and target.get('health'):
+    # Refreshable Heat and part-landing Electricity/Gas share the event kernel
+    # with manual replay. This preserves E[seed * latest landing], including
+    # forced/independent proc sources, instead of multiplying two averages.
+    event_dots = {"DT_FIRE", "DT_ELECTRICITY", "DT_GAS"}
+    event_procs = expected_status_procs(stats, forced_procs=forced_procs)
+    if any(event_procs.get(d, 0.0) > 0.0 for d in event_dots) and isinstance(target, Mapping) and target.get('health'):
         from .combat_replay import replay
         return replay(
             stats, target, attacks_per_second=attacks_per_second, window_seconds=window_seconds,
@@ -4617,6 +4643,7 @@ def windowed_status_damage(
             armour_strip=armour_strip, elemental_armour_strip=elemental_armour_strip,
             steel_path=steel_path, enemy_enhancements=enemy_enhancements, time_step=time_step,
             trigger_sources=trigger_sources, collect_timeline=collect_timeline,
+            combat={"resolve": lambda *_: (stats, None)},
         )
     target = target if isinstance(target, Mapping) else {}
     rate = max(float(attacks_per_second), 0.0)

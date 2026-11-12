@@ -33,7 +33,7 @@ _UNSUPPORTED_COMBAT = (
 
 
 def supported(stats, options) -> bool:
-    if not ENABLED or not getattr(wfcore,"NATIVE_TYPE_QUANTIZATION",0) or options.get("collect_timeline", True):
+    if not ENABLED or not getattr(wfcore,"ELECTRIC_GAS_PROC_PILE",0) or not getattr(wfcore,"NATIVE_TYPE_QUANTIZATION",0) or options.get("collect_timeline", True):
         return False
     draw = options.get("weak_draw")
     if draw is not None and not callable(getattr(draw, "native_spec", None)):
@@ -259,14 +259,30 @@ class _Helper:
             if aim
             else b
         )
+        from dataclasses import replace
+        from .proc_probability import no_status_probability
+        instances = 1. if st.continuous else max(float(st.multishot), 0.)
+        one = replace(st, multishot=st.multishot if st.continuous else 1.)
+        per_forced = {k:v/instances for k,v in (forced_procs or {}).items()} if instances else {}
         rows = {}
-        for dtype, r in b["dot"]["perType"].items():
+        row_types = dict.fromkeys([*b["dot"]["perType"],
+                                  *(d for d in h["dot"]["perType"] if d in ("DT_ELECTRICITY", "DT_GAS"))])
+        for dtype in row_types:
+            r = b["dot"]["perType"].get(dtype) or h["dot"]["perType"][dtype]
             hr = h["dot"]["perType"].get(dtype, r)
             rows[dtype] = {
                 **r,
                 "seedPerSecondPerProc": r["seedPerSecondPerProc"] * (1 - aim)
                 + hr["seedPerSecondPerProc"] * aim,
             }
+            if dtype in ("DT_ELECTRICITY", "DT_GAS"):
+                rows[dtype]['landingBranches'] = [dict(
+                    weight=weight, procs=probe['expectedProcs'].get(dtype, 0.),
+                    seed=row['seedPerSecondPerProc'], accumulator=row['accumulatorPerSecondPerAttack'],
+                    landing=row['landingMultiplier'], head=row['landingHead'],
+                    weak=row['landingWeakEligible'], aim=location,
+                    absence=no_status_probability(one, dtype, per_forced, location))
+                    for weight, probe, row, location in ((1.-aim,b,r,0.),(aim,h,hr,1.)) if weight > 0.]
         procs = {
             k: (1 - aim) * b["expectedProcs"].get(k, 0.0)
             + aim * h["expectedProcs"].get(k, 0.0)
@@ -306,7 +322,10 @@ class _Helper:
             for k, value in v.items(): vector[k] = vector.get(k, 0.0) + weight * value
             for k, value in p.items(): procs[k] = procs.get(k, 0.0) + weight * value
             for k, row in r.items():
+                branches = rows.get(k, {}).get('landingBranches', [])
                 rows[k] = dict(row)
+                if 'landingBranches' in row:
+                    rows[k]['landingBranches'] = branches + [{**b, 'weight': b['weight']*weight} for b in row['landingBranches']]
                 seed_sums[k] = seed_sums.get(k, 0.0) + weight * p.get(k, 0) * row['seedPerSecondPerProc']
             for k, row in n.items():
                 non[k] = dict(row)
@@ -346,9 +365,13 @@ def _target_tables(target, locations):
     damage = [(locations[name]["hit_multiplier"], locations[name]["hit_critical_multiplier"], name == "head")
               for name in ("body", "head")]
     dot = []
+    dot_head_eligible = []
     for name in ("body", "head"):
-        location, hm, hcm, _, _ = _hit_location_info(dot_target, name)
+        location, hm, hcm, unsupported, _ = _hit_location_info(dot_target, name)
+        valid_head = (_normalise_hit_location(location) == "head"
+                      and not any(x in unsupported for x in ("hit-location-head-invalid", "hit-location-head-unavailable")))
         dot.append((hm, hcm, _normalise_hit_location(location) == "head"))
+        dot_head_eligible.append(valid_head)
     defenses = enemy_defenses(dot_target, level=1)
     armour = defenses["armour"]
     overguard = float(defenses.get("overguard") or 0.0)
@@ -366,7 +389,7 @@ def _target_tables(target, locations):
             if defenses["shield"] > 0.0 and interaction not in shield_bypass:
                 value *= _magnetic_defense_multiplier(magnetic_stacks)
         multipliers[interaction] = value
-    return {"damage": damage, "dot": dot, "dotMultiplier": multipliers}
+    return {"damage": damage, "dot": dot, "dotHeadEligible": dot_head_eligible, "dotMultiplier": multipliers}
 
 
 # The target-only part of a replay's setup, by target (record_keys.record_key)
@@ -800,7 +823,12 @@ def trajectory(
             "single-target",
             "non-heat-stacking-procs-expected",
             "single-target-syndicate-no-player-buffs",
-            "magnetic-break-six-ticks-pinned-reference-contract",
+            "electric-gas-shared-expected-clock;random-first-proc-phase-not-branched",
+            "electric-gas-latest-expired-landing-retained-unverified",
+            "electric-gas-mixed-origin-kill-credit-oldest-live-source",
+            "magnetic-break-ordinary-electric-source-context",
+            "electric-gas-adjacent-count-arrival",
+            "gas-mixed-duration-cumulative-newer-rank",
             'spread-hit-loss-not-modeled',
         ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
           + (['fire-rate-spool-reference-transcribed','fire-rate-spool-resets-on-any-pause'] if combat.get('fireRateSpool') else [])

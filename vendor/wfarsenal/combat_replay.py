@@ -350,10 +350,9 @@ def _reference_trajectory(
         "DT_GAS": 10.0,
     }
     states = {}
-    gas_procs = deque()
     blast_procs = deque()
     heat = dict(acc=0.0, token=0)
-    from .proc_probability import HeatChains, StatusPresence, no_status_probability, KillAttribution, DOT_TICK_SECONDS, crit_cv2, capped_stack_add, stack_alive, CappedPool
+    from .proc_probability import HeatChains, StatusPresence, no_status_probability, KillAttribution, DOT_TICK_SECONDS, crit_cv2, stack_alive, CappedPool, ProcPile, proc_pile_outcomes
     heat_chains=HeatChains()
     heat_sources={mode:HeatChains() for mode in ('base','incarnon')}
     heat_source_acc={mode:0. for mode in heat_sources}
@@ -387,7 +386,10 @@ def _reference_trajectory(
     totals = dict(direct=0.0, dot=0.0, nonDot=0.0, syndicate=0.0, arcane=0.0)
     proc_counts = {}
     dot_by_type = {}
+    heat_stats = None
+    heat_source_stats = {}
     magnetic_breaks = []
+    proc_piles = {"DT_ELECTRICITY": ProcPile(), "DT_GAS": ProcPile(10)}
     fortifier = combat.get('fortifier')
     fortifier_damage = fortifier_stolen = 0.0
     self_overguard = 0.0
@@ -504,7 +506,7 @@ def _reference_trajectory(
             critical = sum(weight*((1.-aim)*min(max(max(0.,cc+stacks*.1+puncture)*body_multiplier,0.),1.)
                 + aim*min(max(max(0.,cc+stacks*.1+puncture)+weak,0.),1.)) for stacks,weight in weights.items())
             damage_event = (part.multishot,critical*part.multishot)
-        if not take(result[0],t,'direct',weak_kill=aim,cv2=spread(part,aim),damage_event=damage_event):
+        if not take(result[0],t,'direct',weak_kill=aim,cv2=spread(part,aim),damage_event=damage_event,proc_source=part):
             add_procs(part,aim,t,result)
         noncrit_no_proc_hit(part,aim,t)
         if part.area_direct:
@@ -518,10 +520,8 @@ def _reference_trajectory(
             return heat_chains.count()
         if dtype == 'DT_FREEZE' and frozen_until > current_time:
             return 10.0
-        if dtype == "DT_GAS":
-            return sum(p["count"] * stack_alive(p) for p in gas_procs) + sum(
-                x[1] for x in states.get(dtype, ())
-            )
+        if dtype in proc_piles:
+            return proc_piles[dtype].moments(current_time)[2] + sum(x[1] for x in states.get(dtype, ()))
         if dtype == "DT_EXPLOSION":
             return sum(p["count"] for p in blast_procs)
         if dtype in pooled:
@@ -538,8 +538,6 @@ def _reference_trajectory(
             states['DT_FREEZE']=deque([(frozen_until+6*frozen_scale,3.0)])
             presence.setdefault('DT_FREEZE',StatusPresence()).add(frozen_until+6*frozen_scale,0.)
             frozen_until=-1.0
-        while gas_procs and gas_procs[0]["end"] < t - 1e-9:
-            gas_procs.popleft()
         for rows in states.values():
             while rows and rows[0][0] < t - 1e-9:
                 rows.popleft()
@@ -773,7 +771,7 @@ def _reference_trajectory(
         presence.clear()
         attribution.reset()
         frozen_until=-1.0
-        gas_procs.clear()
+        for pile in proc_piles.values(): pile.reset()
         blast_procs.clear()
         heat["token"] += 1
         heat_chains.reset()
@@ -831,22 +829,34 @@ def _reference_trajectory(
         upcoming = [event[0] for event in heap if event[2] in ('fire', 'reload-complete')]
         return min(upcoming) if upcoming else None
 
-    def magnetic_break(t, pool_index, origin_mode=None):
+    def magnetic_break(t, pool_index, origin_mode=None, proc_source=None):
         stacks = min(count('DT_MAGNETIC'), 10.0)
         if stacks <= 0:
             return
-        # Pinned WFSim engine contract: target-pool fraction, six immediate/1s
-        # ticks, status-damage multiplier squared; no weapon base/crit/element.
-        multiplier = max(model(t)[0].proc_damage_multiplier, 0.0)
-        per_tick = full[pool_index] * .03 * stacks * multiplier ** 2 / 6
+        st = proc_source if proc_source is not None else model(t)[0]
+        scale = proc_duration_scale(st, 'DT_ELECTRICITY')
+        if scale <= 0.:
+            return
+        faction = st.faction_damage_multipliers.get('', 1.)
+        if cache['target_faction']:
+            faction *= st.faction_damage_multipliers.get(cache['target_faction'], 1.)
+        faction *= cache['faction_bracket']
+        bracket = max(st.dot_elemental_multipliers.get('DT_ELECTRICITY', 1.), 0.) * max(st.proc_damage_multiplier, 0.)
+        per_tick = full[pool_index] * .03 * stacks / 6 * faction ** 2 * bracket
+        accumulator = .5 * faction * bracket
         magnetic_breaks.append(dict(time=t, pool=('overguard', 'shield')[pool_index],
                                     stacks=stacks, seedPerTick=per_tick, targetGeneration=gen))
-        probability=presence['DT_MAGNETIC'].probability(t) if 'DT_MAGNETIC' in presence else 1.
-        states.setdefault('DT_ELECTRICITY', deque()).append((t + 6, probability))
-        presence.setdefault('DT_ELECTRICITY',StatusPresence()).add(t+6,1.-probability)
+        probability = presence['DT_MAGNETIC'].probability(t) if 'DT_MAGNETIC' in presence else 1.
+        duration = 6. * scale
+        presence.setdefault('DT_ELECTRICITY', StatusPresence()).add(t+duration, 1.-probability)
         proc_counts['DT_ELECTRICITY'] = proc_counts.get('DT_ELECTRICITY', 0) + probability
-        for tick in range(6):
-            push(t + tick, 'dot', ('DT_ELECTRICITY', per_tick, t + 6, origin_mode or form), gen)
+        outcomes = [(1.-probability, 0, 0., 0., 1., False),
+                    (probability, 1, per_tick, accumulator, 1., False)]
+        schedule = proc_piles['DT_ELECTRICITY'].add(t, duration, outcomes, origin_mode or form, st)
+        if schedule:
+            push(schedule[0], 'proc-pile', ('DT_ELECTRICITY',schedule[1]), gen)
+        signal('proc-DT_ELECTRICITY', t, probability)
+        signal('on-proc', t, probability)
 
     # Extra Hits (Toxic Lash, Xata's Whisper, Resupply): a second instance
     # beside each weapon hit, worth a share of the finished hit in one type.
@@ -886,11 +896,11 @@ def _reference_trajectory(
             critical = sum(w*((1.-aim)*min(max((cc+stacks*.1)*(1. if part.radial_only else part.bodyshot_crit_multiplier),0.),1.)
                            +aim*min(max(cc+stacks*.1+weak,0.),1.)) for stacks,w in weights.items())
             damage_event = (part.multishot, critical*part.multishot)
-        if not take(radial_vector, t, 'direct', cv2=spread(part,aim), weak_kill=aim, damage_event=damage_event):
+        if not take(radial_vector, t, 'direct', cv2=spread(part,aim), weak_kill=aim, damage_event=damage_event,proc_source=part):
             add_procs(part, aim, t, radial_packet, damage_scale=sniper_factor)
         noncrit_no_proc_hit(part, aim, t)
 
-    def take(vector, t, source, weak_kill=False, cv2=0.0, extra=False, damage_event=None, weapon_source=True, origin_mode=None):
+    def take(vector, t, source, weak_kill=False, cv2=0.0, extra=False, damage_event=None, weapon_source=True, origin_mode=None, proc_source=None):
         # Spend one attack fraction across pools. Shield bypass acts in parallel.
         # Residual damage never leaks to the next target.
         nonlocal fortifier_damage, fortifier_stolen, self_overguard, onos_hits
@@ -932,7 +942,7 @@ def _reference_trajectory(
             left -= fraction
             if pools[0] <= 1e-9:
                 pools[0] = 0.0  # Retire the pool before a same-timestamp event can break it again.
-                magnetic_break(t, 0, origin_mode)
+                magnetic_break(t, 0, origin_mode, proc_source)
                 signal('on-overguard-broken', t)
         if left > 0.0 and pools[1] > 0.0:
             shield = sum(
@@ -962,7 +972,7 @@ def _reference_trajectory(
             if pools[1] <= 1e-9:
                 pools[1] = 0.0
                 shield_broke = True
-                magnetic_break(t, 1, origin_mode)
+                magnetic_break(t, 1, origin_mode, proc_source)
                 signal('on-shield-broken', t)
         if left > 0.0 and pools[1] <= 1e-9 and pools[2] > 0.0:
             value = sum(health_value(k, raw) for k, raw in vector.items())
@@ -997,7 +1007,7 @@ def _reference_trajectory(
         if weapon_source and extra_hits and source == 'direct' and not extra:
             trigger = sum(vector.values())
             for dtype, share, _forced in extra_hits:
-                if trigger > 0.0 and take({dtype: trigger * share * extra_scale}, t, source, weak_kill, cv2, extra=True):
+                if trigger > 0.0 and take({dtype: trigger * share * extra_scale}, t, source, weak_kill, cv2, extra=True, proc_source=proc_source):
                     return True
         return False
 
@@ -1118,14 +1128,30 @@ def _reference_trajectory(
             if aim
             else b
         )
+        from dataclasses import replace
+        from .proc_probability import no_status_probability
+        instances = 1. if st.continuous else max(float(st.multishot), 0.)
+        one = replace(st, multishot=st.multishot if st.continuous else 1.)
+        per_forced = {k:v/instances for k,v in (forced_procs or {}).items()} if instances else {}
         rows = {}
-        for dtype, r in b["dot"]["perType"].items():
+        row_types = dict.fromkeys([*b["dot"]["perType"],
+                                  *(d for d in h["dot"]["perType"] if d in ("DT_ELECTRICITY", "DT_GAS"))])
+        for dtype in row_types:
+            r = b["dot"]["perType"].get(dtype) or h["dot"]["perType"][dtype]
             hr = h["dot"]["perType"].get(dtype, r)
             rows[dtype] = {
                 **r,
                 "seedPerSecondPerProc": r["seedPerSecondPerProc"] * (1 - aim)
                 + hr["seedPerSecondPerProc"] * aim,
             }
+            if dtype in ("DT_ELECTRICITY", "DT_GAS"):
+                rows[dtype]['landingBranches'] = [dict(
+                    weight=weight, procs=probe['expectedProcs'].get(dtype, 0.),
+                    seed=row['seedPerSecondPerProc'], accumulator=row['accumulatorPerSecondPerAttack'],
+                    landing=row['landingMultiplier'], head=row['landingHead'],
+                    weak=row['landingWeakEligible'], aim=location,
+                    absence=no_status_probability(one, dtype, per_forced, location))
+                    for weight, probe, row, location in ((1.-aim,b,r,0.),(aim,h,hr,1.)) if weight > 0.]
         procs = {
             k: (1 - aim) * b["expectedProcs"].get(k, 0.0)
             + aim * h["expectedProcs"].get(k, 0.0)
@@ -1203,7 +1229,10 @@ def _reference_trajectory(
             for k,value in v.items():vector[k]=vector.get(k,0.0)+weight*value
             for k,value in p.items():procs[k]=procs.get(k,0.0)+weight*value
             for k,row in r.items():
+                branches = rows.get(k, {}).get('landingBranches', [])
                 rows[k]=dict(row)
+                if 'landingBranches' in row:
+                    rows[k]['landingBranches'] = branches + [{**b, 'weight': b['weight']*weight} for b in row['landingBranches']]
                 seed_sums[k]=seed_sums.get(k,0.0)+weight*p.get(k,0)*row['seedPerSecondPerProc']
             for k,row in n.items():
                 non[k]=dict(row)
@@ -1264,17 +1293,18 @@ def _reference_trajectory(
         faction *= cache['faction_bracket']
         empowered_count += n
         before = totals['arcane']
-        died = take({dtype:n * empowered['damage'] * faction}, t, 'arcane')
+        died = take({dtype:n * empowered['damage'] * faction}, t, 'arcane',proc_source=st)
         empowered_by_type[dtype] = empowered_by_type.get(dtype, 0.0) + totals['arcane'] - before
         return died
 
     def add_procs(st, aim, t, data=None, allow_encumber=True, damage_scale=1.):
-        nonlocal frozen_until,frozen_scale,encumber_time,encumber_remaining,encumber_expected,cryogenic_expected,puncture_strip
+        nonlocal frozen_until,frozen_scale,encumber_time,encumber_remaining,encumber_expected,cryogenic_expected,puncture_strip,heat_stats
         generation = gen
         _, procs, rows, non = data if data is not None else packet(st, aim)
         if damage_scale!=1.:
             rows={k:{**row,'seedPerSecondPerProc':row['seedPerSecondPerProc']*damage_scale,
-                     'accumulatorPerSecondPerAttack':row['accumulatorPerSecondPerAttack']*damage_scale}
+                     'accumulatorPerSecondPerAttack':row['accumulatorPerSecondPerAttack']*damage_scale,
+                     **({'landingBranches':[{**b,'seed':b['seed']*damage_scale,'accumulator':b['accumulator']*damage_scale} for b in row['landingBranches']]} if 'landingBranches' in row else {})}
                   for k,row in rows.items()}
             non={k:{**row,'perProc':row['perProc']*damage_scale} for k,row in non.items()}
         if combat.get('punctureArmorStrip') and not st.radial_only and allow_encumber:
@@ -1307,7 +1337,8 @@ def _reference_trajectory(
                                   impact_proc_conversions={}, crit_proc_chances={})
                     encumber_views[key]=(st,probe)
                 _,_,extra_rows,extra_non=packet(encumber_views[key][1],aim)
-                extra_rows={k:{**r,'seedPerSecondPerProc':r['seedPerSecondPerProc']*merged_seed} for k,r in extra_rows.items()}
+                extra_rows={k:{**r,'seedPerSecondPerProc':r['seedPerSecondPerProc']*merged_seed,
+                    **({'landingBranches':[{**b,'seed':b['seed']*merged_seed} for b in r['landingBranches']]} if 'landingBranches' in r else {})} for k,r in extra_rows.items()}
                 extra_non={k:{**r,'perProc':r['perProc']*merged_seed} for k,r in extra_non.items()}
                 add_procs(st,aim,t,({},dict.fromkeys(STATUS_POOL,weight/len(STATUS_POOL)),extra_rows,extra_non),False)
         if gen != generation:
@@ -1340,6 +1371,11 @@ def _reference_trajectory(
             if absence>=1. and n>0.:absence=1.-min(n,1.)
             if not allow_encumber:
                 absence=max(absence,1.-min(n,1.))
+            pile_events = None
+            if dtype in proc_piles and row:
+                pile_events = proc_pile_outcomes(st, row['landingBranches'], n)
+                absence = math.prod(sum(q for q, number, *_ in outcomes if not number)
+                                    for outcomes in pile_events)
             presence.setdefault(dtype,StatusPresence()).add(t+duration,absence)
             if dtype == "DT_FIRE" and row:
                 if not heat_chains.active():
@@ -1347,6 +1383,8 @@ def _reference_trajectory(
                     push(t + 1.0, "heat", heat["token"], gen)
                 heat_chains.add(t, absence, n, n * row["seedPerSecondPerProc"], duration, scale)
                 heat["acc"] = row["accumulatorPerSecondPerAttack"]
+                heat_stats = st
+                heat_source_stats[form] = st
                 if source_mode_charge:
                     for mode,chain in heat_sources.items():
                         own=mode==form
@@ -1354,6 +1392,11 @@ def _reference_trajectory(
                     heat_source_acc[form]=row["accumulatorPerSecondPerAttack"]
             elif dtype in pooled:
                 pooled[dtype].add(t + duration, absence, n)
+            elif dtype in proc_piles and row:
+                for outcomes in pile_events:
+                    schedule = proc_piles[dtype].add(t, duration, outcomes, form, st)
+                    if schedule:
+                        push(schedule[0], 'proc-pile', (dtype, schedule[1]), gen)
             else:
                 states.setdefault(dtype, deque()).append((t + duration, n))
                 if dtype in caps and dtype != 'DT_GAS':
@@ -1366,28 +1409,18 @@ def _reference_trajectory(
                 if dtype=='DT_FREEZE' and count(dtype)>=10-1e-9 and pools[0]<=0:
                     frozen_until=t+3*scale;frozen_scale=scale
                 if row:
-                    immediate = dtype in ("DT_GAS", "DT_ELECTRICITY")
-                    ticks = (
-                        range(0, max(1, int(math.ceil(duration - 1e-9))))
-                        if immediate
-                        else range(1, int(math.floor(duration + 1e-9)) + 1)
-                    )
+                    ticks = range(1, int(math.floor(duration + 1e-9)) + 1)
                     per = row["seedPerSecondPerProc"]
                     if not row["accumulatorSharedGroup"]:
                         per += row["coefficient"]
                     instance = {
                         "dtype": dtype,
                         "origin_mode": form,
+                        "proc_source": st,
                         "per": per,
                         "count": n,
                         "end": t + duration,
                     }
-                    if dtype == "DT_GAS":
-                        states[dtype].pop()
-                        live = list(gas_procs)
-                        capped_stack_add(live, absence, n, instance, 10)
-                        gas_procs.clear()
-                        gas_procs.extend(live)
                     for j in ticks:
                         push(t + j, "independent-dot", instance, gen)
                 elif dtype in non:
@@ -1401,6 +1434,7 @@ def _reference_trajectory(
                         instance = {
                             "count": kept,
                             "origin_mode": form,
+                            "proc_source": st,
                             "per": non[dtype]["perProc"],
                             "end": t + 1.5 * scale,
                             "hitProbability": min(kept,1.0-no_status_probability(st,dtype,forced_procs,aim)),
@@ -1491,10 +1525,10 @@ def _reference_trajectory(
                     for mode,chain in heat_sources.items():
                         chain.expire(t)
                         value=chain.seed()+heat_source_acc[mode]*chain.alive()
-                        if value:take({"DT_FIRE":value},t,"dot",cv2=1/max(chain.count(),1e-9),origin_mode=mode)
+                        if value:take({"DT_FIRE":value},t,"dot",cv2=1/max(chain.count(),1e-9),origin_mode=mode,proc_source=heat_source_stats.get(mode))
                         if gen!=generation:break
                 else:
-                    take({"DT_FIRE": heat_chains.seed() + heat["acc"] * heat_chains.alive()}, t, "dot", cv2=1/max(heat_chains.count(),1e-9))
+                    take({"DT_FIRE": heat_chains.seed() + heat["acc"] * heat_chains.alive()}, t, "dot", cv2=1/max(heat_chains.count(),1e-9),proc_source=heat_stats)
                 if gen == generation:
                     push(t + 1.0, "heat", token, gen)
         elif kind in ("blast", "blast-all"):
@@ -1510,13 +1544,24 @@ def _reference_trajectory(
                     # Native max-stack blast aggregates the pile under its
                     # newest retained stack; expiry uses that one instance.
                     take({"DT_EXPLOSION":value},t,"nonDot",cv2=1/max(procs,1e-9),
-                         origin_mode=affected[-1].get('origin_mode'))
+                         origin_mode=affected[-1].get('origin_mode'),proc_source=affected[-1].get('proc_source'))
                 else:
-                    take({"DT_EXPLOSION": value}, t, "nonDot", cv2=1/procs)
+                    take({"DT_EXPLOSION": value}, t, "nonDot", cv2=1/procs,proc_source=affected[-1].get("proc_source"))
                 # Only natural expiration is an Enervate hit; the 10-stack
                 # detonation is not. Counts remain the replay's expected procs.
                 if enervate and kind == 'blast':
                     enervate.advance(t,event_probability=payload['hitProbability'])
+        elif kind == 'proc-pile':
+            dtype, token = payload
+            paid = proc_piles[dtype].tick(t, token)
+            if paid is not None:
+                value, weak_value, number, _alive, mode, source_stats, schedule = paid
+                generation = gen
+                if value > 0.:
+                    take({dtype:value},t,'dot',weak_value/value,1/max(number,1e-9),
+                         origin_mode=mode,proc_source=source_stats)
+                if schedule and gen == generation:
+                    push(schedule[0],'proc-pile',(dtype,schedule[1]),gen)
         elif kind == "independent-dot":
             alive = stack_alive(payload)
             if payload["count"] * alive > 0 and t <= payload["end"] + 1e-9:
@@ -1533,7 +1578,7 @@ def _reference_trajectory(
                     "dot",
                     False,  # A DoT kill is a kill, never a weak-point kill.
                     1/payload["count"],  # Poisson proc count.
-                    origin_mode=payload.get("origin_mode"),
+                    origin_mode=payload.get("origin_mode"), proc_source=payload.get("proc_source"),
                 )
         elif kind == 'delayed-radial':
             part, sniper_factor = payload if isinstance(payload, tuple) else (payload, 1.)
@@ -1543,7 +1588,7 @@ def _reference_trajectory(
             part, aim = payload
             delayed_attack_count += 1
             direct_packet = packet(part, aim)
-            if not take({k:v*damage_rate_multiplier for k,v in direct_packet[0].items()}, t, 'direct', not part.radial_only, spread(part,aim)):
+            if not take({k:v*damage_rate_multiplier for k,v in direct_packet[0].items()}, t, 'direct', not part.radial_only, spread(part,aim),proc_source=part):
                 add_procs(part, aim, t, direct_packet)
             enervate_hit(part, t, 0. if part.radial_only else live_crit()[0], aim)
             signal('on-hit', t, part.multishot)
@@ -1562,7 +1607,7 @@ def _reference_trajectory(
                     discarded += 0. if getattr(part, '_mine_extra', False) else part.multishot
                     continue
                 radial_packet = packet(part, 0.)
-                if not take(radial_packet[0], t, 'direct', cv2=spread(part,0.)):
+                if not take(radial_packet[0], t, 'direct', cv2=spread(part,0.),proc_source=part):
                     add_procs(part, 0., t, radial_packet)
                 enervate_hit(part, t, 0., 0.)
                 signal('on-hit', t, part.multishot)
@@ -1599,7 +1644,7 @@ def _reference_trajectory(
             if collect_timeline:finite_field_trace.append(dict(time=t,slot=slot,generation=gen))
             combat['victimProcTypesBeforeHit']={dtype:p.probability(t) for dtype,p in presence.items()}
             vec,_,_,_=attack_data(part,0.)
-            if not take({k:v*damage_rate_multiplier for k,v in vec.items()},t,'direct',cv2=spread(part,0.),weapon_source=False):
+            if not take({k:v*damage_rate_multiplier for k,v in vec.items()},t,'direct',cv2=spread(part,0.),weapon_source=False,proc_source=part):
                 add_procs(part,0.,t,allow_encumber=False)
         elif kind == 'source-owned-field':
             token,slot,part,initial=payload
@@ -1615,7 +1660,7 @@ def _reference_trajectory(
                 radial_hit(part,damage_rate_multiplier,t)
             else:
                 vec,_,_,_=attack_data(part,0.)
-                if not take({k:v*damage_rate_multiplier for k,v in vec.items()},t,'direct',cv2=spread(part,0.)):
+                if not take({k:v*damage_rate_multiplier for k,v in vec.items()},t,'direct',cv2=spread(part,0.),proc_source=part):
                     add_procs(part,0.,t)
         elif kind == 'nox-payload':
             part,weight=payload
@@ -1656,7 +1701,7 @@ def _reference_trajectory(
                 radial_hit(part, 1., t)
             else:
                 vec, _, _, _ = attack_data(part, 0.0)
-                if not take(vec, t, 'direct', cv2=spread(part,0.)):
+                if not take(vec, t, 'direct', cv2=spread(part,0.),proc_source=part):
                     add_procs(part, 0.0, t)
         elif kind == "dot":
             dtype, value, end, origin_mode = payload
@@ -2098,7 +2143,7 @@ def _reference_trajectory(
                     else:
                         direct_packet=packet(lane_direct,0.)
                         vector=direct_packet[0]
-                        died=take({k:v*damage_rate_multiplier for k,v in vector.items()},t,'direct',False,spread(lane_direct,0.))
+                        died=take({k:v*damage_rate_multiplier for k,v in vector.items()},t,'direct',False,spread(lane_direct,0.),proc_source=lane_direct)
                         noncrit_no_proc_hit(lane_direct,0.,t)
                         if not died:add_procs(lane_direct,0.,t,direct_packet)
                         signal('on-hit',t,1.)
@@ -2111,7 +2156,7 @@ def _reference_trajectory(
                         else:
                             combat['victimProcTypesBeforeHit']={dtype:p.probability(t) for dtype,p in presence.items()}
                             rp=packet(lane_radial,0.)
-                            if not take({k:v*damage_rate_multiplier for k,v in rp[0].items()},t,'direct',cv2=spread(lane_radial,0.)):
+                            if not take({k:v*damage_rate_multiplier for k,v in rp[0].items()},t,'direct',cv2=spread(lane_radial,0.),proc_source=lane_radial):
                                 add_procs(lane_radial,0.,t,rp)
                             noncrit_no_proc_hit(lane_radial,0.,t)
                 died=gen!=generation
@@ -2173,7 +2218,7 @@ def _reference_trajectory(
                 t,
                 "direct",
                 not active.radial_only,
-                spread(active,aim),
+                spread(active,aim), proc_source=active,
                 )
                 noncrit_no_proc_hit(active, aim, t)
             if finite_fields and active.multishot>0 and not nox_projectile and not physical_lanes and not manual_detonation and not primary_delay and not stackable and not no_contact:
@@ -2610,7 +2655,12 @@ def _reference_trajectory(
             "single-target",
             "non-heat-stacking-procs-expected",
             "single-target-syndicate-no-player-buffs",
-            "magnetic-break-six-ticks-pinned-reference-contract",
+            "electric-gas-shared-expected-clock;random-first-proc-phase-not-branched",
+            "electric-gas-latest-expired-landing-retained-unverified",
+            "electric-gas-mixed-origin-kill-credit-oldest-live-source",
+            "magnetic-break-ordinary-electric-source-context",
+            "electric-gas-adjacent-count-arrival",
+            "gas-mixed-duration-cumulative-newer-rank",
             'spread-hit-loss-not-modeled',
         ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
           + (['fire-rate-spool-reference-transcribed','fire-rate-spool-resets-on-any-pause'] if combat.get('fireRateSpool') else [])

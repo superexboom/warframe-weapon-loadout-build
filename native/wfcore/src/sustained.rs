@@ -37,6 +37,7 @@ pub struct SustainedTarget {
     faction_bracket: f64,
     body: (f64, f64, bool),
     located: (f64, f64, bool),
+    head_eligible: bool,
     existing_magnetic: i64,
 }
 
@@ -63,6 +64,7 @@ impl SustainedTarget {
             faction_bracket: match config.get_item("factionBracket")? { Some(v) => v.extract()?, None => 1.0 },
             body: get("body")?.extract()?,
             located: get("located")?.extract()?,
+            head_eligible: get("headEligible")?.extract()?,
             existing_magnetic: get("existingMagnetic")?.extract()?,
         })
     }
@@ -181,6 +183,7 @@ impl Context<'_> {
                      Location { hit_multiplier: lhm, hit_critical_multiplier: lhcm, head: lhead }],
             dot: [Location { hit_multiplier: bhm, hit_critical_multiplier: bhcm, head: bhead },
                   Location { hit_multiplier: lhm, hit_critical_multiplier: lhcm, head: lhead }],
+            dot_head_eligible: [false, self.target.head_eligible],
             dot_multiplier: types.iter().map(|&d| (d, self.multiplier(d, armour))).collect(),
             forced_procs: Vec::new(),
         };
@@ -226,7 +229,7 @@ pub fn sustained_status(
         id(&mut types, "DT_CINEMATIC"), id(&mut types, "DT_FIRE"), id(&mut types, "DT_POISON"),
         id(&mut types, "DT_ELECTRICITY"), id(&mut types, "DT_GAS"), id(&mut types, "DT_EXPLOSION"),
     ];
-    let (slash, cinematic, gas) = (id(&mut types, "DT_SLASH"), id(&mut types, "DT_CINEMATIC"), id(&mut types, "DT_GAS"));
+    let (slash, cinematic, gas, electricity) = (id(&mut types, "DT_SLASH"), id(&mut types, "DT_CINEMATIC"), id(&mut types, "DT_GAS"), id(&mut types, "DT_ELECTRICITY"));
     let ctx = Context { target, types: &types };
 
     let rate = pmax(attacks_per_second, 0.0);
@@ -301,15 +304,19 @@ pub fn sustained_status(
         let expected_procs = pmax(tables::get(&status.procs, *d).unwrap_or(0.0), 0.0);
         let interaction = if *d == slash { cinematic } else { *d };
         let damage_multiplier = pool_multiplier(interaction);
-        let per_second = row.seed + row.accumulator;
-        let value = if *d == gas {
-            let active = pmin(expected_procs * proc_rate * row.duration, 10.0);
+        let per_second = (row.seed + row.accumulator) * row.landing;
+        let value = if *d == gas || *d == electricity {
+            let active = expected_procs * proc_rate * row.duration;
+            let active = if *d == gas { pmin(active, 10.0) } else { active };
             let average_hit = if status_rate_multiplier != 0.0 {
                 pmax(damage_rate_multiplier, 0.0) / pmax(status_rate_multiplier, 0.0)
             } else {
                 0.0
             };
-            per_second * active * average_hit
+            // Retain the steady reference's average-live-stack approximation:
+            // positive mean count represents one present group. Windowed replay
+            // resolves occupancy and the latest successful landing instead.
+            (row.seed * active + if active > 0.0 { row.accumulator } else { 0.0 }) * row.landing * average_hit
         } else {
             let count = tables::get(&status.procs, *d).unwrap_or(0.0);
             per_second * row.duration * count * damage_rate
