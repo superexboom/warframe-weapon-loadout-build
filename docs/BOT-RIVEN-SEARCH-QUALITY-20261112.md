@@ -30,4 +30,19 @@ Bot-owned worker在`tools/wfarsenal_bot/bot_riven.py`，通过`tools/sync_wfarse
 
 源代码与native核心必须一起迁移。Bot本轮已快进至远端main `cfd4ac4f`后集成，旧数据/代码指纹不能冒充新缓存。最终全量烘焙完成后检查实际每个目标的baseline、2/3正推荐、负面阈值、reference/witness和manifest；进度文件只用于追踪，不能替代内容验证。
 
-当前阶段：Portable修改和相关测试完成，Bot所有者修改34项单元检查通过；组件迁移、完整缓存与远端交付由本轮后续步骤完成，最终结果以Git提交及交付记录为准。
+## 已交付结果
+
+- Portable计算源码：`1d59e621c6bb9649696d8a45cc4a76f5a779b31e`，已推送 `Preview/performance-delivery-20261025`。
+- Bot代码、native组件与缓存：`a09149cf6087f183bf969ed906ea9a3266c3d284`，已推送远端 `main` 并核对提交。
+- 98条灵化路线、658/658目标、2632份reference v2配装全部完整；输入指纹 `f5b24b11d0db51e3`，无目标计算失败。全程最多10个计算worker。
+- 过程中在第390个目标提交后，Windows进度文件打开出现一次`OSError errno22`。父进程停止worker；随后核验390份完整缓存和98条路线，原输入续跑剩余268个，未重算已完成目标。进度记录少一项不作为缺缓存判据，最终按实际内容验证全覆盖。
+- 约4小时40分包含路线、deep缓存、一次续跑及最终核验；并发与范围不同，不把它与此前16worker或不带新reference搜索的烘焙时长直接相比。
+- Bot所有者Python检查40项通过；`go test -p 1 -buildvcs=false -count=1 -timeout 180s ./service/rarsenal ./domain/riven`通过。生成包92文件在工作区和Git暂存blob均逐项size/SHA256一致；路线文件已使用仓库约定LF字节。
+- 抽样Amprex、Ignis Wraith、普通Lato的缓存MOD顺序/紫卡位置固定重放，KPM与记录逐位一致。
+- 实际JSONL worker预热后，三张卡分别0.247/0.381/0.262秒，均静态命中、非完整响应命中、有效配装/伤害评分、未达到预算。worker首次导入与推荐请求合计3.687秒，单独列出，不混入热态计算。
+
+交付cache SHA256：`d28dafc804aa933707030ba30c0782d7d55cfc277774e47ab59fdd70fec0a47f`。
+
+交付manifest tree SHA256：`ad3385fea95611da2c43d2f09d613fe2fc5d4e2caf967623a70ed1bea07d6681`。
+
+完整记录保存在`.local/delivery/bot-search-quality-20261112/`：`final-coverage.json`、`reference-replay.json`、`worker-canary.json`及两段烘焙日志。远端已交付，不代表这三个样本覆盖所有武器的搜索最优性或生产网络延迟。
