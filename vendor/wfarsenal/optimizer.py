@@ -2285,6 +2285,29 @@ def proxy_seed_best(
     return best
 
 
+def _riven_seed_subsets(base_cards, riven, *, capacity_limit=60, required_mod_keys=(),
+                        forbidden_mod_keys=(), min_fill=None, max_fill=None):
+    """Highest structurally legal keep layer; preserve order and required cards."""
+    required_keys = set(required_mod_keys or ())
+    required = tuple(c for c in base_cards if c.required or c.key in required_keys)
+    optional = tuple(c for c in base_cards if c not in required)
+    maximum = min(len(optional), 7 - len(required))
+    for keep in range(maximum, -1, -1):
+        legal = []
+        for indexes in itertools.combinations(range(len(optional)), keep):
+            selected = {id(c) for c in required} | {id(optional[i]) for i in indexes}
+            cards = tuple(c for c in base_cards if id(c) in selected)
+            if len({_mod_family(c) for c in cards}) != len(cards):
+                continue
+            if validate_build(cards, riven, slot_count=8, capacity_limit=capacity_limit,
+                              required_mod_keys=required_mod_keys, forbidden_mod_keys=forbidden_mod_keys,
+                              min_fill=min_fill, max_fill=max_fill) is None:
+                legal.append(cards)
+        if legal:
+            return legal
+    return []
+
+
 def refine_final_build(
     weapon: Mapping[str, Any], candidates: Sequence[_Card], riven: _Card | None,
     incumbent: _Evaluation, *, scenario: Scenario, metric: str,
@@ -2292,7 +2315,9 @@ def refine_final_build(
     required_damage_type: str | None = None, target_context: Mapping[str, Any] | None = None,
     profile: str = 'standard', required_mod_keys: Sequence[str] | None = None,
     forbidden_mod_keys: Sequence[str] | None = None, min_fill: int | None = None,
-    max_fill: int | None = None,
+    max_fill: int | None = None, max_evaluations: int | None = None,
+    max_rounds: int | None = None, full_neighbourhood: bool = False,
+    deadline_limit: float | None = None,
 ) -> _Evaluation:
     """Refine the final event-scored build, including discarded family variants.
 
@@ -2305,8 +2330,9 @@ def refine_final_build(
     """
     if metric not in {'killsPerMinute', 'windowedDps', 'windowedTotalDamage'} or not target_context:
         return incumbent
-    fast = profile in {'fast', 'ultra'}
-    rounds = 1 if fast else 4 if profile == 'deep' else 2
+    fast = profile in {'fast', 'ultra'} and not full_neighbourhood
+    rounds = max_rounds if max_rounds is not None else (1 if fast else 4 if profile == 'deep' else 2)
+    evaluations = 0
     forbidden = set(forbidden_mod_keys or ())
     required = set(required_mod_keys or ()) | {c.key for c in candidates if c.required}
     pool = tuple(c for c in candidates if c.key not in forbidden)
@@ -2316,6 +2342,8 @@ def refine_final_build(
     best = incumbent
     seen = {tuple(c.key for c in best.cards)}
     deadline = phase_deadline()
+    if deadline_limit is not None:
+        deadline = min(deadline, deadline_limit)
     for _ in range(rounds):
         base = best
         cards = tuple(base.cards)
@@ -2341,16 +2369,30 @@ def refine_final_build(
                     if new.key not in used and _mod_family(new) not in families:
                         yield (*cards, new)
 
-        for proposal in neighbours():
-            if expired(deadline):
+        proposals = neighbours()
+        if max_evaluations is not None:
+            # Visit every slot before spending the bounded budget on its next
+            # candidate. Drops/adds participate early, not after one huge slot.
+            buckets = {}
+            for proposal in proposals:
+                removed = tuple(c.key for c in cards if c.key not in {x.key for x in proposal})
+                bucket = buckets.setdefault(removed, [])
+                if len(proposal) < len(cards):
+                    bucket.insert(0, proposal)
+                else:
+                    bucket.append(proposal)
+            proposals = (p for row in itertools.zip_longest(*buckets.values()) for p in row if p is not None)
+        for proposal in proposals:
+            if expired(deadline) or (max_evaluations is not None and evaluations >= max_evaluations):
                 return best
             signature = tuple(c.key for c in proposal)
             if signature in seen or validate_build(proposal, riven, **constraints):
                 continue
             seen.add(signature)
+            evaluations += 1
             value = _evaluate(weapon, proposal, riven, scenario=scenario, metric=metric,
                               passives=passives, slot_limit=slot_count, capacity_limit=capacity_limit,
-                              target_context=target_context)
+                              target_context=target_context, required_damage_type=required_damage_type)
             if profile == 'deep' and value is not None and len(proposal) == len(cards):
                 changed = [i for i,(before,after) in enumerate(zip(cards,proposal)) if before.key != after.key]
                 if len(changed) == 1:
@@ -2384,7 +2426,8 @@ def refine_final_build(
                     if expired(deadline):return best
                     seen.add(signature)
                     value=_evaluate(weapon,proposal,riven,scenario=scenario,metric=metric,passives=passives,
-                                    slot_limit=slot_count,capacity_limit=capacity_limit,target_context=target_context)
+                                    slot_limit=slot_count,capacity_limit=capacity_limit,target_context=target_context,
+                                    required_damage_type=required_damage_type)
                     if (value is not None and value.score>best.score+1e-9 and
                             (not required_damage_type or value.stats.damage_types.get(required_damage_type,0.)>0.)):
                         best=value
@@ -2583,6 +2626,7 @@ def _evaluate(
     target_context: Mapping[str, Any] | None = None,
     fixed_riven_index: int | None = None,
     reorder_elements: bool = True,
+    required_damage_type: str | None = None,
 ) -> _Evaluation | None:
     heartbeat(1)
     if len(cards) + (1 if riven else 0) > slot_limit:
@@ -2593,6 +2637,8 @@ def _evaluate(
         slot_limit=slot_limit, capacity_limit=capacity_limit, special_cards=special_cards,
         special_capacity_cost=special_capacity_cost, target_context=target_context,
         fixed_riven_index=fixed_riven_index, reorder_elements=reorder_elements)
+    if cache_key is not None and required_damage_type is not None:
+        cache_key = ("required-damage-type", required_damage_type, cache_key)
     if cache_key is not None:
         # Keep the evaluator identity too: instrumentation or a replaced scorer
         # must never consume an answer produced by the previous function.
@@ -2679,6 +2725,10 @@ def _evaluate(
             victim_status_count=expected_victim_status_count(probe_stats),
         )
         stats = apply_mods(weapon, effects, scenario=derived_scenario)
+        # Filter each actual pairing before comparing scores. Filtering only
+        # the winning layout would also discard a legal lower-scoring slot.
+        if required_damage_type and stats.damage_types.get(required_damage_type, 0.0) <= 0.0:
+            continue
         projectile_events = evaluate_projectile_events(
             weapon, effects, scenario=derived_scenario
         )
@@ -5661,10 +5711,9 @@ def analyze_riven_request(
 
     def _apply_riven_floor_profiled(result: _Evaluation, riven_card: _Card, *, floor_metric: str | None = None,
                                     route_passives: Any = None) -> _Evaluation:
-        # riven floor 修正（「无紫卡最优 − 最弱卡 + 紫卡」下限）在所有档位保留：
-        # 它只花 ~9 次评估，却能挡住「窄 beam 剪掉显见路径导致带紫卡反而更差」
-        # 的假性负收益（快速档 beam 12 实测出现 -5% 假性负收益）。真正按档位
-        # 缩的是爬山轮数与 _best_fixed 的子集枚举。
+        # The floor checks the highest capacity-valid keep layer, including
+        # every two-drop choice when one dropped card cannot fit the Riven.
+        # This protects against a narrow beam losing the known baseline family.
         return _apply_riven_floor(result, riven_card, floor_metric=floor_metric, route_passives=route_passives)
 
     _progress("baseline")
@@ -5743,58 +5792,11 @@ def analyze_riven_request(
         # ── 容量修复（2026-09-24）：紫卡 18 耗经常要求丢 2 张卡（8 张满配
         # 60 耗 + 18 超限）；旧 floor 只枚举单卡丢弃，装不下就整条 floor
         # 失效——actual 于是回退到 beam 的劣解（用户报告的 actual < baseline
-        # 崩坏）。先按容量贪心保留（按卡序丢最贵），再补单卡丢弃枚举。
-        required_keys = {
-            card.key for card in baseline.cards if card.required
-        }
-        droppable = [
-            card
-            for card in baseline.cards
-            if card.key not in required_keys
-        ]
-        floor_candidates: list[tuple[_Card, ...]] = []
-        # 容量贪心：从 baseline 全卡开始，装不下就按「最贵优先丢」直到可装。
-        kept_greedy = list(baseline.cards)
-        guard = 0
-        while (
-            validate_build(
-                tuple(kept_greedy),
-                riven_card,
-                slot_count=8,  # analyze_riven_request 固定 8 槽口径
-                capacity_limit=capacity_limit,
-                required_mod_keys=search_required_keys,
-                forbidden_mod_keys=search_forbidden_keys,
-                min_fill=search_min_fill,
-                max_fill=search_max_fill,
-            ) is not None
-            and kept_greedy
-            and guard < 8
-        ):
-            # 丢最贵的一张可丢卡。
-            droppable_here = [c for c in kept_greedy if c.key not in required_keys]
-            if not droppable_here:
-                break
-            most_expensive = max(droppable_here, key=lambda c: c.drain)
-            kept_greedy.remove(most_expensive)
-            guard += 1
-        if kept_greedy and validate_build(
-            tuple(kept_greedy),
-            riven_card,
-            slot_count=8,
-            capacity_limit=capacity_limit,
-            required_mod_keys=search_required_keys,
-            forbidden_mod_keys=search_forbidden_keys,
-            min_fill=search_min_fill,
-            max_fill=search_max_fill,
-        ) is None:
-            floor_candidates.append(tuple(kept_greedy))
-        # 单卡丢弃枚举（保留旧口径；droppable 非空时）。
-        for drop_card in droppable:
-            kept = tuple(
-                card for card in baseline.cards if card.key != drop_card.key
-            )
-            floor_candidates.append(kept)
-        floor_candidates.append(tuple(baseline.cards))
+        # 崩坏）。现在枚举最高合法保留层，完整覆盖同层的一删或两删组合。
+        floor_candidates = _riven_seed_subsets(
+            baseline.cards, riven_card, capacity_limit=capacity_limit,
+            required_mod_keys=search_required_keys, forbidden_mod_keys=search_forbidden_keys,
+            min_fill=search_min_fill, max_fill=search_max_fill)
         floors: list[_Evaluation] = []
         for kept in floor_candidates:
             if validate_build(
@@ -5818,21 +5820,27 @@ def analyze_riven_request(
                 capacity_limit=capacity_limit,
                 target_context=search_context,
                 reorder_elements=False,  # the baseline's element order is already chosen
-                fixed_riven_index=len(kept) if ultra else None,  # ultra: place the Riven in the winner only
+                fixed_riven_index=len(kept) if ultra and not required_damage_type else None,
+                required_damage_type=required_damage_type,
             )
-            if evaluated is not None:
+            if evaluated is not None and (not required_damage_type or
+                    evaluated.stats.damage_types.get(required_damage_type, 0.0) > 0.0):
                 floors.append(evaluated)
 
         def final_floor(candidate):
             if ultra:
-                candidate = _evaluate(weapon, candidate.cards, riven_card, scenario=scenario,
+                placed = _evaluate(weapon, candidate.cards, riven_card, scenario=scenario,
                     metric=floor_metric or ranking_metric, passives=floor_passives, capacity_limit=capacity_limit,
-                    target_context=search_context, reorder_elements=False) or candidate
+                    target_context=search_context, reorder_elements=False,
+                    required_damage_type=required_damage_type)
+                if placed is not None and (not required_damage_type or
+                        placed.stats.damage_types.get(required_damage_type, 0.0) > 0.0):
+                    candidate = placed
             if search_context is not benchmark_context:
                 candidate = _evaluate(weapon, candidate.cards, riven_card, scenario=scenario,
                     metric=floor_metric or ranking_metric, passives=floor_passives, capacity_limit=capacity_limit,
                     target_context=benchmark_context, fixed_riven_index=candidate.riven_index,
-                    reorder_elements=False) or candidate
+                    reorder_elements=False, required_damage_type=required_damage_type) or candidate
             return candidate
 
         floor = _best_finalist(floors, final_floor) if floors else None
@@ -5855,6 +5863,90 @@ def analyze_riven_request(
         ),
         actual_card,
     )
+
+    if ultra and actual is not None and search_context is not None:
+        # Cached builds are witnesses, never cached scores for this Riven. Keep
+        # the original ultra answer even if a middle-node improvement loses
+        # on the complete three-node objective.
+        old_actual = actual
+        seed_keys = []
+        if statics:
+            seed_keys.extend((statics.get("archetypeBases") or {}).values()
+                             if isinstance(statics.get("archetypeBases"), dict) else ())
+            # Bot reference witnesses are stored under this already matched
+            # weapon/scenario cache key. Reuse their MODs, never their old KPM.
+            reference_seeds = []
+            counts = statics.get("counts")
+            if isinstance(counts, dict):
+                for n in ("2", "3"):
+                    bundle = counts.get(n)
+                    reference = bundle.get("reference") if isinstance(bundle, dict) else None
+                    candidates = reference.get("candidates") if isinstance(reference, dict) else None
+                    for candidate in candidates if isinstance(candidates, list) else ():
+                        build = candidate.get("build") if isinstance(candidate, dict) else None
+                        keys = build.get("mods") if isinstance(build, dict) else None
+                        if isinstance(keys, list) and keys not in reference_seeds:
+                            reference_seeds.append(keys)
+            seed_keys.extend(reference_seeds[:4])
+        seeds = [tuple(baseline.cards), tuple(actual.cards)]
+        for keys in seed_keys:
+            if (isinstance(keys, list) and 0 < len(keys) <= 8
+                    and all(isinstance(k, str) and k in pool_by_key for k in keys)
+                    and len(set(keys)) == len(keys)):
+                seeds.append(tuple(pool_by_key[k] for k in keys))
+        warm_deadline = phase_deadline()
+        starts = []
+        seen_warm = set()
+        witness_keys = set()
+        warm_evaluations = 0
+        constraints = dict(capacity_limit=capacity_limit, required_mod_keys=search_required_keys,
+                           forbidden_mod_keys=search_forbidden_keys, min_fill=search_min_fill,
+                           max_fill=search_max_fill)
+        layers = []
+        for seed in seeds:
+            witness_keys.update(c.key for c in seed)
+            layers.append(_riven_seed_subsets(seed, actual_card, **constraints))
+        # A capacity-heavy witness must not consume the whole allowance before
+        # the other cached archetypes get even one current-card evaluation.
+        for row in itertools.zip_longest(*layers):
+            if expired(warm_deadline) or warm_evaluations >= 64:
+                break
+            for cards in row:
+                if cards is None:
+                    continue
+                signature = tuple(c.key for c in cards)
+                if signature in seen_warm:
+                    continue
+                if expired(warm_deadline) or warm_evaluations >= 64:
+                    break
+                seen_warm.add(signature)
+                warm_evaluations += 1
+                value = _evaluate(weapon, cards, actual_card, scenario=scenario,
+                    metric=ranking_metric, passives=passives, capacity_limit=capacity_limit,
+                    target_context=search_context, required_damage_type=required_damage_type)
+                if value is not None and (not required_damage_type or
+                        value.stats.damage_types.get(required_damage_type, 0.0) > 0.0):
+                    starts.append(value)
+        # Prioritize deep witnesses and their family variants; other candidates
+        # remain available. The refiner interleaves slots under its fixed cap.
+        witness_families = {_mod_family(pool_by_key[k]) for k in witness_keys if k in pool_by_key}
+        warm_pool = sorted(mod_pool, key=lambda c: (c.key not in witness_keys,
+                           _mod_family(c) not in witness_families, c.key))
+        finalists = [old_actual]
+        for start in sorted(starts, key=lambda value: -value.score)[:2]:
+            # A scored witness remains a finalist if its screening used the
+            # phase allowance; only the optional neighbourhood work stops.
+            value = start if expired(warm_deadline) else refine_final_build(weapon, warm_pool, actual_card, start,
+                scenario=scenario, metric=ranking_metric, passives=passives,
+                capacity_limit=capacity_limit, required_damage_type=required_damage_type,
+                target_context=search_context, profile='ultra', max_evaluations=64,
+                max_rounds=2, full_neighbourhood=True, deadline_limit=warm_deadline,
+                required_mod_keys=search_required_keys,
+                forbidden_mod_keys=search_forbidden_keys, min_fill=search_min_fill,
+                max_fill=search_max_fill)
+            finalists.append(_rescore(value, actual_card, dict(scenario=scenario,
+                              metric=ranking_metric, passives=passives, capacity_limit=capacity_limit)))
+        actual = max(finalists, key=lambda value: value.score)
 
     # ── 灵化路线随紫卡筛选（2026-10-17）──────────────────────────────────
     # 默认路线（社区策略或裸枪逐阶择优）在看到紫卡之前就定了，紫卡会让最优

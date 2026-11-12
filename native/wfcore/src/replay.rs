@@ -749,9 +749,9 @@ pub struct Replay<'py> {
     kills: i64,
     weak_kill_events: f64,
     /// Weak-point-kill draw of `combat_replay.replay`: (probe, offset,
-    /// golden). A probe records how uncertain the kills were; a branch decides
-    /// each uncertain kill from the rotated Kronecker sequence.
-    weak_draw: Option<(bool, f64, f64)>,
+    /// golden, track kills). A probe tracks kills only for their consumers;
+    /// empty-magazine draws remain active. Branch draw order stays unchanged.
+    weak_draw: Option<(bool, f64, f64, bool)>,
     weak_index: f64,
     weak_uncertainty: f64,
     attacks: i64,
@@ -2624,8 +2624,8 @@ impl<'py> Replay<'py> {
             }
         }
         let mut weak_probability = pmin(1.0, pmax(0.0, weak_kill));
-        if let Some((probe, offset, golden)) = self.weak_draw {
-            if weapon_kill && 1e-9 < weak_probability && weak_probability < 1.0 - 1e-9 {
+        if let Some((probe, offset, golden, track_kills)) = self.weak_draw {
+            if (!probe || track_kills) && weapon_kill && 1e-9 < weak_probability && weak_probability < 1.0 - 1e-9 {
                 if probe {
                     self.weak_uncertainty = pmax(self.weak_uncertainty, pmin(weak_probability, 1.0 - weak_probability));
                 } else {
@@ -4152,7 +4152,7 @@ impl<'py> Replay<'py> {
                         self.ammo = pmax(self.ammo, magazine);
                     }
                     let mut ammo_cost = ammo_cost;
-                    if let Some((probe, offset, golden)) = self.weak_draw {
+                    if let Some((probe, offset, golden, _)) = self.weak_draw {
                         // combat_replay: a branch settles infinite ammo that is up with some
                         // probability at an empty magazine (free shots go on, or a reload).
                         if self.ammo <= 1e-9 && ammo_cost > 1e-9 && magazine > 0.0 {
@@ -5486,7 +5486,7 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         kills: 0,
         weak_kill_events: 0.0,
         weak_draw: match opt_dict("weakDraw")? {
-            Some(d) => Some((truthy(&d, "probe")?, get_f(&d, "offset", 0.0)?, get_f(&d, "golden", 0.0)?)),
+            Some(d) => Some((truthy(&d, "probe")?, get_f(&d, "offset", 0.0)?, get_f(&d, "golden", 0.0)?, match d.get_item("trackKills")? { Some(v)=>v.is_truthy()?, None=>true })),
             None => None,
         },
         weak_index: 0.0,

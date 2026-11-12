@@ -17,17 +17,18 @@ REPLAY_EVENT_LIMIT = 10_000_000
 
 
 class _KillProbe:
-    """weak_draw that leaves kills fractional and records how uncertain they were."""
+    """Keep outcomes fractional; track relevant kills and empty-magazine draws."""
 
-    def __init__(self):
+    def __init__(self, track_kills=True):
         self.uncertainty = 0.
+        self.track_kills = track_kills
 
     def __call__(self, probability):
         self.uncertainty = max(self.uncertainty, min(probability, 1. - probability))
         return probability
 
     def native_spec(self):
-        return dict(probe=True)
+        return dict(probe=True, trackKills=self.track_kills)
 
     def absorb(self, core):
         self.uncertainty = max(self.uncertainty, core['weakUncertainty'])
@@ -87,12 +88,15 @@ def replay(stats, target, **options):
     branches = int(options.pop('kill_branches', None) or KILL_BRANCHES)
     combat = options.get('combat') or {}
     restore = combat.get('magazineRestore') or {}
-    feedback = (restore.get('kind') == 'on-headshot-kill'
-                or any((q.get('kind') == 'on-headshot-kill' or q.get('freeAmmo')) and q.get('perEvent', 1.) != 0
-                       for q in options.get('trigger_sources') or ()))
+    sources = [q for q in options.get('trigger_sources') or ()
+               if (not q.get('actorOnly') or combat.get('_actorSignal')) and q.get('perEvent', 1.) != 0]
+    track_kills = (restore.get('kind') == 'on-headshot-kill'
+                   and restore.get('chance', 1.) > 0 and restore.get('fraction', 0.) > 0
+                   or any(q.get('kind') == 'on-headshot-kill' for q in sources))
+    feedback = track_kills or any(q.get('freeAmmo') for q in sources)
     if not feedback:
         return _trajectory(stats, target, **options)
-    probe = _KillProbe()
+    probe = _KillProbe(track_kills=track_kills)
     expected = _trajectory(stats, target, weak_draw=probe, **options)
     if probe.uncertainty < KILL_BRANCH_MARGIN:
         return expected
@@ -791,7 +795,7 @@ def _reference_trajectory(
         if distance is not None and distance <= 5.0:
             signal("on-close-kill", t)
         weak_probability=(head if weak_kill else 0.) if isinstance(weak_kill,bool) else min(1.,max(0.,weak_kill))
-        if weak_draw and weapon_kill and 1e-9<weak_probability<1.-1e-9:
+        if weak_draw and getattr(weak_draw, "track_kills", True) and weapon_kill and 1e-9<weak_probability<1.-1e-9:
             weak_probability=weak_draw(weak_probability)
         if weak_probability:
             weak_kill_events += weak_probability

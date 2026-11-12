@@ -3,6 +3,7 @@ from collections import OrderedDict
 from contextvars import ContextVar
 from functools import wraps
 import hashlib
+import math
 import os
 import pickle
 import time
@@ -58,9 +59,16 @@ def session_request(fn):
             finally:
                 SESSION.reset(token)
         profile = str(request.get('profile') or 'standard').strip().casefold()
-        state = dict(start=time.monotonic(), deadline=time.monotonic() +
-                     {'fast':45., 'standard':90., 'deep':240.}.get(profile,90.),
-                     phaseSeconds={'fast':8.,'standard':15.,'deep':45.}.get(profile,15.),
+        budget = {'fast':45., 'standard':90., 'deep':240., 'ultra':35.}.get(profile,90.)
+        remaining = request.get('_searchBudgetSeconds')
+        if remaining is not None:
+            if (isinstance(remaining, bool) or not isinstance(remaining, (int, float))
+                    or not math.isfinite(remaining) or remaining <= 0.):
+                raise ValueError('_searchBudgetSeconds must be a finite positive number')
+            budget = min(budget, remaining)
+        start = time.monotonic()
+        state = dict(start=start, deadline=start + budget,
+                     phaseSeconds={'fast':8.,'standard':15.,'deep':45.,'ultra':5.}.get(profile,15.),
                      stage='baseline', hook=kwargs.get('progress_hook'), evaluations=0,
                      memoHits=0, memo=OrderedDict(), searches=OrderedDict(), limited=0,
                      lastBeat=0.)

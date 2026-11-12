@@ -38,6 +38,9 @@ def supported(stats, options) -> bool:
     draw = options.get("weak_draw")
     if draw is not None and not callable(getattr(draw, "native_spec", None)):
         return False
+    if (draw is not None and not getattr(draw, "track_kills", True)
+            and not getattr(wfcore, "SELECTIVE_KILL_PROBE", 0)):
+        return False
     combat = options.get("combat")
     if not combat or not combat.get("resolve"):
         return False

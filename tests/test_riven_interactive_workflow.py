@@ -28,10 +28,10 @@ def captured_analysis(monkeypatch):
 def test_default_target_and_exact_result_cache_preserve_headshots(captured_analysis):
     calls, request = captured_analysis
     for chance in (0., .5, 1.):
-        result = app.analyze_payload({**request, 'headshotChance':chance})
+        result = app.analyze_payload({**request, 'headshotChance':chance, '_searchBudgetSeconds':12.})
         assert result['evaluationTarget']['headshotChance'] == chance
         result['actual']['value'] = 999
-        repeated = app.analyze_payload({**request,'headshotChance':chance,'progressToken':'different'})
+        repeated = app.analyze_payload({**request,'headshotChance':chance,'progressToken':'different', '_searchBudgetSeconds':11.})
         assert repeated['responseCache'] == 'exact-request-hit'
         assert repeated['actual']['value'] == 1
     assert len(calls) == 3
@@ -91,19 +91,20 @@ def test_static_work_is_reported_without_retaining_another_requests_counts():
     @session_request
     def analyze(_directory, request):
         assert not SESSION.get().get('negativeWork')
+        assert SESSION.get()['deadline'] == float('inf')
         heartbeat(3)
         SESSION.get()['negativeWork'] = {'fastSearches': 1, 'fastProofs': 1}
         return {'bakeStaticsOnly': True}
 
     for _ in range(2):
-        result = analyze('.', {'_bakeStaticsOnly': True})
+        result = analyze('.', {'_bakeStaticsOnly': True, '_searchBudgetSeconds': 0.})
         assert result['searchWork']['evaluations'] == 3
         assert result['searchWork']['negative'] == {'fastSearches': 1, 'fastProofs': 1}
         assert SESSION.get() is None
 
 
-@pytest.mark.parametrize('profile,seconds', [('fast', 8.), ('standard', 15.), ('deep', 45.)])
-def test_negative_classification_flag_does_not_disable_the_callers_budget(profile, seconds):
+@pytest.mark.parametrize('profile,budget,seconds', [('fast', 45., 8.), ('standard', 90., 15.), ('deep', 240., 45.), ('ultra', 35., 5.)])
+def test_negative_classification_flag_does_not_disable_the_callers_budget(profile, budget, seconds):
     import math
     from wfarsenal.search_session import session_request
 
@@ -114,7 +115,12 @@ def test_negative_classification_flag_does_not_disable_the_callers_budget(profil
         return dict(searchStatus={}, skipped=[])
 
     result = analyze('.', dict(profile=profile, _bakeNegativeClassificationOnly=True))
-    assert result['searchWork']['budgetSeconds'] > seconds
+    assert result['searchWork']['budgetSeconds'] == pytest.approx(budget)
+    for remaining in (2.5, 999.):
+        result = analyze('.', dict(profile=profile, _searchBudgetSeconds=remaining))
+        assert result['searchWork']['budgetSeconds'] == pytest.approx(min(budget, remaining))
+    with pytest.raises(ValueError, match='finite positive'):
+        analyze('.', dict(profile=profile, _searchBudgetSeconds=float('nan')))
 
 
 def test_phase_heartbeat_is_monotonic_and_exposes_work():

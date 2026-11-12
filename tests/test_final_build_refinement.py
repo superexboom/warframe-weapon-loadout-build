@@ -64,12 +64,31 @@ def test_explicit_required_and_implicit_required_are_preserved(monkeypatch):
 
 
 def test_element_contract_survives_local_improvement(monkeypatch):
+    evaluate = o._evaluate
     a, b = card('a'), card('b')
     old = evaluation((a,), 10)
     monkeypatch.setattr(o, '_evaluate', lambda _w, cards, _r, **_: evaluation(cards, 20, element=False))
     found = o.refine_final_build({}, (a, b), None, old, scenario=Scenario(), metric='killsPerMinute',
                                target_context={'windowSeconds': 30}, required_damage_type='DT_VIRAL', slot_count=1)
     assert found is old
+    found = o.refine_final_build({}, (a, b), None, old, scenario=Scenario(), metric='killsPerMinute',
+                               target_context={'windowSeconds': 30}, required_damage_type='DT_VIRAL', slot_count=1,
+                               profile='ultra', max_evaluations=3, max_rounds=2, full_neighbourhood=True)
+    assert found is old
+    # Cold, Heat, then a Toxin Riven is Blast+Toxin; an earlier Riven is Viral+Heat.
+    # A higher illegal score must not hide the legal insertion point.
+    import app
+    from wfarsenal.damage import ModEffect
+    weapon = next(w for w in app.EXPORTS['weapons'] if w.get('nameEn') == 'Braton Prime')
+    mods = [next(m for m in app.EXPORTS['mods'] if m.get('nameEn') == name)
+            for name in ('Cryo Rounds', 'Hellfire')]
+    installed = tuple(o._mod_card(m, Scenario()) for m in mods)
+    toxin = o._Card('riven', None, 8, (ModEffect('WEAPON_PERCENT_BASE_DAMAGE_ADDED', 'ADD', .9, damage_type='DT_POISON'),), (), 9, None)
+    monkeypatch.setattr(o, '_score', lambda stats, _metric, *_args, **_: 100. if stats.damage_types.get('DT_EXPLOSION') else 10.)
+    value = evaluate(weapon, installed, toxin, scenario=Scenario(), metric='attackDps',
+                     reorder_elements=False, required_damage_type='DT_VIRAL')
+    assert value.score == 10. and value.riven_index < 2
+    assert value.stats.damage_types.get('DT_VIRAL', 0.) > 0.
 
 
 def test_deep_pair_search_crosses_a_valley_standard_cannot(monkeypatch):
@@ -79,6 +98,26 @@ def test_deep_pair_search_crosses_a_valley_standard_cannot(monkeypatch):
     standard=run(monkeypatch,(a,b,c,d),old,scores,profile='standard',slot_count=2,min_fill=2)
     deep=run(monkeypatch,(a,b,c,d),old,scores,profile='deep',slot_count=2,min_fill=2)
     assert standard.score==10. and deep.score==max(scores.values())
+
+
+def test_warm_riven_seeds_cover_capacity_pairs_and_bounded_slot_search(monkeypatch):
+    # Two removals are needed; the best pair can differ from the most costly.
+    cards = tuple(card(key, drain=drain) for key, drain in zip('ABCDEFGH', [8,8,8,8,7,7,7,7]))
+    riven = card('riven', drain=9)
+    seeds = o._riven_seed_subsets(cards, riven, capacity_limit=60)
+    assert len(seeds) == 28
+    assert any(tuple(c.key for c in seed) == tuple('ABCDEF') for seed in seeds)
+    calls = []
+    def evaluate(_weapon, candidate, _riven, **_):
+        calls.append(tuple(c.key for c in candidate))
+        return evaluation(candidate, 20. if calls[-1] == ('A', 'C') else 0.)
+    monkeypatch.setattr(o, '_evaluate', evaluate)
+    a, b, c = (card(k) for k in 'ABC')
+    old = evaluation((a, b), 10.)
+    found = o.refine_final_build({}, (a, b, c), None, old, scenario=Scenario(), metric='killsPerMinute',
+        target_context={'windowSeconds':30}, profile='ultra', slot_count=2, full_neighbourhood=True,
+        max_evaluations=4, max_rounds=2)
+    assert len(calls) <= 4 and found.score == 20.
 
 
 def test_real_laetum_family_variant_matches_independently_replayed_board():

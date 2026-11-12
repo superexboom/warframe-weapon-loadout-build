@@ -287,3 +287,7 @@ def test_uncertain_weakpoint_kill_feedback_branches_deterministically():
     assert 0<first['weakpointKillEvents']<first['killEvents']
     assert len(first['timeline'])==len(go([])['timeline'])
     assert 'killBranches' not in go([])
+    # A free-ammo source needs discrete draws only when an empty magazine
+    # actually asks whether its fractional uptime prevents a reload.
+    free = dict(source, kind='on-hit', freeAmmo=True, maxStacks=1., perEvent=.1)
+    assert 'killBranches' not in go([free])

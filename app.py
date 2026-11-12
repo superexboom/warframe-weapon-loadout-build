@@ -3485,7 +3485,9 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
 
     try:
         with _interactive_analysis_gate():
-            result_key = json.dumps({'request':engine_request, 'record':analysis_record,
+            # Transport remaining time is not part of a completed answer's identity.
+            cache_request = {k:v for k,v in engine_request.items() if k != '_searchBudgetSeconds'}
+            result_key = json.dumps({'request':cache_request, 'record':analysis_record,
                 'stance':analysis_stance, 'inputs':ANALYSIS_STATICS_RUNTIME_INPUTS,
                 'cacheVersion':ANALYSIS_STATICS_CACHE_VERSION}, sort_keys=True, ensure_ascii=False)
             cached_result = _ANALYSIS_RESULTS.get(result_key)
@@ -3503,7 +3505,7 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
                     progress_hook=_stage_hook,
                 )
                 _persist_analysis_statics_cache()
-                if not request.get('_bakeStaticsOnly'):
+                if not request.get('_bakeStaticsOnly') and not (result.get('searchWork') or {}).get('limited'):
                     _ANALYSIS_RESULTS[result_key] = deepcopy(result)
                     while len(_ANALYSIS_RESULTS) > 32:
                         _ANALYSIS_RESULTS.popitem(last=False)
