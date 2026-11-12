@@ -22,9 +22,11 @@ pub const PRESENCE: usize = 12;
 pub const HEAT: usize = 13;
 pub const POOLED: usize = 14;
 pub const NOSTATUS: usize = 15;
-const N: usize = 16;
+pub const PILE_BUILD: usize = 16;
+pub const PILE_MOMENTS: usize = 17;
+const N: usize = 18;
 const NAMES: [&str; N] = ["total", "resolve", "view", "clean", "take", "add_procs", "model", "packet", "signal",
-                          "fire", "setup", "result", "presence", "heat", "pooled", "no_status"];
+                          "fire", "setup", "result", "presence", "heat", "pooled", "no_status", "pile_build", "pile_moments"];
 
 static ENABLED: AtomicBool = AtomicBool::new(false);
 /// Which per-function slots time when enabled (all by default).

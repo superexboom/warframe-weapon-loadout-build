@@ -10,12 +10,13 @@
 //! Every float operation keeps the reference's order.
 
 use crate::heat::HeatChains;
-use crate::proc::{stack_alive, CappedPool, DotInstance, KillAttribution, StatusPresence, ProcPile, PileOutcome, arrival_kernel};
+use crate::proc::{stack_alive, CappedPool, DotInstance, KillAttribution, StatusPresence, ProcPile, PileOutcome, PileKernel, arrival_kernel};
 use crate::pymath::{ceil_i, floor_i, pmax, pmin, pow, psum, trunc_i, PySum};
 use crate::tables::{self, Core, Location, TargetTables};
 use crate::co;
 use crate::stackable::{self, Projectiles};
 use std::rc::Rc;
+use std::cell::OnceCell;
 use crate::fx::{FxHashMap, FxIndexMap};
 use pyo3::exceptions::{PyIndexError, PyValueError, PyZeroDivisionError};
 use pyo3::prelude::*;
@@ -595,7 +596,6 @@ struct Packet {
     rows: FxIndexMap<D, Row>,
     non: FxIndexMap<D, f64>,
 }
-#[derive(Clone)]
 struct Row {
     duration: f64,
     seed: f64,
@@ -603,6 +603,19 @@ struct Row {
     shared: bool,
     coefficient: f64,
     branches: Vec<tables::LandingBranch>,
+    kernels: OnceCell<((u64, u64), Rc<[Rc<PileKernel>]>)>,
+}
+
+impl Clone for Row {
+    fn clone(&self) -> Self {
+        // Derived packets may change seed/accumulator or branch weights.
+        // Their semantic fields survive; their kernel cache starts empty.
+        Self {
+            duration: self.duration, seed: self.seed, accumulator: self.accumulator,
+            shared: self.shared, coefficient: self.coefficient,
+            branches: self.branches.clone(), kernels: OnceCell::new(),
+        }
+    }
 }
 
 #[derive(Clone)]
@@ -1867,7 +1880,7 @@ impl<'py> Replay<'py> {
                 procs,
                 rows: rows.into_iter().map(|(d, r)| (d, Row {
                     duration: r.duration, seed: r.seed, accumulator: r.accumulator, shared: r.shared,
-                    coefficient: r.coefficient, branches: r.branches,
+                    coefficient: r.coefficient, branches: r.branches, kernels: OnceCell::new(),
                 })).collect(),
                 non: non.into_iter().collect(),
             };
@@ -1906,7 +1919,7 @@ impl<'py> Replay<'py> {
                         procs: p,
                         rows: r.into_iter().map(|(d, r)| (d, Row {
                             duration: r.duration, seed: r.seed, accumulator: r.accumulator, shared: r.shared,
-                            coefficient: r.coefficient, branches: r.branches,
+                            coefficient: r.coefficient, branches: r.branches, kernels: OnceCell::new(),
                         })).collect(),
                         non: n.into_iter().collect(),
                     });
@@ -1991,7 +2004,7 @@ impl<'py> Replay<'py> {
                 procs,
                 rows: rows.into_iter().map(|(d, r)| (d, Row {
                     duration: r.duration, seed: r.seed, accumulator: r.accumulator, shared: r.shared,
-                    coefficient: r.coefficient, branches: r.branches,
+                    coefficient: r.coefficient, branches: r.branches, kernels: OnceCell::new(),
                 })).collect(),
                 non: non.into_iter().collect(),
             };
@@ -2016,6 +2029,7 @@ impl<'py> Replay<'py> {
                     accumulator: get_f(r, "accumulatorPerSecondPerAttack", 0.0)?,
                     shared: truthy(r, "accumulatorSharedGroup")?,
                     coefficient: get_f(r, "coefficient", 0.0)?,
+                    kernels: OnceCell::new(),
                     branches: match r.get_item("landingBranches")? {
                         Some(branches) => branches.try_iter()?.map(|value| {
                             let value = value?;
@@ -2380,10 +2394,10 @@ impl<'py> Replay<'py> {
         let probability=self.presence.get_mut(&MAGNETIC).map(|p|p.probability(t)).unwrap_or(1.0);
         self.presence.entry(ELECTRICITY).or_default().add(t+duration,1.0-probability);
         *self.proc_counts.entry(ELECTRICITY).or_insert(0.0)+=probability;
-        self.add_pile(ELECTRICITY,t,duration,vec![vec![
+        self.add_pile(ELECTRICITY,t,duration,&[Rc::new(PileKernel::new(&[
             PileOutcome {probability:1.0-probability,count:0,seed:0.0,accumulator:0.0,landing:1.0,weak:false},
             PileOutcome {probability,count:1,seed:per_tick,accumulator,landing:1.0,weak:false},
-        ]],active);
+        ]))],active);
         let signal=self.proc_signal(ELECTRICITY);
         self.signal(&signal,t,probability);
         self.signal("on-proc",t,probability);
@@ -2891,13 +2905,20 @@ impl<'py> Replay<'py> {
         Ok(died)
     }
 
-    fn pile_outcomes(&self, st: usize, branches: &[tables::LandingBranch], expected_count: f64) -> Vec<Vec<PileOutcome>> {
+    fn pile_outcomes(&self, st: usize, row: &Row, expected_count: f64) -> Rc<[Rc<PileKernel>]> {
         let s = &self.stats[st];
         let pellets = pmax(s.multishot, 0.0);
-        if pellets <= 0.0 { return Vec::new(); }
+        if pellets <= 0.0 { return Rc::from([]); }
         let instances = if s.continuous { 1.0 } else { pellets };
+        let key = (instances.to_bits(), expected_count.to_bits());
+        if let Some((cached_key, kernels)) = row.kernels.get() {
+            if *cached_key == key { return kernels.clone(); }
+        }
+        // Profile actual construction only; cached lookups do not clock.
+        let _timer = crate::counters::Timer::start(crate::counters::PILE_BUILD);
+        let branches = &row.branches;
         let declared = psum(branches.iter().map(|b| b.weight*b.procs));
-        if declared <= 0.0 || expected_count <= 0.0 { return Vec::new(); }
+        if declared <= 0.0 || expected_count <= 0.0 { return Rc::from([]); }
         let scale = expected_count / declared;
         let mut outcomes = Vec::new();
         for b in branches {
@@ -2913,20 +2934,25 @@ impl<'py> Replay<'py> {
             }
         }
         let whole = floor_i(instances) as usize;
-        let mut result = vec![outcomes.clone(); whole];
+        let kernel = Rc::new(PileKernel::new(&outcomes));
+        let mut result = vec![kernel; whole];
         let fraction = instances - whole as f64;
         if fraction > 0.0 {
             let mut last = vec![PileOutcome { probability:1.0-fraction,count:0,seed:0.0,accumulator:0.0,landing:1.0,weak:false }];
-            last.extend(outcomes.into_iter().map(|mut o| { o.probability *= fraction; o }));
-            result.push(last);
+            last.extend(outcomes.iter().copied().map(|mut o| { o.probability *= fraction; o }));
+            result.push(Rc::new(PileKernel::new(&last)));
+        }
+        let result: Rc<[Rc<PileKernel>]> = Rc::from(result);
+        if row.kernels.get().is_none() {
+            let _ = row.kernels.set((key, result.clone()));
         }
         result
     }
 
-    fn add_pile(&mut self, d:D, t:f64, duration:f64, outcomes:Vec<Vec<PileOutcome>>, source:usize) {
+    fn add_pile(&mut self, d:D, t:f64, duration:f64, outcomes:&[Rc<PileKernel>], source:usize) {
         for outcome in outcomes {
             let schedule = self.proc_piles.entry(d).or_insert_with(||ProcPile::new(if d==GAS {Some(10)} else {None}))
-                .add(t,duration,outcome,Some(self.damage_origin.unwrap_or(self.form)),Some(source));
+                .add(t,duration,outcome.clone(),Some(self.damage_origin.unwrap_or(self.form)),Some(source));
             if let Some((when,token))=schedule { self.push(when,Kind::GroupedDot(d,token),Some(self.gen)); }
         }
     }
@@ -3028,7 +3054,7 @@ impl<'py> Replay<'py> {
                 }
                 continue;
             }
-            let row = data.rows.get(&d).cloned();
+            let row = data.rows.get(&d);
             let duration = match &row {
                 Some(r) => r.duration,
                 None => duration_of(d).unwrap_or(6.0) * scale,
@@ -3049,11 +3075,11 @@ impl<'py> Replay<'py> {
                 absence = pmax(absence, 1.0 - pmin(n, 1.0));
             }
             let pile_events = if d == GAS || d == ELECTRICITY {
-                row.as_ref().map(|r| self.pile_outcomes(st, &r.branches, n))
+                row.as_ref().map(|r| self.pile_outcomes(st, r, n))
             } else { None };
             if let Some(ref events) = pile_events {
                 absence = events.iter().map(|outcomes|
-                    psum(outcomes.iter().filter(|o| o.count == 0).map(|o| o.probability)))
+                    psum(outcomes.rows.iter().filter(|r| r.count == 0).map(|r| r.values[0])))
                     .fold(1.0, |a, b| a * b);
             }
             { let _t = crate::counters::Timer::start(crate::counters::PRESENCE); self.presence.entry(d).or_default().add(t + duration, absence); }
@@ -3076,7 +3102,7 @@ impl<'py> Replay<'py> {
                     self.heat_mode_sources[own]=Some(st);
                 }
             } else if (d == GAS || d == ELECTRICITY) && row.is_some() {
-                self.add_pile(d,t,duration,pile_events.unwrap(),st);
+                self.add_pile(d,t,duration,&pile_events.unwrap(),st);
             } else if let Some(p) = pooled_index(d) {
                 { let _t = crate::counters::Timer::start(crate::counters::POOLED); self.pooled[p].add(t + duration, absence, n); }
             } else {

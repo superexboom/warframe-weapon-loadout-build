@@ -1374,8 +1374,7 @@ def _reference_trajectory(
             pile_events = None
             if dtype in proc_piles and row:
                 pile_events = proc_pile_outcomes(st, row['landingBranches'], n)
-                absence = math.prod(sum(q for q, number, *_ in outcomes if not number)
-                                    for outcomes in pile_events)
+                absence = math.prod(kernel.absence() for kernel in pile_events)
             presence.setdefault(dtype,StatusPresence()).add(t+duration,absence)
             if dtype == "DT_FIRE" and row:
                 if not heat_chains.active():

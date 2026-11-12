@@ -301,12 +301,12 @@ def test_electric_gas_pile_retains_latest_landing_correlation():
             pile.add(0., 6., [(1., 1, 1296. if head else 240., 1.5, 1.8 if head else 1., head)])
         values.append(pile.moments(0.)[:2])
     assert values == [(2833.5, 0.), (5100.3, 5100.3)]
-    # Mixed success and landing must retain their joint damage moment.
+    # Mixed success/landing retains both seed and accumulator joint moments.
     pile = ProcPile()
-    outcomes = [(0.5, 0, 0., 0., 1., False), (.25, 1, 1., .5, 1., False), (.25, 1, 3., .5, 2., True)]
+    outcomes = [(0.5, 0, 0., 0., 1., False), (.25, 1, 1., .5, 1., False), (.25, 1, 3., 1.5, 2., True)]
     for _ in range(2):
         pile.add(0., 6., outcomes)
-    assert pile.moments(0.) == pytest.approx((3.9375, 3.125, 1., .75))
+    assert pile.moments(0.) == pytest.approx((4.625, 3.75, 1., .75), rel=1e-12)
     pile = ProcPile(10)
     pile.add(0., 6., [(1., 9, 1., .5, 1., False)])
     pile.add(0., 6., [(0.5, 0, 0., 0., 1., False)] + [

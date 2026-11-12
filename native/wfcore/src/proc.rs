@@ -5,6 +5,7 @@
 use crate::pymath::{erfc, expm1, floor_i, log, pmax, pmin, pow, psum, sqrt, ceil_i};
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, VecDeque};
+use std::rc::Rc;
 
 // Electricity/Gas conditional moments, in reference operation order.
 #[derive(Clone, Copy)]
@@ -18,9 +19,51 @@ pub struct PileOutcome {
 }
 
 #[derive(Clone)]
+pub struct PileBucket {
+    pub count: usize,
+    // Q, seed, accumulator, landing, weak landing and their joint moments.
+    pub values: [f64; 9],
+}
+
+#[derive(Clone)]
+pub struct PileKernel {
+    pub rows: Vec<PileBucket>,
+    pub mass: f64,
+}
+
+impl PileKernel {
+    pub fn new(outcomes: &[PileOutcome]) -> Self {
+        let mut rows: Vec<PileBucket> = Vec::new();
+        for o in outcomes {
+            let q = o.probability;
+            if q <= 0.0 { continue; }
+            let index = match rows.iter().position(|r|r.count==o.count) {
+                Some(i) => i,
+                None => { rows.push(PileBucket {count:o.count,values:[0.0;9]}); rows.len()-1 }
+            };
+            let v = &mut rows[index].values;
+            v[0] += q;
+            if o.count > 0 {
+                v[1] += q*o.seed;
+                v[2] += q*o.accumulator;
+                v[3] += q*o.landing;
+                if o.weak { v[4] += q*o.landing; }
+                v[5] += (q*o.seed)*o.landing;
+                if o.weak { v[6] += (q*o.seed)*o.landing; }
+                v[7] += (q*o.accumulator)*o.landing;
+                if o.weak { v[8] += (q*o.accumulator)*o.landing; }
+            }
+        }
+        rows.sort_by_key(|r|r.count);
+        let mass=psum(rows.iter().map(|r|r.values[0]));
+        Self {rows,mass}
+    }
+}
+
+#[derive(Clone)]
 struct PileEvent {
     end: f64,
-    outcomes: Vec<PileOutcome>,
+    kernel: Rc<PileKernel>,
     origin: Option<u8>,
     source: Option<usize>,
 }
@@ -54,49 +97,62 @@ impl ProcPile {
         self.token += 1;
         self.cached = None;
     }
-    pub fn add(&mut self, t: f64, duration: f64, outcomes: Vec<PileOutcome>, origin: Option<u8>, source: Option<usize>) -> Option<(f64, u64)> {
-        if duration <= 0.0 || !outcomes.iter().any(|o| o.probability > 0.0 && o.count > 0) { return None; }
+    pub fn add(&mut self, t: f64, duration: f64, kernel: Rc<PileKernel>, origin: Option<u8>, source: Option<usize>) -> Option<(f64, u64)> {
+        if duration <= 0.0 || !kernel.rows.iter().any(|r| r.values[0] > 0.0 && r.count > 0) { return None; }
         let schedule = if self.next.is_none() {
             self.next = Some(t);
             self.token += 1;
             Some((t, self.token))
         } else { None };
         let end = self.next.unwrap() + (ceil_i(duration - 1e-9).max(1) as f64) - 1.0;
-        self.events.push(PileEvent { end, outcomes, origin, source });
+        self.events.push(PileEvent { end, kernel, origin, source });
         self.cached = None;
         schedule
     }
     pub fn moments(&mut self, t: f64) -> [f64; 4] {
         if let Some((when, value, _, _)) = self.cached { if when == t { return value; } }
+        let _timer = crate::counters::Timer::start(crate::counters::PILE_MOMENTS);
         let cap = self.cap.unwrap_or(1);
         let mut dp = [[0.0; 9]; 11];
         dp[0][0] = 1.0;
         let (mut origin, mut source) = (None, None);
         for event in self.events.iter().rev() {
+            let live = event.end >= t - 1e-9;
             let mut next = [[0.0; 9]; 11];
             for (k, row) in dp[..=cap].iter().enumerate() {
-                if row[0] == 0.0 { continue; }
-                for outcome in &event.outcomes {
-                    let q = outcome.probability;
+                if row[0] <= 0.0 { continue; }
+                if self.cap.is_some() && k == cap {
+                    for (i, value) in row.iter().enumerate() { next[cap][i] += event.kernel.mass * value; }
+                    continue;
+                }
+                for bucket in &event.kernel.rows {
+                    let [q,b,c,l,hn,bl,bh,cl,ch] = bucket.values;
                     if q <= 0.0 { continue; }
-                    let n = outcome.count;
+                    let n = bucket.count;
                     let dest = if self.cap.is_some() { cap.min(k + n) } else { usize::from(k > 0 || n > 0) };
-                    let mut values = *row;
+                    let mut values = row.map(|x|q*x);
                     if n > 0 && k == 0 {
-                        values[1] = outcome.landing * row[0];
-                        values[2] = if outcome.weak { values[1] } else { 0.0 };
+                        values[1] = row[0]*l;
+                        values[2] = row[0]*hn;
                     }
                     let kept = if self.cap.is_some() { n.min(cap-k) } else { n };
-                    if kept > 0 && event.end >= t - 1e-9 {
+                    if kept > 0 && live {
                         origin = event.origin; source = event.source;
-                        values[3] += kept as f64 * outcome.seed * values[1];
-                        values[4] += kept as f64 * outcome.seed * values[2];
-                        values[5] = outcome.accumulator * values[1];
-                        values[6] = outcome.accumulator * values[2];
-                        values[7] += kept as f64 * row[0];
-                        values[8] = row[0];
+                        if k == 0 {
+                            values[3] += kept as f64 * row[0] * bl;
+                            values[4] += kept as f64 * row[0] * bh;
+                            values[5] = row[0]*cl;
+                            values[6] = row[0]*ch;
+                        } else {
+                            values[3] += kept as f64 * row[1] * b;
+                            values[4] += kept as f64 * row[2] * b;
+                            values[5] = row[1]*c;
+                            values[6] = row[2]*c;
+                        }
+                        values[7] += kept as f64 * row[0] * q;
+                        values[8] = row[0]*q;
                     }
-                    for (i, value) in values.iter().enumerate() { next[dest][i] += q * value; }
+                    for (i, value) in values.iter().enumerate() { next[dest][i] += value; }
                 }
             }
             dp = next;

@@ -402,12 +402,40 @@ def proc_pile_outcomes(stats, branches, expected_count):
             outcomes.extend((weight*q, j, b['seed'], b['accumulator'], b['landing'], b['weak'])
                             for j,q in kernel)
     whole = int(math.floor(instances))
-    result = [tuple(outcomes)] * whole
+    result = [PileKernel(outcomes)] * whole
     fraction = instances - whole
     if fraction > 0.:
-        result.append(tuple([(1.-fraction,0,0.,0.,1.,False),
-                             *((q*fraction,n,seed,acc,land,weak) for q,n,seed,acc,land,weak in outcomes)]))
+        result.append(PileKernel([(1.-fraction,0,0.,0.,1.,False),
+                                 *((q*fraction,n,seed,acc,land,weak) for q,n,seed,acc,land,weak in outcomes)]))
     return result
+
+
+class PileKernel:
+    """Joint moments grouped by count, within one ordered pellet opportunity."""
+    __slots__ = ('rows', 'mass')
+
+    def __init__(self, outcomes):
+        rows = {}
+        for q, n, seed, accumulator, landing, weak in outcomes:
+            if q <= 0.:
+                continue
+            row = rows.setdefault(n, [0.] * 9)
+            row[0] += q
+            if n:
+                qs, qa, ql = q * seed, q * accumulator, q * landing
+                row[1] += qs
+                row[2] += qa
+                row[3] += ql
+                row[4] += ql if weak else 0.
+                row[5] += qs * landing
+                row[6] += qs * landing if weak else 0.
+                row[7] += qa * landing
+                row[8] += qa * landing if weak else 0.
+        self.rows = tuple(sorted(rows.items()))
+        self.mass = sum(row[0] for _, row in self.rows)
+
+    def absence(self):
+        return self.rows[0][1][0] if self.rows and self.rows[0][0] == 0 else 0.
 
 
 class ProcPile:
@@ -432,7 +460,10 @@ class ProcPile:
         self._cached = None
 
     def add(self, t, duration, outcomes, origin=None, source=None):
-        if duration <= 0 or not any(p > 0 and n > 0 for p, n, *_ in outcomes):
+        if duration <= 0:
+            return None
+        kernel = outcomes if isinstance(outcomes, PileKernel) else PileKernel(outcomes)
+        if not any(n > 0 and row[0] > 0. for n, row in kernel.rows):
             return None
         if self.next is None:
             self.next = t
@@ -443,7 +474,7 @@ class ProcPile:
         # The source clock preserves tick count even for a short positive
         # duration joining a later shared boundary.
         end = self.next + max(1, int(math.ceil(duration - 1e-9))) - 1
-        self.events.append((end, tuple(outcomes), origin, source))
+        self.events.append((end, kernel, origin, source))
         self._cached = None
         return schedule
 
@@ -456,31 +487,43 @@ class ProcPile:
         dp = [[0.] * 9 for _ in range(cap + 1)]
         dp[0][0] = 1.
         origin = source = None
-        for end, outcomes, event_origin, event_source in reversed(self.events):
+        for end, kernel, event_origin, event_source in reversed(self.events):
+            live = end >= t - 1e-9
             nxt = [[0.] * 9 for _ in range(cap + 1)]
             for k, row in enumerate(dp):
-                if row[0] == 0.:
+                p, f, h = row[:3]
+                if p == 0.:
                     continue
-                for q, n, seed, accumulator, landing, weak in outcomes:
+                if self.cap and k == cap:
+                    for i, value in enumerate(row):
+                        nxt[cap][i] += kernel.mass * value
+                    continue
+                for n, bucket in kernel.rows:
+                    q, seed, acc, landing, weak, seed_landing, seed_weak, acc_landing, acc_weak = bucket
                     if q <= 0.:
                         continue
                     dest = min(cap, k + n) if self.cap else int(k > 0 or n > 0)
-                    values = list(row)
+                    values = [q * value for value in row]
                     if n and k == 0:
-                        values[1] = landing * row[0]
-                        values[2] = values[1] if weak else 0.
+                        values[1] = p * landing
+                        values[2] = p * weak
                     kept = min(n, cap-k) if self.cap else n
-                    if kept and end >= t - 1e-9:
+                    if kept and live:
                         origin, source = event_origin, event_source
-                        values[3] += kept * seed * values[1]
-                        values[4] += kept * seed * values[2]
-                        # Oldest surviving seed supplies the one accumulator.
-                        values[5] = accumulator * values[1]
-                        values[6] = accumulator * values[2]
-                        values[7] += kept * row[0]
-                        values[8] = row[0]
+                        if k == 0:
+                            values[3] += kept * p * seed_landing
+                            values[4] += kept * p * seed_weak
+                            values[5] = p * acc_landing
+                            values[6] = p * acc_weak
+                        else:
+                            values[3] += kept * f * seed
+                            values[4] += kept * h * seed
+                            values[5] = f * acc
+                            values[6] = h * acc
+                        values[7] += kept * p * q
+                        values[8] = p * q
                     for i, value in enumerate(values):
-                        nxt[dest][i] += q * value
+                        nxt[dest][i] += value
             dp = nxt
         totals = [sum(row[i] for row in dp) for i in range(9)]
         result = (totals[3] + totals[5], totals[4] + totals[6], totals[7], totals[8])
