@@ -75,6 +75,7 @@ class ArenaTarget:
     frozen_until: float = -1.0
     frozen_scale: float = 1.0
     blasts: list = field(default_factory=list)
+    puncture_strip: float = 0.0
     damage: float = 0.0
     death_time: float | None = None
 
@@ -113,6 +114,11 @@ class ArenaShot:
     impact_time: float | None = None
     impact_protected: frozenset = frozenset()
     restore_fraction: float = 0.0
+    restore_amount: float = 0.0
+    contact_targets: set = field(default_factory=set)
+    burst_state: dict | None = None
+    burst_token: int = 0
+    field_duration_multiplier: float = 1.0
     enervate_weights: dict = field(default_factory=lambda: {0: 1.0})
     loaded_rounds: float = 1.0
     charge_seconds: float = 0.0
@@ -201,6 +207,8 @@ class ArenaCombat:
         self._reload = None
         self._transform = None
         self._burst_round = 0
+        self._burst_state = None
+        self.field_duration_ready = False
         self._last_fire = -math.inf
         self._battery_updated = 0.0
         self._force_reload = False
@@ -461,6 +469,25 @@ class ArenaCombat:
                     q["stacks"] = 0.0
 
     def _signal(self, kind, t, weight=1.0):
+        if kind == "on-consecutive-headshot":
+            # Same run-distribution contract as combat_replay.consecutive_heads;
+            # a body contact must reach this branch even with zero head weight.
+            probability = min(1.0, max(0.0, weight))
+            for q in self.sources:
+                if q["kind"] != kind or not q["perEvent"] or q.get("actorOnly"):
+                    continue
+                minimum = int(q.get("minimumConsecutive") or 1)
+                cap = minimum + int(q["maxStacks"]) - 1
+                after = {0: 1.0 - probability}
+                for run, value in q.get("runDistribution", {0: 1.0}).items():
+                    n = min(run + 1, cap)
+                    after[n] = after.get(n, 0.0) + value * probability
+                q["runDistribution"] = after
+                q["stacks"] = sum(
+                    max(n - minimum + 1, 0) * value for n, value in after.items()
+                )
+                q["expires"] = math.inf
+            return
         for q in self.sources:
             if q.get("actorOnly") and not self._actor_signal:
                 continue
@@ -698,6 +725,8 @@ class ArenaCombat:
             self._signal("on-reload-complete", when)
             if empty:
                 self._signal("on-reload-empty-complete", when)
+                if self.combat.get("fieldDurationOnEmptyReload"):
+                    self.field_duration_ready = True
             st, _ = self._resolve()
             self.ammo = st.magazine
         if self._transform and t >= self._transform[0] - EPS:
@@ -735,6 +764,8 @@ class ArenaCombat:
             self.onos_ticks = 0
             self.onos_hits = 0.0
             self.onos_start = t + max(0.0, delay)
+        self._burst_round = 0
+        self._burst_state = None
         self._signal("on-transform", t)
         self._transform = (t + max(0.0, delay), destination)
         self._ready = self._transform[0]
@@ -850,6 +881,11 @@ class ArenaCombat:
                 )
                 return None
             self.reloads += 1
+            self._burst_round = 0
+            self._burst_state = None
+            for q in self.sources:
+                if q["kind"] == "on-burst-hit" and q["perEvent"]:
+                    q["stacks"] = 0.0
             if self.ammo <= EPS:
                 self._signal("on-reload-empty", t)
             self._signal("on-reload", t)
@@ -935,13 +971,30 @@ class ArenaCombat:
         interval = max(
             interval, float(getattr(st, "_native_fire_cooldown_seconds", 0.0))
         )
-        burst = self.combat.get(
-            "baseBurst" if self.form != "incarnon" else "incarnonBurst"
+        base_form = self.form == "base" or (
+            self.form == "selected" and not self.combat.get("selectedIncarnon")
         )
-        if burst and int(burst.get("count", 1)) > 1:
-            self._burst_round = (self._burst_round + 1) % int(burst["count"])
-            if self._burst_round:
-                interval = max(0.001, float(burst.get("delay_seconds") or interval))
+        burst = self.combat.get("baseBurst" if base_form else "incarnonBurst")
+        if burst:
+            if self._burst_round == 0:
+                size = (
+                    max(1, int(math.ceil(self.ammo / max(cost, EPS) - EPS)))
+                    if burst.get("remainingClip") else max(1, int(burst["count"]))
+                )
+                self._burst_state = dict(size=size, rounds={}, closed=False)
+            group = self._burst_state
+            self._burst_round += 1
+            complete = self._burst_round >= group["size"]
+            depleted = not infinite and self.ammo - cost < cost - EPS
+            if not complete and not depleted:
+                rate = self.combat.get("baseFireRate" if base_form else "incarnonFireRate")
+                scale = 1.0 if burst.get("ignoreFireRate") else max(
+                    1.0, st.fire_rate / float(rate or st.fire_rate)
+                )
+                interval = max(0.0, float(burst["delay_seconds"]) / scale)
+            else:
+                group["closed"] = True
+                self._burst_round = 0
         self._shot_id += 1
         shot = ArenaShot(
             self._shot_id,
@@ -956,6 +1009,16 @@ class ArenaCombat:
         )
         if self.combat.get("physicalProjectileLanes"):
             self._attach_physical_lanes(shot, v, preview=False)
+        if burst:
+            shot.burst_state = group
+            group["rounds"][shot.id] = dict(
+                hit=False, head=0.0, done=set(), parts=len(shot.physical_lanes) or 1
+            )
+            for token, lane in enumerate(shot.physical_lanes):
+                lane.burst_state = group
+                lane.burst_token = token
+            if shot.physical_lanes:
+                shot.burst_token = -1  # Synchronous parent batches finish all lanes.
         if onos_active:
             shot.onos_phase = (
                 "power" if self.onos_ticks >= onos["alignmentShots"] else "beam"
@@ -1084,6 +1147,8 @@ class ArenaCombat:
             self._active_shot = parent
         parent.pending.extend(lane.pending)
         lane.pending.clear()
+        parent.restore_amount += lane.restore_amount
+        lane.restore_amount = 0.0
         parent.restore_fraction = 1.0 - (1.0 - parent.restore_fraction) * (
             1.0 - lane.restore_fraction
         )
@@ -1388,6 +1453,7 @@ class ArenaCombat:
             return dict(damage=0.0, killed=False, protected=protected)
         self._clean(v, t)
         st = self._component(shot, component)
+        primary_contact = st is shot.stats
         shot.victim_gate = {dtype: p.probability(t) for dtype, p in v.presence.items()}
         self._victim_gate = shot.victim_gate
         self._contact_factor(shot, st, update=True)
@@ -1432,6 +1498,54 @@ class ArenaCombat:
             self._enervate_hit(st, float(aim), t, shot.form)
         shot.hits.append((target_id, float(aim), st, float(distance)))
         count = 1.0 if st.continuous else max(0.0, st.multishot)
+        if primary_contact and not st.radial_only and not shot.external_part and count > 0:
+            first_contact = target_id not in shot.contact_targets
+            shot.contact_targets.add(target_id)
+            if first_contact:
+                if shot.burst_state is not None:
+                    round_state = shot.burst_state["rounds"][shot.id]
+                    round_state["hit"] = True
+                    round_state["head"] = max(
+                        round_state["head"], 1.0 - (1.0 - float(aim)) ** count
+                    )
+                shot.pending.append(("on-consecutive-headshot", float(aim)))
+                if len(shot.contact_targets) > 1:
+                    shot.pending.append(("on-punchthrough", 1.0))
+                    if shot.form == "base" or not self.combat.get("selectedIncarnon"):
+                        shot.pending.append(("on-onos-damage-condition", 1.0))
+                if len(shot.contact_targets) == 3:
+                    shot.pending.append(("on-three-enemy-punchthrough", 1.0))
+            restore = self.combat.get("magazineRestore")
+            magazine_form = shot.form == "base" or (
+                not self.cycle and not self.combat.get("selectedIncarnon")
+            )
+            if (
+                restore and magazine_form
+                and restore.get("kind") in ("on-headshot", "on-hit")
+            ):
+                gate = (
+                    shot.victim_gate.get(restore["victimProcType"], 0.0)
+                    if restore.get("victimProcType") else 1.0
+                )
+                eligible = first_contact or not restore.get("oncePerShot")
+                if restore.get("oncePerShot") and getattr(
+                    shot, "_hit_restore_used", False
+                ):
+                    eligible = False
+                if eligible and gate > 0:
+                    probability = (
+                        1.0 - (1.0 - float(aim)) ** count
+                        if restore["kind"] == "on-headshot" else 1.0
+                    )
+                    chance = probability * restore.get("chance", 1.0) * gate
+                    shot.restore_fraction = 1.0 - (1.0 - shot.restore_fraction) * (
+                        1.0 - restore.get("fraction", 0.0) * chance
+                    )
+                    shot.restore_amount += (
+                        restore.get("amount", 0.0)
+                        * (1.0 if restore.get("oncePerShot") else count) * chance
+                    )
+                    shot._hit_restore_used = True
         weak = (
             st.weakpoint_crit_chance_bonus
             + st.base_crit_chance * st.weakpoint_crit_chance_relative
@@ -1484,6 +1598,15 @@ class ArenaCombat:
             raise ValueError("Shot is retired")
         if abs(t - shot.time) > EPS:
             raise ValueError("Launch must use prepared fire time")
+        if self.field_duration_ready:
+            magazine_form = shot.form == "base" or (
+                not self.cycle and not self.combat.get("selectedIncarnon")
+            )
+            if magazine_form:
+                shot.field_duration_multiplier = float(
+                    self.combat["fieldDurationOnEmptyReload"]["multiplier"]
+                )
+            self.field_duration_ready = False
         self.ammo = max(0.0, self.ammo - shot.ammo_cost)
         self._last_fire = t
         self._battery_updated = t
@@ -1578,9 +1701,32 @@ class ArenaCombat:
             self._victim_gate = event[2] if len(event) > 2 else shot.victim_gate
             self._signal(kind, t, weight)
         self._victim_gate = {}
-        if shot.restore_fraction:
+        if shot.restore_fraction or shot.restore_amount:
             st, _ = self._resolve()
-            self.ammo += max(0.0, st.magazine - self.ammo) * shot.restore_fraction
+            self.ammo = min(
+                st.magazine, self.ammo
+                + max(0.0, st.magazine - self.ammo) * shot.restore_fraction
+                + shot.restore_amount,
+            )
+            shot.restore_fraction = shot.restore_amount = 0.0
+        group = shot.burst_state
+        if retire and group is not None and not group.get("resolved"):
+            round_state = group["rounds"][shot.id]
+            round_state["done"].update(
+                range(round_state["parts"]) if shot.burst_token == -1
+                else (shot.burst_token,)
+            )
+            if group["closed"] and all(
+                len(row["done"]) == row["parts"] for row in group["rounds"].values()
+            ):
+                group["resolved"] = True
+                rounds = tuple(group["rounds"].values())
+                if len(rounds) == group["size"] and all(row["hit"] for row in rounds):
+                    self._signal("on-burst-hit", t)
+                    self._signal(
+                        "on-burst-headshot", t,
+                        math.prod(row["head"] for row in rounds),
+                    )
         shot.pending.clear()
         shot.hits.clear()
         shot.finished = bool(retire)
@@ -1769,6 +1915,7 @@ class ArenaCombat:
             v.defenses.get("armour", 0.0)
             * (1.0 - float(self.options.get("elemental_armour_strip") or 0.0))
             * (1.0 - v.heat.strip(t))
+            * (1.0 - v.puncture_strip)
         )
         return sum(
             weight
@@ -2322,6 +2469,18 @@ class ArenaCombat:
     def _procs(self, v, st, head, t, packet, scale, mode, natural=True):
         _, procs, rows, non = packet
         rate = max(0.0, float(self.options.get("status_rate_multiplier", 1.0)))
+        if natural and self.combat.get("punctureArmorStrip") and not st.radial_only:
+            # Each bullet strips once if it applied any Puncture, independently
+            # of how many stacks that bullet rolled. Keep the strip on its victim.
+            one = replace(st, multishot=st.multishot if st.continuous else 1.0)
+            probability = 1.0 - no_status_probability(
+                one, "DT_PUNCTURE", self.options.get("forced_procs"), float(head)
+            )
+            bullets = 1.0 if st.continuous else max(0.0, st.multishot)
+            v.puncture_strip = min(
+                1.0, v.puncture_strip
+                + self.combat["punctureArmorStrip"] * bullets * probability,
+            )
         encumber = self.combat.get("encumber")
         if natural and encumber and encumber.get("uptime", 1.0) > 0 and rate > 0:
             if abs(t - self._encumber_time) > EPS:

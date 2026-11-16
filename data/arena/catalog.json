@@ -6484,7 +6484,8 @@
       "excludedNodes": 1,
       "excludedArchwing": 1,
       "inScopeNodesWithNoImportedTile": 0
-    }
+    },
+    "sha256": "68c53628e3fedf6dfb0fa2a5fe2369945d27c6074de191887c79121653411b28"
   },
   "enemySpecSources": {
     "/Lotus/Types/Game/EnemySpecs/CorpusDropship": {

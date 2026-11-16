@@ -7268,7 +7268,11 @@ def arena_catalog_payload():
     for spec in enemy_specs()["specs"]:
         rows=[dict(avatar=r["resolvedAvatarPath"], name=(MANUAL_ENEMIES_BY_PATH.get(r["resolvedAvatarPath"],{}).get("nameZh") or MANUAL_ENEMIES_BY_PATH.get(r["resolvedAvatarPath"],{}).get("nameEn") or r["agent"].rsplit("/",1)[-1]), tier=r["tier"],weight=r["probability"],cap=r.get("maxSimultaneous")) for r in spec["enemies"] if r.get("runnable")]
         specs.append(dict(**sources[spec["path"]], id=spec["path"], name=spec["path"].rsplit("/",1)[-1],tiers=sorted({r["tier"] for r in rows}),rows=rows))
-    return {"enemySpecs":specs,"maps":maps, "missionCoverage":coverage, "enemies":[{"path":e["path"], "nameZh":e.get("nameZh"), "name":e.get("nameZh") or e.get("name") or e.get("nameEn"),
+    return {"enemySpecs":specs,"maps":maps, "missionCoverage":coverage,
+            "spawnProfiles":[{"id":"custom","name":"自定义工况 · 固定数量与层级"},
+                             {"id":"defense","name":"来源防御 · 累计层级与整波编组"},
+                             {"id":"arbitration","name":"来源仲裁防御 · 总量修正与独立无人机"}],
+            "enemies":[{"path":e["path"], "nameZh":e.get("nameZh"), "name":e.get("nameZh") or e.get("name") or e.get("nameEn"),
             "nameEn":e.get("nameEn"), "faction":e.get("faction"), "hasHeadProxy":e.get("hasHeadProxy", False)}
             for e in MANUAL_ENEMIES if e.get("complete") is not False],
             "defaults":defaults(_BENCHMARK_ENEMY_PATH), "model":MODEL,

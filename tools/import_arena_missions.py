@@ -244,9 +244,9 @@ def enemy_spec_sources(nodes, spec_file):
             mapIds=map_ids,
             rawTiers=group.get("rawTiers", []),
             tierSelection=dict(
-                status="user-selected-scenario-tier",
+                status="source-defense-cumulative-or-custom",
                 runtimeNodeTierVerified=False,
-                reason="Node references identify the group only; native tier progression and runtime spawn selection are not recovered.",
+                reason="WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
             ),
             qualification="exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
             noMatchReason=(

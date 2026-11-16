@@ -488,6 +488,113 @@ def test_arena_shared_shooter_snapshot_and_independent_targets(monkeypatch):
     flying.begin_impact(first,1.); flying.hit(first,'v',t=1.); flying.finish_impact(first,1.)
     assert victim.health==pytest.approx(50.) and flying.ammo==1.
 
+    # Event delivery must retain base ammo rules and independent victim state.
+    def configured(st, sources=(), **contract):
+        monkeypatch.setattr(arena, 'prepare', lambda *a, **k: dict(
+            resolve=lambda *args:(st,None), trigger_sources=sources, **contract))
+        combat=arena.ArenaCombat({}, common_options={"delivery_kinds":["lingering"]})
+        for name in ('a','b','c'): combat.add_target(name,target(1e8))
+        return combat
+    direct=stats(damage_types={'DT_PUNCTURE':100.},status_chance=3.,magazine=10.,fire_rate=4.)
+    for selected,expected in [(False,10.),(True,9.)]:
+        combat=configured(direct, selectedIncarnon=selected,
+                          magazineRestore=dict(kind='on-headshot',fraction=1.))
+        shot=combat.prepare_shot(0.);combat.hit(shot,'a',head=True);combat.finish_shot(shot)
+        assert combat.ammo==expected  # base head refill never refills Incarnon charge
+    combat=configured(direct, punctureArmorStrip=.2, magazineRestore=dict(
+        kind='on-hit',victimProcType='DT_ELECTRICITY',amount=1.,chance=.4,oncePerShot=True))
+    for name in ('a','b'):
+        combat.targets[name].presence['DT_ELECTRICITY']=arena.StatusPresence()
+        combat.targets[name].presence['DT_ELECTRICITY'].add(6.,0.)
+    shot=combat.prepare_shot(0.);combat.hit(shot,'a');combat.hit(shot,'b');combat.finish_shot(shot)
+    assert combat.ammo==pytest.approx(9.4)  # once per shot, not per collateral target
+    combat.advance(12.);combat._clean(combat.targets['a'],12.)
+    assert combat.targets['a'].puncture_strip==.2 and combat.targets['c'].puncture_strip==0.
+    assert combat._count(combat.targets['a'],'DT_PUNCTURE',12.)==0.  # strip survives expiry
+    sources=[dict(id='pierce',kind='on-three-enemy-punchthrough',maxStacks=1.,perEvent=1.),
+             dict(id='heads',kind='on-consecutive-headshot',minimumConsecutive=2,maxStacks=4.,perEvent=1.)]
+    combat=configured(direct,sources)
+    shot=combat.prepare_shot(0.);combat.fire_shot(shot)
+    for t,name in enumerate(('a','a','b','c')):
+        when=t*.01
+        combat.begin_impact(shot,when);combat.hit(shot,name,head=True,t=when)
+        combat.finish_impact(shot,when,retire=False)
+    assert [q['stacks'] for q in combat.sources]==[1.,2.]  # repeated target is not a new pierce
+    shot=combat.prepare_shot(.25);combat.hit(shot,'a');combat.finish_shot(shot)
+    assert combat.sources[1]['stacks']==0.
+
+    # Full-burst gates wait for every actual projectile, including late/missing hits.
+    burst_sources=[dict(id=kind,kind=kind,maxStacks=4.,perEvent=1.)
+                   for kind in ('on-burst-hit','on-burst-headshot')]
+    combat=configured(direct,burst_sources,baseBurst=dict(count=2,delay_seconds=.3),baseFireRate=2.)
+    first=combat.prepare_shot(0.);combat.fire_shot(first)
+    assert first.interval==pytest.approx(.15)  # fire-rate scales intra-burst delay
+    second=combat.prepare_shot(.15);combat.fire_shot(second)
+    assert second.interval==pytest.approx(.25)
+    combat.begin_impact(second,.2);combat.hit(second,'a',head=True,t=.2);combat.finish_impact(second,.2)
+    assert all(q['stacks']==0. for q in combat.sources)
+    combat.begin_impact(first,.3);combat.hit(first,'a',head=True,t=.3);combat.finish_impact(first,.3)
+    assert [q['stacks'] for q in combat.sources]==[1.,1.]
+    first=combat.prepare_shot(.4);combat.finish_shot(first)  # an entire round misses
+    second=combat.prepare_shot(.55);combat.hit(second,'a',head=True);combat.finish_shot(second)
+    assert [q['stacks'] for q in combat.sources]==[1.,1.]
+    first=combat.prepare_shot(.8);combat.hit(first,'a');combat.finish_shot(first)
+    second=combat.prepare_shot(.95);combat.hit(second,'a',head=True);combat.finish_shot(second)
+    assert [q['stacks'] for q in combat.sources]==[2.,1.]  # body breaks full-burst headshots
+    combat=configured(replace(direct,magazine=3.),burst_sources,
+                      baseBurst=dict(count=2,remainingClip=True,ignoreFireRate=True,delay_seconds=.3),baseFireRate=2.)
+    for when in (0.,.3,.6):
+        shot=combat.prepare_shot(when);combat.hit(shot,'a',head=True);combat.finish_shot(shot)
+        assert shot.burst_state['size']==3
+        assert shot.interval==pytest.approx(.25 if when==.6 else .3)
+    assert combat.sources[0]['stacks']==1.
+    assert combat.prepare_shot(.85) is None and combat.sources[0]['stacks']==0.  # reload resets burst-hit
+    combat=configured(direct,selectedIncarnon=True,baseBurst=dict(count=2,delay_seconds=.3),
+                      incarnonBurst=dict(count=3,delay_seconds=.1),incarnonFireRate=4.)
+    assert combat.prepare_shot(0.).burst_state['size']==3  # selected form uses its own burst
+    combat=configured(direct,baseBurst=dict(count=4,delay_seconds=0.))
+    from wfarsenal.arena import World
+    world=World.__new__(World);world.combat=combat;world.t=0.;launched=[]
+    def fire_one(aim):
+        shot=combat.prepare_shot(world.t);combat.fire_shot(shot);launched.append(shot)
+    world._fire_one=fire_one;world.fire({})
+    assert len(launched)==4 and [s.time for s in launched]==[0.]*4 and combat.ammo==6.
+
+    # Empty-reload Torid duration is consumed once at launch, even for a miss.
+    cloud=replace(direct,radial_only=True)
+    field=replace(direct,magazine=1.)
+    field._lingering=(cloud,2.,4.)
+    combat=configured(field,fieldDurationOnEmptyReload=dict(multiplier=2.))
+    shot=combat.prepare_shot(0.);combat.finish_shot(shot)
+    assert combat.prepare_shot(.25) is None
+    combat.advance(1.25)
+    shot=combat.prepare_shot(1.25);assert shot.field_duration_multiplier==1.
+    combat.fire_shot(shot);assert shot.field_duration_multiplier==2. and not combat.field_duration_ready
+    from wfarsenal.arena import World
+    world=World.__new__(World);world.combat=combat;world.t=1.25;world.replay={};world.actors={}
+    world.events=[];world.sequence=0;world.diagnostics=[]
+    assert world._place_lifecycle(shot,{'lifecycleProfile':{}},(0.,0.,0.),[],(0.,0.,0.))
+    assert next(iter(world.entities.values()))['end']==pytest.approx(9.25)
+
+    # Conditional spatial effects use fire-time stacks; old projectiles stay frozen.
+    from wfarsenal.damage import Scenario, ModEffect
+    weapon=deepcopy(next(w for w in app.EXPORTS['weapons'] if w['nameEn']=='Felarx'))
+    engine=dict(weapon=weapon,fire_mode=0,effects=[ModEffect('WEAPON_RANGE','ADD',7.)],scenario=Scenario())
+    monkeypatch.undo()  # use the actual prepare contract for the exported Felarx toggle
+    range_source=dict(path='/test/range',conditionalEffects=[dict(eventKind='on-hit',maxStacks=2,duration=1.,
+                      effects=[dict(upgradeType='WEAPON_RANGE',operation='ADD',valuePerRank=5.)])])
+    combat=arena.ArenaCombat(engine,[(range_source,0,None)],incarnon_choices={'tier3':'3-1'})
+    world.combat=combat;world.context={'engine':engine};world.c={'rangeAssumption':100.};world.shot_geometry={}
+    old=combat.preview(0.);before=world.geometry(old)
+    combat._signal('on-reload-complete',0.)
+    after=world.geometry(combat.preview(0.))
+    assert abs(after['puncture']-before['puncture'])==pytest.approx(4.)
+    assert world.geometry(old)==before and after['range']==pytest.approx(107.)
+    combat._signal('on-hit',0.)
+    assert world.geometry(combat.preview(0.))['range']==pytest.approx(112.)
+    combat.advance(1.)
+    assert world.geometry(combat.preview(1.))['range']==pytest.approx(107.)
+
 
 @pytest.mark.parametrize('dtype', ['DT_ELECTRICITY','DT_GAS'])
 def test_arena_independent_proc_clocks_and_neighbour_damage(monkeypatch,dtype):
@@ -571,6 +678,15 @@ def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():
     walker.pos=before;walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":5.,"kind":"walk"}
     assert world._yield_crowded_edge(walker,3.)
     walker.drone=False
+    # A yielded actor with an empty route still recovers the forward source
+    # corridor from the shared flow, rather than returning to its old portal.
+    from wfarsenal.arena_scene import Edge
+    forward=Edge(0,1,((0.,0.,0.),(.5,0.,1.)),"walk",1.,True,1.,1.,key="forward")
+    world.flows={"enemy":SimpleNamespace(d=[1.,0.],prev=[1,-1],edges=[forward,None],reverse=True)}
+    walker.pos=before;walker.route=[]
+    walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":3.6,"kind":"walk"}
+    assert world._yield_crowded_edge(walker,4.) and walker.edge["node"]==1
+    world.flows={}
     # If support disappears, a later blocked-edge attempt keeps exact feet/edge.
     walker.pos=before;walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":3.6,"kind":"walk"}
     original_edge=walker.edge
@@ -594,6 +710,12 @@ def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():
     world.stats={"failedPathPlans":0}
     world.plan()
     assert world.player.route==[vantage_edge] and world.stats["firingPositionPlans"]==1
+    # A visible drone can still be blocked by a protected actor in the muzzle.
+    # An unsuccessful scored shot must allow repositioning despite clear LOS.
+    world.player.route=[];world.aim_blocked=True
+    world.scene.visible=lambda origin,target:True
+    world.plan()
+    assert world.player.route==[vantage_edge]
 
 
 def test_arena_source_door_query_channels():
@@ -628,3 +750,84 @@ def test_arena_source_door_query_channels():
                           "triangleSources": [{"sourceMesh": "verified-source-floor"}] * 2}}
     supported = ArenaScene(raw, native=False, doors=doors, ground=ground)
     assert supported.ground_support((0., 0., -2.)).position == pytest.approx((0., .2, -2.))
+
+
+def test_defense_schedule_cumulative_merge_quotas_and_cap_shortfall():
+    from wfarsenal.arena_spawns import defense_tier, defense_wave_parameters, build_defense_schedule
+
+    assert [defense_tier(w) for w in (1, 2, 3, 5, 6, 12, 15, 100)] == [0, 0, 1, 1, 2, 4, 5, 5]
+    # Native float32 multiplication lands exactly on integral22; Python
+    # double with a rounded2.2f would incorrectly ceil it to23.
+    params = defense_wave_parameters(1, 4, 30)
+    assert (params["maxAlive"], params["requestedTotal"]) == (29, 61)
+    assert defense_wave_parameters(1, 4, 30, arbitration=True)["requestedTotal"] == 49
+    assert defense_wave_parameters(2, 1, 30)["requestedTotal"] == 22
+    # Same agent unlocked in another tier adds its source weight and cap;
+    # the schedule does not replace all previous tiers with the latest one.
+    pool = [dict(agent="A", tier=0, probability=1, maxSimultaneous=2, xp=10),
+            dict(agent="A", tier=1, probability=2, maxSimultaneous=1, xp=10),
+            dict(agent="B", tier=0, probability=3, maxSimultaneous=0, xp=100)]
+    before = deepcopy(pool)
+    result = build_defense_schedule(pool, 12, 4, lambda: 0.5)
+    assert result["scheduledTotal"] == 12
+    assert result["counts"] == {"A": 6, "B": 6}
+    merged = next(row for row in result["quotas"] if row["agent"] == "A")
+    assert merged["tiers"] == [0, 1] and merged["maxSimultaneous"] == 3
+    assert pool == before
+
+    # A symbol group's source tiers disappear in P14. Different source
+    # weights affect the combined quota, while member selection is uniform.
+    symbol_pool = [dict(agent="A", tier=0, probability=9, maxSimultaneous=2, xp=10, mergeSymbol="s"),
+                   dict(agent="B", tier=1, probability=1, maxSimultaneous=1, xp=10, mergeSymbol="s")]
+    values = iter([0.5] + [v for member in (0.9, 0.1, 0.9, 0.1)
+                           for v in (member, 0.0, 0.0, 0.0, 0.0)])
+    result = build_defense_schedule(symbol_pool, 4, 2, lambda: next(values))
+    assert len(result["quotas"]) == 1
+    assert result["counts"] == {"A": 2, "B": 2}
+    assert result["quotas"][0]["maxSimultaneous"] == 2
+
+    # Positive caps can shrink a wave; no synthetic fill-to-N is allowed.
+    result = build_defense_schedule(pool[:1], 12, 8, lambda: 0.5)
+    assert result["scheduledTotal"] == 3
+    assert result["spacing"] == [4]
+    assert result["requestedTotal"] == 12
+
+    # Boss rows append after regular sorting and displace early ordinary rows;
+    # a low-XP boss must not be sorted back into those trimmed early slots.
+    bosses = [dict(agent="Boss", tier=9, probability=0.01, maxSimultaneous=2,
+                   xp=1, eximusXp=1)]
+    before = deepcopy(bosses)
+    result = build_defense_schedule(pool[2:], 6, 4, lambda: 0.5, boss_entries=bosses)
+    assert result["scheduledTotal"] == 6 and result["trimmed"] == 2
+    assert result["counts"] == {"B": 4, "Boss": 2}
+    assert result["bossCount"] == 2
+    assert all(row["scheduledBoss"] and row["scheduledEximus"]
+               for row in result["entries"][-2:])
+    assert result["bossQuota"]["tiers"] == [9] and bosses == before
+
+
+def test_arbitration_drone_opportunities_keep_ordinary_quota_and_respect_cap():
+    from types import SimpleNamespace
+    from wfarsenal.arena import World, Actor, DRONE
+
+    world=World.__new__(World)
+    world.c={"spawnProfile":"arbitration","squadSize":1};world.t=0.
+    world.drone_timer_reset=0.;world.drone_force=False;world.generated=7
+    anchor=Actor(0,0,(0.,0.,0.));world.live=[anchor]
+    world.enemies={DRONE:{"path":DRONE}};world.stats={}
+    world.scene=SimpleNamespace(nodes=((0.,0.,0.),(2.,0.,0.),(-2.,0.,0.)),
+                                check_motion=lambda *a,**k:{"clear":True})
+    def spawn(enemy,point,*,drone=False):
+        actor=Actor(len(world.live),point["face"],world.scene.nodes[point["face"]],drone,tape={})
+        world.live.append(actor)
+        return actor
+    world._spawn_actor=spawn;world.spawn_random=lambda:.9
+    world.arbitration_drone(anchor)
+    assert world.live==[anchor]  # timer==0 is not the strict expired condition
+    world.t=.25;world.arbitration_drone(anchor)
+    assert len(world.live)==2 and world.live[0] is anchor and world.generated==7
+    assert world.drone_timer_reset==30.25 and world.live[1].tape["spawnAnchor"]==0
+    world.spawn_random=lambda:.1;world.t=1.;world.arbitration_drone(anchor)
+    assert len(world.live)==2 and world.drone_timer_reset==30.25  # one-person cap
+    world.live.pop();world.arbitration_drone(anchor)
+    assert len(world.live)==2 and world.drone_timer_reset==31.  #20% remains active during timer

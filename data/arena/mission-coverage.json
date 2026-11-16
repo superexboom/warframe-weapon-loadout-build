@@ -119,7 +119,7 @@
     ],
     "enemySpecCatalog": {
       "file": "enemy-specs.json.gz",
-      "sha256": "4ab1218e5d133881bc3444e19f0a440219ff4099d43dfa142b35d9c6bc6b2995",
+      "sha256": "9dcbc24879693e98d01b54d35d72f8085f1a42ac45a897933e75e394270421fc",
       "qualification": "Display/source metadata only; original group weights, tiers and runnable entries unchanged."
     }
   },
@@ -3586,9 +3586,9 @@
       ],
       "rawTiers": [],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -3640,9 +3640,9 @@
       ],
       "rawTiers": [],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -3771,9 +3771,9 @@
         9
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -3837,9 +3837,9 @@
         0
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -3930,9 +3930,9 @@
         95
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -4102,9 +4102,9 @@
         95
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -4182,9 +4182,9 @@
         9
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": "No exact reference among the45 indexed Defense/Interception nodes. Group remains an optional workload source; no source planet/node is inferred from its name or matching geometry."
@@ -4385,9 +4385,9 @@
         9
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -4505,9 +4505,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -4573,9 +4573,9 @@
         0
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -4716,9 +4716,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -4813,9 +4813,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -4936,9 +4936,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -5033,9 +5033,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -5130,9 +5130,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -5275,9 +5275,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -5468,9 +5468,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -5734,9 +5734,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -5805,9 +5805,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": "No exact reference among the45 indexed Defense/Interception nodes. Group remains an optional workload source; no source planet/node is inferred from its name or matching geometry."
@@ -5876,9 +5876,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": "No exact reference among the45 indexed Defense/Interception nodes. Group remains an optional workload source; no source planet/node is inferred from its name or matching geometry."
@@ -5973,9 +5973,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -6093,9 +6093,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -6216,9 +6216,9 @@
         4
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -6291,9 +6291,9 @@
         2
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
@@ -6372,9 +6372,9 @@
         2
       ],
       "tierSelection": {
-        "status": "user-selected-scenario-tier",
-        "runtimeNodeTierVerified": false,
-        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+        "status": "source-defense-cumulative-or-custom",
+        "reason": "WaveDefend cumulative admission, quota and boss cadence are recovered for explicit Defense profiles. Node references do not choose runtime MissionInfo or an Interception director.",
+        "runtimeNodeTierVerified": false
       },
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null

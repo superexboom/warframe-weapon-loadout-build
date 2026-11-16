@@ -1,0 +1,161 @@
+{
+  "schema": "arena-source-spawn-rules/v1",
+  "sourceBuild": "2026.10.28.09.54",
+  "sources": [
+    {
+      "file": "WaveDefend.lua_B",
+      "sha256": "0fb53a2c0946acc3476df7e16c5a3aaeea1b6384a2d4efa2d7360f4c155dbf10",
+      "bytes": 96329
+    },
+    {
+      "file": "WaveDefend.lua_H",
+      "sha256": "bf57eb856efa007fe9de42e2e11c833a277acea9d33ad9267cfc9f09471a0771",
+      "bytes": 4489
+    },
+    {
+      "file": "Arbitration.lua_B",
+      "sha256": "23470a6b6a8f904c363e08da20995879ef7eb15b28e950cdd271f43eb84b93ce",
+      "bytes": 26059
+    },
+    {
+      "file": "Arbitration.lua_H",
+      "sha256": "8368a70217ff11660606774c8fd98a96094d0aed706e72b0642ed53d812018db",
+      "bytes": 1650
+    },
+    {
+      "file": "Packages.bin_H",
+      "sha256": "e74b5477f645ff5298ba9e8678aa68e2b1e3f58e9a31b855891bf2ab5f353f2c",
+      "bytes": 53554894
+    },
+    {
+      "file": "LotusGameRules.lua_B",
+      "sha256": "7e3aa23b2370ecc7fa1982fca7d48208e65a1eabe4266c660c5bc2e357b92c6c",
+      "bytes": 64680
+    }
+  ],
+  "defense": {
+    "tier": {
+      "formula": "min(floor(wave/3),5)",
+      "eligibility": "entry.tier <= maximum",
+      "source": "WaveDefend P26 pc451-461; P25 pc196-263"
+    },
+    "alive": {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "low": [
+        7,
+        13,
+        22,
+        25
+      ],
+      "high": [
+        10,
+        20,
+        26,
+        29
+      ],
+      "formula": "floor(lerp(low[p],high[p],min(startingLevel/30,1)))",
+      "source": "WaveDefend main P61 pc97-127 -> P26 up3-6; P26 pc60-169",
+      "nativeCap": "Further native Director getter may lower cap; not recovered as a fixed constant."
+    },
+    "count": {
+      "formula": "ceil(maxAlive*lerp(2,3,min(wave,10)*0.1))",
+      "arbitration": "ceil(count*0.8)",
+      "source": "WaveDefend P26 pc208-260",
+      "qualification": "Before schedule stochastic rounding/cap shortages/boss replacement; not a fixed kill count."
+    },
+    "schedule": {
+      "source": "WaveDefend P14-17, P25 pc327-612",
+      "quota": "floor(total*probability/sumProbability+uniform())",
+      "capQuota": "min(quota,floor(maxSimultaneous*total/maxAlive))",
+      "spacing": "floor(maxAlive/maxSimultaneous+0.5)",
+      "mergeSymbol": "sum probabilities, max cap, uniform member selection across admitted tiers",
+      "sameAgent": "sum probabilities, sum positive caps; any zero makes uncapped",
+      "sort": "log10(templateXP)+0.3*sum(four uniforms)",
+      "trim": "remove earliest rows if over quota; do not fill shortfalls"
+    },
+    "templateXp": {
+      "field": "Avatar KillXPReward inheritance",
+      "nativeDefault": 50,
+      "exeSha256": "dae100202115919c89440c9ef320f691113ee8dcaf01205cbd180072c35aabdb",
+      "getter": "P16 private2683854750 -> 0x141b91ba0 -> vtable+0xeb8 -> 0x140700700",
+      "constructor": "0x140f88530-0x140f8854e + write0x140f8869b: 0x8637d184 xor 0x8637d1b6 == 50"
+    },
+    "spawnAttempt": {
+      "seconds": 0.25,
+      "successfulSpawnsPerAttempt": 1,
+      "source": "WaveDefend P25 pc808-840",
+      "qualification": "Successful native spawn attempts may be slower; scene uses source spawn points with occupied-point checks."
+    },
+    "boss": {
+      "cadence": 3,
+      "tiers": "highest existing in 9..9+regularTier-1; default9",
+      "selection": "uniform group; count=maxSimultaneous if positive else1; appended after regular sort, included in final wave quota",
+      "source": "WaveDefend P9/P10; P26 pc470-490; P25 pc464-495"
+    },
+    "eximus": {
+      "source": "P26 pc491-635; P11; P16; P25 pc780-794",
+      "scheduleAndAttemptRolls": true,
+      "rushLastFraction": 0.25,
+      "rushMinimum": {
+        "missionTier0": 0.2,
+        "missionTierPositive": 0.25
+      },
+      "qualification": "MissionInfo difficulty, tier and native multiplier are explicit scenario inputs; resource-less EXIMUS rows retain exact STANDARD variant with a diagnostic."
+    }
+  },
+  "unrecovered": [
+    "native spawn-point/visibility failure policy",
+    "dynamic native Director alive cap",
+    "live MissionInfo selection and runtime overrides",
+    "Interception capture-progress director",
+    "native RNG bit identity",
+    "live enemy level progression",
+    "native ordinary-alive getter inclusion of arbitration drones; scene counts all live enemies",
+    "drone death-blast target filtering and kill attribution",
+    "native HardGameMode helper export identity"
+  ],
+  "numberSemantics": "Current native Luau NUMBER and arithmetic are float32; each relevant operation rounds before floor/ceil. Native LERP and VM arithmetic verified from EXE.",
+  "arbitrationDrones": {
+    "source": "LotusGameRules P5/P40/P42, Arbitration P33",
+    "opportunity": "after each eligible ordinary agent creation",
+    "initialTimer": 0,
+    "chancePerOpportunity": 0.2,
+    "forceCondition": "timer<0 OR randomFloat(0,1)<0.2 OR forceSpawn",
+    "timerAfterSuccess": 30,
+    "maxActiveFormula": "ceil(players/1.5)",
+    "maxActive1to4Players": [
+      1,
+      2,
+      2,
+      3
+    ],
+    "additional": true,
+    "consumesOrdinaryQuota": false,
+    "despawn": {
+      "minimumAge": 60,
+      "notSeenFor": 20,
+      "setsForceSpawn": true,
+      "countsAsKillOrVitusDrop": false
+    },
+    "placementQualification": "Native anchor placement unresolved; nearby source navigation faces with body/occupancy checks. Last-seen uses scene LOS at1s intervals.",
+    "deathExplosion": {
+      "baseAmount": "drone maxHealth",
+      "type": "DT_EXPLOSION",
+      "typeWeight": 1,
+      "radius": 20,
+      "baseProcChance": 1,
+      "checkForCover": false,
+      "hitAirborneTargets": true,
+      "hostAuthoritative": true,
+      "ignoreEntity": "_T.EliteAlertDroneKiller",
+      "source": "LotusGameRules P41 pc66-70 and native typedDamage setter 0x14195f2c0, DamageType enum7",
+      "status": "parameters recovered; target faction filtering and kill attribution unresolved, not applied as player weapon damage"
+    },
+    "eligibilityQualification": "Scene assumes ordinary scheduled hostile agents satisfy P42 native predicates; excluded special/owned-agent predicate names are unresolved. No companion or player-summoned agent opportunities are simulated."
+  }
+}

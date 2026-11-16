@@ -779,6 +779,31 @@ def prepare(
             return cache[key]
         return refresh
 
+    def geometry_effects(form, stacks):
+        """Spatial terms use the same source stacks and form gates as damage."""
+        kinds = {'WEAPON_RANGE', 'WEAPON_PUNCTURE_DEPTH'}
+        fx = [e for e in with_innate(weapon, ModEffectList([*static, *actor_effects]),
+                                    0 if form == 'base' else mode_index)
+              if e.upgrade_type in kinds]
+        for key, terms in dynamic:
+            n = stacks.get(key, 0.)
+            if n > 0:
+                fx.extend(with_value(e, 1. + (e.value - 1.) * n
+                                     if e.operation == 'MULTIPLY' else e.value * n)
+                          for e in terms if e.upgrade_type in kinds)
+        if form != 'base' and weapon.get('isIncarnonForm'):
+            fx.extend(e for terms in form_dynamic for e in terms if e.upgrade_type in kinds)
+        # The verified Felarx toggle's damage model needs only its speed arm;
+        # spatial delivery also needs the complementary +4m punchthrough arm.
+        for q in sources:
+            if (q.get('toggleOn') == 'on-reload-complete'
+                    and q['id'].rsplit(':', 2)[0] in {
+                        '/Lotus/Upgrades/Evolutions/Shotgun/EvoShotgunShellReloadToggle',
+                        '/Lotus/Upgrades/Evolutions/Shotgun/EvoShotgunShellReloadToggleSubUpgrade'}):
+                fx.append(ModEffect('WEAPON_PUNCTURE_DEPTH', 'ADD',
+                                    4. * (1. - stacks.get(q['id'], 0.)), source_path=q['id']))
+        return tuple(fx)
+
     def resolve(form, stacks, live_types=0, last_round=False):
         # The weapon's always-on terms join here (not inside apply_mods) so a
         # fractional live status count below scales them too (Cedo, Galariak).
@@ -1699,6 +1724,7 @@ def prepare(
         battery=selected_attack.get("battery"),
         lastRoundMultishot=last_round_multishot,
         fieldDurationOnEmptyReload=field_duration,
+        geometryEffects=geometry_effects,
         distance=scenario.distance,
         manualDetonation=({**selected_attack['manualDetonation'],
                            'delaySeconds':scenario.detonation_delay_seconds,

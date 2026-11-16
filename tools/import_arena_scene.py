@@ -3240,6 +3240,9 @@ def import_enemy_specs(
                     else None
                 ),
                 "frozenFaction": record.get("faction") if record else None,
+                "killXpReward": package.resolve(resolved).get("KillXPReward", 50) if resolved else None,
+                "killXpSource": ("Packages-Avatar-inheritance" if resolved and "KillXPReward" in package.resolve(resolved)
+                                 else "native-template-XP-default50" if resolved else None),
             }
         standard = variants.get("STANDARD", {})
         value = {
@@ -3253,6 +3256,8 @@ def import_enemy_specs(
                 else error or "no-explicit-standard-avatar-field"
             ),
             "resolutionError": error,
+            "xp": standard.get("killXpReward"),
+            "eximusXp": variants.get("EXIMUS", {}).get("killXpReward"),
         }
         memo[agent] = value
         return value
@@ -3411,7 +3416,7 @@ def import_enemy_specs(
         )
     payload = {
         "schema": "portable-arena-enemy-specs/v1",
-        "parserVersion": PARSER_VERSION + "/enemy-specs-v2-selected-MissionInfo",
+        "parserVersion": PARSER_VERSION + "/enemy-specs-v3-source-xp",
         "currentAgentSourceBuild": "2026.10.28.09.54",
         "frozenEnemyBuild": (
             frozen.get("buildLabel") if isinstance(frozen, dict) else None
@@ -3460,7 +3465,7 @@ def import_enemy_specs(
             "STANDARD AvatarTypes/AvatarType resolved through explicit current Packages inheritance; no approximate Avatar substitution.",
             "Current Agent source and older frozen damage catalog are separate versions; exact path existence does not prove stat parity.",
             "Optional scenario rule: normalize positive runnable weights within a user-selected tier only; this is NOT native observed spawn frequency.",
-            "Raw maxSimultaneous=0 remains zero; runtime meaning is not inferred here.",
+            "Template XP uses current Avatar inheritance or native default50 confirmed from the current LotusNpcAvatar constructor and P16 XP getter; live-context multipliers are not applied.",
             "mapCandidates use exact MissionInfo enemySpec/extraEnemySpec fields when mission coverage is supplied; never infer a group from shared tile geometry.",
             "EventResources/AdvancedAiDirectorSpawns/NpcEncounters remain explicit special-source metadata; they are not flattened into ordinary ground enemies.",
         ],
