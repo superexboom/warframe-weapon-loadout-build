@@ -9866,9 +9866,9 @@
   },
   "groundGeometry": {
     "file": "visual-ground-geometry.json.gz",
-    "sha256": "a6a9ffbc12e5cdb5b7faa33bd3a9ea1797ce7111f77ce64bd5278b424af94593",
-    "jsonSha256": "750e38e5203a82e7fd9d5e8693ac026776993333afc2b5e733e90a6c9a0be720",
-    "compressedBytes": 13899,
-    "jsonBytes": 85337
+    "sha256": "0c7d2a1369e82988f4daa26896ad7ce86782a45dab98d69db38948bbf06b52eb",
+    "jsonSha256": "fddf141a160d43252a3fcc50a03b39a1b8c0de3ed2df70afb336017bf83e9fdb",
+    "compressedBytes": 18386,
+    "jsonBytes": 127063
   }
 }

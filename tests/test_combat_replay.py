@@ -557,6 +557,20 @@ def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():
     assert walker.pos[0]<before[0]  # real supported retreat, not through blocker
     assert 0.<distance(before,walker.pos)<=.36+.00001
     assert distance(walker.pos,blocker.pos)>=distance(before,blocker.pos)
+    # Smaller IDs cannot cross a stationary larger-ID body either.
+    blocker.id=2
+    walker.pos=before;walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":3.6,"kind":"walk"}
+    world.move_actor(walker,.1,1.)
+    assert distance(walker.pos,blocker.pos)>=distance(before,blocker.pos)-1e-6
+    blocker.id=0
+    # Source surface walks use the same grounded, collision-checked retreat.
+    walker.pos=before;walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":3.6,"kind":"source-surface-walk"}
+    walker.crowd_retry_after=0.
+    assert world._yield_crowded_edge(walker,2.)
+    walker.drone=True
+    walker.pos=before;walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":5.,"kind":"walk"}
+    assert world._yield_crowded_edge(walker,3.)
+    walker.drone=False
     # If support disappears, a later blocked-edge attempt keeps exact feet/edge.
     walker.pos=before;walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":3.6,"kind":"walk"}
     original_edge=walker.edge

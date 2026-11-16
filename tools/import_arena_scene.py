@@ -2146,7 +2146,10 @@ def import_source_doors(
                         for y in (-raw_dims[1] / 2, raw_dims[1] / 2)
                         for z in (-raw_dims[2] / 2, raw_dims[2] / 2)
                     ]
-                    dims = [max(p[i] for p in corners) - min(p[i] for p in corners) for i in range(3)]
+                    dims = [
+                        max(p[i] for p in corners) - min(p[i] for p in corners)
+                        for i in range(3)
+                    ]
                     # Existing templates serialize the trigger Dimensions
                     # in their authored door axes; other prefabs rotate the
                     # trigger90deg. Preserve the explicit narrow descriptor,
@@ -2438,7 +2441,9 @@ def import_source_doors(
                     "sourceThresholdTrigger": (
                         {
                             "entityId": threshold[0]["id"],
-                            "dimensions": values(threshold[0]["attributes"], "Dimensions"),
+                            "dimensions": values(
+                                threshold[0]["attributes"], "Dimensions"
+                            ),
                             "dimensionsInDoorAxes": threshold[1],
                             "quaternion": threshold[0]["quaternion"],
                             "position": threshold[0]["position"],
@@ -2598,13 +2603,121 @@ def import_source_doors(
     return value
 
 
-def import_visual_ground_links(case_root, packages_bin, output, *, map_ids=None):
+def _supported_surface_route(scene, support, start, end, *, max_nodes=6000):
+    """Bounded local A* on actual source floor layers, not an interpolated bridge.
+
+    The grid only proposes XZ positions; each foot height is an exact ray hit.
+    Distinct floor layers remain distinct nodes. Every edge checks <=.45 step,
+    source slope, original body collision and source-floor overhead rails.
+    """
+    import heapq
+
+    lower = [min(start[i], end[i]) - 1.0 for i in range(3)]
+    upper = [max(start[i], end[i]) + 1.0 for i in range(3)]
+    pitch = 0.16
+    cells, locations, positions, witnesses = {}, {}, {-1: start, -2: end}, {}
+    for ix in range(int((upper[0] - lower[0]) / pitch) + 1):
+        for iz in range(int((upper[2] - lower[2]) / pitch) + 1):
+            origin = (lower[0] + ix * pitch, upper[1], lower[2] + iz * pitch)
+            rows = []
+            for bvh, kind in ((support, "visual"), (scene.collision, "base")):
+                for hit in bvh.all_hits(origin, (0, -1, 0), upper[1] - lower[1]):
+                    if abs(hit.normal[1]) < 0.55 or any(
+                        abs(point[1] - hit.position[1]) < 0.03 for point, _ in rows
+                    ):
+                        continue
+                    rows.append((hit.position, (kind, hit.triangle)))
+            cells[ix, iz] = []
+            for point, source in rows:
+                node = len(locations)
+                locations[node] = (ix, iz)
+                positions[node], witnesses[node] = point, source
+                cells[ix, iz].append(node)
+    if len(locations) > max_nodes:
+        return None, {
+            "reason": "bounded surface grid exceeded",
+            "nodes": len(locations),
+        }
+
+    def neighbours(node):
+        point = positions[node]
+        ix, iz = locations.get(
+            node,
+            (
+                round((point[0] - lower[0]) / pitch),
+                round((point[2] - lower[2]) / pitch),
+            ),
+        )
+        for dx in (-1, 0, 1):
+            for dz in (-1, 0, 1):
+                for other in cells.get((ix + dx, iz + dz), ()):
+                    if other != node and abs(positions[other][1] - point[1]) <= 0.45:
+                        yield other
+        if (
+            node >= 0
+            and math.dist(point, end) < 0.35
+            and abs(point[1] - end[1]) <= 0.45
+        ):
+            yield -2
+
+    queue, distances, previous = [(math.dist(start, end), 0.0, -1)], {-1: 0.0}, {}
+    visited = 0
+    while queue:
+        _, cost, node = heapq.heappop(queue)
+        if cost != distances[node]:
+            continue
+        if node == -2:
+            order = [-2]
+            while order[-1] != -1:
+                order.append(previous[order[-1]])
+            order.reverse()
+            return ([positions[k] for k in order], [witnesses.get(k) for k in order]), {
+                "visited": visited,
+                "gridNodes": len(locations),
+                "pitch": pitch,
+                "maxLocalStep": 0.45,
+                "normalYMinimum": 0.55,
+            }
+        visited += 1
+        for other in neighbours(node):
+            a, b = positions[node], positions[other]
+            if not scene.check_motion((a, b), ground_step=True)["clear"]:
+                continue
+            blocked = False
+            direction = (b[0] - a[0], 0, b[2] - a[2])
+            length = math.hypot(direction[0], direction[2])
+            if length > 1e-5:
+                for dx, dz in ((0, 0), (0.22, 0), (-0.22, 0), (0, 0.22), (0, -0.22)):
+                    for height in (0.5, 1.0, 1.65):
+                        if support.raycast(
+                            (a[0] + dx, max(a[1], b[1]) + height, a[2] + dz),
+                            direction,
+                            length - 1e-4,
+                        ):
+                            blocked = True
+                            break
+                    if blocked:
+                        break
+            if blocked:
+                continue
+            distance = cost + math.dist(a, b)
+            if distance < distances.get(other, math.inf):
+                distances[other], previous[other] = distance, node
+                heapq.heappush(queue, (distance + math.dist(b, end), distance, other))
+    return None, {
+        "reason": "no source-supported collision-clear surface route",
+        "visited": visited,
+    }
+
+
+def import_visual_ground_links(
+    case_root, packages_bin, output, *, map_ids=None, surface_faces=None
+):
     """Recover short boundary transitions using exact static floor/stair mesh support.
 
     Adds no synthetic plane, never broadens movement thresholds. Output is a
     separate qualified support/candidate-link sidecar; base NAV/BSP unchanged.
     """
-    from wfarsenal.arena_scene import load_scene
     from collections import defaultdict, Counter
     from import_melee_mechanics import Packages
 
@@ -2630,7 +2743,16 @@ def import_visual_ground_links(case_root, packages_bin, output, *, map_ids=None)
             source = case_root / "work/geometry"
         entities, _ = _read_visual_level(source, tile)
         byid = {e["id"]: e for e in entities}
-        scene = load_scene(map_id)
+        # Rebuild without the previous ground sidecar so rerunning does not
+        # erase old routes merely because they already merged the components.
+        from wfarsenal.arena_scene import ArenaScene, load_asset, load_source_doors
+
+        scene = ArenaScene(
+            load_asset(map_id, "scene"),
+            load_asset(map_id, "navigation"),
+            map_id=map_id,
+            doors=load_source_doors(map_id),
+        )
         components = scene.movement_components("enemy")
         visual = json.loads(
             gzip.decompress(
@@ -2641,8 +2763,10 @@ def import_visual_ground_links(case_root, packages_bin, output, *, map_ids=None)
         for inst in visual["instances"]:
             mesh = visual["meshes"][inst["meshId"]]
             path = mesh["path"]
-            if not re.search(
-                r"Floor|Stair|Catwalk|Ramp|Platform|Walkway", path, re.I
+            architectural = path.startswith(tile + "/") and path.endswith("_a.fbx")
+            if not (
+                architectural
+                or re.search(r"Floor|Stair|Catwalk|Ramp|Platform|Walkway", path, re.I)
             ) or re.search(r"Railing|Cover|Decal|Light|Door|Water", path, re.I):
                 continue
             entity = byid.get(inst["entityId"])
@@ -2814,7 +2938,87 @@ def import_visual_ground_links(case_root, packages_bin, output, *, map_ids=None)
                         }
                     )
                 break
+        surface_audit = []
+        if surface_faces:
+            # Surface queries must see this pass's admitted short floor links:
+            # their merged components determine which exits remain missing.
+            for link in links:
+                scene._add(
+                    link["from"],
+                    link["to"],
+                    link["points"],
+                    link["kind"],
+                    link["seconds"],
+                    True,
+                    link["enemySeconds"],
+                    link["source"],
+                )
+            scene._movement_component_cache = None
+            components = scene.movement_components("enemy")
+            selected = {components[face] for face in surface_faces}
+            options = {}
+            for edges in scene.graph:
+                for edge in edges:
+                    a, b = edge.from_node, edge.to_node
+                    if (
+                        edge.enemy
+                        or components[a] == components[b]
+                        or not ({components[a], components[b]} & selected)
+                    ):
+                        continue
+                    start, end = scene.nodes[a], scene.nodes[b]
+                    if (
+                        math.hypot(start[0] - end[0], start[2] - end[2]) > 6
+                        or abs(start[1] - end[1]) > 6
+                    ):
+                        continue
+                    key = tuple(sorted((components[a], components[b])))
+                    row = (math.dist(start, end), min(a, b), max(a, b))
+                    rows = options.setdefault(key, [])
+                    if row not in rows:
+                        rows.append(row)
+                        rows.sort()
+                        del rows[4:]
+            for key, (_, a, b) in (
+                (key, row) for key, rows in sorted(options.items()) for row in rows
+            ):
+                result, audit = _supported_surface_route(
+                    scene, support, scene.nodes[a], scene.nodes[b]
+                )
+                surface_audit.append(dict(audit, fromFace=a, toFace=b))
+                if result is None:
+                    continue
+                points, hits = result
+                used = sorted({hit[1] for hit in hits if hit and hit[0] == "visual"})
+                if not used:
+                    continue
+                witness = [
+                    {"sample": i, **sources[hit[1]]}
+                    for i, hit in enumerate(hits)
+                    if hit and hit[0] == "visual"
+                ]
+                length = sum(math.dist(x, y) for x, y in zip(points, points[1:]))
+                for u, v, pts in ((a, b, points), (b, a, points[::-1])):
+                    links.append(
+                        {
+                            "from": u,
+                            "to": v,
+                            "kind": "source-surface-walk",
+                            "points": pts,
+                            "seconds": length / 6,
+                            "enemy": True,
+                            "enemySeconds": length / 3.6,
+                            "source": {
+                                "type": "actual-static-surface-route",
+                                "supportTriangleIds": used,
+                                "supportWitness": witness,
+                                "routeAudit": audit,
+                                "qualification": "bounded local search on exact source visual architecture/floor and original NAV support; per-edge step <=.45; original collision and overhead rails checked; no jump, synthetic floor or collision exemption",
+                            },
+                        }
+                    )
         records[map_id] = {
+            "surfaceRouteAudit": surface_audit,
             "support": {
                 "vertices": vertices,
                 "triangles": triangles,
@@ -3279,6 +3483,7 @@ def main():
     parser.add_argument("--audit-visual-support", action="store_true")
     parser.add_argument("--source-ground", action="store_true")
     parser.add_argument("--source-doors", action="store_true")
+    parser.add_argument("--ground-surface-face", type=int, action="append")
     parser.add_argument("--complete-visuals", action="store_true")
     parser.add_argument("--case-root", type=Path)
     parser.add_argument("--cache-dir", type=Path)
@@ -3299,7 +3504,11 @@ def main():
         if not args.case_root or not args.packages_bin:
             parser.error("--source-ground requires --case-root --packages-bin")
         import_visual_ground_links(
-            args.case_root, args.packages_bin, args.output, map_ids=args.visual_map_id
+            args.case_root,
+            args.packages_bin,
+            args.output,
+            map_ids=args.visual_map_id,
+            surface_faces=args.ground_surface_face,
         )
         return
     if args.source_doors:

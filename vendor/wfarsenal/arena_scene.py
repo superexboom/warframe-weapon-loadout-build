@@ -31,8 +31,8 @@ DEFAULT_MAP = "corpus-ship-defense"
 def _vec(v: Sequence[float]) -> Vec3:
     if len(v) != 3:
         raise ValueError("expected XYZ triple")
-    p = tuple(float(x) for x in v)
-    if not all(math.isfinite(x) for x in p):
+    p = (float(v[0]), float(v[1]), float(v[2]))
+    if not (math.isfinite(p[0]) and math.isfinite(p[1]) and math.isfinite(p[2])):
         raise ValueError("coordinates must be finite")
     return p
 
@@ -54,7 +54,7 @@ def _cross(a, b):
 
 
 def distance(a, b) -> float:
-    return math.sqrt(sum((a[i] - b[i]) ** 2 for i in range(3)))
+    return math.dist(a, b)
 
 
 @dataclass(frozen=True)

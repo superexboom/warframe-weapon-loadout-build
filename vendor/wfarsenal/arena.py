@@ -15,7 +15,7 @@ from . import parallel
 from .arena_scene import load_scene, distance, Edge, ROOT
 from .arena_combat import ArenaCombat, UnsupportedArenaCombat
 
-MODEL = "arena-world-v3"
+MODEL = "arena-world-v4"
 VITUS_DROP_CHANCE = 0.06
 DRONE = "/Lotus/Types/Enemies/Corpus/Drones/AIWeek/CorpusEliteShieldDroneAvatar"
 EPS = 1e-8
@@ -2780,15 +2780,25 @@ class World:
             True,
             length / 3.6,
             length,
-            key="local:" + str(actor.node) + ":" + ",".join(f"{v:.4f}" for v in end),
+            key="local:" + str(actor.id) + ":" + str(actor.node) + ":"
+            + ",".join(f"{v:.4f}" for v in (*actor.pos, *end)),
         )
 
-    def _crowd_segment_clear(self, actor, begin, end, *, priority_only=False):
+    def _crowd_segment_clear(self, actor, begin, end):
         """Continuous source-space actor separation, allowing an overlap escape."""
         delta = tuple(end[i] - begin[i] for i in range(3))
         squared = sum(v * v for v in delta)
+        lower = tuple(min(begin[i], end[i]) - 0.6 for i in range(3))
+        upper = tuple(max(begin[i], end[i]) + 0.6 for i in range(3))
         for other in self.live:
-            if other is actor or other.dead or (priority_only and other.id >= actor.id):
+            if other is actor or other.dead:
+                continue
+            # Exact segment distance matters only inside its .6-expanded box.
+            # This broad phase preserves the exact body-clearance calculation.
+            p = other.pos
+            if (p[0] < lower[0] or p[0] > upper[0]
+                or p[2] < lower[2] or p[2] > upper[2]
+                or p[1] < lower[1] or p[1] > upper[1]):
                 continue
             old = distance(begin, other.pos)
             ratio = (
@@ -2823,8 +2833,7 @@ class World:
         inter-component route or ordinary-enemy parkour.
         """
         if (
-            actor.drone
-            or actor.edge is None
+            actor.edge is None
             or actor.edge["kind"]
             not in (
                 "walk",
@@ -2834,6 +2843,7 @@ class World:
                 "crowd-yield",
                 "door",
                 "source-floor-step",
+                "source-surface-walk",
             )
         ):
             return False
@@ -2841,44 +2851,89 @@ class World:
         components = self.scene.movement_components("enemy")
         component = components[actor.node]
         origin = actor.pos
-        candidates = sorted(
-            (
-                i
-                for i, point in enumerate(self.scene.nodes)
-                if components[i] == component
-                and 0.45 <= distance(origin, point) <= 2.5
-                and abs(origin[1] - point[1]) <= 0.6
-                and all(
-                    other is actor or other.dead or distance(point, other.pos) >= 0.75
-                    for other in self.live
+        # Face centers alone cannot resolve two source paths merging at a
+        # coarse portal waypoint. Try bounded supported local walks, then
+        # resume the exact remaining source edge instead of walking back to its
+        # old face center. Every sampled foot/body/crowd test below still applies.
+        edge = actor.edge
+        destination = edge["points"][edge["index"]]
+        dx, dz = destination[0] - origin[0], destination[2] - origin[2]
+        horizontal = math.hypot(dx, dz)
+        targets = []
+        # A native centroid/portal polyline can double back through a crowded
+        # merge. Rejoin only an already planned source node, using a bounded
+        # fully supported direct walk; never introduce an inter-floor route.
+        planned = [(edge["node"], actor.route)]
+        planned.extend((link.node, actor.route[i + 1:]) for i, link in enumerate(actor.route[:3]))
+        for node, remaining_route in reversed(planned):
+            point = self.scene.nodes[node]
+            if 0.45 <= distance(origin, point) <= 6.0 and abs(origin[1] - point[1]) <= 3.0:
+                if all(other is actor or other.dead or distance(point, other.pos) >= 0.65
+                       for other in self.live):
+                    targets.append((node, point, False, remaining_route, None))
+                    goal_dx, goal_dz = point[0] - origin[0], point[2] - origin[2]
+                    goal_length = math.hypot(goal_dx, goal_dz)
+                    if goal_length > EPS:
+                        gx, gz = goal_dx / goal_length, goal_dz / goal_length
+                        for side in (0.6, -0.6, 0.9, -0.9):
+                            via = (origin[0] - gz * side + gx * .15,
+                                   origin[1], origin[2] + gx * side + gz * .15)
+                            targets.append((node, point, False, remaining_route, via))
+        if horizontal > EPS:
+            forward = (dx / horizontal, dz / horizontal)
+            for lateral in (0.6, -0.6, 0.9, -0.9):
+                target = (
+                    origin[0] - forward[1] * lateral + forward[0] * 0.15,
+                    origin[1],
+                    origin[2] + forward[0] * lateral + forward[1] * 0.15,
                 )
-            ),
-            key=lambda i: (distance(origin, self.scene.nodes[i]), i),
-        )[:12]
-        for node in candidates:
-            target = self.scene.nodes[node]
-            count = max(2, int(distance(origin, target) / 0.12) + 1)
+                if all(other is actor or other.dead or distance(target, other.pos) >= 0.6
+                       for other in self.live):
+                    targets.append((actor.node, target, True, actor.route, None))
+        def candidate_targets():
+            yield from targets
+            candidates = sorted(
+                (
+                    i
+                    for i, point in enumerate(self.scene.nodes)
+                    if components[i] == component
+                    and 0.45 <= distance(origin, point) <= 2.5
+                    and abs(origin[1] - point[1]) <= 0.6
+                    and all(
+                        other is actor or other.dead or distance(point, other.pos) >= 0.75
+                        for other in self.live
+                    )
+                ),
+                key=lambda i: (distance(origin, self.scene.nodes[i]), i),
+            )[:12]
+            for node in candidates:
+                yield node, self.scene.nodes[node], False, [], None
+
+        for node, target, resume, remaining_route, via in candidate_targets():
             points = [origin]
             valid = True
-            for index in range(1, count + 1):
-                expected = mix(origin, target, index / count)
-                support = self.scene.ground_support(
-                    expected, max_drop=0.5, max_rise=0.25
-                )
-                if (
-                    support is None
-                    or abs(support.position[1] - expected[1]) > 0.35
-                    or abs(support.normal[1]) < 0.5
-                ):
-                    valid = False
+            waypoints = [origin, target] if via is None else [origin, via, target]
+            for begin, end in zip(waypoints, waypoints[1:]):
+                count = max(2, int(distance(begin, end) / 0.12) + 1)
+                for index in range(1, count + 1):
+                    expected = mix(begin, end, index / count)
+                    support = self.scene.ground_support(
+                        expected, max_drop=0.5, max_rise=0.25
+                    )
+                    if (
+                        support is None
+                        or abs(support.position[1] - expected[1]) > 0.35
+                        or abs(support.normal[1]) < 0.5
+                    ):
+                        valid = False
+                        break
+                    point = tuple(support.position)
+                    if abs(point[1] - points[-1][1]) > 0.35 or not self._crowd_segment_clear(actor, points[-1], point):
+                        valid = False
+                        break
+                    points.append(point)
+                if not valid:
                     break
-                point = tuple(support.position)
-                if abs(
-                    point[1] - points[-1][1]
-                ) > 0.35 or not self._crowd_segment_clear(actor, points[-1], point):
-                    valid = False
-                    break
-                points.append(point)
             if (
                 not valid
                 or not self.scene.check_motion(points, ground_step=True)["clear"]
@@ -2887,14 +2942,19 @@ class World:
             length = sum(distance(a, b) for a, b in zip(points, points[1:]))
             if length <= EPS:
                 continue
+            if resume:
+                points.extend(edge["points"][edge["index"]:])
+                if not self.scene.check_motion(points, ground_step=True)["clear"]:
+                    continue
             actor.edge = {
                 "points": points,
                 "index": 1,
-                "node": node,
-                "speed": 3.6,
+                "node": edge["node"] if resume else node,
+                "speed": 5.0 if actor.drone else 3.6,
                 "kind": "crowd-yield",
             }
-            actor.route = []
+            if not resume:
+                actor.route = remaining_route
             actor.crowd_blocked_seconds = 0.0
             self.stats["crowdDetours"] = self.stats.get("crowdDetours", 0) + 1
             return True
@@ -2916,11 +2976,21 @@ class World:
                     actor.route = []
                     break
                 points = list(link.points)
+                # A shared source edge is cached independently of this actor's
+                # current feet. A failed local approach must not disable the
+                # source edge for every other actor.
                 if distance(actor.pos, points[0]) > 0.01:
+                    approach = self.scene.check_motion(
+                        (actor.pos, points[0]), ground_step=True
+                    )["clear"]
+                    if not approach:
+                        actor.route = []
+                        self.stats["failedPathPlans"] += 1
+                        break
                     points = [actor.pos, *points]
                 if link.key not in self.motion_cache:
                     self.motion_cache[link.key] = self.scene.check_motion(
-                        points,
+                        link.points,
                         ground_step=link.kind
                         in (
                             "walk",
@@ -2930,6 +3000,7 @@ class World:
                             "crowd-yield",
                             "door",
                             "source-floor-step",
+                            "source-surface-walk",
                         ),
                     )["clear"]
                 if not self.motion_cache[link.key]:
@@ -2985,7 +3056,7 @@ class World:
             spent = travel / max(EPS, speed)
             candidate = mix(actor.pos, end, travel / length) if length > EPS else end
             if actor.id != -1 and not self._crowd_segment_clear(
-                actor, actor.pos, candidate, priority_only=True
+                actor, actor.pos, candidate
             ):
                 self.stats["crowdWaitSeconds"] += remaining
                 actor.crowd_blocked_seconds = (
