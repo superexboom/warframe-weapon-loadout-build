@@ -580,3 +580,37 @@ def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():
     world.stats={"failedPathPlans":0}
     world.plan()
     assert world.player.route==[vantage_edge] and world.stats["firingPositionPlans"]==1
+
+
+def test_arena_source_door_query_channels():
+    from wfarsenal.arena_scene import ArenaScene
+
+    floor = [[-5., 0., -5.], [5., 0., -5.], [5., 0., 5.], [-5., 0., 5.]]
+    wall = [[2., 0., -5.], [2., 3., -5.], [2., 3., 5.], [2., 0., 5.]]
+    raw = {"nav": {"nodePositions": [[0., 0., -2.], [0., 0., 2.]],
+                   "nativePortals": []}, "start": {"face": 0, "position": [0., 0., -2.]},
+           "collision": {"vertices": floor + wall,
+                         "triangles": [[0, 1, 2], [0, 2, 3], [4, 5, 6], [4, 6, 7]]}}
+    link = {"from": 0, "to": 1, "points": raw["nav"]["nodePositions"],
+            "kind": "door", "seconds": 4 / 6, "enemy": True,
+            "enemySeconds": 4 / 3.6, "source": {"type": "joined-source-npcdoorhint"}}
+    doors = {"doors": [{"id": "source-door", "aperture": {
+        "origin": [0., 0., 0.], "normal": [0., 0., 1.], "right": [1., 0., 0.],
+        "up": [0., 1., 0.], "halfWidth": 1., "height": 3.}}], "links": [link]}
+    opened = ArenaScene(raw, native=False, doors=doors)
+    closed = opened.with_door_sight("closed")
+    assert opened.path(0, 1, "enemy")[0].kind == "door"
+    assert closed.check_motion(link["points"], ground_step=True)["clear"]
+    assert opened.visible((0., 1., -2.), (0., 1., 2.))
+    assert not closed.visible((0., 1., -2.), (0., 1., 2.))
+    assert closed.raycast((0., 1., -2.), (0., 0., 1.), 4.).source["doorId"] == "source-door"
+    assert closed.all_hits((0., 1., -2.), (0., 0., 1.), 4.)[0].triangle == -1
+    assert closed.visible((1.5, 1., -2.), (1.5, 1., 2.))  # finite aperture only
+    assert not opened.visible((1.5, 1., 0.), (3., 1., 0.))  # ordinary wall remains
+    closed.disabled.add("job-local")
+    assert not opened.disabled and opened.door_sight == "open"
+    ground = {"support": {"vertices": [[x, .2, z] for x, _, z in floor],
+                          "triangles": [[0, 1, 2], [0, 2, 3]],
+                          "triangleSources": [{"sourceMesh": "verified-source-floor"}] * 2}}
+    supported = ArenaScene(raw, native=False, doors=doors, ground=ground)
+    assert supported.ground_support((0., 0., -2.)).position == pytest.approx((0., .2, -2.))

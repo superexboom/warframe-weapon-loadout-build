@@ -9351,5 +9351,524 @@
       "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
       "noMatchReason": null
     }
+  },
+  "doorGeometry": {
+    "file": "door-geometry.json.gz",
+    "schema": "arena-source-doors/v1",
+    "sha256": "5c0f30cdd0b0937cfcc288830e9812381b5ee0f9adf939aea16b4f6a20b05157",
+    "jsonSha256": "26cabc5f6a28fa8fea0c3e3cbdc7502127d9792afb6bac8f5e843403e2473660",
+    "compressedBytes": 485507,
+    "jsonBytes": 4044525,
+    "maps": {
+      "grineer-shipyards-defense": {
+        "hintCount": 21,
+        "confirmedDoors": 21,
+        "doorsWithUsableLinks": 21,
+        "directedDoorLinks": 126,
+        "candidateSpawns": 109,
+        "enemyCanReachStartBefore": 4,
+        "enemyCanReachStartAfter": 67,
+        "ordinaryWallsIgnored": false
+      },
+      "corpus-ship-defense": {
+        "hintCount": 16,
+        "confirmedDoors": 16,
+        "doorsWithUsableLinks": 6,
+        "directedDoorLinks": 28,
+        "candidateSpawns": 348,
+        "enemyCanReachStartBefore": 203,
+        "enemyCanReachStartAfter": 203,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-galleon-defense": {
+        "hintCount": 11,
+        "confirmedDoors": 11,
+        "doorsWithUsableLinks": 11,
+        "directedDoorLinks": 66,
+        "candidateSpawns": 191,
+        "enemyCanReachStartBefore": 0,
+        "enemyCanReachStartAfter": 0,
+        "ordinaryWallsIgnored": false
+      },
+      "corpus-outpost-defense-two": {
+        "hintCount": 2,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 66,
+        "enemyCanReachStartBefore": 35,
+        "enemyCanReachStartAfter": 35,
+        "ordinaryWallsIgnored": false
+      },
+      "corpus-gas-city-defense": {
+        "hintCount": 10,
+        "confirmedDoors": 10,
+        "doorsWithUsableLinks": 9,
+        "directedDoorLinks": 54,
+        "candidateSpawns": 171,
+        "enemyCanReachStartBefore": 12,
+        "enemyCanReachStartAfter": 20,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-ocean-defense-02": {
+        "hintCount": 10,
+        "confirmedDoors": 10,
+        "doorsWithUsableLinks": 10,
+        "directedDoorLinks": 60,
+        "candidateSpawns": 52,
+        "enemyCanReachStartBefore": 5,
+        "enemyCanReachStartAfter": 9,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-ocean-defense-03": {
+        "hintCount": 11,
+        "confirmedDoors": 11,
+        "doorsWithUsableLinks": 11,
+        "directedDoorLinks": 66,
+        "candidateSpawns": 337,
+        "enemyCanReachStartBefore": 19,
+        "enemyCanReachStartAfter": 33,
+        "ordinaryWallsIgnored": false
+      },
+      "corpus-outpost-defense-one": {
+        "hintCount": 1,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 50,
+        "enemyCanReachStartBefore": 0,
+        "enemyCanReachStartAfter": 0,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-asteroid-defense": {
+        "hintCount": 6,
+        "confirmedDoors": 6,
+        "doorsWithUsableLinks": 6,
+        "directedDoorLinks": 36,
+        "candidateSpawns": 57,
+        "enemyCanReachStartBefore": 25,
+        "enemyCanReachStartAfter": 57,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-forest-defense": {
+        "hintCount": 8,
+        "confirmedDoors": 5,
+        "doorsWithUsableLinks": 5,
+        "directedDoorLinks": 30,
+        "candidateSpawns": 209,
+        "enemyCanReachStartBefore": 154,
+        "enemyCanReachStartAfter": 180,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-forest-interception-01": {
+        "hintCount": 3,
+        "confirmedDoors": 3,
+        "doorsWithUsableLinks": 3,
+        "directedDoorLinks": 18,
+        "candidateSpawns": 439,
+        "enemyCanReachStartBefore": 0,
+        "enemyCanReachStartAfter": 0,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-forest-interception-02": {
+        "hintCount": 13,
+        "confirmedDoors": 11,
+        "doorsWithUsableLinks": 10,
+        "directedDoorLinks": 58,
+        "candidateSpawns": 172,
+        "enemyCanReachStartBefore": 63,
+        "enemyCanReachStartAfter": 137,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-fortress-defense": {
+        "hintCount": 2,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 136,
+        "enemyCanReachStartBefore": 30,
+        "enemyCanReachStartAfter": 30,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-settlement-defense": {
+        "hintCount": 24,
+        "confirmedDoors": 24,
+        "doorsWithUsableLinks": 24,
+        "directedDoorLinks": 144,
+        "candidateSpawns": 197,
+        "enemyCanReachStartBefore": 8,
+        "enemyCanReachStartAfter": 47,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-shipyards-interception": {
+        "hintCount": 9,
+        "confirmedDoors": 9,
+        "doorsWithUsableLinks": 7,
+        "directedDoorLinks": 42,
+        "candidateSpawns": 53,
+        "enemyCanReachStartBefore": 11,
+        "enemyCanReachStartAfter": 53,
+        "ordinaryWallsIgnored": false
+      },
+      "infested-corpus-defense": {
+        "hintCount": 0,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 102,
+        "enemyCanReachStartBefore": 12,
+        "enemyCanReachStartAfter": 12,
+        "ordinaryWallsIgnored": false
+      },
+      "orokin-tower-defense": {
+        "hintCount": 38,
+        "confirmedDoors": 5,
+        "doorsWithUsableLinks": 5,
+        "directedDoorLinks": 30,
+        "candidateSpawns": 86,
+        "enemyCanReachStartBefore": 82,
+        "enemyCanReachStartAfter": 86,
+        "ordinaryWallsIgnored": false
+      },
+      "orokin-derelict-defense": {
+        "hintCount": 17,
+        "confirmedDoors": 15,
+        "doorsWithUsableLinks": 15,
+        "directedDoorLinks": 90,
+        "candidateSpawns": 150,
+        "enemyCanReachStartBefore": 68,
+        "enemyCanReachStartAfter": 75,
+        "ordinaryWallsIgnored": false
+      },
+      "orokin-moon-defense": {
+        "hintCount": 6,
+        "confirmedDoors": 4,
+        "doorsWithUsableLinks": 4,
+        "directedDoorLinks": 20,
+        "candidateSpawns": 65,
+        "enemyCanReachStartBefore": 17,
+        "enemyCanReachStartAfter": 29,
+        "ordinaryWallsIgnored": false
+      },
+      "entrati-lab-mirror-defense-ear": {
+        "hintCount": 9,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 156,
+        "enemyCanReachStartBefore": 156,
+        "enemyCanReachStartAfter": 156,
+        "ordinaryWallsIgnored": false
+      },
+      "entrati-lab-mirror-defense-eye": {
+        "hintCount": 9,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 179,
+        "enemyCanReachStartBefore": 93,
+        "enemyCanReachStartAfter": 93,
+        "ordinaryWallsIgnored": false
+      },
+      "lastwish-grineer-mirror-defense": {
+        "hintCount": 24,
+        "confirmedDoors": 24,
+        "doorsWithUsableLinks": 24,
+        "directedDoorLinks": 144,
+        "candidateSpawns": 197,
+        "enemyCanReachStartBefore": 8,
+        "enemyCanReachStartAfter": 47,
+        "ordinaryWallsIgnored": false
+      },
+      "lastwish-corpus-mirror-defense": {
+        "hintCount": 12,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 83,
+        "enemyCanReachStartBefore": 5,
+        "enemyCanReachStartAfter": 5,
+        "ordinaryWallsIgnored": false
+      },
+      "1999-temple-defense-underground": {
+        "hintCount": 0,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 120,
+        "enemyCanReachStartBefore": 17,
+        "enemyCanReachStartAfter": 17,
+        "ordinaryWallsIgnored": false
+      },
+      "corpus-ice-defense": {
+        "hintCount": 0,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 113,
+        "enemyCanReachStartBefore": 35,
+        "enemyCanReachStartAfter": 35,
+        "ordinaryWallsIgnored": false
+      }
+    },
+    "mapSummaries": {
+      "grineer-shipyards-defense": {
+        "hintCount": 21,
+        "confirmedDoors": 21,
+        "doorsWithUsableLinks": 21,
+        "directedDoorLinks": 126,
+        "candidateSpawns": 109,
+        "enemyCanReachStartBefore": 4,
+        "enemyCanReachStartAfter": 67,
+        "ordinaryWallsIgnored": false
+      },
+      "corpus-ship-defense": {
+        "hintCount": 16,
+        "confirmedDoors": 16,
+        "doorsWithUsableLinks": 6,
+        "directedDoorLinks": 28,
+        "candidateSpawns": 348,
+        "enemyCanReachStartBefore": 203,
+        "enemyCanReachStartAfter": 203,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-galleon-defense": {
+        "hintCount": 11,
+        "confirmedDoors": 11,
+        "doorsWithUsableLinks": 11,
+        "directedDoorLinks": 66,
+        "candidateSpawns": 191,
+        "enemyCanReachStartBefore": 0,
+        "enemyCanReachStartAfter": 0,
+        "ordinaryWallsIgnored": false
+      },
+      "corpus-outpost-defense-two": {
+        "hintCount": 2,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 66,
+        "enemyCanReachStartBefore": 35,
+        "enemyCanReachStartAfter": 35,
+        "ordinaryWallsIgnored": false
+      },
+      "corpus-gas-city-defense": {
+        "hintCount": 10,
+        "confirmedDoors": 10,
+        "doorsWithUsableLinks": 9,
+        "directedDoorLinks": 54,
+        "candidateSpawns": 171,
+        "enemyCanReachStartBefore": 12,
+        "enemyCanReachStartAfter": 20,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-ocean-defense-02": {
+        "hintCount": 10,
+        "confirmedDoors": 10,
+        "doorsWithUsableLinks": 10,
+        "directedDoorLinks": 60,
+        "candidateSpawns": 52,
+        "enemyCanReachStartBefore": 5,
+        "enemyCanReachStartAfter": 9,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-ocean-defense-03": {
+        "hintCount": 11,
+        "confirmedDoors": 11,
+        "doorsWithUsableLinks": 11,
+        "directedDoorLinks": 66,
+        "candidateSpawns": 337,
+        "enemyCanReachStartBefore": 19,
+        "enemyCanReachStartAfter": 33,
+        "ordinaryWallsIgnored": false
+      },
+      "corpus-outpost-defense-one": {
+        "hintCount": 1,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 50,
+        "enemyCanReachStartBefore": 0,
+        "enemyCanReachStartAfter": 0,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-asteroid-defense": {
+        "hintCount": 6,
+        "confirmedDoors": 6,
+        "doorsWithUsableLinks": 6,
+        "directedDoorLinks": 36,
+        "candidateSpawns": 57,
+        "enemyCanReachStartBefore": 25,
+        "enemyCanReachStartAfter": 57,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-forest-defense": {
+        "hintCount": 8,
+        "confirmedDoors": 5,
+        "doorsWithUsableLinks": 5,
+        "directedDoorLinks": 30,
+        "candidateSpawns": 209,
+        "enemyCanReachStartBefore": 154,
+        "enemyCanReachStartAfter": 180,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-forest-interception-01": {
+        "hintCount": 3,
+        "confirmedDoors": 3,
+        "doorsWithUsableLinks": 3,
+        "directedDoorLinks": 18,
+        "candidateSpawns": 439,
+        "enemyCanReachStartBefore": 0,
+        "enemyCanReachStartAfter": 0,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-forest-interception-02": {
+        "hintCount": 13,
+        "confirmedDoors": 11,
+        "doorsWithUsableLinks": 10,
+        "directedDoorLinks": 58,
+        "candidateSpawns": 172,
+        "enemyCanReachStartBefore": 63,
+        "enemyCanReachStartAfter": 137,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-fortress-defense": {
+        "hintCount": 2,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 136,
+        "enemyCanReachStartBefore": 30,
+        "enemyCanReachStartAfter": 30,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-settlement-defense": {
+        "hintCount": 24,
+        "confirmedDoors": 24,
+        "doorsWithUsableLinks": 24,
+        "directedDoorLinks": 144,
+        "candidateSpawns": 197,
+        "enemyCanReachStartBefore": 8,
+        "enemyCanReachStartAfter": 47,
+        "ordinaryWallsIgnored": false
+      },
+      "grineer-shipyards-interception": {
+        "hintCount": 9,
+        "confirmedDoors": 9,
+        "doorsWithUsableLinks": 7,
+        "directedDoorLinks": 42,
+        "candidateSpawns": 53,
+        "enemyCanReachStartBefore": 11,
+        "enemyCanReachStartAfter": 53,
+        "ordinaryWallsIgnored": false
+      },
+      "infested-corpus-defense": {
+        "hintCount": 0,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 102,
+        "enemyCanReachStartBefore": 12,
+        "enemyCanReachStartAfter": 12,
+        "ordinaryWallsIgnored": false
+      },
+      "orokin-tower-defense": {
+        "hintCount": 38,
+        "confirmedDoors": 5,
+        "doorsWithUsableLinks": 5,
+        "directedDoorLinks": 30,
+        "candidateSpawns": 86,
+        "enemyCanReachStartBefore": 82,
+        "enemyCanReachStartAfter": 86,
+        "ordinaryWallsIgnored": false
+      },
+      "orokin-derelict-defense": {
+        "hintCount": 17,
+        "confirmedDoors": 15,
+        "doorsWithUsableLinks": 15,
+        "directedDoorLinks": 90,
+        "candidateSpawns": 150,
+        "enemyCanReachStartBefore": 68,
+        "enemyCanReachStartAfter": 75,
+        "ordinaryWallsIgnored": false
+      },
+      "orokin-moon-defense": {
+        "hintCount": 6,
+        "confirmedDoors": 4,
+        "doorsWithUsableLinks": 4,
+        "directedDoorLinks": 20,
+        "candidateSpawns": 65,
+        "enemyCanReachStartBefore": 17,
+        "enemyCanReachStartAfter": 29,
+        "ordinaryWallsIgnored": false
+      },
+      "entrati-lab-mirror-defense-ear": {
+        "hintCount": 9,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 156,
+        "enemyCanReachStartBefore": 156,
+        "enemyCanReachStartAfter": 156,
+        "ordinaryWallsIgnored": false
+      },
+      "entrati-lab-mirror-defense-eye": {
+        "hintCount": 9,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 179,
+        "enemyCanReachStartBefore": 93,
+        "enemyCanReachStartAfter": 93,
+        "ordinaryWallsIgnored": false
+      },
+      "lastwish-grineer-mirror-defense": {
+        "hintCount": 24,
+        "confirmedDoors": 24,
+        "doorsWithUsableLinks": 24,
+        "directedDoorLinks": 144,
+        "candidateSpawns": 197,
+        "enemyCanReachStartBefore": 8,
+        "enemyCanReachStartAfter": 47,
+        "ordinaryWallsIgnored": false
+      },
+      "lastwish-corpus-mirror-defense": {
+        "hintCount": 12,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 83,
+        "enemyCanReachStartBefore": 5,
+        "enemyCanReachStartAfter": 5,
+        "ordinaryWallsIgnored": false
+      },
+      "1999-temple-defense-underground": {
+        "hintCount": 0,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 120,
+        "enemyCanReachStartBefore": 17,
+        "enemyCanReachStartAfter": 17,
+        "ordinaryWallsIgnored": false
+      },
+      "corpus-ice-defense": {
+        "hintCount": 0,
+        "confirmedDoors": 0,
+        "doorsWithUsableLinks": 0,
+        "directedDoorLinks": 0,
+        "candidateSpawns": 113,
+        "enemyCanReachStartBefore": 35,
+        "enemyCanReachStartAfter": 35,
+        "ordinaryWallsIgnored": false
+      }
+    }
+  },
+  "groundGeometry": {
+    "file": "visual-ground-geometry.json.gz",
+    "sha256": "a6a9ffbc12e5cdb5b7faa33bd3a9ea1797ce7111f77ce64bd5278b424af94593",
+    "jsonSha256": "750e38e5203a82e7fd9d5e8693ac026776993333afc2b5e733e90a6c9a0be720",
+    "compressedBytes": 13899,
+    "jsonBytes": 85337
   }
 }

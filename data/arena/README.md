@@ -34,6 +34,13 @@ Root resolution uses `WF_RIVEN_ROOT`, then PyInstaller `sys._MEIPASS`, then the 
 
 Rows retain source agent/tier/probability/cap/weaponOverrides and declaring-type provenance. STANDARD avatar selection uses exact ancestor resolution. Optional scenario weighting normalizes positive runnable rows within the user-selected tier; it does not claim native observed spawn frequency or exact runtime tier progression.
 
+### What source tier means
+
+A source `tier` is an integer grouping/selection label on each EnemySpec row, not a wave number, enemy level, rarity or reward rotation. Current GrineerDefenseA has0-4; CorpusSquadDefenseB has0-4 plus9; CorpusShipPurgatorySquad uses90/95. Different rows of the same agent can have different tier/weight/cap. Current WaveDefend bytecode contains tier alongside enemySpec, probability, maxSimultaneous, mergeSymbol and spawn-schedule generation. This supports a source spawning partition; the full Director rule selecting tier from wave, level, elapsed time and mission state has not been recovered. Do not label tier0 as wave1 or tier3 as level3.
+
+For example, GrineerDefenseA tier0 has6 raw rows and probability sum2.750000021; its tier3 has6 rows and sum0.425000013. CorpusSquadDefenseB tier9 has11 rows, each probability1, with separate simultaneous caps. These coefficients are not unconditional enemy composition percentages. The arena's explicitly selected-tier positive runnable-weight normalization and cap0-as-unlimited policy are workload choices. A node's exact primary/extra EnemySpec association does not establish that it uses every listed tier, or that a selected tier matches its current live mission phase. Source tier and the separately selected enemy level remain separate controls.
+
+
 `mission-coverage.json` and catalog enemySpecSources join strictly consecutive current SolarMap MissionInfo fields: Proc, primary EnemySpec, advanced-spawner array, VIP agent, extra EnemySpec. This avoids absorbing unrelated hidden mission records. Each group carries Chinese names, missions/mapIds, source-match status, selectionEnabled and unsupportedReason. Same-map different-faction groups remain separate.
 
 Rebuild explicit node-referenced groups with the existing importer using `--enemy-specs-only --mission-coverage data/arena/mission-coverage.json --packages-bin <Packages.bin_H> --enemy-specs-source <case>/evidence/spawn/enemy-specs.json`, then rerun import_arena_missions.py for the metadata join. Original enemy data probabilities and caps are not retuned by that join.
@@ -90,3 +97,14 @@ The ice-planet template contains one legitimate serialized but geometrically deg
 Arena-world-v2 uses current directed ground-graph strongly connected components for unreachable staging, including admitted stairs/steps. Opponents approach source-qualified visible staging nodes; reverse flows are reused. A crowded moving actor can make a short supported, wall-checked and continuously separated detour from its actual feet. It cannot teleport to its previous graph node. If a target's floor is unreachable but a legal firing position is reachable, the player can use that firing position without inventing an inter-component edge.
 
 Fixed-position requests explicitly identify a source triangle and XYZ point. Validation allows small vertical projection onto that triangle only, with support and body-clearance checks. The mode suppresses all player navigation and returns ordinary-enemy spawn reachability as a qualification, not a promise of universal line of sight. Missing native offmesh/ladder information remains an accuracy limitation.
+
+
+## Source-qualified open doors
+
+`door-geometry.json.gz` is a separate versioned asset (`arena-source-doors/v1`) with compressed/decompressed SHA256 in `catalog.doorGeometry`. Every current map has an audit record. Door admission joins a real NpcDoorHint, authored scope, moving or attached leaves, trigger, explicit dimensions and compatible doorway anchors; unconfirmed variants stay in rejectedHints. Each admitted crossing links real opposite-side NAV faces and passes bounded ground/body checks. The finite threshold slab follows source door anchors. No ordinary wall triangle is removed or globally ignored.
+
+Movement is always open by scenario policy. `doorSight=open|closed` applies separately to finite source aperture planes for sight/hit/proc-neighbor/protection queries. Ground/support/body-motion queries remain open. Source state is not a claim about native lock animation or faction permissions. Job-local query copies prevent UI standing-point validation from changing a running world's door state or disabled links.
+
+`visual-ground-geometry.json.gz` contains only exact source floor/stair triangles used as witnesses for admitted local ground connections, with mesh hashes and triangle IDs. It is not a wholesale conversion of decoration to collision. Both sidecars are recorded in exported result sources.
+
+Rebuild with `tools/import_arena_scene.py --source-doors --case-root <case> --packages-bin <Packages.bin_H>` and `--source-ground` for the bounded witnessed ground pass. Complete raw source geometry is kept in the research case, not copied into the runtime as unclassified collision.

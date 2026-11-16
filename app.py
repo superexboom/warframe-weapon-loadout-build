@@ -7258,15 +7258,17 @@ def _arena_context(payload):
 
 
 def arena_catalog_payload():
-    from wfarsenal.arena_scene import list_maps, mission_coverage
+    from wfarsenal.arena_scene import list_maps, mission_coverage, scene_catalog
     from wfarsenal.arena import MODEL, defaults, enemy_specs
     coverage = mission_coverage()
     sources = coverage["enemySpecSources"]
+    door_summaries = scene_catalog().get("doorGeometry", {}).get("maps", {})
+    maps = [dict(m, doorSummary=door_summaries.get(m["id"])) for m in list_maps()]
     specs=[]
     for spec in enemy_specs()["specs"]:
         rows=[dict(avatar=r["resolvedAvatarPath"], name=(MANUAL_ENEMIES_BY_PATH.get(r["resolvedAvatarPath"],{}).get("nameZh") or MANUAL_ENEMIES_BY_PATH.get(r["resolvedAvatarPath"],{}).get("nameEn") or r["agent"].rsplit("/",1)[-1]), tier=r["tier"],weight=r["probability"],cap=r.get("maxSimultaneous")) for r in spec["enemies"] if r.get("runnable")]
         specs.append(dict(**sources[spec["path"]], id=spec["path"], name=spec["path"].rsplit("/",1)[-1],tiers=sorted({r["tier"] for r in rows}),rows=rows))
-    return {"enemySpecs":specs,"maps":list_maps(), "missionCoverage":coverage, "enemies":[{"path":e["path"], "nameZh":e.get("nameZh"), "name":e.get("nameZh") or e.get("name") or e.get("nameEn"),
+    return {"enemySpecs":specs,"maps":maps, "missionCoverage":coverage, "enemies":[{"path":e["path"], "nameZh":e.get("nameZh"), "name":e.get("nameZh") or e.get("name") or e.get("nameEn"),
             "nameEn":e.get("nameEn"), "faction":e.get("faction"), "hasHeadProxy":e.get("hasHeadProxy", False)}
             for e in MANUAL_ENEMIES if e.get("complete") is not False],
             "defaults":defaults(_BENCHMARK_ENEMY_PATH), "model":MODEL,

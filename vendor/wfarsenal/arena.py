@@ -15,7 +15,7 @@ from . import parallel
 from .arena_scene import load_scene, distance, Edge, ROOT
 from .arena_combat import ArenaCombat, UnsupportedArenaCombat
 
-MODEL = "arena-world-v2"
+MODEL = "arena-world-v3"
 VITUS_DROP_CHANCE = 0.06
 DRONE = "/Lotus/Types/Enemies/Corpus/Drones/AIWeek/CorpusEliteShieldDroneAvatar"
 EPS = 1e-8
@@ -41,6 +41,7 @@ def defaults(enemy=""):
         enemy=enemy,
         headshots=True,
         movement="parkour",
+        doorSight="open",
         enemySpec="single",
         tier=0,
         droneEvery=7,
@@ -93,6 +94,8 @@ def normalize_scenario(value):
         or c["movement"] not in ("parkour", "walking", "fixed")
     ):
         raise ValueError("invalid arena mode/region/movement")
+    if c["doorSight"] not in ("open", "closed"):
+        raise ValueError("invalid doorSight")
     if c["movement"] == "fixed":
         point = c.get("fixedPosition")
         if (
@@ -173,7 +176,9 @@ class World:
         self.c = context["scenario"]
         self.cancelled = cancelled
         self.progress = progress
-        self.scene = load_scene(self.c["mapId"])
+        self.scene = load_scene(self.c["mapId"]).with_door_sight(
+            self.c.get("doorSight", "open")
+        )
         self.scene.reset_runtime()
         if self.cancelled():
             raise InterruptedError("已取消")
@@ -267,6 +272,11 @@ class World:
             crowdWaitSeconds=0.0,
             spawnQueued=0,
             enemyUnreachableSeconds=0.0,
+            confirmedDoors=len(self.scene.doors),
+            doorLinks=sum(
+                edge.kind == "door" for edges in self.scene.graph for edge in edges
+            ),
+            doorSight=self.scene.door_sight,
         )
         self.diagnostics = [
             "生成数量/无人机频率为可复现场景参数，尚未还原原生Director",
@@ -274,6 +284,7 @@ class World:
             "精细外观与碰撞分开；静态墙板已纳入，未恢复原生BSP材质",
             "无扩散、瞬时瞄准；敌人身体与弱点采用固定几何代理",
             "精华按无人机击杀与公开表6%统计，不代表真实任务每分钟收益",
+            "确认门口按常开通行；视线可独立选择，门槛仅在源门洞内抽象衔接，不开放普通墙体",
         ]
         if self.cancelled():
             raise InterruptedError("已取消")
@@ -2815,7 +2826,15 @@ class World:
             actor.drone
             or actor.edge is None
             or actor.edge["kind"]
-            not in ("walk", "stairs", "step", "step-down", "crowd-yield")
+            not in (
+                "walk",
+                "stairs",
+                "step",
+                "step-down",
+                "crowd-yield",
+                "door",
+                "source-floor-step",
+            )
         ):
             return False
         actor.crowd_retry_after = now + 1.0
@@ -2903,7 +2922,15 @@ class World:
                     self.motion_cache[link.key] = self.scene.check_motion(
                         points,
                         ground_step=link.kind
-                        in ("walk", "stairs", "step", "step-down", "crowd-yield"),
+                        in (
+                            "walk",
+                            "stairs",
+                            "step",
+                            "step-down",
+                            "crowd-yield",
+                            "door",
+                            "source-floor-step",
+                        ),
                     )["clear"]
                 if not self.motion_cache[link.key]:
                     self.scene.disabled.add(link.key)
@@ -3163,7 +3190,11 @@ class World:
             loadout=self.context["loadout"],
             scenario=self.c,
             weaponName=self.context["weapon_name"],
-            sources=self.scene.sources,
+            sources=dict(
+                self.scene.sources,
+                doorGeometry=self.scene.door_source,
+                groundGeometry=self.scene.ground_source,
+            ),
             diagnostics=list(
                 dict.fromkeys([*self.diagnostics, *self.combat.diagnostics])
             ),

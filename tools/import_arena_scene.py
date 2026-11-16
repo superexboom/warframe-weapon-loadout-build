@@ -851,61 +851,80 @@ def prepare_raw_tile(
                 continue
             key = tuple(sorted((ca, cb)))
             length = math.dist(pa, pb)
-            if key not in best or length < best[key][0]:
-                best[key] = (length, fa, fb, pa, pb)
+            options = best.setdefault(key, [])
+            options.append((length, fa, fb, pa, pb))
+            options.sort(
+                key=lambda candidate: (candidate[0], candidate[1], candidate[2])
+            )
+            del options[8:]
     step_links = []
-    for length, fa, fb, pa, pb in best.values():
-        raw_points = [nodes[fa], pa, pb, nodes[fb]]
-        supported, valid = [], True
-        for aa, bb in zip(raw_points, raw_points[1:]):
-            sample_count = max(2, int(math.dist(aa, bb) / 0.12) + 1)
-            for k in range(sample_count):
-                ratio = k / sample_count
-                foot = tuple(aa[i] * (1 - ratio) + bb[i] * ratio for i in range(3))
-                hit = bvh.raycast((foot[0], foot[1] + 0.5, foot[2]), (0, -1, 0), 1.1)
-                if not hit:
-                    valid = False
-                    break
-                point = hit.position
-                if supported and abs(point[1] - supported[-1][1]) > 0.5:
-                    valid = False
-                    break
-                if supported:
-                    last = supported[-1]
-                    for dx, dz in ((0, 0), (0.2, 0), (-0.2, 0), (0, 0.2), (0, -0.2)):
-                        for height in (0.5, 1, 1.65):
-                            y = max(point[1], last[1]) + height
-                            delta = (point[0] - last[0], 0, point[2] - last[2])
-                            dist = math.sqrt(sum(x * x for x in delta))
-                            if dist > 1e-5 and bvh.raycast(
-                                (last[0] + dx, y, last[2] + dz), delta, dist - 1e-4
-                            ):
-                                valid = False
-                                break
-                        if not valid:
-                            break
-                supported.append(point)
-            if not valid:
+    accepted_component_pairs = set()
+    for pair, options in best.items():
+        for candidate_rank, (length, fa, fb, pa, pb) in enumerate(options):
+            if pair in accepted_component_pairs:
                 break
-        if valid:
-            supported.append(nodes[fb])
-            walklen = sum(math.dist(a, b) for a, b in zip(supported, supported[1:]))
-            for u, v, pts in ((fa, fb, supported), (fb, fa, supported[::-1])):
-                step_links.append(
-                    {
-                        "from": u,
-                        "to": v,
-                        "kind": "step",
-                        "points": pts,
-                        "seconds": walklen / 6,
-                        "enemy": True,
-                        "enemySeconds": walklen / 3.6,
-                        "source": {
-                            "type": "derived-supported-boundary-step",
-                            "qualification": "continuous source CSG/NAV proxy support each .12, <=.5 step, body rails .2; not native game bridge",
-                        },
-                    }
-                )
+            raw_points = [nodes[fa], pa, pb, nodes[fb]]
+            supported, valid = [], True
+            for aa, bb in zip(raw_points, raw_points[1:]):
+                sample_count = max(2, int(math.dist(aa, bb) / 0.12) + 1)
+                for k in range(sample_count):
+                    ratio = k / sample_count
+                    foot = tuple(aa[i] * (1 - ratio) + bb[i] * ratio for i in range(3))
+                    hit = bvh.raycast(
+                        (foot[0], foot[1] + 0.5, foot[2]), (0, -1, 0), 1.1
+                    )
+                    if not hit:
+                        valid = False
+                        break
+                    point = hit.position
+                    if supported and abs(point[1] - supported[-1][1]) > 0.5:
+                        valid = False
+                        break
+                    if supported:
+                        last = supported[-1]
+                        for dx, dz in (
+                            (0, 0),
+                            (0.2, 0),
+                            (-0.2, 0),
+                            (0, 0.2),
+                            (0, -0.2),
+                        ):
+                            for height in (0.5, 1, 1.65):
+                                y = max(point[1], last[1]) + height
+                                delta = (point[0] - last[0], 0, point[2] - last[2])
+                                dist = math.sqrt(sum(x * x for x in delta))
+                                if dist > 1e-5 and bvh.raycast(
+                                    (last[0] + dx, y, last[2] + dz), delta, dist - 1e-4
+                                ):
+                                    valid = False
+                                    break
+                            if not valid:
+                                break
+                    supported.append(point)
+                if not valid:
+                    break
+            if valid:
+                accepted_component_pairs.add(pair)
+                supported.append(nodes[fb])
+                walklen = sum(math.dist(a, b) for a, b in zip(supported, supported[1:]))
+                for u, v, pts in ((fa, fb, supported), (fb, fa, supported[::-1])):
+                    step_links.append(
+                        {
+                            "from": u,
+                            "to": v,
+                            "kind": "step",
+                            "points": pts,
+                            "seconds": walklen / 6,
+                            "enemy": True,
+                            "enemySeconds": walklen / 3.6,
+                            "source": {
+                                "type": "derived-supported-boundary-step",
+                                "candidateRank": candidate_rank,
+                                "boundedCandidateCount": len(options),
+                                "qualification": "continuous source CSG/NAV proxy support each .12, <=.5 step, body rails .2; not native game bridge",
+                            },
+                        }
+                    )
     # Closest-origin landing can be an isolated defense platform. Keep that
     # exact landing, but let player-only bounded arcs leave it. Enemy ground
     # eligibility remains false; no fake ground edges are introduced.
@@ -2012,6 +2031,870 @@ def audit_visual_support(output: Path, case_root: Path, *, map_ids=None):
     return results
 
 
+def import_source_doors(
+    case_root: Path, packages_bin: Path, output: Path, *, map_ids=None
+):
+    """Join exact NpcDoorHint/Mover/trigger source groups into qualified portals.
+
+    A mesh name alone never grants passage. Doors require exact NpcDoorHint,
+    same authored prefab scope, two paired Mover leaves with explicit keys,
+    DoorTrigger tag and dimensions, and a static frame mesh. Every emitted
+    crossing is tested against existing collision without ignoring any wall.
+    """
+    from collections import defaultdict, Counter
+    from import_melee_mechanics import Packages
+    from wfarsenal.arena_scene import ArenaScene
+
+    package = Packages(packages_bin)
+    catalog = json.loads((output / "catalog.json").read_text(encoding="utf8"))
+    existing_sidecar = output / "door-geometry.json.gz"
+    maps = (
+        json.loads(gzip.decompress(existing_sidecar.read_bytes())).get("maps", {})
+        if existing_sidecar.exists()
+        else {}
+    )
+
+    def rotate(point, q):
+        a = _cross(q[:3], point)
+        b = _cross(q[:3], a)
+        return tuple(point[i] + 2 * (q[3] * a[i] + b[i]) for i in range(3))
+
+    def local(point, entity):
+        q = entity["quaternion"]
+        return rotate(_sub(point, entity["position"]), (-q[0], -q[1], -q[2], q[3]))
+
+    def values(raw, key):
+        found = re.search(r"^" + re.escape(key) + r"=\{([^}]+)\}", raw, re.M)
+        return [float(x) for x in found[1].split(",")] if found else None
+
+    for map_id, entry in catalog["maps"].items():
+        if map_ids and map_id not in map_ids:
+            continue
+        tile = entry["sourceTile"]
+        name = tile.rsplit("/", 1)[-1]
+        source = (
+            case_root
+            / "work/geometry"
+            / ("galleon" if name == "GrnDefenceTwo" else "map-coverage/" + name)
+        )
+        if name == "ObjDefense01":
+            source = case_root / "work/geometry"
+        entities, provenance = _read_visual_level(source, tile)
+        by_scope = defaultdict(list)
+        for entity in entities:
+            by_scope[entity["scope"]].append(entity)
+        raw = json.loads(
+            gzip.decompress((output / entry["assets"]["scene"]["file"]).read_bytes())
+        )
+        navigation = json.loads(
+            gzip.decompress(
+                (output / entry["assets"]["navigation"]["file"]).read_bytes()
+            )
+        )
+        scene = ArenaScene(raw, navigation, map_id=map_id)
+        visual = json.loads(
+            gzip.decompress(
+                (output / entry["assets"]["visual-map"]["file"]).read_bytes()
+            )
+        )
+        visual_by_entity = {i["entityId"]: i for i in visual["instances"]}
+        doors, links, rejected = [], [], []
+        for hint in entities:
+            if hint["type"] != "/EE/Types/Npc/NpcDoorHint":
+                continue
+            group = by_scope[hint["scope"]]
+            movers = [
+                e
+                for e in group
+                if e["type"] == "/EE/Types/Engine/Mover"
+                and re.search(r"^MoverKeys=\{", e["attributes"], re.M)
+            ]
+            trigger = next(
+                (
+                    e
+                    for e in group
+                    if re.search(r"^Tag=DoorTrigger$", e["attributes"], re.M)
+                ),
+                None,
+            )
+            frames = [
+                e
+                for e in group
+                if e["type"]
+                in ("/EE/Types/Engine/Decoration", "/EE/Types/Alias/Decoration")
+                and "DoorFrame" in e["attributes"]
+            ]
+            attached_leaves = [
+                entity
+                for entity in group
+                if re.search(r"^Attached=1$", entity["attributes"], re.M)
+                and re.search(r"^AttachParent=Mover\d+$", entity["attributes"], re.M)
+            ]
+            thin_triggers = []
+            for entity in group:
+                if (
+                    entity["type"] != "/EE/Types/Game/MultiAvatarTrigger"
+                    or entity is trigger
+                ):
+                    continue
+                raw_dims = values(entity["attributes"], "Dimensions")
+                dims = None
+                if raw_dims and len(raw_dims) == 3:
+                    corners = [
+                        local(transform((x, y, z), dict(entity, scale=1.0)), hint)
+                        for x in (-raw_dims[0] / 2, raw_dims[0] / 2)
+                        for y in (-raw_dims[1] / 2, raw_dims[1] / 2)
+                        for z in (-raw_dims[2] / 2, raw_dims[2] / 2)
+                    ]
+                    dims = [max(p[i] for p in corners) - min(p[i] for p in corners) for i in range(3)]
+                    # Existing templates serialize the trigger Dimensions
+                    # in their authored door axes; other prefabs rotate the
+                    # trigger90deg. Preserve the explicit narrow descriptor,
+                    # using transformed extents only when it is not narrow.
+                    if 0.05 <= raw_dims[2] <= 1.0:
+                        dims = raw_dims
+                if (
+                    dims
+                    and len(dims) == 3
+                    and 1.8 <= dims[1] <= 8
+                    and 0.05 <= dims[2] <= 1.0
+                    and math.dist(entity["position"], hint["position"]) <= 6
+                ):
+                    thin_triggers.append((entity, dims))
+            threshold = (
+                min(thin_triggers, key=lambda item: item[1][2])
+                if thin_triggers
+                else None
+            )
+            if (
+                len(movers) < 2
+                or trigger is None
+                or not (frames or (len(attached_leaves) >= 2 and threshold))
+            ):
+                rejected.append(
+                    {
+                        "entityId": hint["id"],
+                        "scope": hint["scope"],
+                        "reason": "insufficient joined DoorHint/MoverKeys/DoorTrigger/frame evidence",
+                    }
+                )
+                continue
+            dimensions = values(trigger["attributes"], "Dimensions")
+            width_match = re.search(r"^Width=([^\n]+)$", hint["attributes"], re.M)
+            width = (
+                float(width_match[1])
+                if width_match
+                else package.resolve(hint["type"]).get("Width")
+            )
+            if not width and threshold:
+                width = threshold[1][0]
+            if not width or not dimensions or len(dimensions) != 3 or dimensions[1] < 2:
+                rejected.append(
+                    {
+                        "entityId": hint["id"],
+                        "reason": "missing explicit width or usable trigger dimensions",
+                    }
+                )
+                continue
+            # Source Width is used conservatively as FULL traversable width;
+            # only inner2.0m is opened for the wider6m source trigger/frame.
+            half_width = min(float(width) * 0.5, dimensions[0] * 0.5)
+            height = min(3.0, dimensions[1])
+            normal = rotate((0.0, 0.0, 1.0), hint["quaternion"])
+            right = rotate((1.0, 0.0, 0.0), hint["quaternion"])
+            up = rotate((0.0, 1.0, 0.0), hint["quaternion"])
+            icons = [
+                entity
+                for entity in group
+                if entity["type"] == "/Lotus/Fx/Gameplay/DoorIcons/DoorIconPlaneGrineer"
+            ]
+            depths = [
+                abs(
+                    sum(
+                        (entity["position"][i] - hint["position"][i]) * normal[i]
+                        for i in range(3)
+                    )
+                )
+                for entity in icons
+            ]
+            # A confirmed door's threshold is wider than its thin detection
+            # trigger on some templates. Bound the abstract default-open
+            # transition by actual transformed source frame vertices AND the
+            # tagged trigger, never by arbitrary nearby empty space.
+            frame_depths, frame_sources = [], []
+            for frame in frames:
+                instance = visual_by_entity.get(frame["id"])
+                if instance is None:
+                    continue
+                mesh = visual["meshes"][instance["meshId"]]
+                positions = mesh["positions"]
+                projected = [
+                    local(transform(positions[k : k + 3], instance), hint)[2]
+                    for k in range(0, len(positions), 3)
+                ]
+                frame_depths.extend(projected)
+                frame_sources.append(
+                    {
+                        "entityId": frame["id"],
+                        "mesh": mesh["path"],
+                        "meshSha256": mesh["sha256"],
+                        "normalBounds": [min(projected), max(projected)],
+                    }
+                )
+            trigger_corners = [
+                local(transform((x, y, z), dict(trigger, scale=1.0)), hint)
+                for x in (-dimensions[0] / 2, dimensions[0] / 2)
+                for y in (-dimensions[1] / 2, dimensions[1] / 2)
+                for z in (-dimensions[2] / 2, dimensions[2] / 2)
+            ]
+            frame_transition_bounds = None
+            if frame_depths:
+                low = max(min(frame_depths), min(p[2] for p in trigger_corners))
+                high = min(max(frame_depths), max(p[2] for p in trigger_corners))
+                if low < -0.15 and high > 0.15:
+                    frame_transition_bounds = (low, high)
+            if depths and all(0.2 <= depth <= 0.45 for depth in depths):
+                half_depth = 0.45
+                depth_basis = (
+                    "paired source door icon planes at normal offsets within .45"
+                )
+            elif threshold:
+                half_depth = threshold[1][2] * 0.5 + 0.05
+                depth_basis = "exact same-scope narrow MultiAvatarTrigger Dimensions depth/2 + .05"
+            elif frame_transition_bounds:
+                half_depth = max(abs(v) for v in frame_transition_bounds)
+                depth_basis = "actual source frame normal bounds intersected with oriented DoorTrigger bounds"
+            else:
+                rejected.append(
+                    {
+                        "entityId": hint["id"],
+                        "reason": "no bounded source leaf/threshold depth for this subtype",
+                        "iconDepths": depths,
+                    }
+                )
+                continue
+            transition_bounds = frame_transition_bounds or (-half_depth, half_depth)
+            door_id = map_id + ":source-door:" + str(hint["id"])
+            sides = [[], []]
+            for face, point in enumerate(scene.nodes):
+                pt = local(point, hint)
+                if (
+                    abs(pt[0]) <= half_width - 0.15
+                    and abs(pt[1]) <= 0.65
+                    and 0.15 < abs(pt[2]) <= 2.5
+                ):
+                    sides[pt[2] > 0].append((sum(x * x for x in pt), face, pt))
+            sides = [sorted(side)[:5] for side in sides]
+            emitted = 0
+            failed = []
+            for _, a, la in sides[0]:
+                for _, b, lb in sides[1]:
+                    start, end = scene.nodes[a], scene.nodes[b]
+                    if abs(start[1] - end[1]) > 0.45:
+                        continue
+                    count = max(3, int(math.dist(start, end) / 0.1) + 1)
+                    points = []
+                    okay = True
+                    support_gaps = []
+                    for index in range(count + 1):
+                        t = index / count
+                        expected = tuple(
+                            start[i] * (1 - t) + end[i] * t for i in range(3)
+                        )
+                        pt = local(expected, hint)
+                        trigger_point = local(expected, trigger)
+                        if (
+                            abs(pt[0]) > half_width - 0.1
+                            or abs(pt[1]) > 0.65
+                            or any(
+                                abs(trigger_point[i]) > dimensions[i] * 0.5 + 1e-4
+                                for i in range(3)
+                            )
+                        ):
+                            okay = False
+                            break
+                        hit = scene.ground_support(
+                            expected, max_drop=0.4, max_rise=0.25
+                        )
+                        if hit is None:
+                            # User-authorized abstract open door threshold:
+                            # supported NAV endpoints cross the confirmed door
+                            # once, within real frame/trigger normal bounds.
+                            # Missing middle NAV/proxy support is recorded;
+                            # no floor or collision exemption is synthesized.
+                            if not (
+                                transition_bounds[0] <= pt[2] <= transition_bounds[1]
+                            ) or index in (0, count):
+                                okay = False
+                                break
+                            support_gaps.append(
+                                {"sample": index, "position": expected, "local": pt}
+                            )
+                            foot = expected
+                        elif (
+                            abs(hit.position[1] - expected[1]) > 0.3
+                            or abs(hit.normal[1]) < 0.5
+                        ):
+                            okay = False
+                            break
+                        else:
+                            foot = tuple(hit.position)
+                        if points and abs(points[-1][1] - foot[1]) > 0.3:
+                            okay = False
+                            break
+                        points.append(foot)
+                    if not okay:
+                        failed.append(
+                            {
+                                "fromFace": a,
+                                "toFace": b,
+                                "reason": "door corridor lacked actual proxy ground support/width/step bound",
+                            }
+                        )
+                        continue
+                    motion = scene.check_motion(points, ground_step=True)
+                    if not motion["clear"]:
+                        failed.append(
+                            {
+                                "fromFace": a,
+                                "toFace": b,
+                                "reason": "nonignored source collision blocks body crossing",
+                                "hit": motion.get("hit"),
+                            }
+                        )
+                        continue
+                    length = sum(math.dist(x, y) for x, y in zip(points, points[1:]))
+                    for u, v, pts in ((a, b, points), (b, a, points[::-1])):
+                        links.append(
+                            {
+                                "doorId": door_id,
+                                "from": u,
+                                "to": v,
+                                "kind": "door",
+                                "points": pts,
+                                "thresholdSupportGaps": support_gaps,
+                                "thresholdPolicy": "user-authorized source-confirmed open door transition; unsupported middle samples bounded by actual source frame and oriented DoorTrigger (else declared leaf slab); two supported NAV endpoints; single plane crossing; original body collision checked; no added floors",
+                                "seconds": length / 6.0,
+                                "enemy": True,
+                                "enemySeconds": length / 3.6,
+                                "source": {
+                                    "type": "joined-source-npcdoorhint",
+                                    "entityId": hint["id"],
+                                    "scope": hint["scope"],
+                                    "qualification": "exact authored door scope + actual two-sided source NAV; ground/body checked without suppressing any collision; custom default-open state, not recovered animation",
+                                },
+                            }
+                        )
+                    emitted += 2
+                    if emitted >= 6:
+                        break
+                if emitted >= 6:
+                    break
+            center = tuple(hint["position"][i] + up[i] * height * 0.5 for i in range(3))
+            corners = [
+                tuple(
+                    hint["position"][i] + right[i] * x + up[i] * y + normal[i] * z
+                    for i in range(3)
+                )
+                for x in (-half_width, half_width)
+                for y in (0, height)
+                for z in (-half_depth, half_depth)
+            ]
+            keys = [e for e in group if e["type"] == "/EE/Types/Engine/MoverKey"]
+            doors.append(
+                {
+                    "id": door_id,
+                    "sourceEntityId": hint["id"],
+                    "sourceScope": hint["scope"],
+                    "sourceType": hint["type"],
+                    "sourcePosition": hint["position"],
+                    "sourceQuaternion": hint["quaternion"],
+                    "sourceDoorStatus": (
+                        re.search(r"^DoorStatus=([^\n]+)", hint["attributes"], re.M)[1]
+                        if re.search(r"^DoorStatus=([^\n]+)", hint["attributes"], re.M)
+                        else None
+                    ),
+                    "movementDefault": "open",
+                    "sightDefault": "open",
+                    "aperture": {
+                        "origin": hint["position"],
+                        "center": center,
+                        "right": right,
+                        "up": up,
+                        "normal": normal,
+                        "halfWidth": half_width,
+                        "height": height,
+                        "halfDepth": half_depth,
+                        "halfDepthSource": depth_basis,
+                        "transitionNormalBounds": transition_bounds,
+                        "transitionBoundsSources": frame_sources,
+                        "transitionPolicy": "abstract confirmed open door threshold, not recovered source animation or synthesized floor",
+                        "aabb": [
+                            [min(p[i] for p in corners) for i in range(3)],
+                            [max(p[i] for p in corners) for i in range(3)],
+                        ],
+                        "qualification": "conservative source Width full-width corridor, trigger height clipped3; finite plane only, do not exempt surrounding wall or arbitrary AABB volume",
+                    },
+                    "sourceThresholdTrigger": (
+                        {
+                            "entityId": threshold[0]["id"],
+                            "dimensions": values(threshold[0]["attributes"], "Dimensions"),
+                            "dimensionsInDoorAxes": threshold[1],
+                            "quaternion": threshold[0]["quaternion"],
+                            "position": threshold[0]["position"],
+                        }
+                        if threshold
+                        else None
+                    ),
+                    "sourceAttachedLeafEntityIds": [
+                        entity["id"] for entity in attached_leaves
+                    ],
+                    "sourceTrigger": {
+                        "entityId": trigger["id"],
+                        "position": trigger["position"],
+                        "dimensions": dimensions,
+                        "attributes": trigger["attributes"],
+                    },
+                    "sourceMovers": [
+                        {
+                            "entityId": e["id"],
+                            "position": e["position"],
+                            "quaternion": e["quaternion"],
+                            "attributes": e["attributes"],
+                        }
+                        for e in movers
+                    ],
+                    "sourceMoverKeys": [
+                        {
+                            "entityId": e["id"],
+                            "position": e["position"],
+                            "attributes": e["attributes"],
+                        }
+                        for e in keys
+                    ],
+                    "sourceFrames": [
+                        {
+                            "entityId": e["id"],
+                            "position": e["position"],
+                            "quaternion": e["quaternion"],
+                            "attributes": e["attributes"],
+                        }
+                        for e in frames
+                    ],
+                    "movementCollisionExemptions": [],
+                    "ordinaryWallsRemainSolid": True,
+                    "sideFaces": [[x[1] for x in side] for side in sides],
+                    "emittedDirectedLinks": emitted,
+                    "rejectedCrossings": failed,
+                    "qualification": "confirmed authored door entity join; movement opens only emitted checked portal routes; optional closed LOS may intersect finite source plane; no source-wall blanket ignore",
+                }
+            )
+        visual_ids = set()
+        visual = json.loads(
+            gzip.decompress(
+                (output / entry["assets"]["visual-map"]["file"]).read_bytes()
+            )
+        )
+        visual_ids = {instance["entityId"] for instance in visual["instances"]}
+        for door in doors:
+            door["leafEntityIds"] = [
+                entity["entityId"] for entity in door["sourceMovers"]
+            ] + door.get("sourceAttachedLeafEntityIds", [])
+            door["frameEntityIds"] = [
+                entity["entityId"] for entity in door["sourceFrames"]
+            ]
+            door["visualLeafEntityIds"] = [
+                ident for ident in door["leafEntityIds"] if ident in visual_ids
+            ]
+            door["visualLeafPolicy"] = (
+                "default-open hides only these exact source leaf entities; current dynamic leaves absent from static visuals need no hide; never hide frameEntityIds"
+            )
+            aperture = door["aperture"]
+            aperture["planeConstant"] = -sum(
+                aperture["normal"][i] * aperture["center"][i] for i in range(3)
+            )
+            icons = [
+                entity
+                for entity in by_scope[door["sourceScope"]]
+                if entity["type"] == "/Lotus/Fx/Gameplay/DoorIcons/DoorIconPlaneGrineer"
+            ]
+            door["sourceDoorIcons"] = [
+                {"entityId": entity["id"], "position": entity["position"]}
+                for entity in icons
+            ]
+        # Reachability comparison under source-qualified door links.
+        before = scene.search(scene.start["face"], "enemy", True)
+        for link in links:
+            scene._add(
+                link["from"],
+                link["to"],
+                link["points"],
+                link["kind"],
+                link["seconds"],
+                True,
+                link["enemySeconds"],
+                link["source"],
+            )
+        after = scene.search(scene.start["face"], "enemy", True)
+        candidates = [s for s in scene.spawns if s.get("accepted")]
+        summary = {
+            "hintCount": sum(
+                e["type"] == "/EE/Types/Npc/NpcDoorHint" for e in entities
+            ),
+            "confirmedDoors": len(doors),
+            "doorsWithUsableLinks": sum(d["emittedDirectedLinks"] > 0 for d in doors),
+            "directedDoorLinks": len(links),
+            "candidateSpawns": len(candidates),
+            "enemyCanReachStartBefore": sum(
+                math.isfinite(before.d[s["face"]]) for s in candidates
+            ),
+            "enemyCanReachStartAfter": sum(
+                math.isfinite(after.d[s["face"]]) for s in candidates
+            ),
+            "ordinaryWallsIgnored": False,
+        }
+        maps[map_id] = {
+            "sourceTile": tile,
+            **provenance,
+            "doors": doors,
+            "links": links,
+            "rejectedHints": rejected,
+            "summary": summary,
+        }
+        print(json.dumps({"mapId": map_id, **summary}), flush=True)
+    value = {
+        "schema": "arena-source-doors/v1",
+        "parserVersion": PARSER_VERSION + "/source-doors-v2",
+        "packagesSha256": sha(packages_bin),
+        "policy": {
+            "doorMovement": "open",
+            "doorSight": "open",
+            "version": "confirmed-open-threshold-v2",
+            "thresholdSupport": "user-authorized abstract default-open door transition: supported source NAV endpoints, step bound, single door-plane crossing, actual frame normal extent intersected with oriented tagged trigger; missing middle proxy floor recorded, never synthesized",
+            "qualification": "scenario default state; source runtime animation/lockdown not simulated; all body crossings checked against ordinary original wall collision; finite confirmed door only, never names or mapwide wall exemption",
+        },
+        "maps": maps,
+    }
+    target = output / "door-geometry.json.gz"
+    raw = compact(value)
+    target.write_bytes(gzip.compress(raw, compresslevel=9, mtime=0))
+    latest = json.loads((output / "catalog.json").read_text(encoding="utf8"))
+    latest["doorGeometry"] = {
+        "file": target.name,
+        "schema": value["schema"],
+        "sha256": sha(target),
+        "jsonSha256": hashlib.sha256(raw).hexdigest(),
+        "compressedBytes": target.stat().st_size,
+        "jsonBytes": len(raw),
+        "maps": {key: record["summary"] for key, record in maps.items()},
+        "mapSummaries": {key: record["summary"] for key, record in maps.items()},
+    }
+    (output / "catalog.json").write_text(
+        json.dumps(latest, ensure_ascii=False, indent=2) + "\n", encoding="utf8"
+    )
+    (case_root / "evidence/geometry/source-door-geometry.json").write_text(
+        json.dumps(value, ensure_ascii=False, indent=2), encoding="utf8"
+    )
+    return value
+
+
+def import_visual_ground_links(case_root, packages_bin, output, *, map_ids=None):
+    """Recover short boundary transitions using exact static floor/stair mesh support.
+
+    Adds no synthetic plane, never broadens movement thresholds. Output is a
+    separate qualified support/candidate-link sidecar; base NAV/BSP unchanged.
+    """
+    from wfarsenal.arena_scene import load_scene
+    from collections import defaultdict, Counter
+    from import_melee_mechanics import Packages
+
+    package = Packages(packages_bin)
+    catalog = json.loads((output / "catalog.json").read_text(encoding="utf8"))
+    previous_path = output / "visual-ground-geometry.json.gz"
+    records = (
+        json.loads(gzip.decompress(previous_path.read_bytes())).get("maps", {})
+        if previous_path.exists()
+        else {}
+    )
+    for map_id, entry in catalog["maps"].items():
+        if map_ids and map_id not in map_ids:
+            continue
+        tile = entry["sourceTile"]
+        name = tile.rsplit("/", 1)[-1]
+        source = (
+            case_root
+            / "work/geometry"
+            / ("galleon" if name == "GrnDefenceTwo" else "map-coverage/" + name)
+        )
+        if name == "ObjDefense01":
+            source = case_root / "work/geometry"
+        entities, _ = _read_visual_level(source, tile)
+        byid = {e["id"]: e for e in entities}
+        scene = load_scene(map_id)
+        components = scene.movement_components("enemy")
+        visual = json.loads(
+            gzip.decompress(
+                (output / entry["assets"]["visual-map"]["file"]).read_bytes()
+            )
+        )
+        vertices, triangles, sources = [], [], []
+        for inst in visual["instances"]:
+            mesh = visual["meshes"][inst["meshId"]]
+            path = mesh["path"]
+            if not re.search(
+                r"Floor|Stair|Catwalk|Ramp|Platform|Walkway", path, re.I
+            ) or re.search(r"Railing|Cover|Decal|Light|Door|Water", path, re.I):
+                continue
+            entity = byid.get(inst["entityId"])
+            if not entity:
+                continue
+            override = re.search(r"^PhysicsBehavior=(.*)$", entity["attributes"], re.M)
+            physics = (
+                override[1].strip('"')
+                if override
+                else (
+                    package.resolve(entity["type"]).get("PhysicsBehavior")
+                    if package.exists(entity["type"])
+                    else None
+                )
+            )
+            if physics != "/EE/Types/Physics/Static":
+                continue
+            points = [
+                transform(mesh["positions"][i : i + 3], inst)
+                for i in range(0, len(mesh["positions"]), 3)
+            ]
+            for i in range(0, len(mesh["indices"]), 3):
+                ids = mesh["indices"][i : i + 3]
+                a, b, c = (points[k] for k in ids)
+                normal = _cross(_sub(b, a), _sub(c, a))
+                length = math.sqrt(_dot(normal, normal))
+                if length < 1e-6 or abs(normal[1]) / length < 0.55:
+                    continue
+                offset = len(vertices)
+                vertices.extend((a, b, c))
+                triangles.append([offset, offset + 1, offset + 2])
+                sources.append(
+                    {
+                        "entityId": inst["entityId"],
+                        "sourceMesh": path,
+                        "sourceMeshSha256": mesh["sha256"],
+                        "sourceTriangle": i // 3,
+                    }
+                )
+        support = TriangleBVH(vertices, triangles, native=True)
+        V = scene.raw["nav"]["vertices"]
+        T = scene.raw["nav"]["triangles"]
+        counts = Counter(
+            tuple(sorted((a, b)))
+            for t in T
+            for a, b in ((t[0], t[1]), (t[1], t[2]), (t[2], t[0]))
+        )
+        boundary = []
+        for f, t in enumerate(T):
+            for a, b in ((t[0], t[1]), (t[1], t[2]), (t[2], t[0])):
+                if counts[tuple(sorted((a, b)))] == 1:
+                    pt = tuple(
+                        (V[a][i] + V[b][i]) * 0.475 + scene.nodes[f][i] * 0.05
+                        for i in range(3)
+                    )
+                    boundary.append((f, pt))
+        candidates = defaultdict(list)
+        for index, (a, pa) in enumerate(boundary):
+            for b, pb in boundary[index + 1 :]:
+                if (
+                    components[a] == components[b]
+                    or abs(pa[1] - pb[1]) > 0.65
+                    or math.hypot(pa[0] - pb[0], pa[2] - pb[2]) > 2.0
+                ):
+                    continue
+                key = tuple(sorted((components[a], components[b])))
+                rows = candidates[key]
+                rows.append((math.dist(pa, pb), a, b, pa, pb))
+                rows.sort(key=lambda r: (r[0], r[1], r[2]))
+                del rows[16:]
+        links = []
+        failures = Counter()
+        for key, rows in candidates.items():
+            for rank, (_, a, b, pa, pb) in enumerate(rows):
+                baseline = [scene.nodes[a], pa, pb, scene.nodes[b]]
+                points = []
+                witness = []
+                valid = True
+                for start, end in zip(baseline, baseline[1:]):
+                    n = max(2, int(math.dist(start, end) / 0.12) + 1)
+                    for index in range(n):
+                        t = index / n
+                        expected = tuple(
+                            start[i] * (1 - t) + end[i] * t for i in range(3)
+                        )
+                        origin = (expected[0], expected[1] + 0.5, expected[2])
+                        old = scene.collision.raycast(origin, (0, -1, 0), 1.1)
+                        extra = support.raycast(origin, (0, -1, 0), 1.1)
+                        options = [
+                            (hit, kind)
+                            for hit, kind in ((old, "base"), (extra, "visual"))
+                            if hit and abs(hit.position[1] - expected[1]) <= 0.6
+                        ]
+                        if not options:
+                            failures["no-source-support"] += 1
+                            valid = False
+                            break
+                        hit, kind = min(
+                            options,
+                            key=lambda row: abs(row[0].position[1] - expected[1]),
+                        )
+                        if points and abs(hit.position[1] - points[-1][1]) > 0.5:
+                            failures["source-step-too-high"] += 1
+                            valid = False
+                            break
+                        points.append(hit.position)
+                        if kind == "visual":
+                            witness.append(
+                                {"sample": len(points) - 1, **sources[hit.triangle]}
+                            )
+                    if not valid:
+                        break
+                if not valid:
+                    continue
+                points.append(scene.nodes[b])
+                if not scene.check_motion(points, ground_step=True)["clear"]:
+                    failures["base-wall-body-blocked"] += 1
+                    continue
+                bodyclear = True
+                for aa, bb in zip(points, points[1:]):
+                    for dx, dz in ((0, 0), (0.2, 0), (-0.2, 0), (0, 0.2), (0, -0.2)):
+                        for h in (0.5, 1.0, 1.65):
+                            y = max(aa[1], bb[1]) + h
+                            direction = (bb[0] - aa[0], 0, bb[2] - aa[2])
+                            dist = math.sqrt(_dot(direction, direction))
+                            if dist > 1e-5 and support.raycast(
+                                (aa[0] + dx, y, aa[2] + dz), direction, dist - 1e-4
+                            ):
+                                bodyclear = False
+                                break
+                        if not bodyclear:
+                            break
+                    if not bodyclear:
+                        break
+                if not bodyclear:
+                    failures["source-floor-overhead-blocked"] += 1
+                    continue
+                if not witness:
+                    failures["no-new-visual-support-used"] += 1
+                    continue
+                # Retain small exact source support triangle footprints for the
+                # admitted path, not all eligible visual floors as new solids.
+                used_triangles = []
+                for index, tri_source in enumerate(sources):
+                    if any(
+                        tri_source["entityId"] == item["entityId"]
+                        and tri_source["sourceTriangle"] == item["sourceTriangle"]
+                        for item in witness
+                    ):
+                        used_triangles.append(index)
+                length = sum(math.dist(x, y) for x, y in zip(points, points[1:]))
+                for u, v, pts in ((a, b, points), (b, a, points[::-1])):
+                    links.append(
+                        {
+                            "from": u,
+                            "to": v,
+                            "kind": "source-floor-step",
+                            "points": pts,
+                            "seconds": length / 6.0,
+                            "enemy": True,
+                            "enemySeconds": length / 3.6,
+                            "source": {
+                                "type": "actual-static-visual-floor-supported-boundary",
+                                "candidateRank": rank,
+                                "supportTriangleIds": used_triangles,
+                                "supportWitness": witness,
+                                "qualification": "thresholds unchanged: <=2horizontal,.65endpoint height,.5localstep; exact visual floor support plus original wall collision; not recovered game offmesh",
+                            },
+                        }
+                    )
+                break
+        records[map_id] = {
+            "support": {
+                "vertices": vertices,
+                "triangles": triangles,
+                "triangleSources": sources,
+                "qualification": "exact upward-facing qualified static floor/stair/catwalk triangles only; not arbitrary prop solidity",
+            },
+            "links": links,
+            "failures": dict(failures),
+            "summary": {
+                "sourceFloorTriangles": len(triangles),
+                "directedGroundLinks": len(links),
+                "componentPairsTried": len(candidates),
+            },
+        }
+        print(
+            json.dumps(
+                {
+                    "mapId": map_id,
+                    **records[map_id]["summary"],
+                    "failures": dict(failures),
+                }
+            ),
+            flush=True,
+        )
+    value = {
+        "schema": "arena-source-ground/v1",
+        "packagesSha256": sha(packages_bin),
+        "maps": records,
+    }
+    # Compact support payload to only exact triangles witnessed by accepted links.
+    for record in records.values():
+        full = record["support"]
+        used = sorted(
+            {
+                index
+                for link in record["links"]
+                for index in link["source"]["supportTriangleIds"]
+            }
+        )
+        compact_vertices = []
+        compact_triangles = []
+        compact_sources = []
+        remap = {old: new for new, old in enumerate(used)}
+        for old in used:
+            tri = full["triangles"][old]
+            offset = len(compact_vertices)
+            compact_vertices.extend(full["vertices"][k] for k in tri)
+            compact_triangles.append([offset, offset + 1, offset + 2])
+            compact_sources.append(full["triangleSources"][old])
+        for link in record["links"]:
+            link["source"]["supportTriangleIds"] = [
+                remap[index] for index in link["source"]["supportTriangleIds"]
+            ]
+        record["support"] = {
+            "vertices": compact_vertices,
+            "triangles": compact_triangles,
+            "triangleSources": compact_sources,
+            "qualification": "exact source floor triangles witnessed by accepted traversals only; no broad solid-prop conversion",
+        }
+        record["summary"]["admittedSupportTriangles"] = len(compact_triangles)
+    target = output / "visual-ground-geometry.json.gz"
+    raw = compact(value)
+    target.write_bytes(gzip.compress(raw, mtime=0))
+    latest = json.loads((output / "catalog.json").read_text(encoding="utf8"))
+    latest["groundGeometry"] = {
+        "file": target.name,
+        "sha256": sha(target),
+        "jsonSha256": hashlib.sha256(raw).hexdigest(),
+        "compressedBytes": target.stat().st_size,
+        "jsonBytes": len(raw),
+    }
+    (output / "catalog.json").write_text(
+        json.dumps(latest, ensure_ascii=False, indent=2) + "\n", encoding="utf8"
+    )
+    (case_root / "evidence/geometry/source-visual-ground-geometry.json").write_text(
+        json.dumps(value, ensure_ascii=False, indent=2), encoding="utf8"
+    )
+    return value
+
+
 def import_enemy_specs(
     specs_path: Path,
     packages_path: Path,
@@ -2394,6 +3277,8 @@ def main():
     parser.add_argument("--map-id", default="corpus-ship-defense")
     parser.add_argument("--no-static-walls", action="store_true")
     parser.add_argument("--audit-visual-support", action="store_true")
+    parser.add_argument("--source-ground", action="store_true")
+    parser.add_argument("--source-doors", action="store_true")
     parser.add_argument("--complete-visuals", action="store_true")
     parser.add_argument("--case-root", type=Path)
     parser.add_argument("--cache-dir", type=Path)
@@ -2410,6 +3295,20 @@ def main():
     parser.add_argument("--enemy-specs-only", action="store_true")
     parser.add_argument("--mission-coverage", type=Path)
     args = parser.parse_args()
+    if args.source_ground:
+        if not args.case_root or not args.packages_bin:
+            parser.error("--source-ground requires --case-root --packages-bin")
+        import_visual_ground_links(
+            args.case_root, args.packages_bin, args.output, map_ids=args.visual_map_id
+        )
+        return
+    if args.source_doors:
+        if not args.case_root or not args.packages_bin:
+            parser.error("--source-doors requires --case-root --packages-bin")
+        import_source_doors(
+            args.case_root, args.packages_bin, args.output, map_ids=args.visual_map_id
+        )
+        return
     if args.audit_visual_support:
         if not args.case_root:
             parser.error("--audit-visual-support requires --case-root")

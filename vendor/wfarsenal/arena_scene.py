@@ -14,6 +14,7 @@ import heapq
 import json
 import math
 import os
+import copy
 import sys
 from pathlib import Path
 from typing import Any, Iterable, Sequence
@@ -336,6 +337,8 @@ class ArenaScene:
         map_id=DEFAULT_MAP,
         sources=None,
         native=True,
+        doors=None,
+        ground=None,
     ):
         self.raw = raw
         self.map_id = map_id
@@ -378,10 +381,85 @@ class ArenaScene:
                 link.get("source"),
             )
         collision = raw["collision"]
-        self.collision = TriangleBVH(
-            collision["vertices"], collision["triangles"], native=native
+        support = (ground or {}).get("support", {})
+        # Admitted source floor faces remain a separate asset/provenance. They
+        # are physical surfaces for every ray channel, including body clearance;
+        # adding them never removes or exempts an existing wall/floor triangle.
+        vertices = list(collision["vertices"])
+        triangles = list(collision["triangles"])
+        offset = len(vertices)
+        vertices.extend(support.get("vertices", []))
+        triangles.extend(
+            tuple(offset + k for k in face) for face in support.get("triangles", [])
         )
-        self.collision_sources = collision.get("triangleSources", [])
+        self.collision = TriangleBVH(vertices, triangles, native=native)
+        self.collision_sources = [
+            *collision.get("triangleSources", [None] * len(collision["triangles"])),
+            *support.get("triangleSources", []),
+        ]
+        self.ground_source = (ground or {}).get("asset", {})
+        self.ground_summary = (ground or {}).get("summary", {})
+        self.doors = tuple((doors or {}).get("doors", []))
+        self.door_sight = "open"
+        self.door_summary = (doors or {}).get("summary", {})
+        self.door_source = (doors or {}).get("asset", {})
+        for link in [*(doors or {}).get("links", []), *(ground or {}).get("links", [])]:
+            self._add(
+                link["from"],
+                link["to"],
+                link["points"],
+                link["kind"],
+                link["seconds"],
+                bool(link["enemy"]),
+                link["enemySeconds"],
+                link["source"],
+            )
+
+    def with_door_sight(self, state="open"):
+        """Job-local query state; source graph and immutable geometry stay shared."""
+        if state not in ("open", "closed"):
+            raise ValueError("invalid doorSight")
+        result = copy.copy(self)
+        result.door_sight = state
+        result.disabled = set()
+        result.metrics = {key: 0 for key in self.metrics}
+        return result
+
+    def _door_hits(self, origin, direction, maximum, minimum):
+        if self.door_sight != "closed":
+            return []
+        o, delta = _vec(origin), _vec(direction)
+        length = math.sqrt(_dot(delta, delta))
+        if length <= 1e-15:
+            return []
+        d = tuple(v / length for v in delta)
+        found = []
+        for door in self.doors:
+            aperture = door["aperture"]
+            normal = _vec(aperture["normal"])
+            denom = _dot(d, normal)
+            if abs(denom) <= 1e-10:
+                continue
+            t = _dot(_sub(aperture["origin"], o), normal) / denom
+            if not minimum <= t <= maximum:
+                continue
+            point = tuple(o[i] + d[i] * t for i in range(3))
+            local = _sub(point, aperture["origin"])
+            if abs(_dot(local, aperture["right"])) > aperture["halfWidth"]:
+                continue
+            if not 0 <= _dot(local, aperture["up"]) <= aperture["height"]:
+                continue
+            facing = tuple(-v for v in normal) if denom > 0 else normal
+            found.append(
+                RayHit(
+                    t,
+                    -1,
+                    point,
+                    facing,
+                    {"type": "source-door-closed-sight", "doorId": door["id"]},
+                )
+            )
+        return sorted(found, key=lambda hit: (hit.distance, hit.source["doorId"]))
 
     def reset_runtime(self):
         """Clear mutable job state; cached geometry/graph is shared between jobs.
@@ -519,14 +597,23 @@ class ArenaScene:
         ids = range(len(self.points)) if candidates is None else candidates
         return min(ids, key=lambda k: (distance(p, self.points[k]), k))
 
-    def raycast(self, origin, direction, maxdist=math.inf, *, min_distance=1e-5):
+    def raycast(
+        self, origin, direction, maxdist=math.inf, *, min_distance=1e-5, query="sight"
+    ):
         self.metrics["rays"] += 1
         hit = self.collision.raycast(
             origin, direction, maxdist, min_distance=min_distance
         )
+        door_hits = (
+            self._door_hits(origin, direction, maxdist, min_distance)
+            if query == "sight"
+            else []
+        )
+        if door_hits and (hit is None or door_hits[0].distance < hit.distance):
+            hit = door_hits[0]
         if hit:
             self.metrics["blocked"] += 1
-            if hit.triangle < len(self.collision_sources):
+            if 0 <= hit.triangle < len(self.collision_sources):
                 hit = RayHit(
                     hit.distance,
                     hit.triangle,
@@ -536,14 +623,18 @@ class ArenaScene:
                 )
         return hit
 
-    def trace_segment(self, origin, target, *, endpoint_epsilon=1e-4):
+    def trace_segment(self, origin, target, *, endpoint_epsilon=1e-4, query="sight"):
         a, b = _vec(origin), _vec(target)
         delta = _sub(b, a)
         length = math.sqrt(_dot(delta, delta))
         if length <= endpoint_epsilon * 2:
             return None
         return self.raycast(
-            a, delta, length - endpoint_epsilon, min_distance=endpoint_epsilon
+            a,
+            delta,
+            length - endpoint_epsilon,
+            min_distance=endpoint_epsilon,
+            query=query,
         )
 
     first_hit = raycast
@@ -671,12 +762,15 @@ class ArenaScene:
         """Nearest downward proxy support; not a native walkability assertion."""
         p = _vec(position)
         return self.raycast(
-            (p[0], p[1] + max_rise, p[2]), (0.0, -1.0, 0.0), max_drop + max_rise
+            (p[0], p[1] + max_rise, p[2]),
+            (0.0, -1.0, 0.0),
+            max_drop + max_rise,
+            query="movement",
         )
 
     def all_hits(self, origin, direction, maxdist=math.inf, **kwargs):
         result = self.collision.all_hits(origin, direction, maxdist, **kwargs)
-        return [
+        result = [
             RayHit(
                 h.distance,
                 h.triangle,
@@ -689,6 +783,14 @@ class ArenaScene:
                 ),
             )
             for h in result
+        ]
+        result.extend(
+            self._door_hits(
+                origin, direction, maxdist, kwargs.get("min_distance", 1e-5)
+            )
+        )
+        return sorted(result, key=lambda hit: (hit.distance, hit.triangle))[
+            : kwargs.get("max_hits", 4096)
         ]
 
     def visible(self, a, b):
@@ -721,7 +823,9 @@ class ArenaScene:
             ):
                 for h in heights:
                     hit = self.trace_segment(
-                        (a[0] + x, a[1] + h, a[2] + z), (b[0] + x, b[1] + h, b[2] + z)
+                        (a[0] + x, a[1] + h, a[2] + z),
+                        (b[0] + x, b[1] + h, b[2] + z),
+                        query="movement",
                     )
                     if hit:
                         return {
@@ -786,6 +890,35 @@ def load_asset(map_id=DEFAULT_MAP, asset="scene", *, root: Path | None = None):
         return json.load(stream)
 
 
+def _load_source_geometry(map_id, catalog_key, schema, *, root=None):
+    base = Path(root or ROOT) / "data/arena"
+    asset = scene_catalog(root).get(catalog_key)
+    if asset is None:
+        return {}
+    path = (base / asset["file"]).resolve()
+    if not path.is_relative_to(base.resolve()):
+        raise ValueError(f"{catalog_key} asset escapes data directory")
+    compressed = path.read_bytes()
+    if hashlib.sha256(compressed).hexdigest() != asset["sha256"]:
+        raise ValueError(f"arena {catalog_key} checksum mismatch")
+    value = json.loads(gzip.decompress(compressed))
+    if value["schema"] != schema:
+        raise ValueError(f"unsupported {catalog_key} schema")
+    return dict(
+        value["maps"].get(map_id, {}),
+        asset={
+            "schema": value["schema"],
+            **{key: asset[key] for key in ("file", "sha256", "jsonSha256")},
+        },
+    )
+
+
+def load_source_doors(map_id, *, root=None):
+    return _load_source_geometry(
+        map_id, "doorGeometry", "arena-source-doors/v1", root=root
+    )
+
+
 @lru_cache(maxsize=2)
 def load_scene(map_id=DEFAULT_MAP, *, root: Path | None = None, native=True):
     catalog = scene_catalog(root)
@@ -804,6 +937,10 @@ def load_scene(map_id=DEFAULT_MAP, *, root: Path | None = None, native=True):
         map_id=map_id,
         sources=entry,
         native=native,
+        doors=load_source_doors(map_id, root=root),
+        ground=_load_source_geometry(
+            map_id, "groundGeometry", "arena-source-ground/v1", root=root
+        ),
     )
 
 
