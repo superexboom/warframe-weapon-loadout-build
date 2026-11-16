@@ -106,6 +106,80 @@ def defense_wave_parameters(wave, players, level, *, arbitration=False,
                 rushCount=math.floor(_mul(requested, 0.25)))
 
 
+def interception_enemy_level(round, start_level, difficulty):
+    """TerritoryMission P35: lower endpoint for an equal-endpoint scenario.
+
+    Native level range endpoints are a,b; this one-value interface sets a=b.
+    Scenario round advancement is explicit and does not simulate capture.
+    """
+    if int(round) != round or round < 1 or start_level < 1 or not 0 <= difficulty <= 1:
+        raise ValueError("round/level must be positive and difficulty within [0, 1]")
+    if round == 1:
+        return math.floor(_f32(start_level))
+    rate = _lerp(1.2, 1.05, difficulty)
+    growth = _f32(math.pow(rate, _sub(round, 1)))
+    return math.ceil(_mul(start_level, growth))
+
+
+def interception_parameters(round, players, difficulty, progress, start_level,
+                            max_alive, *, elapsed_seconds=0.0,
+                            eximus_multiplier=1.0):
+    """Territory/SquadLib parameters for an explicit quota-clear scenario.
+
+    Freeze capture progress at the supplied fraction and disable assaults and
+    progress-triggered bosses. This does not define native round completion,
+    total quota or transform raw EnemySpec into the native runtime pool.
+    elapsed_seconds is the persistent source TimeElapsed (not per-round time).
+    """
+    if (int(round) != round or round < 1 or start_level < 1 or max_alive < 1
+            or not 0 <= difficulty <= 1 or not 0 <= progress <= 1):
+        raise ValueError("positive round/level/cap and [0, 1] difficulty/progress required")
+    d, fraction = _f32(difficulty), _f32(progress)
+    player = min(4, max(1, int(players))) - 1
+    thresholds = [_lerp(a, b, d) for a, b in zip((.15, .6, 1), (.15, .3, 1))]
+    stage = 1 + sum(threshold < fraction for threshold in thresholds)
+    stage_index = stage - 1
+    tier_base = _lerp(0, (0, .75, 1.5)[stage_index], d)
+    tier = math.floor(min(_add(tier_base, _div(_sub(round, 1), 2)), 8))
+    cap_value = _mul(_lerp((7, 13, 22, 25)[player],
+                           (10, 20, 26, 29)[player], d), (.9, .95, 1)[stage_index])
+    # Explicit scenario choice: Utilities.Round's proven body. The private
+    # module-key identity1357905729 -> Round is still not independently closed.
+    alive = min(int(max_alive), math.floor(_add(cap_value, .5)))
+    squad_low = _lerp((1, 2, 2)[stage_index], (2, 3, 4)[stage_index], d)
+    squad_high = _lerp((2, 2, 3)[stage_index], (3, 4, 5)[stage_index], d)
+    # Native random-int binding1217325054 ->14190c090 parses bounds through
+    #1415a5ae0 CVTTSS2SI: positive bounds truncate, then draw inclusive range.
+    delay = _lerp((6, 4, 4, 4)[player], (6, 2, 1, 1)[player], d)
+    increment = _lerp((2, 1, 1, 1)[player], (2, 1, 0, 0)[player], d)
+    maximum = _lerp((10, 8, 8, 8)[player], (10, 5, 1, 1)[player], d)
+    initial = _lerp((0, 8, 10, 12)[player], (6, 8, 10, 12)[player], d)
+    # Territory P34 normal mission: chance depends on persistent elapsed time,
+    # NOT progress. Progress arg1 is supplied by callers but unused in body.
+    offset = math.floor(_lerp(120, 0, d))
+    begin, end = _add(offset, 60), _add(offset, 3000)
+    chance = 0.0
+    if _f32(elapsed_seconds) >= begin:
+        alpha = min(_div(_sub(elapsed_seconds, begin), _sub(end, begin)), 1)
+        chance = _lerp(_mul(.02, eximus_multiplier),
+                       _mul(.15, eximus_multiplier), alpha)
+    return dict(tier=tier, stage=stage, maxAlive=alive,
+                minSquad=int(squad_low), maxSquad=int(squad_high),
+                minSquadRaw=squad_low, maxSquadRaw=squad_high,
+                capMinimumSquad=max(squad_low, 1),
+                defaultDelay=delay, increment=increment, maxDelay=maximum,
+                initialCount=math.floor(initial), leaderChance=chance,
+                level=interception_enemy_level(round, start_level, d),
+                qualifications=[
+                    "interception-quota-clear-cycle-not-native-capture-round",
+                    "frozen-progress-no-priority-assault-or-progress-boss",
+                    "utilities-round-formula-selected-private-key-identity-unclosed",
+                    "raw-spec-runtime-pool-merge-countgroups-not-replayed",
+                    "normal-mission-leader-chance-special-overrides-excluded",
+                    "equal-director-level-endpoints-scenario",
+                ])
+
+
 def build_defense_schedule(
     entries: Iterable[Mapping], total: int, max_alive: int,
     random_value: Callable[[], float], *, eximus_probability: float = 0.0,

@@ -687,6 +687,16 @@ def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():
     walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":3.6,"kind":"walk"}
     assert world._yield_crowded_edge(walker,4.) and walker.edge["node"]==1
     world.flows={}
+    # A tightly packed door merge needs only a .2m tangent step. Resuming
+    # behind that step would restore the same two-actor standstill.
+    walker.pos=(0.,0.,0.);walker.route=[];blocker.pos=(-.06,0.,-.597)
+    walker.edge={"points":[walker.pos,(.1,0.,-.03),(.2,0.,-.06),(.3,0.,-.09)],
+                 "index":1,"node":0,"speed":3.6,"kind":"door"}
+    assert world._yield_crowded_edge(walker,5.)
+    assert walker.edge["points"][-1]==(.3,0.,-.09)
+    assert all(p[0] >= -.001 for p in walker.edge["points"])
+    assert (.1,0.,-.03) not in walker.edge["points"]
+    blocker.pos=(1.,0.,0.)
     # If support disappears, a later blocked-edge attempt keeps exact feet/edge.
     walker.pos=before;walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":3.6,"kind":"walk"}
     original_edge=walker.edge
@@ -716,6 +726,19 @@ def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():
     world.scene.visible=lambda origin,target:True
     world.plan()
     assert world.player.route==[vantage_edge]
+    # A nearby drone on the SAME reachable node must not keep the shooter
+    # inside a protected body's muzzle. Verify actual contacts from the new node.
+    world.scene.nodes=((0.,0.,0.),(2.,0.,0.),(3.,0.,0.))
+    world.scene.raycast=lambda *a,**k:None
+    drone=Actor(3,0,(.6,0.,0.),drone=True);cover=Actor(4,0,(0.,0.,0.))
+    world.live=[drone,cover];world.player.route=[]
+    world.combat.targets={3:SimpleNamespace(protected=False,record={}),
+                          4:SimpleNamespace(protected=True,record={"hitProxies":[{"part":"HEAD"}]})}
+    world.combat.preview=lambda t:SimpleNamespace(radials=())
+    world.geometry=lambda shot:dict(range=100.,traceRadius=0.,puncture=0.,
+                                    infinitePuncture=False,ignoresAvatars=False,projectile=True)
+    world.plan()
+    assert world.player.route==[vantage_edge] and world.stats["firingPositionPlans"]==3
 
 
 def test_arena_source_door_query_channels():
@@ -809,7 +832,17 @@ def test_defense_schedule_cumulative_merge_quotas_and_cap_shortfall():
     assert result["bossQuota"]["tiers"] == [9] and bosses == before
 
 
-def test_arbitration_drone_opportunities_keep_ordinary_quota_and_respect_cap():
+    from wfarsenal.arena_spawns import interception_parameters, interception_enemy_level
+    low = interception_parameters(1, 1, 0, .5, 30, 40)
+    high = interception_parameters(3, 4, 1, .5, 30, 40)
+    middle = interception_parameters(1, 2, .5, .5, 30, 40)
+    assert (low["stage"], low["tier"], low["maxAlive"], low["initialCount"]) == (2, 0, 7, 0)
+    assert (high["stage"], high["tier"], high["maxAlive"], high["minSquad"], high["defaultDelay"]) == (3, 2, 29, 4, 1)
+    assert (middle["stage"], middle["minSquad"], middle["maxSquad"], middle["defaultDelay"]) == (3, 3, 4, 3)
+    assert interception_enemy_level(2, 30, 0) == 36
+
+
+def test_arbitration_drone_opportunities_keep_ordinary_quota_and_respect_cap(monkeypatch):
     from types import SimpleNamespace
     from wfarsenal.arena import World, Actor, DRONE
 
@@ -834,3 +867,83 @@ def test_arbitration_drone_opportunities_keep_ordinary_quota_and_respect_cap():
     assert len(world.live)==2 and world.drone_timer_reset==30.25  # one-person cap
     world.live.pop();world.arbitration_drone(anchor)
     assert len(world.live)==2 and world.drone_timer_reset==31.  #20% remains active during timer
+
+    # Spawn callbacks upgrade the template: +400% health, unchanged shields,
+    # status immunity. Hits remain valid but cannot trigger proc-based arcanes.
+    from wfarsenal import arena_combat
+    st=stats(damage_types={"DT_IMPACT":10.},status_chance=3.,magazine=20.)
+    monkeypatch.setattr(arena_combat,"prepare",lambda *a,**k:dict(
+        resolve=lambda *args:(st,None),trigger_sources=[dict(
+            id="proc",kind="on-proc",maxStacks=99,duration=10.,perEvent=1.)],
+        empowered=dict(damage=1000.,uptime=1.)))
+    world.combat=arena_combat.ArenaCombat({})
+    world.actors={};world.live=[];world.replay={"actors":[]};world.wave_level=1
+    world.stats={};world.t=0.
+    enemy={**target(35.),"path":DRONE,"shield":50.}
+    actor=World._spawn_actor(world,enemy,{"face":0},drone=True)
+    victim=world.combat.targets[actor.id]
+    assert victim.full==[0.,50.,175.] and victim.defenses["health"]==175.
+    assert actor.tape["statusImmune"] and actor.tape["healthMultiplier"]==5.
+    shot=world.combat.prepare_shot(0.,False,actor.id)
+    world.combat.hit(shot,actor.id);world.combat.finish_shot(shot)
+    assert 0. < victim.shield < 50. and victim.health==175.
+    assert not victim.presence and world.combat.sources[0]["stacks"]==0.
+    assert world.combat.empowered_count==0.
+
+    # Death blast retains player source but no weapon, so it cannot grant a
+    # weapon on-kill buff. A second drone still protects ordinary recipients.
+    from wfarsenal.arena_combat import ArenaCombat
+    monkeypatch.setattr(arena_combat,"prepare",lambda *a,**k:dict(
+        resolve=lambda *args:(st,None),trigger_sources=[dict(
+            id="kill",kind="on-kill",maxStacks=9,duration=10.,perEvent=1.)]))
+    world.combat=ArenaCombat({});world.actors={};world.live=[]
+    world.replay={"actors":[],"combat":[],"kills":[]};world.c["seed"]=1
+    world.stats=dict(kills=0,droneKills=0,vitusExpected=0.,vitusSample=0)
+    world.scene.visible=lambda *args:True
+    first=World._spawn_actor(world,enemy,{"face":0},drone=True)
+    second=World._spawn_actor(world,enemy,{"face":1},drone=True)
+    ordinary=World._spawn_actor(world,{**target(1e5),"path":"ordinary"},{"face":2})
+    world.protection()
+    world.combat.drone_explosion(first.id,1e6,0.)
+    world.drain()
+    assert first.dead and not second.dead and world.stats["droneKills"]==1
+    assert world.combat.targets[ordinary.id].health==1e5
+    assert world.combat.sources[0]["stacks"]==0.
+    # Nearby drone already damaged: a finite death chain unprotects the survivor.
+    world.combat.targets[second.id].pools=[0.,0.,10.]
+    third=World._spawn_actor(world,enemy,{"face":0},drone=True)
+    world.combat.drone_explosion(third.id,1e6,0.)
+    world.drain()
+    assert second.dead and third.dead and world.stats["droneKills"]==3
+    assert world.stats["vitusExpected"]==pytest.approx(.18)
+    assert world.combat.targets[ordinary.id].health<1e5
+    assert len([e for e in world.replay["combat"] if e["kind"]=="drone-explosion"])==3
+    assert world.combat.sources[0]["stacks"]==0.
+
+
+def test_interception_squad_gate_keeps_delay_and_allows_soft_cap_overshoot():
+    from wfarsenal.arena import World, Actor
+    from wfarsenal.arena_spawns import interception_parameters
+
+    world=World.__new__(World)
+    world.c=dict(spawnProfile="interception",squadSize=4,missionDifficulty=1.,
+                 interceptionProgress=.5,level=30,eximusMultiplier=1.,directorHardCap=40,seed=1)
+    world.t=0.;world.wave=1;world.source_spawns=True;world.interception=True
+    world.interception_params=interception_parameters(1,4,1.,.5,30,40)
+    world.wave_alive_cap=29;world.wave_target=60;world.generated=26;world.initial_squad=0
+    world.squad_delay=1.;world.stats={"spawnQueued":0,"peakAlive":0};world.spawn_random=lambda:.99
+    world.scene=SimpleNamespace(nodes=tuple((i*2.,0.,0.) for i in range(40)))
+    world.spawn_points=[{"face":i} for i in range(40)]
+    world.live=[Actor(i,i,world.scene.nodes[i],tape={"sourceAgent":"a"}) for i in range(25)]
+    world.actors={a.id:a for a in world.live}
+    world.enemy={"path":"enemy"};world.enemies={"enemy":world.enemy}
+    world.wave_pool=[dict(agent="a",tier=0,probability=1.,maxSimultaneous=0,resolvedAvatarPath="enemy")]
+    def spawn(enemy,point,**kw):
+        actor=Actor(len(world.actors),point["face"],world.scene.nodes[point["face"]],tape={"sourceAgent":"a"})
+        world.live.append(actor);world.actors[actor.id]=actor
+        return actor
+    world._spawn_actor=spawn;world.arbitration_drone=lambda anchor:None
+    world.spawn()
+    assert len(world.live)==30 and world.generated==31  # gate25+4<=29 permits all5
+    world.squad_delay=2.;world.t=2.;world.spawn()
+    assert len(world.live)==30 and world.next_spawn==4. and world.squad_delay==2.

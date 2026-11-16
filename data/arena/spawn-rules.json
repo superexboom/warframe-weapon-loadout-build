@@ -31,6 +31,26 @@
       "file": "LotusGameRules.lua_B",
       "sha256": "7e3aa23b2370ecc7fa1982fca7d48208e65a1eabe4266c660c5bc2e357b92c6c",
       "bytes": 64680
+    },
+    {
+      "file": "TerritoryMission.lua_B",
+      "sha256": "3a8acf02213053621ad8cf3cc77809a35f27baddf91d10fcbf94475d0a7d225b",
+      "bytes": 80700
+    },
+    {
+      "file": "EliteShieldAura.lua_B",
+      "sha256": "137bcc6ec71318980cf9f7035ddf00f45637f32f22e94f0054b5737f7e9e52d1",
+      "bytes": 1578
+    },
+    {
+      "file": "Lotus/Scripts/Libs/SquadLib.lua_B",
+      "sha256": "53c4a3ff5f5d67f0478b202229b787c81f8852f7eed36e2b60376fcb88966e2e",
+      "bytes": 13181
+    },
+    {
+      "file": "EE/Interface/Utilities.lua_B",
+      "sha256": "df58ebe84b5bf51bf0adfd2b171b4b36d551195cbd7db92aa1087a9a39ea7ad5",
+      "bytes": 51977
     }
   ],
   "defense": {
@@ -127,13 +147,13 @@
   "unrecovered": [
     "native spawn-point/visibility failure policy",
     "live MissionInfo selection and runtime overrides",
-    "Interception capture-progress director",
     "native RNG bit identity",
     "native ordinary-alive getter inclusion of arbitration drones; scene counts all live enemies",
-    "drone death-blast target filtering and kill attribution",
     "native HardGameMode helper export identity",
     "live Director starting level endpoints and special mission endpoint modifiers",
-    "Director reserved slots, exact tracked-agent predicate membership and platform-switch identity"
+    "Interception objective simulation intentionally excluded; runtime pool conversion/shared groups/special override and Round private-key identity unresolved",
+    "exact tracked-agent registration, spatial/threat channels and platform-switch identity",
+    "drone secondary Blast proc and knockdown duration; native score/XP consumer; weapon Bane classification vs runtime team faction"
   ],
   "numberSemantics": "Current native Luau NUMBER and arithmetic are float32; each relevant operation rounds before floor/ceil. Native LERP and VM arithmetic verified from EXE.",
   "arbitrationDrones": {
@@ -170,9 +190,33 @@
       "hostAuthoritative": true,
       "ignoreEntity": "_T.EliteAlertDroneKiller",
       "source": "LotusGameRules P41 pc66-70 and native typedDamage setter 0x14195f2c0, DamageType enum7",
-      "status": "parameters recovered; target faction filtering and kill attribution unresolved, not applied as player weapon damage"
+      "status": "Applied for player-source scene kills without weapon identity; main Blast only, normal mitigation and surviving-drone protection",
+      "forcedProc": "PT_KNOCKED_DOWN (EProcType19), not a damage bypass flag",
+      "sourceEntity": "_T.EliteAlertDroneKiller via DamageData+d0",
+      "sourceWeapon": null,
+      "falloff": "max(0,1-distanceToRecipientAABB/20); inner0 exponent1 minimum0; scene uses existing body/head proxy AABB",
+      "secondaryProcQualification": "baseProcChance1 and forcedKnockdown19 verified; automatic PT_FLASHBANG eligibility/seed unresolved, no secondary proc damage invented",
+      "sourceQualification": "Source/killer is player, weapon handle empty; no weapon on-kill/fortifier effects or inherited mods. Scene kills/Vitus count actual removed drones; native XP and scoreboard ownership outside model",
+      "admission": "v1110 checks entity equality, not faction; IgnoreTeamDamage rejects same nonzero faction and IgnoreDamageSourceType checks source entity class. Player-source damage may reach another hostile drone; no automatic dying-drone-source exclusion"
     },
-    "eligibilityQualification": "Scene assumes ordinary scheduled hostile agents satisfy P42 native predicates; excluded special/owned-agent predicate names are unresolved. No companion or player-summoned agent opportunities are simulated."
+    "eligibilityQualification": "Scene assumes ordinary scheduled hostile agents satisfy P42 native predicates; excluded special/owned-agent predicate names are unresolved. No companion or player-summoned agent opportunities are simulated.",
+    "spawnUpgrades": {
+      "source": "LotusGameRules P40pc124-135 and145-150; current EXE UpgradeType table1400597c0, OperationType registration14003d8bf-14003d934",
+      "health": {
+        "type": "AVATAR_HEALTH_MAX",
+        "operation": "STACKING_MULTIPLY",
+        "value": 4,
+        "finalMultiplier": 5
+      },
+      "statusImmunity": {
+        "type": "AVATAR_INJURY_BLOCK_CHANCE",
+        "operation": "SET",
+        "value": 1
+      },
+      "shieldMultiplier": 1,
+      "scope": "spawn callback, not static Avatar template; source custom-drone stand-ins use the same upgrades"
+    },
+    "runtimeFaction": "P40 sets anchor faction then Director.GetFaction(0): first registered spawn faction, not template Neutral. Scene contains only hostile recipients; weapon Bane classification consumer not inferred from this team field."
   },
   "director": {
     "sourceExeSha256": "dae100202115919c89440c9ef320f691113ee8dcaf01205cbd180072c35aabdb",
@@ -184,7 +228,240 @@
     "setter": "hash1689982972 ->0x1419bb260 ->slot0xc60 ->0x1403e44c0",
     "standardDefenseSetterFound": false,
     "aliveCounter": "hash3789076070 ->0x1419a5050 ->slot0x180 ->0x141581f60 returns+0x270; filtered tracked agents, not all NPCs",
-    "allocationGate": "max(0,hardCap-reserved838-count188(true,false))>=requested; reserved count/filters unresolved",
-    "sceneQualification": "Ordinary and drone actors counted as modeled hostile agents; no other entities or reserved slots. Explicit override affects admission, not a multiplier on wave totals."
+    "allocationGate": "max(0,hardCap-reserved838-count188(true,false))>=requested; count188 filters tracked live avatars",
+    "sceneQualification": "All scene hostiles are counted, including drones. Native270 equals its raw eligible count only with aggregation disabled or a full-size positive spatial channel; no exact native spatial/threat equivalence is claimed.",
+    "reservedSlots": {
+      "type": "Symbol-keyed external reservations",
+      "set": "C80/140e7e700: total=total-old[key]+new",
+      "release": "C88/1411746b0: remove key and subtract",
+      "defaultAndReset": 0,
+      "arenaValue": 0,
+      "arenaReason": "no external reservation client; ordinary remaining quota and drone party capacity are not reservations"
+    },
+    "nativeAliveAggregation": "if861&&!lockDown1dd&&enabled204: max(C280,C278,C2a0,floor(C290/2)); otherwise raw live eligible count"
+  },
+  "interception": {
+    "source": "TerritoryMission P0/P34/P35 and SquadLib P5/P10/P18; runtime selector140ad4a00",
+    "mode": "conditional fixed-progress, finite quota-clear cycle; no capture objectives, high-priority assaults or progress-triggered bosses",
+    "progressDefault": 0.5,
+    "tier": "floor(min(lerp(stageTierLow,stageTierHigh,difficulty)+(round-1)/2,8)); source tiers<=current",
+    "maxAlive": "Utilities.Round(lerp([7,13,22,25],[10,20,26,29],difficulty)*[.9,.95,1][stage]); hard-cap bound",
+    "roundQualification": "Utilities.Round=floor(f32(x+.5)) proven; calling private key identity1357905729 remains unclosed",
+    "schedule": "after delay and live+max(rawMinSquad,1)<=softM, one squad without per-member softM truncation; hardcap still applies. Gate failure keeps current delay; admitted attempt resets delay if>=max, else max if now full, else adds increment. Initial batch restarts for each scenario quota cycle.",
+    "leaderChance": "Territory P34 uses persistent elapsedSeconds, offset=floor(lerp(120,0,difficulty)); chance0 before offset+60 then lerp(.02,.15,min((elapsed-offset-60)/2940,1))*nativeMultiplier",
+    "level": "round1=start; later ceil(f32(start*powf(lerp(1.2,1.05,difficulty),round-1))); scenario equal low/high endpoints, disabled by default",
+    "weightedSelection": "Native selector filters runtime tier/cap/level/faction/tag/canEnhance, sums weights with ADDSS and subtracts each weight from roll until selected. Scene uses mapped raw rows with per-Agent live caps; native merge/countgroup/override incomplete.",
+    "arbitration": "independent extra-drone callback; no Defense count*.8 or0.25s cadence applied",
+    "parameters": {
+      "lowTemplate": {
+        "tier": [
+          0,
+          0,
+          0
+        ],
+        "numSquadObj": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            2,
+            2
+          ],
+          [
+            3,
+            3,
+            3
+          ],
+          [
+            3,
+            3,
+            3
+          ]
+        ],
+        "minSquadSize": [
+          1,
+          2,
+          2
+        ],
+        "maxSquadSize": [
+          2,
+          2,
+          3
+        ],
+        "index": [
+          0.15,
+          0.6,
+          1
+        ],
+        "defaultSpawnDelay": [
+          6,
+          4,
+          4,
+          4
+        ],
+        "spawnDelayIncrement": [
+          2,
+          1,
+          1,
+          1
+        ],
+        "maxSpawnDelay": [
+          10,
+          8,
+          8,
+          8
+        ],
+        "objectiveUpdateTime": [
+          8,
+          6,
+          4,
+          4
+        ],
+        "maxLeaders": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "initialSpawnAmount": [
+          0,
+          8,
+          10,
+          12
+        ],
+        "highPriorityUpdate": [
+          100,
+          60,
+          60,
+          60
+        ],
+        "highPrioritySpawnDelay": [
+          10,
+          6,
+          6,
+          6
+        ]
+      },
+      "highTemplate": {
+        "tier": [
+          0,
+          0.75,
+          1.5
+        ],
+        "numSquadObj": [
+          [
+            1,
+            2,
+            2
+          ],
+          [
+            3,
+            3,
+            4
+          ],
+          [
+            3,
+            4,
+            4
+          ],
+          [
+            4,
+            4,
+            4
+          ]
+        ],
+        "minSquadSize": [
+          2,
+          3,
+          4
+        ],
+        "maxSquadSize": [
+          3,
+          4,
+          5
+        ],
+        "index": [
+          0.15,
+          0.3,
+          1
+        ],
+        "defaultSpawnDelay": [
+          6,
+          2,
+          1,
+          1
+        ],
+        "spawnDelayIncrement": [
+          2,
+          1,
+          0,
+          0
+        ],
+        "maxSpawnDelay": [
+          10,
+          5,
+          1,
+          1
+        ],
+        "objectiveUpdateTime": [
+          8,
+          6,
+          4,
+          2
+        ],
+        "maxLeaders": [
+          0,
+          2,
+          3,
+          4
+        ],
+        "initialSpawnAmount": [
+          6,
+          8,
+          10,
+          12
+        ],
+        "highPriorityUpdate": [
+          80,
+          40,
+          30,
+          20
+        ],
+        "highPrioritySpawnDelay": [
+          10,
+          6,
+          2,
+          0.5
+        ]
+      },
+      "maxAiLow": [
+        7,
+        13,
+        22,
+        25
+      ],
+      "maxAiHigh": [
+        10,
+        20,
+        26,
+        29
+      ],
+      "maxAiStageMultiplier": [
+        0.9,
+        0.95,
+        1
+      ],
+      "maxLeaders": [
+        32,
+        32,
+        32,
+        32
+      ],
+      "clearOrdersAfterHighPriority": true,
+      "source": "TerritoryMission P0 pc1787..2235; low/high entries interpolate by MissionInfo.difficulty, per-player fields [1..4], per-stage fields [1..3]"
+    }
   }
 }

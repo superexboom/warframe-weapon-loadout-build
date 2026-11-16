@@ -59,6 +59,7 @@ class ArenaTarget:
     full: list
     alive: bool = True
     protected: bool = False
+    status_immune: bool = False
     states: dict = field(default_factory=dict)
     pooled: dict = field(
         default_factory=lambda: {k: CappedPool(v) for k, v in CAPS.items()}
@@ -236,6 +237,7 @@ class ArenaCombat:
         self.total_damage = 0.0
         self.direct_damage = 0.0
         self.dot_damage = 0.0
+        self.drone_explosion_damage = 0.0
         self.base_ammo = None
         self.beam = BeamRamp()
         self.sniper_combo = (
@@ -1583,7 +1585,8 @@ class ArenaCombat:
             ):
                 no_proc *= max(0.0, 1.0 - forced)
             shot.pending.append(
-                ("on-noncrit-no-proc", count * (1.0 - critical) * no_proc)
+                ("on-noncrit-no-proc", count * (1.0 - critical)
+                 * (1.0 if v.status_immune else no_proc))
             )
         return dict(
             damage=self.total_damage - before, killed=not v.alive, protected=False
@@ -2061,6 +2064,8 @@ class ArenaCombat:
 
     def _packet(self, v, st, head):
         # Victim defenses are applied at landing, independently of cached seeds.
+        if v.status_immune:
+            return self._direct_vector(v, st, head), {}, {}, {}
         key = (
             repr(st),
             head,
@@ -2130,7 +2135,7 @@ class ArenaCombat:
     def _take(self, v, vector, t, source, head=0.0, stats=None, mode=None, extra=False):
         if not v.alive or v.protected:
             return False
-        weapon_source = source != "syndicate"
+        weapon_source = source not in ("syndicate", "drone-explosion")
         if (
             self.combat.get("onosCharge")
             and self.combat.get("onosCrits")
@@ -2185,7 +2190,8 @@ class ArenaCombat:
             left -= share
             if v.overguard <= EPS:
                 self._magnetic_break(v, t, 0, stats, mode)
-                self._defer_signal("on-overguard-broken", t)
+                if source != "drone-explosion":
+                    self._defer_signal("on-overguard-broken", t)
         if left > 0 and v.shield > 0:
             shield = sum(
                 x * max(0.0, 1.0 + deltas.get(k, 0.0))
@@ -2208,7 +2214,8 @@ class ArenaCombat:
             if v.shield <= EPS:
                 broke = True
                 self._magnetic_break(v, t, 1, stats, mode)
-                self._defer_signal("on-shield-broken", t)
+                if source != "drone-explosion":
+                    self._defer_signal("on-shield-broken", t)
         if left > 0 and v.shield <= EPS and v.health > 0:
             value = sum(health_value(k, x) for k, x in vector.items()) * left
             if broke:
@@ -2224,6 +2231,8 @@ class ArenaCombat:
             self.syndicate_damage += applied
         elif source == "arcane":
             self.arcane_damage += applied
+        elif source == "drone-explosion":
+            self.drone_explosion_damage += applied
         else:
             self.dot_damage += applied
         if v.health <= EPS and v.overguard <= EPS:
@@ -2309,6 +2318,17 @@ class ArenaCombat:
                     return True
         return False
 
+    def drone_explosion(self, target_id, amount, t):
+        """Player-sourced death blast, with no killing-weapon reference.
+
+        World admits recipients and updates surviving drone auras first. Use
+        recipient defenses normally; neither forced knockdown nor the death
+        source bypasses protection, armour or shields.
+        """
+        victim = self.targets[target_id]
+        self._clean(victim, t)
+        return self._take(victim, {"DT_EXPLOSION": amount}, t, "drone-explosion")
+
     def _syndicate_kill(self, v, t):
         spec = self.combat.get("syndicate")
         if not spec or t < self.syndicate_ready:
@@ -2376,7 +2396,7 @@ class ArenaCombat:
             died = self._take(
                 v, {dtype: float(config.get("damage", 1000.0))}, t, "syndicate"
             )
-            if died or spec["id"] == "justice":
+            if died or v.protected or v.status_immune or spec["id"] == "justice":
                 continue
             duration = (
                 8.0
@@ -2467,6 +2487,8 @@ class ArenaCombat:
         )
 
     def _procs(self, v, st, head, t, packet, scale, mode, natural=True):
+        if v.status_immune or v.protected:
+            return
         _, procs, rows, non = packet
         rate = max(0.0, float(self.options.get("status_rate_multiplier", 1.0)))
         if natural and self.combat.get("punctureArmorStrip") and not st.radial_only:

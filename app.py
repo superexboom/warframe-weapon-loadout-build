@@ -7272,7 +7272,9 @@ def arena_catalog_payload():
             "materialPalette":json.loads((ROOT / "data/arena/material-palette.json").read_text(encoding="utf-8")),
             "spawnProfiles":[{"id":"custom","name":"自定义工况 · 固定数量与层级"},
                              {"id":"defense","name":"来源防御 · 累计层级与整波编组"},
-                             {"id":"arbitration","name":"来源仲裁防御 · 总量修正与独立无人机"}],
+                             {"id":"arbitration","name":"来源仲裁防御 · 总量修正与独立无人机"},
+                             {"id":"interception","name":"拦截参数 · 定额清场"},
+                             {"id":"arbitration_interception","name":"仲裁拦截参数 · 定额清场与无人机"}],
             "enemies":[{"path":e["path"], "nameZh":e.get("nameZh"), "name":e.get("nameZh") or e.get("name") or e.get("nameEn"),
             "nameEn":e.get("nameEn"), "faction":e.get("faction"), "hasHeadProxy":e.get("hasHeadProxy", False)}
             for e in MANUAL_ENEMIES if e.get("complete") is not False],

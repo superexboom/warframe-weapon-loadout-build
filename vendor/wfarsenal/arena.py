@@ -15,7 +15,7 @@ from . import parallel
 from .arena_scene import load_scene, distance, Edge, ROOT
 from .arena_combat import ArenaCombat, UnsupportedArenaCombat
 
-MODEL = "arena-world-v6"
+MODEL = "arena-world-v7"
 VITUS_DROP_CHANCE = 0.06
 DRONE = "/Lotus/Types/Enemies/Corpus/Drones/AIWeek/CorpusEliteShieldDroneAvatar"
 EPS = 1e-8
@@ -32,6 +32,7 @@ def defaults(enemy=""):
         spawnProfile="custom",
         squadSize=1,
         missionDifficulty=0.0,
+        interceptionProgress=0.5,
         missionTier=0,
         eximusMultiplier=1.0,
         aliveCap=64,
@@ -87,6 +88,7 @@ def normalize_scenario(value):
     for key, low, high in [
         ("seconds", 0.1, 1800),
         ("missionDifficulty", 0, 1),
+        ("interceptionProgress", 0, 1),
         ("eximusMultiplier", 0, 10),
         ("spawnEvery", 0.05, 60),
         ("waveWait", 0, 60),
@@ -106,7 +108,8 @@ def normalize_scenario(value):
         or c["movement"] not in ("parkour", "walking", "fixed")
     ):
         raise ValueError("invalid arena mode/region/movement")
-    if c["spawnProfile"] not in ("custom", "defense", "arbitration"):
+    if c["spawnProfile"] not in ("custom", "defense", "arbitration",
+                                  "interception", "arbitration_interception"):
         raise ValueError("invalid spawnProfile")
     if c["doorSight"] not in ("open", "closed"):
         raise ValueError("invalid doorSight")
@@ -321,6 +324,7 @@ class World:
         self.spec_entries = []
         self.raw_spec_entries = []
         self.source_spawns = self.c["spawnProfile"] != "custom"
+        self.interception = self.c["spawnProfile"] in ("interception", "arbitration_interception")
         if self.c.get("enemySpec") not in (None, "", "single"):
             spec = next(
                 (s for s in enemy_specs()["specs"] if s["path"] == self.c["enemySpec"]),
@@ -336,15 +340,18 @@ class World:
                 raise ValueError("选定tier没有可映射敌人")
         if self.source_spawns:
             if not any(r.get("tier", 0) == 0 and r.get("probability", 0) > 0 for r in self.spec_entries):
-                raise ValueError("来源防御编波需要含普通tier0的敌组；特殊编组请使用自定义工况")
-            self.diagnostics[0] = "防御编波使用已恢复的脚本与当前PC Director硬上限40；特殊任务可覆盖，原生预留槽位和筛选计数未完整复刻"
+                raise ValueError("来源规则需要含普通tier0的敌组；特殊编组请使用自定义工况")
+            self.diagnostics[0] = "防御编波使用已恢复的脚本与当前PC Director硬上限40；特殊任务可覆盖，本场景无外部预留，使用全部存活NPC计数，原生空间/威胁计数未完整复刻"
             self.diagnostics.append("任务difficulty/Eximus倍率为显式输入，当前地图几何不决定实时任务参数")
-            self.diagnostics.append("已开启来源防御等级增长：两个Director起始端点均取输入等级，特殊任务端点修正未套用" if self.c["levelGrowth"] else "等级增长未开启：敌人等级固定为用户配置")
-            if self.c["spawnProfile"] == "arbitration":
+            self.diagnostics.append("已开启所选来源规则的等级增长：两个Director起始端点均取输入等级，特殊任务端点修正未套用" if self.c["levelGrowth"] else "等级增长未开启：敌人等级固定为用户配置")
+            if self.interception:
+                self.diagnostics[0] = "拦截参数定额清场：使用来源小队间隔和条件上限；固定进度、不占点，配额清场结束周期，不代表原生拦截轮次"
+                self.diagnostics.append("拦截原始敌组按累计tier/权重和Agent存活限额抽取；native池合并、共享count-group、特殊override未完整恢复；不模拟占点突袭与进度阈值Boss")
+            if self.c["spawnProfile"] in ("arbitration", "arbitration_interception"):
                 if DRONE not in self.enemies:
                     raise ValueError("当前敌人数据缺少仲裁无人机")
                 self.diagnostics.append("仲裁无人机为普通敌人生成后的独立机会：20%或30秒保底计时、人数上限；原生近点生成改用有支撑且无碰撞的邻近导航面，未见清理以场景LOS每秒检查")
-                self.diagnostics.append("无人机死亡爆炸已确认最大生命值为基伤、20米Blast；阵营过滤与击杀归属尚未确认，当前未计入伤害，可能低估群体清场")
+                self.diagnostics.append("无人机按源回调获得+400%生命和状态免疫；死亡20米Blast以玩家为伤害来源、无武器引用，不继承武器击杀触发；保留其他无人机保护；20米线性衰减按身体包围盒近似；次生Blast状态与击倒动画/时长未证实，未模拟")
                 self.diagnostics.append("场景把无人机计入总存活上限；原生Director该计数是否排除无人机仍未证实")
         elif self.enemy_pool:
             self.diagnostics.append("自定义工况固定所选tier并逐只权重抽样；不是游戏防御编波")
@@ -410,29 +417,62 @@ class World:
         )
 
     def drain(self, events=None):
-        for event in events if events is not None else self.combat.drain_events():
-            kind = event.get("kind")
-            if kind == "kill":
+        pending = list(events if events is not None else self.combat.drain_events())
+        explosions = []
+        while pending or explosions:
+            for event in pending:
+                kind = event.get("kind")
+                if kind != "kill":
+                    self.replay["combat"].append(event)
+                    continue
                 actor = self.actors[event["targetId"]]
                 if actor.dead:
                     continue
                 actor.dead = True
                 when = event["time"]
                 self.record(actor, when)
-                actor.tape.update(death=round(when, 6), deathPosition=list(actor.pos))
+                actor.tape.update(death=round(when, 6), deathPosition=list(actor.pos),
+                                  deathSource=event.get("source"))
                 self.stats["kills"] += 1
                 self.last_kill = when
                 self.replay["kills"].append([round(when, 6), actor.id, *actor.pos])
                 if actor.drone:
                     self.stats["droneKills"] += 1
-                    self.stats["vitusExpected"] = (
-                        self.stats["droneKills"] * VITUS_DROP_CHANCE
-                    )
+                    self.stats["vitusExpected"] = self.stats["droneKills"] * VITUS_DROP_CHANCE
                     if random_at(self.c["seed"], actor.id, 3) < VITUS_DROP_CHANCE:
                         self.stats["vitusSample"] += 1
-            else:
-                self.replay["combat"].append(event)
-        self.live = [a for a in self.live if not a.dead]
+                    explosions.append((actor, when))
+            self.live = [a for a in self.live if not a.dead]
+            pending = []
+            if not explosions:
+                break
+            # Drain iteratively: each drone can die/explode once, including a
+            # chain. Remove dead auras before admission, retaining other drones.
+            actor, when = explosions.pop(0)
+            self.protection()
+            amount = self.combat.targets[actor.id].defenses["health"]
+            before = self.combat.drone_explosion_damage
+            origin = add(actor.pos, 0.85)
+            for recipient in self.live:
+                # Native falloff uses the closest point of the recipient AABB.
+                # These bounds enclose this arena's existing body/head proxies.
+                low = add(recipient.pos, 0.4 if recipient.drone else 0.07)
+                high = add(recipient.pos, 1.3 if recipient.drone else 1.88)
+                radius = 0.45 if recipient.drone else 0.38
+                nearest = (max(low[0]-radius, min(high[0]+radius, origin[0])),
+                           max(low[1], min(high[1], origin[1])),
+                           max(low[2]-radius, min(high[2]+radius, origin[2])))
+                factor = max(0.0, 1.0 - distance(origin, nearest) / 20.0)
+                if factor > 0:
+                    self.combat.drone_explosion(recipient.id, amount * factor, when)
+            self.replay["combat"].append(dict(
+                kind="drone-explosion", time=round(when, 6), sourceActor=actor.id,
+                attacker="player", weapon=None, position=list(actor.pos), radius=20.,
+                baseAmount=amount, damage=self.combat.drone_explosion_damage-before,
+                forcedProc="PT_KNOCKED_DOWN", checkForCover=False,
+                falloff="linear-to-zero-at20m",
+            ))
+            pending = self.combat.drain_events()
 
     def spawn_random(self):
         value = random_at(self.c["seed"], self.spawn_draw_index, 25)
@@ -446,12 +486,34 @@ class World:
         self.last_kill = self.t
         self.next_spawn = self.t
         self.wave_pending = False
-        from .arena_spawns import defense_enemy_level
-        self.wave_level = (min(9999, defense_enemy_level(self.wave, self.c["level"]))
-                           if self.c["levelGrowth"] else self.c["level"])
+        from .arena_spawns import defense_enemy_level, interception_enemy_level
+        level = (interception_enemy_level(self.wave, self.c["level"], self.c["missionDifficulty"])
+                 if self.interception else defense_enemy_level(self.wave, self.c["level"]))
+        self.wave_level = min(9999, level) if self.c["levelGrowth"] else self.c["level"]
         info = dict(wave=self.wave, start=round(self.t, 6), end=None,
                     enemyLevel=self.wave_level, levelGrowth=self.c["levelGrowth"])
-        if self.source_spawns:
+        if self.interception:
+            from .arena_spawns import interception_parameters
+            params = interception_parameters(
+                self.wave, self.c["squadSize"], self.c["missionDifficulty"],
+                self.c["interceptionProgress"], self.c["level"],
+                max_alive=min(self.c["aliveCap"], self.c["directorHardCap"]),
+                elapsed_seconds=self.t, eximus_multiplier=self.c["eximusMultiplier"],
+            )
+            self.interception_params = params
+            self.wave_alive_cap = params["maxAlive"]
+            self.wave_target = self.c["enemies"]
+            self.wave_pool = [r for r in self.spec_entries
+                              if r["tier"] <= params["tier"] and r["probability"] > 0]
+            self.squad_delay = params["defaultDelay"]
+            self.initial_squad = params["initialCount"]
+            if not self.initial_squad:
+                self.next_spawn = self.t + self.squad_delay
+            info.update(spawnProfile=self.c["spawnProfile"], **{k:v for k,v in params.items() if k!="level"},
+                        formulaEnemyLevel=params["level"], targetCount=self.wave_target, fixedProgress=self.c["interceptionProgress"],
+                        roundEnd="scenario-quota-cleared", directorHardCap=self.c["directorHardCap"])
+            self.diagnostics.extend(params["qualifications"])
+        elif self.source_spawns:
             from .arena_spawns import defense_wave_parameters, build_defense_schedule
             params = defense_wave_parameters(
                 self.wave, self.c["squadSize"], self.c["level"],
@@ -488,9 +550,18 @@ class World:
 
     def _spawn_actor(self, enemy, point, *, drone=False, source=None):
         id = len(self.actors)
+        drone = drone or enemy["path"] == DRONE
         pos = tuple(self.scene.nodes[point["face"]])
         actor = Actor(id, point["face"], pos, drone)
         target = self.combat.add_target(id, enemy, self.wave_level, pos)
+        if drone:
+            # LotusGameRules P40: health STACKING_MULTIPLY +4 (5x), then
+            # refill health; injury-block SET1. These are spawn-time upgrades,
+            # absent from the static Avatar template, and do not scale shields.
+            target.defenses["health"] *= 5.0
+            target.full[2] *= 5.0
+            target.pools[2] *= 5.0
+            target.status_immune = True
         actor.tape = dict(id=id, type="drone" if drone else "normal",
                           name=enemy.get("name") or enemy.get("nameEn"),
                           enemyPath=enemy["path"], level=self.wave_level,
@@ -509,10 +580,11 @@ class World:
         self.record(actor, self.t)
         if drone:
             actor.last_seen = self.t
+            actor.tape.update(healthMultiplier=5.0, statusImmune=True)
         return actor
 
     def arbitration_drone(self, anchor):
-        if self.c["spawnProfile"] != "arbitration":
+        if self.c["spawnProfile"] not in ("arbitration", "arbitration_interception"):
             return
         # LotusGameRules OnAgentCreated: cooldown expiration OR a fresh 20%
         # roll. A successful spawn resets30s; it never replaces the anchor.
@@ -541,7 +613,7 @@ class World:
         self.stats["droneSpawnBlocked"] = self.stats.get("droneSpawnBlocked", 0) + 1
 
     def maintain_drones(self):
-        if self.c["spawnProfile"] != "arbitration" or self.t < self.next_drone_maintenance:
+        if self.c["spawnProfile"] not in ("arbitration", "arbitration_interception") or self.t < self.next_drone_maintenance:
             return
         self.next_drone_maintenance = self.t + 1.0
         for actor in self.live:
@@ -564,8 +636,26 @@ class World:
             self.next_spawn = math.inf
             return
         batch = 1 if self.source_spawns else self.c["spawnBatch"]
+        initial, squad_allowed = False, True
+        if self.interception:
+            from .arena_spawns import interception_parameters
+            params = self.interception_params
+            params["leaderChance"] = interception_parameters(
+                self.wave, self.c["squadSize"], self.c["missionDifficulty"],
+                self.c["interceptionProgress"], self.c["level"], self.wave_alive_cap,
+                elapsed_seconds=self.t, eximus_multiplier=self.c["eximusMultiplier"],
+            )["leaderChance"]
+            initial = self.initial_squad > 0
+            batch = self.initial_squad if initial else int(
+                params["minSquad"] + self.spawn_random()
+                * (params["maxSquad"] - params["minSquad"] + 1))
+            self.initial_squad = 0
+            if not initial and len(self.live) + params["capMinimumSquad"] > self.wave_alive_cap:
+                batch = 0
+                squad_allowed = False
         for _ in range(min(batch, self.wave_target - self.generated)):
-            if len(self.live) >= self.wave_alive_cap:
+            admission_cap = self.c["directorHardCap"] if self.interception else self.wave_alive_cap
+            if len(self.live) >= admission_cap:
                 break
             id = len(self.actors)
             offset = int(random_at(self.c["seed"], id) * len(self.spawn_points))
@@ -582,7 +672,36 @@ class World:
             drone = bool(not self.source_spawns and self.c["droneEvery"] and id % self.c["droneEvery"] == 0)
             enemy = self.enemies.get(DRONE, self.enemy) if drone else self.enemy
             row = None
-            if self.source_spawns:
+            if self.interception:
+                from .arena_spawns import _add, _mul, _sub
+                counts = {}
+                for active in self.live:
+                    name = active.tape.get("sourceAgent")
+                    counts[name] = counts.get(name, 0) + 1
+                available = [r for r in self.wave_pool if not r.get("maxSimultaneous")
+                             or counts.get(r["agent"], 0) < r["maxSimultaneous"]]
+                if not available:
+                    self.stats["spawnQueued"] += 1
+                    break
+                weight = 0.0
+                for candidate in available:
+                    weight = _add(weight, candidate["probability"])
+                roll = _mul(self.spawn_random(), weight)
+                row = available[-1]
+                for candidate in available:
+                    if roll <= candidate["probability"]:
+                        row = candidate
+                        break
+                    roll = _sub(roll, candidate["probability"])
+                path = row["resolvedAvatarPath"]
+                variant = row.get("avatarVariants", {}).get("EXIMUS", {})
+                if self.spawn_random() < self.interception_params["leaderChance"]:
+                    if variant.get("resolvedAvatarPath") in self.enemies:
+                        path = variant["resolvedAvatarPath"]
+                    else:
+                        self.diagnostics.append("部分源Agent无可运行EXIMUS变体：保留普通变体，不替换为其他敌人")
+                enemy = self.enemies[path]
+            elif self.source_spawns:
                 row = self.wave_schedule[self.generated]
                 chance = self.wave_eximus_probability
                 if self.wave_target - self.generated <= self.wave_rush_count:
@@ -615,7 +734,19 @@ class World:
             if not drone:
                 self.arbitration_drone(actor)
         self.stats["peakAlive"] = max(self.stats["peakAlive"], len(self.live))
-        self.next_spawn = self.t + (0.25 if self.source_spawns else self.c["spawnEvery"])
+        if self.interception:
+            params = self.interception_params
+            if not initial and squad_allowed:
+                if self.squad_delay >= params["maxDelay"]:
+                    self.squad_delay = params["defaultDelay"]
+                elif len(self.live) + params["capMinimumSquad"] > self.wave_alive_cap:
+                    self.squad_delay = params["maxDelay"]
+                else:
+                    from .arena_spawns import _add
+                    self.squad_delay = _add(self.squad_delay, params["increment"])
+            self.next_spawn = self.t + self.squad_delay
+        else:
+            self.next_spawn = self.t + (0.25 if self.source_spawns else self.c["spawnEvery"])
 
     def geometry(self, shot):
         engine = self.context["engine"]
@@ -2870,6 +3001,37 @@ class World:
                     self.player.node,
                     "walking" if self.c["movement"] == "walking" else "player",
                 )
+                if getattr(self, "aim_blocked", False) and current:
+                    # LOS to a nearby drone can be clear while a protected body
+                    # encloses the muzzle. Chasing that same node cannot help.
+                    # Choose a reachable, unoccupied firing origin and check
+                    # real first contacts before committing to the source route.
+                    targets = sorted((a for a in self.live if not self.combat.targets[a.id].protected),
+                                     key=lambda a: (not a.drone, distance(a.pos, self.player.pos), a.id))
+                    geometry = self.geometry(current)
+                    nodes = sorted((i for i, cost in enumerate(search.d)
+                                    if i != self.player.node and math.isfinite(cost)
+                                    and distance(self.scene.nodes[i], self.player.pos) <= 15.0),
+                                   key=lambda i: (search.d[i], i))
+                    for node in nodes:
+                        position = self.scene.nodes[node]
+                        if any(distance(position, a.pos) < 1.2 for a in self.live):
+                            continue
+                        origin = add(position, 1.55)
+                        viable = False
+                        for target in targets:
+                            point = self.aimpoint(target)[0]
+                            if distance(origin, point) > effective_range or not self.scene.visible(origin, point):
+                                continue
+                            contacts, _ = self.shot_hits(origin, point, current, geometry, preview=True)
+                            if any(not self.combat.targets[a.id].protected for a, _, _ in contacts):
+                                viable = True
+                                break
+                        if viable:
+                            self.player.route = route(search, node)
+                            self.stats["firingPositionPlans"] = self.stats.get("firingPositionPlans", 0) + 1
+                            self.next_plan = self.t + .5
+                            return
                 candidates = [
                     a for a in self.live if math.isfinite(search.d[a.node])
                     and (not getattr(self, "aim_blocked", False)
@@ -3030,7 +3192,28 @@ class World:
         destination = edge["points"][edge["index"]]
         dx, dz = destination[0] - origin[0], destination[2] - origin[2]
         horizontal = math.hypot(dx, dz)
-        targets = []
+        targets, short_targets = [], []
+        # At a narrow merge a full .6m sidestep may leave the floor even
+        # though a .2m tangent step frees the next actor. Keep the source
+        # edge, validate the small step, then resume it without teleporting.
+        if horizontal > EPS:
+            gx, gz = dx/horizontal, dz/horizontal
+            neighbours = sorted((other for other in self.live
+                                 if other is not actor and not other.dead
+                                 and distance(origin, other.pos) < .85),
+                                key=lambda other: (distance(origin, other.pos), other.id))
+            for other in neighbours[:2]:
+                ax, az = origin[0]-other.pos[0], origin[2]-other.pos[2]
+                separation = math.hypot(ax, az)
+                if separation <= EPS:
+                    continue
+                ax, az = ax/separation, az/separation
+                inward = min(0.0, gx*ax + gz*az)
+                tx, tz = gx-inward*ax+.1*ax, gz-inward*az+.1*az
+                tangent = math.hypot(tx, tz)
+                if tangent > EPS:
+                    point = (origin[0]+tx/tangent*.2, origin[1], origin[2]+tz/tangent*.2)
+                    short_targets.append((actor.node, point, True, actor.route, None))
         # A native centroid/portal polyline can double back through a crowded
         # merge. Rejoin only an already planned source node, using a bounded
         # fully supported direct walk; never introduce an inter-floor route.
@@ -3054,6 +3237,7 @@ class World:
                             via = (origin[0] - gz * side + gx * .15,
                                    origin[1], origin[2] + gx * side + gz * .15)
                             targets.append((node, point, False, remaining_route, via))
+        targets.extend(short_targets)
         if horizontal > EPS:
             forward = (dx / horizontal, dz / horizontal)
             for lateral in (0.6, -0.6, 0.9, -0.9):
@@ -3118,7 +3302,45 @@ class World:
             if length <= EPS:
                 continue
             if resume:
-                points.extend(edge["points"][edge["index"]:])
+                next_index = edge["index"]
+                # Keep forward progress along the old edge after stepping out;
+                # going back to an already passed sample recreates the jam.
+                shift = tuple(points[-1][i]-origin[i] for i in range(3))
+                while (distance(origin, target) <= .21
+                       and next_index + 1 < len(edge["points"])
+                       and distance(origin, edge["points"][next_index]) <= .4) and sum(
+                    (edge["points"][next_index][i]-points[-1][i])*shift[i]
+                    for i in range(3)
+                ) < 0:
+                    next_index += 1
+                join_start, join_end = points[-1], edge["points"][next_index]
+                steps = max(1, math.ceil(distance(join_start, join_end)/.12))
+                for step in range(1, steps+1):
+                    point = mix(join_start, join_end, step/steps)
+                    support = self.scene.ground_support(point, max_drop=.5, max_rise=.25)
+                    if support is not None:
+                        valid = (abs(support.position[1]-point[1]) <= .35
+                                 and abs(support.normal[1]) >= .5)
+                    else:
+                        # The existing confirmed-open door edge deliberately
+                        # spans its missing NAV threshold. Qualify only that
+                        # exact aperture, never an arbitrary floor/wall gap.
+                        valid = False
+                        if edge["kind"] == "door":
+                            for door in self.scene.doors:
+                                ap = door["aperture"]
+                                local = tuple(point[i]-ap["origin"][i] for i in range(3))
+                                along = sum(local[i]*ap["normal"][i] for i in range(3))
+                                across = sum(local[i]*ap["right"][i] for i in range(3))
+                                height = sum(local[i]*ap["up"][i] for i in range(3))
+                                if abs(along) <= ap["halfDepth"] and abs(across) <= ap["halfWidth"]-.22 and -.25 <= height <= .45:
+                                    valid = True
+                                    break
+                    if not valid:
+                        break
+                if not valid:
+                    continue
+                points.extend(edge["points"][next_index:])
                 if not self.scene.check_motion(points, ground_step=True)["clear"]:
                     continue
             actor.edge = {
@@ -3418,6 +3640,7 @@ class World:
             pathSearches=self.scene.metrics["pathSearches"],
             directDamage=self.combat.direct_damage,
             dotDamage=self.combat.dot_damage,
+            droneExplosionDamage=self.combat.drone_explosion_damage,
             reloads=self.combat.reloads,
             transforms=self.combat.transforms,
             enemyDistance=sum(a.travelled for a in self.actors.values()),
