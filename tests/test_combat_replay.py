@@ -449,3 +449,66 @@ def test_heat_new_proc_keeps_stronger_decay_tail():
     at=next(p for p in r['timeline'] if p['time']==2.6)
     assert at['stacks']['heat']==1
     assert at['heatArmourStrip']==.4
+
+
+def test_arena_shared_shooter_snapshot_and_independent_targets(monkeypatch):
+    from wfarsenal import arena_combat as arena
+    base = stats(damage_types={'DT_IMPACT': 100.}, status_chance=0., magazine=1., fire_rate=2.)
+    radial = replace(base, radial_only=True)
+    def resolve(form, stacks, live, last):
+        factor = 1. + stacks.get('kill', 0.)
+        return replace(base, damage_types={'DT_IMPACT': 100.*factor}), replace(radial, damage_types={'DT_IMPACT':100.*factor})
+    monkeypatch.setattr(arena, 'prepare', lambda *a, **k: dict(resolve=resolve, trigger_sources=[dict(id='kill',kind='on-kill',maxStacks=3,duration=1.,perEvent=1.)]))
+    session=arena.ArenaCombat({})
+    a=session.add_target('a',target(50.)); b=session.add_target('b',target(250.)); untouched=session.add_target('c',target(500.))
+    shot=session.prepare_shot(0.,False,'a')
+    session.hit(shot,'a'); session.hit(shot,'b','radial')
+    assert a.health==0 and b.health==pytest.approx(150.) and untouched.health==500.
+    assert session.ammo==1. and session.sources[0]['stacks']==0.
+    session.finish_shot(shot)
+    assert session.ammo==0. and session.sources[0]['stacks']==1.
+    assert [e['targetId'] for e in session.drain_events() if e['kind']=='kill']==['a']
+    assert session.prepare_shot(.5,False,'b') is None
+    assert session.reloads==1 and session.next_attack_time(.5)==pytest.approx(1.5)
+    session.advance(1.5)
+    follow=session.prepare_shot(1.5,False,'b')
+    assert follow.stats.damage_types['DT_IMPACT']==100.  # shared buff expired during reload
+    session.hit(follow,'b'); session.finish_shot(follow)
+    assert b.health==pytest.approx(50.) and untouched.health==500.
+    # Two projectiles may coexist; impact ordering never pays ammo twice.
+    base=replace(base,magazine=3.)
+    flying=arena.ArenaCombat({}); victim=flying.add_target('v',target(250.))
+    first=flying.prepare_shot(0.,False,'v'); flying.fire_shot(first)
+    second=flying.prepare_shot(.5,False,'v'); flying.fire_shot(second)
+    assert flying.ammo==1. and flying.shots==2
+    planned=flying.preview(.5,'v'); before=(flying.ammo,victim.health,flying.shots)
+    assert flying.estimate(planned,'v')==pytest.approx(100.)
+    assert before==(flying.ammo,victim.health,flying.shots)
+    flying.begin_impact(second,.8); flying.hit(second,'v',t=.8); flying.finish_impact(second,.8)
+    flying.begin_impact(first,1.); flying.hit(first,'v',t=1.); flying.finish_impact(first,1.)
+    assert victim.health==pytest.approx(50.) and flying.ammo==1.
+
+
+@pytest.mark.parametrize('dtype', ['DT_ELECTRICITY','DT_GAS'])
+def test_arena_independent_proc_clocks_and_neighbour_damage(monkeypatch,dtype):
+    from wfarsenal import arena_combat as arena
+    st=stats(damage_types={dtype:100.},fire_rate=2.,magazine=4.)
+    monkeypatch.setattr(arena,'prepare',lambda *a,**k:dict(resolve=lambda *args:(st,None),trigger_sources=[]))
+    session=arena.ArenaCombat({})
+    a=session.add_target('a',target(1e6)); b=session.add_target('b',target(1e6)); c=session.add_target('c',target(1e6))
+    session.nearby=lambda id,radius,t: ['b'] if id=='a' else []
+    shot=session.prepare_shot(0.,False,'a'); session.hit(shot,'a'); session.finish_shot(shot)
+    session.advance(2.)
+    assert a.damage>100.
+    assert (b.damage>0)==(dtype in ('DT_ELECTRICITY','DT_GAS'))
+    assert c.damage==0. and not c.presence
+    assert not b.presence  # area ticks do not recursively apply source procs
+    assert session.shots==1 and session.ammo==3.
+    # Chunked stepping must preserve source clocks/latest conditional moments.
+    other=arena.ArenaCombat({})
+    for id in ('a','b','c'): other.add_target(id,target(1e6))
+    other.nearby=session.nearby
+    shot=other.prepare_shot(0.,False,'a'); other.hit(shot,'a'); other.finish_shot(shot)
+    for t in (.25,.5,.75,1.,1.25,1.5,1.75,2.): other.advance(t)
+    assert other.targets['a'].damage==pytest.approx(a.damage)
+    assert other.targets['b'].damage==pytest.approx(b.damage)

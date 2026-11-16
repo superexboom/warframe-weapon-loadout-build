@@ -1,0 +1,772 @@
+{
+  "schema": 1,
+  "defaultMap": "corpus-ship-defense",
+  "maps": {
+    "corpus-ship-defense": {
+      "id": "corpus-ship-defense",
+      "name": "Corpus Ship Defense — extracted tile",
+      "sourceTile": "/Lotus/Levels/CorpusShipRemastered/ObjDefense01",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "a400648c2eacf8a63727665ce5e836a0241620a154b7daadb02ed59652b7d981",
+          "bytes": 1971123
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "d6b97383111c61d59cde6656cf6dbe3a18c76e3b7d18a95eedf6995e8618d77b",
+          "bytes": 24563961
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "604dee0d3a3276aeb4b9d1c5b8c845e760fb88d9e32c04a99e8c25a05e180ecc",
+          "bytes": 16563922
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "1c0fe65eff707c39ff27e0fe4c5f95aba97c0a0fe40b951fd9464f3f278c9828",
+          "bytes": 554492
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "corpus-ship-defense.scene.json.gz",
+          "sha256": "5065bdfa5e326f2ec0b6c4a3758d82f9d87b849835b8523439a36cce21da1757",
+          "jsonSha256": "5b7b95b048b2c09d2dc0da48c15e7330918c5d7b501049e6dc5f53d327af7ca7",
+          "compressedBytes": 1308268,
+          "jsonBytes": 13941358
+        },
+        "navigation": {
+          "file": "corpus-ship-defense.navigation.json.gz",
+          "sha256": "dbd67eb1adeb2fbfe9753181ba056c2fbffc1fe5f90e8a51353d53731ba6e0a0",
+          "jsonSha256": "620c0809dd47322dd55b267d8f9d8babfe263c0841fa1e27156492e1f72f3311",
+          "compressedBytes": 8227777,
+          "jsonBytes": 24563924
+        },
+        "visual-map": {
+          "file": "corpus-ship-defense.visual-map.json.gz",
+          "sha256": "85749ba567e2d7b16bff2164a1d30c22e2e79c3d526f4f51c759874b26c30ef7",
+          "jsonSha256": "ad0cd65c8bc31bda3643d40f2c4d98cededed4b6ecfa4c14249d77aea7853c68",
+          "compressedBytes": 4089181,
+          "jsonBytes": 16564143
+        },
+        "visual-map-collision-candidates": {
+          "file": "corpus-ship-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "c251b20869834e63dfd678edb67ebc286321f74f1901871af7f60c64757cb6af",
+          "jsonSha256": "1c0fe65eff707c39ff27e0fe4c5f95aba97c0a0fe40b951fd9464f3f278c9828",
+          "compressedBytes": 40085,
+          "jsonBytes": 554492
+        }
+      },
+      "staticWallAdmission": {
+        "policy": "static regular wall panels, exact near-vertical source triangles area>=0.05; native body-portal blocking triangles vetoed",
+        "selectedInstances": 156,
+        "candidateTriangles": 53803,
+        "vetoedTriangles": 0,
+        "admittedTriangles": 53803,
+        "nativeRouteAuditCasts": 28332,
+        "baseTriangles": 7893,
+        "totalTriangles": 61696,
+        "qualification": "conservative qualified visual proxy; not native BSP; no collision from decorative props; source wall triangles conflicting with native paths intentionally omitted"
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256"
+      ],
+      "originalInputs": [
+        {
+          "file": "H.Misc.toc",
+          "sha256": "282e5fb454b1538a714af8ecefdda183800003e7b5cf96ba391321072ffa08d0",
+          "bytes": 26098376
+        },
+        {
+          "file": "B.Misc.toc",
+          "sha256": "a7dc0ed79e23c7f09162f518a96bb3ac41c38506c6ff7e80e6674ee7e8807cde",
+          "bytes": 17015240
+        },
+        {
+          "file": "F.Misc.toc",
+          "sha256": "1dfcd8a356d1b9dfaec1ce2338d9d000772e9f2ee3432e66b01ba4dcc0c7b917",
+          "bytes": 6301448
+        },
+        {
+          "file": "Warframe-Exporter-CLI_Windows.exe",
+          "sha256": "17105d912343d6f432f423e612e3bbb3d217512848f6c2ad72bc7bac5874ac58",
+          "bytes": 1744896
+        },
+        {
+          "file": "Warframe.x64.exe",
+          "sha256": "dae100202115919c89440c9ef320f691113ee8dcaf01205cbd180072c35aabdb",
+          "bytes": 45522808
+        },
+        {
+          "file": "H.AnimRetarget.toc",
+          "sha256": "60854f26febb7371d687de8ff7d39f362a8454fb6f61368b4361b1e03bc9d09b",
+          "bytes": 1442984
+        },
+        {
+          "file": "B.AnimRetarget.toc",
+          "sha256": "f2440048863710b4429f47bd9bc12fb4cfbf04ac599dbd73ebf24a8cbde6e2d1",
+          "bytes": 1217768
+        }
+      ],
+      "sourceRepositoryTrees": [
+        {
+          "repo": "Puxtril/Warframe-Exporter",
+          "treeSha": "845faf239c2c4bdd1590385d551e1ccce8c10d69"
+        },
+        {
+          "repo": "Puxtril/LotusLib",
+          "treeSha": "a94f2bd02aa926be6dad88b3bb7aa8bad2e6da80"
+        }
+      ],
+      "extractorVersion": "2.14 <Debug> <Extract> <Main>",
+      "nameZh": "Corpus飞船防御模板",
+      "architectureFaction": "Corpus",
+      "templateLabelZh": "飞船防御／拦截共享模板",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+    },
+    "grineer-galleon-defense": {
+      "id": "grineer-galleon-defense",
+      "name": "Grineer Galleon Defense — Hydron / Helene template",
+      "sourceTile": "/Lotus/Levels/GrineerGalleon/GrnDefenceTwo",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "c22bc49b94860c98163edb385ea773545427a970516419c2cc67b92469251d22",
+          "bytes": 1816092
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "33f0e1e69cc2be6ae92033b2eab56e695ccc3d328aef00f62e642b0c8ba77cf1",
+          "bytes": 214233
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "47aee2a6f30f0671437d2fd1d291bcdeed5b92b69742b3be03a38daf9bf2c7ee",
+          "bytes": 22358764
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "grineer-galleon-defense.scene.json.gz",
+          "sha256": "6072341a51af688e73c54654126f5daf01228c8a7a20693c38844a6a4dc92410",
+          "jsonSha256": "6d8a50839c2c24e8c1895de66776b2f028ab2d0fd8370d10503ebcc61c2da042",
+          "compressedBytes": 144312,
+          "jsonBytes": 1816315
+        },
+        "navigation": {
+          "file": "grineer-galleon-defense.navigation.json.gz",
+          "sha256": "66108c30616aefc762c466a9b5ff4edfb6ae937e238a458a1c63c2c9ffe4b5f2",
+          "jsonSha256": "28b8aad7194104e92e6f7ae99d96784e88a1afd7257eccb4fc7f3b4bfa6d38e7",
+          "compressedBytes": 39412,
+          "jsonBytes": 214328
+        },
+        "visual-map": {
+          "file": "grineer-galleon-defense.visual-map.json.gz",
+          "sha256": "06d1dcf76eaa93f7b1defc24978f0beafafbbca45601bff4b2a25ef1b4148dde",
+          "jsonSha256": "ad33c23fd9dd5d7c8c0737c98bee5018f102c7de8931c0464d84714bd9c03c8f",
+          "compressedBytes": 3864837,
+          "jsonBytes": 22358987
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-galleon-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256"
+      ],
+      "sharedNodeAliases": [
+        {
+          "name": "Hydron",
+          "node": "SolNode195",
+          "offset": "0x65e76",
+          "links": [
+            "/Lotus/Levels/Proc/Grineer/GrineerGalleonDefense",
+            "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        },
+        {
+          "name": "Helene",
+          "node": "SolNode42",
+          "offset": "0x275db",
+          "links": [
+            "/Lotus/Levels/Proc/Grineer/GrineerGalleonDefense",
+            "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        }
+      ],
+      "sourceProc": {
+        "path": "/Lotus/Levels/Proc/Grineer/GrineerGalleonDefense",
+        "tileReference": "/Lotus/Levels/GrineerGalleon/GrnDefenceTwo.level",
+        "qualification": "exact resource reference in current Proc header; node aliases from contiguous solar-map strings, not live Arbitration roster"
+      },
+      "nameZh": "Grineer战舰防御模板",
+      "architectureFaction": "Grineer",
+      "templateLabelZh": "战舰防御／拦截共享模板",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+    },
+    "corpus-outpost-defense-two": {
+      "id": "corpus-outpost-defense-two",
+      "name": "Corpus Outpost Defense Two — Sechura candidate",
+      "sourceTile": "/Lotus/Levels/Outpost/CrpOutpostDefenseTwo",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "64b66f48cf65f291765a8def759444328c85efed165c2a0ea72baa916ee72661",
+          "bytes": 2272261
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "d3e6f5fa90dc56ca78dbb9dd27481b0abdcf344481f7baa248d472ef27ce806a",
+          "bytes": 1299157
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "e2bd9d373be95b16145391591ef2a7c14e42e55546e7c3d6826ab7369339c865",
+          "bytes": 6742073
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "corpus-outpost-defense-two.scene.json.gz",
+          "sha256": "03798cc766f8db92a777f5b3fe662032ec7520984e604a4293bf17bc5d61eccc",
+          "jsonSha256": "c058aeea4fd5a720637839506e6899a3650d6ea3f93f5c7cf2b8e02182e7e4fe",
+          "compressedBytes": 349449,
+          "jsonBytes": 2272479
+        },
+        "navigation": {
+          "file": "corpus-outpost-defense-two.navigation.json.gz",
+          "sha256": "dfd8d9f4f1063b1205eb7f0c40a26e3ca58697661c9a28d53e3fd36d9c4a03dd",
+          "jsonSha256": "51e51d87d18f5b21add3e8cc5d3cfdcf0bb7b905808813f5202486d63d5efced",
+          "compressedBytes": 224045,
+          "jsonBytes": 1299252
+        },
+        "visual-map": {
+          "file": "corpus-outpost-defense-two.visual-map.json.gz",
+          "sha256": "657a5f40d211727086986383662d6d0a0a212856b22d2b43cb39486bd96c3f63",
+          "jsonSha256": "f14e4a8cfe6afce61f5e549316901e3a885b10a97eb78e7c8d8e4af32f28f719",
+          "compressedBytes": 1057870,
+          "jsonBytes": 6742291
+        },
+        "visual-map-collision-candidates": {
+          "file": "corpus-outpost-defense-two.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256"
+      ],
+      "sharedNodeAliases": [
+        {
+          "name": "Sechura",
+          "node": "ClanNode24",
+          "offset": "0x4ac3e",
+          "links": [
+            "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+            "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        }
+      ],
+      "sourceProc": {
+        "path": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+        "tileReference": "/Lotus/Levels/Outpost/CrpOutpostDefenseTwo.level",
+        "qualification": "exact current Proc resource reference; candidate node aliases retain ordered-string evidence, Arbitration eligibility unknown"
+      },
+      "nameZh": "Corpus前哨站防御模板二",
+      "architectureFaction": "Corpus",
+      "templateLabelZh": "前哨站防御变体二",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+    },
+    "grineer-shipyards-defense": {
+      "id": "grineer-shipyards-defense",
+      "name": "Grineer Shipyards Defense — Seimeni candidate",
+      "sourceTile": "/Lotus/Levels/GrineerShipyards/ShipyardsDefence",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "afe98a6de75281d85cb15e82c78b3e84b78c5a7bf326c29f0621921f7b89ec47",
+          "bytes": 2863201
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "0e06711f00443bb57f0e0f78da4a1e3c2aad2cd1f4d9dee19996ae516efe96c6",
+          "bytes": 518213
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "f1f11da3906fd14c0ed96d126140530d78f05d8b3855110a962fc6d1abffee8c",
+          "bytes": 14591877
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "grineer-shipyards-defense.scene.json.gz",
+          "sha256": "c5af5e4bf7eca98baf1d94a2ade80f787f594133b1b07230e7054302b141fe31",
+          "jsonSha256": "19e249bf77dca50db8961aa768e16f51e58afb9a2ed711ac719b57bcecd6dd1f",
+          "compressedBytes": 414109,
+          "jsonBytes": 2863409
+        },
+        "navigation": {
+          "file": "grineer-shipyards-defense.navigation.json.gz",
+          "sha256": "aa7c871dd1e635c77d055b001ba819fe2f358886daa50f01436c9db76993d799",
+          "jsonSha256": "9a8d5b180c6b65a799c22388e1278c8102dc87235055da480b01d6e02cbcda52",
+          "compressedBytes": 100255,
+          "jsonBytes": 518308
+        },
+        "visual-map": {
+          "file": "grineer-shipyards-defense.visual-map.json.gz",
+          "sha256": "d0c071312b2f6875d10e26187e6e94df09b5c0d040ffa8a1d903e175286ea54d",
+          "jsonSha256": "611bdf11bbb96170fef435ab8df256154529fdcdb38b22b4abc76ca0d8de7ea0",
+          "compressedBytes": 3119483,
+          "jsonBytes": 14592085
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-shipyards-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256"
+      ],
+      "sharedNodeAliases": [
+        {
+          "name": "Seimeni",
+          "node": "ClanNode22",
+          "offset": "0x54bc3",
+          "links": [
+            "/Lotus/Levels/Proc/Grineer/GrineerShipyardsDefense",
+            "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        }
+      ],
+      "sourceProc": {
+        "path": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsDefense",
+        "tileReference": "/Lotus/Levels/GrineerShipyards/ShipyardsDefence.level",
+        "qualification": "exact current Proc resource reference; candidate node aliases retain ordered-string evidence, Arbitration eligibility unknown"
+      },
+      "nameZh": "Grineer船坞防御模板",
+      "architectureFaction": "Grineer",
+      "templateLabelZh": "船坞防御模板",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+    },
+    "corpus-gas-city-defense": {
+      "id": "corpus-gas-city-defense",
+      "name": "Corpus Gas City Defense — Io / Sinai candidate",
+      "sourceTile": "/Lotus/Levels/CorpusGasCityRemaster/GasDefense",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "f65cb712eed83414bdbcdc63220808f1a6c68cfc3e0ca5f108fcbcea64683550",
+          "bytes": 4106370
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "591ae1d7e5063ed7909a589e3e500ae665d0b97b13c07c49bc5a67e02aacef66",
+          "bytes": 1878855
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "a00e919fe5bc1f0ce8f5b1fba42d4f1c2e5bdceff910f7558da5e40b3455ed94",
+          "bytes": 2813282
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "corpus-gas-city-defense.scene.json.gz",
+          "sha256": "08489237ca3234727ffc7278d46927a8fb4d1750cba872ef152b1e3f23bf6c5c",
+          "jsonSha256": "5b193d71c75da18a3b70ef3f07a4bcda73639505fdd38122f9376932f38a2fe2",
+          "compressedBytes": 574574,
+          "jsonBytes": 4106582
+        },
+        "navigation": {
+          "file": "corpus-gas-city-defense.navigation.json.gz",
+          "sha256": "c36a23a18fbc8c3e1bac648368ce7c4fd3db259168329cf7d0bb269d3279dca3",
+          "jsonSha256": "fb3fd1a0e7d9a237c616fdfd20053ef844b6e9a87baf7b92733b77189c2ddd18",
+          "compressedBytes": 348988,
+          "jsonBytes": 1878950
+        },
+        "visual-map": {
+          "file": "corpus-gas-city-defense.visual-map.json.gz",
+          "sha256": "9b206412b5c4806b2487a4e00e85ed5c6d2a0e3ec20b7e5848180b97d082be57",
+          "jsonSha256": "66c67fb440bd9155aba14229fa5d8a1c663a5cb2ad56c84ef2fe9679f66649c1",
+          "compressedBytes": 423619,
+          "jsonBytes": 2813494
+        },
+        "visual-map-collision-candidates": {
+          "file": "corpus-gas-city-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256"
+      ],
+      "sharedNodeAliases": [
+        {
+          "name": "Io",
+          "node": "SolNode125",
+          "offset": "0x21464",
+          "links": [
+            "/Lotus/Levels/Proc/Corpus/CorpusGasCityDefense",
+            "/Lotus/Types/Game/EnemySpecs/CorpusGasRemasterDefenseSquad"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        },
+        {
+          "name": "Sinai",
+          "node": "ClanNode4",
+          "offset": "0x24133",
+          "links": [
+            "/Lotus/Levels/Proc/Corpus/CorpusGasCityDefense",
+            "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        }
+      ],
+      "sourceProc": {
+        "path": "/Lotus/Levels/Proc/Corpus/CorpusGasCityDefense",
+        "tileReference": "/Lotus/Levels/CorpusGasCityRemaster/GasDefense.level",
+        "qualification": "exact current Proc resource reference; candidate node aliases retain ordered-string evidence, Arbitration eligibility unknown"
+      },
+      "nameZh": "Corpus燃气城防御模板",
+      "architectureFaction": "Corpus",
+      "templateLabelZh": "燃气城防御模板",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+    },
+    "grineer-ocean-defense-02": {
+      "id": "grineer-ocean-defense-02",
+      "name": "Grineer Ocean Defense 02 — Stephano candidate",
+      "sourceTile": "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense02",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "dc6823a6b3e918761ed4611e1c0833cde3f40a512c719a66a277ea20ab0bfeab",
+          "bytes": 1591262
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "1c085859a5ae9ab0ef686c4af64e07ea84841926bb8f48c988303af0c108d0f9",
+          "bytes": 735143
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "0d2441bc12a46ef406c259f09f82242c6f5664928d9f634da7c1f5ecc1a91ad2",
+          "bytes": 1235277
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "grineer-ocean-defense-02.scene.json.gz",
+          "sha256": "b0efadb69ff9798e07ef7691c541626dd2cd4c6486a084eaa0bd292642840d7f",
+          "jsonSha256": "fee7290f7dbc67d6d744ee35ba5a172ed4230364c3def880ba9c81d7441a8562",
+          "compressedBytes": 269727,
+          "jsonBytes": 1591494
+        },
+        "navigation": {
+          "file": "grineer-ocean-defense-02.navigation.json.gz",
+          "sha256": "6eb00188d7ea640521c0ba1131c4883034386953abf561d58863a0d8d7a5a76e",
+          "jsonSha256": "e98898677f80f414bfb83211ee2b92d025bbac5016f74518604aefaf5fe6d9f5",
+          "compressedBytes": 140596,
+          "jsonBytes": 735238
+        },
+        "visual-map": {
+          "file": "grineer-ocean-defense-02.visual-map.json.gz",
+          "sha256": "1538f8e323a7bf82ec775bdd519f586146b9ca268c58f9b9f0683a6a1866b7ef",
+          "jsonSha256": "52a13a952da1e7ab52fbc4bea4f280391c22dbef62097b5d17ad333cdc3c113d",
+          "compressedBytes": 225640,
+          "jsonBytes": 1235509
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-ocean-defense-02.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256"
+      ],
+      "sharedNodeAliases": [
+        {
+          "name": "Stephano",
+          "node": "SolNode122",
+          "offset": "0x3ac53",
+          "links": [
+            "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+            "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        }
+      ],
+      "sourceProc": {
+        "path": "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+        "tileReference": "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense02.level",
+        "qualification": "exact current Proc resource reference; candidate node aliases retain ordered-string evidence, Arbitration eligibility unknown"
+      },
+      "nameZh": "Grineer海底实验室防御模板二",
+      "architectureFaction": "Grineer",
+      "templateLabelZh": "海底实验室防御变体二",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+    },
+    "grineer-ocean-defense-03": {
+      "id": "grineer-ocean-defense-03",
+      "name": "Grineer Ocean Defense 03 — Stephano candidate",
+      "sourceTile": "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense03",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "2a6da559b171f7ec3c5b2b1f65b996e0ca5da326cf9e01498cf32187c32028a8",
+          "bytes": 1885643
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "b81ab5fdece72f7ac65b58ad27334b5a93601023c0fad99fca24337ca358b6bc",
+          "bytes": 1542603
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "c121e51a840ddff0212b0cd57caf1ca7ab64ad5eebdc52d99426660ba18b9da9",
+          "bytes": 1851065
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "grineer-ocean-defense-03.scene.json.gz",
+          "sha256": "6a8f77900e04d6609b7f1b9decc9020a17cf548fc886b540a231a8844d1497b0",
+          "jsonSha256": "8e0e35bc764ebffb568e8facbb9baef9c44235f4c8324ddf4d307f5306533e2e",
+          "compressedBytes": 301640,
+          "jsonBytes": 1885875
+        },
+        "navigation": {
+          "file": "grineer-ocean-defense-03.navigation.json.gz",
+          "sha256": "300ef54ea867214698d9506ea436d34bb17aae45be6037a93147f3010793da72",
+          "jsonSha256": "c3451e92af2cebe584bd83a6f44b13fc401a0f7132132c8fb7eaa77e4d1fe22a",
+          "compressedBytes": 305439,
+          "jsonBytes": 1542698
+        },
+        "visual-map": {
+          "file": "grineer-ocean-defense-03.visual-map.json.gz",
+          "sha256": "af692352646872f8f9678c07032d3852ef63721f3e16144882d7d5a3b043e1a5",
+          "jsonSha256": "91114f6bbade6f549b678832e1290683cdbf47d149853a27e3a86652d82a0867",
+          "compressedBytes": 398377,
+          "jsonBytes": 1851297
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-ocean-defense-03.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256"
+      ],
+      "sharedNodeAliases": [
+        {
+          "name": "Stephano",
+          "node": "SolNode122",
+          "offset": "0x3ac53",
+          "links": [
+            "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+            "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        }
+      ],
+      "sourceProc": {
+        "path": "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+        "tileReference": "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense03.level",
+        "qualification": "exact current Proc resource reference; candidate node aliases retain ordered-string evidence, Arbitration eligibility unknown"
+      },
+      "nameZh": "Grineer海底实验室防御模板三",
+      "architectureFaction": "Grineer",
+      "templateLabelZh": "海底实验室防御变体三",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+    },
+    "corpus-outpost-defense-one": {
+      "id": "corpus-outpost-defense-one",
+      "name": "Corpus Outpost Defense One — Sechura candidate",
+      "sourceTile": "/Lotus/Levels/Outpost/CrpOutpostDefenseOne",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "d5671c54e4fdd5ee749a2707725ea6a1fabd22ea19f1d2cbce244b8b2efe5d8a",
+          "bytes": 2273703
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "342a699683c8f53f919384e243372ac1e6d7b1f175f4e48332ccc4f3acd8ba84",
+          "bytes": 332225
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "eee4bbe9f3845bcd219b13ee0b57b1534ecdd045c850878b30c1f8eb8f037d28",
+          "bytes": 1656115
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "corpus-outpost-defense-one.scene.json.gz",
+          "sha256": "9f95a55a89c61ba4843e7494cf093262b9b17d140536752782815678c448902b",
+          "jsonSha256": "05cae5dbcaec7f37796c66e5c44474edc67195a80cacd93076fe4522dafa0f64",
+          "compressedBytes": 494741,
+          "jsonBytes": 2273737
+        },
+        "navigation": {
+          "file": "corpus-outpost-defense-one.navigation.json.gz",
+          "sha256": "13a48798ee83ec43c6207504d5db00a49ee1d8e71e1a7f2398931b793fd3b513",
+          "jsonSha256": "f6532a90a94ce78e094423a281f6d4f535ade54e3802d8d1c2a9022c99616b0b",
+          "compressedBytes": 79067,
+          "jsonBytes": 332320
+        },
+        "visual-map": {
+          "file": "corpus-outpost-defense-one.visual-map.json.gz",
+          "sha256": "bca5348c231a258c853bad94d19b9d4e8d92ca4d1d6e31d1c1d0ecc1a3ebdee7",
+          "jsonSha256": "eee4bbe9f3845bcd219b13ee0b57b1534ecdd045c850878b30c1f8eb8f037d28",
+          "compressedBytes": 286494,
+          "jsonBytes": 1656115
+        },
+        "visual-map-collision-candidates": {
+          "file": "corpus-outpost-defense-one.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256"
+      ],
+      "nameZh": "Corpus前哨站防御模板一",
+      "architectureFaction": "Corpus",
+      "templateLabelZh": "前哨站防御变体一",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "name": "Sechura",
+          "node": "ClanNode24",
+          "offset": "0x4ac3e",
+          "links": [
+            "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+            "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        }
+      ]
+    }
+  }
+}

@@ -2056,3 +2056,6 @@ body:not(.mod-slot) :is(.button, .tool-tab, input, select, textarea) { font-size
   .warframe-form-switch-options { grid-template-columns: 1fr; }
   .warframe-form-tab { min-height: 70px; }
 }
+
+/* The arena is a separate tool panel and retains the equipped build state. */
+#arena-open:disabled { opacity: .45; cursor: not-allowed; }

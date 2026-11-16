@@ -108,6 +108,7 @@ const state = {
 };
 
 const ui = Object.fromEntries([
+  "arena-tool", "arena-open",
   "app-shell", "boot-screen", "page-title",
   "health-dot", "health-label", "build-label", "weapon-count", "coverage-count",
   "sample-button", "reset-button", "export-button", "riven-form",
@@ -8151,6 +8152,7 @@ function drawBenchmarkReplay(bench) {
 }
 
 function renderBuild() {
+  refreshArenaEntry();
   const build = state.result?.[state.buildMode] || {};
   for (const button of ui["build-mode"].querySelectorAll("button")) {
     const active = button.dataset.mode === state.buildMode;
@@ -9719,16 +9721,47 @@ function renderWarframeResult(result) {
   ui["warframe-diagnostic-list"].replaceChildren(...(diagnostics.length ? diagnostics.map((line) => create("p", "", String(line))) : [create("p", "", "本次容量、槽位和资料校验通过。")])) ;
 }
 
+let arenaView = null;
+let arenaModule = null;
+function arenaWeaponAvailable() {
+  const weapon = state.buildWeapon;
+  return Boolean(weapon && ["primary", "secondary", "arch_gun"].includes(weapon.slot) && !["melee", "zaw"].includes(weapon.weaponType));
+}
+function refreshArenaEntry() {
+  const button = ui["arena-open"];
+  if (!button) return;
+  button.disabled = !arenaWeaponAvailable();
+  button.title = button.disabled ? "场景靶场仅支持玩家远程武器，近战与同伴暂不接入" : "冻结当前已装备槽位；独立页面点击开始后计算";
+}
+async function openArenaFromBuild() {
+  if (!arenaWeaponAvailable()) { toast("场景靶场仅支持玩家远程武器"); return; }
+  try {
+    const payload = structuredClone(buildPayloadFromForm());
+    // These keys can request searches on the build endpoint. The arena always uses explicit slots.
+    payload.autoArcane = false; payload.autoIncarnon = false; payload.mode = "manual";
+    const label = state.buildWeapon.nameZh || state.buildWeapon.nameEn;
+    arenaModule ||= import("/arena/view.mjs");
+    const { mountArena } = await arenaModule;
+    if (!arenaView) arenaView = mountArena(ui["arena-tool"]);
+    if (location.hash !== "#arena") history.pushState(null, "", "#arena");
+    arenaView.open(payload, label);
+    setActiveTool("arena");
+  } catch (error) { toast("场景靶场：" + (error.message || error)); }
+}
 function setActiveTool(name) {
   if (!ui[`${name}-tool`]) return;
+  if (name === "arena" && !arenaView?.hasLoadout) { openArenaFromBuild(); return; }
   state.activeTool = name;
+  if (name !== "arena") arenaView?.hide();
+  else arenaView?.open();
+  ui["arena-tool"].hidden = name !== "arena";
   ui["analysis-tool"].hidden = name !== "analysis";
   ui["build-tool"].hidden = name !== "build";
   ui["warframe-tool"].hidden = name !== "warframe";
   if (name === "analysis") requestAnimationFrame(fitRivenCardText);
-  ui["page-title"].textContent = name === "warframe" ? "战甲配装" : name === "build" ? "武器配装" : "紫卡分析";
+  ui["page-title"].textContent = name === "arena" ? "场景靶场" : name === "warframe" ? "战甲配装" : name === "build" ? "武器配装" : "紫卡分析";
   for (const button of document.querySelectorAll("[data-tab]")) {
-    const active = button.dataset.tab === name;
+    const active = button.dataset.tab === (name === "arena" ? "build" : name);
     button.classList.toggle("is-active", active);
     if (button.getAttribute("role") === "tab") button.setAttribute("aria-selected", String(active));
   }
@@ -12133,9 +12166,11 @@ function bindEvents() {
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") { closeModPicker(); closeWeaponPicker(); closeArcanePicker(); closeEnemyPicker(); closeWarframePicker(); closeRabbitDialog(); }
   });
+  ui["arena-open"]?.addEventListener("click", openArenaFromBuild);
+  ui["arena-tool"]?.addEventListener("arena-back", () => { location.hash = "build"; setActiveTool("build"); });
   window.addEventListener("hashchange", () => {
     const tool = location.hash.replace("#", "");
-    if (["analysis", "build", "warframe"].includes(tool)) setActiveTool(tool);
+    if (["analysis", "build", "warframe", "arena"].includes(tool)) setActiveTool(tool);
   });
   ui["build-enemy-open"]?.addEventListener("click", openEnemyPicker);
   ui["enemy-picker-close"]?.addEventListener("click", closeEnemyPicker);
@@ -12220,7 +12255,7 @@ async function bootstrap() {
     window.setTimeout(() => { ui["boot-screen"].hidden = true; }, 280);
     if (!state.modAssets) toast("MOD 素材索引加载失败，配装仍可计算");
     const hashTool = location.hash.replace("#", "");
-    if (["build", "analysis", "warframe"].includes(hashTool)) setActiveTool(hashTool);
+    if (["build", "analysis", "warframe", "arena"].includes(hashTool)) setActiveTool(hashTool);
   } catch (error) {
     ui["boot-screen"].querySelector("p").textContent = error.message || "本地数据加载失败";
     ui["boot-screen"].classList.add("has-error");

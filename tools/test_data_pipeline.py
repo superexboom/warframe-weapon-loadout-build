@@ -38,6 +38,38 @@ class PipelineTest(unittest.TestCase):
                 config.write_text(json.dumps(records, indent=indent), encoding="utf-8-sig")
                 self.assertEqual(_rabbit_rows(config), records)
 
+    def test_bundle_arena_assets_follow_engine_instead_of_selected_snapshot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "runtime"
+            snapshot = root / "data/snapshots/candidate"
+            for base in (root, snapshot):
+                (base / "data/export/build").mkdir(parents=True)
+                (base / "data/export/build/weapons.json").write_text("[]")
+                (base / "frontend/assets").mkdir(parents=True)
+                (base / "frontend/assets/probe.txt").write_text("asset")
+                (base / "data/arena").mkdir()
+            (root / "frontend/index.html").write_text("current engine")
+            pipeline.write_json(root / "data/source-lock.json", {
+                "activeBuild": "build", "snapshotRoot": "data/snapshots/candidate"})
+            pipeline.write_json(snapshot / "data/source-lock.json", {"activeBuild": "build"})
+            (root / "data/arena/catalog.json").write_text("current catalog")
+            (root / "data/arena/current.scene.json.gz").write_bytes(b"current scene")
+            (root / "data/arena/weapon-geometry.json.gz").write_bytes(b"current weapon geometry")
+            (snapshot / "data/arena/catalog.json").write_text("old catalog")
+            (snapshot / "data/arena/removed.scene.json.gz").write_bytes(b"old removed scene")
+            frozen_before = pipeline.payload_hashes(snapshot)
+            for mode in ("active", "explicit"):
+                with self.subTest(mode=mode):
+                    bundle = Path(directory) / ("bundle-" + mode)
+                    pipeline.copy_runtime(root, bundle, snapshot=snapshot if mode == "explicit" else None)
+                    self.assertEqual(sorted(p.name for p in (bundle / "data/arena").iterdir()),
+                                     ["catalog.json", "current.scene.json.gz", "weapon-geometry.json.gz"])
+                    for asset in (root / "data/arena").iterdir():
+                        self.assertEqual((bundle / "data/arena" / asset.name).read_bytes(), asset.read_bytes())
+                    self.assertNotIn("snapshotRoot", load_source_lock(bundle))
+                    self.assertFalse((bundle / "data/snapshots").exists())
+            self.assertEqual(pipeline.payload_hashes(snapshot), frozen_before)
+
     def test_snapshot_activation_failure_and_rollback(self):
         temp_root = pipeline.ROOT / ".local" / "pipeline-tests"
         temp_root.mkdir(parents=True, exist_ok=True)

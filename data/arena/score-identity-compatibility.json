@@ -1,0 +1,424 @@
+{
+  "schema": 1,
+  "kind": "exact-pre-arena-source-compatibility",
+  "baselineGitRevision": "b548c1d06f5ad124b2ff618688215c8f140275a2",
+  "provenBaselineInputs": "d5eb0056c3da6a45",
+  "dependencies": [
+    {
+      "path": "data/export/2026.08.13.13.24/weapons.json",
+      "currentNormalizedSha256": "d27c0fcc27b64aa14e18813716ad5eb90064162afb6b9bb8615134939b5e6582",
+      "scoringIdentitySha256": "d27c0fcc27b64aa14e18813716ad5eb90064162afb6b9bb8615134939b5e6582",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/export/2026.08.13.13.24/exalted_weapons.json",
+      "currentNormalizedSha256": "9477902c6dc97216eac993c52b33c57c3be557a2b44362021f4bf19bce3bd9e9",
+      "scoringIdentitySha256": "9477902c6dc97216eac993c52b33c57c3be557a2b44362021f4bf19bce3bd9e9",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/export/2026.08.13.13.24/mods.json",
+      "currentNormalizedSha256": "d028d826aa56d946e4952733920150c2fe43f6100472aa3bce8b03ae49bf365c",
+      "scoringIdentitySha256": "d028d826aa56d946e4952733920150c2fe43f6100472aa3bce8b03ae49bf365c",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/export/2026.08.13.13.24/enemies.json",
+      "currentNormalizedSha256": "982a16048768648d8e09985d1456187a0a8e7a25ff7f0a6a889138f81e5530b1",
+      "scoringIdentitySha256": "982a16048768648d8e09985d1456187a0a8e7a25ff7f0a6a889138f81e5530b1",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/export/2026.08.13.13.24/enemy_overrides.json",
+      "currentNormalizedSha256": "2037948449e19896008bde213e087401eff0ee47c7fb494f767befdbb595687f",
+      "scoringIdentitySha256": "2037948449e19896008bde213e087401eff0ee47c7fb494f767befdbb595687f",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/export/2026.08.13.13.24/riven_templates.json",
+      "currentNormalizedSha256": "693e4a54f34fecc0fdcda982d6f28808c3df6947661452276e24262a0e3ab7af",
+      "scoringIdentitySha256": "693e4a54f34fecc0fdcda982d6f28808c3df6947661452276e24262a0e3ab7af",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/export/2026.08.13.13.24/incarnon_defaults.json",
+      "currentNormalizedSha256": "36aa9c0a6fecfd7125c3a95713bd6dbf26f7a462c1f0136fc26955511f4a8451",
+      "scoringIdentitySha256": "36aa9c0a6fecfd7125c3a95713bd6dbf26f7a462c1f0136fc26955511f4a8451",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/source-lock.json",
+      "currentNormalizedSha256": "2739a1d3a6d37d440fdc9ffb1f31c666eaee3e90f184a66d6424c8785d25ccd8",
+      "scoringIdentitySha256": "2739a1d3a6d37d440fdc9ffb1f31c666eaee3e90f184a66d6424c8785d25ccd8",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/wiki_weapon_overrides.json",
+      "currentNormalizedSha256": "f4a48e112204b2637a1011b1d4d09c776bb7c4bddd394f0c6d3861a98d2c345e",
+      "scoringIdentitySha256": "f4a48e112204b2637a1011b1d4d09c776bb7c4bddd394f0c6d3861a98d2c345e",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/combat-reference.json",
+      "currentNormalizedSha256": "0352f5b017efa48fec0234e7feb70a025de9223b1205abadf059c7772425714d",
+      "scoringIdentitySha256": "0352f5b017efa48fec0234e7feb70a025de9223b1205abadf059c7772425714d",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/sniper-mechanics.json",
+      "currentNormalizedSha256": "e937e5b2a5200be8b0fec36801804b839e0d3f81855aa17999103b05dd6ba1cb",
+      "scoringIdentitySha256": "e937e5b2a5200be8b0fec36801804b839e0d3f81855aa17999103b05dd6ba1cb",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/melee-mechanics.json",
+      "currentNormalizedSha256": "726295ee59414fb0c8d3ca66e319b536f3916130e1b03712fb51ff53868d5b0e",
+      "scoringIdentitySha256": "726295ee59414fb0c8d3ca66e319b536f3916130e1b03712fb51ff53868d5b0e",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/riven-disposition.json",
+      "currentNormalizedSha256": "9d7f4f86c017a11219c7cc5884b19d5cefa5c12dd0981d9dfec8f605be2be0f3",
+      "scoringIdentitySha256": "9d7f4f86c017a11219c7cc5884b19d5cefa5c12dd0981d9dfec8f605be2be0f3",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/battery-profiles.json",
+      "currentNormalizedSha256": "e490aca25bf5cbb2c0ea44ba7e7d146ead35ac5cebe22aadacedf81082eb9c07",
+      "scoringIdentitySha256": "e490aca25bf5cbb2c0ea44ba7e7d146ead35ac5cebe22aadacedf81082eb9c07",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/weapon-passives.json",
+      "currentNormalizedSha256": "b16905e97d97436e3a1874cc7cc824db12e13d7ae9e32c72c7bf55e93285417d",
+      "scoringIdentitySha256": "b16905e97d97436e3a1874cc7cc824db12e13d7ae9e32c72c7bf55e93285417d",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/client-updates.json",
+      "currentNormalizedSha256": "8f36274fcc8fc4c3bbcc853a75c5944033ee7f4f71fa07ff1758680efc01013e",
+      "scoringIdentitySha256": "8f36274fcc8fc4c3bbcc853a75c5944033ee7f4f71fa07ff1758680efc01013e",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/sentinels.json",
+      "currentNormalizedSha256": "a2ab139d3e3b81ec26d6cff341101bdc710b32f0f0949492e6932994889fb3b0",
+      "scoringIdentitySha256": "a2ab139d3e3b81ec26d6cff341101bdc710b32f0f0949492e6932994889fb3b0",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/companion-projectile-sequences.json",
+      "currentNormalizedSha256": "2dc532a5eb111a8a3091f74694823a8130476d13ef65e3c8f77122d6cf66033d",
+      "scoringIdentitySha256": "2dc532a5eb111a8a3091f74694823a8130476d13ef65e3c8f77122d6cf66033d",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/player-only-conditions.json",
+      "currentNormalizedSha256": "c9a4312e7be20e7bd8cd1ebc7c3d8f9ccbb3bcf02924bdeb4c21e6a62fd7e93a",
+      "scoringIdentitySha256": "c9a4312e7be20e7bd8cd1ebc7c3d8f9ccbb3bcf02924bdeb4c21e6a62fd7e93a",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/burst-profiles.json",
+      "currentNormalizedSha256": "f4ff3c1c7f54a136fd9462939da848b1955f962296becbd47d77bc221bedddbf",
+      "scoringIdentitySha256": "f4ff3c1c7f54a136fd9462939da848b1955f962296becbd47d77bc221bedddbf",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/charge-profiles.json",
+      "currentNormalizedSha256": "df53a8ce85a585c952378ac15b5510090ef24b866eccec85147a271d910d13a6",
+      "scoringIdentitySha256": "df53a8ce85a585c952378ac15b5510090ef24b866eccec85147a271d910d13a6",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/shell-reload-profiles.json",
+      "currentNormalizedSha256": "dcdc61bcc232082b7f8ec71b8db82b01d6200f3a727dd443da42f5cf2340acc9",
+      "scoringIdentitySha256": "dcdc61bcc232082b7f8ec71b8db82b01d6200f3a727dd443da42f5cf2340acc9",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/reload-after-shot.json",
+      "currentNormalizedSha256": "b6c33407bc0d109a2821762ca1196c730a2973e1e4bd08c200704297dcd136d1",
+      "scoringIdentitySha256": "b6c33407bc0d109a2821762ca1196c730a2973e1e4bd08c200704297dcd136d1",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/kill-charge-profiles.json",
+      "currentNormalizedSha256": "6e10a8f3b688b176805a73a46514e49a3f8e5dae4928bd4b34292ee6bfa7e8d7",
+      "scoringIdentitySha256": "6e10a8f3b688b176805a73a46514e49a3f8e5dae4928bd4b34292ee6bfa7e8d7",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/damage-event-producers.json",
+      "currentNormalizedSha256": "103098e6585facaf078ea9f3a94114b7b52a72bec244a4628b8eefeebd1cc7b6",
+      "scoringIdentitySha256": "103098e6585facaf078ea9f3a94114b7b52a72bec244a4628b8eefeebd1cc7b6",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/mechanics/infinite-conditions.json",
+      "currentNormalizedSha256": "e84fe741c9a39613d19204197ee41197e0442f61f73fb32bb29dc67f4ee1d675",
+      "scoringIdentitySha256": "e84fe741c9a39613d19204197ee41197e0442f61f73fb32bb29dc67f4ee1d675",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/export/2026.08.13.13.24/kitguns.json",
+      "currentNormalizedSha256": "368fa4ff5baa9e49a0ef9099fe4d626e2e917c21ae473eb0a26179ec97422f6b",
+      "scoringIdentitySha256": "368fa4ff5baa9e49a0ef9099fe4d626e2e917c21ae473eb0a26179ec97422f6b",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/export/2026.08.13.13.24/zaws.json",
+      "currentNormalizedSha256": "6bf2cab3b0f388012705ad625e890daf0464b9ed5a2bf11a35df84acea8759fd",
+      "scoringIdentitySha256": "6bf2cab3b0f388012705ad625e890daf0464b9ed5a2bf11a35df84acea8759fd",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/stances.json",
+      "currentNormalizedSha256": "38df6a7ecb15727032dddaf2a8b74d4ff9204f37379cdfbb3c370c7bfd861bdb",
+      "scoringIdentitySha256": "38df6a7ecb15727032dddaf2a8b74d4ff9204f37379cdfbb3c370c7bfd861bdb",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/optimizer.py",
+      "currentNormalizedSha256": "9947daab5fe5985207a0b755af552c441f6b77dbab9ef69ccae6929fcf6900e5",
+      "scoringIdentitySha256": "9947daab5fe5985207a0b755af552c441f6b77dbab9ef69ccae6929fcf6900e5",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/damage.py",
+      "currentNormalizedSha256": "856170d74152e345ae1ad6cd1f2da905f0119695cc101c0c64dd53b672b7ebf0",
+      "scoringIdentitySha256": "856170d74152e345ae1ad6cd1f2da905f0119695cc101c0c64dd53b672b7ebf0",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/simulator.py",
+      "currentNormalizedSha256": "2b62636cd5b6dacd07d60001f09baa44e8d01d7ed8084227ef99a92be420ffb5",
+      "scoringIdentitySha256": "2b62636cd5b6dacd07d60001f09baa44e8d01d7ed8084227ef99a92be420ffb5",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/catalog_releases.py",
+      "currentNormalizedSha256": "e2d01dcd1baa690f9bcde6d394e563fe1798caf86526ab78d02450e387b8e48b",
+      "scoringIdentitySha256": "e2d01dcd1baa690f9bcde6d394e563fe1798caf86526ab78d02450e387b8e48b",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/projectile_events.py",
+      "currentNormalizedSha256": "863ef150f020fa5c962a2436ea9c28e452212ad7f4115703801fdbf35cb3917e",
+      "scoringIdentitySha256": "863ef150f020fa5c962a2436ea9c28e452212ad7f4115703801fdbf35cb3917e",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/zymos.py",
+      "currentNormalizedSha256": "99f0dc1068e739bec5850a50b7359cdfc8b8badef71cdb7264723fa4fc169a87",
+      "scoringIdentitySha256": "99f0dc1068e739bec5850a50b7359cdfc8b8badef71cdb7264723fa4fc169a87",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/runtime_adapters.py",
+      "currentNormalizedSha256": "6129115e7fd5ea982b70c4a99e20636cd63da96fec133f4812709fdc41c74dd5",
+      "scoringIdentitySha256": "6129115e7fd5ea982b70c4a99e20636cd63da96fec133f4812709fdc41c74dd5",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/combat_events.py",
+      "currentNormalizedSha256": "33b2eeb0e4814612f5b9f3c2507238528022977e00344a2cf35892d5b2692f0f",
+      "scoringIdentitySha256": "33b2eeb0e4814612f5b9f3c2507238528022977e00344a2cf35892d5b2692f0f",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/combat_replay.py",
+      "currentNormalizedSha256": "b74fbbb90189973c595761cbd9534273b6fc64d56a49444e9c865e23526cb44e",
+      "scoringIdentitySha256": "b74fbbb90189973c595761cbd9534273b6fc64d56a49444e9c865e23526cb44e",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/native_replay.py",
+      "currentNormalizedSha256": "eee09b436ef2fa77c9bff564297d3a16f29533c21871fa3cc2be3b0e30ddeb3a",
+      "scoringIdentitySha256": "eee09b436ef2fa77c9bff564297d3a16f29533c21871fa3cc2be3b0e30ddeb3a",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/mods_native.py",
+      "currentNormalizedSha256": "3791d9662ef2d05617c34ff47450d798edd742e2e85accbc131e270b3e94061e",
+      "scoringIdentitySha256": "3791d9662ef2d05617c34ff47450d798edd742e2e85accbc131e270b3e94061e",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/status_native.py",
+      "currentNormalizedSha256": "2403b0b705bb53d698474a3a0df40906498f74d677929c022c59e5735768c41b",
+      "scoringIdentitySha256": "2403b0b705bb53d698474a3a0df40906498f74d677929c022c59e5735768c41b",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/proc_probability.py",
+      "currentNormalizedSha256": "b77a728903bca45118bf0263ea3737d30c8383ad09c4c0902baf85dfe9335d4c",
+      "scoringIdentitySha256": "b77a728903bca45118bf0263ea3737d30c8383ad09c4c0902baf85dfe9335d4c",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/beam_ramp.py",
+      "currentNormalizedSha256": "f908f79e20d757aa4e637b6574b791bb93032a4f28bdcfa442f836f85cdeb9a9",
+      "scoringIdentitySha256": "f908f79e20d757aa4e637b6574b791bb93032a4f28bdcfa442f836f85cdeb9a9",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/manual_combat.py",
+      "currentNormalizedSha256": "e59d8f1561b94bc0cd42c35765805332cd58b5c82578de8bb62c63f2f3e73b94",
+      "scoringIdentitySha256": "e59d8f1561b94bc0cd42c35765805332cd58b5c82578de8bb62c63f2f3e73b94",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/delayed_radial_events.py",
+      "currentNormalizedSha256": "bc3136fe27b76b66e363f81881796c36fd18d0ef871a0a843fcd171815a6e64f",
+      "scoringIdentitySha256": "bc3136fe27b76b66e363f81881796c36fd18d0ef871a0a843fcd171815a6e64f",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/projectile_lanes.py",
+      "currentNormalizedSha256": "be034f25376bb79e52320b741fd78d959b2d0afe49490a3075a86fb7183e1cb4",
+      "scoringIdentitySha256": "be034f25376bb79e52320b741fd78d959b2d0afe49490a3075a86fb7183e1cb4",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/enervate.py",
+      "currentNormalizedSha256": "91259c91d5f480cb7ab7d9aae8020cd7e5237db0f00c73335db2228a00637d87",
+      "scoringIdentitySha256": "91259c91d5f480cb7ab7d9aae8020cd7e5237db0f00c73335db2228a00637d87",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/status_arcanes.py",
+      "currentNormalizedSha256": "b79edb5ceaaec374a15023dd2c860cd1b169f015d3396f367d0abc7b12bb8bc5",
+      "scoringIdentitySha256": "b79edb5ceaaec374a15023dd2c860cd1b169f015d3396f367d0abc7b12bb8bc5",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/search_combat.py",
+      "currentNormalizedSha256": "053e1a719bfebc749cb0f689d2efb2b3bd247233b66cf529ec85f6661751d17b",
+      "scoringIdentitySha256": "053e1a719bfebc749cb0f689d2efb2b3bd247233b66cf529ec85f6661751d17b",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/evaluation_cache.py",
+      "currentNormalizedSha256": "df42ca1deae8fd59cf1c34309241b11e42502222e2eb77435eb382ab8aabde11",
+      "scoringIdentitySha256": "df42ca1deae8fd59cf1c34309241b11e42502222e2eb77435eb382ab8aabde11",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/loadout_search.py",
+      "currentNormalizedSha256": "dc3c98cf46a0ef0a9f22ff4adebdd362bfaa32e196c645a050649b827de2402b",
+      "scoringIdentitySha256": "dc3c98cf46a0ef0a9f22ff4adebdd362bfaa32e196c645a050649b827de2402b",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/search_session.py",
+      "currentNormalizedSha256": "5a5119b15a9518108b672d8630d88e8f6eba4ec15f950433eacaeca9717067e6",
+      "scoringIdentitySha256": "5a5119b15a9518108b672d8630d88e8f6eba4ec15f950433eacaeca9717067e6",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/riven_recommendation.py",
+      "currentNormalizedSha256": "146e72de854c1101ffb8ff01e097cf351083246d10e79f222d797cfb0f9e4e2d",
+      "scoringIdentitySha256": "146e72de854c1101ffb8ff01e097cf351083246d10e79f222d797cfb0f9e4e2d",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/parallel.py",
+      "currentNormalizedSha256": "722944098306c69f564c4ef2c381fb7d7b84410d76e8ea428706d11af2abf66d",
+      "scoringIdentitySha256": "1bff57a46e9c791138e099a4fe522ecb045edbde61b208e3fb8c031953ee9278",
+      "usesAuditedBaseline": true
+    },
+    {
+      "path": "vendor/wfarsenal/event_profiles.py",
+      "currentNormalizedSha256": "1c358e807dea0b59546202c6829ddc5f00c2cb4fa37f066d61a9ceb6cdbf4385",
+      "scoringIdentitySha256": "1c358e807dea0b59546202c6829ddc5f00c2cb4fa37f066d61a9ceb6cdbf4385",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/stackable_projectiles.py",
+      "currentNormalizedSha256": "1718ea5832967b3eb6cfdf4d016b6b4295024ec264826c1c866b04f1e57f790d",
+      "scoringIdentitySha256": "1718ea5832967b3eb6cfdf4d016b6b4295024ec264826c1c866b04f1e57f790d",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/consecutive_hits.py",
+      "currentNormalizedSha256": "e5576cdab17a4ee39e0174cb6324650b1e2a10fcdcdf61714b2b6ccaf9ea9e94",
+      "scoringIdentitySha256": "e5576cdab17a4ee39e0174cb6324650b1e2a10fcdcdf61714b2b6ccaf9ea9e94",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/sniper.py",
+      "currentNormalizedSha256": "2329510a2caf27c693d78f53df9efa2448c88304c6ae72937d488e8ad40e5762",
+      "scoringIdentitySha256": "2329510a2caf27c693d78f53df9efa2448c88304c6ae72937d488e8ad40e5762",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/riven_fusion.py",
+      "currentNormalizedSha256": "445024202085f14e157ae3b31b3c9c820da3420b17a775b1c72f38df6d8563e1",
+      "scoringIdentitySha256": "445024202085f14e157ae3b31b3c9c820da3420b17a775b1c72f38df6d8563e1",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/melee_sequence.py",
+      "currentNormalizedSha256": "60f4aef9e0155084db25283729f50b1f796e3b48ab707b6555f325ae439805b6",
+      "scoringIdentitySha256": "60f4aef9e0155084db25283729f50b1f796e3b48ab707b6555f325ae439805b6",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/arcane_runtime.py",
+      "currentNormalizedSha256": "d14c57b3ab536edde35a8e58fdfc1e0326fa3685d4e3db7f44b25ef4892b4915",
+      "scoringIdentitySha256": "d14c57b3ab536edde35a8e58fdfc1e0326fa3685d4e3db7f44b25ef4892b4915",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/riven_disposition.py",
+      "currentNormalizedSha256": "3ae3192286f4599bb163773d93a88fe5da841b77852b9181260187db198efe82",
+      "scoringIdentitySha256": "3ae3192286f4599bb163773d93a88fe5da841b77852b9181260187db198efe82",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/client_updates.py",
+      "currentNormalizedSha256": "e1783388a9c3862cd138058cb6dea11a3f982cc9fd328348505b33aec6f29a3d",
+      "scoringIdentitySha256": "e1783388a9c3862cd138058cb6dea11a3f982cc9fd328348505b33aec6f29a3d",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/companion.py",
+      "currentNormalizedSha256": "229d3750fe9987c142528de8a497a2e317c3c50e2fb4c155b25ee8207bbadb82",
+      "scoringIdentitySha256": "229d3750fe9987c142528de8a497a2e317c3c50e2fb4c155b25ee8207bbadb82",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "vendor/wfarsenal/sentinel.py",
+      "currentNormalizedSha256": "9f5d5d766d55df52c801cfbad2f44e64bd1f8504d0c989d297385670ac4818fa",
+      "scoringIdentitySha256": "9f5d5d766d55df52c801cfbad2f44e64bd1f8504d0c989d297385670ac4818fa",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "data/export/2026.08.13.13.24/arcanes.json",
+      "currentNormalizedSha256": "489d2a67224695a51ff63803556ed5cce928c10e929ecf2c74e60bbf2e302f04",
+      "scoringIdentitySha256": "489d2a67224695a51ff63803556ed5cce928c10e929ecf2c74e60bbf2e302f04",
+      "usesAuditedBaseline": false
+    },
+    {
+      "path": "app.py",
+      "currentNormalizedSha256": "e22609cc67da75bbffd1a61016c6934a64d26d5c5320ab7707e945788ea7e5e8",
+      "scoringIdentitySha256": "e2c7b687a334753d6473a85f7b7c2f0b13a5e4587a15332bf13a1bf03e789ec6",
+      "usesAuditedBaseline": true
+    }
+  ],
+  "existingCache": {
+    "inputs": "7aa6c97127eb8a75",
+    "entries": 1,
+    "sha256": "eb131a3da45df952654760cb91f9f98e7e668f7b7174e70b83e3a23d245426ab",
+    "unchanged": true,
+    "matchesProvenBaseline": false,
+    "migration": "not-performed: prior cache identity differs from reconstructed pre-arena baseline, no proof for reuse"
+  },
+  "qualification": [
+    "All non-app/parallel scoring dependency bytes still participate in the exact legacy SHA1 identity.",
+    "Only reviewed arena AST reversals are accepted; remaining full source AST must equal pinned HEAD baseline.",
+    "Source transformation unknowns fall back to raw source bytes, never to an accepted cache ID.",
+    "Pinned baseline asset checksum mismatch fails closed; no cached score values are modified."
+  ]
+}

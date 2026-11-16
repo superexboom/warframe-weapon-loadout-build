@@ -14,6 +14,7 @@ any of it.
 | Game data, text and artwork | `data/export/`, data sidecars, `frontend/assets/`, `tools/archon_frame_source/` | © Digital Extremes Ltd. — no license granted |
 | WFHelper assets | Riven card shell, polarity and element icons | WFHelper, MIT (artwork remains Digital Extremes') |
 | warframe-items data and images | generation inputs; Warframe portraits, Warframe-mod, Arcane, ability and shard icons; one MOD illustration | WFCD, MIT (artwork remains Digital Extremes') |
+| Three.js and OrbitControls | `frontend/arena/vendor/three.module.js`, `three.core.js`, `OrbitControls.js` | Three.js Authors, MIT; complete notice in `frontend/arena/vendor/LICENSE-three.txt` |
 | Overframe ability statistics | `data/overframe_abilitystats.json` | game facts, credited to Overframe |
 
 ## License scope

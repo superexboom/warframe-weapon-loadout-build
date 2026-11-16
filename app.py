@@ -675,6 +675,8 @@ def _stances_fingerprint() -> str:
 
 
 def _analysis_inputs_fingerprint() -> str:
+    from wfarsenal.cache_identity import score_source_bytes
+
     digest = hashlib.sha1()
     digest.update(
         str(
@@ -775,6 +777,7 @@ def _analysis_inputs_fingerprint() -> str:
         try:
             digest.update(path.name.encode("utf-8"))
             data = path.read_bytes()
+            data = score_source_bytes(path.name, data, ROOT)
             digest.update(data.replace(b'\r\n',b'\n') if path.suffix=='.py' else data)
         except OSError:
             # F13：文件读取失败不得回退成空指纹——空指纹会与「另一个同样
@@ -7218,6 +7221,70 @@ def part_values_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
     return deepcopy(result)
 
 
+# Arena owns a single long-running world; all loadout parsing still goes through
+# the existing explicit-slot reducer. Entering its page never starts a search.
+def _arena_context(payload):
+    from wfarsenal.arena import normalize_scenario
+    if not isinstance(payload, Mapping) or not isinstance(payload.get("loadout"), Mapping):
+        raise SimulationError("arena requires a current equipped loadout")
+    scenario = normalize_scenario(payload.get("scenario") or {})
+    loadout = deepcopy(dict(payload["loadout"]))
+    loadout.update(mode="manual", autoArcane=False, autoIncarnon=False,
+                   damageModel="target", enemy=scenario["enemy"], level=scenario["level"],
+                   headshotChance=0., distance=None, windowSeconds=30.)
+    ctx = _manual_resolve_sim_context(loadout)
+    if ctx["weapon"].get("slot") not in {"primary", "secondary", "arch_gun"}:
+        raise SimulationError("场景靶场只支持玩家远程武器")
+    common = dict(ctx["common"])
+    passive = ctx["build_passives"](None)
+    engine = {}
+    with _engine_lock():
+        result = simulate(**common, hit_location="body", passive_effects=passive["passive_effects"],
+                          engine_context_sink=engine)
+    records = [(optimizer.resolve_record(EXPORTS["mods"], m["path"], kind="mod"),
+                int(m.get("rank") if m.get("rank") is not None else MANUAL_MODS_BY_PATH[m["path"]]["maxRank"]), None)
+               for m in common["mods"]]
+    arcanes = [(optimizer.resolve_record(EXPORTS["arcanes"], m["path"], kind="arcane"), m["rank"], m)
+               for m in ctx["validated_arcanes"]]
+    if ctx["riven_slot_drain"] + ctx["exilus_unvalidated_drain"] > (result.get("loadoutValidation") or {}).get("remaining", 9999):
+        raise SimulationError("当前紫卡或特殊槽位使配装容量不足")
+    return dict(engine=engine, mod_records=records, arcane_records=arcanes,
+                common_options={**{k:common.get(k) for k in ("level", "armour_strip", "elemental_armour_strip", "steel_path", "enemy_enhancements", "forced_procs")}, "assumed":loadout.get("triggerPolicy")=="assumed_max"},
+                incarnon_choices=ctx["incarnon_choices"], cycle_enabled=common["scenario"].incarnon_cycle,
+                scenario=scenario, loadout=loadout,
+                weapon_name=ctx["weapon"].get("name") or ctx["weapon"].get("nameEn"),
+                validation=result.get("loadoutValidation"),
+                enemies={e["path"]:e for e in EXPORTS["enemies"]})
+
+
+def arena_catalog_payload():
+    from wfarsenal.arena_scene import list_maps
+    from wfarsenal.arena import defaults, enemy_specs
+    specs=[]
+    for spec in enemy_specs()["specs"]:
+        rows=[dict(avatar=r["resolvedAvatarPath"], name=(MANUAL_ENEMIES_BY_PATH.get(r["resolvedAvatarPath"],{}).get("nameZh") or MANUAL_ENEMIES_BY_PATH.get(r["resolvedAvatarPath"],{}).get("nameEn") or r["agent"].rsplit("/",1)[-1]), tier=r["tier"],weight=r["probability"],cap=r.get("maxSimultaneous")) for r in spec["enemies"] if r.get("runnable")]
+        specs.append(dict(id=spec["path"],name=spec["path"].rsplit("/",1)[-1],tiers=sorted({r["tier"] for r in rows}),rows=rows))
+    return {"enemySpecs":specs,"maps":list_maps(), "enemies":[{"path":e["path"], "nameZh":e.get("nameZh"), "name":e.get("nameZh") or e.get("name") or e.get("nameEn"),
+            "nameEn":e.get("nameEn"), "faction":e.get("faction"), "hasHeadProxy":e.get("hasHeadProxy", False)}
+            for e in MANUAL_ENEMIES if e.get("complete") is not False],
+            "defaults":defaults(_BENCHMARK_ENEMY_PATH), "model":"arena-world-v1",
+            "coverage":["当前装备槽位独立模拟", "真实目标防御与独立状态", "几何与刷怪策略保留来源和近似标记"]}
+
+
+def arena_start_payload(payload):
+    from wfarsenal.arena import JOBS
+    if not isinstance(payload, Mapping):
+        raise SimulationError("arena request must be an object")
+    # The job snapshots the request before preparation; the UI is free to keep editing.
+    frozen = deepcopy(dict(payload))
+    return JOBS.start(lambda: _arena_context(frozen))
+
+
+def arena_cancel_payload(payload):
+    from wfarsenal.arena import JOBS
+    return JOBS.cancel(str(payload.get("id") or ""))
+
+
 class PortableHandler(BaseHTTPRequestHandler):
     server_version = "Warframe-Weapon-Loadout-Build/2"
 
@@ -7226,6 +7293,37 @@ class PortableHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         path = urlsplit(self.path).path
+        if path == "/api/arena/catalog":
+            self._send_json(HTTPStatus.OK, arena_catalog_payload(), cache="no-cache")
+            return
+        if path == "/api/arena/jobs":
+            from wfarsenal.arena import JOBS
+            job_id = (parse_qs(urlsplit(self.path).query).get("id") or [""])[0]
+            entry = JOBS.get(job_id)
+            if entry is None:
+                self._send_error(HTTPStatus.NOT_FOUND, "not_found", "场景任务不存在或已过期")
+            else:
+                self._send_json(HTTPStatus.OK, entry)
+            return
+        if path.startswith("/api/arena/assets/"):
+            from wfarsenal.arena_scene import asset_bytes
+            parts = path.removeprefix("/api/arena/assets/").split("/")
+            try:
+                body, content_type, encoding = asset_bytes(*parts) if len(parts) == 2 else (None, None, None)
+            except (ValueError, KeyError, FileNotFoundError):
+                body = None
+            if body is None:
+                self._send_error(HTTPStatus.NOT_FOUND, "not_found", "场景资源不存在")
+                return
+            self.send_response(HTTPStatus.OK)
+            self.send_header("Content-Type", content_type)
+            if encoding:
+                self.send_header("Content-Encoding", encoding)
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Cache-Control", "no-cache")
+            self.end_headers()
+            self.wfile.write(body)
+            return
         if path == "/api/health":
             self._send_json(
                 HTTPStatus.OK,
@@ -7288,6 +7386,8 @@ class PortableHandler(BaseHTTPRequestHandler):
             self._post_settings()
             return
         analyzers = {
+            "/api/arena/jobs": arena_start_payload,
+            "/api/arena/cancel": arena_cancel_payload,
             "/api/analyze": analyze_payload,
             "/api/build": build_weapon_route,
             "/api/simulate": simulate_manual_payload,
@@ -7372,6 +7472,8 @@ class PortableHandler(BaseHTTPRequestHandler):
             relative = Path("index.html")
         elif request_path in {"/app.css", "/app.js", "/enemy-images.js", "/build-config-migrations.js"}:
             relative = Path(request_path.removeprefix("/"))
+        elif request_path.startswith("/arena/"):
+            relative = Path(unquote(request_path.removeprefix("/")))
         elif request_path.startswith("/assets/"):
             static_root = DATASET_ROOT / "frontend"
             relative = Path(unquote(request_path.removeprefix("/")))
@@ -7403,7 +7505,7 @@ class PortableHandler(BaseHTTPRequestHandler):
                 "resource could not be read",
             )
             return
-        content_type = mimetypes.guess_type(target.name)[0] or "application/octet-stream"
+        content_type = "text/javascript" if target.suffix == ".mjs" else (mimetypes.guess_type(target.name)[0] or "application/octet-stream")
         if static_root == ROOT:
             content_type = "text/plain"
         if content_type.startswith("text/") or content_type in {

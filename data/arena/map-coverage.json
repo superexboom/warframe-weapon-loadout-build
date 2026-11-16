@@ -1,0 +1,510 @@
+{
+  "schema": "portable-arena-map-coverage/v1",
+  "gameVersion": "2026.10.28.09.54",
+  "qualification": [
+    "Map candidates only: current Arbitration qualification/rotation is unknown.",
+    "Shared Proc references are deduplicated by actual authored tile, no synthetic map alias copies.",
+    "No current full mission instance/seed or dynamic mode activation is claimed.",
+    "Ordinary enemy route reachability remains explicit, including isolated start platforms.",
+    "All derived player arcs remain enemy=false; supported step policy is explicitly custom.",
+    "Visual geometry is only exact exported tile-local CSG/static aggregation, not complete world props or source textures."
+  ],
+  "counts": {
+    "newAvailable": 6,
+    "sourceformatblocked": 1,
+    "duplicate": 2,
+    "catalogTotalMaps": 8
+  },
+  "records": [
+    {
+      "status": "available",
+      "mapId": "corpus-outpost-defense-one",
+      "tile": "/Lotus/Levels/Outpost/CrpOutpostDefenseOne",
+      "proc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+      "reason": "Source closed n-gon edge rings are now triangulated only after planar tolerance, simple boundary, orientation, normal, area and exact boundary checks; fromFaceMap preserves original face IDs.",
+      "evidence": "outpost-one-nav-format-block.json",
+      "assets": {
+        "scene": {
+          "file": "corpus-outpost-defense-one.scene.json.gz",
+          "sha256": "9f95a55a89c61ba4843e7494cf093262b9b17d140536752782815678c448902b",
+          "jsonSha256": "05cae5dbcaec7f37796c66e5c44474edc67195a80cacd93076fe4522dafa0f64",
+          "compressedBytes": 494741,
+          "jsonBytes": 2273737
+        },
+        "navigation": {
+          "file": "corpus-outpost-defense-one.navigation.json.gz",
+          "sha256": "13a48798ee83ec43c6207504d5db00a49ee1d8e71e1a7f2398931b793fd3b513",
+          "jsonSha256": "f6532a90a94ce78e094423a281f6d4f535ade54e3802d8d1c2a9022c99616b0b",
+          "compressedBytes": 79067,
+          "jsonBytes": 332320
+        },
+        "visual-map": {
+          "file": "corpus-outpost-defense-one.visual-map.json.gz",
+          "sha256": "bca5348c231a258c853bad94d19b9d4e8d92ca4d1d6e31d1c1d0ecc1a3ebdee7",
+          "jsonSha256": "eee4bbe9f3845bcd219b13ee0b57b1534ecdd045c850878b30c1f8eb8f037d28",
+          "compressedBytes": 286494,
+          "jsonBytes": 1656115
+        },
+        "visual-map-collision-candidates": {
+          "file": "corpus-outpost-defense-one.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "validation": {
+        "map": "CrpOutpostDefenseOne",
+        "navFaces": 3376,
+        "sourcePolygonCount": 2521,
+        "polygonTriangulationMaxPlaneError": 0.0009029883582975656,
+        "components": [
+          1372,
+          699,
+          233,
+          193,
+          186,
+          128,
+          120,
+          113,
+          44,
+          32,
+          28,
+          19,
+          19,
+          19,
+          18,
+          18,
+          18,
+          17,
+          16,
+          12,
+          11,
+          10,
+          9,
+          6,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ],
+        "start": {
+          "position": [
+            0.0,
+            0.16610125711106655,
+            -0.009377951624279568
+          ],
+          "face": 1261,
+          "component": 0,
+          "selection": "closest point on all actual NAV triangles to source origin"
+        },
+        "reachableFaces": 3374,
+        "derivedGroundLinks": 2,
+        "derivedPlayerJumpLinks": 122,
+        "reachableHeightSpan": [
+          -0.3572382430235545,
+          16.0
+        ],
+        "spawns": 54,
+        "acceptedSpawns": 50,
+        "visualMeshes": 34,
+        "visualInstances": 22,
+        "collisionTriangles": 9012,
+        "artInstances": 19,
+        "nativeInternalSplitEdges": 855,
+        "originalSharedSourceFacePairs": 3203,
+        "sourcePolygonEdgeDistribution": {
+          "3": 1911,
+          "4": 429,
+          "5": 136,
+          "6": 30,
+          "7": 12,
+          "8": 2,
+          "9": 1
+        },
+        "nameZh": "Corpus前哨站防御模板一",
+        "architectureFaction": "Corpus"
+      }
+    },
+    {
+      "status": "available",
+      "mapId": "corpus-outpost-defense-two",
+      "tile": "/Lotus/Levels/Outpost/CrpOutpostDefenseTwo",
+      "proc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+      "candidateNodes": [
+        {
+          "name": "Sechura",
+          "node": "ClanNode24",
+          "offset": "0x4ac3e",
+          "links": [
+            "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+            "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        }
+      ],
+      "validation": {
+        "mapId": "corpus-outpost-defense-two",
+        "tile": "/Lotus/Levels/Outpost/CrpOutpostDefenseTwo",
+        "faces": 3164,
+        "sourceSpawns": 70,
+        "tmfSpawnNames": 69,
+        "tmfExactMatch": false,
+        "playerReachable": 3062,
+        "enemyReachableFromStart": 2445,
+        "acceptedSpawns": 66,
+        "visualMeshes": 8,
+        "visualInstances": 24,
+        "visualTriangles": 24385,
+        "collisionTriangles": 6387,
+        "levelBodyConsumed": true,
+        "levelHeaderTail": 20,
+        "navComponents": 111
+      },
+      "assets": {
+        "scene": {
+          "file": "corpus-outpost-defense-two.scene.json.gz",
+          "sha256": "44b9e91edce9be8ee12b3020c72aaa26bbdb17bf0d4441a8791bd73beb6d6362",
+          "jsonSha256": "64b66f48cf65f291765a8def759444328c85efed165c2a0ea72baa916ee72661",
+          "compressedBytes": 349234,
+          "jsonBytes": 2272261
+        },
+        "navigation": {
+          "file": "corpus-outpost-defense-two.navigation.json.gz",
+          "sha256": "825262a888d765a5de445269db13c79e73de8feafce66b4d5e2afd6422ed1a9e",
+          "jsonSha256": "d3e6f5fa90dc56ca78dbb9dd27481b0abdcf344481f7baa248d472ef27ce806a",
+          "compressedBytes": 223946,
+          "jsonBytes": 1299157
+        },
+        "visual-map": {
+          "file": "corpus-outpost-defense-two.visual-map.json.gz",
+          "sha256": "19cd16f6c81d4b4937d6667a43e02567290c820eec7e74bf56123d2a057b8edd",
+          "jsonSha256": "e2bd9d373be95b16145391591ef2a7c14e42e55546e7c3d6826ab7369339c865",
+          "compressedBytes": 1057735,
+          "jsonBytes": 6742073
+        },
+        "visual-map-collision-candidates": {
+          "file": "corpus-outpost-defense-two.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      }
+    },
+    {
+      "status": "available",
+      "mapId": "grineer-shipyards-defense",
+      "tile": "/Lotus/Levels/GrineerShipyards/ShipyardsDefence",
+      "proc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsDefense",
+      "candidateNodes": [
+        {
+          "name": "Seimeni",
+          "node": "ClanNode22",
+          "offset": "0x54bc3",
+          "links": [
+            "/Lotus/Levels/Proc/Grineer/GrineerShipyardsDefense",
+            "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        }
+      ],
+      "validation": {
+        "mapId": "grineer-shipyards-defense",
+        "tile": "/Lotus/Levels/GrineerShipyards/ShipyardsDefence",
+        "faces": 2301,
+        "sourceSpawns": 110,
+        "tmfSpawnNames": 110,
+        "tmfExactMatch": true,
+        "playerReachable": 2268,
+        "enemyReachableFromStart": 14,
+        "acceptedSpawns": 109,
+        "visualMeshes": 33,
+        "visualInstances": 31,
+        "visualTriangles": 166477,
+        "collisionTriangles": 6085,
+        "levelBodyConsumed": true,
+        "levelHeaderTail": 24,
+        "navComponents": 56
+      },
+      "assets": {
+        "scene": {
+          "file": "grineer-shipyards-defense.scene.json.gz",
+          "sha256": "1d115d3d67f6fd9fd25a59934a38cd137566db12b99f0e88985d6122b69b7a26",
+          "jsonSha256": "afe98a6de75281d85cb15e82c78b3e84b78c5a7bf326c29f0621921f7b89ec47",
+          "compressedBytes": 414001,
+          "jsonBytes": 2863201
+        },
+        "navigation": {
+          "file": "grineer-shipyards-defense.navigation.json.gz",
+          "sha256": "1964e4b7f6fdcee51c30e4203daf72705ac0880ea364399b8449be9da6b4341e",
+          "jsonSha256": "0e06711f00443bb57f0e0f78da4a1e3c2aad2cd1f4d9dee19996ae516efe96c6",
+          "compressedBytes": 100153,
+          "jsonBytes": 518213
+        },
+        "visual-map": {
+          "file": "grineer-shipyards-defense.visual-map.json.gz",
+          "sha256": "caf2eaa44f17cddc43c604e71190a3e6e69c311352d383297d855da59cda9840",
+          "jsonSha256": "f1f11da3906fd14c0ed96d126140530d78f05d8b3855110a962fc6d1abffee8c",
+          "compressedBytes": 3119339,
+          "jsonBytes": 14591877
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-shipyards-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      }
+    },
+    {
+      "status": "available",
+      "mapId": "corpus-gas-city-defense",
+      "tile": "/Lotus/Levels/CorpusGasCityRemaster/GasDefense",
+      "proc": "/Lotus/Levels/Proc/Corpus/CorpusGasCityDefense",
+      "candidateNodes": [
+        {
+          "name": "Io",
+          "node": "SolNode125",
+          "offset": "0x21464",
+          "links": [
+            "/Lotus/Levels/Proc/Corpus/CorpusGasCityDefense",
+            "/Lotus/Types/Game/EnemySpecs/CorpusGasRemasterDefenseSquad"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        },
+        {
+          "name": "Sinai",
+          "node": "ClanNode4",
+          "offset": "0x24133",
+          "links": [
+            "/Lotus/Levels/Proc/Corpus/CorpusGasCityDefense",
+            "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        }
+      ],
+      "validation": {
+        "mapId": "corpus-gas-city-defense",
+        "tile": "/Lotus/Levels/CorpusGasCityRemaster/GasDefense",
+        "faces": 4696,
+        "sourceSpawns": 191,
+        "tmfSpawnNames": 189,
+        "tmfExactMatch": false,
+        "playerReachable": 4494,
+        "enemyReachableFromStart": 1215,
+        "acceptedSpawns": 171,
+        "visualMeshes": 16,
+        "visualInstances": 20,
+        "visualTriangles": 13541,
+        "collisionTriangles": 11825,
+        "levelBodyConsumed": true,
+        "levelHeaderTail": 44,
+        "navComponents": 137
+      },
+      "assets": {
+        "scene": {
+          "file": "corpus-gas-city-defense.scene.json.gz",
+          "sha256": "3843efedc3a91b5f047522a753d66b0b7aa4f0eb9a532d05036fff052a526560",
+          "jsonSha256": "f65cb712eed83414bdbcdc63220808f1a6c68cfc3e0ca5f108fcbcea64683550",
+          "compressedBytes": 574437,
+          "jsonBytes": 4106370
+        },
+        "navigation": {
+          "file": "corpus-gas-city-defense.navigation.json.gz",
+          "sha256": "a87c78b2de4fb254f56fe29fdf048f4b061833a36409b267b25d027ed9b182b9",
+          "jsonSha256": "591ae1d7e5063ed7909a589e3e500ae665d0b97b13c07c49bc5a67e02aacef66",
+          "compressedBytes": 348895,
+          "jsonBytes": 1878855
+        },
+        "visual-map": {
+          "file": "corpus-gas-city-defense.visual-map.json.gz",
+          "sha256": "32a06a6a72c1850ab390f4482104c100a5c885e6bfe30a22e8367045ca0a05fe",
+          "jsonSha256": "a00e919fe5bc1f0ce8f5b1fba42d4f1c2e5bdceff910f7558da5e40b3455ed94",
+          "compressedBytes": 423451,
+          "jsonBytes": 2813282
+        },
+        "visual-map-collision-candidates": {
+          "file": "corpus-gas-city-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      }
+    },
+    {
+      "status": "available",
+      "mapId": "grineer-ocean-defense-02",
+      "tile": "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense02",
+      "proc": "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+      "candidateNodes": [
+        {
+          "name": "Stephano",
+          "node": "SolNode122",
+          "offset": "0x3ac53",
+          "links": [
+            "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+            "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        }
+      ],
+      "validation": {
+        "mapId": "grineer-ocean-defense-02",
+        "tile": "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense02",
+        "faces": 3014,
+        "sourceSpawns": 53,
+        "tmfSpawnNames": 53,
+        "tmfExactMatch": true,
+        "playerReachable": 3008,
+        "enemyReachableFromStart": 40,
+        "acceptedSpawns": 52,
+        "visualMeshes": 14,
+        "visualInstances": 11,
+        "visualTriangles": 17178,
+        "collisionTriangles": 5644,
+        "levelBodyConsumed": true,
+        "levelHeaderTail": 20,
+        "navComponents": 71
+      },
+      "assets": {
+        "scene": {
+          "file": "grineer-ocean-defense-02.scene.json.gz",
+          "sha256": "0d744b1ecda2c18da2b7ad53848dfd6282f0ab1569bf798f06325d54d1eaa014",
+          "jsonSha256": "dc6823a6b3e918761ed4611e1c0833cde3f40a512c719a66a277ea20ab0bfeab",
+          "compressedBytes": 269530,
+          "jsonBytes": 1591262
+        },
+        "navigation": {
+          "file": "grineer-ocean-defense-02.navigation.json.gz",
+          "sha256": "3e0328f0d06278225ad7c76c33f4a78cde04d985e7b6ab92f4e118eec12feda8",
+          "jsonSha256": "1c085859a5ae9ab0ef686c4af64e07ea84841926bb8f48c988303af0c108d0f9",
+          "compressedBytes": 140495,
+          "jsonBytes": 735143
+        },
+        "visual-map": {
+          "file": "grineer-ocean-defense-02.visual-map.json.gz",
+          "sha256": "a14a1272d7187000d74f64610361cb9fe2be3da930b7d676a38211aeff98923e",
+          "jsonSha256": "0d2441bc12a46ef406c259f09f82242c6f5664928d9f634da7c1f5ecc1a91ad2",
+          "compressedBytes": 225512,
+          "jsonBytes": 1235277
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-ocean-defense-02.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      }
+    },
+    {
+      "status": "available",
+      "mapId": "grineer-ocean-defense-03",
+      "tile": "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense03",
+      "proc": "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+      "candidateNodes": [
+        {
+          "name": "Stephano",
+          "node": "SolNode122",
+          "offset": "0x3ac53",
+          "links": [
+            "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+            "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA"
+          ],
+          "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
+        }
+      ],
+      "validation": {
+        "mapId": "grineer-ocean-defense-03",
+        "tile": "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense03",
+        "faces": 4635,
+        "sourceSpawns": 338,
+        "tmfSpawnNames": 338,
+        "tmfExactMatch": true,
+        "playerReachable": 4627,
+        "enemyReachableFromStart": 104,
+        "acceptedSpawns": 337,
+        "visualMeshes": 19,
+        "visualInstances": 13,
+        "visualTriangles": 49092,
+        "collisionTriangles": 5931,
+        "levelBodyConsumed": true,
+        "levelHeaderTail": 20,
+        "navComponents": 122
+      },
+      "assets": {
+        "scene": {
+          "file": "grineer-ocean-defense-03.scene.json.gz",
+          "sha256": "9b71575eb4c3bf4ee65abda1b4d38b3a85b72534842b3d875b84cf9b238dc45e",
+          "jsonSha256": "2a6da559b171f7ec3c5b2b1f65b996e0ca5da326cf9e01498cf32187c32028a8",
+          "compressedBytes": 301435,
+          "jsonBytes": 1885643
+        },
+        "navigation": {
+          "file": "grineer-ocean-defense-03.navigation.json.gz",
+          "sha256": "850970d5578f720665cba4f222a1fbb8845f1136e224d5cd58c968c1e38676ec",
+          "jsonSha256": "b81ab5fdece72f7ac65b58ad27334b5a93601023c0fad99fca24337ca358b6bc",
+          "compressedBytes": 305344,
+          "jsonBytes": 1542603
+        },
+        "visual-map": {
+          "file": "grineer-ocean-defense-03.visual-map.json.gz",
+          "sha256": "bead74014d45ebad4a90ce19d7b11d15bb83189a11f4d5c2eedaa6ac93d3f47b",
+          "jsonSha256": "c121e51a840ddff0212b0cd57caf1ca7ab64ad5eebdc52d99426660ba18b9da9",
+          "compressedBytes": 398294,
+          "jsonBytes": 1851065
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-ocean-defense-03.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      }
+    },
+    {
+      "status": "sourceformatblocked",
+      "tile": "/Lotus/Levels/Outpost/CrpOutpostDefenseThree",
+      "proc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+      "reason": "Current exact tile resource export contains LEVEL212/CSG/BSP but no 0.nav header/body. LEVEL references Navigation_lyr but does not declare a generated0.nav resource. Source NAV unavailable; do not fabricate route graph.",
+      "evidence": "map-coverage-resource-formats.json"
+    },
+    {
+      "status": "duplicate",
+      "proc": "/Lotus/Levels/Proc/Corpus/CorpusShipInterception",
+      "mapId": "corpus-ship-defense",
+      "tile": "/Lotus/Levels/CorpusShipRemastered/ObjDefense01",
+      "candidateNodes": [
+        "Xini/SolNode172"
+      ],
+      "qualification": "Proc references already imported authored defense tile; other referenced room/cap/purgatory assets are not independently asserted full combat maps. Runtime mode/activation unresolved."
+    },
+    {
+      "status": "duplicate",
+      "proc": "/Lotus/Levels/Proc/Grineer/GrineerGalleonInterception",
+      "mapId": "grineer-galleon-defense",
+      "tile": "/Lotus/Levels/GrineerGalleon/GrnDefenceTwo",
+      "candidateNodes": [
+        "Odin/SolNode224"
+      ],
+      "qualification": "Proc references same authored tile as GalleonDefense; alias is source candidate, not current Arbitration eligibility."
+    }
+  ]
+}

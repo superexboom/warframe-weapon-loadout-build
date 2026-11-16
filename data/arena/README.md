@@ -1,0 +1,62 @@
+# Arena scene package
+
+`catalog.json` is the map/asset allowlist and provenance manifest. All JSON assets use deterministic gzip (`mtime=0`), each compressed and decompressed SHA-256 recorded in the catalog. The initial `corpus-ship-defense` authored tile is from local client2026.10.28.09.54; this is not a generated mission runtime capture.
+
+Reimport audited artifacts:
+
+```powershell
+python tools/import_arena_scene.py --source <audited-arena-demo-directory>
+```
+
+The importer is standard-library only. It reads scene.json, navigation.json and visual-map files, never the game cache. Scene collision preserves original CSG/native NAV-floor barriers and adds a bounded static regular-wall triangle batch. Decorations, doors, pillars and guessed bounding-box solids are excluded. Every admitted triangle is sourced; candidate walls blocking native portal body routes are vetoed. This remains a visual/NAV proxy, not authoritative BSP. Native-derived and custom movement policy qualifications remain explicit. The weapon-geometry file is separately owned and is not overwritten by scene imports.
+
+Python API (`wfarsenal.arena_scene`):
+
+- `load_scene(map_id="corpus-ship-defense", native=True)` uses optional `wfarsenal.wfcore.SpatialIndex`, with standard-library BVH fallback.
+- `scene.nodes/points`: XYZ tuples; graph/incoming contain directed Edge objects.
+- `search(start, profile="player", reverse=False)`: SearchResult.d/prev/edges; reverse uses incoming graph with the original directed edge cost.
+- `path/route(start,goal,profile)`: ordered Edge list; unreachable returns[]. Profiles: player, enemy, walking, drone. Only explicit enemy edges can be used by enemy/walking; drone follows the same geometry graph at5 source units/s.
+- `raycast/first_hit(origin,direction,maxdist)`: RayHit or None; direction normalized internally, hit.t/distance is source distance. `trace_segment(a,b)` excludes tiny endpoint contacts; `visible` is boolean.
+- `all_hits` returns sorted triangle hits, including coincident faces. This does not infer closed solids or penetration thickness; material/solid qualification remains unresolved.
+- `check_motion(points,ground_step=False)`: sampled body-rail segments, not full capsule physics. For stairs ground_step checks the higher tread before horizontal motion; caller enforces supplied step/support policy.
+- `ground_support(position,max_drop=2,max_rise=.5)`: downward proxy support ray only.
+- `asset_bytes(map_id,name)` returns `(gzip_bytes,"application/json","gzip")` for HTTP Content-Type/Content-Encoding; `load_asset` provides decompressed dict. Names allowlisted by catalog: scene, navigation, visual-map, visual-map-collision-candidates.
+
+Source-only verification was run with native=False: exact floor ray, two stacked deck nearest/all-hits behavior, forward/reverse enemy route-time parity and all native body-height portals unaffected by newly admitted walls. Native `cargo check` passed with CARGO_BUILD_JOBS=2; binary rebuild/parity test is delegated to the coordinated build. One necessary parity regression was appended to existing tests/test_native_core.py.
+
+Root resolution uses `WF_RIVEN_ROOT`, then PyInstaller `sys._MEIPASS`, then the source-tree root. `list_maps()` returns map metadata with `default` flags. Asset names accept `scene`, `scene.json`, and `scene.json.gz` equivalents (same for visual-map/navigation), always catalog allowlisted.
+
+`load_scene` caches expensive geometry. **Each sequential job must call `scene.reset_runtime()` before starting** to clear disabled links and metrics. Concurrent jobs must pass their own `disabled=set()` to `search` and keep metrics/job route state local; do not mutate the cached graph/raw/source metadata. Calling reset while another job is active is not isolation.
+
+## Source EnemySpecs candidate pools
+
+`enemy-specs.json.gz` (`portable-arena-enemy-specs/v1`) contains11 defense/interception specs only; survival/disruption special specs are excluded. `specs[].enemies[]` retains source `agent`, `tier`, `probability`, `maxSimultaneous`, `weaponOverrides`, and `mergeSymbol` unchanged, then adds `resolvedAvatarPath`, `presentInFrozenEnemies`, `availabilityStatus`, `runnable`, `agentInheritanceChain`, and per-variant `avatarVariants` with declaring type/raw reference. Only STANDARD exact path matches are runnable; missing frozen paths are never approximated. Current Agent source2026.10.28.09.54 and frozen damage catalog2026.08.13.13.24 are intentionally recorded separately.
+
+`specs[].tiers[]` gives raw/runnable counts and weight sums. Normalize positive runnable weights **within an explicitly user-selected tier only**, if that scenario policy is enabled; neither this dataset nor normalization proves native observed spawn frequency. Raw cap0 remains uninterpreted. `mapCandidates` retains contiguous-string solar-map evidence with its uncertainty and is not live Arbitration rotation data.
+
+Rebuild with the same importer, without rebaking maps:
+
+```powershell
+python tools/import_arena_scene.py --enemy-specs-only --enemy-specs-source <case>/evidence/spawn/enemy-specs.json --packages-bin <case>/artifacts/original/Debug/Packages.bin_H --candidate-nodes <case>/evidence/spawn/candidate-nodes.json
+```
+
+Inputs are SHA256-recorded inside the compressed payload. Use `--enemies` to explicitly validate a different frozen catalog; default follows Portable source-lock. Tier0 runnable entries total57 across11 specs (duplicate agents across specs intentionally retained). All other raw tiers/caps remain available for explicit scenario choices.
+
+
+## Scoring cache isolation
+
+`wfarsenal.cache_identity.score_source_bytes` provides narrow, fail-closed pre-arena identity compatibility. All existing score input files still participate in the legacy digest. Only app.py and parallel.py may map to exact pinned HEAD source bytes, after AST reversal of reviewed arena functions/routes/MIME support or external-slot scheduling hooks and complete equality of all retained source. Unknown statements, actual scorer changes and ordinary scheduler changes fall back to raw source bytes and invalidate the cache. Runtime data/arena assets and dedicated arena modules remain outside score input identity. This does not mask unrelated Python changes.
+
+`score-identity-baseline.json.gz` is pinned by SHA256 in cache_identity.py. `score-identity-compatibility.json` records the67 actual dependencies, normalized byte hashes, proven pre-arena identity and unchanged old cache evidence. The current old cache identity differs from the reconstructed HEAD baseline, so **no unsafe cache identity rewrite was performed**; unmatched entries remain rejected. An original-byte backup was saved under .local/cache/riven-analysis-statics.pre-arena-identity-*.json. Scores and cached numeric entries were not edited. Arena-only updates can continue using an otherwise matching pre-arena cache; changed actual score dependencies still invalidate it.
+
+## Second defense template
+
+Map `grineer-galleon-defense`: source GrnDefenceTwo from current GrineerGalleonDefense Proc; Hydron/Helene shared-template candidates, not claimed current Arbitration roster.1653 NAV faces/192 authored spawn points/191 player-reachable candidates;40 source baked-art+CSG shared GLBs with50 exact transforms.6268 CSG+NAV proxy collision faces.40 ordinary supported step edges plus60 separately player-only arcs. Start `(0,4.3,0)` lies on isolated4-face platform: enemies cannot reach it, explicitly retained; player leaves platform to pursue. No ordinary-enemy ballistic jumps. Four compressed assets total about4.05MB. Original raw source hashes/alias evidence and parser qualifications are embedded in scene/catalog. Generic raw importer is implemented in tools/import_arena_scene.py; no full-cache unpack, no source textures or invented collision solids.
+
+## Candidate source coverage
+
+`map-coverage.json` records5 newly available defense tiles,2 source/format blocks and2 shared-template duplicates. Catalog now offers7 authored tiles total: corpus-ship-defense, grineer-galleon-defense, corpus-outpost-defense-two, grineer-shipyards-defense, corpus-gas-city-defense, grineer-ocean-defense-02, grineer-ocean-defense-03. Candidates derive from Sechura,Seimeni,Io/Sinai,Stephano,Xini,Odin/Hydron/Helene source references; current Arbitration qualification remains unknown. Xini/Odin reuse existing authored tiles. OutpostOne polygon NAV77 and OutpostThree missing NAV are explicitly blocked, no synthetic topology. Source notes/counts/blocked reasons and alias evidence are in coverage manifest; exact raw resource hashes remain embedded in scene metadata. Ordinary enemy reachability to exact center varies and is intentionally not filled with player-only jump links.
+
+## Source polygon NAV support
+
+`corpus-outpost-defense-one` is now available.2521 source n-gons expand to3376 runtime triangles only after exact source ring ordering, simple boundary, Newell plane tolerance0.002, positive3D normals, projected signed-area conservation and exact boundary/incidence checks.855 internal split edges are explicitly distinguished from3203 native shared-source portals. `nav.sourcePolygons` and `nav.fromFaceMap` preserve original face identity; existing runtime triangle API remains unchanged. SourceDefenseThree still has no0.nav and stays blocked. Catalog now8 real authored maps; all include `nameZh`, `architectureFaction`, `templateLabelZh`, with architecture faction explicitly separate from mission enemy selection.

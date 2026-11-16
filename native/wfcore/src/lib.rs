@@ -14,6 +14,7 @@ pub mod proc;
 pub mod pymath;
 pub mod replay;
 pub mod stackable;
+pub mod spatial;
 pub mod sustained;
 pub mod tables;
 
@@ -182,6 +183,7 @@ fn c_math(name: &str, x: f64, y: f64) -> f64 {
 
 #[pymodule]
 fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_class::<spatial::SpatialIndex>()?;
     m.add("ABI", 1)?;
     m.add("ELECTRIC_GAS_PROC_PILE", 1)?;
     m.add("SELECTIVE_KILL_PROBE", 1)?;

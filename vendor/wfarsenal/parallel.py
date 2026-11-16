@@ -29,6 +29,7 @@ import os
 import threading
 from concurrent.futures import Future, ProcessPoolExecutor
 from concurrent.futures.process import BrokenProcessPool
+from contextlib import contextmanager
 from contextvars import ContextVar
 from typing import Any, Callable
 
@@ -144,6 +145,8 @@ class _Scheduler:
         self._queue: list = []
         self._order = itertools.count()
         self._running = 0
+        self._external = 0
+        self._external_waiting = 0
         self._executor: ProcessPoolExecutor | None = None
         self._dispatcher: threading.Thread | None = None
         self.workers = default_workers()
@@ -204,7 +207,7 @@ class _Scheduler:
     def _dispatch(self) -> None:
         while True:
             with self._lock:
-                while not (self._queue and self._running < self.workers):
+                while not (self._queue and self._running < (min(self.workers, 10) - self._external - self._external_waiting if self._external or self._external_waiting else self.workers)):
                     if not self._queue and not self._running:
                         # Idle: let the thread end; the next submit starts one.
                         if not self._lock.wait(timeout=30.0) and not self._queue:
@@ -246,6 +249,27 @@ class _Scheduler:
         with self._lock:
             self._running -= 1
             self._lock.notify_all()
+
+    @contextmanager
+    def external_slot(self, cancelled=lambda: False):
+        """One long local arena shares the same CPU budget with pool jobs."""
+        with self._lock:
+            self._external_waiting += 1
+            try:
+                while self._running + self._external >= min(self.workers, 10):
+                    if cancelled():
+                        raise InterruptedError("arena cancelled while waiting for a compute slot")
+                    self._lock.wait(timeout=.1)
+                self._external += 1
+            finally:
+                self._external_waiting -= 1
+                self._lock.notify_all()
+        try:
+            yield
+        finally:
+            with self._lock:
+                self._external -= 1
+                self._lock.notify_all()
 
     def shutdown(self) -> None:
         with self._lock:

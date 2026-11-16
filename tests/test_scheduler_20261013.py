@@ -7,7 +7,6 @@
   saved by /api/settings; a change applies to new jobs.
 """
 import json
-import time
 
 import pytest
 
@@ -16,17 +15,33 @@ from wfarsenal import parallel
 
 
 def test_interactive_jobs_jump_the_queue():
+    from concurrent.futures import Future
+    from threading import Event
     scheduler = parallel._Scheduler()
     scheduler.configure(workers=1, low_priority=False)
+    started = Event()
+    gate = Future()
+    class Executor:
+        def submit(self, fn, arg):
+            if arg == 0:
+                started.set()
+                return gate
+            done = Future()
+            done.set_result(fn(arg))
+            return done
+    executor = Executor()
+    scheduler._ensure = lambda: executor
     try:
         order = []
-        blocker = scheduler.submit(time.sleep, 1.0, priority=parallel.ANALYSIS)
+        blocker = scheduler.submit(abs, 0, priority=parallel.ANALYSIS)
+        assert started.wait(timeout=1)
         queued = [scheduler.submit(abs, -n, priority=level)
                   for n, level in ((1, parallel.ANALYSIS), (2, parallel.ANALYSIS), (3, parallel.INTERACTIVE))]
         for future in queued:
             future.add_done_callback(lambda done: order.append(done.result()))
-        blocker.result(timeout=60)
-        assert [f.result(timeout=60) for f in queued] == [1, 2, 3]
+        gate.set_result(0)
+        assert blocker.result(timeout=1) == 0
+        assert [f.result(timeout=1) for f in queued] == [1, 2, 3]
         assert order == [3, 1, 2]
     finally:
         scheduler.shutdown()
@@ -93,3 +108,14 @@ def test_the_packaged_entry_point_lets_workers_start():
     entry = next(node for node in tree.body if isinstance(node, ast.If) and "__main__" in ast.unparse(node.test))
     calls = [ast.unparse(node.func) for node in ast.walk(entry) if isinstance(node, ast.Call)]
     assert calls.index("multiprocessing.freeze_support") < calls.index("main")
+
+
+def test_arena_reserves_one_shared_compute_slot_and_releases_on_cancel():
+    scheduler = parallel._Scheduler()
+    scheduler.configure(workers=1)
+    with scheduler.external_slot():
+        assert scheduler._external == 1
+        with pytest.raises(InterruptedError):
+            with scheduler.external_slot(lambda: True):
+                raise AssertionError("cancelled arena entered a full compute budget")
+    assert scheduler._external == scheduler._external_waiting == 0

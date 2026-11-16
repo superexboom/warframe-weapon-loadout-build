@@ -118,11 +118,16 @@ def copy_runtime(root: Path, destination: Path, *, include_export: bool = True, 
     if (content / "snapshot.json").is_file() and not lock.get("snapshotId"):
         lock["snapshotId"] = sha256(content / "snapshot.json")
     destination.mkdir(parents=True, exist_ok=False)
-    shutil.copytree(content / "data", destination / "data", ignore=shutil.ignore_patterns("snapshots", "export", "cache"))
-    # Mechanics metadata ships with the engine, independently of a game snapshot.
+    shutil.copytree(content / "data", destination / "data", ignore=shutil.ignore_patterns("snapshots", "export", "cache", "arena"))
+    # Engine-owned mechanics and arena assets ship with the current runtime,
+    # independently of the selected immutable game-data snapshot. Never merge
+    # snapshot arena files: removed maps must not survive a version change.
     mechanics = root / 'data/mechanics'
     if mechanics.is_dir():
         shutil.copytree(mechanics, destination / 'data/mechanics', dirs_exist_ok=True)
+    arena = root / 'data/arena'
+    if arena.is_dir():
+        shutil.copytree(arena, destination / 'data/arena')
     if include_export:
         build = validate_build(str(lock["activeBuild"]))
         shutil.copytree(content / "data" / "export" / build, destination / "data" / "export" / build)

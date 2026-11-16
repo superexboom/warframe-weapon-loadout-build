@@ -30,3 +30,23 @@ def test_invalid_windows_are_rejected(value):
 
 def test_existing_requests_keep_the_thirty_second_window():
     assert app._manual_resolve_sim_context(payload())['window_seconds'] == 30.
+
+
+def test_arena_world_uses_explicit_slots_and_ends_without_mutating_the_request(monkeypatch):
+    from copy import deepcopy
+    from wfarsenal.arena import World
+    from wfarsenal.arena_scene import ArenaScene
+    p=payload(); p.update(level=1, steelPath=False, headshotChance=0.)
+    original=deepcopy(p)
+    raw=dict(nav=dict(nodePositions=[(0,0,0),(0,0,3)],nativePortals=[dict(fromFace=0,toFace=1,portal=(0,0,1.5))],componentOfFace=[0,0]),
+        start=dict(face=0,position=(0,0,0)),spawns=[dict(face=1,accepted=True)],focusRegion=dict(faces=[0,1]),
+        collision=dict(vertices=[(-5,0,-5),(5,0,-5),(5,0,5),(-5,0,5)],triangles=[(0,1,2),(0,2,3)]))
+    scene=ArenaScene(raw,native=False)
+    monkeypatch.setattr('wfarsenal.arena.load_scene',lambda _:scene)
+    context=app._arena_context(dict(loadout=p,scenario=dict(enemy=p['enemy'],level=1,enemies=1,waves=1,seconds=2,droneEvery=0)))
+    world=World(context); result=world.run()
+    assert p==original and result['loadout']['mods']==p['mods']
+    assert result['stats']['shots']>0 and result['replay']['actors']
+    assert result['stats']['seconds']<=2 and result['status'] in ('completed','time_limit')
+    again=World(context).run()
+    assert result['stats']['eventHash']==again['stats']['eventHash']

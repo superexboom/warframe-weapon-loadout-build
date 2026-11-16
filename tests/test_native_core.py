@@ -144,3 +144,20 @@ def test_capped_stack_add_matches_python():
         nat_added, nat_dists = wfcore.capped_stack_add_dists(dists, absence, count, cap)
         assert added == nat_added, run
         assert [item["dist"] for item in items] == nat_dists, run
+
+
+def test_arena_spatial_bvh_nearest_all_hits_and_segment_bounds():
+    from wfarsenal.arena_scene import TriangleBVH
+    vertices = [(-2., 0., -2.), (2., 0., -2.), (0., 0., 2.),
+                (-2., 3., -2.), (2., 3., -2.), (0., 3., 2.)]
+    reference = TriangleBVH(vertices, [(0, 1, 2), (3, 4, 5)], native=False)
+    native = wfcore.SpatialIndex(vertices, [(0, 1, 2), (3, 4, 5)])
+    for origin, direction, limit in [((0., 5., 0.), (0., -2., 0.), 10.),
+                                     ((0., 1., 0.), (0., 1., 0.), 1.5),
+                                     ((0., 1., 0.), (0., 1., 0.), 3.),
+                                     ((10., 1., 0.), (0., -1., 0.), 5.)]:
+        expected = reference.raycast(origin, direction, limit)
+        actual = native.raycast(origin, direction, limit)
+        assert actual == (None if expected is None else (expected.distance, expected.triangle))
+        assert native.all_hits(origin, direction, limit) == [(h.distance, h.triangle) for h in reference.all_hits(origin, direction, limit)]
+    assert native.raycast_batch([((0., 5., 0.), (0., -1., 0.), 10.)]) == [(2., 1)]

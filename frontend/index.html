@@ -9,6 +9,7 @@
   <link rel="icon" href="/assets/riven/riven-icon.ico">
   <title>Warframe &amp; Weapon Loadout Build</title>
 <link rel="stylesheet" href="/app.css?v=20260902a">
+<link rel="stylesheet" href="/arena/arena.css">
 <script src="/enemy-images.js" defer></script>
 <script src="/build-config-migrations.js" defer></script>
 <script src="/app.js?v=20260902a" defer></script>
@@ -71,6 +72,8 @@
           </button>
           <div class="tab-context"><span class="context-light" aria-hidden="true"></span>所有计算均在本机完成</div>
         </div>
+
+        <section id="arena-tool" aria-label="场景靶场" hidden></section>
 
         <div class="tool-layout" id="analysis-tool" role="tabpanel" aria-labelledby="analysis-tab">
           <form class="input-pane" id="riven-form" novalidate>
@@ -735,6 +738,7 @@
                   </div>
                   <div class="bench-toolbar-right">
                     <span id="manual-build-summary">点击空槽选择 MOD</span>
+                    <button class="button button-quiet" id="arena-open" type="button" title="冻结当前配装，进入独立场景靶场；点击开始才计算">场景靶场</button>
                     <button class="button button-quiet" id="manual-clear" type="button" title="清空当前武器的 8 个 MOD 槽">清空配卡</button>
                     <button class="button button-danger" id="build-reset-all" type="button" title="清除所有武器的已保存配置与本机缓存">清空全部</button>
                   </div>
