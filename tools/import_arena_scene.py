@@ -3479,6 +3479,261 @@ def import_enemy_specs(
     return payload, target
 
 
+def _source_material_style(path, fields):
+    """Readable illustrative colors, classified from actual material identities.
+
+    Shader uniforms are evidence only: masks, vertex colors and textures are not
+    reconstructed. In particular a generic inherited DiffuseColor is not albedo.
+    """
+    name = path.rsplit("/", 1)[-1]
+    physics = fields.get("DefaultPhysicsMaterial", "").rsplit("/", 1)[-1]
+    shader = fields.get("Shader2", fields.get("Shader0", ""))
+
+    def named(pattern):
+        return bool(re.search(pattern, name, re.I))
+
+    # Explicit surface names precede inherited physics: GroundSnowA inherits
+    # Flesh, and FloorMoss inherits Metal in the original source.
+    if named(r"Alabaster") and named(r"Bark|Root|Tree"):
+        category, color, roughness, metalness, reason = (
+            "wood",
+            "#d8d5c7",
+            0.92,
+            0,
+            "alabaster-bark-name",
+        )
+    elif named(r"Snow"):
+        category, color, roughness, metalness, reason = (
+            "snow",
+            "#c5d4d9",
+            0.95,
+            0,
+            "snow-name",
+        )
+    elif named(r"Ice(?:Ground|Rock|Wall|Cliff|Sheet|Chunk|A|B|C|D|$)|Frozen|Glacier"):
+        category, color, roughness, metalness, reason = (
+            "ice",
+            "#9dbfc9",
+            0.35,
+            0.05,
+            "ice-name",
+        )
+    elif named(
+        r"Moss|Grass|Fern|Leaf|Leaves|Foliage|Plant|Vine|Canopy|Flower|Bush|Shrub"
+    ):
+        category, color, roughness, metalness, reason = (
+            "vegetation",
+            "#5f7950",
+            0.95,
+            0,
+            "vegetation-name",
+        )
+    elif named(r"Bark|Tree|Root|Wood"):
+        category, color, roughness, metalness, reason = (
+            "wood",
+            "#79634a",
+            0.92,
+            0,
+            "wood-name",
+        )
+    elif named(r"Rock|Stone|Cliff|Boulder|Gravel|Rubble|Basalt|Marble|Granite"):
+        category, color, roughness, metalness, reason = (
+            "rock",
+            "#827c6d",
+            0.98,
+            0,
+            "rock-name",
+        )
+    elif named(r"Dirt|Mud|Sand|Soil|Ground|Terrain"):
+        category, color, roughness, metalness, reason = (
+            "ground",
+            "#8a795a",
+            0.98,
+            0,
+            "ground-name",
+        )
+    elif named(r"Infest|Technocyte|Flesh|Tendril|Tumor"):
+        category, color, roughness, metalness, reason = (
+            "infested",
+            "#886859",
+            0.88,
+            0,
+            "organic-name",
+        )
+    elif "RockFill" in shader:
+        category, color, roughness, metalness, reason = (
+            "rock",
+            "#827c6d",
+            0.98,
+            0,
+            "source-rock-shader",
+        )
+    elif physics in (
+        "Stone",
+        "Dirt",
+        "Snow",
+        "DeepSnow",
+        "Ice",
+        "Vegetation",
+        "Wood",
+        "InfestedSolid",
+        "TechnocyteFlesh",
+        "Sludge",
+    ):
+        category, color = {
+            "Stone": ("rock", "#827c6d"),
+            "Dirt": ("ground", "#8a795a"),
+            "Snow": ("snow", "#c5d4d9"),
+            "DeepSnow": ("snow", "#c5d4d9"),
+            "Ice": ("ice", "#9dbfc9"),
+            "Vegetation": ("vegetation", "#5f7950"),
+            "Wood": ("wood", "#79634a"),
+            "InfestedSolid": ("infested", "#886859"),
+            "TechnocyteFlesh": ("infested", "#886859"),
+            "Sludge": ("ground", "#6d7250"),
+        }[physics]
+        roughness, metalness, reason = (
+            (0.35 if category == "ice" else 0.94),
+            0,
+            "source-physics",
+        )
+    elif named(r"Glass") or "Glass" in physics or "Glass" in shader:
+        category, color, roughness, metalness, reason = (
+            "glass",
+            "#719fae",
+            0.25,
+            0.1,
+            "glass-name-physics-or-shader",
+        )
+    elif named(r"Light|Lamp|Lantern|Emissive|Glow") and not named(
+        r"NoEmissive|NoGlow|EmisOff|EmissiveOff|GlowOff|LightOff|LightsOff"
+    ):
+        category, color, roughness, metalness, reason = (
+            "light",
+            "#d5bc81",
+            0.55,
+            0.15,
+            "light-name",
+        )
+    elif physics in ("Metal", "Pipe") or named(r"Metal|Iron|Steel|Rust|Copper|Brass"):
+        category, color, roughness, metalness, reason = (
+            "metal",
+            "#9babad",
+            0.6,
+            0.5,
+            "source-physics-or-metal-name",
+        )
+        if named(r"Rust"):
+            color, roughness, metalness = "#94725b", 0.85, 0.25
+    elif named(r"Floor|Catwalk|Platform|Stair|Ramp|Grate"):
+        category, color, roughness, metalness, reason = (
+            "floor",
+            "#8a9291",
+            0.88,
+            0.1,
+            "structural-name",
+        )
+    elif named(r"Wall|Panel|Ceiling|Pillar|Trim|InteriorKit|Concrete|Brick|Tile"):
+        category, color, roughness, metalness, reason = (
+            "structure",
+            "#939b9f",
+            0.88,
+            0.1,
+            "structural-name",
+        )
+    else:
+        category, color, roughness, metalness, reason = (
+            "default",
+            "#818c91",
+            0.88,
+            0.1,
+            "neutral-fallback",
+        )
+    evidence = {"classification": reason}
+    if fields.get("DefaultPhysicsMaterial"):
+        evidence["physics"] = fields["DefaultPhysicsMaterial"]
+    if shader:
+        evidence["shader"] = shader
+    for key in ("VS:BaseTintColor", "PS:TintColor", "VS:TintColor"):
+        tint = fields.get(key)
+        if isinstance(tint, list) and len(tint) >= 3:
+            evidence.update(tintSource=key, tint=tint)
+            break
+    result = dict(
+        category=category,
+        color=color,
+        roughness=roughness,
+        metalness=metalness,
+        source=evidence,
+    )
+    if category == "light":
+        result["emissiveColor"] = "#705d32"
+    return result
+
+
+def import_source_materials(packages_path, output):
+    """Write one small sidecar; visual-map geometry and per-map hashes stay intact."""
+    from import_melee_mechanics import Packages
+
+    package = Packages(packages_path)
+    catalog_path = output / "catalog.json"
+    catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    paths, inputs = set(), []
+    for map_id, entry in catalog["maps"].items():
+        asset = entry["assets"]["visual-map"]
+        file = output / asset["file"]
+        actual_hash = sha(file)
+        if actual_hash != asset["sha256"]:
+            raise ValueError(f"visual-map SHA256 mismatch: {map_id}")
+        visual = json.loads(gzip.decompress(file.read_bytes()))
+        paths.update(m["sourcePath"].replace("\\", "/") for m in visual["materials"])
+        inputs.append(dict(mapId=map_id, sha256=actual_hash))
+    materials, absent = {}, []
+    for path in sorted(paths):
+        exists = package.exists(path)
+        fields = package.resolve(path) if exists else {}
+        style = _source_material_style(path, fields)
+        style["source"]["present"] = exists
+        if not exists:
+            absent.append(path)
+        materials[path] = style
+    payload = {
+        "schema": "arena-material-palette/v1",
+        "parserVersion": PARSER_VERSION + "/source-materials-v1",
+        "qualification": "Illustrative untextured colors, not recovered source albedo. Exact material identity and inherited source physics/shader/tint evidence only; textures, vertex colors and shader masks are not reconstructed. Glass stays opaque; lights use material emissive only, no dynamic lights.",
+        "source": {
+            "file": packages_path.name,
+            "sha256": package.sha256,
+            "bytes": packages_path.stat().st_size,
+        },
+        "visualInputs": inputs,
+        "counts": {
+            "materials": len(materials),
+            "sourcePresent": len(materials) - len(absent),
+            "sourceAbsent": len(absent),
+        },
+        "absentSourcePaths": absent,
+        "materials": materials,
+    }
+    target = output / "material-palette.json"
+    target.write_bytes(compact(payload))
+    # Reread so unrelated catalog metadata owned by parallel work is preserved.
+    catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    catalog["materialPalette"] = {
+        "file": target.name,
+        "sha256": sha(target),
+        "bytes": target.stat().st_size,
+        "schema": payload["schema"],
+        "counts": payload["counts"],
+        "qualification": "illustrative source-classified colors; not original albedo",
+    }
+    catalog_path.write_text(
+        json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    print(json.dumps(catalog["materialPalette"], ensure_ascii=False, indent=2))
+    return payload, target
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, help="audited arena-demo directory")
@@ -3487,6 +3742,7 @@ def main():
     parser.add_argument("--no-static-walls", action="store_true")
     parser.add_argument("--audit-visual-support", action="store_true")
     parser.add_argument("--source-ground", action="store_true")
+    parser.add_argument("--source-materials", action="store_true")
     parser.add_argument("--source-doors", action="store_true")
     parser.add_argument("--ground-surface-face", type=int, action="append")
     parser.add_argument("--complete-visuals", action="store_true")
@@ -3505,6 +3761,11 @@ def main():
     parser.add_argument("--enemy-specs-only", action="store_true")
     parser.add_argument("--mission-coverage", type=Path)
     args = parser.parse_args()
+    if args.source_materials:
+        if not args.packages_bin:
+            parser.error("--source-materials requires --packages-bin")
+        import_source_materials(args.packages_bin, args.output)
+        return
     if args.source_ground:
         if not args.case_root or not args.packages_bin:
             parser.error("--source-ground requires --case-root --packages-bin")

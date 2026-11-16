@@ -52,13 +52,39 @@ def defense_tier(wave: int) -> int:
 
 
 
+def defense_enemy_level(wave, start_level, *, max_level=None, arbitration=False):
+    """WaveDefend P48 141..182/1483..1529 ordinary spawn level.
+
+    The source reads two Director level endpoints. A one-value scenario uses
+    that explicit value for both; pass max_level for a known mission range.
+    Main R33=10 is the initial interpolation horizon. Ordinary and Arbitration
+    Defense share this expression: Arbitration adds no separate multiplier.
+    Special Circle/Duviri overrides and live Director endpoint modifiers are
+    outside this function. The result is passed to P26 then P25's spawn call;
+    it does not change the saved initial level used for population interpolation.
+    """
+    if int(wave) != wave or wave < 1:
+        raise ValueError("wave must be a positive integer")
+    low = _f32(start_level)
+    high = low if max_level is None else _f32(max_level)
+    if not math.isfinite(low) or not math.isfinite(high) or low < 1 or high < low:
+        raise ValueError("level endpoints must be positive and ordered")
+    position, horizon = _mul(wave, 90), _mul(10, 90)
+    if position <= horizon:
+        return math.floor(_lerp(low, high, _div(position, horizon)))
+    elapsed = _sub(position, horizon)
+    divisor = max(math.ceil(_sub(90, _mul(_div(elapsed, 90), 0.99))), 5)
+    return int(_add(high, math.floor(_div(elapsed, divisor))))
+
+
 def defense_wave_parameters(wave, players, level, *, arbitration=False,
-                            max_alive=64, mission_difficulty=0.0,
+                            max_alive=40, mission_difficulty=0.0,
                             eximus_multiplier=1.0):
     """WaveDefend P26 ordinary branch; level is the mission starting level.
 
-    Native Director's additional dynamic cap is not replayed: max_alive is an
-    explicit scenario ceiling. Mission difficulty and leader multiplier remain
+    Current PC Director hard maximum defaults to40; explicit max_alive allows
+    verified task overrides. Reserved slots/native actor filtering remain outside
+    wave population math. Mission difficulty and leader multiplier remain
     explicit inputs until the selected live MissionInfo is available.
     """
     low, high = (7, 13, 22, 25), (10, 20, 26, 29)

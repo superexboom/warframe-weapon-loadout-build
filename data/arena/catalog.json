@@ -9871,5 +9871,17 @@
     "jsonSha256": "fddf141a160d43252a3fcc50a03b39a1b8c0de3ed2df70afb336017bf83e9fdb",
     "compressedBytes": 18386,
     "jsonBytes": 127063
+  },
+  "materialPalette": {
+    "file": "material-palette.json",
+    "sha256": "3a1ce934b68e7dc744dd04be4439ba2c8f6abb21e160ad41a49c9222a74fa91a",
+    "bytes": 467243,
+    "schema": "arena-material-palette/v1",
+    "counts": {
+      "materials": 1512,
+      "sourcePresent": 1508,
+      "sourceAbsent": 4
+    },
+    "qualification": "illustrative source-classified colors; not original albedo"
   }
 }

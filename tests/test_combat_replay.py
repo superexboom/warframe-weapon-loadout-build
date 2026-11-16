@@ -753,9 +753,12 @@ def test_arena_source_door_query_channels():
 
 
 def test_defense_schedule_cumulative_merge_quotas_and_cap_shortfall():
-    from wfarsenal.arena_spawns import defense_tier, defense_wave_parameters, build_defense_schedule
+    from wfarsenal.arena_spawns import (defense_tier, defense_wave_parameters,
+                                        defense_enemy_level, build_defense_schedule)
 
     assert [defense_tier(w) for w in (1, 2, 3, 5, 6, 12, 15, 100)] == [0, 0, 1, 1, 2, 4, 5, 5]
+    assert defense_enemy_level(20, 160, arbitration=True) == 171
+    assert defense_enemy_level(5, 10, max_level=20) == 15
     # Native float32 multiplication lands exactly on integral22; Python
     # double with a rounded2.2f would incorrectly ceil it to23.
     params = defense_wave_parameters(1, 4, 30)
@@ -811,7 +814,7 @@ def test_arbitration_drone_opportunities_keep_ordinary_quota_and_respect_cap():
     from wfarsenal.arena import World, Actor, DRONE
 
     world=World.__new__(World)
-    world.c={"spawnProfile":"arbitration","squadSize":1};world.t=0.
+    world.c={"spawnProfile":"arbitration","squadSize":1,"directorHardCap":40};world.t=0.
     world.drone_timer_reset=0.;world.drone_force=False;world.generated=7
     anchor=Actor(0,0,(0.,0.,0.));world.live=[anchor]
     world.enemies={DRONE:{"path":DRONE}};world.stats={}

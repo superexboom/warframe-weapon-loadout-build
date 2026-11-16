@@ -60,7 +60,7 @@
       ],
       "formula": "floor(lerp(low[p],high[p],min(startingLevel/30,1)))",
       "source": "WaveDefend main P61 pc97-127 -> P26 up3-6; P26 pc60-169",
-      "nativeCap": "Further native Director getter may lower cap; not recovered as a fixed constant."
+      "nativeCap": "Current PC native constructor hardCap40, getter=min(hardCap,XB1Cap) only when separate platform flag; scenario exposes verified override. No ordinary/Arbitration defense setter calls found."
     },
     "count": {
       "formula": "ceil(maxAlive*lerp(2,3,min(wave,10)*0.1))",
@@ -106,18 +106,34 @@
         "missionTierPositive": 0.25
       },
       "qualification": "MissionInfo difficulty, tier and native multiplier are explicit scenario inputs; resource-less EXIMUS rows retain exact STANDARD variant with a diagnostic."
+    },
+    "levelGrowth": {
+      "defaultEnabled": false,
+      "source": "WaveDefend P48 pc141-182 and1483-1529; mainR33=10; P48pc681-684 ->P26/P25/P24 CreateAgent",
+      "endpoints": "Scenario single level supplies both native low/high endpoints; known native mission range can differ",
+      "arithmetic": "float32 per operation",
+      "upToWave10": "floor(lerp(a,b,(90*wave)/(90*10)))",
+      "afterWave10": "b+floor(D/max(ceil(90-.99*(D/90)),5)), D=90*(wave-10)",
+      "arbitrationMultiplier": 1,
+      "exampleWave20": {
+        "start1": 12,
+        "start30": 41,
+        "start160": 171,
+        "start1000": 1011
+      },
+      "populationInput": "Keep original starting level for the population interpolation; never feed current wave level back into enemy count."
     }
   },
   "unrecovered": [
     "native spawn-point/visibility failure policy",
-    "dynamic native Director alive cap",
     "live MissionInfo selection and runtime overrides",
     "Interception capture-progress director",
     "native RNG bit identity",
-    "live enemy level progression",
     "native ordinary-alive getter inclusion of arbitration drones; scene counts all live enemies",
     "drone death-blast target filtering and kill attribution",
-    "native HardGameMode helper export identity"
+    "native HardGameMode helper export identity",
+    "live Director starting level endpoints and special mission endpoint modifiers",
+    "Director reserved slots, exact tracked-agent predicate membership and platform-switch identity"
   ],
   "numberSemantics": "Current native Luau NUMBER and arithmetic are float32; each relevant operation rounds before floor/ceil. Native LERP and VM arithmetic verified from EXE.",
   "arbitrationDrones": {
@@ -157,5 +173,18 @@
       "status": "parameters recovered; target faction filtering and kill attribution unresolved, not applied as player weapon damage"
     },
     "eligibilityQualification": "Scene assumes ordinary scheduled hostile agents satisfy P42 native predicates; excluded special/owned-agent predicate names are unresolved. No companion or player-summoned agent opportunities are simulated."
+  },
+  "director": {
+    "sourceExeSha256": "dae100202115919c89440c9ef320f691113ee8dcaf01205cbd180072c35aabdb",
+    "hardMaxAiCapDefault": 40,
+    "runtimeVtable": "0x1421cfd30",
+    "getter": "hash1952708222 ->0x1419bb530 ->slot0xc68 ->0x1403356a0",
+    "constructor": "0x1400d4ae7 writes40 to+0x800",
+    "platformBranch": "if global142937ae8 then min(hardCap,XB1Cap20); flag defaultfalse, identity unresolved",
+    "setter": "hash1689982972 ->0x1419bb260 ->slot0xc60 ->0x1403e44c0",
+    "standardDefenseSetterFound": false,
+    "aliveCounter": "hash3789076070 ->0x1419a5050 ->slot0x180 ->0x141581f60 returns+0x270; filtered tracked agents, not all NPCs",
+    "allocationGate": "max(0,hardCap-reserved838-count188(true,false))>=requested; reserved count/filters unresolved",
+    "sceneQualification": "Ordinary and drone actors counted as modeled hostile agents; no other entities or reserved slots. Explicit override affects admission, not a multiplier on wave totals."
   }
 }

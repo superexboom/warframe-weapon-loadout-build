@@ -15,7 +15,7 @@ from . import parallel
 from .arena_scene import load_scene, distance, Edge, ROOT
 from .arena_combat import ArenaCombat, UnsupportedArenaCombat
 
-MODEL = "arena-world-v5"
+MODEL = "arena-world-v6"
 VITUS_DROP_CHANCE = 0.06
 DRONE = "/Lotus/Types/Enemies/Corpus/Drones/AIWeek/CorpusEliteShieldDroneAvatar"
 EPS = 1e-8
@@ -35,6 +35,7 @@ def defaults(enemy=""):
         missionTier=0,
         eximusMultiplier=1.0,
         aliveCap=64,
+        directorHardCap=40,
         spawnEvery=1.0,
         spawnBatch=3,
         waveWait=3.0,
@@ -43,6 +44,7 @@ def defaults(enemy=""):
         wallSeconds=30.0,
         seed=20261116,
         level=160,
+        levelGrowth=False,
         enemy=enemy,
         headshots=True,
         movement="parkour",
@@ -66,6 +68,7 @@ def normalize_scenario(value):
         ("missionTier", 0, 99),
         ("enemies", 1, 128),
         ("aliveCap", 1, 128),
+        ("directorHardCap", 1, 128),
         ("spawnBatch", 1, 16),
         ("level", 1, 9999),
         ("seed", 0, 2147483647),
@@ -119,6 +122,10 @@ def normalize_scenario(value):
             raise ValueError(
                 "fixed mode requires fixedPosition={face:int,position:[x,y,z]}"
             )
+    if not isinstance(c["levelGrowth"], bool):
+        raise ValueError("levelGrowth must be boolean")
+    if c["levelGrowth"] and c["spawnProfile"] == "custom":
+        raise ValueError("等级增长需要来源防御或来源仲裁防御规则")
     if not isinstance(c["headshots"], bool):
         raise ValueError("headshots must be boolean")
     return c
@@ -330,8 +337,9 @@ class World:
         if self.source_spawns:
             if not any(r.get("tier", 0) == 0 and r.get("probability", 0) > 0 for r in self.spec_entries):
                 raise ValueError("来源防御编波需要含普通tier0的敌组；特殊编组请使用自定义工况")
-            self.diagnostics[0] = "防御编波按已恢复的WaveDefend脚本：累计tier、整波配额、来源上限；原生动态Director与任务特殊覆盖仍未完全复刻"
-            self.diagnostics.append("敌人等级按用户配置固定；任务difficulty/Eximus倍率为显式输入，当前地图几何不决定实时任务参数")
+            self.diagnostics[0] = "防御编波使用已恢复的脚本与当前PC Director硬上限40；特殊任务可覆盖，原生预留槽位和筛选计数未完整复刻"
+            self.diagnostics.append("任务difficulty/Eximus倍率为显式输入，当前地图几何不决定实时任务参数")
+            self.diagnostics.append("已开启来源防御等级增长：两个Director起始端点均取输入等级，特殊任务端点修正未套用" if self.c["levelGrowth"] else "等级增长未开启：敌人等级固定为用户配置")
             if self.c["spawnProfile"] == "arbitration":
                 if DRONE not in self.enemies:
                     raise ValueError("当前敌人数据缺少仲裁无人机")
@@ -340,6 +348,7 @@ class World:
                 self.diagnostics.append("场景把无人机计入总存活上限；原生Director该计数是否排除无人机仍未证实")
         elif self.enemy_pool:
             self.diagnostics.append("自定义工况固定所选tier并逐只权重抽样；不是游戏防御编波")
+        self.wave_level = self.c["level"]
         self.wave_target = self.c["enemies"]
         self.wave_alive_cap = self.c["aliveCap"]
         self.wave_schedule = []
@@ -437,13 +446,17 @@ class World:
         self.last_kill = self.t
         self.next_spawn = self.t
         self.wave_pending = False
-        info = dict(wave=self.wave, start=round(self.t, 6), end=None)
+        from .arena_spawns import defense_enemy_level
+        self.wave_level = (min(9999, defense_enemy_level(self.wave, self.c["level"]))
+                           if self.c["levelGrowth"] else self.c["level"])
+        info = dict(wave=self.wave, start=round(self.t, 6), end=None,
+                    enemyLevel=self.wave_level, levelGrowth=self.c["levelGrowth"])
         if self.source_spawns:
             from .arena_spawns import defense_wave_parameters, build_defense_schedule
             params = defense_wave_parameters(
                 self.wave, self.c["squadSize"], self.c["level"],
                 arbitration=self.c["spawnProfile"] == "arbitration",
-                max_alive=self.c["aliveCap"], mission_difficulty=self.c["missionDifficulty"],
+                max_alive=min(self.c["aliveCap"], self.c["directorHardCap"]), mission_difficulty=self.c["missionDifficulty"],
                 eximus_multiplier=self.c["eximusMultiplier"],
             )
             eligible = [r for r in self.spec_entries if r.get("tier", 0) <= params["tier"]]
@@ -466,7 +479,7 @@ class World:
                 self.boss_spawn_wave = self.wave
             info.update(spawnProfile=self.c["spawnProfile"], **params,
                         schedule=schedule, targetCount=self.wave_target,
-                        spawnAttemptSeconds=0.25)
+                        spawnAttemptSeconds=0.25, directorHardCap=self.c["directorHardCap"])
             self.diagnostics.extend(schedule["qualifications"])
         else:
             info.update(spawnProfile="custom", targetCount=self.wave_target,
@@ -477,10 +490,10 @@ class World:
         id = len(self.actors)
         pos = tuple(self.scene.nodes[point["face"]])
         actor = Actor(id, point["face"], pos, drone)
-        target = self.combat.add_target(id, enemy, self.c["level"], pos)
+        target = self.combat.add_target(id, enemy, self.wave_level, pos)
         actor.tape = dict(id=id, type="drone" if drone else "normal",
                           name=enemy.get("name") or enemy.get("nameEn"),
-                          enemyPath=enemy["path"], level=self.c["level"],
+                          enemyPath=enemy["path"], level=self.wave_level,
                           birth=round(self.t, 6), death=None, hp=sum(target.full), path=[])
         if source:
             actor.tape.update(sourceAgent=source["agent"], sourceTier=source["tier"],
@@ -507,7 +520,7 @@ class World:
             return
         self.drone_force = False
         cap = math.ceil(self.c["squadSize"] / 1.5)
-        if sum(a.drone for a in self.live) >= cap:
+        if sum(a.drone for a in self.live) >= cap or len(self.live) >= self.c["directorHardCap"]:
             return
         # Native create-at-anchor placement is not decoded. Use a nearby real
         # navigable face with support/body clearance, never spawn inside a wall
