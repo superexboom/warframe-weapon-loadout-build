@@ -160,6 +160,16 @@ def test_arena_spatial_bvh_nearest_all_hits_and_segment_bounds():
         _triangulate_nav_polygon([(0., 0., 0.), (2., 0., 2.), (0., 0., 2.), (2., 0., 0.)],
                                  [(0, 1), (1, 2), (2, 3), (3, 0)], 4954)
     assert not isinstance(crossing.value, _ZeroAreaNavFace)
+    from wfarsenal.arena_scene import ArenaScene
+    raw={"nav":{"vertices":[[-3.,0.,-3.],[3.,0.,-3.],[0.,0.,3.]],
+                "triangles":[[0,1,2]],"nodePositions":[[0.,0.,0.]],"nativePortals":[]},
+         "collision":{"vertices":[[-3.,0.,-3.],[3.,0.,-3.],[0.,0.,3.]],"triangles":[[0,1,2]]},
+         "start":{"face":0,"position":[0.,0.,0.]},"spawns":[]}
+    standing_scene=ArenaScene(raw,native=False)
+    assert standing_scene.validate_standing([0.,.05,0.],0)["position"]==[0.,0.,0.]
+    assert standing_scene.metrics=={"rays":0,"blocked":0,"pathSearches":0}
+    for position,face in [([0.,4.,0.],0),([8.,0.,0.],0)]:
+        with pytest.raises(ValueError):standing_scene.validate_standing(position,face)
     vertices = [(-2., 0., -2.), (2., 0., -2.), (0., 0., 2.),
                 (-2., 3., -2.), (2., 3., -2.), (0., 3., 2.)]
     reference = TriangleBVH(vertices, [(0, 1, 2), (3, 4, 5)], native=False)

@@ -512,3 +512,71 @@ def test_arena_independent_proc_clocks_and_neighbour_damage(monkeypatch,dtype):
     for t in (.25,.5,.75,1.,1.25,1.5,1.75,2.): other.advance(t)
     assert other.targets['a'].damage==pytest.approx(a.damage)
     assert other.targets['b'].damage==pytest.approx(b.damage)
+
+
+def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():
+    from types import SimpleNamespace
+    from wfarsenal.arena import World, Actor
+
+    calls=[]
+    class Scene:
+        nodes=((0.,0.,0.),(2.,0.,0.),(3.,0.,0.),(4.,0.,0.),(5.,0.,0.),(.1,0.,0.))
+        disabled=set()
+        def movement_components(self,profile):return (0,1,1,1,1,0)
+        def visible(self,*args):return True
+        def search(self,start,profile,reverse=False):
+            calls.append((start,profile,reverse))
+            return SimpleNamespace(d=[0. if i==start else float('inf') for i in range(6)],
+                                   prev=[-1]*6,edges=[None]*6,reverse=reverse)
+    world=World.__new__(World)
+    world.scene=Scene();world.c={"movement":"fixed"};world.t=0.
+    world.player=Actor(-1,0,(0.,0.,0.));world.live=[Actor(1,1,(2.,0.,0.)),Actor(2,2,(3.,0.,0.))]
+    world.flow_node=-1;world.flows={};world.fallback={};world.combat=SimpleNamespace(targets={})
+    world.plan();count=len(calls)
+    world.plan();assert len(calls)==count  # same staging node, no repeated search
+    world.player.node=5
+    world.plan();assert len(calls)==count+1  # new player flow only, old ground staging flows remain
+    world.player.route=[object()];world.player.edge={"invalid":"must never move"}
+    assert world.move_actor(world.player,1.,0.)==0.
+    assert world.player.pos==(0.,0.,0.) and not world.player.route and world.player.edge is None
+    from wfarsenal.arena_scene import ArenaScene, distance
+    ground={"nav":{"vertices":[[-5.,0.,-5.],[5.,0.,-5.],[0.,0.,5.]],
+                  "triangles":[[0,1,2],[0,1,2]],"nodePositions":[[0.,0.,0.],[.5,0.,1.]],
+                  "nativePortals":[{"fromFace":0,"toFace":1,"portal":[.25,0.,.5]}]},
+            "collision":{"vertices":[[-5.,0.,-5.],[5.,0.,-5.],[0.,0.,5.]],"triangles":[[0,1,2]]},
+            "start":{"face":0,"position":[0.,0.,0.]},"spawns":[]}
+    world.scene=ArenaScene(ground,native=False);world.c={"movement":"parkour"}
+    blocker=Actor(0,0,(1.,0.,0.));walker=Actor(1,0,(.5,0.,0.))
+    walker.tape={"path":[]};walker.edge={"points":[walker.pos,(2.,0.,0.)],"index":1,"node":0,"speed":3.6,"kind":"walk"}
+    world.live=[blocker,walker];world.combat=SimpleNamespace(targets={1:SimpleNamespace(frozen_until=-1.)})
+    world.stats={"crowdWaitSeconds":0.};world.replay={"player":[]};world.motion_cache={}
+    world.record(walker,0.)
+    before=walker.pos
+    for k in range(8):world.move_actor(walker,.1,k*.1)
+    assert world.stats.get("crowdDetours",0)==1 and walker.pos!=before
+    assert walker.pos[0]<before[0]  # real supported retreat, not through blocker
+    assert 0.<distance(before,walker.pos)<=.36+.00001
+    assert distance(walker.pos,blocker.pos)>=distance(before,blocker.pos)
+    # If support disappears, a later blocked-edge attempt keeps exact feet/edge.
+    walker.pos=before;walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":3.6,"kind":"walk"}
+    original_edge=walker.edge
+    world.scene.ground_support=lambda *a,**k:None
+    assert not world._yield_crowded_edge(walker,10.)
+    assert walker.pos==before and walker.edge is original_edge
+    # Disconnected target floor does not forbid a reachable firing vantage.
+    from wfarsenal.arena_scene import Edge
+    vantage_edge=Edge(0,1,((0.,0.,0.),(1.,0.,0.)),"walk",1.,True,1.,1.,key="vantage")
+    result=SimpleNamespace(d=[0.,1.,float("inf")],prev=[-1,0,-1],edges=[None,vantage_edge,None],reverse=False)
+    class VantageScene:
+        nodes=((0.,0.,0.),(1.,0.,0.),(2.,0.,0.));disabled=set()
+        def movement_components(self,profile):return (0,0,1)
+        def search(self,*args,**kwargs):return result
+        def visible(self,origin,target):return origin[0]>.5
+    world.scene=VantageScene();world.c={"movement":"parkour","rangeAssumption":100.};world.t=0.
+    world.player=Actor(-1,0,(0.,0.,0.));world.live=[Actor(2,2,(2.,0.,0.))]
+    world.flow_node=0;world.flows={"enemy":result};world.fallback={};world.fallback_staging={}
+    world.combat=SimpleNamespace(preview=lambda t:None,targets={2:SimpleNamespace(protected=False)})
+    world.aimpoint=lambda actor:((actor.pos[0],1.,actor.pos[2]),False)
+    world.stats={"failedPathPlans":0}
+    world.plan()
+    assert world.player.route==[vantage_edge] and world.stats["firingPositionPlans"]==1

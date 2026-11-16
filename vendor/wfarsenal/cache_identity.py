@@ -21,6 +21,7 @@ ARENA_FUNCTIONS = frozenset(
         "arena_catalog_payload",
         "arena_start_payload",
         "arena_cancel_payload",
+        "arena_standing_point_payload",
     )
 )
 DISPATCH_GUARD = "not (self._queue and self._running < (min(self.workers, 10) - self._external - self._external_waiting if self._external or self._external_waiting else self.workers))"
@@ -124,7 +125,12 @@ class _AppArenaOnly(ast.NodeTransformer):
                 for k, v in zip(node.keys, node.values)
                 if not (
                     isinstance(k, ast.Constant)
-                    and k.value in ("/api/arena/jobs", "/api/arena/cancel")
+                    and k.value
+                    in (
+                        "/api/arena/jobs",
+                        "/api/arena/cancel",
+                        "/api/arena/standing-point",
+                    )
                 )
             ]
             node.keys = [k for k, _ in pairs]

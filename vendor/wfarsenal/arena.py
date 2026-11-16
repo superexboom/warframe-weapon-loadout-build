@@ -15,7 +15,8 @@ from . import parallel
 from .arena_scene import load_scene, distance, Edge, ROOT
 from .arena_combat import ArenaCombat, UnsupportedArenaCombat
 
-MODEL = "arena-world-v1"
+MODEL = "arena-world-v2"
+VITUS_DROP_CHANCE = 0.06
 DRONE = "/Lotus/Types/Enemies/Corpus/Drones/AIWeek/CorpusEliteShieldDroneAvatar"
 EPS = 1e-8
 
@@ -89,9 +90,21 @@ def normalize_scenario(value):
     if (
         c["mode"] not in ("waves", "time")
         or c["region"] not in ("focus", "full")
-        or c["movement"] not in ("parkour", "walking")
+        or c["movement"] not in ("parkour", "walking", "fixed")
     ):
         raise ValueError("invalid arena mode/region/movement")
+    if c["movement"] == "fixed":
+        point = c.get("fixedPosition")
+        if (
+            not isinstance(point, dict)
+            or isinstance(point.get("face"), bool)
+            or not isinstance(point.get("face"), int)
+            or not isinstance(point.get("position"), (list, tuple))
+            or len(point["position"]) != 3
+        ):
+            raise ValueError(
+                "fixed mode requires fixedPosition={face:int,position:[x,y,z]}"
+            )
     if not isinstance(c["headshots"], bool):
         raise ValueError("headshots must be boolean")
     return c
@@ -199,6 +212,16 @@ class World:
         self.player = Actor(
             -1, self.scene.start["face"], tuple(self.scene.start["position"])
         )
+        if self.c["movement"] == "fixed":
+            point = self.c.get("fixedPosition")
+            if not isinstance(point, dict):
+                raise ValueError("fixed mode requires an explicit validated position")
+            standing = self.scene.validate_standing(
+                point.get("position"), point.get("face")
+            )
+            self.c["fixedPosition"] = standing
+            self.player.node = standing["face"]
+            self.player.pos = tuple(standing["position"])
         self.actors = {}
         self.live = []
         self.events = []
@@ -235,6 +258,8 @@ class World:
             playerTravelSeconds=0.0,
             vitusExpected=0.0,
             vitusSample=0,
+            droneKills=0,
+            vitusDropChance=VITUS_DROP_CHANCE,
             bulletJumps=0,
             drops=0,
             upwardJumps=0,
@@ -345,8 +370,11 @@ class World:
                 self.last_kill = when
                 self.replay["kills"].append([round(when, 6), actor.id, *actor.pos])
                 if actor.drone:
-                    self.stats["vitusExpected"] += 0.06
-                    if random_at(self.c["seed"], actor.id, 3) < 0.06:
+                    self.stats["droneKills"] += 1
+                    self.stats["vitusExpected"] = (
+                        self.stats["droneKills"] * VITUS_DROP_CHANCE
+                    )
+                    if random_at(self.c["seed"], actor.id, 3) < VITUS_DROP_CHANCE:
                         self.stats["vitusSample"] += 1
             else:
                 self.replay["combat"].append(event)
@@ -961,16 +989,24 @@ class World:
             return None
         geometry = self.geometry(preview)
         origin = add(self.player.pos, 1.55)
-        targets = sorted(
-            self.live, key=lambda a: (distance(a.pos, self.player.pos), a.id)
-        )[:16]
+        # A shortlist must be drawn from shootable targets. Cutting by distance
+        # first can hide every visible target behind sixteen nearby occluded
+        # enemies, while the movement planner correctly decides to stay put.
+        targets = []
         candidates = []
-        for actor in targets:
+        for actor in sorted(
+            self.live, key=lambda a: (distance(a.pos, self.player.pos), a.id)
+        ):
+            if self.combat.targets[actor.id].protected:
+                continue
             point, _ = self.aimpoint(actor)
             if distance(origin, point) <= geometry["range"] and self.scene.visible(
                 origin, point
             ):
+                targets.append(actor)
                 candidates.append(point)
+                if len(targets) == 16:
+                    break
         radials = self.radial_specs(preview)
         if radials:
             radius = max(r["radius"] for r in radials)
@@ -2548,11 +2584,16 @@ class World:
     def plan(self):
         if self.flow_node != self.player.node or not self.flows:
             self.flows = {
-                profile: self.scene.search(self.player.node, profile, reverse=True)
-                for profile in ("enemy", "drone")
+                "enemy": self.scene.search(self.player.node, "enemy", reverse=True)
             }
             self.flow_node = self.player.node
-            self.fallback.clear()
+        if any(actor.drone for actor in self.live) and "drone" not in self.flows:
+            self.flows["drone"] = self.scene.search(
+                self.player.node, "drone", reverse=True
+            )
+        if not hasattr(self, "fallback_staging"):
+            self.fallback_staging = {}
+        ground_components = self.scene.movement_components("enemy")
         for actor in self.live:
             if actor.edge:
                 continue
@@ -2562,26 +2603,79 @@ class World:
                 d = distance(actor.pos, self.player.pos)
                 actor.route = []
                 if d > 1.4:
-                    goal = mix(self.player.pos, actor.pos, 1.3 / d)
-                    actor.route = [self.local_edge(actor, goal)]
+                    actor.route = [
+                        self.local_edge(actor, mix(self.player.pos, actor.pos, 1.3 / d))
+                    ]
             elif not actor.unreachable:
                 actor.route = route(flow, actor.node, 4)
             else:
-                component = self.scene.raw["nav"]["componentOfFace"][actor.node]
-                if component not in self.fallback:
-                    candidates = [
-                        i
-                        for i, c in enumerate(self.scene.raw["nav"]["componentOfFace"])
-                        if c == component
-                    ]
-                    nearest = self.scene.nearest_node(
-                        self.player.pos, candidates=candidates
+                component = ground_components[actor.node]
+                staged = self.fallback_staging.get(component)
+                if (
+                    staged is None
+                    or distance(staged["playerPosition"], self.player.pos) > 6.0
+                ):
+                    candidates = sorted(
+                        (i for i, c in enumerate(ground_components) if c == component),
+                        key=lambda i: (
+                            distance(self.scene.nodes[i], self.player.pos),
+                            i,
+                        ),
                     )
-                    self.fallback[component] = self.scene.search(
+                    visible = [
+                        i
+                        for i in candidates[:48]
+                        if self.scene.visible(
+                            add(self.scene.nodes[i], 0.85), add(self.player.pos, 1.55)
+                        )
+                    ]
+                    lanes = []
+                    for node in visible or candidates:
+                        if all(
+                            distance(self.scene.nodes[node], self.scene.nodes[old])
+                            >= 0.8
+                            for old in lanes
+                        ):
+                            lanes.append(node)
+                            if len(lanes) >= 4:
+                                break
+                    staged = {
+                        "playerPosition": self.player.pos,
+                        "lanes": lanes or [actor.node],
+                    }
+                    self.fallback_staging[component] = staged
+                # Cache reverse ground flows by actual source component/goal,
+                # not moving player's triangle. No collision check is skipped.
+                lanes = staged["lanes"]
+                offset = actor.id % len(lanes)
+                choices = lanes[offset:] + lanes[:offset]
+                nearest = next(
+                    (
+                        node
+                        for node in choices
+                        if all(
+                            other is actor
+                            or other.dead
+                            or distance(self.scene.nodes[node], other.pos) >= 0.8
+                            for other in self.live
+                        )
+                    ),
+                    choices[0],
+                )
+                key = (component, nearest)
+                if key not in self.fallback:
+                    self.fallback[key] = self.scene.search(
                         nearest, "enemy", reverse=True
                     )
-                actor.route = route(self.fallback[component], actor.node, 4)
-        if not self.player.edge and not self.player.route and self.live:
+                    if len(self.fallback) > 128:
+                        self.fallback.pop(next(iter(self.fallback)))
+                actor.route = route(self.fallback[key], actor.node, 4)
+        if (
+            self.c["movement"] != "fixed"
+            and not self.player.edge
+            and not self.player.route
+            and self.live
+        ):
             current = self.combat.preview(self.t)
             effective_range = (
                 self.geometry(current)["range"]
@@ -2623,7 +2717,45 @@ class World:
                         else []
                     )
                 else:
-                    self.stats["failedPathPlans"] += 1
+                    # An enemy's floor can remain source-unreachable while a
+                    # legal firing position is reachable. Search only existing
+                    # player nodes; never add an edge across the blocked floor.
+                    reachable = sorted(
+                        (i for i, cost in enumerate(search.d) if math.isfinite(cost)),
+                        key=lambda i: (search.d[i], i),
+                    )
+                    vantage = None
+                    targets = sorted(
+                        (
+                            actor
+                            for actor in self.live
+                            if not self.combat.targets[actor.id].protected
+                        ),
+                        key=lambda actor: (
+                            distance(actor.pos, self.player.pos),
+                            actor.id,
+                        ),
+                    )
+                    for node in reachable:
+                        if node == self.player.node:
+                            continue
+                        position = self.scene.nodes[node]
+                        if any(
+                            distance(position, target.pos) <= effective_range
+                            and self.scene.visible(
+                                add(position, 1.55), self.aimpoint(target)[0]
+                            )
+                            for target in targets
+                        ):
+                            vantage = node
+                            break
+                    if vantage is not None:
+                        self.player.route = route(search, vantage)
+                        self.stats["firingPositionPlans"] = (
+                            self.stats.get("firingPositionPlans", 0) + 1
+                        )
+                    else:
+                        self.stats["failedPathPlans"] += 1
         self.next_plan = self.t + 0.5
 
     def local_edge(self, actor, end):
@@ -2640,7 +2772,120 @@ class World:
             key="local:" + str(actor.node) + ":" + ",".join(f"{v:.4f}" for v in end),
         )
 
+    def _crowd_segment_clear(self, actor, begin, end, *, priority_only=False):
+        """Continuous source-space actor separation, allowing an overlap escape."""
+        delta = tuple(end[i] - begin[i] for i in range(3))
+        squared = sum(v * v for v in delta)
+        for other in self.live:
+            if other is actor or other.dead or (priority_only and other.id >= actor.id):
+                continue
+            old = distance(begin, other.pos)
+            ratio = (
+                max(
+                    0.0,
+                    min(
+                        1.0,
+                        sum((other.pos[i] - begin[i]) * delta[i] for i in range(3))
+                        / squared,
+                    ),
+                )
+                if squared > EPS
+                else 0.0
+            )
+            near = mix(begin, end, ratio)
+            minimum = distance(near, other.pos)
+            # Already overlapping actors may move strictly outward; they may
+            # never move closer or use an overlap as permission to cross.
+            required = min(0.6, old)
+            if minimum < required - 1e-6 or (
+                old < 0.6 and distance(end, other.pos) < old + 1e-6
+            ):
+                return False
+        return True
+
+    def _yield_crowded_edge(self, actor, now):
+        """Replace a blocked ground edge only with a fully checked local walk.
+
+        Starts at actual feet, never teleports to actor.node (which can be the
+        old endpoint while mid-edge). No retreat exists => keep the source edge
+        and retry later. This is collision-qualified local avoidance, not a new
+        inter-component route or ordinary-enemy parkour.
+        """
+        if (
+            actor.drone
+            or actor.edge is None
+            or actor.edge["kind"]
+            not in ("walk", "stairs", "step", "step-down", "crowd-yield")
+        ):
+            return False
+        actor.crowd_retry_after = now + 1.0
+        components = self.scene.movement_components("enemy")
+        component = components[actor.node]
+        origin = actor.pos
+        candidates = sorted(
+            (
+                i
+                for i, point in enumerate(self.scene.nodes)
+                if components[i] == component
+                and 0.45 <= distance(origin, point) <= 2.5
+                and abs(origin[1] - point[1]) <= 0.6
+                and all(
+                    other is actor or other.dead or distance(point, other.pos) >= 0.75
+                    for other in self.live
+                )
+            ),
+            key=lambda i: (distance(origin, self.scene.nodes[i]), i),
+        )[:12]
+        for node in candidates:
+            target = self.scene.nodes[node]
+            count = max(2, int(distance(origin, target) / 0.12) + 1)
+            points = [origin]
+            valid = True
+            for index in range(1, count + 1):
+                expected = mix(origin, target, index / count)
+                support = self.scene.ground_support(
+                    expected, max_drop=0.5, max_rise=0.25
+                )
+                if (
+                    support is None
+                    or abs(support.position[1] - expected[1]) > 0.35
+                    or abs(support.normal[1]) < 0.5
+                ):
+                    valid = False
+                    break
+                point = tuple(support.position)
+                if abs(
+                    point[1] - points[-1][1]
+                ) > 0.35 or not self._crowd_segment_clear(actor, points[-1], point):
+                    valid = False
+                    break
+                points.append(point)
+            if (
+                not valid
+                or not self.scene.check_motion(points, ground_step=True)["clear"]
+            ):
+                continue
+            length = sum(distance(a, b) for a, b in zip(points, points[1:]))
+            if length <= EPS:
+                continue
+            actor.edge = {
+                "points": points,
+                "index": 1,
+                "node": node,
+                "speed": 3.6,
+                "kind": "crowd-yield",
+            }
+            actor.route = []
+            actor.crowd_blocked_seconds = 0.0
+            self.stats["crowdDetours"] = self.stats.get("crowdDetours", 0) + 1
+            return True
+        return False
+
     def move_actor(self, actor, dt, start):
+        if actor.id == -1 and self.c["movement"] == "fixed":
+            actor.route.clear()
+            actor.edge = None
+            return 0.0
         remaining = dt
         elapsed = 0.0
         while remaining > EPS:
@@ -2658,13 +2903,15 @@ class World:
                     self.motion_cache[link.key] = self.scene.check_motion(
                         points,
                         ground_step=link.kind
-                        in ("walk", "stairs", "step", "step-down"),
+                        in ("walk", "stairs", "step", "step-down", "crowd-yield"),
                     )["clear"]
                 if not self.motion_cache[link.key]:
                     self.scene.disabled.add(link.key)
                     actor.route = []
                     self.flows.clear()
                     self.fallback.clear()
+                    if hasattr(self, "fallback_staging"):
+                        self.fallback_staging.clear()
                     self.stats["failedPathPlans"] += 1
                     break
                 length = sum(distance(a, b) for a, b in zip(points, points[1:]))
@@ -2710,15 +2957,21 @@ class World:
             travel = min(length, speed * remaining)
             spent = travel / max(EPS, speed)
             candidate = mix(actor.pos, end, travel / length) if length > EPS else end
-            if actor.id != -1 and any(
-                other.id < actor.id
-                and distance(candidate, other.pos) < 0.6
-                and distance(candidate, other.pos) <= distance(actor.pos, other.pos)
-                for other in self.live
-                if other is not actor
+            if actor.id != -1 and not self._crowd_segment_clear(
+                actor, actor.pos, candidate, priority_only=True
             ):
                 self.stats["crowdWaitSeconds"] += remaining
+                actor.crowd_blocked_seconds = (
+                    getattr(actor, "crowd_blocked_seconds", 0.0) + remaining
+                )
+                if (
+                    actor.crowd_blocked_seconds >= 0.8 - EPS
+                    and start + elapsed >= getattr(actor, "crowd_retry_after", -1.0)
+                ):
+                    if self._yield_crowded_edge(actor, start + elapsed):
+                        continue
                 break
+            actor.crowd_blocked_seconds = 0.0
             actor.travelled += distance(actor.pos, candidate)
             actor.pos = tuple(candidate)
             remaining -= spent

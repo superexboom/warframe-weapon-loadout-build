@@ -3,6 +3,9 @@
   "gameVersion": "2026.10.28.09.54",
   "summary": {
     "nodes": 45,
+    "enemySpecGroups": 25,
+    "enemySpecGroupsWithNodeReference": 22,
+    "enemySpecGroupsWithoutNodeReference": 3,
     "defense": 31,
     "interception": 14,
     "uniqueProcs": 30,
@@ -113,7 +116,12 @@
         "sha256": "282e5fb454b1538a714af8ecefdda183800003e7b5cf96ba391321072ffa08d0",
         "bytes": 26098376
       }
-    ]
+    ],
+    "enemySpecCatalog": {
+      "file": "enemy-specs.json.gz",
+      "sha256": "4ab1218e5d133881bc3444e19f0a440219ff4099d43dfa142b35d9c6bc6b2995",
+      "qualification": "Display/source metadata only; original group weights, tiers and runnable entries unchanged."
+    }
   },
   "nodes": [
     {
@@ -137,6 +145,31 @@
       "maxEnemyLevel": 11,
       "factionIndex": 2,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerAsteroidDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA",
+            "lengthOffset": 1840,
+            "valueOffset": 1844,
+            "byteLength": 45,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 1905,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 1893,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -185,6 +218,31 @@
       "maxEnemyLevel": 11,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerGalleonInterception",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA",
+            "lengthOffset": 14476,
+            "valueOffset": 14480,
+            "byteLength": 44,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 14540,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 14528,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -233,6 +291,31 @@
       "maxEnemyLevel": 8,
       "factionIndex": 1,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipInterception",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB",
+            "lengthOffset": 33105,
+            "valueOffset": 33109,
+            "byteLength": 73,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 33198,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 33186,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -281,6 +364,41 @@
       "maxEnemyLevel": 7,
       "factionIndex": 1,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+        "/Lotus/Types/Game/EnemySpecs/CorpusDropship"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+          "/Lotus/Types/Game/EnemySpecs/CorpusDropship"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+            "lengthOffset": 43789,
+            "valueOffset": 43793,
+            "byteLength": 48,
+            "resourceTrailer": 0
+          },
+          {
+            "field": "extraEnemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusDropship",
+            "lengthOffset": 43853,
+            "valueOffset": 43857,
+            "byteLength": 43,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+        "extraPath": "/Lotus/Types/Game/EnemySpecs/CorpusDropship",
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 43904,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 43845,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -339,6 +457,41 @@
       "maxEnemyLevel": 18,
       "factionIndex": 2,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA",
+        "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipPurgatorySquad"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA",
+          "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipPurgatorySquad"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA",
+            "lengthOffset": 46122,
+            "valueOffset": 46126,
+            "byteLength": 45,
+            "resourceTrailer": 0
+          },
+          {
+            "field": "extraEnemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipPurgatorySquad",
+            "lengthOffset": 46183,
+            "valueOffset": 46187,
+            "byteLength": 74,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA",
+        "extraPath": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipPurgatorySquad",
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 46265,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 46175,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -387,6 +540,31 @@
       "maxEnemyLevel": 5,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/GrineerDefenseForest"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/GrineerDefenseForest"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseForest",
+            "lengthOffset": 66819,
+            "valueOffset": 66823,
+            "byteLength": 49,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseForest",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 66888,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 66876,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -435,6 +613,31 @@
       "maxEnemyLevel": 6,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestInterception",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/GrineerDefenseForest"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/GrineerDefenseForest"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseForest",
+            "lengthOffset": 72148,
+            "valueOffset": 72152,
+            "byteLength": 49,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseForest",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 72217,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 72205,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -485,6 +688,31 @@
       "maxEnemyLevel": 16,
       "factionIndex": 2,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA",
+            "lengthOffset": 79819,
+            "valueOffset": 79823,
+            "byteLength": 45,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 79884,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 79872,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -533,6 +761,31 @@
       "maxEnemyLevel": 12,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerSettlementDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/DesertGrineerDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/DesertGrineerDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/DesertGrineerDefenseA",
+            "lengthOffset": 100539,
+            "valueOffset": 100543,
+            "byteLength": 50,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/DesertGrineerDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 100609,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 100597,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -581,6 +834,31 @@
       "maxEnemyLevel": 13,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerSettlementInterception",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/DesertGrineerDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/DesertGrineerDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/DesertGrineerDefenseA",
+            "lengthOffset": 105483,
+            "valueOffset": 105487,
+            "byteLength": 50,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/DesertGrineerDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 105553,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 105541,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -629,6 +907,31 @@
       "maxEnemyLevel": 20,
       "factionIndex": 2,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerSettlementDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA",
+            "lengthOffset": 113171,
+            "valueOffset": 113175,
+            "byteLength": 45,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 113236,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 113224,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -677,6 +980,31 @@
       "maxEnemyLevel": 30,
       "factionIndex": 1,
       "sourceProc": "/Lotus/Levels/Proc/LastWish/LastWishDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/CorpusGrineerDesertMix"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/CorpusGrineerDesertMix"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusGrineerDesertMix",
+            "lengthOffset": 127835,
+            "valueOffset": 127839,
+            "byteLength": 51,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/CorpusGrineerDesertMix",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 127906,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 127894,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "officially-added",
@@ -730,6 +1058,31 @@
       "maxEnemyLevel": 20,
       "factionIndex": 1,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusGasCityDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/CorpusGasRemasterDefenseSquad"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/CorpusGasRemasterDefenseSquad"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusGasRemasterDefenseSquad",
+            "lengthOffset": 136622,
+            "valueOffset": 136626,
+            "byteLength": 58,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/CorpusGasRemasterDefenseSquad",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 136700,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 136688,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -778,6 +1131,31 @@
       "maxEnemyLevel": 20,
       "factionIndex": 1,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusGasCityInterception",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/CorpusGasRemasterDefenseSquad"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/CorpusGasRemasterDefenseSquad"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusGasRemasterDefenseSquad",
+            "lengthOffset": 141547,
+            "valueOffset": 141551,
+            "byteLength": 58,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/CorpusGasRemasterDefenseSquad",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 141625,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 141613,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -826,6 +1204,31 @@
       "maxEnemyLevel": 30,
       "factionIndex": 2,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusGasCityDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA",
+            "lengthOffset": 148113,
+            "valueOffset": 148117,
+            "byteLength": 45,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 148178,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 148166,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -874,6 +1277,31 @@
       "maxEnemyLevel": 26,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerGalleonDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA",
+            "lengthOffset": 161627,
+            "valueOffset": 161631,
+            "byteLength": 44,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 161691,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 161679,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -922,6 +1350,31 @@
       "maxEnemyLevel": 26,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerAsteroidInterception",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/GrineerDefenseAAsteroid"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/GrineerDefenseAAsteroid"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseAAsteroid",
+            "lengthOffset": 178938,
+            "valueOffset": 178942,
+            "byteLength": 52,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseAAsteroid",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 179010,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 178998,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -970,6 +1423,31 @@
       "maxEnemyLevel": 29,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA",
+            "lengthOffset": 215117,
+            "valueOffset": 215121,
+            "byteLength": 50,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 215269,
+        "advancedSpawnerCount": 1,
+        "advancedSpawnerCountOffset": 215175,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1020,6 +1498,31 @@
       "maxEnemyLevel": 29,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA",
+            "lengthOffset": 241063,
+            "valueOffset": 241067,
+            "byteLength": 50,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 241215,
+        "advancedSpawnerCount": 1,
+        "advancedSpawnerCountOffset": 241121,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1070,6 +1573,31 @@
       "maxEnemyLevel": 29,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Space/SpaceGrineerInterceptionProcLevel",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/SpaceGrineerDefenseC"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/SpaceGrineerDefenseC"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/SpaceGrineerDefenseC",
+            "lengthOffset": 244183,
+            "valueOffset": 244187,
+            "byteLength": 49,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/SpaceGrineerDefenseC",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 244252,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 244240,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1114,6 +1642,31 @@
       "maxEnemyLevel": 32,
       "factionIndex": 1,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB",
+            "lengthOffset": 257913,
+            "valueOffset": 257917,
+            "byteLength": 73,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 258006,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 257994,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1162,6 +1715,41 @@
       "maxEnemyLevel": 40,
       "factionIndex": 1,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+        "/Lotus/Types/Game/EnemySpecs/CorpusDropshipAmbulas"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+          "/Lotus/Types/Game/EnemySpecs/CorpusDropshipAmbulas"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+            "lengthOffset": 291715,
+            "valueOffset": 291719,
+            "byteLength": 48,
+            "resourceTrailer": 0
+          },
+          {
+            "field": "extraEnemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusDropshipAmbulas",
+            "lengthOffset": 291779,
+            "valueOffset": 291783,
+            "byteLength": 50,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+        "extraPath": "/Lotus/Types/Game/EnemySpecs/CorpusDropshipAmbulas",
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 291837,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 291771,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1220,6 +1808,31 @@
       "maxEnemyLevel": 40,
       "factionIndex": 1,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostInterception",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+            "lengthOffset": 304149,
+            "valueOffset": 304153,
+            "byteLength": 48,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 304337,
+        "advancedSpawnerCount": 1,
+        "advancedSpawnerCountOffset": 304205,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1270,6 +1883,31 @@
       "maxEnemyLevel": 45,
       "factionIndex": 2,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+            "lengthOffset": 306589,
+            "valueOffset": 306593,
+            "byteLength": 45,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 306654,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 306642,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1328,6 +1966,31 @@
       "maxEnemyLevel": 17,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA",
+            "lengthOffset": 338730,
+            "valueOffset": 338734,
+            "byteLength": 53,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 338869,
+        "advancedSpawnerCount": 1,
+        "advancedSpawnerCountOffset": 338791,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1376,6 +2039,31 @@
       "maxEnemyLevel": 17,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsInterception",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA",
+            "lengthOffset": 341001,
+            "valueOffset": 341005,
+            "byteLength": 53,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 341140,
+        "advancedSpawnerCount": 1,
+        "advancedSpawnerCountOffset": 341062,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1426,6 +2114,31 @@
       "maxEnemyLevel": 25,
       "factionIndex": 2,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+            "lengthOffset": 347430,
+            "valueOffset": 347434,
+            "byteLength": 45,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 347495,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 347483,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1474,6 +2187,31 @@
       "maxEnemyLevel": 40,
       "factionIndex": 2,
       "sourceProc": "/Lotus/Levels/Proc/Infestation/InfestedCorpusShipDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+            "lengthOffset": 365015,
+            "valueOffset": 365019,
+            "byteLength": 45,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 365080,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 365068,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1522,6 +2260,31 @@
       "maxEnemyLevel": 45,
       "factionIndex": 2,
       "sourceProc": "/Lotus/Levels/Proc/Infestation/InfestedCorpusShipDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+            "lengthOffset": 382785,
+            "valueOffset": 382789,
+            "byteLength": 45,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 382850,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 382838,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1570,6 +2333,41 @@
       "maxEnemyLevel": 40,
       "factionIndex": 2,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipInterception",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+        "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipPurgatorySquad"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+          "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipPurgatorySquad"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+            "lengthOffset": 384963,
+            "valueOffset": 384967,
+            "byteLength": 45,
+            "resourceTrailer": 0
+          },
+          {
+            "field": "extraEnemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipPurgatorySquad",
+            "lengthOffset": 385024,
+            "valueOffset": 385028,
+            "byteLength": 74,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+        "extraPath": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipPurgatorySquad",
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 385106,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 385016,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1618,6 +2416,31 @@
       "maxEnemyLevel": 40,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsInterceptionTwo",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA",
+            "lengthOffset": 404055,
+            "valueOffset": 404059,
+            "byteLength": 53,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 404128,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 404116,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1666,6 +2489,31 @@
       "maxEnemyLevel": 40,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerGalleonDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA",
+            "lengthOffset": 417781,
+            "valueOffset": 417785,
+            "byteLength": 44,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 417845,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 417833,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1714,6 +2562,31 @@
       "maxEnemyLevel": 45,
       "factionIndex": 2,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerAsteroidDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+            "lengthOffset": 425927,
+            "valueOffset": 425931,
+            "byteLength": 45,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 425992,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 425980,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1762,6 +2635,31 @@
       "maxEnemyLevel": 23,
       "factionIndex": 1,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusIcePlanetInterception",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+            "lengthOffset": 444118,
+            "valueOffset": 444122,
+            "byteLength": 48,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 444299,
+        "advancedSpawnerCount": 1,
+        "advancedSpawnerCountOffset": 444174,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1810,6 +2708,41 @@
       "maxEnemyLevel": 23,
       "factionIndex": 1,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusIcePlanetDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+        "/Lotus/Types/Game/EnemySpecs/CorpusDropship"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+          "/Lotus/Types/Game/EnemySpecs/CorpusDropship"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+            "lengthOffset": 447795,
+            "valueOffset": 447799,
+            "byteLength": 48,
+            "resourceTrailer": 0
+          },
+          {
+            "field": "extraEnemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusDropship",
+            "lengthOffset": 447859,
+            "valueOffset": 447863,
+            "byteLength": 43,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+        "extraPath": "/Lotus/Types/Game/EnemySpecs/CorpusDropship",
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 447910,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 447851,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1858,6 +2791,31 @@
       "maxEnemyLevel": 33,
       "factionIndex": 2,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusIcePlanetDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+            "lengthOffset": 452283,
+            "valueOffset": 452287,
+            "byteLength": 45,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 452348,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 452336,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1906,6 +2864,31 @@
       "maxEnemyLevel": 15,
       "factionIndex": 3,
       "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquad"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquad"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquad",
+            "lengthOffset": 465554,
+            "valueOffset": 465558,
+            "byteLength": 47,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquad",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 465621,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 465609,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -1954,6 +2937,31 @@
       "maxEnemyLevel": 35,
       "factionIndex": 3,
       "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquadB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquadB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquadB",
+            "lengthOffset": 470323,
+            "valueOffset": 470327,
+            "byteLength": 48,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquadB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 470391,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 470379,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -2002,6 +3010,31 @@
       "maxEnemyLevel": 45,
       "factionIndex": 3,
       "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerInterception",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquadB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquadB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquadB",
+            "lengthOffset": 473781,
+            "valueOffset": 473785,
+            "byteLength": 48,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquadB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 473849,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 473837,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -2050,6 +3083,31 @@
       "maxEnemyLevel": 15,
       "factionIndex": 1,
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB",
+            "lengthOffset": 496159,
+            "valueOffset": 496163,
+            "byteLength": 73,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 496252,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 496240,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -2098,6 +3156,31 @@
       "maxEnemyLevel": 20,
       "factionIndex": 2,
       "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerDerelictDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+            "lengthOffset": 513819,
+            "valueOffset": 513823,
+            "byteLength": 45,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 513884,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 513872,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -2146,6 +3229,31 @@
       "maxEnemyLevel": 60,
       "factionIndex": 7,
       "sourceProc": "/Lotus/Levels/Proc/EntratiLab/EntratiLabMirrorDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/EntratiLab/EntratiMirrorDefenseSpec"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/EntratiLab/EntratiMirrorDefenseSpec"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/EntratiLab/EntratiMirrorDefenseSpec",
+            "lengthOffset": 528411,
+            "valueOffset": 528415,
+            "byteLength": 64,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/EntratiLab/EntratiMirrorDefenseSpec",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 528495,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 528483,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "officially-added",
@@ -2199,6 +3307,31 @@
       "maxEnemyLevel": 30,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinMoonDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/GrineerMoonDefense"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/GrineerMoonDefense"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/GrineerMoonDefense",
+            "lengthOffset": 537854,
+            "valueOffset": 537858,
+            "byteLength": 47,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/GrineerMoonDefense",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 537921,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 537909,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -2247,6 +3380,31 @@
       "maxEnemyLevel": 32,
       "factionIndex": 0,
       "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerFortressDefense",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/GrineerDefenseFortress"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/GrineerDefenseFortress"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseFortress",
+            "lengthOffset": 547441,
+            "valueOffset": 547445,
+            "byteLength": 51,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseFortress",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 547512,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 547500,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -2295,6 +3453,31 @@
       "maxEnemyLevel": 70,
       "factionIndex": 8,
       "sourceProc": "/Lotus/Levels/Proc/Vania/VaniaEchoesDefenseWinterWet",
+      "enemySpecPaths": [
+        "/Lotus/Types/Game/EnemySpecs/SpecialMissionSpecs/DisruptionScaldraSpec"
+      ],
+      "enemySpecEvidence": {
+        "paths": [
+          "/Lotus/Types/Game/EnemySpecs/SpecialMissionSpecs/DisruptionScaldraSpec"
+        ],
+        "references": [
+          {
+            "field": "enemySpec",
+            "path": "/Lotus/Types/Game/EnemySpecs/SpecialMissionSpecs/DisruptionScaldraSpec",
+            "lengthOffset": 588561,
+            "valueOffset": 588565,
+            "byteLength": 70,
+            "resourceTrailer": 0
+          }
+        ],
+        "primaryPath": "/Lotus/Types/Game/EnemySpecs/SpecialMissionSpecs/DisruptionScaldraSpec",
+        "extraPath": null,
+        "qualification": "validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        "prefixEndOffset": 588651,
+        "advancedSpawnerCount": 0,
+        "advancedSpawnerCountOffset": 588639,
+        "runtimeTierSelectionVerified": false
+      },
       "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
       "arbitrationQualification": {
         "status": "unverified",
@@ -2331,6 +3514,2872 @@
       }
     }
   ],
+  "enemySpecSources": {
+    "/Lotus/Types/Game/EnemySpecs/CorpusDropship": {
+      "path": "/Lotus/Types/Game/EnemySpecs/CorpusDropship",
+      "nameZh": "Corpus 运输艇事件编组（非普通地面敌人）",
+      "nameEn": "CorpusDropship",
+      "runnable": false,
+      "scopeIncluded": true,
+      "selectionEnabled": false,
+      "sourceStatus": "event-resources-no-ordinary-enemies",
+      "unsupportedReason": "event-resources-have-no-ordinary-ground-Enemies-list",
+      "unsupportedSourceFields": {
+        "EventResources": "retained-not-flattened-into-ground-enemies"
+      },
+      "tierAvailability": [],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode22",
+          "nodeName": "Tessera",
+          "nodeNameZh": "Tessera",
+          "planet": "Venus",
+          "planetZh": "金星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "extraEnemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode212",
+          "nodeName": "Paimon",
+          "nodeNameZh": "Paimon",
+          "planet": "Europa",
+          "planetZh": "欧罗巴",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusIcePlanetDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-ice-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "extraEnemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "corpus-ice-defense",
+        "corpus-outpost-defense-one",
+        "corpus-outpost-defense-two"
+      ],
+      "rawTiers": [],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/CorpusDropshipAmbulas": {
+      "path": "/Lotus/Types/Game/EnemySpecs/CorpusDropshipAmbulas",
+      "nameZh": "Corpus Ambulas 运输艇事件编组（非普通地面敌人）",
+      "nameEn": "CorpusDropshipAmbulas",
+      "runnable": false,
+      "scopeIncluded": true,
+      "selectionEnabled": false,
+      "sourceStatus": "event-resources-no-ordinary-enemies",
+      "unsupportedReason": "event-resources-have-no-ordinary-ground-Enemies-list",
+      "unsupportedSourceFields": {
+        "EventResources": "retained-not-flattened-into-ground-enemies"
+      },
+      "tierAvailability": [],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode72",
+          "nodeName": "Outer Terminus",
+          "nodeNameZh": "Outer Terminus",
+          "planet": "Pluto",
+          "planetZh": "冥王星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "extraEnemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "corpus-outpost-defense-one",
+        "corpus-outpost-defense-two"
+      ],
+      "rawTiers": [],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/CorpusGasRemasterDefenseSquad": {
+      "path": "/Lotus/Types/Game/EnemySpecs/CorpusGasRemasterDefenseSquad",
+      "nameZh": "Corpus 木星天然气城防御编组",
+      "nameEn": "CorpusGasRemasterDefenseSquad",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies-with-special-fields",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {
+        "AdvancedAiDirectorSpawns": "retained-not-flattened-into-ground-enemies"
+      },
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 8,
+          "runnableEntryCount": 6,
+          "runnableUniqueAvatarCount": 6,
+          "rawWeightSum": 2.369999992,
+          "runnableWeightSum": 2.069999991
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.400000013,
+          "runnableWeightSum": 0.400000013
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 7,
+          "runnableEntryCount": 7,
+          "runnableUniqueAvatarCount": 7,
+          "rawWeightSum": 0.550000014,
+          "runnableWeightSum": 0.550000014
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.30000000400000004,
+          "runnableWeightSum": 0.200000004
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.400000011,
+          "runnableWeightSum": 0.400000011
+        },
+        {
+          "tier": 9,
+          "rawEntryCount": 7,
+          "runnableEntryCount": 7,
+          "runnableUniqueAvatarCount": 7,
+          "rawWeightSum": 7.0,
+          "runnableWeightSum": 7.0
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode125",
+          "nodeName": "Io",
+          "nodeNameZh": "Io",
+          "planet": "Jupiter",
+          "planetZh": "木星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusGasCityDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-gas-city-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode25",
+          "nodeName": "Callisto",
+          "nodeNameZh": "Callisto",
+          "planet": "Jupiter",
+          "planetZh": "木星",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusGasCityInterception",
+          "inScope": true,
+          "mapIds": [
+            "corpus-gas-city-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "corpus-gas-city-defense"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        9
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/CorpusGrineerDesertMix": {
+      "path": "/Lotus/Types/Game/EnemySpecs/CorpusGrineerDesertMix",
+      "nameZh": "Corpus／沙漠 Grineer 混合编组",
+      "nameEn": "CorpusGrineerDesertMix",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 24,
+          "runnableEntryCount": 19,
+          "runnableUniqueAvatarCount": 18,
+          "rawWeightSum": 7.7600000118,
+          "runnableWeightSum": 6.1100000108
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode450",
+          "nodeName": "Tyana Pass",
+          "nodeNameZh": "Tyana Pass",
+          "planet": "Mars",
+          "planetZh": "火星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/LastWish/LastWishDefense",
+          "inScope": true,
+          "mapIds": [
+            "lastwish-grineer-mirror-defense",
+            "lastwish-corpus-mirror-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "officially-added",
+            "eligible": null,
+            "date": "2024-10-02",
+            "url": "https://www.warframe.com/en/patch-notes/pc/37-0-0",
+            "currentWhitelistVerified": false,
+            "evidenceType": "historical-official-affirmative-announcement",
+            "reason": "Official Update 37 added this Mirror Defense node on October 2, 2024; the current server rotation whitelist was not verified."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "lastwish-corpus-mirror-defense",
+        "lastwish-grineer-mirror-defense"
+      ],
+      "rawTiers": [
+        0
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipPurgatorySquad": {
+      "path": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipPurgatorySquad",
+      "nameZh": "Corpus 飞船特殊 Purgatory 编组",
+      "nameEn": "CorpusShipPurgatorySquad",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 90,
+          "rawEntryCount": 2,
+          "runnableEntryCount": 1,
+          "runnableUniqueAvatarCount": 1,
+          "rawWeightSum": 2.0,
+          "runnableWeightSum": 1.0
+        },
+        {
+          "tier": 95,
+          "rawEntryCount": 1,
+          "runnableEntryCount": 0,
+          "runnableUniqueAvatarCount": 0,
+          "rawWeightSum": 1.0,
+          "runnableWeightSum": 0
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "ClanNode0",
+          "nodeName": "Romula",
+          "nodeNameZh": "Romula",
+          "planet": "Venus",
+          "planetZh": "金星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-ship-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "extraEnemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode172",
+          "nodeName": "Xini",
+          "nodeNameZh": "Xini",
+          "planet": "Eris",
+          "planetZh": "阋神星",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipInterception",
+          "inScope": true,
+          "mapIds": [
+            "corpus-ship-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "extraEnemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "corpus-ship-defense"
+      ],
+      "rawTiers": [
+        90,
+        95
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB": {
+      "path": "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB",
+      "nameZh": "Corpus 重制飞船防御编组 B",
+      "nameEn": "CorpusShipSquadDefenseB",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies-with-special-fields",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {
+        "AdvancedAiDirectorSpawns": "retained-not-flattened-into-ground-enemies"
+      },
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 2.4199999610000003,
+          "runnableWeightSum": 2.4199999610000003
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.35000001199999997,
+          "runnableWeightSum": 0.100000002
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 0.400000013,
+          "runnableWeightSum": 0.250000003
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.250000005,
+          "runnableWeightSum": 0.250000005
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.400000011,
+          "runnableWeightSum": 0.400000011
+        },
+        {
+          "tier": 9,
+          "rawEntryCount": 9,
+          "runnableEntryCount": 9,
+          "runnableUniqueAvatarCount": 9,
+          "rawWeightSum": 8.1,
+          "runnableWeightSum": 8.1
+        },
+        {
+          "tier": 90,
+          "rawEntryCount": 2,
+          "runnableEntryCount": 1,
+          "runnableUniqueAvatarCount": 1,
+          "rawWeightSum": 2.0,
+          "runnableWeightSum": 1.0
+        },
+        {
+          "tier": 95,
+          "rawEntryCount": 1,
+          "runnableEntryCount": 0,
+          "runnableUniqueAvatarCount": 0,
+          "rawWeightSum": 1.0,
+          "runnableWeightSum": 0
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode23",
+          "nodeName": "Cytherean",
+          "nodeNameZh": "Cytherean",
+          "planet": "Venus",
+          "planetZh": "金星",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipInterception",
+          "inScope": true,
+          "mapIds": [
+            "corpus-ship-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode17",
+          "nodeName": "Proteus",
+          "nodeNameZh": "Proteus",
+          "planet": "Neptune",
+          "planetZh": "海王星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-ship-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SettlementNode11",
+          "nodeName": "Gulliver",
+          "nodeNameZh": "Gulliver",
+          "planet": "Phobos",
+          "planetZh": "火卫一",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-ship-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "corpus-ship-defense"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        9,
+        90,
+        95
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseA": {
+      "path": "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseA",
+      "nameZh": "Corpus 防御编组 A",
+      "nameEn": "CorpusSquadDefenseA",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 7,
+          "runnableEntryCount": 6,
+          "runnableUniqueAvatarCount": 6,
+          "rawWeightSum": 2.299999992,
+          "runnableWeightSum": 2.049999992
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.400000013,
+          "runnableWeightSum": 0.400000013
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 7,
+          "runnableEntryCount": 7,
+          "runnableUniqueAvatarCount": 7,
+          "rawWeightSum": 0.550000014,
+          "runnableWeightSum": 0.550000014
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.200000004,
+          "runnableWeightSum": 0.200000004
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.400000011,
+          "runnableWeightSum": 0.400000011
+        },
+        {
+          "tier": 9,
+          "rawEntryCount": 11,
+          "runnableEntryCount": 11,
+          "runnableUniqueAvatarCount": 11,
+          "rawWeightSum": 11.0,
+          "runnableWeightSum": 11.0
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "no-selected-node-reference",
+      "missions": [],
+      "mapIds": [],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        9
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": "No exact reference among the45 indexed Defense/Interception nodes. Group remains an optional workload source; no source planet/node is inferred from its name or matching geometry."
+    },
+    "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB": {
+      "path": "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
+      "nameZh": "Corpus 防御编组 B",
+      "nameEn": "CorpusSquadDefenseB",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 7,
+          "runnableEntryCount": 6,
+          "runnableUniqueAvatarCount": 6,
+          "rawWeightSum": 2.319999991,
+          "runnableWeightSum": 2.069999991
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.400000013,
+          "runnableWeightSum": 0.400000013
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 7,
+          "runnableEntryCount": 7,
+          "runnableUniqueAvatarCount": 7,
+          "rawWeightSum": 0.550000014,
+          "runnableWeightSum": 0.550000014
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.200000004,
+          "runnableWeightSum": 0.200000004
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.400000011,
+          "runnableWeightSum": 0.400000011
+        },
+        {
+          "tier": 9,
+          "rawEntryCount": 11,
+          "runnableEntryCount": 11,
+          "runnableUniqueAvatarCount": 11,
+          "rawWeightSum": 11.0,
+          "runnableWeightSum": 11.0
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode22",
+          "nodeName": "Tessera",
+          "nodeNameZh": "Tessera",
+          "planet": "Venus",
+          "planetZh": "金星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode72",
+          "nodeName": "Outer Terminus",
+          "nodeNameZh": "Outer Terminus",
+          "planet": "Pluto",
+          "planetZh": "冥王星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode43",
+          "nodeName": "Cerberus",
+          "nodeNameZh": "Cerberus",
+          "planet": "Pluto",
+          "planetZh": "冥王星",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostInterception",
+          "inScope": true,
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode211",
+          "nodeName": "Ose",
+          "nodeNameZh": "Ose",
+          "planet": "Europa",
+          "planetZh": "欧罗巴",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusIcePlanetInterception",
+          "inScope": true,
+          "mapIds": [
+            "corpus-ice-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode212",
+          "nodeName": "Paimon",
+          "nodeNameZh": "Paimon",
+          "planet": "Europa",
+          "planetZh": "欧罗巴",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusIcePlanetDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-ice-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "corpus-ice-defense",
+        "corpus-outpost-defense-one",
+        "corpus-outpost-defense-two"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        9
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/DesertGrineerDefenseA": {
+      "path": "/Lotus/Types/Game/EnemySpecs/DesertGrineerDefenseA",
+      "nameZh": "沙漠 Grineer 防御编组 A",
+      "nameEn": "DesertGrineerDefenseA",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 2.750000021,
+          "runnableWeightSum": 1.750000021
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 2,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.150000001,
+          "runnableWeightSum": 0.150000001
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.400000011,
+          "runnableWeightSum": 0.2
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.275000003,
+          "runnableWeightSum": 0.250000003
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 0.1100000018,
+          "runnableWeightSum": 0.1100000018
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode46",
+          "nodeName": "Spear",
+          "nodeNameZh": "战矛基地",
+          "planet": "Mars",
+          "planetZh": "火星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerSettlementDefense",
+          "inScope": true,
+          "mapIds": [
+            "grineer-settlement-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode106",
+          "nodeName": "Alator",
+          "nodeNameZh": "暗猎区",
+          "planet": "Mars",
+          "planetZh": "火星",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerSettlementInterception",
+          "inScope": true,
+          "mapIds": [
+            "grineer-settlement-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "grineer-settlement-defense"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/EntratiLab/EntratiMirrorDefenseSpec": {
+      "path": "/Lotus/Types/Game/EnemySpecs/EntratiLab/EntratiMirrorDefenseSpec",
+      "nameZh": "英择谛实验室镜像防御编组",
+      "nameEn": "EntratiMirrorDefenseSpec",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies-with-special-fields",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {
+        "AdvancedAiDirectorSpawns": "retained-not-flattened-into-ground-enemies"
+      },
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 8,
+          "runnableEntryCount": 7,
+          "runnableUniqueAvatarCount": 7,
+          "rawWeightSum": 2.420000012,
+          "runnableWeightSum": 2.220000012
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode719",
+          "nodeName": "Munio",
+          "nodeNameZh": "墓垒",
+          "planet": "Deimos",
+          "planetZh": "火卫二",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/EntratiLab/EntratiLabMirrorDefense",
+          "inScope": true,
+          "mapIds": [
+            "entrati-lab-mirror-defense-ear",
+            "entrati-lab-mirror-defense-eye"
+          ],
+          "arbitrationQualification": {
+            "status": "officially-added",
+            "eligible": null,
+            "date": "2024-10-02",
+            "url": "https://www.warframe.com/en/patch-notes/pc/37-0-0",
+            "currentWhitelistVerified": false,
+            "evidenceType": "historical-official-affirmative-announcement",
+            "reason": "Official Update 37 added this Mirror Defense node on October 2, 2024; the current server rotation whitelist was not verified."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "entrati-lab-mirror-defense-ear",
+        "entrati-lab-mirror-defense-eye"
+      ],
+      "rawTiers": [
+        0
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA": {
+      "path": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseA",
+      "nameZh": "Grineer 舰船防御编组 A",
+      "nameEn": "GrineerDefenseA",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 2.750000021,
+          "runnableWeightSum": 1.750000021
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 2,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.150000001,
+          "runnableWeightSum": 0.150000001
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.35000001199999997,
+          "runnableWeightSum": 0.150000001
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.425000013,
+          "runnableWeightSum": 0.400000013
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.2100000018,
+          "runnableWeightSum": 0.2100000018
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode224",
+          "nodeName": "Odin",
+          "nodeNameZh": "奥丁平原",
+          "planet": "Mercury",
+          "planetZh": "水星",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerGalleonInterception",
+          "inScope": true,
+          "mapIds": [
+            "grineer-galleon-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode42",
+          "nodeName": "Helene",
+          "nodeNameZh": "Helene",
+          "planet": "Saturn",
+          "planetZh": "土星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerGalleonDefense",
+          "inScope": true,
+          "mapIds": [
+            "grineer-galleon-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode195",
+          "nodeName": "Hydron",
+          "nodeNameZh": "Hydron",
+          "planet": "Sedna",
+          "planetZh": "赛德娜",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerGalleonDefense",
+          "inScope": true,
+          "mapIds": [
+            "grineer-galleon-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "grineer-galleon-defense"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/GrineerDefenseAAsteroid": {
+      "path": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseAAsteroid",
+      "nameZh": "Grineer 小行星防御编组 A",
+      "nameEn": "GrineerDefenseAAsteroid",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 2.750000021,
+          "runnableWeightSum": 1.750000021
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 2,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.150000001,
+          "runnableWeightSum": 0.150000001
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 1,
+          "runnableUniqueAvatarCount": 1,
+          "rawWeightSum": 0.300000011,
+          "runnableWeightSum": 0.1
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.275000003,
+          "runnableWeightSum": 0.250000003
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 0.1100000018,
+          "runnableWeightSum": 0.1100000018
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode18",
+          "nodeName": "Rhea",
+          "nodeNameZh": "Rhea",
+          "planet": "Saturn",
+          "planetZh": "土星",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerAsteroidInterception",
+          "inScope": true,
+          "mapIds": [
+            "grineer-asteroid-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "grineer-asteroid-defense"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/GrineerDefenseForest": {
+      "path": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseForest",
+      "nameZh": "Grineer 地球森林防御编组",
+      "nameEn": "GrineerDefenseForest",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 2.750000021,
+          "runnableWeightSum": 1.750000021
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 2,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.150000001,
+          "runnableWeightSum": 0.150000001
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.400000011,
+          "runnableWeightSum": 0.2
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 7,
+          "runnableEntryCount": 6,
+          "runnableUniqueAvatarCount": 6,
+          "rawWeightSum": 0.345000004,
+          "runnableWeightSum": 0.320000004
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.2100000018,
+          "runnableWeightSum": 0.2100000018
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode26",
+          "nodeName": "Lith",
+          "nodeNameZh": "Lith",
+          "planet": "Earth",
+          "planetZh": "地球",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestDefense",
+          "inScope": true,
+          "mapIds": [
+            "grineer-forest-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode85",
+          "nodeName": "Gaia",
+          "nodeNameZh": "Gaia",
+          "planet": "Earth",
+          "planetZh": "地球",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestInterception",
+          "inScope": true,
+          "mapIds": [
+            "grineer-forest-interception-01",
+            "grineer-forest-interception-02"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "grineer-forest-defense",
+        "grineer-forest-interception-01",
+        "grineer-forest-interception-02"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/GrineerDefenseFortress": {
+      "path": "/Lotus/Types/Game/EnemySpecs/GrineerDefenseFortress",
+      "nameZh": "Grineer 赤毒要塞防御编组",
+      "nameEn": "GrineerDefenseFortress",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 2.750000021,
+          "runnableWeightSum": 1.750000021
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 2,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.150000001,
+          "runnableWeightSum": 0.150000001
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 1,
+          "runnableUniqueAvatarCount": 1,
+          "rawWeightSum": 0.300000011,
+          "runnableWeightSum": 0.1
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.275000003,
+          "runnableWeightSum": 0.250000003
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.1600000028,
+          "runnableWeightSum": 0.1600000028
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode742",
+          "nodeName": "Nabuk",
+          "nodeNameZh": "Nabuk",
+          "planet": "Kuva Fortress",
+          "planetZh": "赤毒要塞",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerFortressDefense",
+          "inScope": true,
+          "mapIds": [
+            "grineer-fortress-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "grineer-fortress-defense"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/GrineerMoonDefense": {
+      "path": "/Lotus/Types/Game/EnemySpecs/GrineerMoonDefense",
+      "nameZh": "Grineer 月球防御编组",
+      "nameEn": "GrineerMoonDefense",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 2.750000021,
+          "runnableWeightSum": 1.750000021
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 0.650000001,
+          "runnableWeightSum": 0.650000001
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 1,
+          "runnableUniqueAvatarCount": 1,
+          "rawWeightSum": 0.300000011,
+          "runnableWeightSum": 0.1
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.425000013,
+          "runnableWeightSum": 0.400000013
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.2100000018,
+          "runnableWeightSum": 0.2100000018
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode305",
+          "nodeName": "Stöfler",
+          "nodeNameZh": "Stöfler",
+          "planet": "Lua",
+          "planetZh": "月球",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinMoonDefense",
+          "inScope": true,
+          "mapIds": [
+            "orokin-moon-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "orokin-moon-defense"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA": {
+      "path": "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA",
+      "nameZh": "Grineer 船坞防御编组 A",
+      "nameEn": "GrineerShipyardsDefenseA",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 7,
+          "runnableEntryCount": 6,
+          "runnableUniqueAvatarCount": 6,
+          "rawWeightSum": 2.800000022,
+          "runnableWeightSum": 1.8000000219999999
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 2,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.100000002,
+          "runnableWeightSum": 0.100000002
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.35000001199999997,
+          "runnableWeightSum": 0.150000001
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.325000004,
+          "runnableWeightSum": 0.30000000400000004
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.2100000018,
+          "runnableWeightSum": 0.2100000018
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode149",
+          "nodeName": "Casta",
+          "nodeNameZh": "Casta",
+          "planet": "Ceres",
+          "planetZh": "谷神星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsDefense",
+          "inScope": true,
+          "mapIds": [
+            "grineer-shipyards-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode147",
+          "nodeName": "Cinxia",
+          "nodeNameZh": "Cinxia",
+          "planet": "Ceres",
+          "planetZh": "谷神星",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsInterception",
+          "inScope": true,
+          "mapIds": [
+            "grineer-shipyards-defense",
+            "grineer-shipyards-interception"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode185",
+          "nodeName": "Berehynia",
+          "nodeNameZh": "Berehynia",
+          "planet": "Sedna",
+          "planetZh": "赛德娜",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsInterceptionTwo",
+          "inScope": true,
+          "mapIds": [
+            "grineer-shipyards-interception"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "grineer-shipyards-defense",
+        "grineer-shipyards-interception"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA": {
+      "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseA",
+      "nameZh": "感染者防御编组 A",
+      "nameEn": "InfestedDefenseA",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 2.30000002,
+          "runnableWeightSum": 0.8000000199999999
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.39999999900000005,
+          "runnableWeightSum": 0.39999999900000005
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 0.30000000000000004,
+          "runnableWeightSum": 0.30000000000000004
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 6,
+          "runnableUniqueAvatarCount": 6,
+          "rawWeightSum": 0.67,
+          "runnableWeightSum": 0.67
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 2,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.129999999,
+          "runnableWeightSum": 0.129999999
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode130",
+          "nodeName": "Lares",
+          "nodeNameZh": "神守基地",
+          "planet": "Mercury",
+          "planetZh": "水星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerAsteroidDefense",
+          "inScope": true,
+          "mapIds": [
+            "grineer-asteroid-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "ClanNode0",
+          "nodeName": "Romula",
+          "nodeNameZh": "Romula",
+          "planet": "Venus",
+          "planetZh": "金星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-ship-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "ClanNode2",
+          "nodeName": "Coba",
+          "nodeNameZh": "Coba",
+          "planet": "Earth",
+          "planetZh": "地球",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestDefense",
+          "inScope": true,
+          "mapIds": [
+            "grineer-forest-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "ClanNode8",
+          "nodeName": "Kadesh",
+          "nodeNameZh": "卡迪什圣地",
+          "planet": "Mars",
+          "planetZh": "火星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerSettlementDefense",
+          "inScope": true,
+          "mapIds": [
+            "grineer-settlement-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "ClanNode4",
+          "nodeName": "Sinai",
+          "nodeNameZh": "Sinai",
+          "planet": "Jupiter",
+          "planetZh": "木星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusGasCityDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-gas-city-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "corpus-gas-city-defense",
+        "corpus-ship-defense",
+        "grineer-asteroid-defense",
+        "grineer-forest-defense",
+        "grineer-settlement-defense"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB": {
+      "path": "/Lotus/Types/Game/EnemySpecs/InfestedDefenseB",
+      "nameZh": "感染者防御编组 B",
+      "nameEn": "InfestedDefenseB",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 6,
+          "runnableUniqueAvatarCount": 6,
+          "rawWeightSum": 1.850000001,
+          "runnableWeightSum": 1.850000001
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.800000002,
+          "runnableWeightSum": 0.800000002
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 6,
+          "runnableUniqueAvatarCount": 6,
+          "rawWeightSum": 0.400000004,
+          "runnableWeightSum": 0.400000004
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 6,
+          "runnableUniqueAvatarCount": 6,
+          "rawWeightSum": 0.500000002,
+          "runnableWeightSum": 0.500000002
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.250000005,
+          "runnableWeightSum": 0.250000005
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "ClanNode24",
+          "nodeName": "Sechura",
+          "nodeNameZh": "Sechura",
+          "planet": "Pluto",
+          "planetZh": "冥王星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "ClanNode22",
+          "nodeName": "Seimeni",
+          "nodeNameZh": "Seimeni",
+          "planet": "Ceres",
+          "planetZh": "谷神星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsDefense",
+          "inScope": true,
+          "mapIds": [
+            "grineer-shipyards-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode164",
+          "nodeName": "Kala-azar",
+          "nodeNameZh": "Kala-azar",
+          "planet": "Eris",
+          "planetZh": "阋神星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Infestation/InfestedCorpusShipDefense",
+          "inScope": true,
+          "mapIds": [
+            "infested-corpus-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "ClanNode18",
+          "nodeName": "Akkad",
+          "nodeNameZh": "Akkad",
+          "planet": "Eris",
+          "planetZh": "阋神星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Infestation/InfestedCorpusShipDefense",
+          "inScope": true,
+          "mapIds": [
+            "infested-corpus-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode172",
+          "nodeName": "Xini",
+          "nodeNameZh": "Xini",
+          "planet": "Eris",
+          "planetZh": "阋神星",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipInterception",
+          "inScope": true,
+          "mapIds": [
+            "corpus-ship-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "ClanNode15",
+          "nodeName": "Sangeru",
+          "nodeNameZh": "Sangeru",
+          "planet": "Sedna",
+          "planetZh": "赛德娜",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerAsteroidDefense",
+          "inScope": true,
+          "mapIds": [
+            "grineer-asteroid-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "ClanNode6",
+          "nodeName": "Larzac",
+          "nodeNameZh": "Larzac",
+          "planet": "Europa",
+          "planetZh": "欧罗巴",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusIcePlanetDefense",
+          "inScope": true,
+          "mapIds": [
+            "corpus-ice-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode707",
+          "nodeName": "Hyf",
+          "nodeNameZh": "Hyf",
+          "planet": "Deimos",
+          "planetZh": "火卫二",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerDerelictDefense",
+          "inScope": true,
+          "mapIds": [
+            "orokin-derelict-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "corpus-ice-defense",
+        "corpus-outpost-defense-one",
+        "corpus-outpost-defense-two",
+        "corpus-ship-defense",
+        "grineer-asteroid-defense",
+        "grineer-shipyards-defense",
+        "infested-corpus-defense",
+        "orokin-derelict-defense"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/InfestedInterceptionA": {
+      "path": "/Lotus/Types/Game/EnemySpecs/InfestedInterceptionA",
+      "nameZh": "感染者拦截编组 A",
+      "nameEn": "InfestedInterceptionA",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 2.30000002,
+          "runnableWeightSum": 0.8000000199999999
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.39999999900000005,
+          "runnableWeightSum": 0.39999999900000005
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 0.30000000000000004,
+          "runnableWeightSum": 0.30000000000000004
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 7,
+          "runnableEntryCount": 7,
+          "runnableUniqueAvatarCount": 7,
+          "rawWeightSum": 0.729999999,
+          "runnableWeightSum": 0.729999999
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 1,
+          "runnableEntryCount": 1,
+          "runnableUniqueAvatarCount": 1,
+          "rawWeightSum": 0.07,
+          "runnableWeightSum": 0.07
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "no-selected-node-reference",
+      "missions": [],
+      "mapIds": [],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": "No exact reference among the45 indexed Defense/Interception nodes. Group remains an optional workload source; no source planet/node is inferred from its name or matching geometry."
+    },
+    "/Lotus/Types/Game/EnemySpecs/InfestedInterceptionB": {
+      "path": "/Lotus/Types/Game/EnemySpecs/InfestedInterceptionB",
+      "nameZh": "感染者拦截编组 B",
+      "nameEn": "InfestedInterceptionB",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 7,
+          "runnableEntryCount": 6,
+          "runnableUniqueAvatarCount": 6,
+          "rawWeightSum": 2.850000001,
+          "runnableWeightSum": 1.850000001
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.350000003,
+          "runnableWeightSum": 0.350000003
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 6,
+          "runnableUniqueAvatarCount": 6,
+          "rawWeightSum": 0.400000004,
+          "runnableWeightSum": 0.400000004
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 6,
+          "runnableUniqueAvatarCount": 6,
+          "rawWeightSum": 0.500000002,
+          "runnableWeightSum": 0.500000002
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.250000005,
+          "runnableWeightSum": 0.250000005
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "no-selected-node-reference",
+      "missions": [],
+      "mapIds": [],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": "No exact reference among the45 indexed Defense/Interception nodes. Group remains an optional workload source; no source planet/node is inferred from its name or matching geometry."
+    },
+    "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquad": {
+      "path": "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquad",
+      "nameZh": "Orokin 虚空防御编组",
+      "nameEn": "OrokinDefenseSquad",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 1,
+          "runnableUniqueAvatarCount": 1,
+          "rawWeightSum": 2.0,
+          "runnableWeightSum": 0.75
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 0.7,
+          "runnableWeightSum": 0.7
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.5,
+          "runnableWeightSum": 0.5
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 0.200000002,
+          "runnableWeightSum": 0.200000002
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 2,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.150000001,
+          "runnableWeightSum": 0.150000001
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode402",
+          "nodeName": "Taranis",
+          "nodeNameZh": "雷争塔",
+          "planet": "Void",
+          "planetZh": "虚空",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerDefense",
+          "inScope": true,
+          "mapIds": [
+            "orokin-tower-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "orokin-tower-defense"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquadB": {
+      "path": "/Lotus/Types/Game/EnemySpecs/OrokinDefenseSquadB",
+      "nameZh": "Orokin 虚空防御编组 B",
+      "nameEn": "OrokinDefenseSquadB",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 2.50000003,
+          "runnableWeightSum": 1.20000002
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 0.70000001,
+          "runnableWeightSum": 0.70000001
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 0.650000001,
+          "runnableWeightSum": 0.650000001
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 0.150000003,
+          "runnableWeightSum": 0.150000003
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 2,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.150000001,
+          "runnableWeightSum": 0.150000001
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode408",
+          "nodeName": "Belenus",
+          "nodeNameZh": "光神塔",
+          "planet": "Void",
+          "planetZh": "虚空",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerDefense",
+          "inScope": true,
+          "mapIds": [
+            "orokin-tower-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode412",
+          "nodeName": "Mithra",
+          "nodeNameZh": "光理塔",
+          "planet": "Void",
+          "planetZh": "虚空",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerInterception",
+          "inScope": true,
+          "mapIds": [
+            "orokin-tower-defense"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "orokin-tower-defense"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA": {
+      "path": "/Lotus/Types/Game/EnemySpecs/SeaLabGrineerDefenseA",
+      "nameZh": "Grineer 天王星海底实验室防御编组 A",
+      "nameEn": "SeaLabGrineerDefenseA",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 5,
+          "runnableUniqueAvatarCount": 5,
+          "rawWeightSum": 2.750000021,
+          "runnableWeightSum": 1.750000021
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 2,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.150000001,
+          "runnableWeightSum": 0.150000001
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 4,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.400000011,
+          "runnableWeightSum": 0.2
+        },
+        {
+          "tier": 3,
+          "rawEntryCount": 5,
+          "runnableEntryCount": 4,
+          "runnableUniqueAvatarCount": 4,
+          "rawWeightSum": 0.275000003,
+          "runnableWeightSum": 0.250000003
+        },
+        {
+          "tier": 4,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 0.1100000018,
+          "runnableWeightSum": 0.1100000018
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode64",
+          "nodeName": "Umbriel",
+          "nodeNameZh": "Umbriel",
+          "planet": "Uranus",
+          "planetZh": "天王星",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+          "inScope": true,
+          "mapIds": [
+            "grineer-ocean-defense-02",
+            "grineer-ocean-defense-03"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        },
+        {
+          "nodeId": "SolNode122",
+          "nodeName": "Stephano",
+          "nodeNameZh": "Stephano",
+          "planet": "Uranus",
+          "planetZh": "天王星",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+          "inScope": true,
+          "mapIds": [
+            "grineer-ocean-defense-02",
+            "grineer-ocean-defense-03"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "grineer-ocean-defense-02",
+        "grineer-ocean-defense-03"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/SpaceGrineerDefenseC": {
+      "path": "/Lotus/Types/Game/EnemySpecs/SpaceGrineerDefenseC",
+      "nameZh": "Grineer 空战编组 C（范围外）",
+      "nameEn": "SpaceGrineerDefenseC",
+      "runnable": false,
+      "scopeIncluded": false,
+      "selectionEnabled": false,
+      "sourceStatus": "aerial-excluded",
+      "unsupportedReason": "aerial-group-excluded-from-ground-scope",
+      "unsupportedSourceFields": {},
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 8,
+          "runnableEntryCount": 0,
+          "runnableUniqueAvatarCount": 0,
+          "rawWeightSum": 4.10000004,
+          "runnableWeightSum": 0
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 0,
+          "runnableUniqueAvatarCount": 0,
+          "rawWeightSum": 0.60000001,
+          "runnableWeightSum": 0
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 6,
+          "runnableEntryCount": 0,
+          "runnableUniqueAvatarCount": 0,
+          "rawWeightSum": 1.4500000100000001,
+          "runnableWeightSum": 0
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode907",
+          "nodeName": "Caelus",
+          "nodeNameZh": "Caelus",
+          "planet": "Uranus",
+          "planetZh": "天王星",
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "sourceProc": "/Lotus/Levels/Proc/Space/SpaceGrineerInterceptionProcLevel",
+          "inScope": false,
+          "mapIds": [],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [],
+      "rawTiers": [
+        0,
+        1,
+        2
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    },
+    "/Lotus/Types/Game/EnemySpecs/SpecialMissionSpecs/DisruptionScaldraSpec": {
+      "path": "/Lotus/Types/Game/EnemySpecs/SpecialMissionSpecs/DisruptionScaldraSpec",
+      "nameZh": "1999 Scaldra 节点编组（源类型名 Disruption）",
+      "nameEn": "DisruptionScaldraSpec",
+      "runnable": true,
+      "scopeIncluded": true,
+      "selectionEnabled": true,
+      "sourceStatus": "ordinary-enemies-with-special-fields",
+      "unsupportedReason": null,
+      "unsupportedSourceFields": {
+        "NpcEncounters": "retained-not-flattened-into-ground-enemies"
+      },
+      "tierAvailability": [
+        {
+          "tier": 0,
+          "rawEntryCount": 3,
+          "runnableEntryCount": 3,
+          "runnableUniqueAvatarCount": 3,
+          "rawWeightSum": 2.5,
+          "runnableWeightSum": 2.5
+        },
+        {
+          "tier": 1,
+          "rawEntryCount": 2,
+          "runnableEntryCount": 2,
+          "runnableUniqueAvatarCount": 2,
+          "rawWeightSum": 0.40000000999999996,
+          "runnableWeightSum": 0.40000000999999996
+        },
+        {
+          "tier": 2,
+          "rawEntryCount": 1,
+          "runnableEntryCount": 1,
+          "runnableUniqueAvatarCount": 1,
+          "rawWeightSum": 0.1,
+          "runnableWeightSum": 0.1
+        }
+      ],
+      "nameQualification": "curated-Chinese-display-label-for-source-group-not-official-localization",
+      "sourceMatchStatus": "node-reference-confirmed",
+      "missions": [
+        {
+          "nodeId": "SolNode858",
+          "nodeName": "Solstice Square",
+          "nodeNameZh": "至日广场",
+          "planet": "Höllvania",
+          "planetZh": "霍瓦尼亚",
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "sourceProc": "/Lotus/Levels/Proc/Vania/VaniaEchoesDefenseWinterWet",
+          "inScope": true,
+          "mapIds": [
+            "1999-temple-defense-underground"
+          ],
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "sourceFields": [
+            "enemySpec"
+          ]
+        }
+      ],
+      "mapIds": [
+        "1999-temple-defense-underground"
+      ],
+      "rawTiers": [
+        0,
+        1,
+        2
+      ],
+      "tierSelection": {
+        "status": "user-selected-scenario-tier",
+        "runtimeNodeTierVerified": false,
+        "reason": "Node references identify the group only; native tier progression and runtime spawn selection are not recovered."
+      },
+      "qualification": "exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+      "noMatchReason": null
+    }
+  },
   "procs": [
     {
       "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusGasCityDefense",

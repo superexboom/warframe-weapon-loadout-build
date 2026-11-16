@@ -8,11 +8,12 @@ Example (offline after source acquisition):
 --refresh downloads official hashed ExportRegions en/zh and extracts only the
 45-node SolarMap's selected Proc headers with an explicit local exporter.
 No tile meshes, navigation or visual assets are modified. Catalog edits own
-only maps[*].missions and top-level missionCoverage summary.
+only maps[*].missions and top-level missionCoverage/enemySpecSources metadata.
 """
 
 from __future__ import annotations
 import argparse
+import gzip
 import hashlib
 import json
 import lzma
@@ -81,6 +82,180 @@ def arbitration_qualification(node_id):
         "currentWhitelistVerified": False,
         "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification.",
     }
+
+
+ENEMY_SPEC_NAMES_ZH = {
+    "GrineerDefenseA": "Grineer 舰船防御编组 A",
+    "GrineerDefenseAAsteroid": "Grineer 小行星防御编组 A",
+    "GrineerShipyardsDefenseA": "Grineer 船坞防御编组 A",
+    "InfestedDefenseA": "感染者防御编组 A",
+    "InfestedDefenseB": "感染者防御编组 B",
+    "CorpusSquadDefenseA": "Corpus 防御编组 A",
+    "CorpusSquadDefenseB": "Corpus 防御编组 B",
+    "CorpusGasRemasterDefenseSquad": "Corpus 木星天然气城防御编组",
+    "SeaLabGrineerDefenseA": "Grineer 天王星海底实验室防御编组 A",
+    "InfestedInterceptionA": "感染者拦截编组 A",
+    "InfestedInterceptionB": "感染者拦截编组 B",
+    "CorpusDropship": "Corpus 运输艇事件编组（非普通地面敌人）",
+    "CorpusDropshipAmbulas": "Corpus Ambulas 运输艇事件编组（非普通地面敌人）",
+    "CorpusGrineerDesertMix": "Corpus／沙漠 Grineer 混合编组",
+    "CorpusShipPurgatorySquad": "Corpus 飞船特殊 Purgatory 编组",
+    "CorpusShipSquadDefenseB": "Corpus 重制飞船防御编组 B",
+    "DesertGrineerDefenseA": "沙漠 Grineer 防御编组 A",
+    "EntratiMirrorDefenseSpec": "英择谛实验室镜像防御编组",
+    "GrineerDefenseForest": "Grineer 地球森林防御编组",
+    "GrineerDefenseFortress": "Grineer 赤毒要塞防御编组",
+    "GrineerMoonDefense": "Grineer 月球防御编组",
+    "OrokinDefenseSquad": "Orokin 虚空防御编组",
+    "OrokinDefenseSquadB": "Orokin 虚空防御编组 B",
+    "SpaceGrineerDefenseC": "Grineer 空战编组 C（范围外）",
+    "DisruptionScaldraSpec": "1999 Scaldra 节点编组（源类型名 Disruption）",
+}
+
+
+def solar_enemy_specs(data, proc_offset, proc_path):
+    """Decode only the consecutive native MissionInfo resource prefix.
+
+    Proc and nonempty resources serialize as u32 byte length, ASCII path,
+    u32 resource trailer. Empty resource is one u32 zero. Following Proc:
+    enemySpec, u32 advanced-spawner count, that many resource references,
+    vipAgent, extraEnemySpec. This prefix is validated on all45 selected
+    nodes; no nearby-string scan or faction-based inference is used.
+    """
+
+    def read_resource(offset, family=None):
+        if offset + 4 > len(data):
+            raise ValueError("Truncated MissionInfo resource length")
+        size = struct.unpack_from("<I", data, offset)[0]
+        if size > 1024 or offset + 4 + size + (4 if size else 0) > len(data):
+            raise ValueError("Unbounded MissionInfo resource")
+        value = data[offset + 4 : offset + 4 + size].decode("ascii")
+        if size and (
+            not value.startswith("/Lotus/") or family and not value.startswith(family)
+        ):
+            raise ValueError("Unexpected MissionInfo resource: " + value)
+        trailer = struct.unpack_from("<I", data, offset + 4 + size)[0] if size else None
+        if size and trailer != 0:
+            raise ValueError("Unknown MissionInfo resource trailer")
+        evidence = dict(
+            lengthOffset=offset,
+            valueOffset=offset + 4,
+            byteLength=size,
+            resourceTrailer=trailer,
+        )
+        return value, offset + 4 + size + (4 if size else 0), evidence
+
+    after = proc_offset + len(proc_path) + 4
+    primary, after, primary_evidence = read_resource(
+        after, "/Lotus/Types/Game/EnemySpecs/"
+    )
+    count_offset = after
+    count = struct.unpack_from("<I", data, after)[0]
+    after += 4
+    if count > 64:
+        raise ValueError("Unbounded MissionInfo advanced-spawner array")
+    for _ in range(count):
+        _, after, _ = read_resource(after, "/Lotus/Types/Enemies/AdvancedSpawners/")
+    _, after, _ = read_resource(after)  # vipAgent, not an enemySpec
+    extra, after, extra_evidence = read_resource(after, "/Lotus/Types/Game/EnemySpecs/")
+    refs = (
+        [dict(field="enemySpec", path=primary, **primary_evidence)] if primary else []
+    )
+    if extra:
+        refs.append(dict(field="extraEnemySpec", path=extra, **extra_evidence))
+    return dict(
+        paths=[r["path"] for r in refs],
+        references=refs,
+        primaryPath=primary or None,
+        extraPath=extra or None,
+        qualification="validated-consecutive-MissionInfo-enemySpec-and-extraEnemySpec-resource-fields",
+        prefixEndOffset=after,
+        advancedSpawnerCount=count,
+        advancedSpawnerCountOffset=count_offset,
+        runtimeTierSelectionVerified=False,
+    )
+
+
+def enemy_spec_sources(nodes, spec_file):
+    """Describe only actual selected-group references, never same-map factions."""
+    selected = json.loads(gzip.decompress(spec_file.read_bytes()))["specs"]
+    out = {}
+    for group in selected:
+        path = group["path"]
+        missions = []
+        for node in nodes:
+            if path not in node["enemySpecPaths"]:
+                continue
+            fields = [
+                r["field"]
+                for r in node["enemySpecEvidence"]["references"]
+                if r["path"] == path
+            ]
+            missions.append(
+                {
+                    **{
+                        key: node[key]
+                        for key in (
+                            "nodeId",
+                            "nodeName",
+                            "nodeNameZh",
+                            "planet",
+                            "planetZh",
+                            "missionType",
+                            "missionTypeZh",
+                            "sourceProc",
+                            "inScope",
+                            "mapIds",
+                            "arbitrationQualification",
+                        )
+                    },
+                    "sourceFields": fields,
+                }
+            )
+        map_ids = sorted(
+            {map_id for mission in missions for map_id in mission["mapIds"]}
+        )
+        short = path.rsplit("/", 1)[-1]
+        out[path] = dict(
+            path=path,
+            nameZh=ENEMY_SPEC_NAMES_ZH[short],
+            nameEn=short,
+            runnable=bool(
+                group.get(
+                    "runnable", any(e.get("runnable") for e in group.get("enemies", []))
+                )
+            ),
+            scopeIncluded=group.get("scopeIncluded", True),
+            selectionEnabled=bool(
+                group.get(
+                    "runnable", any(e.get("runnable") for e in group.get("enemies", []))
+                )
+            )
+            and group.get("scopeIncluded", True),
+            sourceStatus=group.get("sourceStatus", "legacy"),
+            unsupportedReason=group.get("unsupportedReason"),
+            unsupportedSourceFields=group.get("unsupportedSourceFields", {}),
+            tierAvailability=group.get("tiers", []),
+            nameQualification="curated-Chinese-display-label-for-source-group-not-official-localization",
+            sourceMatchStatus=(
+                "node-reference-confirmed" if missions else "no-selected-node-reference"
+            ),
+            missions=missions,
+            mapIds=map_ids,
+            rawTiers=group.get("rawTiers", []),
+            tierSelection=dict(
+                status="user-selected-scenario-tier",
+                runtimeNodeTierVerified=False,
+                reason="Node references identify the group only; native tier progression and runtime spawn selection are not recovered.",
+            ),
+            qualification="exact-current-SolarMap-MissionInfo-reference; same-tile or same-faction similarity is never a group match",
+            noMatchReason=(
+                None
+                if missions
+                else "No exact reference among the45 indexed Defense/Interception nodes. Group remains an optional workload source; no source planet/node is inferred from its name or matching geometry."
+            ),
+        )
+    return out
 
 
 def digest(path):
@@ -182,12 +357,7 @@ def solar_nodes(data, regions):
         # All regular observed node Proc fields occur within <1 KiB of their name.
         if source_offset - start > 2048:
             raise ValueError("Unbounded node/Proc association")
-        specs = [
-            x["value"]
-            for x in fields
-            if x["value"].startswith("/Lotus/Types/Game/EnemySpecs/")
-            and x["offset"] <= proc["offset"] + 1024
-        ]
+        spec_evidence = solar_enemy_specs(data, source_offset, proc["value"])
         rows.append(
             dict(
                 **q,
@@ -195,7 +365,8 @@ def solar_nodes(data, regions):
                 sourceOffset=start,
                 procOffset=source_offset,
                 sourceProc=proc["value"],
-                enemySpecs=list(dict.fromkeys(specs)),
+                enemySpecs=spec_evidence["paths"],
+                enemySpecEvidence=spec_evidence,
             )
         )
     return rows
@@ -445,6 +616,8 @@ def build(args):
             maxEnemyLevel=row["maxEnemyLevel"],
             factionIndex=row["factionIndex"],
             sourceProc=p,
+            enemySpecPaths=row["enemySpecs"],
+            enemySpecEvidence=row["enemySpecEvidence"],
             qualification="official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
             arbitrationQualification=arbitration_qualification(row["uniqueName"]),
             coverage=coverage if included else "excluded",
@@ -487,8 +660,16 @@ def build(args):
             ),
         )
         result_nodes.append(node)
+    spec_sources = enemy_spec_sources(result_nodes, args.output / "enemy-specs.json.gz")
     summary = dict(
         nodes=len(result_nodes),
+        enemySpecGroups=len(spec_sources),
+        enemySpecGroupsWithNodeReference=sum(
+            bool(s["missions"]) for s in spec_sources.values()
+        ),
+        enemySpecGroupsWithoutNodeReference=sum(
+            not s["missions"] for s in spec_sources.values()
+        ),
         defense=sum(x["missionIndex"] == 8 for x in result_nodes),
         interception=sum(x["missionIndex"] == 13 for x in result_nodes),
         uniqueProcs=len(procs),
@@ -537,8 +718,14 @@ def build(args):
             referenceSiteSnapshot=REFERENCE_SITE_SNAPSHOT,
             solarMap=dict(sha256=hashlib.sha256(solar).hexdigest(), bytes=len(solar)),
             cacheTocs=toc_sources,
+            enemySpecCatalog=dict(
+                file="enemy-specs.json.gz",
+                sha256=digest(args.output / "enemy-specs.json.gz"),
+                qualification="Display/source metadata only; original group weights, tiers and runnable entries unchanged.",
+            ),
         ),
         nodes=result_nodes,
+        enemySpecSources=spec_sources,
         procs=proc_rows,
         tiles=tiles,
     )
@@ -550,6 +737,7 @@ def build(args):
     catalog = json.loads(catalog_path.read_text(encoding="utf8"))
     for map_id, map_row in catalog["maps"].items():
         map_row["missions"] = [n for n in result_nodes if map_id in n["mapIds"]]
+    catalog["enemySpecSources"] = spec_sources
     catalog["missionCoverage"] = dict(
         schema=SCHEMA, file="mission-coverage.json", summary=summary
     )

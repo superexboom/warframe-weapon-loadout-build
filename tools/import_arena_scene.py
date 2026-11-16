@@ -2019,8 +2019,9 @@ def import_enemy_specs(
     *,
     candidate_nodes: Path | None = None,
     enemies_path: Path | None = None,
+    mission_coverage: Path | None = None,
 ):
-    """Resolve only explicit defense/interception Agent Avatar fields.
+    """Resolve explicit selected mission groups through STANDARD Agent Avatars.
 
     Relative AvatarTypes references belong to the declaring ancestor, not the
     leaf Agent directory. No name-based Avatar substitutions are permitted.
@@ -2044,6 +2045,60 @@ def import_enemy_specs(
     inputs = [specs_path, packages_path, enemies_path] + (
         [candidate_nodes] if candidate_nodes else []
     )
+    coverage = (
+        json.loads(mission_coverage.read_text(encoding="utf-8"))
+        if mission_coverage
+        else None
+    )
+    explicit_paths = set()
+    scope_by_path = {}
+    if coverage:
+        for node in coverage["nodes"]:
+            for path in node.get("enemySpecPaths", []):
+                explicit_paths.add(path)
+                scope_by_path[path] = scope_by_path.get(path, False) or node.get(
+                    "inScope", True
+                )
+
+    legacy_paths = {
+        row["path"]
+        for row in specs
+        if "Defense" in row["path"].rsplit("/", 1)[-1]
+        or "Interception" in row["path"].rsplit("/", 1)[-1]
+    }
+    selected_paths = legacy_paths | explicit_paths
+    # Re-read all selected groups from this current package. The historical
+    # extracted list chooses only legacy optional groups, never supplies stats.
+    specs = []
+    source_unsupported = []
+    for path in sorted(selected_paths):
+        try:
+            fields = package.resolve(path)
+            enemies = fields.get("Enemies", [])
+            if not isinstance(enemies, list):
+                raise ValueError("Enemies is not a source list")
+            specs.append(
+                dict(
+                    path=path,
+                    parent=package.parent(path),
+                    enemies=enemies,
+                    count=len(enemies),
+                    probability_sum=sum(
+                        float(e.get("probability", 0.0)) for e in enemies
+                    ),
+                    tiers=sorted({e.get("tier", 0) for e in enemies}),
+                    source_fields=fields,
+                    scope_included=scope_by_path.get(path, True),
+                )
+            )
+        except Exception as exc:
+            source_unsupported.append(
+                dict(
+                    path=path,
+                    reason="group-source-parse-error:" + type(exc).__name__,
+                    detail=str(exc),
+                )
+            )
     result = []
     excluded = []
     memo = {}
@@ -2117,12 +2172,6 @@ def import_enemy_specs(
 
     for spec in specs:
         path = spec["path"]
-        if not (
-            "Defense" in path.rsplit("/", 1)[-1]
-            or "Interception" in path.rsplit("/", 1)[-1]
-        ):
-            excluded.append(path)
-            continue
         candidates = [
             {
                 "node": node.get("node"),
@@ -2134,23 +2183,61 @@ def import_enemy_specs(
             for node in nodes
             if path in node.get("links", [])
         ]
+        if coverage:
+            candidates = [
+                dict(
+                    node=n["nodeId"],
+                    name=n["nodeName"],
+                    planet=n["planet"],
+                    planetZh=n["planetZh"],
+                    missionType=n["missionType"],
+                    mapIds=n["mapIds"],
+                    sourceFields=[
+                        r["field"]
+                        for r in n["enemySpecEvidence"]["references"]
+                        if r["path"] == path
+                    ],
+                    links=[n["sourceProc"], path],
+                    basis="exact-current-MissionInfo-resource-fields",
+                    offset=n["evidence"]["nodeOffset"],
+                )
+                for n in coverage["nodes"]
+                if path in n.get("enemySpecPaths", [])
+            ]
         entries = []
         for index, raw in enumerate(spec["enemies"]):
-            resolved = avatars(raw["agent"])
+            agent = raw.get("agent") if isinstance(raw, dict) else None
+            resolved = (
+                avatars(agent)
+                if isinstance(agent, str) and agent.startswith("/Lotus/Types/Enemies/")
+                else dict(
+                    resolvedAvatarPath=None,
+                    presentInFrozenEnemies=False,
+                    resolutionStatus="nonstandard-or-nested-agent-unsupported",
+                    resolutionError="nonstandard-or-nested-agent-unsupported",
+                    agentInheritanceChain=[],
+                    avatarVariants={},
+                )
+            )
             entry = dict(raw, rowIndex=index, **resolved)
             entry["runnable"] = bool(
                 entry["resolvedAvatarPath"]
                 and entry["presentInFrozenEnemies"]
                 and not entry["resolutionError"]
+                and spec["scope_included"]
             )
             entry["availabilityStatus"] = (
-                "exact-frozen-avatar"
-                if entry["runnable"]
+                "aerial-group-excluded-from-ground-scope"
+                if not spec["scope_included"]
                 else (
-                    "current-avatar-not-in-frozen-catalog"
-                    if entry["resolvedAvatarPath"]
-                    and not entry["presentInFrozenEnemies"]
-                    else entry["resolutionStatus"]
+                    "exact-frozen-avatar"
+                    if entry["runnable"]
+                    else (
+                        "current-avatar-not-in-frozen-catalog"
+                        if entry["resolvedAvatarPath"]
+                        and not entry["presentInFrozenEnemies"]
+                        else entry["resolutionStatus"]
+                    )
                 )
             )
             entries.append(entry)
@@ -2181,6 +2268,52 @@ def import_enemy_specs(
         result.append(
             {
                 "path": path,
+                "parent": spec["parent"],
+                "scopeIncluded": spec["scope_included"],
+                "selectionStatus": (
+                    "node-reference-confirmed"
+                    if path in explicit_paths
+                    else "legacy-optional-workload-source"
+                ),
+                "runnable": any(
+                    e["runnable"] and float(e.get("probability", 0)) > 0
+                    for e in entries
+                ),
+                "sourceFields": spec["source_fields"],
+                "sourceStatus": (
+                    "aerial-excluded"
+                    if not spec["scope_included"]
+                    else (
+                        "event-resources-no-ordinary-enemies"
+                        if not entries and spec["source_fields"].get("EventResources")
+                        else (
+                            "ordinary-enemies-with-special-fields"
+                            if any(
+                                spec["source_fields"].get(k)
+                                for k in ("AdvancedAiDirectorSpawns", "NpcEncounters")
+                            )
+                            else "ordinary-enemies"
+                        )
+                    )
+                ),
+                "unsupportedReason": (
+                    "aerial-group-excluded-from-ground-scope"
+                    if not spec["scope_included"]
+                    else (
+                        "event-resources-have-no-ordinary-ground-Enemies-list"
+                        if not entries and spec["source_fields"].get("EventResources")
+                        else None
+                    )
+                ),
+                "unsupportedSourceFields": {
+                    k: "retained-not-flattened-into-ground-enemies"
+                    for k in (
+                        "EventResources",
+                        "AdvancedAiDirectorSpawns",
+                        "NpcEncounters",
+                    )
+                    if spec["source_fields"].get(k)
+                },
                 "rawCount": spec.get("count"),
                 "rawProbabilitySum": spec.get("probability_sum"),
                 "rawTiers": spec.get("tiers"),
@@ -2191,7 +2324,7 @@ def import_enemy_specs(
         )
     payload = {
         "schema": "portable-arena-enemy-specs/v1",
-        "parserVersion": PARSER_VERSION + "/enemy-specs-v1",
+        "parserVersion": PARSER_VERSION + "/enemy-specs-v2-selected-MissionInfo",
         "currentAgentSourceBuild": "2026.10.28.09.54",
         "frozenEnemyBuild": (
             frozen.get("buildLabel") if isinstance(frozen, dict) else None
@@ -2199,16 +2332,53 @@ def import_enemy_specs(
         "sources": [
             {"file": str(path.name), "bytes": path.stat().st_size, "sha256": sha(path)}
             for path in inputs
-        ],
+        ]
+        + (
+            [
+                {
+                    "file": "mission-node-enemySpec-reference-subset",
+                    "bytes": len(
+                        compact(
+                            [
+                                {
+                                    "nodeId": n["nodeId"],
+                                    "inScope": n.get("inScope", True),
+                                    "enemySpecPaths": n.get("enemySpecPaths", []),
+                                    "enemySpecEvidence": n.get("enemySpecEvidence", {}),
+                                }
+                                for n in coverage["nodes"]
+                            ]
+                        )
+                    ),
+                    "sha256": hashlib.sha256(
+                        compact(
+                            [
+                                {
+                                    "nodeId": n["nodeId"],
+                                    "inScope": n.get("inScope", True),
+                                    "enemySpecPaths": n.get("enemySpecPaths", []),
+                                    "enemySpecEvidence": n.get("enemySpecEvidence", {}),
+                                }
+                                for n in coverage["nodes"]
+                            ]
+                        )
+                    ).hexdigest(),
+                }
+            ]
+            if coverage
+            else []
+        ),
         "qualification": [
             "Raw source tier/probability/maxSimultaneous/weaponOverrides/mergeSymbol preserved unchanged.",
             "STANDARD AvatarTypes/AvatarType resolved through explicit current Packages inheritance; no approximate Avatar substitution.",
             "Current Agent source and older frozen damage catalog are separate versions; exact path existence does not prove stat parity.",
             "Optional scenario rule: normalize positive runnable weights within a user-selected tier only; this is NOT native observed spawn frequency.",
             "Raw maxSimultaneous=0 remains zero; runtime meaning is not inferred here.",
-            "mapCandidates are ordered-string evidence, not fully decoded solar-map linkage or current Arbitration rotation.",
+            "mapCandidates use exact MissionInfo enemySpec/extraEnemySpec fields when mission coverage is supplied; never infer a group from shared tile geometry.",
+            "EventResources/AdvancedAiDirectorSpawns/NpcEncounters remain explicit special-source metadata; they are not flattened into ordinary ground enemies.",
         ],
         "excludedSpecs": excluded,
+        "unsupportedSpecs": source_unsupported,
         "specs": result,
     }
     output.mkdir(parents=True, exist_ok=True)
@@ -2238,6 +2408,7 @@ def main():
     parser.add_argument("--candidate-nodes", type=Path)
     parser.add_argument("--enemies", type=Path)
     parser.add_argument("--enemy-specs-only", action="store_true")
+    parser.add_argument("--mission-coverage", type=Path)
     args = parser.parse_args()
     if args.audit_visual_support:
         if not args.case_root:
@@ -2277,6 +2448,7 @@ def main():
             args.output,
             candidate_nodes=args.candidate_nodes,
             enemies_path=args.enemies,
+            mission_coverage=args.mission_coverage,
         )
         print(
             json.dumps(

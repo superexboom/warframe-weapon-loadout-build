@@ -28,20 +28,15 @@ Root resolution uses `WF_RIVEN_ROOT`, then PyInstaller `sys._MEIPASS`, then the 
 
 `load_scene` caches expensive geometry. **Each sequential job must call `scene.reset_runtime()` before starting** to clear disabled links and metrics. Concurrent jobs must pass their own `disabled=set()` to `search` and keep metrics/job route state local; do not mutate the cached graph/raw/source metadata. Calling reset while another job is active is not isolation.
 
-## Source EnemySpecs candidate pools
+## Source EnemySpecs and node associations
 
-`enemy-specs.json.gz` (`portable-arena-enemy-specs/v1`) contains11 defense/interception specs only; survival/disruption special specs are excluded. `specs[].enemies[]` retains source `agent`, `tier`, `probability`, `maxSimultaneous`, `weaponOverrides`, and `mergeSymbol` unchanged, then adds `resolvedAvatarPath`, `presentInFrozenEnemies`, `availabilityStatus`, `runnable`, `agentInheritanceChain`, and per-variant `avatarVariants` with declaring type/raw reference. Only STANDARD exact path matches are runnable; missing frozen paths are never approximated. Current Agent source2026.10.28.09.54 and frozen damage catalog2026.08.13.13.24 are intentionally recorded separately.
+`enemy-specs.json.gz` contains25 audited groups:21 current ground-node references,1 excluded Archwing source, and3 retained legacy selectable groups without a current matching-node reference.22 groups have ordinary runnable targets. Dropship EventResources are retained as source records and are never flattened into normal ground enemies. Nested/unsupported agents and Avatar paths absent from the frozen target catalog remain excluded with reasons.
 
-`specs[].tiers[]` gives raw/runnable counts and weight sums. Normalize positive runnable weights **within an explicitly user-selected tier only**, if that scenario policy is enabled; neither this dataset nor normalization proves native observed spawn frequency. Raw cap0 remains uninterpreted. `mapCandidates` retains contiguous-string solar-map evidence with its uncertainty and is not live Arbitration rotation data.
+Rows retain source agent/tier/probability/cap/weaponOverrides and declaring-type provenance. STANDARD avatar selection uses exact ancestor resolution. Optional scenario weighting normalizes positive runnable rows within the user-selected tier; it does not claim native observed spawn frequency or exact runtime tier progression.
 
-Rebuild with the same importer, without rebaking maps:
+`mission-coverage.json` and catalog enemySpecSources join strictly consecutive current SolarMap MissionInfo fields: Proc, primary EnemySpec, advanced-spawner array, VIP agent, extra EnemySpec. This avoids absorbing unrelated hidden mission records. Each group carries Chinese names, missions/mapIds, source-match status, selectionEnabled and unsupportedReason. Same-map different-faction groups remain separate.
 
-```powershell
-python tools/import_arena_scene.py --enemy-specs-only --enemy-specs-source <case>/evidence/spawn/enemy-specs.json --packages-bin <case>/artifacts/original/Debug/Packages.bin_H --candidate-nodes <case>/evidence/spawn/candidate-nodes.json
-```
-
-Inputs are SHA256-recorded inside the compressed payload. Use `--enemies` to explicitly validate a different frozen catalog; default follows Portable source-lock. Tier0 runnable entries total57 across11 specs (duplicate agents across specs intentionally retained). All other raw tiers/caps remain available for explicit scenario choices.
-
+Rebuild explicit node-referenced groups with the existing importer using `--enemy-specs-only --mission-coverage data/arena/mission-coverage.json --packages-bin <Packages.bin_H> --enemy-specs-source <case>/evidence/spawn/enemy-specs.json`, then rerun import_arena_missions.py for the metadata join. Original enemy data probabilities and caps are not retuned by that join.
 
 ## Scoring cache isolation
 
@@ -88,3 +83,10 @@ A shared resource extraction cache avoids repeatedly decoding identical structur
 ## Degenerate source NAV face
 
 The ice-planet template contains one legitimate serialized but geometrically degenerate face: source face4953 has three exactly collinear vertices. The importer now quarantines only a valid ring whose vertices are exactly collinear, retaining all original vertices, source face IDs and rejected native portals. It does not replace that face, reconnect the two sides or generate step/jump shortcuts through its adjacent faces. Self-intersecting/nonplanar/unsupported source geometry is still rejected. `nav.sourceFaceToTriangles`, `quarantinedSourceFaces`, `excludedSourcePortals` and `quarantineDerivedLinkExcludedFaces` record the decision.
+
+
+## Navigation runtime and fixed stance
+
+Arena-world-v2 uses current directed ground-graph strongly connected components for unreachable staging, including admitted stairs/steps. Opponents approach source-qualified visible staging nodes; reverse flows are reused. A crowded moving actor can make a short supported, wall-checked and continuously separated detour from its actual feet. It cannot teleport to its previous graph node. If a target's floor is unreachable but a legal firing position is reachable, the player can use that firing position without inventing an inter-component edge.
+
+Fixed-position requests explicitly identify a source triangle and XYZ point. Validation allows small vertical projection onto that triangle only, with support and body-clearance checks. The mode suppresses all player navigation and returns ordinary-enemy spawn reachability as a qualification, not a promise of universal line of sight. Missing native offmesh/ladder information remains an accuracy limitation.

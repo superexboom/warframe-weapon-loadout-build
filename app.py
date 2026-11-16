@@ -7259,15 +7259,17 @@ def _arena_context(payload):
 
 def arena_catalog_payload():
     from wfarsenal.arena_scene import list_maps, mission_coverage
-    from wfarsenal.arena import defaults, enemy_specs
+    from wfarsenal.arena import MODEL, defaults, enemy_specs
+    coverage = mission_coverage()
+    sources = coverage["enemySpecSources"]
     specs=[]
     for spec in enemy_specs()["specs"]:
         rows=[dict(avatar=r["resolvedAvatarPath"], name=(MANUAL_ENEMIES_BY_PATH.get(r["resolvedAvatarPath"],{}).get("nameZh") or MANUAL_ENEMIES_BY_PATH.get(r["resolvedAvatarPath"],{}).get("nameEn") or r["agent"].rsplit("/",1)[-1]), tier=r["tier"],weight=r["probability"],cap=r.get("maxSimultaneous")) for r in spec["enemies"] if r.get("runnable")]
-        specs.append(dict(id=spec["path"],name=spec["path"].rsplit("/",1)[-1],tiers=sorted({r["tier"] for r in rows}),rows=rows))
-    return {"enemySpecs":specs,"maps":list_maps(), "missionCoverage":mission_coverage(), "enemies":[{"path":e["path"], "nameZh":e.get("nameZh"), "name":e.get("nameZh") or e.get("name") or e.get("nameEn"),
+        specs.append(dict(**sources[spec["path"]], id=spec["path"], name=spec["path"].rsplit("/",1)[-1],tiers=sorted({r["tier"] for r in rows}),rows=rows))
+    return {"enemySpecs":specs,"maps":list_maps(), "missionCoverage":coverage, "enemies":[{"path":e["path"], "nameZh":e.get("nameZh"), "name":e.get("nameZh") or e.get("name") or e.get("nameEn"),
             "nameEn":e.get("nameEn"), "faction":e.get("faction"), "hasHeadProxy":e.get("hasHeadProxy", False)}
             for e in MANUAL_ENEMIES if e.get("complete") is not False],
-            "defaults":defaults(_BENCHMARK_ENEMY_PATH), "model":"arena-world-v1",
+            "defaults":defaults(_BENCHMARK_ENEMY_PATH), "model":MODEL,
             "coverage":["当前装备槽位独立模拟", "真实目标防御与独立状态", "几何与刷怪策略保留来源和近似标记"]}
 
 
@@ -7283,6 +7285,14 @@ def arena_start_payload(payload):
 def arena_cancel_payload(payload):
     from wfarsenal.arena import JOBS
     return JOBS.cancel(str(payload.get("id") or ""))
+
+
+def arena_standing_point_payload(payload):
+    from wfarsenal.arena_scene import load_scene
+    if not isinstance(payload, Mapping):
+        raise SimulationError("请选择地图上的可站立位置")
+    scene = load_scene(str(payload.get("mapId") or ""))
+    return scene.validate_standing(payload.get("position"), payload.get("face"))
 
 
 class PortableHandler(BaseHTTPRequestHandler):
@@ -7388,6 +7398,7 @@ class PortableHandler(BaseHTTPRequestHandler):
         analyzers = {
             "/api/arena/jobs": arena_start_payload,
             "/api/arena/cancel": arena_cancel_payload,
+            "/api/arena/standing-point": arena_standing_point_payload,
             "/api/analyze": analyze_payload,
             "/api/build": build_weapon_route,
             "/api/simulate": simulate_manual_payload,

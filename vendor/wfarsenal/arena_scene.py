@@ -461,6 +461,57 @@ class ArenaScene:
             node = result.previous[node]
         return found if reverse else found[::-1]
 
+    def movement_components(self, profile="enemy"):
+        """Strong components of the current directed traversable graph.
+
+        Includes admitted derived ground stairs/steps and disabled-edge state;
+        original resource component IDs remain provenance, not runtime reach.
+        """
+        key = (profile, frozenset(self.disabled))
+        cache = getattr(self, "_movement_component_cache", None)
+        if cache and cache[0] == key:
+            return cache[1]
+        forward = [[] for _ in self.nodes]
+        incoming = [[] for _ in self.nodes]
+        for start, edges in enumerate(self.graph):
+            for edge in edges:
+                if edge.key not in self.disabled and math.isfinite(edge.time(profile)):
+                    forward[start].append(edge.node)
+                    incoming[edge.node].append(start)
+        visited = set()
+        order = []
+        for start in range(len(self.nodes)):
+            if start in visited:
+                continue
+            visited.add(start)
+            stack = [(start, 0)]
+            while stack:
+                node, index = stack[-1]
+                if index >= len(forward[node]):
+                    order.append(node)
+                    stack.pop()
+                    continue
+                other = forward[node][index]
+                stack[-1] = (node, index + 1)
+                if other not in visited:
+                    visited.add(other)
+                    stack.append((other, 0))
+        groups = [-1] * len(self.nodes)
+        serial = 0
+        for start in reversed(order):
+            if groups[start] >= 0:
+                continue
+            groups[start] = serial
+            stack = [start]
+            while stack:
+                for other in incoming[stack.pop()]:
+                    if groups[other] < 0:
+                        groups[other] = serial
+                        stack.append(other)
+            serial += 1
+        self._movement_component_cache = (key, tuple(groups))
+        return self._movement_component_cache[1]
+
     route = path
 
     def nearest_node(self, position, *, candidates=None):
@@ -496,6 +547,125 @@ class ArenaScene:
         )
 
     first_hit = raycast
+
+    def validate_standing(self, position, face: int):
+        """Validate an explicitly chosen source NAV face and standing footprint.
+
+        Only vertical projection onto that exact triangle is allowed (<=0.2
+        source units); never snaps to a nearest node, another deck or a wall.
+        Ground and clearance use the declared CSG/NAV collision proxy, not BSP.
+        Invalid positions raise ValueError suitable for the API validation path.
+        """
+        if (
+            isinstance(face, bool)
+            or not isinstance(face, int)
+            or not 0 <= face < len(self.nodes)
+        ):
+            raise ValueError("请选择地图上的有效可行走面")
+        if (
+            not isinstance(position, (list, tuple))
+            or len(position) != 3
+            or any(
+                isinstance(x, bool) or not isinstance(x, (int, float)) for x in position
+            )
+        ):
+            raise ValueError("站位坐标必须是三个有限数值")
+        p = _vec(position)
+        triangle = self.raw["nav"]["triangles"][face]
+        a, b, c = (self.raw["nav"]["vertices"][k] for k in triangle)
+        normal = _cross(_sub(b, a), _sub(c, a))
+        norm = math.sqrt(_dot(normal, normal))
+        if norm <= 1e-10 or abs(normal[1]) / norm < 0.5:
+            raise ValueError("所选面过陡或没有有效面积，无法站立")
+        denominator = (b[2] - c[2]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[2] - c[2])
+        if abs(denominator) < 1e-10:
+            raise ValueError("所选面没有有效地面面积，无法站立")
+        u = (
+            (b[2] - c[2]) * (p[0] - c[0]) + (c[0] - b[0]) * (p[2] - c[2])
+        ) / denominator
+        v = (
+            (c[2] - a[2]) * (p[0] - c[0]) + (a[0] - c[0]) * (p[2] - c[2])
+        ) / denominator
+        w = 1 - u - v
+        if min(u, v, w) < -1e-5 or max(u, v, w) > 1 + 1e-5:
+            raise ValueError("所选位置不在指定可行走面内，请重新点击地面")
+        y = u * a[1] + v * b[1] + w * c[1]
+        if abs(p[1] - y) > 0.2:
+            raise ValueError("所选位置不在地面高度，不能站在空中或跨楼层吸附")
+        canonical = (p[0], y, p[2])
+
+        def cast(origin, direction, maxdist):
+            return self.collision.raycast(origin, direction, maxdist)
+
+        def blocked(origin, end):
+            delta = _sub(end, origin)
+            length = math.sqrt(_dot(delta, delta))
+            return (
+                length > 2e-4
+                and self.collision.raycast(
+                    origin, delta, length - 1e-4, min_distance=1e-4
+                )
+                is not None
+            )
+
+        radius = 0.22
+        for dx, dz in (
+            (0.0, 0.0),
+            (radius, 0.0),
+            (-radius, 0.0),
+            (0.0, radius),
+            (0.0, -radius),
+        ):
+            hit = cast(
+                (canonical[0] + dx, y + 0.25, canonical[2] + dz), (0.0, -1.0, 0.0), 0.7
+            )
+            if (
+                hit is None
+                or abs(hit.position[1] - y) > 0.35
+                or abs(hit.normal[1]) < 0.5
+            ):
+                raise ValueError("脚下支撑不足，请选择边缘以内的完整地面")
+            if blocked(
+                (canonical[0] + dx, y + 0.3, canonical[2] + dz),
+                (canonical[0] + dx, y + 1.8, canonical[2] + dz),
+            ):
+                raise ValueError("身体或头顶空间不足，请选择无遮挡位置")
+        for height in (0.5, 1.0, 1.65):
+            origin = (canonical[0], y + height, canonical[2])
+            for dx, dz in (
+                (radius, 0.0),
+                (-radius, 0.0),
+                (0.0, radius),
+                (0.0, -radius),
+            ):
+                if blocked(origin, (origin[0] + dx, origin[1], origin[2] + dz)):
+                    raise ValueError("所选站位与墙体相交，请离开墙边重新选择")
+        # Read-only reverse reachability for UI qualification; do not mutate
+        # cached disabled state or job search/raycast counters while selecting.
+        reachable = {face}
+        stack = [face]
+        while stack:
+            for edge in self.incoming[stack.pop()]:
+                if (
+                    edge.key not in self.disabled
+                    and math.isfinite(edge.time("enemy"))
+                    and edge.from_node not in reachable
+                ):
+                    reachable.add(edge.from_node)
+                    stack.append(edge.from_node)
+        candidates = [s for s in self.spawns if s.get("accepted")]
+        can_reach = sum(s["face"] in reachable for s in candidates)
+        return {
+            "face": face,
+            "position": list(canonical),
+            "enemyReachableSpawns": can_reach,
+            "candidateSpawns": len(candidates),
+            "enemyReachableSpawnRatio": (
+                can_reach / len(candidates) if candidates else 0.0
+            ),
+            "groundConnectivityQualification": "current ordinary-enemy directed graph; missing native offmesh/ladder source links remain unreachable; no player-parkour substitution",
+            "qualification": "explicit source NAV triangle, proxy footprint radius .22/body clearance1.8; vertical correction<=.2; no nearest-face relocation",
+        }
 
     def ground_support(self, position, *, max_drop=2.0, max_rise=0.5):
         """Nearest downward proxy support; not a native walkability assertion."""

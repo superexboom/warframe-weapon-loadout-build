@@ -50,3 +50,18 @@ def test_arena_world_uses_explicit_slots_and_ends_without_mutating_the_request(m
     assert result['stats']['seconds']<=2 and result['status'] in ('completed','time_limit')
     again=World(context).run()
     assert result['stats']['eventHash']==again['stats']['eventHash']
+
+    # The only visible target can lie beyond sixteen nearer occluded enemies.
+    # Movement sees it and holds position, so the shooting shortlist must too.
+    from types import SimpleNamespace as NS
+    world.live = [NS(id=i, pos=(float(i + 1), 0., 0.)) for i in range(17)]
+    shot = NS(physical_lanes=())
+    world.combat = NS(preview=lambda _: shot, estimate=lambda *args: 200.,
+                     targets={i: NS(protected=False, pools=(100.,)) for i in range(17)})
+    monkeypatch.setattr(world, 'geometry', lambda _: dict(range=100.))
+    monkeypatch.setattr(world, 'aimpoint', lambda actor: (actor.pos, False))
+    monkeypatch.setattr(world.scene, 'visible', lambda origin, point: point[0] == 17.)
+    monkeypatch.setattr(world, 'radial_specs', lambda _: [])
+    monkeypatch.setattr(world, 'recipients', lambda packet, origin, point, geometry, **kw:
+                        ([(world.live[-1], 0, False, 1., 17.)], point))
+    assert world.choose()['point'] == (17., 0., 0.)
