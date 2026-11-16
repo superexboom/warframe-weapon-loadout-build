@@ -148,6 +148,18 @@ def test_capped_stack_add_matches_python():
 
 def test_arena_spatial_bvh_nearest_all_hits_and_segment_bounds():
     from wfarsenal.arena_scene import TriangleBVH
+    from tools.import_arena_scene import _triangulate_nav_polygon, _ZeroAreaNavFace
+
+    # Source collinear face is isolated with original IDs; a bowtie whose
+    # Newell normal cancels is still a format error, never quarantined.
+    with pytest.raises(_ZeroAreaNavFace) as defect:
+        _triangulate_nav_polygon([(0., 0., 0.), (1., 0., 0.), (2., 0., 0.)],
+                                 [(0, 1), (1, 2), (2, 0)], 4953)
+    assert defect.value.source_face == 4953 and defect.value.ring == [0, 1, 2]
+    with pytest.raises(ValueError) as crossing:
+        _triangulate_nav_polygon([(0., 0., 0.), (2., 0., 2.), (0., 0., 2.), (2., 0., 0.)],
+                                 [(0, 1), (1, 2), (2, 3), (3, 0)], 4954)
+    assert not isinstance(crossing.value, _ZeroAreaNavFace)
     vertices = [(-2., 0., -2.), (2., 0., -2.), (0., 0., 2.),
                 (-2., 3., -2.), (2., 3., -2.), (0., 3., 2.)]
     reference = TriangleBVH(vertices, [(0, 1, 2), (3, 4, 5)], native=False)

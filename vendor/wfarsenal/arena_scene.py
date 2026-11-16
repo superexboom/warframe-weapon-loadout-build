@@ -572,6 +572,13 @@ def scene_catalog(root: Path | None = None):
     return json.loads((base / "data/arena/catalog.json").read_text(encoding="utf-8"))
 
 
+def mission_coverage(*, root: Path | None = None):
+    base = Path(root or ROOT)
+    return json.loads(
+        (base / "data/arena/mission-coverage.json").read_text(encoding="utf-8")
+    )
+
+
 def list_maps(*, root: Path | None = None):
     """Catalog metadata list, including an explicit default flag and stable IDs."""
     catalog = scene_catalog(root)

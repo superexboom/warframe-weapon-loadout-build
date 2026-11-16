@@ -11,7 +11,7 @@ let raw,result,playing=false,time=0,follow=false,loaded=false,last=performance.n
 const scene=new THREE.Scene(),viewer=$('viewer'),renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.localClippingEnabled=true;viewer.prepend(renderer.domElement);
 const camera=new THREE.PerspectiveCamera(43,1,.1,1500),controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.08;controls.minDistance=10;controls.maxDistance=600;
 scene.add(new THREE.HemisphereLight(0xcde5ff,0x4b5669,.9));let sun=new THREE.DirectionalLight(0xffffff,1.25);sun.position.set(60,150,90);scene.add(sun);
-let detailedGroup=null,visualInfo=null;const plane=new THREE.Plane(new THREE.Vector3(0,-1,0),20),mapGroup=new THREE.Group();scene.add(mapGroup);let grid=new THREE.GridHelper(230,23,0x35495a,0x23313f);grid.position.y=-21;grid.material.transparent=true;grid.material.opacity=.25;scene.add(grid);
+let detailedGroup=null,visualInfo=null,clipTouched=false,floorCut=false;const plane=new THREE.Plane(new THREE.Vector3(0,-1,0),20),mapGroup=new THREE.Group();scene.add(mapGroup);let grid=new THREE.GridHelper(230,23,0x35495a,0x23313f);grid.position.y=-21;grid.material.transparent=true;grid.material.opacity=.25;scene.add(grid);
 let player=new THREE.Mesh(new THREE.CapsuleGeometry(.55,1.1,4,8),new THREE.MeshBasicMaterial({color:0x38c6e9,depthTest:false,transparent:true}));player.renderOrder=8;scene.add(player);player.visible=false;
 let bodies=new THREE.InstancedMesh(new THREE.CapsuleGeometry(.44,.9,3,6),new THREE.MeshBasicMaterial({color:0xffffff,depthTest:false,transparent:true}),256);bodies.count=0;bodies.frustumCulled=false;bodies.renderOrder=7;scene.add(bodies);let drones=new THREE.InstancedMesh(new THREE.OctahedronGeometry(.7),new THREE.MeshBasicMaterial({color:0xefca60,depthTest:false,transparent:true}),256);drones.count=0;drones.frustumCulled=false;drones.renderOrder=8;scene.add(drones);
 const fieldGroup=new THREE.Group();scene.add(fieldGroup);const fieldMeshes=new Map();
@@ -20,7 +20,13 @@ function linePositions(object,positions){object.geometry.dispose();object.geomet
 let mapCenter=new THREE.Vector3(0,-7,0),mapExtent=180;function reset(){controls.target.copy(mapCenter);camera.position.copy(mapCenter).add(new THREE.Vector3(mapExtent*.72,mapExtent*.58,mapExtent*.75));controls.update();}reset();
 let lastPaint=-1;
 function theme(){const style=getComputedStyle(document.documentElement);scene.background=new THREE.Color(style.getPropertyValue('--void').trim()||'#090b10');lastPaint=-1;}theme();new MutationObserver(theme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
-$('reset').onclick=reset;$('top').onclick=()=>{camera.position.copy(mapCenter).add(new THREE.Vector3(0,mapExtent*1.35,.1));controls.target.copy(mapCenter);controls.update();};$('follow').onclick=()=>{follow=!follow;$('follow').textContent=follow?'停止跟随':'跟随战甲';};$('cut').oninput=()=>{plane.constant=Number($('cut').value);};$('detail').onclick=()=>{if(!detailedGroup)return;detailedGroup.visible=!detailedGroup.visible;mapGroup.visible=!detailedGroup.visible;$('detail').textContent=detailedGroup.visible?'导航代理':'精细地图';};
+$('reset').onclick=reset;$('top').onclick=()=>{camera.position.copy(mapCenter).add(new THREE.Vector3(0,mapExtent*1.35,.1));controls.target.copy(mapCenter);controls.update();};$('follow').onclick=()=>{follow=!follow;$('follow').textContent=follow?'停止跟随':'跟随战甲';};$('cut').oninput=()=>{clipTouched=true;floorCut=false;$('floor').textContent='当前层';plane.constant=Number($('cut').value);};$('detail').onclick=()=>{if(!detailedGroup)return;detailedGroup.visible=!detailedGroup.visible;mapGroup.visible=!detailedGroup.visible;$('detail').textContent=detailedGroup.visible?'导航代理':'精细地图';};
+$('floor').onclick=()=>{
+  if(!raw)return;
+  floorCut=!floorCut;clipTouched=floorCut;
+  $('cut').value=floorCut?Math.min(Number($('cut').max),player.position.y+3):$('cut').max;
+  plane.constant=Number($('cut').value);$('floor').textContent=floorCut?'完整外观':'当前层';
+};
 new ResizeObserver(()=>{let w=viewer.clientWidth,h=viewer.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}).observe(viewer);
 function upper(path,t){let l=0,r=path.length;while(l<r){let m=(l+r)>>1;if(path[m][0]<=t)l=m+1;else r=m;}return l;}
 function position(path,t){if(!path.length)return [0,0,0];let i=upper(path,t);if(!i)return path[0].slice(1);if(i>=path.length)return path.at(-1).slice(1);let a=path[i-1],b=path[i],k=(t-a[0])/Math.max(.00001,b[0]-a[0]);return [1,2,3].map(n=>a[n]+(b[n]-a[n])*k);}
@@ -36,7 +42,62 @@ function paintReplay(){if(!result||resultMap!==mapId||Math.abs(time-lastPaint)<.
  let shotPositions=[];for(let s of r.shots){if(s[0]>time)break;if(time-s[0]>.8)continue;shotPositions.push(...s.slice(1,7));}linePositions(rays,shotPositions);linePositions(killMarks,r.kills.filter(k=>k[0]<=time&&time-k[0]<8).flatMap(k=>[k[2],k[3]+.7,k[4]]));
  let air=[];for(let m of r.moves||[]){if(m.start>time||time-m.start>30||m.kind==='walk'||m.kind==='step')continue;for(let i=1;i<m.points.length;i++)air.push(...m.points[i-1],...m.points[i]);}linePositions(jumpTrail,air);
  paintFields(time);$('clock').textContent=format(time);$('timeline').value=time;let done=r.kills.filter(k=>k[0]<=time).length;$('viewMetrics').textContent='当前 '+(bi+di)+' 个目标 · '+(motion?({drop:'直接下落','jump-down':'跳跃下层','bullet-jump':'子弹跳'}[motion.kind]||'步行'):'射击/等待')+' · 累计 '+done+' 击杀';}
-async function loadVisual(){const token=loadToken, url=visualUrl, begin=performance.now();try{const data=await json(url);if(token!==loadToken)return;detailedGroup=new THREE.Group();scene.add(detailedGroup);const geometries=data.meshes.map(m=>{let g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(m.positions,3));g.setIndex(m.indices);g.computeVertexNormals();for(let group of m.groups)g.addGroup(group.start,group.count,group.materialId);return g;});const materials=data.materials.map(m=>new THREE.MeshStandardMaterial({color:m.color,side:THREE.DoubleSide,roughness:.85,metalness:.12,clippingPlanes:[plane]}));const groups=new Map();for(let item of data.instances){let key=item.meshId+':'+JSON.stringify(item.materialOverrides);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(item);}let rendered=0;for(let instances of groups.values()){let first=instances[0],source=data.meshes[first.meshId],base=geometries[first.meshId],geometry=base.clone();geometry.clearGroups();const mats=[];for(let i=0;i<source.groups.length;i++){let group=source.groups[i],id=first.materialOverrides?.[i]??group.materialId;mats.push(materials[id]||materials[group.materialId]);geometry.addGroup(group.start,group.count,i);}const mesh=new THREE.InstancedMesh(geometry,mats,instances.length);for(let [i,item]of instances.entries()){dummy.position.fromArray(item.position);dummy.quaternion.fromArray(item.quaternion);dummy.scale.setScalar(item.scale);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);}mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();detailedGroup.add(mesh);rendered+=source.indices.length/3*instances.length;}dummy.quaternion.identity();dummy.scale.setScalar(1);mapGroup.visible=false;visualInfo={meshes:data.meshes.length,instances:data.instances.length,triangles:rendered,loadMs:Math.round(performance.now()-begin)};$('detail').disabled=false;$('detail').textContent='导航代理';$('sceneMeta').textContent=data.instances.length.toLocaleString()+' 个真实实例 / '+Math.round(rendered/10000)+' 万面 · 加载 '+(visualInfo.loadMs/1000).toFixed(2)+'s';if(!jobId)$('status').textContent='地图就绪；点击开始才计算。';}catch(e){if(token!==loadToken)return;$('status').textContent='导航可用；精细地图加载失败：'+e.message;console.error(e);}}
+function disposeMapGroup(group){
+  if(!group)return;
+  const geometries=new Set(),materials=new Set();
+  group.traverse(object=>{
+    if(object.geometry)geometries.add(object.geometry);
+    for(const material of (Array.isArray(object.material)?object.material:[object.material]))if(material)materials.add(material);
+    if(object.isInstancedMesh)object.dispose();
+  });
+  for(const geometry of geometries)geometry.dispose();
+  for(const material of materials)material.dispose();
+  group.clear();
+}
+function extendClipBounds(bounds){
+  $('cut').min=Math.min(Number($('cut').min),Math.floor(bounds.min.y-2));
+  $('cut').max=Math.max(Number($('cut').max),Math.ceil(bounds.max.y+2));
+  // Initial view shows the entire actual visual asset; only an explicit user
+  // drag clips it. NAV bounds alone omit roofs and elevated structures.
+  if(!clipTouched){$('cut').value=$('cut').max;plane.constant=Number($('cut').value);}
+}
+async function loadVisual(){
+  const token=loadToken,url=visualUrl,begin=performance.now();
+  try{
+    const data=await json(url);if(token!==loadToken)return;
+    detailedGroup=new THREE.Group();scene.add(detailedGroup);
+    const geometries=data.meshes.map(mesh=>{
+      const geometry=new THREE.BufferGeometry();
+      geometry.setAttribute('position',new THREE.Float32BufferAttribute(mesh.positions,3));
+      geometry.setIndex(mesh.indices);geometry.computeVertexNormals();
+      mesh.groups.forEach((group,index)=>geometry.addGroup(group.start,group.count,index));
+      return geometry;
+    });
+    const materials=data.materials.map(material=>new THREE.MeshStandardMaterial({color:material.color,side:THREE.DoubleSide,roughness:.85,metalness:.12,clippingPlanes:[plane]}));
+    const groups=new Map();
+    for(const item of data.instances){const key=item.meshId+':'+JSON.stringify(item.materialOverrides);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(item);}
+    let rendered=0;const visualBounds=new THREE.Box3();
+    for(const instances of groups.values()){
+      const first=instances[0],source=data.meshes[first.meshId];
+      const mats=source.groups.map((group,index)=>materials[first.materialOverrides?.[index]??group.materialId]||materials[group.materialId]);
+      const mesh=new THREE.InstancedMesh(geometries[first.meshId],mats,instances.length);
+      for(const [index,item]of instances.entries()){
+        dummy.position.fromArray(item.position);dummy.quaternion.fromArray(item.quaternion);dummy.scale.setScalar(item.scale);dummy.updateMatrix();mesh.setMatrixAt(index,dummy.matrix);
+      }
+      mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.computeBoundingBox();
+      visualBounds.union(mesh.boundingBox);detailedGroup.add(mesh);rendered+=source.indices.length/3*instances.length;
+    }
+    dummy.quaternion.identity();dummy.scale.setScalar(1);
+    if(!visualBounds.isEmpty())extendClipBounds(visualBounds);
+    mapGroup.visible=false;
+    visualInfo={meshes:data.meshes.length,instances:data.instances.length,triangles:rendered,loadMs:Math.round(performance.now()-begin)};
+    $('detail').disabled=false;$('detail').textContent='导航代理';
+    const coverage=data.metadata?.visualCoverage;
+    $('sceneMeta').textContent=data.instances.length.toLocaleString()+' 个真实实例 / '+Math.round(rendered/10000)+' 万面 · 无纹理模型';
+    if(coverage){const omitted=coverage.missingMeshInstances+coverage.unsupportedRiggedMeshInstances;if(omitted>0)$('sceneMeta').textContent+=' · '+omitted+' 个来源实例未解析';}
+    if(!jobId)$('status').textContent='地图就绪；点击开始才计算。';
+  }catch(error){if(token!==loadToken)return;$('status').textContent='导航可用；地图外观加载失败：'+error.message;console.error(error);}
+}
 
 const json=async(url,body)=>{const r=await fetch(url,body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const value=await r.json();if(!r.ok){const message=value.message||value.error?.message||value.error||'请求失败';throw new Error(typeof message==='string'?message:JSON.stringify(message));}return value;};
 const option=(select,id,name)=>{const o=document.createElement('option');o.value=id;o.textContent=name;select.append(o);};
@@ -51,9 +112,72 @@ $('back').onclick=()=>host.dispatchEvent(new CustomEvent('arena-back',{bubbles:t
 $('play').onclick=()=>{if(!result||resultMap!==mapId)return;if(time>=result.stats.seconds)time=0;playing=!playing;$('play').textContent=playing?'暂停':'播放';};
 $('timeline').oninput=()=>{time=Number($('timeline').value);playing=false;$('play').textContent='播放';paintReplay();};
 $('export').onclick=()=>{if(!result)return;let url=URL.createObjectURL(new Blob([JSON.stringify({loadout:resultLoadout,result})],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='arena-replay-'+(result.stats.eventHash||Date.now())+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
-async function loadMap(){const token=++loadToken;mapId=$('map').value;lastPaint=-1;bodies.count=0;drones.count=0;$('play').disabled=!result||resultMap!==mapId;$('timeline').disabled=!result||resultMap!==mapId;const map=(catalog.maps||[]).find(m=>(m.id||m.mapId)===mapId)||{};const base='/api/arena/assets/'+encodeURIComponent(mapId)+'/';visualUrl=map.visualUrl||base+'visual-map.json';$('mapTitle').textContent=map.name||map.label||mapId;try{const data=await json(map.sceneUrl||base+'scene.json');if(token!==loadToken)return;raw=data;const bounds=new THREE.Box3();for(let p of raw.collision.vertices)bounds.expandByPoint(new THREE.Vector3(...p));bounds.getCenter(mapCenter);const size=bounds.getSize(new THREE.Vector3());mapExtent=Math.max(size.x,size.z,size.y,30);$('cut').min=Math.floor(bounds.min.y-2);$('cut').max=Math.ceil(bounds.max.y+2);$('cut').value=$('cut').max;plane.constant=Number($('cut').value);grid.position.y=bounds.min.y-1;reset();for(let g of [mapGroup,detailedGroup])if(g)g.traverse(o=>{o.geometry?.dispose();});mapGroup.clear();if(detailedGroup){scene.remove(detailedGroup);detailedGroup=null;}$('detail').disabled=true;let geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(raw.collision.vertices.flat(),3));geo.setIndex(raw.collision.triangles.flat());geo.computeVertexNormals();mapGroup.add(new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0x668b9c,side:THREE.DoubleSide,roughness:1,transparent:true,opacity:.8,clippingPlanes:[plane]})));mapGroup.visible=true;if(raw.start?.position){player.position.fromArray(raw.start.position);player.position.y+=1;player.visible=true;}loaded=true;$('sceneMeta').textContent=(raw.nav?.triangles?.length||0).toLocaleString()+' 导航面';loadVisual();}catch(e){$('status').textContent='地图显示加载失败：'+e.message;}}
+async function loadMap(){
+  const token=++loadToken;mapId=$('map').value;lastPaint=-1;clipTouched=false;floorCut=false;$('floor').textContent='当前层';bodies.count=0;drones.count=0;
+  for(const object of [trails,playerTrail,rays,killMarks,jumpTrail])linePositions(object,[]);
+  for(const mesh of fieldMeshes.values())mesh.visible=false;
+  $('play').disabled=!result||resultMap!==mapId;$('timeline').disabled=!result||resultMap!==mapId;
+  const map=catalog.maps.find(item=>(item.id||item.mapId)===mapId)||{},base='/api/arena/assets/'+encodeURIComponent(mapId)+'/';
+  visualUrl=map.visualUrl||base+'visual-map.json';showMapMissions(map);
+  $('sceneMeta').textContent='正在读取地图…';$('status').textContent='正在读取地图…';$('detail').disabled=true;
+  try{
+    const data=await json(map.sceneUrl||base+'scene.json');if(token!==loadToken)return;raw=data;
+    const bounds=new THREE.Box3();for(const point of raw.collision.vertices)bounds.expandByPoint(new THREE.Vector3(...point));
+    const walkBounds=new THREE.Box3();for(const point of raw.nav.nodePositions)walkBounds.expandByPoint(new THREE.Vector3(...point));
+    walkBounds.getCenter(mapCenter);const size=walkBounds.getSize(new THREE.Vector3());mapExtent=Math.max(size.x,size.z,size.y,30);
+    $('cut').min=Math.floor(bounds.min.y-2);$('cut').max=Math.ceil(bounds.max.y+2);$('cut').value=$('cut').max;plane.constant=Number($('cut').value);grid.position.y=bounds.min.y-1;reset();
+    disposeMapGroup(mapGroup);disposeMapGroup(detailedGroup);if(detailedGroup){scene.remove(detailedGroup);detailedGroup=null;}
+    const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(raw.collision.vertices.flat(),3));geometry.setIndex(raw.collision.triangles.flat());geometry.computeVertexNormals();
+    mapGroup.add(new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:0x668b9c,side:THREE.DoubleSide,roughness:1,transparent:true,opacity:.8,clippingPlanes:[plane]})));mapGroup.visible=true;
+    if(raw.start?.position){player.position.fromArray(raw.start.position);player.position.y+=1;player.visible=true;}
+    loaded=true;$('sceneMeta').textContent=(raw.nav?.triangles?.length||0).toLocaleString()+' 导航面';loadVisual();
+  }catch(error){if(token!==loadToken)return;$('status').textContent='地图显示加载失败：'+error.message;}
+}
+
 $('map').onchange=()=>{playing=false;loadMap();};
 for(let id of ['region','budget','wait','movement','enemies','seed','head','enemy','level','enemySpec','tier'])$(id).addEventListener('change',()=>{if(!jobId)$('status').textContent='配置已修改，点击开始才重新计算。';});
+function missionPlanet(mission){return mission.planetZh||mission.planet;}
+function missionNode(mission){return mission.nodeNameZh&&mission.nodeNameZh!==mission.nodeName?mission.nodeNameZh+' ('+mission.nodeName+')':mission.nodeName;}
+function missionType(mission){return ({'mirror-defense':'镜像防御','1999-defense':'1999 防御','archwing':'空战拦截'}[mission.variant]||mission.missionTypeZh||mission.missionType);}
+function mapOptionLabel(map){
+  const planets=[...new Set((map.missions||[]).map(missionPlanet))];
+  return (planets.length?planets.join(' / ')+' · ':'')+(map.nameZh||map.name||map.id);
+}
+function showMapMissions(map){
+  const missions=map.missions||[],planets=[...new Set(missions.map(missionPlanet))];
+  $('mapTitle').textContent=map.nameZh||map.name||map.id;
+  $('mapSummary').textContent=planets.length?planets.join(' / '):'节点对应关系待核对';
+  $('mapSubtitle').textContent=missions.map(m=>missionPlanet(m)+' · '+missionNode(m)+'（'+missionType(m)+'）').join('；');
+  const box=$('mapMissions');box.replaceChildren();
+  for(const mission of missions){
+    const card=document.createElement('div');card.className='arena-mission';
+    const node=document.createElement('b');node.textContent=missionNode(mission);
+    const detail=document.createElement('span');detail.textContent=missionPlanet(mission)+' · '+missionType(mission);
+    card.append(node,detail);
+    if(mission.arbitrationQualification?.status==='officially-added'){const badge=document.createElement('span');badge.className='arena-official-note';badge.textContent='官方曾确认加入仲裁';card.append(badge);}box.append(card);
+  }
+  const historical=missions.filter(m=>m.arbitrationQualification?.status==='officially-added');
+  $('mapQualification').textContent='这里列出关联该模板的星图节点；一个节点可能使用多个变体。'+(historical.length?'官方更新37已确认镜像防御加入仲裁；当前轮换名单尚未核实。':'当前仲裁轮换资格尚未核实。');
+}
+function showMapCoverage(){
+  const coverage=catalog.missionCoverage,box=$('mapCoverage');box.replaceChildren();
+  const intro=document.createElement('p');
+  $('mapCoverageSummary').textContent='已接入 '+catalog.maps.length+' / '+(coverage?.summary.candidateTiles||catalog.maps.length)+' 份候选模板 · 覆盖范围';
+  if(!coverage){intro.textContent='当前模板不是防御与拦截任务的完整地图集合。';box.append(intro);return;}
+  const summary=coverage.summary;
+  intro.textContent='已核对 '+summary.inScopeNodes+' 个地面节点（防御 '+summary.inScopeDefense+' / 拦截 '+summary.inScopeInterception+'），当前 '+summary.nodesWithImportedTile+' 个节点至少有一份模板接入。全清单另列 '+summary.excludedArchwing+' 个范围外空战节点。多个节点可以共享地图；镜像等特殊任务单独标注，不能据此判断仲裁轮换。';box.append(intro);
+  const wrap=document.createElement('div');wrap.className='arena-coverage-table';
+  const table=document.createElement('table'),head=document.createElement('thead'),heading=document.createElement('tr');
+  for(const label of ['星球 / 节点','任务','状态']){const th=document.createElement('th');th.textContent=label;heading.append(th);}head.append(heading);table.append(head);
+  const body=document.createElement('tbody');
+  for(const mission of coverage.nodes||[]){
+    const row=document.createElement('tr');
+    for(const value of [missionPlanet(mission)+' · '+missionNode(mission),missionType(mission),({available:'模板已接入',partial:'部分已接入',missing:'未接入',excluded:'范围外'}[mission.coverageStatus]||mission.coverageLabel||'待核对')]){const td=document.createElement('td');td.textContent=value;row.append(td);}
+    if(mission.missingMapReasons?.length){const detail=document.createElement('small');detail.className='arena-map-missing';detail.textContent=mission.missingMapReasons.map(item=>item.reason).join('；');row.lastChild.append(detail);}
+    body.append(row);
+  }
+  table.append(body);wrap.append(table);box.append(wrap);
+}
 function enemyLabel(enemy){return enemy.nameZh||enemy.name||enemy.nameEn||enemy.path||enemy.id;}
 function filterEnemies(){
   const query=$('enemySearch').value.trim().toLocaleLowerCase();
@@ -110,7 +234,7 @@ async function loadCatalog(){
     catalog=await json('/api/arena/catalog');
     for(let key of ['maps','enemies','enemySpecs'])catalog[key]=Array.isArray(catalog[key])?catalog[key]:Object.values(catalog[key]||{});
     enemyIndex=new Map(catalog.enemies.map(e=>[e.path||e.id,e]));
-    $('map').replaceChildren();for(let m of catalog.maps)option($('map'),m.id||m.mapId,m.nameZh||m.name||m.label||m.id);
+    $('map').replaceChildren();for(let m of catalog.maps)option($('map'),m.id||m.mapId,mapOptionLabel(m));showMapCoverage();
     $('enemySpec').replaceChildren();option($('enemySpec'),'single','单一敌人 · 当前选择');
     for(let spec of catalog.enemySpecs)option($('enemySpec'),spec.id,spec.nameZh||spec.name||spec.id);
     applyCatalogDefaults();coverageText(catalog.coverage||catalog.modelCoverage);diagnostics(catalog.unsupported||catalog.diagnostics);busy(false);loadMap();

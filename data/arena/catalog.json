@@ -47,10 +47,10 @@
         },
         "visual-map": {
           "file": "corpus-ship-defense.visual-map.json.gz",
-          "sha256": "85749ba567e2d7b16bff2164a1d30c22e2e79c3d526f4f51c759874b26c30ef7",
-          "jsonSha256": "ad0cd65c8bc31bda3643d40f2c4d98cededed4b6ecfa4c14249d77aea7853c68",
-          "compressedBytes": 4089181,
-          "jsonBytes": 16564143
+          "sha256": "60544c92bbdb64e4acb14a0d72e5f6fb8a6d1d3031ae0ccc65e325e8eb7457e1",
+          "jsonSha256": "0122710dd34b92e3cfaba44e35f3629df447f42719e46dad01db5cc9286e816b",
+          "compressedBytes": 4092759,
+          "jsonBytes": 16454282
         },
         "visual-map-collision-candidates": {
           "file": "corpus-ship-defense.visual-map-collision-candidates.json.gz",
@@ -128,7 +128,249 @@
       "nameZh": "Corpus飞船防御模板",
       "architectureFaction": "Corpus",
       "templateLabelZh": "飞船防御／拦截共享模板",
-      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "missions": [
+        {
+          "nodeId": "SolNode23",
+          "nodeName": "Cytherean",
+          "nodeNameZh": "Cytherean",
+          "planet": "Venus",
+          "planetZh": "金星",
+          "systemIndex": 1,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 6,
+          "maxEnemyLevel": 8,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "corpus-ship-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/CorpusShipRemastered/ObjDefense01"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 32690,
+            "procOffset": 33053,
+            "localizationTag": "/Lotus/Language/Locations/Cytherean",
+            "procSha256": "c097cd67cdac1c30ee0fedd22676437267e9f9540d45d8b97f2097675d7c8170",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "ClanNode0",
+          "nodeName": "Romula",
+          "nodeNameZh": "Romula",
+          "planet": "Venus",
+          "planetZh": "金星",
+          "systemIndex": 1,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 8,
+          "maxEnemyLevel": 18,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "corpus-ship-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/CorpusShipRemastered/ObjDefense01"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 45714,
+            "procOffset": 46075,
+            "localizationTag": "/Lotus/Language/Locations/Romula",
+            "procSha256": "046a3889beadee7b832a1a39c90bba8bfb6c7339598cb64a457d2cd30df1bdf3",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode17",
+          "nodeName": "Proteus",
+          "nodeNameZh": "Proteus",
+          "planet": "Neptune",
+          "planetZh": "海王星",
+          "systemIndex": 7,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 27,
+          "maxEnemyLevel": 32,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "corpus-ship-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/CorpusShipRemastered/ObjDefense01"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 257518,
+            "procOffset": 257866,
+            "localizationTag": "/Lotus/Language/Locations/Proteus",
+            "procSha256": "046a3889beadee7b832a1a39c90bba8bfb6c7339598cb64a457d2cd30df1bdf3",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode172",
+          "nodeName": "Xini",
+          "nodeNameZh": "Xini",
+          "planet": "Eris",
+          "planetZh": "阋神星",
+          "systemIndex": 10,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 30,
+          "maxEnemyLevel": 40,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "corpus-ship-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/CorpusShipRemastered/ObjDefense01"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 384556,
+            "procOffset": 384911,
+            "localizationTag": "/Lotus/Language/Locations/Xini",
+            "procSha256": "c097cd67cdac1c30ee0fedd22676437267e9f9540d45d8b97f2097675d7c8170",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SettlementNode11",
+          "nodeName": "Gulliver",
+          "nodeNameZh": "Gulliver",
+          "planet": "Phobos",
+          "planetZh": "火卫一",
+          "systemIndex": 15,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 10,
+          "maxEnemyLevel": 15,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusShipDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "corpus-ship-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/CorpusShipRemastered/ObjDefense01"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 495739,
+            "procOffset": 496112,
+            "localizationTag": "/Lotus/Language/Locations/Gulliver",
+            "procSha256": "046a3889beadee7b832a1a39c90bba8bfb6c7339598cb64a457d2cd30df1bdf3",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
     },
     "grineer-galleon-defense": {
       "id": "grineer-galleon-defense",
@@ -175,10 +417,10 @@
         },
         "visual-map": {
           "file": "grineer-galleon-defense.visual-map.json.gz",
-          "sha256": "06d1dcf76eaa93f7b1defc24978f0beafafbbca45601bff4b2a25ef1b4148dde",
-          "jsonSha256": "ad33c23fd9dd5d7c8c0737c98bee5018f102c7de8931c0464d84714bd9c03c8f",
-          "compressedBytes": 3864837,
-          "jsonBytes": 22358987
+          "sha256": "b083e01b8fcd800e5561850cd4662a18dfd58def018c80e14bc437eadc617b1c",
+          "jsonSha256": "044991446cb6733dbd43bd8cb0fcc881c78f1e55ad018ddb54d36e1cfcdb2e9a",
+          "compressedBytes": 5786336,
+          "jsonBytes": 29312299
         },
         "visual-map-collision-candidates": {
           "file": "grineer-galleon-defense.visual-map-collision-candidates.json.gz",
@@ -227,7 +469,153 @@
       "nameZh": "Grineer战舰防御模板",
       "architectureFaction": "Grineer",
       "templateLabelZh": "战舰防御／拦截共享模板",
-      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "missions": [
+        {
+          "nodeId": "SolNode224",
+          "nodeName": "Odin",
+          "nodeNameZh": "奥丁平原",
+          "planet": "Mercury",
+          "planetZh": "水星",
+          "systemIndex": 0,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 6,
+          "maxEnemyLevel": 11,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerGalleonInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-galleon-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerGalleon/GrnDefenceTwo"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 14064,
+            "procOffset": 14419,
+            "localizationTag": "/Lotus/Language/Locations/Odin",
+            "procSha256": "507bd535147cd18baf047606304cc5601a2ee281e23954b8e1d24cb038df9b9f",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode42",
+          "nodeName": "Helene",
+          "nodeNameZh": "Helene",
+          "planet": "Saturn",
+          "planetZh": "土星",
+          "systemIndex": 5,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 21,
+          "maxEnemyLevel": 26,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerGalleonDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-galleon-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerGalleon/GrnDefenceTwo"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 161226,
+            "procOffset": 161575,
+            "localizationTag": "/Lotus/Language/Locations/Helene",
+            "procSha256": "b26cafad86e046cf8edc2f01389aea99f7a0e75fbf7169638e33df2f215a3468",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode195",
+          "nodeName": "Hydron",
+          "nodeNameZh": "Hydron",
+          "planet": "Sedna",
+          "planetZh": "赛德娜",
+          "systemIndex": 11,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 30,
+          "maxEnemyLevel": 40,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerGalleonDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-galleon-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerGalleon/GrnDefenceTwo"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 417380,
+            "procOffset": 417729,
+            "localizationTag": "/Lotus/Language/Locations/Hydron",
+            "procSha256": "b26cafad86e046cf8edc2f01389aea99f7a0e75fbf7169638e33df2f215a3468",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
     },
     "corpus-outpost-defense-two": {
       "id": "corpus-outpost-defense-two",
@@ -274,10 +662,10 @@
         },
         "visual-map": {
           "file": "corpus-outpost-defense-two.visual-map.json.gz",
-          "sha256": "657a5f40d211727086986383662d6d0a0a212856b22d2b43cb39486bd96c3f63",
-          "jsonSha256": "f14e4a8cfe6afce61f5e549316901e3a885b10a97eb78e7c8d8e4af32f28f719",
-          "compressedBytes": 1057870,
-          "jsonBytes": 6742291
+          "sha256": "4c3ee5734924401e5348ad467f53cc50e80c517cd735a830fcaae25920cc13f7",
+          "jsonSha256": "e6c977340feb9e2675d19444ca9e60f689bede21da8e254d98b378a8f755f04f",
+          "compressedBytes": 2131777,
+          "jsonBytes": 10692727
         },
         "visual-map-collision-candidates": {
           "file": "corpus-outpost-defense-two.visual-map-collision-candidates.json.gz",
@@ -316,7 +704,233 @@
       "nameZh": "Corpus前哨站防御模板二",
       "architectureFaction": "Corpus",
       "templateLabelZh": "前哨站防御变体二",
-      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "missions": [
+        {
+          "nodeId": "SolNode22",
+          "nodeName": "Tessera",
+          "nodeNameZh": "Tessera",
+          "planet": "Venus",
+          "planetZh": "金星",
+          "systemIndex": 1,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 3,
+          "maxEnemyLevel": 7,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "partial",
+          "coverageStatus": "partial",
+          "coverageLabel": "部分候选tile已接入",
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseOne",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseThree",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseTwo"
+          ],
+          "missingTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseThree"
+          ],
+          "missingMapReasons": [
+            {
+              "tile": "/Lotus/Levels/Outpost/CrpOutpostDefenseThree",
+              "reason": "来源缺少完整0.nav_H/0.nav_B，无法建立可验证原生路线；未用平面或邻近点伪造连接。"
+            }
+          ],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 43435,
+            "procOffset": 43739,
+            "localizationTag": "/Lotus/Language/Locations/Tessera",
+            "procSha256": "0beb0795aa57e9f30054b0d9996b454f2217ccb4d63fa59f72093077590161f4",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode72",
+          "nodeName": "Outer Terminus",
+          "nodeNameZh": "Outer Terminus",
+          "planet": "Pluto",
+          "planetZh": "冥王星",
+          "systemIndex": 8,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 30,
+          "maxEnemyLevel": 40,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "partial",
+          "coverageStatus": "partial",
+          "coverageLabel": "部分候选tile已接入",
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseOne",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseThree",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseTwo"
+          ],
+          "missingTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseThree"
+          ],
+          "missingMapReasons": [
+            {
+              "tile": "/Lotus/Levels/Outpost/CrpOutpostDefenseThree",
+              "reason": "来源缺少完整0.nav_H/0.nav_B，无法建立可验证原生路线；未用平面或邻近点伪造连接。"
+            }
+          ],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 291349,
+            "procOffset": 291665,
+            "localizationTag": "/Lotus/Language/Locations/OuterTerminus",
+            "procSha256": "0beb0795aa57e9f30054b0d9996b454f2217ccb4d63fa59f72093077590161f4",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode43",
+          "nodeName": "Cerberus",
+          "nodeNameZh": "Cerberus",
+          "planet": "Pluto",
+          "planetZh": "冥王星",
+          "systemIndex": 8,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 30,
+          "maxEnemyLevel": 40,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseOne",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseTwo"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 303778,
+            "procOffset": 304094,
+            "localizationTag": "/Lotus/Language/Locations/Cerberus",
+            "procSha256": "4817411061d66e000484598541ddf5926a6dcc98a09e24512c340839df37ee3b",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "ClanNode24",
+          "nodeName": "Sechura",
+          "nodeNameZh": "Sechura",
+          "planet": "Pluto",
+          "planetZh": "冥王星",
+          "systemIndex": 8,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 35,
+          "maxEnemyLevel": 45,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "partial",
+          "coverageStatus": "partial",
+          "coverageLabel": "部分候选tile已接入",
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseOne",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseThree",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseTwo"
+          ],
+          "missingTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseThree"
+          ],
+          "missingMapReasons": [
+            {
+              "tile": "/Lotus/Levels/Outpost/CrpOutpostDefenseThree",
+              "reason": "来源缺少完整0.nav_H/0.nav_B，无法建立可验证原生路线；未用平面或邻近点伪造连接。"
+            }
+          ],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 306220,
+            "procOffset": 306539,
+            "localizationTag": "/Lotus/Language/Locations/Sechura",
+            "procSha256": "0beb0795aa57e9f30054b0d9996b454f2217ccb4d63fa59f72093077590161f4",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
     },
     "grineer-shipyards-defense": {
       "id": "grineer-shipyards-defense",
@@ -363,10 +977,10 @@
         },
         "visual-map": {
           "file": "grineer-shipyards-defense.visual-map.json.gz",
-          "sha256": "d0c071312b2f6875d10e26187e6e94df09b5c0d040ffa8a1d903e175286ea54d",
-          "jsonSha256": "611bdf11bbb96170fef435ab8df256154529fdcdb38b22b4abc76ca0d8de7ea0",
-          "compressedBytes": 3119483,
-          "jsonBytes": 14592085
+          "sha256": "9f8c6d401e4676163abdc60f251c763eaf202e26b737c29d5c64605d5487d89b",
+          "jsonSha256": "1d2bca5091aaa16c2150c0009c7b06bf95c9fdcccdb99b4ca40a673999627643",
+          "compressedBytes": 5284295,
+          "jsonBytes": 22004758
         },
         "visual-map-collision-candidates": {
           "file": "grineer-shipyards-defense.visual-map-collision-candidates.json.gz",
@@ -405,7 +1019,155 @@
       "nameZh": "Grineer船坞防御模板",
       "architectureFaction": "Grineer",
       "templateLabelZh": "船坞防御模板",
-      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "missions": [
+        {
+          "nodeId": "SolNode149",
+          "nodeName": "Casta",
+          "nodeNameZh": "Casta",
+          "planet": "Ceres",
+          "planetZh": "谷神星",
+          "systemIndex": 9,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 12,
+          "maxEnemyLevel": 17,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-shipyards-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerShipyards/ShipyardsDefence"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 338374,
+            "procOffset": 338676,
+            "localizationTag": "/Lotus/Language/Locations/Casta",
+            "procSha256": "2aeb41b02c3f285804b4bccc109b5a5c1a5b1490ebaa0c73db4abb57e5c0dbbc",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode147",
+          "nodeName": "Cinxia",
+          "nodeNameZh": "Cinxia",
+          "planet": "Ceres",
+          "planetZh": "谷神星",
+          "systemIndex": 9,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 12,
+          "maxEnemyLevel": 17,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-shipyards-defense",
+            "grineer-shipyards-interception"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerShipyards/ShipyardsDefence",
+            "/Lotus/Levels/GrineerShipyards/ShipyardsInterception"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 340628,
+            "procOffset": 340942,
+            "localizationTag": "/Lotus/Language/Locations/Cinxia",
+            "procSha256": "33605d985d593288c823516723e116accbdfc0524c5c6a26de951fcad20c52d7",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "ClanNode22",
+          "nodeName": "Seimeni",
+          "nodeNameZh": "Seimeni",
+          "planet": "Ceres",
+          "planetZh": "谷神星",
+          "systemIndex": 9,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 15,
+          "maxEnemyLevel": 25,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-shipyards-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerShipyards/ShipyardsDefence"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 347057,
+            "procOffset": 347376,
+            "localizationTag": "/Lotus/Language/Locations/Seimeni",
+            "procSha256": "2aeb41b02c3f285804b4bccc109b5a5c1a5b1490ebaa0c73db4abb57e5c0dbbc",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
     },
     "corpus-gas-city-defense": {
       "id": "corpus-gas-city-defense",
@@ -452,10 +1214,10 @@
         },
         "visual-map": {
           "file": "corpus-gas-city-defense.visual-map.json.gz",
-          "sha256": "9b206412b5c4806b2487a4e00e85ed5c6d2a0e3ec20b7e5848180b97d082be57",
-          "jsonSha256": "66c67fb440bd9155aba14229fa5d8a1c663a5cb2ad56c84ef2fe9679f66649c1",
-          "compressedBytes": 423619,
-          "jsonBytes": 2813494
+          "sha256": "5cb0c87d207bd573ac7fa959e1a378cd3c91e934872e81413af1fbf1f09236b9",
+          "jsonSha256": "f591bc767eb24b48876bd45c7526f4aabcc611307c0c9b35ed24965aa1ead81f",
+          "compressedBytes": 3715813,
+          "jsonBytes": 16086965
         },
         "visual-map-collision-candidates": {
           "file": "corpus-gas-city-defense.visual-map-collision-candidates.json.gz",
@@ -504,7 +1266,153 @@
       "nameZh": "Corpus燃气城防御模板",
       "architectureFaction": "Corpus",
       "templateLabelZh": "燃气城防御模板",
-      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "missions": [
+        {
+          "nodeId": "SolNode125",
+          "nodeName": "Io",
+          "nodeNameZh": "Io",
+          "planet": "Jupiter",
+          "planetZh": "木星",
+          "systemIndex": 4,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 15,
+          "maxEnemyLevel": 20,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusGasCityDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "corpus-gas-city-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/CorpusGasCityRemaster/GasDefense"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 136274,
+            "procOffset": 136572,
+            "localizationTag": "/Lotus/Language/Locations/Io",
+            "procSha256": "ae0d77338072c719737b5f3d6b6aa532cecbac726d3b38267dab66369fae087e",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode25",
+          "nodeName": "Callisto",
+          "nodeNameZh": "Callisto",
+          "planet": "Jupiter",
+          "planetZh": "木星",
+          "systemIndex": 4,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 15,
+          "maxEnemyLevel": 20,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusGasCityInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "corpus-gas-city-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/CorpusGasCityRemaster/GasDefense"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 141174,
+            "procOffset": 141492,
+            "localizationTag": "/Lotus/Language/Locations/Callisto",
+            "procSha256": "4b489d94e3d7744feb19ff40e5d14992f01a74b7e3c95dea557c6fa6e7691bf7",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "ClanNode4",
+          "nodeName": "Sinai",
+          "nodeNameZh": "Sinai",
+          "planet": "Jupiter",
+          "planetZh": "木星",
+          "systemIndex": 4,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 20,
+          "maxEnemyLevel": 30,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusGasCityDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "corpus-gas-city-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/CorpusGasCityRemaster/GasDefense"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 147746,
+            "procOffset": 148063,
+            "localizationTag": "/Lotus/Language/Locations/Sinai",
+            "procSha256": "ae0d77338072c719737b5f3d6b6aa532cecbac726d3b38267dab66369fae087e",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
     },
     "grineer-ocean-defense-02": {
       "id": "grineer-ocean-defense-02",
@@ -551,10 +1459,10 @@
         },
         "visual-map": {
           "file": "grineer-ocean-defense-02.visual-map.json.gz",
-          "sha256": "1538f8e323a7bf82ec775bdd519f586146b9ca268c58f9b9f0683a6a1866b7ef",
-          "jsonSha256": "52a13a952da1e7ab52fbc4bea4f280391c22dbef62097b5d17ad333cdc3c113d",
-          "compressedBytes": 225640,
-          "jsonBytes": 1235509
+          "sha256": "83afcf9c22a16159bab0c7acd1e52abe98054a9823328febd23ae9d6fa2edac1",
+          "jsonSha256": "57d8a58b99c6f6b8a20391fbdea431cc222da2a01754cd0ee958723156bceb7b",
+          "compressedBytes": 2735032,
+          "jsonBytes": 10108912
         },
         "visual-map-collision-candidates": {
           "file": "grineer-ocean-defense-02.visual-map-collision-candidates.json.gz",
@@ -593,7 +1501,109 @@
       "nameZh": "Grineer海底实验室防御模板二",
       "architectureFaction": "Grineer",
       "templateLabelZh": "海底实验室防御变体二",
-      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "missions": [
+        {
+          "nodeId": "SolNode64",
+          "nodeName": "Umbriel",
+          "nodeNameZh": "Umbriel",
+          "planet": "Uranus",
+          "planetZh": "天王星",
+          "systemIndex": 6,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 24,
+          "maxEnemyLevel": 29,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-ocean-defense-02",
+            "grineer-ocean-defense-03"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense02",
+            "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense03"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 214751,
+            "procOffset": 215067,
+            "localizationTag": "/Lotus/Language/Locations/Umbriel",
+            "procSha256": "be0794c9a5eaa008c26724d1b083f1d74e94340cdf0fd9a1493195ebad859ca8",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode122",
+          "nodeName": "Stephano",
+          "nodeNameZh": "Stephano",
+          "planet": "Uranus",
+          "planetZh": "天王星",
+          "systemIndex": 6,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 24,
+          "maxEnemyLevel": 29,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-ocean-defense-02",
+            "grineer-ocean-defense-03"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense02",
+            "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense03"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 240705,
+            "procOffset": 241013,
+            "localizationTag": "/Lotus/Language/Locations/Stephano",
+            "procSha256": "be0794c9a5eaa008c26724d1b083f1d74e94340cdf0fd9a1493195ebad859ca8",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
     },
     "grineer-ocean-defense-03": {
       "id": "grineer-ocean-defense-03",
@@ -640,10 +1650,10 @@
         },
         "visual-map": {
           "file": "grineer-ocean-defense-03.visual-map.json.gz",
-          "sha256": "af692352646872f8f9678c07032d3852ef63721f3e16144882d7d5a3b043e1a5",
-          "jsonSha256": "91114f6bbade6f549b678832e1290683cdbf47d149853a27e3a86652d82a0867",
-          "compressedBytes": 398377,
-          "jsonBytes": 1851297
+          "sha256": "4c642dfba3e5cd293dd6aa82f19ea1915782e58d8c135b8ea61f8017004ef00d",
+          "jsonSha256": "c5bf746086c6a520e4284e3b4f33cd5909ce7e91485be014478801736d8e7fca",
+          "compressedBytes": 4625528,
+          "jsonBytes": 16325188
         },
         "visual-map-collision-candidates": {
           "file": "grineer-ocean-defense-03.visual-map-collision-candidates.json.gz",
@@ -682,7 +1692,109 @@
       "nameZh": "Grineer海底实验室防御模板三",
       "architectureFaction": "Grineer",
       "templateLabelZh": "海底实验室防御变体三",
-      "factionQualification": "architecture faction only; mission enemy faction is selected independently"
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "missions": [
+        {
+          "nodeId": "SolNode64",
+          "nodeName": "Umbriel",
+          "nodeNameZh": "Umbriel",
+          "planet": "Uranus",
+          "planetZh": "天王星",
+          "systemIndex": 6,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 24,
+          "maxEnemyLevel": 29,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-ocean-defense-02",
+            "grineer-ocean-defense-03"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense02",
+            "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense03"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 214751,
+            "procOffset": 215067,
+            "localizationTag": "/Lotus/Language/Locations/Umbriel",
+            "procSha256": "be0794c9a5eaa008c26724d1b083f1d74e94340cdf0fd9a1493195ebad859ca8",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode122",
+          "nodeName": "Stephano",
+          "nodeNameZh": "Stephano",
+          "planet": "Uranus",
+          "planetZh": "天王星",
+          "systemIndex": 6,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 24,
+          "maxEnemyLevel": 29,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerOceanDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-ocean-defense-02",
+            "grineer-ocean-defense-03"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense02",
+            "/Lotus/Levels/GrineerOceanRelight/GrineerOceanDefense03"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 240705,
+            "procOffset": 241013,
+            "localizationTag": "/Lotus/Language/Locations/Stephano",
+            "procSha256": "be0794c9a5eaa008c26724d1b083f1d74e94340cdf0fd9a1493195ebad859ca8",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
     },
     "corpus-outpost-defense-one": {
       "id": "corpus-outpost-defense-one",
@@ -729,10 +1841,10 @@
         },
         "visual-map": {
           "file": "corpus-outpost-defense-one.visual-map.json.gz",
-          "sha256": "bca5348c231a258c853bad94d19b9d4e8d92ca4d1d6e31d1c1d0ecc1a3ebdee7",
-          "jsonSha256": "eee4bbe9f3845bcd219b13ee0b57b1534ecdd045c850878b30c1f8eb8f037d28",
-          "compressedBytes": 286494,
-          "jsonBytes": 1656115
+          "sha256": "4e02298bc9769fa54b7241f4e91043014c2d9a5a7ffbe83181ce0a612d7fad3c",
+          "jsonSha256": "9da336cafdf626239918a6a5275e2cb31276a177cc12c25a18a40af01b00bfe6",
+          "compressedBytes": 2333104,
+          "jsonBytes": 8316660
         },
         "visual-map-collision-candidates": {
           "file": "corpus-outpost-defense-one.visual-map-collision-candidates.json.gz",
@@ -766,7 +1878,3189 @@
           ],
           "basis": "Contiguous ordered strings in current OriginSolarMapRedux_H, not full binary schema decode"
         }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode22",
+          "nodeName": "Tessera",
+          "nodeNameZh": "Tessera",
+          "planet": "Venus",
+          "planetZh": "金星",
+          "systemIndex": 1,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 3,
+          "maxEnemyLevel": 7,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "partial",
+          "coverageStatus": "partial",
+          "coverageLabel": "部分候选tile已接入",
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseOne",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseThree",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseTwo"
+          ],
+          "missingTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseThree"
+          ],
+          "missingMapReasons": [
+            {
+              "tile": "/Lotus/Levels/Outpost/CrpOutpostDefenseThree",
+              "reason": "来源缺少完整0.nav_H/0.nav_B，无法建立可验证原生路线；未用平面或邻近点伪造连接。"
+            }
+          ],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 43435,
+            "procOffset": 43739,
+            "localizationTag": "/Lotus/Language/Locations/Tessera",
+            "procSha256": "0beb0795aa57e9f30054b0d9996b454f2217ccb4d63fa59f72093077590161f4",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode72",
+          "nodeName": "Outer Terminus",
+          "nodeNameZh": "Outer Terminus",
+          "planet": "Pluto",
+          "planetZh": "冥王星",
+          "systemIndex": 8,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 30,
+          "maxEnemyLevel": 40,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "partial",
+          "coverageStatus": "partial",
+          "coverageLabel": "部分候选tile已接入",
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseOne",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseThree",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseTwo"
+          ],
+          "missingTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseThree"
+          ],
+          "missingMapReasons": [
+            {
+              "tile": "/Lotus/Levels/Outpost/CrpOutpostDefenseThree",
+              "reason": "来源缺少完整0.nav_H/0.nav_B，无法建立可验证原生路线；未用平面或邻近点伪造连接。"
+            }
+          ],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 291349,
+            "procOffset": 291665,
+            "localizationTag": "/Lotus/Language/Locations/OuterTerminus",
+            "procSha256": "0beb0795aa57e9f30054b0d9996b454f2217ccb4d63fa59f72093077590161f4",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode43",
+          "nodeName": "Cerberus",
+          "nodeNameZh": "Cerberus",
+          "planet": "Pluto",
+          "planetZh": "冥王星",
+          "systemIndex": 8,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 30,
+          "maxEnemyLevel": 40,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseOne",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseTwo"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 303778,
+            "procOffset": 304094,
+            "localizationTag": "/Lotus/Language/Locations/Cerberus",
+            "procSha256": "4817411061d66e000484598541ddf5926a6dcc98a09e24512c340839df37ee3b",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "ClanNode24",
+          "nodeName": "Sechura",
+          "nodeNameZh": "Sechura",
+          "planet": "Pluto",
+          "planetZh": "冥王星",
+          "systemIndex": 8,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 35,
+          "maxEnemyLevel": 45,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "partial",
+          "coverageStatus": "partial",
+          "coverageLabel": "部分候选tile已接入",
+          "mapIds": [
+            "corpus-outpost-defense-two",
+            "corpus-outpost-defense-one"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseOne",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseThree",
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseTwo"
+          ],
+          "missingTiles": [
+            "/Lotus/Levels/Outpost/CrpOutpostDefenseThree"
+          ],
+          "missingMapReasons": [
+            {
+              "tile": "/Lotus/Levels/Outpost/CrpOutpostDefenseThree",
+              "reason": "来源缺少完整0.nav_H/0.nav_B，无法建立可验证原生路线；未用平面或邻近点伪造连接。"
+            }
+          ],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 306220,
+            "procOffset": 306539,
+            "localizationTag": "/Lotus/Language/Locations/Sechura",
+            "procSha256": "0beb0795aa57e9f30054b0d9996b454f2217ccb4d63fa59f72093077590161f4",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
       ]
+    },
+    "grineer-asteroid-defense": {
+      "id": "grineer-asteroid-defense",
+      "name": "Grineer小行星防御模板",
+      "sourceTile": "/Lotus/Levels/GrineerAsteroidRelight/GrnDefenseOne",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "ca7c6166978b0adcdf28bc573e130f078afd0a417c959b9382444df54fbd9bb6",
+          "bytes": 761700
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "9380ba585453f76fc45336bb3cc53efbdcba9db88f0661b90eb6806e0db16b9b",
+          "bytes": 180664
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "d21c4c654d2939b3f79a1be55a7cb192a9673b71ba5b4051c9bf03bd1ba987f6",
+          "bytes": 249911
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "grineer-asteroid-defense.scene.json.gz",
+          "sha256": "29aa1540a17865478fdb0b09c58aa918afcf0039b57eadcbe4549f53572a1b7a",
+          "jsonSha256": "ca7c6166978b0adcdf28bc573e130f078afd0a417c959b9382444df54fbd9bb6",
+          "compressedBytes": 119730,
+          "jsonBytes": 761700
+        },
+        "navigation": {
+          "file": "grineer-asteroid-defense.navigation.json.gz",
+          "sha256": "a0f95587925da1db3ecfe38051048c010a1f2e703c968a795355dc12861da744",
+          "jsonSha256": "9380ba585453f76fc45336bb3cc53efbdcba9db88f0661b90eb6806e0db16b9b",
+          "compressedBytes": 35632,
+          "jsonBytes": 180664
+        },
+        "visual-map": {
+          "file": "grineer-asteroid-defense.visual-map.json.gz",
+          "sha256": "8b2ab8df730f8c3f9443c3abc319a73f0eed388c136b2eeb404dc54a34b8ea1a",
+          "jsonSha256": "efcdfa227d71a16a0c8a5107ddf6b9f5b9231e40aaafc871bbc22ab1aaeb9b5b",
+          "compressedBytes": 1090079,
+          "jsonBytes": 3473868
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-asteroid-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Standard ground defense/interception source candidate; server Arbitration eligibility unverified"
+      ],
+      "nameZh": "Grineer小行星防御模板",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "GrnDefenseOne",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode130",
+          "nodeName": "Lares",
+          "nodeNameZh": "神守基地",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerAsteroidDefense"
+        },
+        {
+          "nodeId": "SolNode18",
+          "nodeName": "Rhea",
+          "nodeNameZh": "Rhea",
+          "missionType": "Interception",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerAsteroidInterception"
+        },
+        {
+          "nodeId": "ClanNode15",
+          "nodeName": "Sangeru",
+          "nodeNameZh": "Sangeru",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerAsteroidDefense"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode130",
+          "nodeName": "Lares",
+          "nodeNameZh": "神守基地",
+          "planet": "Mercury",
+          "planetZh": "水星",
+          "systemIndex": 0,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 6,
+          "maxEnemyLevel": 11,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerAsteroidDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-asteroid-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerAsteroidRelight/GrnDefenseOne"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 1441,
+            "procOffset": 1787,
+            "localizationTag": "/Lotus/Language/Locations/Lares",
+            "procSha256": "bf6de6647d3efccaf2d35fa35b475c640251ace74eea03072aba4548b9152d2f",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode18",
+          "nodeName": "Rhea",
+          "nodeNameZh": "Rhea",
+          "planet": "Saturn",
+          "planetZh": "土星",
+          "systemIndex": 5,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 21,
+          "maxEnemyLevel": 26,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerAsteroidInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-asteroid-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerAsteroidRelight/GrnDefenseOne"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 178526,
+            "procOffset": 178880,
+            "localizationTag": "/Lotus/Language/Locations/Rhea",
+            "procSha256": "5e1a6df7fceba7fbc40bc0dacdc5f3713c8ab900fa2e2ed95d0b2254a0ab38d5",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "ClanNode15",
+          "nodeName": "Sangeru",
+          "nodeNameZh": "Sangeru",
+          "planet": "Sedna",
+          "planetZh": "赛德娜",
+          "systemIndex": 11,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 35,
+          "maxEnemyLevel": 45,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerAsteroidDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-asteroid-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerAsteroidRelight/GrnDefenseOne"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 425555,
+            "procOffset": 425874,
+            "localizationTag": "/Lotus/Language/Locations/Sangeru",
+            "procSha256": "bf6de6647d3efccaf2d35fa35b475c640251ace74eea03072aba4548b9152d2f",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "grineer-forest-defense": {
+      "id": "grineer-forest-defense",
+      "name": "Grineer森林防御模板",
+      "sourceTile": "/Lotus/Levels/GrineerForestRemastered/GftDefense02",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "3a2037c2c91d3c77a36ba7c30edaab449bcc9d3e2eb5ae05299baa7f403a5a4f",
+          "bytes": 1997811
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "77661074647c8c1433db6837972aae59d20fa9cacb44b0330d817a74dbe913f7",
+          "bytes": 843691
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "b64e8a434323a3b3ef1436500015c798f22bb438dec9774c35d556159108aa43",
+          "bytes": 3475296
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "grineer-forest-defense.scene.json.gz",
+          "sha256": "6037f41644c0b57c61bd1f181f742c96a7c716461f415637012166ba8433b475",
+          "jsonSha256": "3a2037c2c91d3c77a36ba7c30edaab449bcc9d3e2eb5ae05299baa7f403a5a4f",
+          "compressedBytes": 326904,
+          "jsonBytes": 1997811
+        },
+        "navigation": {
+          "file": "grineer-forest-defense.navigation.json.gz",
+          "sha256": "f0e2f46412afb5c07ec7386bebca7cbe42e3d8bee0edd9e1229a5f167d573283",
+          "jsonSha256": "77661074647c8c1433db6837972aae59d20fa9cacb44b0330d817a74dbe913f7",
+          "compressedBytes": 157890,
+          "jsonBytes": 843691
+        },
+        "visual-map": {
+          "file": "grineer-forest-defense.visual-map.json.gz",
+          "sha256": "b8e35255b4b4d1d9cf1938d659ef68de9017d69d48033f34c0d700bcc326d246",
+          "jsonSha256": "26914b555a225fa780bbbd328bec3ac86d133ae209fd0213346189d8a25a3246",
+          "compressedBytes": 3659000,
+          "jsonBytes": 13032728
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-forest-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Standard ground defense/interception source candidate; server Arbitration eligibility unverified"
+      ],
+      "nameZh": "Grineer森林防御模板",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "GftDefense02",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode26",
+          "nodeName": "Lith",
+          "nodeNameZh": "Lith",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestDefense"
+        },
+        {
+          "nodeId": "ClanNode2",
+          "nodeName": "Coba",
+          "nodeNameZh": "Coba",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestDefense"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode26",
+          "nodeName": "Lith",
+          "nodeNameZh": "Lith",
+          "planet": "Earth",
+          "planetZh": "地球",
+          "systemIndex": 2,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 2,
+          "maxEnemyLevel": 5,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-forest-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerForestRemastered/GftDefense02"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 66470,
+            "procOffset": 66768,
+            "localizationTag": "/Lotus/Language/Locations/Lith",
+            "procSha256": "fe110b885cb9ac0d02131c3e0716361b23ce9fb1a764a7111d525a94f68cfe4b",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "ClanNode2",
+          "nodeName": "Coba",
+          "nodeNameZh": "Coba",
+          "planet": "Earth",
+          "planetZh": "地球",
+          "systemIndex": 2,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 6,
+          "maxEnemyLevel": 16,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-forest-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerForestRemastered/GftDefense02"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 79454,
+            "procOffset": 79768,
+            "localizationTag": "/Lotus/Language/Locations/Coba",
+            "procSha256": "fe110b885cb9ac0d02131c3e0716361b23ce9fb1a764a7111d525a94f68cfe4b",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "grineer-forest-interception-01": {
+      "id": "grineer-forest-interception-01",
+      "name": "Grineer森林拦截模板一",
+      "sourceTile": "/Lotus/Levels/GrineerForestRemastered/GftInterception01",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "794a80cccbc63ded5899bce14fc5ece1cec0b38c1d9055ac03b9ca9e3230c68f",
+          "bytes": 2976629
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "1056d55343ecd526785fa62197f16b2f3f8490fa59cef6ee6de7fefd5614f99a",
+          "bytes": 204700
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "aeac9e008c922150d995428aa064ec72c98a820fe14dea0a3e5178171929b456",
+          "bytes": 1934859
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "grineer-forest-interception-01.scene.json.gz",
+          "sha256": "82101187abb14180e985f270905903f281dbce4099e507bb175f1bda211a4f76",
+          "jsonSha256": "794a80cccbc63ded5899bce14fc5ece1cec0b38c1d9055ac03b9ca9e3230c68f",
+          "compressedBytes": 441678,
+          "jsonBytes": 2976629
+        },
+        "navigation": {
+          "file": "grineer-forest-interception-01.navigation.json.gz",
+          "sha256": "5691fefa017ae8271713a689f7faaf5da6cd53b34df1c3f3b1b5f936e193d7ce",
+          "jsonSha256": "1056d55343ecd526785fa62197f16b2f3f8490fa59cef6ee6de7fefd5614f99a",
+          "compressedBytes": 40445,
+          "jsonBytes": 204700
+        },
+        "visual-map": {
+          "file": "grineer-forest-interception-01.visual-map.json.gz",
+          "sha256": "f132dc6132530fe8425a35712c02597aba86f01e073676c4fa2cdfe75081cb6f",
+          "jsonSha256": "548066096833c98846b5e268654f1341eb7760ce4cf5dd0864d050271d01d1f5",
+          "compressedBytes": 3120668,
+          "jsonBytes": 11045990
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-forest-interception-01.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Standard ground defense/interception source candidate; server Arbitration eligibility unverified"
+      ],
+      "nameZh": "Grineer森林拦截模板一",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "GftInterception01",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode85",
+          "nodeName": "Gaia",
+          "nodeNameZh": "Gaia",
+          "missionType": "Interception",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestInterception"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode85",
+          "nodeName": "Gaia",
+          "nodeNameZh": "Gaia",
+          "planet": "Earth",
+          "planetZh": "地球",
+          "systemIndex": 2,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 1,
+          "maxEnemyLevel": 6,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-forest-interception-01",
+            "grineer-forest-interception-02"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerForestRemastered/GftInterception01",
+            "/Lotus/Levels/GrineerForestRemastered/GftInterception02"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 71784,
+            "procOffset": 72092,
+            "localizationTag": "/Lotus/Language/Locations/Gaia",
+            "procSha256": "2d4318b53c6d8b6f982d3b1ee4bce406f296ba9d96750632e763460f4f067517",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "grineer-forest-interception-02": {
+      "id": "grineer-forest-interception-02",
+      "name": "Grineer森林拦截模板二",
+      "sourceTile": "/Lotus/Levels/GrineerForestRemastered/GftInterception02",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "2b53b2a22f56dc5d2532e5800afd15318827c23115a753496f9996a197adbca2",
+          "bytes": 6144826
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "12bca4b464226e0ce646f1224d8dc68b85bfa5ee0347c296693c5900785d9375",
+          "bytes": 141620
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "44d4775fed138cd3f5da24f4badf274cc63d384260bac17d489e40e8d87138d7",
+          "bytes": 7164384
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "grineer-forest-interception-02.scene.json.gz",
+          "sha256": "4aa4d8006791198dbaf4e24b25dccbf7274a41c0c501610072aab7b1cff25ef2",
+          "jsonSha256": "2b53b2a22f56dc5d2532e5800afd15318827c23115a753496f9996a197adbca2",
+          "compressedBytes": 923745,
+          "jsonBytes": 6144826
+        },
+        "navigation": {
+          "file": "grineer-forest-interception-02.navigation.json.gz",
+          "sha256": "29935a589d36dbc8e9b3fb3486e2e2af53e75e4fe1a11818e7b294b288c1aa5d",
+          "jsonSha256": "12bca4b464226e0ce646f1224d8dc68b85bfa5ee0347c296693c5900785d9375",
+          "compressedBytes": 26734,
+          "jsonBytes": 141620
+        },
+        "visual-map": {
+          "file": "grineer-forest-interception-02.visual-map.json.gz",
+          "sha256": "75af5593d9fb7e505c2deb5caf987e49f25d8e4467cb235e71384e5b142838c8",
+          "jsonSha256": "7b40ddd7245328c1b6ddb59cecf94e8cc18a8bf62db49e2bfa40fa08d1cbbe70",
+          "compressedBytes": 3471015,
+          "jsonBytes": 14536557
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-forest-interception-02.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Standard ground defense/interception source candidate; server Arbitration eligibility unverified"
+      ],
+      "nameZh": "Grineer森林拦截模板二",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "GftInterception02",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode85",
+          "nodeName": "Gaia",
+          "nodeNameZh": "Gaia",
+          "missionType": "Interception",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestInterception"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode85",
+          "nodeName": "Gaia",
+          "nodeNameZh": "Gaia",
+          "planet": "Earth",
+          "planetZh": "地球",
+          "systemIndex": 2,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 1,
+          "maxEnemyLevel": 6,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerForestInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-forest-interception-01",
+            "grineer-forest-interception-02"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerForestRemastered/GftInterception01",
+            "/Lotus/Levels/GrineerForestRemastered/GftInterception02"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 71784,
+            "procOffset": 72092,
+            "localizationTag": "/Lotus/Language/Locations/Gaia",
+            "procSha256": "2d4318b53c6d8b6f982d3b1ee4bce406f296ba9d96750632e763460f4f067517",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "grineer-fortress-defense": {
+      "id": "grineer-fortress-defense",
+      "name": "Grineer要塞防御模板",
+      "sourceTile": "/Lotus/Levels/GrineerFortress/FortObjDefense",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "4e975dae2cfdec8a0b6b98ebc6dd42c534b662bdfbee70735a7eb46e7a489c4f",
+          "bytes": 2294528
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "d504ec6f46b2ec087289f310b088b8c77702adc71d2d70e1d911be3ddb023f1d",
+          "bytes": 224266
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "94d61f5b7d36fed10c7626ed0223999ec1aff23a7bd6d7648e8bc0cb255032a7",
+          "bytes": 3544173
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "grineer-fortress-defense.scene.json.gz",
+          "sha256": "5616528adf629b7d008fc2867f119959a5e8a116124e546cec80bc4f413e9f07",
+          "jsonSha256": "4e975dae2cfdec8a0b6b98ebc6dd42c534b662bdfbee70735a7eb46e7a489c4f",
+          "compressedBytes": 372675,
+          "jsonBytes": 2294528
+        },
+        "navigation": {
+          "file": "grineer-fortress-defense.navigation.json.gz",
+          "sha256": "2aa8d760185b6338981bae4679b0c59724a67408960f1d64d1ba10adec767d05",
+          "jsonSha256": "d504ec6f46b2ec087289f310b088b8c77702adc71d2d70e1d911be3ddb023f1d",
+          "compressedBytes": 50863,
+          "jsonBytes": 224266
+        },
+        "visual-map": {
+          "file": "grineer-fortress-defense.visual-map.json.gz",
+          "sha256": "c0c7e0a06c81e119ebd2f180db850424f382b3bddd697e5bc5f93919f53e7e6c",
+          "jsonSha256": "4734dba51ab1adbc45b5fa15fd0389f96f724f77124d4034f77c94934bee3cba",
+          "compressedBytes": 3370997,
+          "jsonBytes": 14004181
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-fortress-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Standard ground defense/interception source candidate; server Arbitration eligibility unverified"
+      ],
+      "nameZh": "Grineer要塞防御模板",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "FortObjDefense",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode742",
+          "nodeName": "Nabuk",
+          "nodeNameZh": "Nabuk",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerFortressDefense"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode742",
+          "nodeName": "Nabuk",
+          "nodeNameZh": "Nabuk",
+          "planet": "Kuva Fortress",
+          "planetZh": "赤毒要塞",
+          "systemIndex": 18,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 30,
+          "maxEnemyLevel": 32,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerFortressDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-fortress-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerFortress/FortObjDefense"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 547070,
+            "procOffset": 547388,
+            "localizationTag": "/Lotus/Language/Locations/FortressNodeB",
+            "procSha256": "1ea0239ce1c343a91035cd90a34217963c7dc192b50633acfc36d4a714397e5d",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "grineer-settlement-defense": {
+      "id": "grineer-settlement-defense",
+      "name": "Grineer沙漠营地防御模板",
+      "sourceTile": "/Lotus/Levels/GrineerSettlement/CmpDefence",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "423feab3a6af3011edefeabd3434491159c5f830e8489b3964d129c7fa2694fc",
+          "bytes": 1932428
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "f33bff5edc97cb390d393ccb59e57e717e8b64c71a53efbe9b21575a4691a921",
+          "bytes": 1340279
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "16804a848a77795fed710c507012915b917e360a47d9863ef09a37b906b10fc3",
+          "bytes": 403558
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "grineer-settlement-defense.scene.json.gz",
+          "sha256": "6ef9668d4be2e77bac8144eab19e7b97a45a827b018c2e5d2441afa77e85b269",
+          "jsonSha256": "423feab3a6af3011edefeabd3434491159c5f830e8489b3964d129c7fa2694fc",
+          "compressedBytes": 326370,
+          "jsonBytes": 1932428
+        },
+        "navigation": {
+          "file": "grineer-settlement-defense.navigation.json.gz",
+          "sha256": "313fcc398ac618812587736fbf5179da27c3a92f4cb034c939f52303289be24a",
+          "jsonSha256": "f33bff5edc97cb390d393ccb59e57e717e8b64c71a53efbe9b21575a4691a921",
+          "compressedBytes": 280114,
+          "jsonBytes": 1340279
+        },
+        "visual-map": {
+          "file": "grineer-settlement-defense.visual-map.json.gz",
+          "sha256": "5aabfd7ba77e22fad9400060dd7d5e2d513b56cff85549f998f8c2d28fe99b16",
+          "jsonSha256": "646ca77ad9c2ba7d3a53148ae49753003c25d9d95f709d3dd95a667cc6323e52",
+          "compressedBytes": 2296462,
+          "jsonBytes": 7802988
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-settlement-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Standard ground defense/interception source candidate; server Arbitration eligibility unverified"
+      ],
+      "nameZh": "Grineer沙漠营地防御模板",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "CmpDefence",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode46",
+          "nodeName": "Spear",
+          "nodeNameZh": "战矛基地",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerSettlementDefense"
+        },
+        {
+          "nodeId": "SolNode106",
+          "nodeName": "Alator",
+          "nodeNameZh": "暗猎区",
+          "missionType": "Interception",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerSettlementInterception"
+        },
+        {
+          "nodeId": "ClanNode8",
+          "nodeName": "Kadesh",
+          "nodeNameZh": "卡迪什圣地",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerSettlementDefense"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode46",
+          "nodeName": "Spear",
+          "nodeNameZh": "战矛基地",
+          "planet": "Mars",
+          "planetZh": "火星",
+          "systemIndex": 3,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 8,
+          "maxEnemyLevel": 12,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerSettlementDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-settlement-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerSettlement/CmpDefence"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 100182,
+            "procOffset": 100484,
+            "localizationTag": "/Lotus/Language/Locations/Spear",
+            "procSha256": "063cbb6382eab25a23acb24bf4d82992bb121e67f4ddc0a2f356326663687ec2",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode106",
+          "nodeName": "Alator",
+          "nodeNameZh": "暗猎区",
+          "planet": "Mars",
+          "planetZh": "火星",
+          "systemIndex": 3,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 8,
+          "maxEnemyLevel": 13,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerSettlementInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-settlement-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerSettlement/CmpDefence"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 105109,
+            "procOffset": 105423,
+            "localizationTag": "/Lotus/Language/Locations/Alator",
+            "procSha256": "b05e86d577d9372811f559882423c33576968dbbd06357e00ab87067593d52c3",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "ClanNode8",
+          "nodeName": "Kadesh",
+          "nodeNameZh": "卡迪什圣地",
+          "planet": "Mars",
+          "planetZh": "火星",
+          "systemIndex": 3,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 10,
+          "maxEnemyLevel": 20,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerSettlementDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-settlement-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerSettlement/CmpDefence"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 112801,
+            "procOffset": 113116,
+            "localizationTag": "/Lotus/Language/Locations/Kadesh",
+            "procSha256": "063cbb6382eab25a23acb24bf4d82992bb121e67f4ddc0a2f356326663687ec2",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "grineer-shipyards-interception": {
+      "id": "grineer-shipyards-interception",
+      "name": "Grineer船坞拦截模板",
+      "sourceTile": "/Lotus/Levels/GrineerShipyards/ShipyardsInterception",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "303e3614208e8846654f0378ae0c6e58f9f56a5aeaca5fce3800736d5f2d3998",
+          "bytes": 1331106
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "2da00fb4e60ba5a1264d405fb862f965de6c1edf030fe631d5851b852fb76440",
+          "bytes": 40634
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "52ff24f6b068a3c43ca26e0a12d308c3c9a9d0d647990c8619a36879e1074eca",
+          "bytes": 752991
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "grineer-shipyards-interception.scene.json.gz",
+          "sha256": "841099260f34eec1d65b8eb9ef2f3d1d822eef62f16958fb81c4aa3d908e6df6",
+          "jsonSha256": "303e3614208e8846654f0378ae0c6e58f9f56a5aeaca5fce3800736d5f2d3998",
+          "compressedBytes": 203646,
+          "jsonBytes": 1331106
+        },
+        "navigation": {
+          "file": "grineer-shipyards-interception.navigation.json.gz",
+          "sha256": "4d528065fba4a49326cdb8a99629bb8862cbe22a3453e52c0901a2419156340e",
+          "jsonSha256": "2da00fb4e60ba5a1264d405fb862f965de6c1edf030fe631d5851b852fb76440",
+          "compressedBytes": 8106,
+          "jsonBytes": 40634
+        },
+        "visual-map": {
+          "file": "grineer-shipyards-interception.visual-map.json.gz",
+          "sha256": "9b013da95e7358a4ff4b22f48cb6c45fe27dd680a6bd4dd67c7bd967bcb436a3",
+          "jsonSha256": "f81b51e4d61709ed57afb48d29becf796538a861708411861e5fb894b182505f",
+          "compressedBytes": 1938146,
+          "jsonBytes": 6993299
+        },
+        "visual-map-collision-candidates": {
+          "file": "grineer-shipyards-interception.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Standard ground defense/interception source candidate; server Arbitration eligibility unverified"
+      ],
+      "nameZh": "Grineer船坞拦截模板",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "ShipyardsInterception",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode147",
+          "nodeName": "Cinxia",
+          "nodeNameZh": "Cinxia",
+          "missionType": "Interception",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsInterception"
+        },
+        {
+          "nodeId": "SolNode185",
+          "nodeName": "Berehynia",
+          "nodeNameZh": "Berehynia",
+          "missionType": "Interception",
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsInterceptionTwo"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode147",
+          "nodeName": "Cinxia",
+          "nodeNameZh": "Cinxia",
+          "planet": "Ceres",
+          "planetZh": "谷神星",
+          "systemIndex": 9,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 12,
+          "maxEnemyLevel": 17,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-shipyards-defense",
+            "grineer-shipyards-interception"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerShipyards/ShipyardsDefence",
+            "/Lotus/Levels/GrineerShipyards/ShipyardsInterception"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 340628,
+            "procOffset": 340942,
+            "localizationTag": "/Lotus/Language/Locations/Cinxia",
+            "procSha256": "33605d985d593288c823516723e116accbdfc0524c5c6a26de951fcad20c52d7",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode185",
+          "nodeName": "Berehynia",
+          "nodeNameZh": "Berehynia",
+          "planet": "Sedna",
+          "planetZh": "赛德娜",
+          "systemIndex": 11,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 30,
+          "maxEnemyLevel": 40,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Grineer/GrineerShipyardsInterceptionTwo",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "grineer-shipyards-interception"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/GrineerShipyards/ShipyardsInterception"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 403673,
+            "procOffset": 403993,
+            "localizationTag": "/Lotus/Language/Locations/Berehynia",
+            "procSha256": "672b09efc87e26696a87dc9d741e330b08715a93c65f82ef3610bb528b48d644",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "infested-corpus-defense": {
+      "id": "infested-corpus-defense",
+      "name": "Infested Corpus舰船防御模板",
+      "sourceTile": "/Lotus/Levels/InfestedCorpus/InfestedDefense01",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "0b53bffb1f98e3d4f47230c6c944a826614b3b3c0e0ba0fb87c79c8d8f656336",
+          "bytes": 4960610
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "3f306346a648425ae5283b69ef5c9c4b8411fe4e5e2701116641f14d78d8ec50",
+          "bytes": 490491
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "95a9fca1558b5a1f7966e867fb5856d7a737d69c67b808db2a573052a4debf10",
+          "bytes": 4021654
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "infested-corpus-defense.scene.json.gz",
+          "sha256": "78776e49ae5253d28571caec910d4c8a60698a6c5ede03ee131319f50f051126",
+          "jsonSha256": "0b53bffb1f98e3d4f47230c6c944a826614b3b3c0e0ba0fb87c79c8d8f656336",
+          "compressedBytes": 730334,
+          "jsonBytes": 4960610
+        },
+        "navigation": {
+          "file": "infested-corpus-defense.navigation.json.gz",
+          "sha256": "4db2885ea5ae0a757179bb375660e6ecafd9097a2dcb298df7a9d5cf8f86248f",
+          "jsonSha256": "3f306346a648425ae5283b69ef5c9c4b8411fe4e5e2701116641f14d78d8ec50",
+          "compressedBytes": 99886,
+          "jsonBytes": 490491
+        },
+        "visual-map": {
+          "file": "infested-corpus-defense.visual-map.json.gz",
+          "sha256": "db695d8887c2373b7b43a46e71fbef2975bfcd00edd9668b7cf747aabd6b494c",
+          "jsonSha256": "5c8b89e1c1cfc3b8c73a2205de642c14b0e10c921d4982b2c2e9b60560108640",
+          "compressedBytes": 2517665,
+          "jsonBytes": 10426336
+        },
+        "visual-map-collision-candidates": {
+          "file": "infested-corpus-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Standard ground defense/interception source candidate; server Arbitration eligibility unverified"
+      ],
+      "nameZh": "Infested Corpus舰船防御模板",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "InfestedDefense01",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode164",
+          "nodeName": "Kala-azar",
+          "nodeNameZh": "Kala-azar",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Infestation/InfestedCorpusShipDefense"
+        },
+        {
+          "nodeId": "ClanNode18",
+          "nodeName": "Akkad",
+          "nodeNameZh": "Akkad",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Infestation/InfestedCorpusShipDefense"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode164",
+          "nodeName": "Kala-azar",
+          "nodeNameZh": "Kala-azar",
+          "planet": "Eris",
+          "planetZh": "阋神星",
+          "systemIndex": 10,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 30,
+          "maxEnemyLevel": 40,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Infestation/InfestedCorpusShipDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "infested-corpus-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/InfestedCorpus/InfestedDefense01"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 364601,
+            "procOffset": 364955,
+            "localizationTag": "/Lotus/Language/Locations/Kala-azar",
+            "procSha256": "35540ce5ea3d575bec29ca278c53e7dbf23adf2f1b94a2c863db04e337f74f2e",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "ClanNode18",
+          "nodeName": "Akkad",
+          "nodeNameZh": "Akkad",
+          "planet": "Eris",
+          "planetZh": "阋神星",
+          "systemIndex": 10,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 35,
+          "maxEnemyLevel": 45,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Infestation/InfestedCorpusShipDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "infested-corpus-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/InfestedCorpus/InfestedDefense01"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 382364,
+            "procOffset": 382725,
+            "localizationTag": "/Lotus/Language/Locations/Akkad",
+            "procSha256": "35540ce5ea3d575bec29ca278c53e7dbf23adf2f1b94a2c863db04e337f74f2e",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "orokin-tower-defense": {
+      "id": "orokin-tower-defense",
+      "name": "Orokin塔防御模板",
+      "sourceTile": "/Lotus/Levels/Orokin/Defend1",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "f295b3179d29e4062503ecc686c599e767d163be814e5294595ddbff0387eac0",
+          "bytes": 2810651
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "205ff920c3fce938e36dc90a59b14b438f5382536de0577229340297f6edc767",
+          "bytes": 522755
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "d0fe26dbcc4e61fd03ed51ffbf1765e3b44816e4cbc4259e3b2d8fe0d6d78e5a",
+          "bytes": 593033
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "orokin-tower-defense.scene.json.gz",
+          "sha256": "7ed52a070fa20b68b352bf5397cda661a40d923180dd4b576b16c72fabd3510c",
+          "jsonSha256": "f295b3179d29e4062503ecc686c599e767d163be814e5294595ddbff0387eac0",
+          "compressedBytes": 371631,
+          "jsonBytes": 2810651
+        },
+        "navigation": {
+          "file": "orokin-tower-defense.navigation.json.gz",
+          "sha256": "05da7d0f718c0b8b6da42393ac5e8e91f8c371476230d47a6d5919008899526a",
+          "jsonSha256": "205ff920c3fce938e36dc90a59b14b438f5382536de0577229340297f6edc767",
+          "compressedBytes": 92548,
+          "jsonBytes": 522755
+        },
+        "visual-map": {
+          "file": "orokin-tower-defense.visual-map.json.gz",
+          "sha256": "5faf5b3679ad26e870838ef24a1c10527623b7c9575e5d87fb267cd2f81d6ef2",
+          "jsonSha256": "a396e6d30368c1c6f3e5ffac8438ce5a37c83a7cb91a505ae84e151d27072f86",
+          "compressedBytes": 1067662,
+          "jsonBytes": 4748564
+        },
+        "visual-map-collision-candidates": {
+          "file": "orokin-tower-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Standard ground defense/interception source candidate; server Arbitration eligibility unverified"
+      ],
+      "nameZh": "Orokin塔防御模板",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "Defend1",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode402",
+          "nodeName": "Taranis",
+          "nodeNameZh": "雷争塔",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerDefense"
+        },
+        {
+          "nodeId": "SolNode408",
+          "nodeName": "Belenus",
+          "nodeNameZh": "光神塔",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerDefense"
+        },
+        {
+          "nodeId": "SolNode412",
+          "nodeName": "Mithra",
+          "nodeNameZh": "光理塔",
+          "missionType": "Interception",
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerInterception"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode402",
+          "nodeName": "Taranis",
+          "nodeNameZh": "雷争塔",
+          "planet": "Void",
+          "planetZh": "虚空",
+          "systemIndex": 14,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 10,
+          "maxEnemyLevel": 15,
+          "factionIndex": 3,
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "orokin-tower-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/Orokin/Defend1"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 465202,
+            "procOffset": 465506,
+            "localizationTag": "/Lotus/Language/Locations/VoidNode3",
+            "procSha256": "55fc7dd66e03857820d66e9e8af02cc7c4d16027dab7acf29893365e031d12db",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode408",
+          "nodeName": "Belenus",
+          "nodeNameZh": "光神塔",
+          "planet": "Void",
+          "planetZh": "虚空",
+          "systemIndex": 14,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 30,
+          "maxEnemyLevel": 35,
+          "factionIndex": 3,
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "orokin-tower-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/Orokin/Defend1"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 469970,
+            "procOffset": 470275,
+            "localizationTag": "/Lotus/Language/Locations/VoidNode9",
+            "procSha256": "55fc7dd66e03857820d66e9e8af02cc7c4d16027dab7acf29893365e031d12db",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode412",
+          "nodeName": "Mithra",
+          "nodeNameZh": "光理塔",
+          "planet": "Void",
+          "planetZh": "虚空",
+          "systemIndex": 14,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 40,
+          "maxEnemyLevel": 45,
+          "factionIndex": 3,
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "orokin-tower-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/Orokin/Defend1"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 473420,
+            "procOffset": 473728,
+            "localizationTag": "/Lotus/Language/Locations/VoidNode13",
+            "procSha256": "7a2f07428d3ff37dfa3d69ddf9edddde80562ba96aa16deeee41638569c6d7e7",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "orokin-derelict-defense": {
+      "id": "orokin-derelict-defense",
+      "name": "Orokin遗迹防御模板",
+      "sourceTile": "/Lotus/Levels/OrokinDerelict/Defend2Derelict",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "ac3a7fdc633b6d43b97621f7a6b7a52718a98222a12afeca3e0a8d2b87c17be3",
+          "bytes": 2008558
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "e68906f3120b58f32df08fa8fe2a58cc09aaf339cb8c53f3f60c12a2ebf90b1d",
+          "bytes": 274859
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "973ccb98a7435c55c7b63bdee11df91a8ab7cf4cc6cf1e0fbf1aab6ee1610ab7",
+          "bytes": 3317930
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "orokin-derelict-defense.scene.json.gz",
+          "sha256": "8c9f2f1fb64a3c1c96621b2e92ce189a333bc596cff775eedd39f14644c0a133",
+          "jsonSha256": "ac3a7fdc633b6d43b97621f7a6b7a52718a98222a12afeca3e0a8d2b87c17be3",
+          "compressedBytes": 290315,
+          "jsonBytes": 2008558
+        },
+        "navigation": {
+          "file": "orokin-derelict-defense.navigation.json.gz",
+          "sha256": "909185ef9afc2f90687492c1faa79b5e1fed323557e0a6cc6aa2a5e031bd6932",
+          "jsonSha256": "e68906f3120b58f32df08fa8fe2a58cc09aaf339cb8c53f3f60c12a2ebf90b1d",
+          "compressedBytes": 53561,
+          "jsonBytes": 274859
+        },
+        "visual-map": {
+          "file": "orokin-derelict-defense.visual-map.json.gz",
+          "sha256": "36e5c00411a2b7fd6c7f4424788a4aadb33a170da5f0f988eb30397a7ba3de15",
+          "jsonSha256": "257b44793e15a4465512c28c093a8be60dce993f62201350cb2a21c3462a7b00",
+          "compressedBytes": 2030341,
+          "jsonBytes": 8493603
+        },
+        "visual-map-collision-candidates": {
+          "file": "orokin-derelict-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Standard ground defense/interception source candidate; server Arbitration eligibility unverified"
+      ],
+      "nameZh": "Orokin遗迹防御模板",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "Defend2Derelict",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode707",
+          "nodeName": "Hyf",
+          "nodeNameZh": "Hyf",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerDerelictDefense"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode707",
+          "nodeName": "Hyf",
+          "nodeNameZh": "Hyf",
+          "planet": "Deimos",
+          "planetZh": "火卫二",
+          "systemIndex": 16,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 15,
+          "maxEnemyLevel": 20,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinTowerDerelictDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "orokin-derelict-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/OrokinDerelict/Defend2Derelict"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 513467,
+            "procOffset": 513763,
+            "localizationTag": "/Lotus/Language/InfestedMicroplanet/SolarMapDeimosNodeE",
+            "procSha256": "2abf0a0eb8a38e22d86d9c4f550818f7b5fa637297768d8df5774999a8362a61",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "orokin-moon-defense": {
+      "id": "orokin-moon-defense",
+      "name": "Orokin月球防御模板",
+      "sourceTile": "/Lotus/Levels/OrokinMoon/MoonObjDefense01",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "d1ff6bcdbfc0135e712a487d07f27568ca05376f437018c3f53d5032a2e63618",
+          "bytes": 3880468
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "e7bf148e681706967a373bc41860422f115f5506a84a61029e20c37621f8cb26",
+          "bytes": 2891048
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "6004fd88deec55662d8ace1cd01fcc55b930a4e9e8fa8f7c6bfb49cf62bc843a",
+          "bytes": 1704983
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "orokin-moon-defense.scene.json.gz",
+          "sha256": "dca554b77a97cc0f4893ac4590c1a74f92c448a51cf26eb31d3c0463ad8eee53",
+          "jsonSha256": "d1ff6bcdbfc0135e712a487d07f27568ca05376f437018c3f53d5032a2e63618",
+          "compressedBytes": 601229,
+          "jsonBytes": 3880468
+        },
+        "navigation": {
+          "file": "orokin-moon-defense.navigation.json.gz",
+          "sha256": "dcce37b28b63de6d532043bbec70f9dfcaaf2c2dadf02d2731bb1bfd055076ca",
+          "jsonSha256": "e7bf148e681706967a373bc41860422f115f5506a84a61029e20c37621f8cb26",
+          "compressedBytes": 574992,
+          "jsonBytes": 2891048
+        },
+        "visual-map": {
+          "file": "orokin-moon-defense.visual-map.json.gz",
+          "sha256": "cb4ff2f1a3c2de7d0029c768e6079f123a92202ea9a9921868ddb3b4333c5ad9",
+          "jsonSha256": "d17b97b7af913c9413e604570c3359e3ad4d73049de37f9ea1bff94e6a856317",
+          "compressedBytes": 2341977,
+          "jsonBytes": 7881193
+        },
+        "visual-map-collision-candidates": {
+          "file": "orokin-moon-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Standard ground defense/interception source candidate; server Arbitration eligibility unverified"
+      ],
+      "nameZh": "Orokin月球防御模板",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "MoonObjDefense01",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode305",
+          "nodeName": "Stöfler",
+          "nodeNameZh": "Stöfler",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinMoonDefense"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode305",
+          "nodeName": "Stöfler",
+          "nodeNameZh": "Stöfler",
+          "planet": "Lua",
+          "planetZh": "月球",
+          "systemIndex": 17,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 25,
+          "maxEnemyLevel": 30,
+          "factionIndex": 0,
+          "sourceProc": "/Lotus/Levels/Proc/Orokin/OrokinMoonDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "orokin-moon-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/OrokinMoon/MoonObjDefense01"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 537496,
+            "procOffset": 537807,
+            "localizationTag": "/Lotus/Language/Locations/MoonNode5",
+            "procSha256": "83efbdbc3ae75f27ac37fcd452020ba674dda894468f0f4a080311de2e069c90",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "entrati-lab-mirror-defense-ear": {
+      "id": "entrati-lab-mirror-defense-ear",
+      "name": "Entrati实验室镜像防御模板耳",
+      "sourceTile": "/Lotus/Levels/EntratiLab/ObjDefenseEar",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "4f528965bdd21312d584a9dcf4d0b26f26383fc473488037f931e068c015f61a",
+          "bytes": 1409370
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "2e79dd4b1550df615314fc05e6ea93593e37ffe682223cf9d5dc0fb7dca4148e",
+          "bytes": 184786
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "bd00fdb8f64b0c112a73c422b1070ea805d5ad0fc0c5def695b1ff306142fa32",
+          "bytes": 945029
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "entrati-lab-mirror-defense-ear.scene.json.gz",
+          "sha256": "008cea34f40a438528eeb3ad28bb3e0b3a392154a2362658b7d5468667efa65b",
+          "jsonSha256": "4f528965bdd21312d584a9dcf4d0b26f26383fc473488037f931e068c015f61a",
+          "compressedBytes": 223383,
+          "jsonBytes": 1409370
+        },
+        "navigation": {
+          "file": "entrati-lab-mirror-defense-ear.navigation.json.gz",
+          "sha256": "796fb6e24a0c5f9273e21e8427f3224852d602eaa5e039d2635b6fa9322adfbc",
+          "jsonSha256": "2e79dd4b1550df615314fc05e6ea93593e37ffe682223cf9d5dc0fb7dca4148e",
+          "compressedBytes": 32201,
+          "jsonBytes": 184786
+        },
+        "visual-map": {
+          "file": "entrati-lab-mirror-defense-ear.visual-map.json.gz",
+          "sha256": "e85ef1a0cc5f07a57b560c5d9dc5df933929232016801f8f5465d607cf28c286",
+          "jsonSha256": "23cdfd4f3e6628c4909ae85d6a18c6fa85a258fa2e0215f14688507b738454a9",
+          "compressedBytes": 5345394,
+          "jsonBytes": 19092403
+        },
+        "visual-map-collision-candidates": {
+          "file": "entrati-lab-mirror-defense-ear.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Ground defense/interception authored tile; mirror mission objective/timer not modeled; continuous-clear scenario only"
+      ],
+      "nameZh": "Entrati实验室镜像防御模板耳",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "ObjDefenseEar",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode719",
+          "nodeName": "Munio",
+          "nodeNameZh": "墓垒",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/EntratiLab/EntratiLabMirrorDefense"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode719",
+          "nodeName": "Munio",
+          "nodeNameZh": "墓垒",
+          "planet": "Deimos",
+          "planetZh": "火卫二",
+          "systemIndex": 16,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "mirror-defense",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 55,
+          "maxEnemyLevel": 60,
+          "factionIndex": 7,
+          "sourceProc": "/Lotus/Levels/Proc/EntratiLab/EntratiLabMirrorDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "officially-added",
+            "eligible": null,
+            "date": "2024-10-02",
+            "url": "https://www.warframe.com/en/patch-notes/pc/37-0-0",
+            "currentWhitelistVerified": false,
+            "evidenceType": "historical-official-affirmative-announcement",
+            "reason": "Official Update 37 added this Mirror Defense node on October 2, 2024; the current server rotation whitelist was not verified."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "entrati-lab-mirror-defense-ear",
+            "entrati-lab-mirror-defense-eye"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/EntratiLab/ObjDefenseEar",
+            "/Lotus/Levels/EntratiLab/ObjDefenseEye"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 528007,
+            "procOffset": 528354,
+            "localizationTag": "/Lotus/Language/Entrati/SolarMapEntratiNodeE",
+            "procSha256": "17f536a9222c6ace5da31ab760470f1bf49f5721b089edce2e50d5eeed62a71b",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "entrati-lab-mirror-defense-eye": {
+      "id": "entrati-lab-mirror-defense-eye",
+      "name": "Entrati实验室镜像防御模板眼",
+      "sourceTile": "/Lotus/Levels/EntratiLab/ObjDefenseEye",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "38f7f0d87dfedd7f79c35fe422f1a982c4eeaf65fd53e55eb42f4a255f0e74b5",
+          "bytes": 1586860
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "410deb21522ad2fa2187b90a81c1266b14ef2948075cead0a5b2c7be4cb50ae2",
+          "bytes": 220334
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "48593f8d58328954f501cabcb4d768c766cdf3f0a8fac2bd4f2e0d6dff58faa4",
+          "bytes": 1128435
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "entrati-lab-mirror-defense-eye.scene.json.gz",
+          "sha256": "5f067b52fac4ea5a9f43d900055a0ec152fd9cb9e5e6f22fe8a8dc64188f45ee",
+          "jsonSha256": "38f7f0d87dfedd7f79c35fe422f1a982c4eeaf65fd53e55eb42f4a255f0e74b5",
+          "compressedBytes": 251881,
+          "jsonBytes": 1586860
+        },
+        "navigation": {
+          "file": "entrati-lab-mirror-defense-eye.navigation.json.gz",
+          "sha256": "454c092e7b00222a3a47844cfc2f691bb7e7ee281ca7b69ccb2e3371800563ff",
+          "jsonSha256": "410deb21522ad2fa2187b90a81c1266b14ef2948075cead0a5b2c7be4cb50ae2",
+          "compressedBytes": 41256,
+          "jsonBytes": 220334
+        },
+        "visual-map": {
+          "file": "entrati-lab-mirror-defense-eye.visual-map.json.gz",
+          "sha256": "fd55e86636057ed2dcaef433b3ad1dbb8a33fb5fe939263c2c6026e7166e0f21",
+          "jsonSha256": "6f9ad5a626235cad6b414a7292ff836c9cb3a67c4e173c49f383f018be3831d6",
+          "compressedBytes": 4851792,
+          "jsonBytes": 17606041
+        },
+        "visual-map-collision-candidates": {
+          "file": "entrati-lab-mirror-defense-eye.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Ground defense/interception authored tile; mirror mission objective/timer not modeled; continuous-clear scenario only"
+      ],
+      "nameZh": "Entrati实验室镜像防御模板眼",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "ObjDefenseEye",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode719",
+          "nodeName": "Munio",
+          "nodeNameZh": "墓垒",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/EntratiLab/EntratiLabMirrorDefense"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode719",
+          "nodeName": "Munio",
+          "nodeNameZh": "墓垒",
+          "planet": "Deimos",
+          "planetZh": "火卫二",
+          "systemIndex": 16,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "mirror-defense",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 55,
+          "maxEnemyLevel": 60,
+          "factionIndex": 7,
+          "sourceProc": "/Lotus/Levels/Proc/EntratiLab/EntratiLabMirrorDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "officially-added",
+            "eligible": null,
+            "date": "2024-10-02",
+            "url": "https://www.warframe.com/en/patch-notes/pc/37-0-0",
+            "currentWhitelistVerified": false,
+            "evidenceType": "historical-official-affirmative-announcement",
+            "reason": "Official Update 37 added this Mirror Defense node on October 2, 2024; the current server rotation whitelist was not verified."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "entrati-lab-mirror-defense-ear",
+            "entrati-lab-mirror-defense-eye"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/EntratiLab/ObjDefenseEar",
+            "/Lotus/Levels/EntratiLab/ObjDefenseEye"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 528007,
+            "procOffset": 528354,
+            "localizationTag": "/Lotus/Language/Entrati/SolarMapEntratiNodeE",
+            "procSha256": "17f536a9222c6ace5da31ab760470f1bf49f5721b089edce2e50d5eeed62a71b",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "lastwish-grineer-mirror-defense": {
+      "id": "lastwish-grineer-mirror-defense",
+      "name": "Grineer镜像防御模板",
+      "sourceTile": "/Lotus/Levels/LastWishDefense/LastWishCmpDefense",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "587149ea9785739b6488a6b74d7f1e3d3d988854476c69989c22156542223d3d",
+          "bytes": 1854013
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "ac932617d999245dc44621d46fe5832c737fec76b7a97ea3d9fdfb0ab0e8f604",
+          "bytes": 1357685
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "a0b5a47e467deed5ad13be7fbb891176406f8060f34777351353b400d4f5c50e",
+          "bytes": 1491
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "lastwish-grineer-mirror-defense.scene.json.gz",
+          "sha256": "6feff83272a9230e32b61d82618acc7e34c62d02a0a5abb26a7c8fdbddd838a1",
+          "jsonSha256": "587149ea9785739b6488a6b74d7f1e3d3d988854476c69989c22156542223d3d",
+          "compressedBytes": 320017,
+          "jsonBytes": 1854013
+        },
+        "navigation": {
+          "file": "lastwish-grineer-mirror-defense.navigation.json.gz",
+          "sha256": "8ddbf6102edb3a3e5e65f1f0c823b5255a17dfe0b9eea7b1b34d24bc2aef4b8f",
+          "jsonSha256": "ac932617d999245dc44621d46fe5832c737fec76b7a97ea3d9fdfb0ab0e8f604",
+          "compressedBytes": 284334,
+          "jsonBytes": 1357685
+        },
+        "visual-map": {
+          "file": "lastwish-grineer-mirror-defense.visual-map.json.gz",
+          "sha256": "9857a0f563eeab957abb2a8b51bd73310a9b35c48d5aa7463b12633703a631ac",
+          "jsonSha256": "1dcb6e42efb7efb2ae72dfba1e58ca33b17b5b9c7148b2018d07e822bf813a11",
+          "compressedBytes": 2158172,
+          "jsonBytes": 7230847
+        },
+        "visual-map-collision-candidates": {
+          "file": "lastwish-grineer-mirror-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Ground defense/interception authored tile; mirror mission objective/timer not modeled; continuous-clear scenario only"
+      ],
+      "nameZh": "Grineer镜像防御模板",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "LastWishCmpDefense",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode450",
+          "nodeName": "Tyana Pass",
+          "nodeNameZh": "Tyana Pass",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/LastWish/LastWishDefense"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode450",
+          "nodeName": "Tyana Pass",
+          "nodeNameZh": "Tyana Pass",
+          "planet": "Mars",
+          "planetZh": "火星",
+          "systemIndex": 3,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "mirror-defense",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 25,
+          "maxEnemyLevel": 30,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/LastWish/LastWishDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "officially-added",
+            "eligible": null,
+            "date": "2024-10-02",
+            "url": "https://www.warframe.com/en/patch-notes/pc/37-0-0",
+            "currentWhitelistVerified": false,
+            "evidenceType": "historical-official-affirmative-announcement",
+            "reason": "Official Update 37 added this Mirror Defense node on October 2, 2024; the current server rotation whitelist was not verified."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "lastwish-grineer-mirror-defense",
+            "lastwish-corpus-mirror-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/LastWishDefense/LastWishCmpDefense",
+            "/Lotus/Levels/LastWishDefense/LastWishGuildDefenseTwo"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 127423,
+            "procOffset": 127788,
+            "localizationTag": "/Lotus/Language/Locations/MarsDualDefense",
+            "procSha256": "0930dbc33b795c430b685bae5489eb9a3785b3ed5d06f525429df8520d15a1f8",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "lastwish-corpus-mirror-defense": {
+      "id": "lastwish-corpus-mirror-defense",
+      "name": "Corpus镜像防御模板",
+      "sourceTile": "/Lotus/Levels/LastWishDefense/LastWishGuildDefenseTwo",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "fda122bb7b1c0c7e7aecb3442923ebfac33cf9ac2391defbecd94a7a982636a9",
+          "bytes": 3017448
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "a67abcadca20390512d1b366931f60df3ffcda8ab8c2f6bdbe40a21e783543c2",
+          "bytes": 1150303
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "48947aa847a97a0bf8a0307d4b2594be88c267c24259201ce98d11e6a7d797ae",
+          "bytes": 1936131
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "lastwish-corpus-mirror-defense.scene.json.gz",
+          "sha256": "ff5e8e5de6962f04a3074e6f214f2fd4e6382170f101d93b2b140c2689be450c",
+          "jsonSha256": "fda122bb7b1c0c7e7aecb3442923ebfac33cf9ac2391defbecd94a7a982636a9",
+          "compressedBytes": 390611,
+          "jsonBytes": 3017448
+        },
+        "navigation": {
+          "file": "lastwish-corpus-mirror-defense.navigation.json.gz",
+          "sha256": "726ad096f9409021437a3cc44cfee7d1dbc3f6f68c5377bf80f0c5792274bbf4",
+          "jsonSha256": "a67abcadca20390512d1b366931f60df3ffcda8ab8c2f6bdbe40a21e783543c2",
+          "compressedBytes": 211909,
+          "jsonBytes": 1150303
+        },
+        "visual-map": {
+          "file": "lastwish-corpus-mirror-defense.visual-map.json.gz",
+          "sha256": "e8bebe7b3a1db2ce69173425eaefc961ff95103173f6fd52bf24a7ebad42c214",
+          "jsonSha256": "096e1e1d12f2cb79f4e9ad2111f7afad2c37802c9f2ad2730551e8d129104728",
+          "compressedBytes": 1635811,
+          "jsonBytes": 7388434
+        },
+        "visual-map-collision-candidates": {
+          "file": "lastwish-corpus-mirror-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Ground defense/interception authored tile; mirror mission objective/timer not modeled; continuous-clear scenario only"
+      ],
+      "nameZh": "Corpus镜像防御模板",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "LastWishGuildDefenseTwo",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode450",
+          "nodeName": "Tyana Pass",
+          "nodeNameZh": "Tyana Pass",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/LastWish/LastWishDefense"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode450",
+          "nodeName": "Tyana Pass",
+          "nodeNameZh": "Tyana Pass",
+          "planet": "Mars",
+          "planetZh": "火星",
+          "systemIndex": 3,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "mirror-defense",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 25,
+          "maxEnemyLevel": 30,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/LastWish/LastWishDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "officially-added",
+            "eligible": null,
+            "date": "2024-10-02",
+            "url": "https://www.warframe.com/en/patch-notes/pc/37-0-0",
+            "currentWhitelistVerified": false,
+            "evidenceType": "historical-official-affirmative-announcement",
+            "reason": "Official Update 37 added this Mirror Defense node on October 2, 2024; the current server rotation whitelist was not verified."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "lastwish-grineer-mirror-defense",
+            "lastwish-corpus-mirror-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/LastWishDefense/LastWishCmpDefense",
+            "/Lotus/Levels/LastWishDefense/LastWishGuildDefenseTwo"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 127423,
+            "procOffset": 127788,
+            "localizationTag": "/Lotus/Language/Locations/MarsDualDefense",
+            "procSha256": "0930dbc33b795c430b685bae5489eb9a3785b3ed5d06f525429df8520d15a1f8",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "1999-temple-defense-underground": {
+      "id": "1999-temple-defense-underground",
+      "name": "1999地下神庙防御候选场景",
+      "sourceTile": "/Lotus/Levels/1999/ObjTempleDefenseUnderground",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "95e5b8ecfd3481fcc5b65693506c0ef0348e81230e1970d182ead7aaaa096e6a",
+          "bytes": 1169975
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "b762b0474f5fa178c64f2df47dc269231e800e799eec896bc4cb9dacb08740e2",
+          "bytes": 391479
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "812aa1e9e4fea88fe2b142479ccd746ffe9e7ad081cbf262aae2dbdacf403b0b",
+          "bytes": 926057
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "1999-temple-defense-underground.scene.json.gz",
+          "sha256": "18bfdd536d7f44de2b47e7a55aca23a6c11c2ac91d1225306c7f0c76dfed17c2",
+          "jsonSha256": "95e5b8ecfd3481fcc5b65693506c0ef0348e81230e1970d182ead7aaaa096e6a",
+          "compressedBytes": 163989,
+          "jsonBytes": 1169975
+        },
+        "navigation": {
+          "file": "1999-temple-defense-underground.navigation.json.gz",
+          "sha256": "9813049e19df869d980a441a37b28ed90572f82b8e7c48d98133bbfa227c7fee",
+          "jsonSha256": "b762b0474f5fa178c64f2df47dc269231e800e799eec896bc4cb9dacb08740e2",
+          "compressedBytes": 79793,
+          "jsonBytes": 391479
+        },
+        "visual-map": {
+          "file": "1999-temple-defense-underground.visual-map.json.gz",
+          "sha256": "9350269e4080cb41f40bfebc811f5e55b326ea47b7b81639ff547abd358d2938",
+          "jsonSha256": "016441b435e92e4c1db3b3299282f0ae59a5d9499eca576be50fcaa1b9765f34",
+          "compressedBytes": 1515400,
+          "jsonBytes": 5411138
+        },
+        "visual-map-collision-candidates": {
+          "file": "1999-temple-defense-underground.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Ground defense/interception authored tile; mirror mission objective/timer not modeled; continuous-clear scenario only"
+      ],
+      "nameZh": "1999地下神庙防御候选场景",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "ObjTempleDefenseUnderground",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode858",
+          "nodeName": "Solstice Square",
+          "nodeNameZh": "至日广场",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Vania/VaniaEchoesDefenseWinterWet"
+        }
+      ],
+      "missions": [
+        {
+          "nodeId": "SolNode858",
+          "nodeName": "Solstice Square",
+          "nodeNameZh": "至日广场",
+          "planet": "Höllvania",
+          "planetZh": "霍瓦尼亚",
+          "systemIndex": 23,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "1999-defense",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 65,
+          "maxEnemyLevel": 70,
+          "factionIndex": 8,
+          "sourceProc": "/Lotus/Levels/Proc/Vania/VaniaEchoesDefenseWinterWet",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "partial",
+          "coverageStatus": "partial",
+          "coverageLabel": "部分候选tile已接入",
+          "mapIds": [
+            "1999-temple-defense-underground"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/1999/ObjTempleDefenseUnderground",
+            "/Lotus/Levels/1999/ObjTempleDefenseWinterWet"
+          ],
+          "missingTiles": [
+            "/Lotus/Levels/1999/ObjTempleDefenseWinterWet"
+          ],
+          "missingMapReasons": [
+            {
+              "tile": "/Lotus/Levels/1999/ObjTempleDefenseWinterWet",
+              "reason": "当前安装来源缺少完整0.nav_H/0.nav_B，无法验证原生路线；未伪造导航。"
+            }
+          ],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 588176,
+            "procOffset": 588505,
+            "localizationTag": "/Lotus/Language/1999Echoes/1999NodeI",
+            "procSha256": "7bb9fae1e5421e36b0a454fcc334c77de0262a551d51697bce8019448258c9b2",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    },
+    "corpus-ice-defense": {
+      "id": "corpus-ice-defense",
+      "name": "Corpus冰原防御模板",
+      "sourceTile": "/Lotus/Levels/CorpusIcePlanet/IceDefense01",
+      "gameVersion": "2026.10.28.09.54",
+      "parserVersion": "portable-arena-import-v1",
+      "sources": [
+        {
+          "file": "scene.json",
+          "sha256": "fbf645bd6cb635a741c9b990dd0ee7eeadc863b98efcff99a502ec70ebd8e7fa",
+          "bytes": 2432136
+        },
+        {
+          "file": "navigation.json",
+          "sha256": "0166e5914a9a243ee5a5f27e5dd1659336841b81dbcd77603192b5a2ea8ea777",
+          "bytes": 271113
+        },
+        {
+          "file": "visual-map.json",
+          "sha256": "80c2dd57a1de139f203cd85874eacdba37de4cedbe4948346e54e7d61f5be727",
+          "bytes": 628818
+        },
+        {
+          "file": "visual-map-collision-candidates.json",
+          "sha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "bytes": 168
+        }
+      ],
+      "assets": {
+        "scene": {
+          "file": "corpus-ice-defense.scene.json.gz",
+          "sha256": "516d924821caae53711ac0ce0c4beb568a8f4cd59a40b4de320bb709f063feb1",
+          "jsonSha256": "fbf645bd6cb635a741c9b990dd0ee7eeadc863b98efcff99a502ec70ebd8e7fa",
+          "compressedBytes": 367007,
+          "jsonBytes": 2432136
+        },
+        "navigation": {
+          "file": "corpus-ice-defense.navigation.json.gz",
+          "sha256": "0cbbfce2046ea21ca8ae5a8670a9aef14054a38410fb3bbe712015142cdc2f20",
+          "jsonSha256": "0166e5914a9a243ee5a5f27e5dd1659336841b81dbcd77603192b5a2ea8ea777",
+          "compressedBytes": 53299,
+          "jsonBytes": 271113
+        },
+        "visual-map": {
+          "file": "corpus-ice-defense.visual-map.json.gz",
+          "sha256": "6fe3cd612940e68e69f8995241c8b8d70d74deea6c15902a40e1b922cdea80d0",
+          "jsonSha256": "65c0162dff8d37f0e62f9875cdbae5473decf68c074d785872711692645e371f",
+          "compressedBytes": 2991731,
+          "jsonBytes": 10809668
+        },
+        "visual-map-collision-candidates": {
+          "file": "corpus-ice-defense.visual-map-collision-candidates.json.gz",
+          "sha256": "efb64dd8a056dcd7d3bdf1ed8db8e3ccf30f45e5876262739ee92ebed508f4f5",
+          "jsonSha256": "b8db458155bfc323f84939b8df66b364b3a2402c05e9ca7c746971101fc08d47",
+          "compressedBytes": 155,
+          "jsonBytes": 168
+        }
+      },
+      "staticWallAdmission": {
+        "admittedTriangles": 0
+      },
+      "qualification": [
+        "authored tile template, not mission runtime instance",
+        "visual/CSG/NAV collision proxy, not authoritative BSP",
+        "explicit custom movement policy; ordinary enemies use only admitted enemy links",
+        "source resource provenance is retained in scene metadata and per-mesh source SHA256",
+        "Source zero-area face4953 and incident portals quarantined with original IDs retained; no synthesized bridge or displaced vertices"
+      ],
+      "nameZh": "Corpus冰原防御模板",
+      "architectureFaction": "unknown",
+      "templateLabelZh": "IceDefense01",
+      "factionQualification": "architecture faction only; mission enemy faction is selected independently",
+      "sharedNodeAliases": [
+        {
+          "nodeId": "SolNode211",
+          "nodeName": "Ose",
+          "nodeNameZh": "Ose",
+          "missionType": "Interception",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusIcePlanetInterception"
+        },
+        {
+          "nodeId": "SolNode212",
+          "nodeName": "Paimon",
+          "nodeNameZh": "Paimon",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusIcePlanetDefense"
+        },
+        {
+          "nodeId": "ClanNode6",
+          "nodeName": "Larzac",
+          "nodeNameZh": "Larzac",
+          "missionType": "Defense",
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusIcePlanetDefense"
+        }
+      ],
+      "navQuarantine": {
+        "quarantinedSourceFaces": [
+          {
+            "sourceFace": 4953,
+            "vertexIds": [
+              4516,
+              4618,
+              4619
+            ],
+            "positions": [
+              [
+                -6.875,
+                1.3749980926513672,
+                106.90000915527344
+              ],
+              [
+                -6.275001525878906,
+                1.3749980926513672,
+                106.90000915527344
+              ],
+              [
+                -6.674995422363281,
+                1.3749980926513672,
+                106.90000915527344
+              ]
+            ],
+            "sourceEdges": [
+              [
+                4516,
+                4619
+              ],
+              [
+                4516,
+                4618
+              ],
+              [
+                4618,
+                4619
+              ]
+            ],
+            "reason": "exact-collinear-zero-area-source-ring",
+            "qualification": "isolated without moving source vertices or replacing incident portals"
+          }
+        ]
+      },
+      "missions": [
+        {
+          "nodeId": "SolNode211",
+          "nodeName": "Ose",
+          "nodeNameZh": "Ose",
+          "planet": "Europa",
+          "planetZh": "欧罗巴",
+          "systemIndex": 12,
+          "missionType": "Interception",
+          "missionTypeZh": "拦截",
+          "missionIndex": 13,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 18,
+          "maxEnemyLevel": 23,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusIcePlanetInterception",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "corpus-ice-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/CorpusIcePlanet/IceDefense01"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 443751,
+            "procOffset": 444061,
+            "localizationTag": "/Lotus/Language/Locations/Ose",
+            "procSha256": "92325e403804e25ea2c7f8a8013e8ab1171ddd1f10c86cef390cd198cbcacfd6",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "SolNode212",
+          "nodeName": "Paimon",
+          "nodeNameZh": "Paimon",
+          "planet": "Europa",
+          "planetZh": "欧罗巴",
+          "systemIndex": 12,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 18,
+          "maxEnemyLevel": 23,
+          "factionIndex": 1,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusIcePlanetDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "corpus-ice-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/CorpusIcePlanet/IceDefense01"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 447437,
+            "procOffset": 447743,
+            "localizationTag": "/Lotus/Language/Locations/Paimon",
+            "procSha256": "805bd4f363e62f9f4c704e0f28e0f5907fbd2659d333ac19a481ae03e02e9234",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        },
+        {
+          "nodeId": "ClanNode6",
+          "nodeName": "Larzac",
+          "nodeNameZh": "Larzac",
+          "planet": "Europa",
+          "planetZh": "欧罗巴",
+          "systemIndex": 12,
+          "missionType": "Defense",
+          "missionTypeZh": "防御",
+          "missionIndex": 8,
+          "variant": "standard",
+          "inScope": true,
+          "scope": {
+            "included": true,
+            "exclusion": null,
+            "reason": null
+          },
+          "minEnemyLevel": 23,
+          "maxEnemyLevel": 33,
+          "factionIndex": 2,
+          "sourceProc": "/Lotus/Levels/Proc/Corpus/CorpusIcePlanetDefense",
+          "qualification": "official-export-node-label + current-installed-solar-node-first-proc + exact-proc-resource-dependency",
+          "arbitrationQualification": {
+            "status": "unverified",
+            "eligible": null,
+            "currentWhitelistVerified": false,
+            "reason": "No authoritative current server node whitelist extracted; missionIndex and official drop table are not Arbitration qualification."
+          },
+          "coverage": "candidate-tiles-imported",
+          "coverageStatus": "available",
+          "coverageLabel": "候选tile已接入",
+          "mapIds": [
+            "corpus-ice-defense"
+          ],
+          "candidateTiles": [
+            "/Lotus/Levels/CorpusIcePlanet/IceDefense01"
+          ],
+          "missingTiles": [],
+          "missingMapReasons": [],
+          "evidence": {
+            "solarMapSha256": "9c19755802bcd801ffb9c302085fb359f10ca30ee51a588092fb1a6d5d1be31f",
+            "nodeOffset": 451914,
+            "procOffset": 452231,
+            "localizationTag": "/Lotus/Language/Locations/Larzac",
+            "procSha256": "805bd4f363e62f9f4c704e0f28e0f5907fbd2659d333ac19a481ae03e02e9234",
+            "tileSelection": "Proc dependency closure; top authored level names containing Defense/Defence/Defend/Interception, excluding spawn/exit/prefab/connector/prop families. Not a decoded procedural room selector."
+          }
+        }
+      ]
+    }
+  },
+  "missionCoverage": {
+    "schema": "portable-arena-mission-coverage/v1",
+    "file": "mission-coverage.json",
+    "summary": {
+      "nodes": 45,
+      "defense": 31,
+      "interception": 14,
+      "uniqueProcs": 30,
+      "candidateTiles": 27,
+      "importedTiles": 25,
+      "catalogMaps": 25,
+      "nodesWithImportedTile": 44,
+      "nodesWithNoImportedTile": 1,
+      "partialNodes": 4,
+      "missingTiles": 2,
+      "missingTilesWithNav": 0,
+      "missingTilesWithoutNav": 2,
+      "arbitrationVerifiedNodes": 0,
+      "arbitrationHistoricallyAddedNodes": 2,
+      "currentWhitelistVerified": false,
+      "inScopeNodes": 44,
+      "inScopeDefense": 31,
+      "inScopeInterception": 13,
+      "excludedNodes": 1,
+      "excludedArchwing": 1,
+      "inScopeNodesWithNoImportedTile": 0
     }
   }
 }

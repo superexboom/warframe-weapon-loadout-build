@@ -7258,13 +7258,13 @@ def _arena_context(payload):
 
 
 def arena_catalog_payload():
-    from wfarsenal.arena_scene import list_maps
+    from wfarsenal.arena_scene import list_maps, mission_coverage
     from wfarsenal.arena import defaults, enemy_specs
     specs=[]
     for spec in enemy_specs()["specs"]:
         rows=[dict(avatar=r["resolvedAvatarPath"], name=(MANUAL_ENEMIES_BY_PATH.get(r["resolvedAvatarPath"],{}).get("nameZh") or MANUAL_ENEMIES_BY_PATH.get(r["resolvedAvatarPath"],{}).get("nameEn") or r["agent"].rsplit("/",1)[-1]), tier=r["tier"],weight=r["probability"],cap=r.get("maxSimultaneous")) for r in spec["enemies"] if r.get("runnable")]
         specs.append(dict(id=spec["path"],name=spec["path"].rsplit("/",1)[-1],tiers=sorted({r["tier"] for r in rows}),rows=rows))
-    return {"enemySpecs":specs,"maps":list_maps(), "enemies":[{"path":e["path"], "nameZh":e.get("nameZh"), "name":e.get("nameZh") or e.get("name") or e.get("nameEn"),
+    return {"enemySpecs":specs,"maps":list_maps(), "missionCoverage":mission_coverage(), "enemies":[{"path":e["path"], "nameZh":e.get("nameZh"), "name":e.get("nameZh") or e.get("name") or e.get("nameEn"),
             "nameEn":e.get("nameEn"), "faction":e.get("faction"), "hasHeadProxy":e.get("hasHeadProxy", False)}
             for e in MANUAL_ENEMIES if e.get("complete") is not False],
             "defaults":defaults(_BENCHMARK_ENEMY_PATH), "model":"arena-world-v1",

@@ -1,0 +1,793 @@
+{
+  "schema": "portable-arena-map-import-status/v1",
+  "gameVersion": "2026.10.28.09.54",
+  "qualification": "Import-state metadata only; not a server Arbitration whitelist and not an instruction to invent navigation.",
+  "tiles": {
+    "/Lotus/Levels/GrineerAsteroidRelight/GrnDefenseOne": {
+      "status": "imported",
+      "mapId": "grineer-asteroid-defense",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/GrineerAsteroidRelight/GrnDefenseOne.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 50302738,
+            "packedBytes": 20649,
+            "unpackedBytes": 98800
+          }
+        },
+        "/Lotus/Levels/GrineerAsteroidRelight/GrnDefenseOne/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 2113016143,
+            "packedBytes": 3247,
+            "unpackedBytes": 8976
+          },
+          "H.Misc.toc": {
+            "offset": 65856531,
+            "packedBytes": 136,
+            "unpackedBytes": 136
+          }
+        },
+        "/Lotus/Levels/GrineerAsteroidRelight/GrnDefenseOne/0.nav": {
+          "B.Misc.toc": {
+            "offset": 2113121224,
+            "packedBytes": 54378,
+            "unpackedBytes": 133626
+          },
+          "H.Misc.toc": {
+            "offset": 65854325,
+            "packedBytes": 184,
+            "unpackedBytes": 184
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/GrineerForestRemastered/GftDefense02": {
+      "status": "imported",
+      "mapId": "grineer-forest-defense",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/GrineerForestRemastered/GftDefense02.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 26174281,
+            "packedBytes": 43632,
+            "unpackedBytes": 210458
+          }
+        },
+        "/Lotus/Levels/GrineerForestRemastered/GftDefense02/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 2827515434,
+            "packedBytes": 6616,
+            "unpackedBytes": 18416
+          },
+          "H.Misc.toc": {
+            "offset": 67986553,
+            "packedBytes": 136,
+            "unpackedBytes": 136
+          }
+        },
+        "/Lotus/Levels/GrineerForestRemastered/GftDefense02/0.nav": {
+          "B.Misc.toc": {
+            "offset": 2827523437,
+            "packedBytes": 145637,
+            "unpackedBytes": 376118
+          },
+          "H.Misc.toc": {
+            "offset": 68001179,
+            "packedBytes": 184,
+            "unpackedBytes": 184
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/GrineerForestRemastered/GftInterception01": {
+      "status": "imported",
+      "mapId": "grineer-forest-interception-01",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/GrineerForestRemastered/GftInterception01.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 26116250,
+            "packedBytes": 48419,
+            "unpackedBytes": 245263
+          }
+        },
+        "/Lotus/Levels/GrineerForestRemastered/GftInterception01/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 2125951034,
+            "packedBytes": 26857,
+            "unpackedBytes": 85224
+          },
+          "H.Misc.toc": {
+            "offset": 65510091,
+            "packedBytes": 141,
+            "unpackedBytes": 141
+          }
+        },
+        "/Lotus/Levels/GrineerForestRemastered/GftInterception01/0.nav": {
+          "B.Misc.toc": {
+            "offset": 2126120462,
+            "packedBytes": 70053,
+            "unpackedBytes": 182242
+          },
+          "H.Misc.toc": {
+            "offset": 65521678,
+            "packedBytes": 179,
+            "unpackedBytes": 189
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/GrineerForestRemastered/GftInterception02": {
+      "status": "imported",
+      "mapId": "grineer-forest-interception-02",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/GrineerForestRemastered/GftInterception02.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 26075502,
+            "packedBytes": 40748,
+            "unpackedBytes": 231960
+          }
+        },
+        "/Lotus/Levels/GrineerForestRemastered/GftInterception02/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 2125759154,
+            "packedBytes": 34407,
+            "unpackedBytes": 109776
+          },
+          "H.Misc.toc": {
+            "offset": 65504032,
+            "packedBytes": 141,
+            "unpackedBytes": 141
+          }
+        },
+        "/Lotus/Levels/GrineerForestRemastered/GftInterception02/0.nav": {
+          "B.Misc.toc": {
+            "offset": 2125306691,
+            "packedBytes": 56743,
+            "unpackedBytes": 150214
+          },
+          "H.Misc.toc": {
+            "offset": 65495517,
+            "packedBytes": 189,
+            "unpackedBytes": 189
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/GrineerFortress/FortObjDefense": {
+      "status": "imported",
+      "mapId": "grineer-fortress-defense",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/GrineerFortress/FortObjDefense.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 14015634,
+            "packedBytes": 70597,
+            "unpackedBytes": 436818
+          }
+        },
+        "/Lotus/Levels/GrineerFortress/FortObjDefense/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 1083896188,
+            "packedBytes": 47809,
+            "unpackedBytes": 139224
+          },
+          "H.Misc.toc": {
+            "offset": 46036796,
+            "packedBytes": 130,
+            "unpackedBytes": 130
+          }
+        },
+        "/Lotus/Levels/GrineerFortress/FortObjDefense/0.nav": {
+          "B.Misc.toc": {
+            "offset": 1083848740,
+            "packedBytes": 45184,
+            "unpackedBytes": 124650
+          },
+          "H.Misc.toc": {
+            "offset": 46043295,
+            "packedBytes": 178,
+            "unpackedBytes": 178
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/GrineerSettlement/CmpDefence": {
+      "status": "imported",
+      "mapId": "grineer-settlement-defense",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/GrineerSettlement/CmpDefence.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 52643252,
+            "packedBytes": 52328,
+            "unpackedBytes": 256768
+          }
+        },
+        "/Lotus/Levels/GrineerSettlement/CmpDefence/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 3160787748,
+            "packedBytes": 13350,
+            "unpackedBytes": 37984
+          },
+          "H.Misc.toc": {
+            "offset": 82441533,
+            "packedBytes": 128,
+            "unpackedBytes": 128
+          }
+        },
+        "/Lotus/Levels/GrineerSettlement/CmpDefence/0.nav": {
+          "B.Misc.toc": {
+            "offset": 3160529605,
+            "packedBytes": 138018,
+            "unpackedBytes": 353986
+          },
+          "H.Misc.toc": {
+            "offset": 82438562,
+            "packedBytes": 176,
+            "unpackedBytes": 176
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/GrineerShipyards/ShipyardsInterception": {
+      "status": "imported",
+      "mapId": "grineer-shipyards-interception",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/GrineerShipyards/ShipyardsInterception.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 45168246,
+            "packedBytes": 39520,
+            "unpackedBytes": 177318
+          }
+        },
+        "/Lotus/Levels/GrineerShipyards/ShipyardsInterception/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 2430752859,
+            "packedBytes": 10349,
+            "unpackedBytes": 31080
+          },
+          "H.Misc.toc": {
+            "offset": 55786652,
+            "packedBytes": 138,
+            "unpackedBytes": 138
+          }
+        },
+        "/Lotus/Levels/GrineerShipyards/ShipyardsInterception/0.nav": {
+          "B.Misc.toc": {
+            "offset": 2430673844,
+            "packedBytes": 64450,
+            "unpackedBytes": 179656
+          },
+          "H.Misc.toc": {
+            "offset": 55783381,
+            "packedBytes": 186,
+            "unpackedBytes": 186
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/InfestedCorpus/InfestedDefense01": {
+      "status": "imported",
+      "mapId": "infested-corpus-defense",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/InfestedCorpus/InfestedDefense01.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 21639141,
+            "packedBytes": 56046,
+            "unpackedBytes": 272825
+          }
+        },
+        "/Lotus/Levels/InfestedCorpus/InfestedDefense01/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 1030662974,
+            "packedBytes": 17923,
+            "unpackedBytes": 55520
+          },
+          "H.Misc.toc": {
+            "offset": 18957839,
+            "packedBytes": 132,
+            "unpackedBytes": 132
+          }
+        },
+        "/Lotus/Levels/InfestedCorpus/InfestedDefense01/0.nav": {
+          "B.Misc.toc": {
+            "offset": 1030570835,
+            "packedBytes": 59156,
+            "unpackedBytes": 147252
+          },
+          "H.Misc.toc": {
+            "offset": 18957273,
+            "packedBytes": 180,
+            "unpackedBytes": 180
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/Orokin/Defend1": {
+      "status": "imported",
+      "mapId": "orokin-tower-defense",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/Orokin/Defend1.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 34650584,
+            "packedBytes": 30241,
+            "unpackedBytes": 282550
+          }
+        },
+        "/Lotus/Levels/Orokin/Defend1/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 2479443952,
+            "packedBytes": 29127,
+            "unpackedBytes": 89856
+          },
+          "H.Misc.toc": {
+            "offset": 68451365,
+            "packedBytes": 114,
+            "unpackedBytes": 114
+          }
+        },
+        "/Lotus/Levels/Orokin/Defend1/0.nav": {
+          "B.Misc.toc": {
+            "offset": 2479804279,
+            "packedBytes": 156361,
+            "unpackedBytes": 429066
+          },
+          "H.Misc.toc": {
+            "offset": 68448619,
+            "packedBytes": 152,
+            "unpackedBytes": 162
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/OrokinDerelict/Defend2Derelict": {
+      "status": "imported",
+      "mapId": "orokin-derelict-defense",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/OrokinDerelict/Defend2Derelict.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 66965048,
+            "packedBytes": 37751,
+            "unpackedBytes": 278075
+          }
+        },
+        "/Lotus/Levels/OrokinDerelict/Defend2Derelict/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 3632782567,
+            "packedBytes": 20145,
+            "unpackedBytes": 67040
+          },
+          "H.Misc.toc": {
+            "offset": 89580679,
+            "packedBytes": 130,
+            "unpackedBytes": 130
+          }
+        },
+        "/Lotus/Levels/OrokinDerelict/Defend2Derelict/0.nav": {
+          "B.Misc.toc": {
+            "offset": 3632545053,
+            "packedBytes": 37702,
+            "unpackedBytes": 100064
+          },
+          "H.Misc.toc": {
+            "offset": 89592521,
+            "packedBytes": 178,
+            "unpackedBytes": 178
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/OrokinMoon/MoonObjDefense01": {
+      "status": "imported",
+      "mapId": "orokin-moon-defense",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/OrokinMoon/MoonObjDefense01.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 10887154,
+            "packedBytes": 48452,
+            "unpackedBytes": 241668
+          }
+        },
+        "/Lotus/Levels/OrokinMoon/MoonObjDefense01/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 921461089,
+            "packedBytes": 24664,
+            "unpackedBytes": 74720
+          },
+          "H.Misc.toc": {
+            "offset": 30353125,
+            "packedBytes": 127,
+            "unpackedBytes": 127
+          }
+        },
+        "/Lotus/Levels/OrokinMoon/MoonObjDefense01/0.nav": {
+          "B.Misc.toc": {
+            "offset": 921231476,
+            "packedBytes": 228500,
+            "unpackedBytes": 606836
+          },
+          "H.Misc.toc": {
+            "offset": 30341885,
+            "packedBytes": 175,
+            "unpackedBytes": 175
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/EntratiLab/ObjDefenseEar": {
+      "status": "imported",
+      "mapId": "entrati-lab-mirror-defense-ear",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/EntratiLab/ObjDefenseEar.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 22973390,
+            "packedBytes": 34768,
+            "unpackedBytes": 245436
+          }
+        },
+        "/Lotus/Levels/EntratiLab/ObjDefenseEar/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 1928687542,
+            "packedBytes": 20515,
+            "unpackedBytes": 60952
+          },
+          "H.Misc.toc": {
+            "offset": 68672316,
+            "packedBytes": 124,
+            "unpackedBytes": 124
+          }
+        },
+        "/Lotus/Levels/EntratiLab/ObjDefenseEar/0.nav": {
+          "B.Misc.toc": {
+            "offset": 1929523103,
+            "packedBytes": 36993,
+            "unpackedBytes": 98964
+          },
+          "H.Misc.toc": {
+            "offset": 68689561,
+            "packedBytes": 172,
+            "unpackedBytes": 172
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/EntratiLab/ObjDefenseEye": {
+      "status": "imported",
+      "mapId": "entrati-lab-mirror-defense-eye",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/EntratiLab/ObjDefenseEye.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 23008158,
+            "packedBytes": 29631,
+            "unpackedBytes": 217705
+          }
+        },
+        "/Lotus/Levels/EntratiLab/ObjDefenseEye/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 1929666848,
+            "packedBytes": 6690,
+            "unpackedBytes": 18256
+          },
+          "H.Misc.toc": {
+            "offset": 68682232,
+            "packedBytes": 124,
+            "unpackedBytes": 124
+          }
+        },
+        "/Lotus/Levels/EntratiLab/ObjDefenseEye/0.nav": {
+          "B.Misc.toc": {
+            "offset": 1929723467,
+            "packedBytes": 35713,
+            "unpackedBytes": 93714
+          },
+          "H.Misc.toc": {
+            "offset": 68675431,
+            "packedBytes": 172,
+            "unpackedBytes": 172
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/LastWishDefense/LastWishCmpDefense": {
+      "status": "imported",
+      "mapId": "lastwish-grineer-mirror-defense",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/LastWishDefense/LastWishCmpDefense.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 16798376,
+            "packedBytes": 56858,
+            "unpackedBytes": 284387
+          }
+        },
+        "/Lotus/Levels/LastWishDefense/LastWishCmpDefense/0.nav": {
+          "B.Misc.toc": {
+            "offset": 1236843094,
+            "packedBytes": 138723,
+            "unpackedBytes": 353430
+          },
+          "H.Misc.toc": {
+            "offset": 37665626,
+            "packedBytes": 182,
+            "unpackedBytes": 182
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/LastWishDefense/LastWishGuildDefenseTwo": {
+      "status": "imported",
+      "mapId": "lastwish-corpus-mirror-defense",
+      "reason": null,
+      "qualification": "Source NAV/LEVEL validated; authored tile only. Real 10s/3 enemy World smoke passed; external static visuals completed with source omissions retained.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/LastWishDefense/LastWishGuildDefenseTwo.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 16766394,
+            "packedBytes": 31982,
+            "unpackedBytes": 234879
+          }
+        },
+        "/Lotus/Levels/LastWishDefense/LastWishGuildDefenseTwo/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 1236656295,
+            "packedBytes": 30726,
+            "unpackedBytes": 98600
+          },
+          "H.Misc.toc": {
+            "offset": 37644626,
+            "packedBytes": 139,
+            "unpackedBytes": 139
+          }
+        },
+        "/Lotus/Levels/LastWishDefense/LastWishGuildDefenseTwo/0.nav": {
+          "B.Misc.toc": {
+            "offset": 1235707757,
+            "packedBytes": 66710,
+            "unpackedBytes": 181242
+          },
+          "H.Misc.toc": {
+            "offset": 37645764,
+            "packedBytes": 187,
+            "unpackedBytes": 187
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/CorpusIcePlanet/IceDefense01": {
+      "status": "imported-with-quarantine",
+      "code": "source-degenerate-face-quarantined",
+      "reason": "已隔离原生零面积face4953与2条相关portal，保留源ID和原顶点；5122有效面、5059可达面，真实10秒3敌验证通过。",
+      "importBlockReason": null,
+      "sourceFace": 4953,
+      "sourceEdges": [
+        [
+          4516,
+          4619
+        ],
+        [
+          4516,
+          4618
+        ],
+        [
+          4618,
+          4619
+        ]
+      ],
+      "sourceVertices": {
+        "4516": [
+          -6.875,
+          1.3749980926513672,
+          106.90000915527344
+        ],
+        "4618": [
+          -6.275001525878906,
+          1.3749980926513672,
+          106.90000915527344
+        ],
+        "4619": [
+          -6.674995422363281,
+          1.3749980926513672,
+          106.90000915527344
+        ]
+      },
+      "area": 0.0,
+      "evidence": "work/geometry/map-coverage/IceDefense01/raw",
+      "error": "ValueError: NAV polygon 4953: zero area",
+      "resolution": "Imported with exact zero-area source face and incident portals excluded, original source IDs retained; no vertex motion or synthesized bypass.",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/CorpusIcePlanet/IceDefense01.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 20539142,
+            "packedBytes": 56603,
+            "unpackedBytes": 324909
+          }
+        },
+        "/Lotus/Levels/CorpusIcePlanet/IceDefense01/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 1294879285,
+            "packedBytes": 12249,
+            "unpackedBytes": 41224
+          },
+          "H.Misc.toc": {
+            "offset": 36655180,
+            "packedBytes": 128,
+            "unpackedBytes": 128
+          }
+        },
+        "/Lotus/Levels/CorpusIcePlanet/IceDefense01/0.nav": {
+          "B.Misc.toc": {
+            "offset": 1294891534,
+            "packedBytes": 167072,
+            "unpackedBytes": 413966
+          },
+          "H.Misc.toc": {
+            "offset": 36660307,
+            "packedBytes": 176,
+            "unpackedBytes": 176
+          }
+        }
+      },
+      "mapId": "corpus-ice-defense",
+      "navQuarantine": {
+        "sourcePolygonCount": 5123,
+        "runtimeFaces": 5122,
+        "quarantinedSourceFaces": [
+          {
+            "sourceFace": 4953,
+            "vertexIds": [
+              4516,
+              4618,
+              4619
+            ],
+            "positions": [
+              [
+                -6.875,
+                1.3749980926513672,
+                106.90000915527344
+              ],
+              [
+                -6.275001525878906,
+                1.3749980926513672,
+                106.90000915527344
+              ],
+              [
+                -6.674995422363281,
+                1.3749980926513672,
+                106.90000915527344
+              ]
+            ],
+            "sourceEdges": [
+              [
+                4516,
+                4619
+              ],
+              [
+                4516,
+                4618
+              ],
+              [
+                4618,
+                4619
+              ]
+            ],
+            "reason": "exact-collinear-zero-area-source-ring",
+            "qualification": "isolated without moving source vertices or replacing incident portals"
+          }
+        ],
+        "excludedSourcePortalCount": 2,
+        "reachableFaces": 5059
+      }
+    },
+    "/Lotus/Levels/Outpost/CrpOutpostDefenseThree": {
+      "status": "blocked-missing-source-nav",
+      "code": "source-nav-header-body-missing",
+      "reason": "当前安装资源中未找到该模板0.nav_H/0.nav_B；有level/BSP不等于有可验证导航。",
+      "importBlockReason": "来源缺少完整0.nav_H/0.nav_B，无法建立可验证原生路线；未用平面或邻近点伪造连接。",
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/Outpost/CrpOutpostDefenseThree.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 17745720,
+            "packedBytes": 38074,
+            "unpackedBytes": 223698
+          }
+        },
+        "/Lotus/Levels/Outpost/CrpOutpostDefenseThree/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 1143239599,
+            "packedBytes": 29103,
+            "unpackedBytes": 95712
+          },
+          "H.Misc.toc": {
+            "offset": 34372835,
+            "packedBytes": 130,
+            "unpackedBytes": 130
+          }
+        }
+      }
+    },
+    "/Lotus/Levels/1999/ObjTempleDefenseUnderground": {
+      "status": "imported-candidate",
+      "code": "source-imported-arbitration-unverified",
+      "reason": "来源NAV/LEVEL验证及10秒3敌真实世界运行通过；仅候选来源场景，仲裁资格未知，不复刻1999任务。",
+      "importBlockReason": null,
+      "navHeaderPresent": true,
+      "navBodyPresent": true,
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/1999/ObjTempleDefenseUnderground.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 55577218,
+            "packedBytes": 28167,
+            "unpackedBytes": 137261
+          }
+        },
+        "/Lotus/Levels/1999/ObjTempleDefenseUnderground/0.bsp": {
+          "B.Misc.toc": {
+            "offset": 2806512188,
+            "packedBytes": 9809,
+            "unpackedBytes": 24104
+          },
+          "H.Misc.toc": {
+            "offset": 67933759,
+            "packedBytes": 132,
+            "unpackedBytes": 132
+          }
+        },
+        "/Lotus/Levels/1999/ObjTempleDefenseUnderground/0.nav": {
+          "B.Misc.toc": {
+            "offset": 2806323671,
+            "packedBytes": 70487,
+            "unpackedBytes": 176576
+          },
+          "H.Misc.toc": {
+            "offset": 67941542,
+            "packedBytes": 170,
+            "unpackedBytes": 180
+          }
+        }
+      },
+      "mapId": "1999-temple-defense-underground",
+      "arbitrationEligibility": "unknown",
+      "qualification": "Source readable candidate does not imply authoritative Arbitration eligibility."
+    },
+    "/Lotus/Levels/1999/ObjTempleDefenseWinterWet": {
+      "status": "blocked-missing-source-nav",
+      "code": "source-nav-header-body-missing",
+      "reason": "来源未找到完整0.nav_H/0.nav_B；候选资格未知不作为排除理由，但无可验证导航不能导入。",
+      "importBlockReason": "当前安装来源缺少完整0.nav_H/0.nav_B，无法验证原生路线；未伪造导航。",
+      "navHeaderPresent": false,
+      "navBodyPresent": false,
+      "sourceResourceEvidence": {
+        "/Lotus/Levels/1999/ObjTempleDefenseWinterWet.level": {
+          "H.AnimRetarget.toc": {
+            "offset": 35998957,
+            "packedBytes": 48649,
+            "unpackedBytes": 278465
+          }
+        }
+      }
+    }
+  }
+}

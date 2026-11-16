@@ -308,6 +308,15 @@ def _closest_triangle(p, a, b, c):
     return tuple(a[i] + ab[i] * vb / den + ac[i] * vc / den for i in range(3))
 
 
+class _ZeroAreaNavFace(ValueError):
+    """Only a valid source edge ring whose vertices are exactly collinear."""
+
+    def __init__(self, source_face, ring):
+        self.source_face = source_face
+        self.ring = list(ring)
+        super().__init__(f"NAV polygon {source_face}: exact collinear zero-area ring")
+
+
 def _triangulate_nav_polygon(vertices, edges, source_face):
     """Recover one closed source ring and deterministic validated ear clipping.
 
@@ -344,7 +353,21 @@ def _triangulate_nav_polygon(vertices, edges, source_face):
         normal[2] += (a[0] - b[0]) * (a[1] + b[1])
     norm = math.sqrt(_dot(normal, normal))
     if norm < 1e-9:
-        raise ValueError(f"NAV polygon {source_face}: zero area")
+        # Newell cancellation alone may also mean a self-crossing polygon.
+        # Quarantine only exact collinearity, not tiny valid triangles, bowties
+        # or arbitrary invalid source faces. Source coordinates stay unchanged.
+        anchor = points[0]
+        direction = next(
+            (_sub(point, anchor) for point in points[1:] if point != anchor), None
+        )
+        if direction is not None and all(
+            _cross(direction, _sub(point, anchor)) == (0.0, 0.0, 0.0)
+            for point in points
+        ):
+            raise _ZeroAreaNavFace(source_face, ring)
+        raise ValueError(
+            f"NAV polygon {source_face}: zero/cancelled area, not exact collinearity"
+        )
     normal = [v / norm for v in normal]
     plane_error = max(abs(_dot(_sub(p, points[0]), normal)) for p in points)
     if plane_error > 0.002:
@@ -536,8 +559,24 @@ def prepare_raw_tile(
     source_count = nfaces
     polygons, triangles, from_face_map, plane_errors = [], [], [], []
     expanded = {}
+    quarantined_faces = []
+    quarantined_ids = set()
     for f in range(source_count):
-        ring, split, error = _triangulate_nav_polygon(vertices, faces[f], f)
+        try:
+            ring, split, error = _triangulate_nav_polygon(vertices, faces[f], f)
+        except _ZeroAreaNavFace as exc:
+            ring, split, error = exc.ring, [], 0.0
+            quarantined_ids.add(f)
+            quarantined_faces.append(
+                {
+                    "sourceFace": f,
+                    "vertexIds": list(ring),
+                    "positions": [list(vertices[k]) for k in ring],
+                    "sourceEdges": [list(edge) for edge in faces[f]],
+                    "reason": "exact-collinear-zero-area-source-ring",
+                    "qualification": "isolated without moving source vertices or replacing incident portals",
+                }
+            )
         polygons.append(ring)
         plane_errors.append(error)
         expanded[f] = list(range(len(triangles), len(triangles) + len(split)))
@@ -565,6 +604,8 @@ def prepare_raw_tile(
             }
         )
 
+    excluded_portals = []
+    quarantined_neighbor_faces = set()
     # Shared edge records contain exact source vertex IDs.
     for a, c, f, g, tag in struct.iter_unpack(
         "<5H", nav_b.read_bytes()[nverts * 12 : end]
@@ -572,6 +613,17 @@ def prepare_raw_tile(
         if g == 65535:
             continue
         edge = tuple(sorted((a, c)))
+        if f in quarantined_ids or g in quarantined_ids:
+            excluded_portals.append(
+                {
+                    "sourceFaces": [f, g],
+                    "vertexIds": list(edge),
+                    "reason": "incident-to-quarantined-zero-area-face",
+                }
+            )
+            quarantined_neighbor_faces.update(expanded.get(f, []))
+            quarantined_neighbor_faces.update(expanded.get(g, []))
+            continue
         one, two = source_edges[(f, edge)], source_edges[(g, edge)]
         if len(one) != 1 or len(two) != 1:
             raise ValueError(
@@ -582,6 +634,8 @@ def prepare_raw_tile(
         if len(parts) == 2:
             connect(parts[0], parts[1], edge, "validated-source-polygon-internal-split")
     nfaces = len(triangles)
+    if not nfaces:
+        raise ValueError("NAV contains no nonquarantined faces")
     nodes = [[sum(vertices[k][i] for k in t) / 3 for i in range(3)] for t in triangles]
     graph = defaultdict(set)
     for a, c in adjacency:
@@ -779,6 +833,8 @@ def prepare_raw_tile(
     )
     for face, t in enumerate(triangles):
         for a, b in ((t[0], t[1]), (t[1], t[2]), (t[2], t[0])):
+            if face in quarantined_neighbor_faces:
+                continue
             if incidence[tuple(sorted((a, b)))] == 1:
                 midpoint = [(vertices[a][i] + vertices[b][i]) * 0.5 for i in range(3)]
                 point = [midpoint[i] * 0.95 + nodes[face][i] * 0.05 for i in range(3)]
@@ -865,6 +921,8 @@ def prepare_raw_tile(
                 key=lambda row: row[0],
             )
             length, fa, fb = best_pair
+            if fa in quarantined_neighbor_faces or fb in quarantined_neighbor_faces:
+                continue
             pa, pb = nodes[fa], nodes[fb]
             if (
                 abs(pa[1] - pb[1]) > 8
@@ -1008,6 +1066,10 @@ def prepare_raw_tile(
             "fromFaceMap": from_face_map,
             "sourcePolygons": polygons,
             "sourcePolygonCount": source_count,
+            "sourceFaceToTriangles": [expanded[f] for f in range(source_count)],
+            "quarantinedSourceFaces": quarantined_faces,
+            "excludedSourcePortals": excluded_portals,
+            "quarantineDerivedLinkExcludedFaces": sorted(quarantined_neighbor_faces),
             "polygonTriangulation": {
                 "method": "edge-ring-earclip",
                 "maxPlaneError": max(plane_errors),
@@ -1100,6 +1162,8 @@ def prepare_raw_tile(
                 "map": name,
                 "navFaces": nfaces,
                 "sourcePolygonCount": source_count,
+                "quarantinedSourceFaces": quarantined_faces,
+                "excludedSourcePortalCount": len(excluded_portals),
                 "polygonTriangulationMaxPlaneError": max(plane_errors),
                 "components": sorted(map(len, groups), reverse=True),
                 "start": scene["start"],
@@ -1124,6 +1188,828 @@ def prepare_raw_tile(
         encoding="utf8",
     )
     return destination
+
+
+def _read_visual_level(source: Path, tile_path: str):
+    """Read exact LEVEL212 instances for visual completion, independent of NAV."""
+    import struct
+
+    name = tile_path.rsplit("/", 1)[-1]
+    header = next((source / "raw-level").glob(f"**/{name}.level_H"))
+    body = next((source / "raw-level").glob(f"**/{name}.level_B"))
+    h, b = header.read_bytes(), body.read_bytes()
+    reader = _TileReader(h, 16)
+    reader.strings()
+    reader.u32()
+    version = reader.u32()
+    if version != 212:
+        raise ValueError(f"unsupported visual LEVEL {version}")
+    reader.strings()
+    reader.strings()
+    reader.strings()
+    for _ in range(reader.u32()):
+        reader.string()
+        reader.string()
+        reader.u32()
+        reader.u32()
+    if reader.u32() != 0:
+        raise ValueError("unexpected level prefix")
+    count = reader.u32()
+    entities = []
+    for index in range(count):
+        offset = reader.pos
+        typ = reader.string()
+        values = struct.unpack_from("<7f", h, reader.pos)
+        reader.pos += 28
+        scope = reader.string()
+        mesh_index, unknown = reader.u32(), reader.u32()
+        entities.append(
+            {
+                "id": index,
+                "type": typ,
+                "position": list(values[:3]),
+                "quaternion": list(values[3:]),
+                "scope": scope,
+                "headerOffset": offset,
+            }
+        )
+    lens = struct.unpack_from("<" + "I" * count, b)
+    offset = count * 4
+    for entity, length in zip(entities, lens):
+        entity["attributes"] = (
+            b[offset : offset + length + 1].rstrip(b"\0").decode("utf8")
+        )
+        entity["bodyOffset"] = offset
+        offset += length + 1
+    if offset != len(b):
+        raise ValueError("visual level body not fully consumed")
+    return entities, {
+        "levelHeaderSha256": sha(header),
+        "levelBodySha256": sha(body),
+        "levelEntities": count,
+        "levelHeaderTailBytes": len(h) - reader.pos,
+        "levelBodyFullyConsumed": True,
+    }
+
+
+def _decode_visual_glb(path: Path, source_path: str):
+    """Reverse exporter static-Z mirror; preserve groups without invented UVs."""
+    import struct
+
+    data = path.read_bytes()
+    size = struct.unpack_from("<I", data, 12)[0]
+    doc, binary = json.loads(data[20 : 20 + size]), data[28 + size :]
+    if doc.get("skins") or any(
+        any(
+            key in node
+            for key in ("matrix", "translation", "rotation", "scale", "skin")
+        )
+        for node in doc.get("nodes", [])
+    ):
+        return None, "rigged-or-node-transformed-mesh-unassembled"
+
+    def access(index):
+        accessor = doc["accessors"][index]
+        view = doc["bufferViews"][accessor["bufferView"]]
+        width = {"SCALAR": 1, "VEC3": 3}[accessor["type"]]
+        code = {5126: "f", 5123: "H", 5125: "I"}[accessor["componentType"]]
+        offset = view.get("byteOffset", 0) + accessor.get("byteOffset", 0)
+        stride = view.get("byteStride", struct.calcsize("<" + code) * width)
+        return [
+            struct.unpack_from("<" + code * width, binary, offset + i * stride)
+            for i in range(accessor["count"])
+        ]
+
+    vertices, indices, groups, unique = [], [], [], {}
+    for mesh in doc.get("meshes", []):
+        for primitive in mesh["primitives"]:
+            if primitive.get("mode", 4) != 4:
+                return None, "non-triangle-primitive"
+            points = access(primitive["attributes"]["POSITION"])
+            remap = []
+            for x, y, z in points:
+                point = (round(x, 5), round(y, 5), round(-z, 5))
+                if point not in unique:
+                    unique[point] = len(vertices) // 3
+                    vertices.extend(point)
+                remap.append(unique[point])
+            raw = [row[0] for row in access(primitive["indices"])]
+            start = len(indices)
+            for k in range(0, len(raw), 3):
+                indices.extend((remap[raw[k]], remap[raw[k + 2]], remap[raw[k + 1]]))
+            mat = doc.get("materials", [{}])[primitive.get("material", 0)]
+            groups.append(
+                {
+                    "start": start,
+                    "count": len(raw),
+                    "sourceMaterialPath": mat.get("extras", {}).get(
+                        "FullPath", mat.get("name", "unknown")
+                    ),
+                }
+            )
+    if not indices:
+        return None, "no-triangle-geometry"
+    return {
+        "path": source_path,
+        "positions": vertices,
+        "indices": indices,
+        "groups": groups,
+        "sha256": sha(path),
+        "triangleCount": len(indices) // 3,
+        "vertexCount": len(vertices) // 3,
+        "bounds": [
+            [min(vertices[i::3]) for i in range(3)],
+            [max(vertices[i::3]) for i in range(3)],
+        ],
+        "category": (
+            "csg"
+            if source_path.endswith("_c.fbx")
+            else (
+                "structure"
+                if source_path.endswith(".tmesh")
+                or re.search(
+                    r"Structural|Floor|Wall|Stair|Ramp|Platform|Catwalk|_a\.fbx$",
+                    source_path,
+                    re.I,
+                )
+                else "prop"
+            )
+        ),
+        "qualification": "actual referenced static mesh; source XYZ; inverse exporter Z mirror and winding; positions quantized1e-5",
+    }, None
+
+
+def _inspect_renderless_mesh(header: Path, body: Path):
+    """Read known source header counts, without turning collision into visuals."""
+    import struct
+
+    data = header.read_bytes()
+    reader = _TileReader(data, 16)
+    reader.strings()
+    reader.u32()
+    version = reader.u32()
+    if version not in (102, 109, 112):
+        return None
+    resource_start = reader.pos
+    reader.pos += 0x30
+    first, second = reader.u32(), reader.u32()
+    if (first == 8 or second == 8) if version == 102 else (first & 8 or second & 8):
+        reader.pos += 2
+    reader.string()
+    reader.pos += 0x28 + 32
+    count_offset = reader.pos
+    vertices, indices, morphs, bones = (reader.u32() for _ in range(4))
+    if vertices or indices:
+        return None
+    payload = body.read_bytes()
+    return {
+        "kind": "source-zero-render-geometry",
+        "resourceVersion": version,
+        "resourcePayloadOffset": resource_start,
+        "renderCountOffset": count_offset,
+        "renderVertices": vertices,
+        "renderIndices": indices,
+        "morphCount": morphs,
+        "boneCount": bones,
+        "headerSha256": sha(header),
+        "bodySha256": sha(body),
+        "bodyBytes": len(payload),
+        "bodyMagicHex": payload[:16].hex(),
+        "physxConvexMagic": payload.startswith(b"NXS\x01CVXM"),
+        "qualification": "source render vertex/index counts are both zero under upstream model102/109/112 header layout; retained physics/body data is not a visible surface or alternate render LOD",
+    }
+
+
+def complete_visual_maps(
+    case_root: Path,
+    cache_dir: Path,
+    exporter: Path,
+    packages_bin: Path,
+    output: Path,
+    *,
+    map_ids=None,
+):
+    """Complete exact external LEVEL Mesh references; never modify NAV/collision.
+
+    Shared per-resource extraction cache and instance-level omissions make this
+    reusable for every imported map. Catalog updates are restricted to the
+    visual-map asset entry; live metadata maintained by other owners is reread.
+    """
+    import subprocess
+    from collections import Counter
+    from import_melee_mechanics import Packages
+
+    package = Packages(packages_bin)
+    catalog = json.loads((output / "catalog.json").read_text(encoding="utf8"))
+    workspace = case_root / "work/geometry/complete-visuals"
+    workspace.mkdir(parents=True, exist_ok=True)
+    shared = workspace / "assets"
+    shared.mkdir(exist_ok=True)
+    index_path = workspace / "export-index.json"
+    export_index = (
+        json.loads(index_path.read_text(encoding="utf8")) if index_path.exists() else {}
+    )
+    decoded, defaults, results = {}, {}, []
+    for map_id, entry in catalog["maps"].items():
+        if map_ids and map_id not in map_ids:
+            continue
+        tile = entry["sourceTile"]
+        name = tile.rsplit("/", 1)[-1]
+        source = (
+            case_root
+            / "work/geometry"
+            / ("galleon" if name == "GrnDefenceTwo" else "map-coverage/" + name)
+        )
+        if name == "ObjDefense01":
+            source = case_root / "work/geometry"
+        entities, provenance = _read_visual_level(source, tile)
+        prior_asset = entry["assets"]["visual-map"]
+        old = json.loads(gzip.decompress((output / prior_asset["file"]).read_bytes()))
+        metadata = dict(old.get("metadata", {}))
+        meshes, instances, materials, matids, meshids, omissions = (
+            [],
+            [],
+            [],
+            {},
+            {},
+            [],
+        )
+
+        def material(path):
+            if path not in matids:
+                color = "#64727b"
+                if re.search(r"Floor|Catwalk|Platform|Stair", path, re.I):
+                    color = "#6d756d"
+                elif re.search(r"Wall|Panel|InteriorKit", path, re.I):
+                    color = "#657783"
+                elif re.search(r"Metal|Iron|Steel|Rust", path, re.I):
+                    color = "#787872"
+                elif re.search(r"Dark|Black|DkGray", path, re.I):
+                    color = "#3b4650"
+                elif re.search(r"Light|Emissive", path, re.I):
+                    color = "#97b7c5"
+                elif re.search(r"Grineer|Gln|Gof", path, re.I):
+                    color = "#777565"
+                matids[path] = len(materials)
+                materials.append(
+                    {
+                        "id": len(materials),
+                        "sourcePath": path,
+                        "color": color,
+                        "qualification": "source material identity with simplified untextured color",
+                    }
+                )
+            return matids[path]
+
+        # Keep original shared-mesh IDs stable: the separate collision candidate
+        # sidecar can refer to those IDs even though simulation collision is not
+        # changed by this visual-only pass. New shared meshes append afterwards.
+        original_file = (
+            (case_root / "output/arena-demo/visual-map.json")
+            if name == "ObjDefense01"
+            else source / "prepared/visual-map.json"
+        )
+        original_visual = (
+            json.loads(original_file.read_text(encoding="utf8"))
+            if original_file.exists()
+            else old
+        )
+        for original_mesh in original_visual.get("meshes", []):
+            seeded = dict(original_mesh)
+            seeded["id"] = len(meshes)
+            seeded["groups"] = []
+            for group in original_mesh["groups"]:
+                path = (
+                    group.get("sourceMaterialPath")
+                    or original_visual["materials"][group["materialId"]]["sourcePath"]
+                )
+                seeded["groups"].append(
+                    dict(group, sourceMaterialPath=path, materialId=material(path))
+                )
+            positions = seeded["positions"]
+            seeded["bounds"] = [
+                [min(positions[i::3]) for i in range(3)],
+                [max(positions[i::3]) for i in range(3)],
+            ]
+            seeded["category"] = (
+                "csg"
+                if seeded["path"].endswith("_c.fbx")
+                else (
+                    "structure"
+                    if re.search(
+                        r"Structural|Floor|Wall|Stair|Ramp|Platform|Catwalk|_a\.fbx$",
+                        seeded["path"],
+                        re.I,
+                    )
+                    else "prop"
+                )
+            )
+            meshids[seeded["path"]] = seeded["id"]
+            meshes.append(seeded)
+        explicit_count = inherited_count = eligible = 0
+        for entity in entities:
+            raw, typ = entity["attributes"], entity["type"]
+            if typ not in defaults:
+                # A true source parse error must stop the import. Falling back
+                # to {} would silently lose inherited Mesh-bearing instances.
+                defaults[typ] = package.resolve(typ) if package.exists(typ) else {}
+            base = defaults[typ]
+            match = re.search(r"^Mesh=(.*)$", raw, re.M)
+            reference = match[1].strip('"') if match else base.get("Mesh")
+            if not isinstance(reference, str) or not reference:
+                continue
+            explicit_count += bool(match)
+            inherited_count += not bool(match)
+            if reference.startswith("/"):
+                path = reference
+            elif match:
+                path = (
+                    tile + "/" + reference
+                    if not reference.startswith(name + "/")
+                    else tile.rsplit("/", 1)[0] + "/" + reference
+                )
+            else:
+                # Mesh references inherited from a type belong to that type's
+                # declaring directory, not the map tile or instance scope.
+                owner = typ
+                seen = set()
+                while owner and owner not in seen:
+                    seen.add(owner)
+                    own = package.own(owner)
+                    if "Mesh" in own:
+                        break
+                    owner = package.parent(owner)
+                path = owner.rsplit("/", 1)[0] + "/" + reference if owner else ""
+            reason = None
+            if re.search(r"^Attached=1$", raw, re.M) or (
+                not re.search(r"^Attached=", raw, re.M) and base.get("Attached")
+            ):
+                reason = "attached-parent-local-transform-unresolved"
+            elif re.search(r"^StartHidden=1$", raw, re.M) or (
+                not re.search(r"^StartHidden=", raw, re.M) and base.get("StartHidden")
+            ):
+                reason = "authored-start-hidden"
+            elif (
+                typ.endswith("/Mover")
+                or "/Characters/" in typ
+                or "/Fx/" in typ
+                or ("/Fx/" in path and not re.search(r"IceFloorMesh", path))
+            ):
+                reason = "dynamic-mover-character-or-effect"
+            elif path == "/EE/Objects/FogVolumeSphere.lwo":
+                reason = "source-fog-volume-not-visible-floor-geometry"
+            elif re.search(r"/Decals/|/Water/|/Skybox/", path, re.I):
+                reason = "decal-water-sky-needs-source-transparency-material"
+            elif not path.startswith("/") or not path.endswith(
+                (".fbx", ".obj", ".tmesh")
+            ):
+                reason = "unsupported-or-unresolved-mesh-reference"
+            if reason:
+                omissions.append(
+                    {
+                        "entityId": entity["id"],
+                        "type": typ,
+                        "sourceMesh": path,
+                        "reason": reason,
+                    }
+                )
+                continue
+            eligible += 1
+            if path not in decoded:
+                # Reuse source tile exports when exact original path matches.
+                existing = (
+                    source / "models" / (path.lstrip("/").rsplit(".", 1)[0] + ".glb")
+                )
+                if existing.exists():
+                    file = existing
+                else:
+                    file = shared / (path.lstrip("/").rsplit(".", 1)[0] + ".glb")
+                    if not file.exists() and path not in export_index:
+                        args = [
+                            str(exporter),
+                            "--game",
+                            "Warframe",
+                            "--cache-dir",
+                            str(cache_dir),
+                            "--extract-models",
+                            "--package",
+                            "Misc",
+                            "--internal-path",
+                            path,
+                            "--output-path",
+                            str(shared),
+                        ]
+                        run = subprocess.run(
+                            args,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT,
+                            timeout=60,
+                        )
+                        log = workspace / "export.log"
+                        with log.open("ab") as stream:
+                            stream.write(
+                                ("\nRESOURCE " + path + "\n").encode() + run.stdout
+                            )
+                        export_index[path] = {
+                            "returncode": run.returncode,
+                            "file": str(file),
+                            "exists": file.exists(),
+                        }
+                        index_path.write_text(
+                            json.dumps(export_index, indent=2), encoding="utf8"
+                        )
+                if file.exists():
+                    try:
+                        decoded[path] = _decode_visual_glb(file, path)
+                    except Exception as exc:
+                        decoded[path] = (
+                            None,
+                            "mesh-decode-failed:" + type(exc).__name__ + ":" + str(exc),
+                        )
+                else:
+                    raw_cache = workspace / "raw-format-cache"
+                    header = raw_cache / (path.lstrip("/") + "_H")
+                    body = raw_cache / (path.lstrip("/") + "_B")
+                    if (
+                        not header.exists()
+                        and (raw_cache / "Debug" / (path.lstrip("/") + "_H")).exists()
+                    ):
+                        header = raw_cache / "Debug" / (path.lstrip("/") + "_H")
+                        body = raw_cache / "Debug" / (path.lstrip("/") + "_B")
+                    if not header.exists():
+                        command = [
+                            str(exporter),
+                            "--game",
+                            "Warframe",
+                            "--cache-dir",
+                            str(cache_dir),
+                            "--write-raw",
+                            "--package",
+                            "Misc",
+                            "--internal-path",
+                            path,
+                            "--output-path",
+                            str(raw_cache),
+                        ]
+                        run = subprocess.run(
+                            command,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT,
+                            timeout=60,
+                        )
+                        with (workspace / "export.log").open("ab") as stream:
+                            stream.write(
+                                ("\nRAW FORMAT " + path + "\n").encode() + run.stdout
+                            )
+                    # Exporter raw output inserts Debug before the source path.
+                    if not header.exists():
+                        header = raw_cache / "Debug" / (path.lstrip("/") + "_H")
+                        body = raw_cache / "Debug" / (path.lstrip("/") + "_B")
+                    inspection = (
+                        _inspect_renderless_mesh(header, body)
+                        if header.exists() and body.exists()
+                        else None
+                    )
+                    if inspection:
+                        export_index.setdefault(path, {})["rawInspection"] = inspection
+                        index_path.write_text(
+                            json.dumps(export_index, indent=2), encoding="utf8"
+                        )
+                    decoded[path] = (
+                        None,
+                        (
+                            "source-zero-render-geometry"
+                            if inspection
+                            else "referenced-resource-export-failed"
+                        ),
+                    )
+            mesh, error = decoded[path]
+            if mesh is None:
+                omissions.append(
+                    {
+                        "entityId": entity["id"],
+                        "type": typ,
+                        "sourceMesh": path,
+                        "reason": error,
+                    }
+                )
+                continue
+            if path not in meshids:
+                item = dict(mesh)
+                item["id"] = len(meshes)
+                item["groups"] = [
+                    dict(g, materialId=material(g["sourceMaterialPath"]))
+                    for g in mesh["groups"]
+                ]
+                meshids[path] = item["id"]
+                meshes.append(item)
+            scale_match = re.search(r"^MeshScale=(.+)$", raw, re.M)
+            scale = (
+                float(scale_match[1])
+                if scale_match
+                else float(base.get("MeshScale", 1.0))
+            )
+            if (
+                not math.isfinite(scale)
+                or scale <= 0
+                or abs(sum(x * x for x in entity["quaternion"]) - 1) > 1e-3
+            ):
+                omissions.append(
+                    {
+                        "entityId": entity["id"],
+                        "sourceMesh": path,
+                        "reason": "invalid-scale-or-quaternion",
+                    }
+                )
+                continue
+            override = re.search(r"^OverrideMaterial=\{([^}]+)\}", raw, re.M)
+            overrides = (
+                [material(x.strip()) for x in override[1].split(",")]
+                if override
+                else None
+            )
+            instance_index = re.search(r"^Instance=(\d+)$", raw, re.M)
+            instances.append(
+                {
+                    "entityId": entity["id"],
+                    "meshId": meshids[path],
+                    "name": entity["scope"]
+                    + typ.rsplit("/", 1)[-1]
+                    + (instance_index[1] if instance_index else "?"),
+                    "position": entity["position"],
+                    "quaternion": entity["quaternion"],
+                    "scale": scale,
+                    "scaleSource": (
+                        "explicit-instance"
+                        if scale_match
+                        else (
+                            "inherited-type"
+                            if "MeshScale" in base
+                            else "exporter-default1"
+                        )
+                    ),
+                    "materialOverrides": overrides,
+                    "qualification": "exact absolute source-level instance; external shared Mesh resolved by full path; no extra prefab transform",
+                }
+            )
+        report = {
+            "parserVersion": PARSER_VERSION + "/complete-static-visual-v1",
+            "sourceTile": tile,
+            **provenance,
+            "packagesSha256": sha(packages_bin),
+            "previousInstances": len(old.get("instances", [])),
+            "meshBearingEntities": explicit_count + inherited_count,
+            "explicitMeshInstances": explicit_count,
+            "inheritedMeshInstances": inherited_count,
+            "eligibleStaticInstances": eligible,
+            "assembledInstances": len(instances),
+            "assembledMeshAssets": len(meshes),
+            "sourceMeshTriangles": sum(m["triangleCount"] for m in meshes),
+            "instancedTriangles": sum(
+                meshes[x["meshId"]]["triangleCount"] for x in instances
+            ),
+            "omittedInstances": len(omissions),
+            "omittedByReason": dict(Counter(x["reason"] for x in omissions)),
+            "externalInstances": sum(
+                not meshes[x["meshId"]]["path"].startswith(tile + "/")
+                for x in instances
+            ),
+            "floorStairPlatformInstances": sum(
+                bool(
+                    re.search(
+                        r"Floor|Stair|Ramp|Platform|Catwalk",
+                        meshes[x["meshId"]]["path"],
+                        re.I,
+                    )
+                )
+                for x in instances
+            ),
+            "qualification": "full explicit/inherited static Mesh references attempted; rendered real source geometry only; source omissions listed; no NAV rendering used as replacement floor; simulation NAV and collision unmodified",
+        }
+        world_min, world_max = [math.inf] * 3, [-math.inf] * 3
+        for instance in instances:
+            bounds = meshes[instance["meshId"]]["bounds"]
+            for corner in range(8):
+                point = transform(
+                    [bounds[(corner >> i) & 1][i] for i in range(3)], instance
+                )
+                for i in range(3):
+                    world_min[i] = min(world_min[i], point[i])
+                    world_max[i] = max(world_max[i], point[i])
+        report["worldBounds"] = [world_min, world_max]
+        report["originalInstances"] = len(original_visual.get("instances", []))
+        report["stableOriginalMeshIds"] = len(original_visual.get("meshes", []))
+        report["usedMeshAssets"] = len({instance["meshId"] for instance in instances})
+        metadata["worldBounds"] = [world_min, world_max]
+        report["terrainInstances"] = sum(
+            meshes[x["meshId"]]["path"].endswith(".tmesh") for x in instances
+        )
+        report["missingMeshInstances"] = sum(
+            x["reason"]
+            in (
+                "referenced-resource-export-failed",
+                "unsupported-or-unresolved-mesh-reference",
+            )
+            or x["reason"].startswith("mesh-decode-failed")
+            for x in omissions
+        )
+        report["unsupportedRiggedMeshInstances"] = sum(
+            x["reason"] == "rigged-or-node-transformed-mesh-unassembled"
+            for x in omissions
+        )
+        report["excludedSourceStateInstances"] = (
+            len(omissions)
+            - report["missingMeshInstances"]
+            - report["unsupportedRiggedMeshInstances"]
+        )
+        report["sourceZeroRenderInstances"] = sum(
+            x["reason"] == "source-zero-render-geometry" for x in omissions
+        )
+        report["sourceFogVolumeInstances"] = sum(
+            x["reason"] == "source-fog-volume-not-visible-floor-geometry"
+            for x in omissions
+        )
+        metadata["visualCoverage"] = report
+        metadata["visualCompletion"] = report
+        value = {
+            "schema": "arena-visual-map/v1",
+            "metadata": metadata,
+            "meshes": meshes,
+            "materials": materials,
+            "instances": instances,
+        }
+        raw = compact(value)
+        target = output / prior_asset["file"]
+        target.write_bytes(gzip.compress(raw, compresslevel=9, mtime=0))
+        newmeta = {
+            "file": target.name,
+            "sha256": sha(target),
+            "jsonSha256": hashlib.sha256(raw).hexdigest(),
+            "compressedBytes": target.stat().st_size,
+            "jsonBytes": len(raw),
+        }
+        # Reread just before write: other owners may update names/source metadata.
+        latest = json.loads((output / "catalog.json").read_text(encoding="utf8"))
+        latest["maps"][map_id]["assets"]["visual-map"] = newmeta
+        (output / "catalog.json").write_text(
+            json.dumps(latest, ensure_ascii=False, indent=2) + "\n", encoding="utf8"
+        )
+        evidence = case_root / "evidence/geometry"
+        evidence.mkdir(exist_ok=True)
+        (evidence / (map_id + "-visual-completion.json")).write_text(
+            json.dumps(
+                {"summary": report, "asset": newmeta, "omissions": omissions},
+                ensure_ascii=False,
+                indent=2,
+            ),
+            encoding="utf8",
+        )
+        results.append(dict(mapId=map_id, **report))
+        print(
+            json.dumps(
+                {
+                    "mapId": map_id,
+                    "before": report["previousInstances"],
+                    "after": len(instances),
+                    "omitted": len(omissions),
+                    "meshes": len(meshes),
+                    "floorInstances": report["floorStairPlatformInstances"],
+                    "compressedBytes": newmeta["compressedBytes"],
+                }
+            ),
+            flush=True,
+        )
+    (case_root / "evidence/geometry/visual-completion-summary.json").write_text(
+        json.dumps(results, ensure_ascii=False, indent=2), encoding="utf8"
+    )
+    return results
+
+
+def audit_visual_support(output: Path, case_root: Path, *, map_ids=None):
+    """Bounded visual-only floor support samples; never uses NAV as geometry."""
+    catalog = json.loads((output / "catalog.json").read_text(encoding="utf8"))
+    results = []
+
+    def rotate(point, quaternion):
+        u = quaternion[:3]
+        a = _cross(u, point)
+        b = _cross(u, a)
+        return tuple(point[i] + 2 * (quaternion[3] * a[i] + b[i]) for i in range(3))
+
+    for map_id, entry in catalog["maps"].items():
+        if map_ids and map_id not in map_ids:
+            continue
+        visual = json.loads(
+            gzip.decompress(
+                (output / entry["assets"]["visual-map"]["file"]).read_bytes()
+            )
+        )
+        scene = json.loads(
+            gzip.decompress((output / entry["assets"]["scene"]["file"]).read_bytes())
+        )
+        meshes = visual["meshes"]
+        trees = {}
+        bounds = []
+        for instance in visual["instances"]:
+            mesh = meshes[instance["meshId"]]
+            bb = mesh.get("bounds")
+            if not bb:
+                vs = mesh["positions"]
+                bb = [
+                    [min(vs[i::3]) for i in range(3)],
+                    [max(vs[i::3]) for i in range(3)],
+                ]
+            corners = [
+                transform([bb[(k >> i) & 1][i] for i in range(3)], instance)
+                for k in range(8)
+            ]
+            bounds.append(
+                (
+                    instance,
+                    [min(p[i] for p in corners) for i in range(3)],
+                    [max(p[i] for p in corners) for i in range(3)],
+                )
+            )
+        nodes = scene["nav"]["nodePositions"]
+        count = min(96, len(nodes))
+        ids = sorted(
+            {int(i * (len(nodes) - 1) / max(1, count - 1)) for i in range(count)}
+        )
+        matches = []
+        missing = []
+        for face in ids:
+            point = nodes[face]
+            origin = (point[0], point[1] + 0.3, point[2])
+            hits = []
+            for instance, lo, hi in bounds:
+                if not (
+                    lo[0] - 1e-5 <= point[0] <= hi[0] + 1e-5
+                    and lo[2] - 1e-5 <= point[2] <= hi[2] + 1e-5
+                    and hi[1] >= point[1] - 1.5
+                    and lo[1] <= origin[1]
+                ):
+                    continue
+                mid = instance["meshId"]
+                if mid not in trees:
+                    m = meshes[mid]
+                    v = m["positions"]
+                    ix = m["indices"]
+                    trees[mid] = TriangleBVH(
+                        [v[k : k + 3] for k in range(0, len(v), 3)],
+                        [ix[k : k + 3] for k in range(0, len(ix), 3)],
+                        native=True,
+                    )
+                q = instance["quaternion"]
+                inverse = (-q[0], -q[1], -q[2], q[3])
+                scale = instance["scale"]
+                local_origin = tuple(
+                    v / scale
+                    for v in rotate(_sub(origin, instance["position"]), inverse)
+                )
+                local_direction = rotate((0, -1, 0), inverse)
+                hit = trees[mid].raycast(local_origin, local_direction, 1.8 / scale)
+                if hit and abs(rotate(hit.normal, q)[1]) >= 0.4:
+                    pos = transform(hit.position, instance)
+                    hits.append(
+                        {
+                            "entityId": instance["entityId"],
+                            "sourceMesh": meshes[mid]["path"],
+                            "heightDifference": round(point[1] - pos[1], 5),
+                            "position": pos,
+                        }
+                    )
+            if hits:
+                matches.append(
+                    {
+                        "navFace": face,
+                        "navPoint": point,
+                        "support": min(hits, key=lambda h: abs(h["heightDifference"])),
+                    }
+                )
+            else:
+                missing.append({"navFace": face, "position": point})
+        record = {
+            "mapId": map_id,
+            "sampledNavFaces": len(ids),
+            "realVisualSupportHits": len(matches),
+            "noVisualSupportInWindow": len(missing),
+            "supportWindow": {"aboveNav": 0.3, "belowNav": 1.5},
+            "qualification": "bounded real visual mesh floor ray samples; NAV used only as sample positions, never a visual floor surrogate; unmatched samples retained, not a global completeness proof",
+            "matches": matches,
+            "missing": missing,
+        }
+        results.append(record)
+        print(
+            json.dumps(
+                {k: v for k, v in record.items() if k not in ("matches", "missing")}
+            ),
+            flush=True,
+        )
+    target = case_root / "evidence/geometry/visual-floor-support-audit.json"
+    target.write_text(
+        json.dumps(results, ensure_ascii=False, indent=2), encoding="utf8"
+    )
+    return results
 
 
 def import_enemy_specs(
@@ -1337,6 +2223,12 @@ def main():
     parser.add_argument("--output", type=Path, default=ROOT / "data/arena")
     parser.add_argument("--map-id", default="corpus-ship-defense")
     parser.add_argument("--no-static-walls", action="store_true")
+    parser.add_argument("--audit-visual-support", action="store_true")
+    parser.add_argument("--complete-visuals", action="store_true")
+    parser.add_argument("--case-root", type=Path)
+    parser.add_argument("--cache-dir", type=Path)
+    parser.add_argument("--exporter", type=Path)
+    parser.add_argument("--visual-map-id", action="append")
     parser.add_argument("--raw-tile-dir", type=Path)
     parser.add_argument("--tile-path")
     parser.add_argument("--prepared-source", type=Path)
@@ -1347,6 +2239,25 @@ def main():
     parser.add_argument("--enemies", type=Path)
     parser.add_argument("--enemy-specs-only", action="store_true")
     args = parser.parse_args()
+    if args.audit_visual_support:
+        if not args.case_root:
+            parser.error("--audit-visual-support requires --case-root")
+        audit_visual_support(args.output, args.case_root, map_ids=args.visual_map_id)
+        return
+    if args.complete_visuals:
+        if not all((args.case_root, args.cache_dir, args.exporter, args.packages_bin)):
+            parser.error(
+                "--complete-visuals requires --case-root --cache-dir --exporter --packages-bin"
+            )
+        complete_visual_maps(
+            args.case_root,
+            args.cache_dir,
+            args.exporter,
+            args.packages_bin,
+            args.output,
+            map_ids=args.visual_map_id,
+        )
+        return
     if args.raw_tile_dir:
         if not args.tile_path or not args.prepared_source:
             parser.error("--raw-tile-dir requires --tile-path and --prepared-source")

@@ -53,10 +53,38 @@ Inputs are SHA256-recorded inside the compressed payload. Use `--enemies` to exp
 
 Map `grineer-galleon-defense`: source GrnDefenceTwo from current GrineerGalleonDefense Proc; Hydron/Helene shared-template candidates, not claimed current Arbitration roster.1653 NAV faces/192 authored spawn points/191 player-reachable candidates;40 source baked-art+CSG shared GLBs with50 exact transforms.6268 CSG+NAV proxy collision faces.40 ordinary supported step edges plus60 separately player-only arcs. Start `(0,4.3,0)` lies on isolated4-face platform: enemies cannot reach it, explicitly retained; player leaves platform to pursue. No ordinary-enemy ballistic jumps. Four compressed assets total about4.05MB. Original raw source hashes/alias evidence and parser qualifications are embedded in scene/catalog. Generic raw importer is implemented in tools/import_arena_scene.py; no full-cache unpack, no source textures or invented collision solids.
 
-## Candidate source coverage
+## Mission and map coverage
 
-`map-coverage.json` records5 newly available defense tiles,2 source/format blocks and2 shared-template duplicates. Catalog now offers7 authored tiles total: corpus-ship-defense, grineer-galleon-defense, corpus-outpost-defense-two, grineer-shipyards-defense, corpus-gas-city-defense, grineer-ocean-defense-02, grineer-ocean-defense-03. Candidates derive from Sechura,Seimeni,Io/Sinai,Stephano,Xini,Odin/Hydron/Helene source references; current Arbitration qualification remains unknown. Xini/Odin reuse existing authored tiles. OutpostOne polygon NAV77 and OutpostThree missing NAV are explicitly blocked, no synthetic topology. Source notes/counts/blocked reasons and alias evidence are in coverage manifest; exact raw resource hashes remain embedded in scene metadata. Ordinary enemy reachability to exact center varies and is intentionally not filled with player-only jump links.
+`mission-coverage.json` joins official English/Chinese ExportRegions labels to bounded length-prefixed node/Proc references in the installed SolarMap and exact current Proc level dependencies. Each node retains planet, mission type, level-resource candidates, matched imported maps, missing maps and source hashes. This is a candidate-template inventory, not a recovered procedural selector or current server Arbitration whitelist. Different nodes can share a tile; one node can reference multiple variants.
+
+The first delivery's eight tiles were a partial import, not the complete Defense/Interception set. The new full inventory also records excluded Archwing and distinct Mirror Defense/1999 variants instead of silently conflating them with standard Defense. See the current manifest summary and the in-app coverage table for available, partial and missing nodes. `map-coverage.json` retains the original eight-map import history and format evidence; it is not the current star-chart inventory.
+
+Rebuild node labels and coverage after adding a map:
+
+```powershell
+python tools/import_arena_missions.py --source-root <case>/work/spawn/missions --solar-map <case>/work/spawn/raw/Debug/Lotus/Types/Game/SolarMap/OriginSolarMapRedux_H --cache-dir <current Cache.Windows>
+```
+
+The offline inputs are hashed. `--refresh --exporter <path>` reacquires official bilingual ExportRegions and missing current Proc headers. The tool updates only map mission metadata and the mission coverage manifest, preserving geometry hashes.
 
 ## Source polygon NAV support
 
-`corpus-outpost-defense-one` is now available.2521 source n-gons expand to3376 runtime triangles only after exact source ring ordering, simple boundary, Newell plane tolerance0.002, positive3D normals, projected signed-area conservation and exact boundary/incidence checks.855 internal split edges are explicitly distinguished from3203 native shared-source portals. `nav.sourcePolygons` and `nav.fromFaceMap` preserve original face identity; existing runtime triangle API remains unchanged. SourceDefenseThree still has no0.nav and stays blocked. Catalog now8 real authored maps; all include `nameZh`, `architectureFaction`, `templateLabelZh`, with architecture faction explicitly separate from mission enemy selection.
+`corpus-outpost-defense-one` is now available.2521 source n-gons expand to3376 runtime triangles only after exact source ring ordering, simple boundary, Newell plane tolerance0.002, positive3D normals, projected signed-area conservation and exact boundary/incidence checks.855 internal split edges are explicitly distinguished from3203 native shared-source portals. `nav.sourcePolygons` and `nav.fromFaceMap` preserve original face identity; existing runtime triangle API remains unchanged. SourceDefenseThree still has no0.nav and stays blocked. At the initial polygon-import milestone, the catalog reached8 authored maps; those entries include `nameZh`, `architectureFaction`, `templateLabelZh`, with architecture faction explicitly separate from mission enemy selection.
+
+
+## Visual completeness repair
+
+The initial generic raw importer assembled only tile-local meshes. This omitted shared floors, stairs and other architecture; it was not evidence that those objects were absent from the game. The completion pass now resolves full explicit and inherited Mesh references, including actual `.tmesh` terrain, and uses exact LEVEL transforms. It preserves original mesh IDs used by the collision-candidate sidecar. Source meshes, material groups, simplified material colors, source hashes and an instance omission ledger are included.
+
+```powershell
+python tools/import_arena_scene.py --complete-visuals --case-root <case> --cache-dir <current Cache.Windows> --exporter <path> --packages-bin <Packages.bin_H>
+```
+
+`metadata.visualCoverage` distinguishes successfully assembled instances, missing resources, unsupported rigged geometry and excluded authored hidden/dynamic/attached states. `metadata.worldBounds` covers real visual geometry; the viewer defaults to no clipping and lets the user choose a section height. Switching to detailed geometry does not substitute NAV for missing visual floors. NAV/collision remain separate from display geometry; source textures and dynamic object animation are not reproduced.
+
+A shared resource extraction cache avoids repeatedly decoding identical structural meshes between maps. Browser rendering shares indexed geometry across instance groups, and switching maps releases GPU geometry, instance buffers and materials.
+
+
+## Degenerate source NAV face
+
+The ice-planet template contains one legitimate serialized but geometrically degenerate face: source face4953 has three exactly collinear vertices. The importer now quarantines only a valid ring whose vertices are exactly collinear, retaining all original vertices, source face IDs and rejected native portals. It does not replace that face, reconnect the two sides or generate step/jump shortcuts through its adjacent faces. Self-intersecting/nonplanar/unsupported source geometry is still rejected. `nav.sourceFaceToTriangles`, `quarantinedSourceFaces`, `excludedSourcePortals` and `quarantineDerivedLinkExcludedFaces` record the decision.
