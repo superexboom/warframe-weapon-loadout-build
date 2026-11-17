@@ -238,3 +238,116 @@ impl SpatialIndex {
             .collect()
     }
 }
+
+
+// Immutable per-profile path graph. Input order is preserved in both adjacency
+// lists, matching Python's graph/incoming traversal and first-wins ties.
+#[derive(Clone)]
+struct PathEdge {
+    from: usize,
+    to: usize,
+    cost: f64,
+    key_id: usize,
+}
+
+#[derive(Copy, Clone)]
+struct PathQueueEntry {
+    cost: f64,
+    node: usize,
+}
+impl PartialEq for PathQueueEntry {
+    fn eq(&self, other: &Self) -> bool {
+        self.cost.total_cmp(&other.cost).is_eq() && self.node == other.node
+    }
+}
+impl Eq for PathQueueEntry {}
+impl PartialOrd for PathQueueEntry {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+impl Ord for PathQueueEntry {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.cost.total_cmp(&other.cost).then(self.node.cmp(&other.node))
+    }
+}
+
+#[pyclass]
+pub struct PathGraph {
+    edges: Vec<PathEdge>,
+    forward: Vec<Vec<usize>>,
+    incoming: Vec<Vec<usize>>,
+}
+
+#[pymethods]
+impl PathGraph {
+    #[new]
+    #[pyo3(signature = (node_count, edges))]
+    fn new(node_count: usize, edges: Vec<(usize, usize, f64, usize)>) -> PyResult<Self> {
+        let mut graph = Self {
+            edges: Vec::with_capacity(edges.len()),
+            forward: vec![Vec::new(); node_count],
+            incoming: vec![Vec::new(); node_count],
+        };
+        for (from, to, cost, key_id) in edges {
+            if from >= node_count || to >= node_count || cost.is_nan() || cost < 0.0 {
+                return Err(PyValueError::new_err("invalid path edge"));
+            }
+            let index = graph.edges.len();
+            graph.forward[from].push(index);
+            graph.incoming[to].push(index);
+            graph.edges.push(PathEdge { from, to, cost, key_id });
+        }
+        Ok(graph)
+    }
+
+    #[pyo3(signature = (start, reverse, disabled_ids))]
+    fn search(
+        &self,
+        py: Python<'_>,
+        start: usize,
+        reverse: bool,
+        disabled_ids: Vec<usize>,
+    ) -> PyResult<(Vec<f64>, Vec<i64>, Vec<i64>)> {
+        if start >= self.forward.len() {
+            return Err(PyValueError::new_err("navigation node out of range"));
+        }
+        Ok(py.detach(|| {
+            use std::cmp::Reverse;
+            use std::collections::{BinaryHeap, HashSet};
+            let keys: HashSet<usize> = disabled_ids.into_iter().collect();
+            // A dense edge mask avoids hash lookup in the Dijkstra hot loop
+            // without allocating by potentially sparse external key ID.
+            let blocked: Vec<bool> = self.edges.iter()
+                .map(|edge| keys.contains(&edge.key_id)).collect();
+            let count = self.forward.len();
+            let mut distances = vec![f64::INFINITY; count];
+            let mut previous = vec![-1; count];
+            let mut edge_indices = vec![-1; count];
+            let adjacency = if reverse { &self.incoming } else { &self.forward };
+            let mut heap = BinaryHeap::new();
+            distances[start] = 0.0;
+            heap.push(Reverse(PathQueueEntry { cost: 0.0, node: start }));
+            while let Some(Reverse(PathQueueEntry { cost, node })) = heap.pop() {
+                if cost != distances[node] {
+                    continue;
+                }
+                for &index in &adjacency[node] {
+                    if blocked[index] {
+                        continue;
+                    }
+                    let edge = &self.edges[index];
+                    let other = if reverse { edge.from } else { edge.to };
+                    let value = cost + edge.cost;
+                    if value + 1e-8 < distances[other] {
+                        distances[other] = value;
+                        previous[other] = node as i64;
+                        edge_indices[other] = index as i64;
+                        heap.push(Reverse(PathQueueEntry { cost: value, node: other }));
+                    }
+                }
+            }
+            (distances, previous, edge_indices)
+        }))
+    }
+}

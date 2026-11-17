@@ -670,6 +670,12 @@ def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():
     world.move_actor(walker,.1,1.)
     assert distance(walker.pos,blocker.pos)>=distance(before,blocker.pos)-1e-6
     blocker.id=0
+    # Millimetre event steps must not keep a crowd wait below the .8s yield
+    # threshold while the actor has made no meaningful progress.
+    walker.pos=before;walker.crowd_progress_position=before;walker.crowd_progress_since=0.
+    walker.crowd_blocked_seconds=0.;walker.crowd_retry_after=100.
+    world.move_actor(walker,.01,.9)
+    assert walker.crowd_blocked_seconds>=.8
     # Source surface walks use the same grounded, collision-checked retreat.
     walker.pos=before;walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":3.6,"kind":"source-surface-walk"}
     walker.crowd_retry_after=0.
@@ -739,6 +745,14 @@ def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():
                                     infinitePuncture=False,ignoresAvatars=False,projectile=True)
     world.plan()
     assert world.player.route==[vantage_edge] and world.stats["firingPositionPlans"]==3
+    # Two different airborne arcs through the same corridor must not start
+    # together and block each other halfway across. Release follows completion.
+    crossing=Edge(0,1,((0.,0.,0.),(1.,.45,0.),(2.,0.,0.)),"npc-short-gap",1.,False,1.,2.,key="air")
+    first=Actor(6,0,(1.,.45,0.),edge={"kind":"bullet-jump","node":1,"points":crossing.points},drone=True)
+    queued=Actor(7,0,(0.,0.,0.),route=[crossing],tape={"path":[]})
+    world.live=[first,queued];world.stats["crowdWaitSeconds"]=0.;world.c["npcShortGap"]=True
+    assert world.move_actor(queued,.1,0.)==0. and queued.route==[crossing]
+    assert queued.edge is None and queued.pos==(0.,0.,0.)
 
 
 def test_arena_source_door_query_channels():
@@ -759,6 +773,13 @@ def test_arena_source_door_query_channels():
     opened = ArenaScene(raw, native=False, doors=doors)
     closed = opened.with_door_sight("closed")
     assert opened.path(0, 1, "enemy")[0].kind == "door"
+    searches=opened.metrics["pathSearches"]
+    assert opened.path(0, 1, "enemy")[0].kind=="door"
+    assert opened.metrics["pathSearches"]==searches
+    closed.disabled.add("0:1:door")
+    assert closed.path(0,1,"enemy")==[] and opened.path(0,1,"enemy")
+    closed.disabled.clear()
+    assert closed.path(0,1,"enemy")[0].kind=="door"
     assert closed.check_motion(link["points"], ground_step=True)["clear"]
     assert opened.visible((0., 1., -2.), (0., 1., 2.))
     assert not closed.visible((0., 1., -2.), (0., 1., 2.))
@@ -773,6 +794,10 @@ def test_arena_source_door_query_channels():
                           "triangleSources": [{"sourceMesh": "verified-source-floor"}] * 2}}
     supported = ArenaScene(raw, native=False, doors=doors, ground=ground)
     assert supported.ground_support((0., 0., -2.)).position == pytest.approx((0., .2, -2.))
+    gap={**link,"kind":"npc-short-gap","enemy":False}
+    jumping=ArenaScene(raw,native=False,npc_gaps={"links":[gap]})
+    assert not jumping.path(0,1,"enemy") and not jumping.path(0,1,"player")
+    assert jumping.path(0,1,"enemy-gap")[0].kind=="npc-short-gap"
 
 
 def test_defense_schedule_cumulative_merge_quotas_and_cap_shortfall():
@@ -878,7 +903,7 @@ def test_arbitration_drone_opportunities_keep_ordinary_quota_and_respect_cap(mon
         empowered=dict(damage=1000.,uptime=1.)))
     world.combat=arena_combat.ArenaCombat({})
     world.actors={};world.live=[];world.replay={"actors":[]};world.wave_level=1
-    world.stats={};world.t=0.
+    world.stats={};world.t=0.;world.diagnostics=[]
     enemy={**target(35.),"path":DRONE,"shield":50.}
     actor=World._spawn_actor(world,enemy,{"face":0},drone=True)
     victim=world.combat.targets[actor.id]
@@ -889,6 +914,11 @@ def test_arbitration_drone_opportunities_keep_ordinary_quota_and_respect_cap(mon
     assert 0. < victim.shield < 50. and victim.health==175.
     assert not victim.presence and world.combat.sources[0]["stacks"]==0.
     assert world.combat.empowered_count==0.
+    source=dict(agent="source-hover",tier=0,resolvedAvatarPath="ordinary-hover",
+                movement=dict(profile="hover",smallHoverCompatible=True))
+    flyer=World._spawn_actor(world,{**target(35.),"path":"ordinary-hover"},{"face":1},source=source)
+    assert flyer.aerial and not flyer.drone
+    assert world.combat.targets[flyer.id].health==35. and not world.combat.targets[flyer.id].status_immune
 
     # Death blast retains player source but no weapon, so it cannot grant a
     # weapon on-kill buff. A second drone still protects ordinary recipients.

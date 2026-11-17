@@ -2710,14 +2710,265 @@ def _supported_surface_route(scene, support, start, end, *, max_nodes=6000):
     }
 
 
+def import_ground_support_recipe(
+    case_root,
+    packages_bin,
+    output,
+    recipe_path,
+    *,
+    map_ids,
+    surface_faces,
+    support_entities,
+):
+    """Admit only exact static source triangles witnessed by a reviewed route.
+
+    Proposed route points are resampled and reprojected onto original collision
+    or the exact triangle allowlist; they are not copied as invented support.
+    """
+    from import_melee_mechanics import Packages
+    from wfarsenal.arena_scene import ArenaScene, load_asset, load_source_doors
+
+    if not map_ids or len(map_ids) != 1 or not support_entities or not surface_faces:
+        raise ValueError(
+            "ground recipe requires one --visual-map-id, --ground-surface-face and explicit --ground-support-entity IDs"
+        )
+    map_id = map_ids[0]
+    root = output.parents[1]
+    catalog_path = output / "catalog.json"
+    catalog = json.loads(catalog_path.read_text(encoding="utf8"))
+    entry = catalog["maps"][map_id]
+    target = output / "visual-ground-geometry.json.gz"
+    payload = json.loads(gzip.decompress(target.read_bytes()))
+    previous = payload["maps"][map_id]
+    recipe = json.loads(recipe_path.read_text(encoding="utf8"))
+    route = recipe["routes"][0]
+    a, b = recipe["from"], recipe["to"]
+    if not ({a, b} & set(surface_faces)):
+        raise ValueError("recipe endpoint is outside --ground-surface-face")
+    tile = entry["sourceTile"]
+    name = tile.rsplit("/", 1)[-1]
+    source = case_root / "work/geometry" / ("map-coverage/" + name)
+    entities, _ = _read_visual_level(source, tile)
+    byid = {e["id"]: e for e in entities}
+    package = Packages(packages_bin)
+    visual = json.loads(
+        gzip.decompress((output / entry["assets"]["visual-map"]["file"]).read_bytes())
+    )
+    instances = {i["entityId"]: i for i in visual["instances"]}
+    allow = set(support_entities)
+    vertices, triangles, sources = [], [], []
+    seen = set()
+    for witness in route["witness"]:
+        ident = witness["entityId"]
+        if ident not in allow:
+            raise ValueError(f"recipe triangle entity {ident} not explicitly admitted")
+        key = (ident, witness["sourceTriangle"])
+        if key in seen:
+            continue
+        seen.add(key)
+        inst, entity = instances[ident], byid[ident]
+        mesh = visual["meshes"][inst["meshId"]]
+        if mesh["sha256"] != witness["sha256"] or mesh["path"] != witness["mesh"]:
+            raise ValueError("recipe source mesh identity/hash changed")
+        override = re.search(r"^PhysicsBehavior=(.*)$", entity["attributes"], re.M)
+        physics = (
+            override[1].strip('"')
+            if override
+            else package.resolve(entity["type"]).get("PhysicsBehavior")
+        )
+        if physics != "/EE/Types/Physics/Static":
+            raise ValueError(f"recipe entity {ident} is not static")
+        offset = witness["sourceTriangle"] * 3
+        ids = mesh["indices"][offset : offset + 3]
+        xyz = [transform(mesh["positions"][i * 3 : i * 3 + 3], inst) for i in ids]
+        normal = _cross(_sub(xyz[1], xyz[0]), _sub(xyz[2], xyz[0]))
+        mag = math.sqrt(_dot(normal, normal))
+        if mag < 1e-8 or abs(normal[1]) / mag < 0.55:
+            raise ValueError("recipe triangle is not source standable support")
+        j = len(vertices)
+        vertices.extend(xyz)
+        triangles.append([j, j + 1, j + 2])
+        sources.append(
+            {
+                "entityId": ident,
+                "sourceMesh": mesh["path"],
+                "sourceMeshSha256": mesh["sha256"],
+                "sourceTriangle": witness["sourceTriangle"],
+            }
+        )
+    support = TriangleBVH(vertices, triangles, native=True)
+    scene = ArenaScene(
+        load_asset(map_id, "scene", root=root),
+        load_asset(map_id, "navigation", root=root),
+        map_id=map_id,
+        doors=load_source_doors(map_id, root=root),
+    )
+    if (
+        math.dist(route["points"][0], scene.nodes[a]) > 0.5
+        or math.dist(route["points"][-1], scene.nodes[b]) > 0.5
+    ):
+        raise ValueError("recipe NAV endpoints changed")
+    points, used, witnesses = [], set(), []
+    for start, end in zip(route["points"], route["points"][1:]):
+        count = max(1, math.ceil(math.dist(start, end) / 0.04))
+        for k in range(count + 1):
+            expected = tuple(
+                start[j] * (1 - k / count) + end[j] * (k / count) for j in range(3)
+            )
+            options = []
+            for tree, kind in ((scene.collision, "base"), (support, "visual")):
+                for hit in tree.all_hits(
+                    (expected[0], expected[1] + 0.45, expected[2]), (0, -1, 0), 0.9
+                ):
+                    if (
+                        abs(hit.normal[1]) >= 0.55
+                        and abs(hit.position[1] - expected[1]) <= 0.45
+                    ):
+                        options.append((abs(hit.position[1] - expected[1]), hit, kind))
+            if not options:
+                raise ValueError(f"recipe source support missing at {expected}")
+            _, hit, kind = min(options, key=lambda item: item[0])
+            if points and abs(hit.position[1] - points[-1][1]) > 0.45:
+                raise ValueError("recipe local source step exceeds .45m")
+            if not points or math.dist(points[-1], hit.position) > 1e-6:
+                points.append(hit.position)
+            if kind == "visual":
+                used.add(hit.triangle)
+                witnesses.append({"sample": len(points) - 1, **sources[hit.triangle]})
+    points = [scene.nodes[a], *points, scene.nodes[b]]
+    if not scene.check_motion(
+        points, radius=0.22, heights=(0.5, 1, 1.65), ground_step=True
+    )["clear"]:
+        raise ValueError("recipe blocked by original body collision")
+    # Keep every existing map record and existing Gas support/link byte structure
+    # intact; append only newly witnessed source triangles and this route.
+    record = json.loads(json.dumps(previous))
+    old_support = record["support"]
+    existing = {
+        (x["entityId"], x["sourceTriangle"]): i
+        for i, x in enumerate(old_support["triangleSources"])
+    }
+    remap = {}
+    for index in sorted(used):
+        source = sources[index]
+        key = (source["entityId"], source["sourceTriangle"])
+        if key not in existing:
+            j = len(old_support["vertices"])
+            old_support["vertices"].extend(vertices[i] for i in triangles[index])
+            existing[key] = len(old_support["triangles"])
+            old_support["triangles"].append([j, j + 1, j + 2])
+            old_support["triangleSources"].append(source)
+        remap[index] = existing[key]
+    # The admitted exact floor faces also participate in all runtime body rails.
+    combined = ArenaScene(
+        scene.raw,
+        scene.navigation,
+        map_id=map_id,
+        doors=load_source_doors(map_id, root=root),
+        ground=record,
+    )
+    audit = combined.check_motion(
+        points, radius=0.22, heights=(0.5, 1, 1.65), ground_step=True
+    )
+    if not audit["clear"]:
+        raise ValueError("recipe blocked after exact support admission: " + str(audit))
+    length = sum(math.dist(x, y) for x, y in zip(points, points[1:]))
+    src = {
+        "type": "actual-static-source-triangle-recipe",
+        "supportTriangleIds": sorted(remap.values()),
+        "supportWitness": witnesses,
+        "recipeSha256": sha(recipe_path),
+        "sourceSceneSha256": entry["assets"]["scene"]["jsonSha256"],
+        "qualification": "reviewed exact static source door-frame/trim support only; center-foot support every .04m, local step<=.45m, normalY>=.55 and full .22m body rails .5/1/1.65; NOT full footprint support; no synthetic floor, wall exemption or expanded door trigger",
+        "centerFootPolicy": True,
+        "maxLocalStep": 0.45,
+        "supportSamplePitch": 0.04,
+        "bodyRadius": 0.22,
+        "bodyHeights": [0.5, 1, 1.65],
+    }
+    for u, v, pts in ((a, b, points), (b, a, points[::-1])):
+        record["links"] = [
+            link
+            for link in record["links"]
+            if not (
+                link["from"] == u
+                and link["to"] == v
+                and link["source"].get("type") == src["type"]
+            )
+        ]
+        record["links"].append(
+            {
+                "from": u,
+                "to": v,
+                "points": pts,
+                "kind": "source-surface-walk",
+                "seconds": length / 6,
+                "enemy": True,
+                "enemySeconds": length / 3.6,
+                "source": src,
+            }
+        )
+    record["summary"]["directedGroundLinks"] = len(record["links"])
+    record["summary"]["admittedSupportTriangles"] = len(old_support["triangles"])
+    record["summary"]["sourceRecipeDirectedLinks"] = 2
+    payload["maps"][map_id] = record
+    raw = compact(payload)
+    target.write_bytes(gzip.compress(raw, mtime=0))
+    latest = json.loads(catalog_path.read_text(encoding="utf8"))
+    latest["groundGeometry"] = {
+        "file": target.name,
+        "sha256": sha(target),
+        "jsonSha256": hashlib.sha256(raw).hexdigest(),
+        "compressedBytes": target.stat().st_size,
+        "jsonBytes": len(raw),
+    }
+    catalog_path.write_text(
+        json.dumps(latest, ensure_ascii=False, indent=2) + "\n", encoding="utf8"
+    )
+    print(
+        json.dumps(
+            {
+                "mapId": map_id,
+                "recipe": str(recipe_path),
+                "summary": record["summary"],
+                "admittedNewTriangles": len(remap),
+                "body": audit,
+            }
+        ),
+        flush=True,
+    )
+    return payload
+
+
 def import_visual_ground_links(
-    case_root, packages_bin, output, *, map_ids=None, surface_faces=None
+    case_root,
+    packages_bin,
+    output,
+    *,
+    map_ids=None,
+    surface_faces=None,
+    support_entities=None,
+    support_recipe=None,
 ):
     """Recover short boundary transitions using exact static floor/stair mesh support.
 
     Adds no synthetic plane, never broadens movement thresholds. Output is a
     separate qualified support/candidate-link sidecar; base NAV/BSP unchanged.
     """
+    if support_recipe:
+        return import_ground_support_recipe(
+            case_root,
+            packages_bin,
+            output,
+            support_recipe,
+            map_ids=map_ids,
+            surface_faces=surface_faces,
+            support_entities=support_entities,
+        )
+    if support_entities:
+        raise ValueError(
+            "--ground-support-entity requires --ground-support-recipe so only exact reviewed triangles are admitted"
+        )
     from collections import defaultdict, Counter
     from import_melee_mechanics import Packages
 
@@ -3099,6 +3350,428 @@ def import_visual_ground_links(
     return value
 
 
+def _npc_gap_nearest_segments(a, b, c, d):
+    """Closest points on two finite source NAV edges (clamped segment distance)."""
+    u, v, w = _sub(b, a), _sub(d, c), _sub(a, c)
+    aa, bb, cc = _dot(u, u), _dot(u, v), _dot(v, v)
+    dd, ee = _dot(u, w), _dot(v, w)
+    den = aa * cc - bb * bb
+    t = max(0.0, min(1.0, (bb * ee - cc * dd) / den)) if den > 1e-12 else 0.0
+    q = (bb * t + ee) / cc if cc > 1e-12 else 0.0
+    if q < 0:
+        q, t = 0.0, max(0.0, min(1.0, -dd / aa)) if aa > 1e-12 else 0.0
+    elif q > 1:
+        q, t = 1.0, max(0.0, min(1.0, (bb - dd) / aa)) if aa > 1e-12 else 0.0
+    return tuple(a[i] + t * u[i] for i in range(3)), tuple(
+        c[i] + q * v[i] for i in range(3)
+    )
+
+
+def _source_csg_surface_route(scene, a, b, start, end):
+    """Full original-scene support, including the complete foot cross-section.
+
+    Continuous existing CSG/NAV support needs no new visual-floor witness and
+    must not be mislabeled as airborne movement. No collision is generated.
+    """
+    points, witnessed = [], set()
+    original_count = len(scene.raw["collision"]["triangles"])
+    sample_count = 0
+    for x, y in zip((scene.nodes[a], start, end), (start, end, scene.nodes[b])):
+        count = max(1, math.ceil(math.dist(x, y) / 0.04))
+        for i in range(count + 1):
+            expected = tuple(
+                x[k] * (1 - i / count) + y[k] * (i / count) for k in range(3)
+            )
+            center = scene.ground_support(expected, max_drop=0.18, max_rise=0.18)
+            if (
+                center is None
+                or abs(center.normal[1]) < 0.55
+                or abs(center.position[1] - expected[1]) > 0.15
+                or center.triangle >= original_count
+            ):
+                return None, "continuous-original-center-support-missing"
+            foot = center.position
+            for dx, dz in ((0, 0), (0.22, 0), (-0.22, 0), (0, 0.22), (0, -0.22)):
+                hit = scene.ground_support(
+                    (foot[0] + dx, foot[1], foot[2] + dz), max_drop=0.18, max_rise=0.18
+                )
+                if (
+                    hit is None
+                    or abs(hit.normal[1]) < 0.55
+                    or abs(hit.position[1] - foot[1]) > 0.15
+                    or hit.triangle >= original_count
+                ):
+                    return None, "continuous-original-footprint-support-missing"
+                witnessed.add(hit.triangle)
+            sample_count += 1
+            if points and abs(points[-1][1] - foot[1]) > 0.45:
+                return None, "continuous-original-step-over-.45"
+            if not points or math.dist(points[-1], foot) > 1e-6:
+                points.append(foot)
+    # Graph endpoints remain their actual NAV feet; the interior is projected
+    # to real source support. Validate the two short vertical endpoint offsets.
+    points = [scene.nodes[a], *points, scene.nodes[b]]
+    if not scene.check_motion(
+        points, radius=0.22, heights=(0.5, 1, 1.65), ground_step=True
+    )["clear"]:
+        return None, "continuous-original-body-blocked"
+    length = sum(math.dist(x, y) for x, y in zip(points, points[1:]))
+    return {
+        "kind": "source-surface-walk",
+        "points": points,
+        "seconds": length / 6,
+        "enemySeconds": length / 3.6,
+        "length": length,
+        "takeoff": start,
+        "landing": end,
+        "unsupportedSpan": 0,
+        "collisionTriangleIds": sorted(witnessed),
+        "supportSampleCount": sample_count,
+    }, None
+
+
+def _npc_gap_route(scene, a, b, edge_a, edge_b):
+    """Bounded scenario jump between real NAV feet; never creates collision."""
+
+    def mix(x, y, t):
+        return tuple(x[i] * (1 - t) + y[i] * t for i in range(3))
+
+    def inset(point, center):
+        length = math.dist(point, center)
+        return mix(point, center, min(1.0, 0.14 / length)) if length > 1e-8 else point
+
+    start, end = inset(edge_a, scene.nodes[a]), inset(edge_b, scene.nodes[b])
+    span = math.hypot(end[0] - start[0], end[2] - start[2])
+    if abs(start[1] - end[1]) > 0.45 or span > 1.7 or span < 0.06:
+        return None, "foot-span-or-height"
+
+    def support(point):
+        hit = scene.ground_support(point, max_drop=0.18, max_rise=0.18)
+        return (
+            hit
+            if hit
+            and abs(hit.normal[1]) >= 0.55
+            and abs(hit.position[1] - point[1]) <= 0.15
+            else None
+        )
+
+    # Every approach sample must have real support. A no-support run is allowed
+    # only in the explicitly airborne center section, never near graph centers.
+    approaches = []
+    for x, y in ((scene.nodes[a], start), (end, scene.nodes[b])):
+        n = max(1, math.ceil(math.dist(x, y) / 0.08))
+        pts = [mix(x, y, i / n) for i in range(n + 1)]
+        if any(support(point) is None for point in pts):
+            return None, "approach-no-support"
+        if not scene.check_motion(pts, radius=0.22, ground_step=True)["clear"]:
+            return None, "approach-body-blocked"
+        approaches.append(pts)
+    n = max(2, math.ceil(span / 0.04))
+    samples = [mix(start, end, i / n) for i in range(n + 1)]
+    hits = [support(point) for point in samples]
+    if not hits[0] or not hits[-1]:
+        return None, "takeoff-or-landing-no-support"
+    runs, run = [], []
+    for i, hit in enumerate(hits):
+        if hit is None:
+            run.append(i)
+        elif run:
+            runs.append(run)
+            run = []
+    if run:
+        runs.append(run)
+    if not runs:
+        return _source_csg_surface_route(scene, a, b, start, end)
+    if len(runs) != 1:
+        return None, "not-one-unsupported-gap"
+    missing = runs[0]
+    # Bracket with the last/first supported samples, not just missing centers:
+    # the conservatively rounded unsupported length must remain <=.8m.
+    gap_width = (missing[-1] - missing[0] + 2) * span / n
+    if gap_width > 0.8 + 1e-9:
+        return None, "unsupported-span-over-.8"
+    arc = [
+        tuple(
+            point[j] + (4 * 0.45 * (i / n) * (1 - i / n) if j == 1 else 0)
+            for j in range(3)
+        )
+        for i, point in enumerate(samples)
+    ]
+    points = [*approaches[0][:-1], *arc, *approaches[1][1:]]
+    if not scene.check_motion(points, radius=0.22, heights=(0.5, 1.0, 1.65))["clear"]:
+        return None, "arc-body-blocked"
+    length = sum(math.dist(x, y) for x, y in zip(points, points[1:]))
+    seconds = max(
+        0.45,
+        sum(math.hypot(y[0] - x[0], y[2] - x[2]) for x, y in zip(points, points[1:]))
+        / 3.6,
+    )
+    return (
+        dict(
+            kind="npc-short-gap",
+            points=points,
+            seconds=seconds,
+            enemySeconds=seconds,
+            length=length,
+            takeoff=start,
+            landing=end,
+            unsupportedSpan=gap_width,
+            supportedEndpointTriangles=[hits[0].triangle, hits[-1].triangle],
+        ),
+        None,
+    )
+
+
+def import_source_npc_gaps(packages_path, output, *, map_ids=None):
+    """Import conservative NPC short-gap scenario links, not native offmesh.
+
+    Existing source door/ground sidecars and collision triangles are immutable.
+    Candidates use a spatial hash over actual NAV boundary edges and are bounded
+    per component pair before expensive support/body queries.
+    """
+    from collections import Counter, defaultdict
+    from import_melee_mechanics import Packages
+    from wfarsenal.arena_scene import (
+        ArenaScene,
+        load_asset,
+        load_source_doors,
+        _load_source_geometry,
+    )
+
+    package = Packages(packages_path)
+    ability_paths = [
+        "/EE/Types/Actions/JumpAcross",
+        "/EE/Types/Actions/JumpDown",
+        "/EE/Types/Npc/NpcAgent",
+        "/Lotus/Types/Enemies/Grineer/GrineerAvatars/GrineerWalkAttribs",
+    ]
+    ability = {path: package.resolve(path) for path in ability_paths}
+    if ability[ability_paths[0]].get("PlayerNpcUse") != "PN_NPCS_ONLY":
+        raise ValueError("source NPC jump capability changed")
+    catalog_path = output / "catalog.json"
+    catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    target = output / "npc-gap-geometry.json.gz"
+    records = (
+        json.loads(gzip.decompress(target.read_bytes())).get("maps", {})
+        if target.exists()
+        else {}
+    )
+    for map_id, entry in catalog["maps"].items():
+        if map_ids and map_id not in map_ids:
+            continue
+        # Construct without this sidecar even when runtime default enables it:
+        # reproducibility must not depend on links imported during a prior run.
+        scene = ArenaScene(
+            load_asset(map_id, "scene", root=output.parents[1]),
+            load_asset(map_id, "navigation", root=output.parents[1]),
+            map_id=map_id,
+            doors=load_source_doors(map_id, root=output.parents[1]),
+            ground=_load_source_geometry(
+                map_id,
+                "groundGeometry",
+                "arena-source-ground/v1",
+                root=output.parents[1],
+            ),
+        )
+        components = scene.movement_components("enemy")
+        nav = scene.raw["nav"]
+        vertices, faces = nav["vertices"], nav["triangles"]
+        counts = Counter(
+            tuple(sorted((a, b)))
+            for f in faces
+            for a, b in ((f[0], f[1]), (f[1], f[2]), (f[2], f[0]))
+        )
+        boundary = []
+        for face, tri in enumerate(faces):
+            x, y, z = (vertices[i] for i in tri)
+            normal = _cross(_sub(y, x), _sub(z, x))
+            if abs(normal[1]) < 0.55 * math.sqrt(_dot(normal, normal)):
+                continue
+            for a, b in ((tri[0], tri[1]), (tri[1], tri[2]), (tri[2], tri[0])):
+                if counts[tuple(sorted((a, b)))] == 1:
+                    boundary.append((face, vertices[a], vertices[b]))
+        cells, candidates = defaultdict(set), defaultdict(list)
+        # Boundary edge samples <=.4m apart; a 1.25m grid with neighbouring
+        # cells covers near endpoints even on large triangles. No all-pairs.
+        for i, (face, a, b) in enumerate(boundary):
+            count = max(1, math.ceil(math.dist(a, b) / 0.4))
+            keys = {
+                tuple(
+                    math.floor((a[k] * (1 - t / count) + b[k] * (t / count)) / 1.25)
+                    for k in range(3)
+                )
+                for t in range(count + 1)
+            }
+            neighbours = set()
+            for key in keys:
+                for dx in (-1, 0, 1):
+                    for dy in (-1, 0, 1):
+                        for dz in (-1, 0, 1):
+                            neighbours.update(
+                                cells[(key[0] + dx, key[1] + dy, key[2] + dz)]
+                            )
+            for j in sorted(neighbours):
+                other, c, d = boundary[j]
+                if components[face] == components[other]:
+                    continue
+                pa, pb = _npc_gap_nearest_segments(a, b, c, d)
+                gap = math.hypot(pa[0] - pb[0], pa[2] - pb[2])
+                if gap > 1.2 or abs(pa[1] - pb[1]) > 0.45:
+                    continue
+                # Multiple boundary edges of a face pair may offer different
+                # approach points: keep exact proposals instead of suppressing
+                # after a failed first candidate.
+                pair = tuple(sorted((components[face], components[other])))
+                row = (math.dist(pa, pb), face, other, tuple(pa), tuple(pb))
+                rows = candidates[pair]
+                if row not in rows:
+                    rows.append(row)
+                    rows.sort()
+                    del rows[24:]
+            for key in keys:
+                cells[key].add(i)
+        links, failures = [], Counter()
+        for pair, rows in sorted(candidates.items()):
+            admitted = set()
+            for _, a, b, pa, pb in rows:
+                if len(admitted) >= 3 or (min(a, b), max(a, b)) in admitted:
+                    continue
+                route, error = _npc_gap_route(scene, a, b, pa, pb)
+                if route is None:
+                    failures[error] += 1
+                    continue
+                admitted.add((min(a, b), max(a, b)))
+                source = {
+                    "type": "scenario-npc-short-gap",
+                    "qualification": "user-authorized conservative NPC movement approximation; source NPC JumpAcross/JumpDown capability only; NOT recovered native offmesh endpoints, reach, animation, duration or universal NPC eligibility; no floor triangles added",
+                    "sourceNavFaces": [a, b],
+                    "groundComponents": list(pair),
+                    "takeoff": route["takeoff"],
+                    "landing": route["landing"],
+                    "unsupportedSpan": route["unsupportedSpan"],
+                    "supportedEndpointTriangles": route.get(
+                        "supportedEndpointTriangles", []
+                    ),
+                    "arcLift": 0.45,
+                    "bodyRadius": 0.22,
+                    "bodyHeights": [0.5, 1, 1.65],
+                    "timing": "scenario max(.45s, horizontal path length / 3.6m/s)",
+                    "capabilitySource": "/EE/Types/Actions/JumpAcross",
+                }
+                if route["kind"] == "source-surface-walk":
+                    source = {
+                        "type": "continuous-original-scene-supported-boundary",
+                        "qualification": "continuous existing source CSG/NAV support, center and +/- .22m footprint every .04m, full body rails; no new visual support required, no airborne gap, no added collision; not recovered native offmesh",
+                        "sourceNavFaces": [a, b],
+                        "groundComponents": list(pair),
+                        "sourceSceneSha256": entry["assets"]["scene"]["jsonSha256"],
+                        "sourceSceneAssetSha256": entry["assets"]["scene"]["sha256"],
+                        "collisionTriangleIds": route["collisionTriangleIds"],
+                        "supportSampleCount": route["supportSampleCount"],
+                        "supportSamplePitch": 0.04,
+                        "footprintRadius": 0.22,
+                        "supportHeightTolerance": 0.15,
+                        "supportNormalYMinimum": 0.55,
+                        "bodyRadius": 0.22,
+                        "bodyHeights": [0.5, 1, 1.65],
+                        "timing": "existing scene movement policy: player6m/s, enemy3.6m/s",
+                    }
+                for u, v, points in (
+                    (a, b, route["points"]),
+                    (b, a, route["points"][::-1]),
+                ):
+                    # Player inclusion is controlled by the dedicated runtime
+                    # profile; these are NPC links, not a new player traversal.
+                    links.append(
+                        {
+                            "from": u,
+                            "to": v,
+                            "kind": route["kind"],
+                            "points": points,
+                            "seconds": route["seconds"],
+                            "enemy": route["kind"] == "source-surface-walk",
+                            "enemySeconds": route["enemySeconds"],
+                            "source": source,
+                        }
+                    )
+        # Audit reach change locally without saving synthetic collision.
+        for link in links:
+            scene._add(
+                link["from"],
+                link["to"],
+                link["points"],
+                link["kind"],
+                link["seconds"],
+                link["enemy"],
+                link["enemySeconds"],
+                link["source"],
+            )
+        summary = {
+            "boundaryEdges": len(boundary),
+            "candidateComponentPairs": len(candidates),
+            "candidateRoutes": sum(len(rows) for rows in candidates.values()),
+            "directedGapLinks": sum(link["kind"] == "npc-short-gap" for link in links),
+            "directedSourceWalkLinks": sum(
+                link["kind"] == "source-surface-walk" for link in links
+            ),
+            "groundComponentsBefore": len(set(components)),
+            "groundComponentsAfter": len(set(scene.movement_components("enemy-gap"))),
+        }
+        records[map_id] = {
+            "sourceTile": entry["sourceTile"],
+            "inputHashes": {
+                "scene": entry["assets"]["scene"]["sha256"],
+                "navigation": entry["assets"]["navigation"]["sha256"],
+                "doorGeometry": catalog.get("doorGeometry", {}).get("sha256"),
+                "groundGeometry": catalog.get("groundGeometry", {}).get("sha256"),
+            },
+            "links": links,
+            "failures": dict(failures),
+            "summary": summary,
+        }
+        print(
+            json.dumps({"mapId": map_id, **summary, "failures": dict(failures)}),
+            flush=True,
+        )
+    payload = {
+        "schema": "arena-npc-gaps/v1",
+        "parserVersion": PARSER_VERSION + "/source-walk-and-scenario-npc-gap-v2",
+        "packagesSha256": package.sha256,
+        "capabilitySources": ability,
+        "policy": {
+            "maxUnsupportedSpan": 0.8,
+            "maxEndpointHeightDifference": 0.45,
+            "arcLift": 0.45,
+            "bodyRadius": 0.22,
+            "bodyHeights": [0.5, 1, 1.65],
+            "supportNormalYMinimum": 0.55,
+            "supportSamplePitch": 0.04,
+            "maxLinksPerComponentPair": 3,
+            "candidateLimitPerPair": 24,
+            "sourceWalkPolicy": "always-admitted continuous original CSG/NAV support with +/- .22m footprint; no added floors",
+            "qualification": "source-supported continuous walks plus explicitly optional NPC short-gap approximation; not recovered native offmesh; no new floors",
+        },
+        "maps": records,
+    }
+    raw = compact(payload)
+    target.write_bytes(gzip.compress(raw, compresslevel=9, mtime=0))
+    latest = json.loads(catalog_path.read_text(encoding="utf-8"))
+    latest["npcGapGeometry"] = {
+        "file": target.name,
+        "schema": payload["schema"],
+        "sha256": sha(target),
+        "jsonSha256": hashlib.sha256(raw).hexdigest(),
+        "compressedBytes": target.stat().st_size,
+        "jsonBytes": len(raw),
+        "mapSummaries": {key: value["summary"] for key, value in records.items()},
+        "qualification": payload["policy"]["qualification"],
+    }
+    catalog_path.write_text(
+        json.dumps(latest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    return payload
+
+
 def import_enemy_specs(
     specs_path: Path,
     packages_path: Path,
@@ -3244,6 +3917,41 @@ def import_enemy_specs(
                 "killXpSource": ("Packages-Avatar-inheritance" if resolved and "KillXPReward" in package.resolve(resolved)
                                  else "native-template-XP-default50" if resolved else None),
             }
+        # Source locomotion/physics classification is independent of drone
+        # gameplay identity and names. Keep variant-specific body dimensions.
+        agent_fields = package.resolve(agent) if package.exists(agent) else {}
+        controller = agent_fields.get("LocomotionController:Type")
+        followers = agent_fields.get("LocomotionController:PathFollower", [])
+        resolved_controller = package.locate(agent, controller) if controller else None
+        resolved_followers = [package.locate(agent, f) for f in followers]
+        if (resolved_controller == "/EE/Types/Npc/DynamicLocomotionControllerHover"
+                and "/EE/Types/Npc/DynamicPathFollowerHover" in resolved_followers):
+            for variant in variants.values():
+                avatar = variant.get("resolvedAvatarPath")
+                if not avatar:
+                    continue
+                avatar_fields = package.resolve(avatar)
+                physics_ref = avatar_fields.get("PhysicsBehavior")
+                physics = package.locate(avatar, physics_ref) if physics_ref else None
+                physics_fields = package.resolve(physics) if physics else {}
+                attributes_ref = physics_fields.get("ControllerAttributes")
+                attributes = package.locate(physics, attributes_ref) if attributes_ref else None
+                attributes_fields = package.resolve(attributes) if attributes else {}
+                if attributes_fields.get("Flyer") != 1:
+                    continue
+                radius = attributes_fields.get("CapsuleRadius")
+                height = attributes_fields.get("Height")
+                preferences = agent_fields.get("LocomotionController:PathingPreferences", {})
+                variant["movement"] = dict(profile="hover", evidence=dict(
+                    type=resolved_controller, pathFollower=resolved_followers,
+                    pathFinder=agent_fields.get("LocomotionController:PathFinder"),
+                    physicsBehavior=physics, physicsAttributes=attributes, Flyer=1,
+                    preferredHeight=preferences.get("preferredHeight"),
+                    maxHeight=preferences.get("maxHeight"),
+                    limitToNav=agent_fields.get("LocomotionController:limitToNav"),
+                    bodyRadius=radius, bodyHeight=height,
+                ), smallHoverCompatible=bool(radius is not None and height is not None
+                                            and radius <= .45 and height <= 1.8))
         standard = variants.get("STANDARD", {})
         value = {
             "agentInheritanceChain": chain,
@@ -3259,6 +3967,11 @@ def import_enemy_specs(
             "xp": standard.get("killXpReward"),
             "eximusXp": variants.get("EXIMUS", {}).get("killXpReward"),
         }
+        # Promote only if every explicit resolved variant confirms hover.
+        resolved_variants = [v for v in variants.values() if v.get("resolvedAvatarPath")]
+        if resolved_variants and all(v.get("movement", {}).get("profile") == "hover"
+                                     for v in resolved_variants):
+            value["movement"] = dict(standard["movement"])
         memo[agent] = value
         return value
 
@@ -3743,8 +4456,11 @@ def main():
     parser.add_argument("--audit-visual-support", action="store_true")
     parser.add_argument("--source-ground", action="store_true")
     parser.add_argument("--source-materials", action="store_true")
+    parser.add_argument("--source-npc-gaps", action="store_true")
     parser.add_argument("--source-doors", action="store_true")
     parser.add_argument("--ground-surface-face", type=int, action="append")
+    parser.add_argument("--ground-support-entity", type=int, action="append")
+    parser.add_argument("--ground-support-recipe", type=Path)
     parser.add_argument("--complete-visuals", action="store_true")
     parser.add_argument("--case-root", type=Path)
     parser.add_argument("--cache-dir", type=Path)
@@ -3761,6 +4477,11 @@ def main():
     parser.add_argument("--enemy-specs-only", action="store_true")
     parser.add_argument("--mission-coverage", type=Path)
     args = parser.parse_args()
+    if args.source_npc_gaps:
+        if not args.packages_bin:
+            parser.error("--source-npc-gaps requires --packages-bin")
+        import_source_npc_gaps(args.packages_bin, args.output, map_ids=args.visual_map_id)
+        return
     if args.source_materials:
         if not args.packages_bin:
             parser.error("--source-materials requires --packages-bin")
@@ -3775,6 +4496,8 @@ def main():
             args.output,
             map_ids=args.visual_map_id,
             surface_faces=args.ground_surface_face,
+            support_entities=args.ground_support_entity,
+            support_recipe=args.ground_support_recipe,
         )
         return
     if args.source_doors:

@@ -9867,10 +9867,10 @@
   },
   "groundGeometry": {
     "file": "visual-ground-geometry.json.gz",
-    "sha256": "0c7d2a1369e82988f4daa26896ad7ce86782a45dab98d69db38948bbf06b52eb",
-    "jsonSha256": "fddf141a160d43252a3fcc50a03b39a1b8c0de3ed2df70afb336017bf83e9fdb",
-    "compressedBytes": 18386,
-    "jsonBytes": 127063
+    "sha256": "25faeacccf35ec1c8ec8a975e0c4b958d5f03aa24883059b09698ef54878a067",
+    "jsonSha256": "7c43ba5c81c58d103973f64b7d9aead5c5b0c9007deee9b8d8fead3853edea96",
+    "compressedBytes": 21515,
+    "jsonBytes": 185698
   },
   "materialPalette": {
     "file": "material-palette.json",
@@ -9883,5 +9883,241 @@
       "sourceAbsent": 4
     },
     "qualification": "illustrative source-classified colors; not original albedo"
+  },
+  "npcGapGeometry": {
+    "file": "npc-gap-geometry.json.gz",
+    "schema": "arena-npc-gaps/v1",
+    "sha256": "16098448bf818e039220b46d04e0a372dcf85f4509a719d2d9610bc8131b62e0",
+    "jsonSha256": "934ea909b60d9a03c3bc71925391db4547e510421a2d4e4bfb33dd4a873d0267",
+    "compressedBytes": 867292,
+    "jsonBytes": 4735819,
+    "mapSummaries": {
+      "corpus-ship-defense": {
+        "boundaryEdges": 3867,
+        "candidateComponentPairs": 6,
+        "candidateRoutes": 74,
+        "directedGapLinks": 24,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 53,
+        "groundComponentsAfter": 49
+      },
+      "grineer-galleon-defense": {
+        "boundaryEdges": 1433,
+        "candidateComponentPairs": 2,
+        "candidateRoutes": 27,
+        "directedGapLinks": 6,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 3,
+        "groundComponentsAfter": 2
+      },
+      "corpus-outpost-defense-two": {
+        "boundaryEdges": 3026,
+        "candidateComponentPairs": 13,
+        "candidateRoutes": 99,
+        "directedGapLinks": 62,
+        "directedSourceWalkLinks": 6,
+        "groundComponentsBefore": 84,
+        "groundComponentsAfter": 71
+      },
+      "grineer-shipyards-defense": {
+        "boundaryEdges": 2208,
+        "candidateComponentPairs": 2,
+        "candidateRoutes": 13,
+        "directedGapLinks": 0,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 30,
+        "groundComponentsAfter": 30
+      },
+      "corpus-gas-city-defense": {
+        "boundaryEdges": 4239,
+        "candidateComponentPairs": 12,
+        "candidateRoutes": 100,
+        "directedGapLinks": 66,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 112,
+        "groundComponentsAfter": 101
+      },
+      "grineer-ocean-defense-02": {
+        "boundaryEdges": 2765,
+        "candidateComponentPairs": 11,
+        "candidateRoutes": 74,
+        "directedGapLinks": 44,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 61,
+        "groundComponentsAfter": 54
+      },
+      "grineer-ocean-defense-03": {
+        "boundaryEdges": 4126,
+        "candidateComponentPairs": 19,
+        "candidateRoutes": 103,
+        "directedGapLinks": 42,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 109,
+        "groundComponentsAfter": 98
+      },
+      "corpus-outpost-defense-one": {
+        "boundaryEdges": 2006,
+        "candidateComponentPairs": 5,
+        "candidateRoutes": 48,
+        "directedGapLinks": 0,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 40,
+        "groundComponentsAfter": 40
+      },
+      "grineer-asteroid-defense": {
+        "boundaryEdges": 1329,
+        "candidateComponentPairs": 3,
+        "candidateRoutes": 16,
+        "directedGapLinks": 16,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 21,
+        "groundComponentsAfter": 18
+      },
+      "grineer-forest-defense": {
+        "boundaryEdges": 4441,
+        "candidateComponentPairs": 10,
+        "candidateRoutes": 36,
+        "directedGapLinks": 16,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 81,
+        "groundComponentsAfter": 77
+      },
+      "grineer-forest-interception-01": {
+        "boundaryEdges": 2051,
+        "candidateComponentPairs": 1,
+        "candidateRoutes": 5,
+        "directedGapLinks": 6,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 20,
+        "groundComponentsAfter": 19
+      },
+      "grineer-forest-interception-02": {
+        "boundaryEdges": 1746,
+        "candidateComponentPairs": 0,
+        "candidateRoutes": 0,
+        "directedGapLinks": 0,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 11,
+        "groundComponentsAfter": 11
+      },
+      "grineer-fortress-defense": {
+        "boundaryEdges": 1307,
+        "candidateComponentPairs": 3,
+        "candidateRoutes": 11,
+        "directedGapLinks": 0,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 17,
+        "groundComponentsAfter": 17
+      },
+      "grineer-settlement-defense": {
+        "boundaryEdges": 4159,
+        "candidateComponentPairs": 24,
+        "candidateRoutes": 268,
+        "directedGapLinks": 122,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 73,
+        "groundComponentsAfter": 58
+      },
+      "grineer-shipyards-interception": {
+        "boundaryEdges": 1952,
+        "candidateComponentPairs": 1,
+        "candidateRoutes": 2,
+        "directedGapLinks": 2,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 4,
+        "groundComponentsAfter": 3
+      },
+      "infested-corpus-defense": {
+        "boundaryEdges": 1794,
+        "candidateComponentPairs": 21,
+        "candidateRoutes": 175,
+        "directedGapLinks": 112,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 40,
+        "groundComponentsAfter": 25
+      },
+      "orokin-tower-defense": {
+        "boundaryEdges": 4801,
+        "candidateComponentPairs": 0,
+        "candidateRoutes": 0,
+        "directedGapLinks": 0,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 19,
+        "groundComponentsAfter": 19
+      },
+      "orokin-derelict-defense": {
+        "boundaryEdges": 1210,
+        "candidateComponentPairs": 3,
+        "candidateRoutes": 34,
+        "directedGapLinks": 12,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 8,
+        "groundComponentsAfter": 6
+      },
+      "orokin-moon-defense": {
+        "boundaryEdges": 7217,
+        "candidateComponentPairs": 56,
+        "candidateRoutes": 406,
+        "directedGapLinks": 254,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 207,
+        "groundComponentsAfter": 170
+      },
+      "entrati-lab-mirror-defense-ear": {
+        "boundaryEdges": 1086,
+        "candidateComponentPairs": 0,
+        "candidateRoutes": 0,
+        "directedGapLinks": 0,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 1,
+        "groundComponentsAfter": 1
+      },
+      "entrati-lab-mirror-defense-eye": {
+        "boundaryEdges": 1051,
+        "candidateComponentPairs": 3,
+        "candidateRoutes": 24,
+        "directedGapLinks": 14,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 6,
+        "groundComponentsAfter": 3
+      },
+      "lastwish-grineer-mirror-defense": {
+        "boundaryEdges": 4137,
+        "candidateComponentPairs": 25,
+        "candidateRoutes": 271,
+        "directedGapLinks": 126,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 74,
+        "groundComponentsAfter": 58
+      },
+      "lastwish-corpus-mirror-defense": {
+        "boundaryEdges": 2154,
+        "candidateComponentPairs": 28,
+        "candidateRoutes": 129,
+        "directedGapLinks": 112,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 100,
+        "groundComponentsAfter": 79
+      },
+      "1999-temple-defense-underground": {
+        "boundaryEdges": 2038,
+        "candidateComponentPairs": 16,
+        "candidateRoutes": 77,
+        "directedGapLinks": 18,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 39,
+        "groundComponentsAfter": 35
+      },
+      "corpus-ice-defense": {
+        "boundaryEdges": 4553,
+        "candidateComponentPairs": 15,
+        "candidateRoutes": 96,
+        "directedGapLinks": 18,
+        "directedSourceWalkLinks": 0,
+        "groundComponentsBefore": 46,
+        "groundComponentsAfter": 43
+      }
+    },
+    "qualification": "source-supported continuous walks plus explicitly optional NPC short-gap approximation; not recovered native offmesh; no new floors"
   }
 }

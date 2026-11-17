@@ -299,9 +299,11 @@ class Edge:
         return self.seconds
 
     def time(self, profile="player"):
-        if profile in ("enemy", "walking") and not self.enemy:
+        if self.kind == "npc-short-gap":
+            return self.enemy_seconds if profile in ("enemy-gap", "drone") else math.inf
+        if profile in ("enemy", "enemy-gap", "walking") and not self.enemy:
             return math.inf
-        if profile == "enemy":
+        if profile in ("enemy", "enemy-gap"):
             return self.enemy_seconds
         if profile == "drone":
             return self.length / 5.0
@@ -339,6 +341,7 @@ class ArenaScene:
         native=True,
         doors=None,
         ground=None,
+        npc_gaps=None,
     ):
         self.raw = raw
         self.map_id = map_id
@@ -354,6 +357,11 @@ class ArenaScene:
         self.incoming = [[] for _ in self.points]
         self.disabled: set[str] = set()
         self.metrics = {"rays": 0, "blocked": 0, "pathSearches": 0}
+        self._search_cache = {}
+        self._search_disabled = frozenset()
+        self._native_graphs = {}
+        self._all_edges = []
+        self._native_paths = native and os.environ.get("WF_ARENA_PYTHON_PATHS") != "1"
         for p in raw["nav"]["nativePortals"]:
             a, b = p["fromFace"], p["toFace"]
             path = [self.points[a], p["portal"], self.points[b]]
@@ -403,7 +411,10 @@ class ArenaScene:
         self.door_sight = "open"
         self.door_summary = (doors or {}).get("summary", {})
         self.door_source = (doors or {}).get("asset", {})
-        for link in [*(doors or {}).get("links", []), *(ground or {}).get("links", [])]:
+        self.npc_gap_source = (npc_gaps or {}).get("asset", {})
+        self.npc_gap_summary = (npc_gaps or {}).get("summary", {})
+        for link in [*(doors or {}).get("links", []), *(ground or {}).get("links", []),
+                     *(npc_gaps or {}).get("links", [])]:
             self._add(
                 link["from"],
                 link["to"],
@@ -422,6 +433,8 @@ class ArenaScene:
         result = copy.copy(self)
         result.door_sight = state
         result.disabled = set()
+        result._search_cache = {}
+        result._search_disabled = frozenset()
         result.metrics = {key: 0 for key in self.metrics}
         return result
 
@@ -468,6 +481,8 @@ class ArenaScene:
         Never mutate graph/raw/metadata or share self.disabled across active jobs.
         """
         self.disabled.clear()
+        self._search_cache.clear()
+        self._search_disabled = frozenset()
         for key in self.metrics:
             self.metrics[key] = 0
 
@@ -493,19 +508,59 @@ class ArenaScene:
         )
         self.graph[a].append(edge)
         self.incoming[b].append(edge)
+        self._all_edges.append(edge)
+        self._search_cache.clear()
+        self._native_graphs.clear()
+        self._movement_component_cache = None
 
     def search(self, start: int, profile="player", reverse=False, *, disabled=None):
         if not 0 <= start < len(self.points):
             raise ValueError("navigation node out of range")
-        if profile not in ("player", "enemy", "walking", "drone"):
+        if profile not in ("player", "enemy", "enemy-gap", "walking", "drone"):
             raise ValueError("unknown movement profile")
+        forbidden = frozenset(self.disabled if disabled is None else disabled)
+        if forbidden != self._search_disabled:
+            self._search_cache.clear()
+            self._search_disabled = forbidden
+        key = (start, profile, reverse)
+        if key in self._search_cache:
+            found = self._search_cache.pop(key)
+            self._search_cache[key] = found
+            return found
         self.metrics["pathSearches"] += 1
+        native_graph = self._native_graphs.get(profile)
+        if self._native_paths and native_graph is None:
+            try:
+                from . import wfcore
+                cls = getattr(wfcore, "PathGraph", None)
+            except ImportError:
+                cls = None
+            if cls is None:
+                self._native_paths = False
+            else:
+                edges = [e for e in self._all_edges if math.isfinite(e.time(profile))]
+                key_ids = {e.key: i for i, e in enumerate(edges)}
+                graph = cls(len(self.points), [
+                    (e.from_node, e.to_node, e.time(profile), key_ids[e.key]) for e in edges
+                ])
+                native_graph = (graph, edges, key_ids)
+                self._native_graphs[profile] = native_graph
+        if native_graph is not None:
+            graph, edge_list, key_ids = native_graph
+            distances, previous, indices = graph.search(
+                start, reverse, [key_ids[k] for k in forbidden if k in key_ids]
+            )
+            found = SearchResult(start, profile, reverse, distances, previous,
+                                 [edge_list[i] if i >= 0 else None for i in indices])
+            self._search_cache[key] = found
+            if len(self._search_cache) > 64:
+                self._search_cache.pop(next(iter(self._search_cache)))
+            return found
         distances = [math.inf] * len(self.points)
         previous = [-1] * len(self.points)
         edges = [None] * len(self.points)
         distances[start] = 0.0
         heap = [(0.0, start)]
-        forbidden = self.disabled if disabled is None else disabled
         graph = self.incoming if reverse else self.graph
         while heap:
             cost, node = heapq.heappop(heap)
@@ -520,7 +575,11 @@ class ArenaScene:
                 if value + 1e-8 < distances[other]:
                     distances[other], previous[other], edges[other] = value, node, edge
                     heapq.heappush(heap, (value, other))
-        return SearchResult(start, profile, reverse, distances, previous, edges)
+        found = SearchResult(start, profile, reverse, distances, previous, edges)
+        self._search_cache[key] = found
+        if len(self._search_cache) > 64:
+            self._search_cache.pop(next(iter(self._search_cache)))
+        return found
 
     def path(self, start: int, goal: int, profile="player", *, reverse=False):
         if not 0 <= goal < len(self.points):
@@ -639,7 +698,7 @@ class ArenaScene:
 
     first_hit = raycast
 
-    def validate_standing(self, position, face: int):
+    def validate_standing(self, position, face: int, *, enemy_profile="enemy"):
         """Validate an explicitly chosen source NAV face and standing footprint.
 
         Only vertical projection onto that exact triangle is allowed (<=0.2
@@ -739,7 +798,7 @@ class ArenaScene:
             for edge in self.incoming[stack.pop()]:
                 if (
                     edge.key not in self.disabled
-                    and math.isfinite(edge.time("enemy"))
+                    and math.isfinite(edge.time(enemy_profile))
                     and edge.from_node not in reachable
                 ):
                     reachable.add(edge.from_node)
@@ -940,6 +999,9 @@ def load_scene(map_id=DEFAULT_MAP, *, root: Path | None = None, native=True):
         doors=load_source_doors(map_id, root=root),
         ground=_load_source_geometry(
             map_id, "groundGeometry", "arena-source-ground/v1", root=root
+        ),
+        npc_gaps=_load_source_geometry(
+            map_id, "npcGapGeometry", "arena-npc-gaps/v1", root=root
         ),
     )
 

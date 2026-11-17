@@ -184,6 +184,7 @@ fn c_math(name: &str, x: f64, y: f64) -> f64 {
 #[pymodule]
 fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<spatial::SpatialIndex>()?;
+    m.add_class::<spatial::PathGraph>()?;
     m.add("ABI", 1)?;
     m.add("ELECTRIC_GAS_PROC_PILE", 1)?;
     m.add("SELECTIVE_KILL_PROBE", 1)?;

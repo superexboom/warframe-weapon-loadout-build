@@ -183,3 +183,18 @@ def test_arena_spatial_bvh_nearest_all_hits_and_segment_bounds():
         assert actual == (None if expected is None else (expected.distance, expected.triangle))
         assert native.all_hits(origin, direction, limit) == [(h.distance, h.triangle) for h in reference.all_hits(origin, direction, limit)]
     assert native.raycast_batch([((0., 5., 0.), (0., -1., 0.), 10.)]) == [(2., 1)]
+
+    # Native graph keeps directed edge indices and Python heap(cost,node) ties;
+    # sparse shared key IDs disable all matching edges, in either direction.
+    graph = wfcore.PathGraph(5, [(0, 2, 1., 9), (0, 1, 1., 8),
+                                 (2, 3, 1., 7), (1, 3, 1., 7),
+                                 (0, 3, 2. + 5e-9, 10)])
+    distances, previous, indices = graph.search(0, False, [])
+    assert distances[:3] == [0., 1., 1.] and math.isinf(distances[4])
+    assert previous[3] == 0 and indices[3] == 4  # epsilon prevents tiny update
+    reverse = graph.search(3, True, [7, 10, 1_000_000])
+    assert reverse[0][3] == 0. and math.isinf(reverse[0][0])
+    tied = wfcore.PathGraph(4, [(0, 2, 1., 0), (0, 1, 1., 1),
+                                (2, 3, 1., 2), (1, 3, 1., 3)])
+    assert tied.search(0, False, [])[1][3] == 1
+    assert tied.search(3, True, [])[2][0] == 1

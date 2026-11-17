@@ -7301,7 +7301,8 @@ def arena_standing_point_payload(payload):
     if not isinstance(payload, Mapping):
         raise SimulationError("请选择地图上的可站立位置")
     scene = load_scene(str(payload.get("mapId") or ""))
-    return scene.validate_standing(payload.get("position"), payload.get("face"))
+    return scene.validate_standing(payload.get("position"), payload.get("face"),
+                                   enemy_profile="enemy-gap" if payload.get("npcShortGap", True) else "enemy")
 
 
 class PortableHandler(BaseHTTPRequestHandler):

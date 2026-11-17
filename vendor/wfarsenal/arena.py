@@ -15,7 +15,7 @@ from . import parallel
 from .arena_scene import load_scene, distance, Edge, ROOT
 from .arena_combat import ArenaCombat, UnsupportedArenaCombat
 
-MODEL = "arena-world-v7"
+MODEL = "arena-world-v8"
 VITUS_DROP_CHANCE = 0.06
 DRONE = "/Lotus/Types/Enemies/Corpus/Drones/AIWeek/CorpusEliteShieldDroneAvatar"
 EPS = 1e-8
@@ -50,6 +50,7 @@ def defaults(enemy=""):
         headshots=True,
         movement="parkour",
         doorSight="open",
+        npcShortGap=True,
         enemySpec="single",
         tier=0,
         droneEvery=7,
@@ -125,6 +126,8 @@ def normalize_scenario(value):
             raise ValueError(
                 "fixed mode requires fixedPosition={face:int,position:[x,y,z]}"
             )
+    if not isinstance(c["npcShortGap"], bool):
+        raise ValueError("npcShortGap must be boolean")
     if not isinstance(c["levelGrowth"], bool):
         raise ValueError("levelGrowth must be boolean")
     if c["levelGrowth"] and c["spawnProfile"] == "custom":
@@ -194,6 +197,7 @@ class Actor:
     dead: bool = False
     unreachable: bool = False
     travelled: float = 0.0
+    aerial: bool = False
 
 
 class World:
@@ -248,7 +252,8 @@ class World:
             if not isinstance(point, dict):
                 raise ValueError("fixed mode requires an explicit validated position")
             standing = self.scene.validate_standing(
-                point.get("position"), point.get("face")
+                point.get("position"), point.get("face"),
+                enemy_profile="enemy-gap" if self.c["npcShortGap"] else "enemy",
             )
             self.c["fixedPosition"] = standing
             self.player.node = standing["face"]
@@ -286,6 +291,7 @@ class World:
             peakAlive=0,
             jumps=0,
             failedPathPlans=0,
+            npcShortGaps=0,
             playerTravelSeconds=0.0,
             vitusExpected=0.0,
             vitusSample=0,
@@ -312,6 +318,8 @@ class World:
             "精华按无人机击杀与公开表6%统计，不代表真实任务每分钟收益",
             "确认门口按常开通行；视线可独立选择，门槛仅在源门洞内抽象衔接，不开放普通墙体",
         ]
+        if self.c["npcShortGap"]:
+            self.diagnostics.append("NPC短跨越为可关闭的场景近似：仅真实NAV起落点和狭窄无地板缺口，全弧身体检查；普通NPC跳跃能力有源证据，但距离/轨迹/耗时不是已恢复原生offmesh")
         if self.cancelled():
             raise InterruptedError("已取消")
         if self.combat.unsupported:
@@ -553,6 +561,15 @@ class World:
         drone = drone or enemy["path"] == DRONE
         pos = tuple(self.scene.nodes[point["face"]])
         actor = Actor(id, point["face"], pos, drone)
+        movement = source.get("movement", {}) if source else {}
+        if source:
+            movement = next((v.get("movement", movement) for v in source.get("avatarVariants", {}).values()
+                             if v.get("resolvedAvatarPath") == enemy["path"]), movement)
+        actor.aerial = drone or (movement.get("profile") == "hover" and movement.get("smallHoverCompatible"))
+        if movement.get("profile") == "hover" and not movement.get("smallHoverCompatible"):
+            self.diagnostics.append("部分源飞行单位体积超过当前小型Hover代理，保留原地面路径；其原生飞行高度与大体积碰撞待补，不缩体积强行通过")
+        if actor.aerial and not drone:
+            self.diagnostics.append("普通飞行NPC按当前Hover源字段单独分配飞行兼容路径；仍检查静态障碍与源图，不获得仲裁生命/免疫/保护/爆炸/精华。原生高度控制与大型飞行单位体积尚未完整模拟")
         target = self.combat.add_target(id, enemy, self.wave_level, pos)
         if drone:
             # LotusGameRules P40: health STACKING_MULTIPLY +4 (5x), then
@@ -568,6 +585,7 @@ class World:
                           birth=round(self.t, 6), death=None, hp=sum(target.full), path=[])
         if source:
             actor.tape.update(sourceAgent=source["agent"], sourceTier=source["tier"],
+                              movementProfile="hover" if actor.aerial else "ground",
                               boss=source.get("scheduledBoss", False),
                               eximus=enemy["path"] != source["resolvedAvatarPath"])
         self.actors[id] = actor
@@ -2891,22 +2909,23 @@ class World:
             )
 
     def plan(self):
+        enemy_profile = "enemy-gap" if self.c.get("npcShortGap", False) else "enemy"
         if self.flow_node != self.player.node or not self.flows:
             self.flows = {
-                "enemy": self.scene.search(self.player.node, "enemy", reverse=True)
+                "enemy": self.scene.search(self.player.node, enemy_profile, reverse=True)
             }
             self.flow_node = self.player.node
-        if any(actor.drone for actor in self.live) and "drone" not in self.flows:
+        if any(actor.aerial or actor.drone for actor in self.live) and "drone" not in self.flows:
             self.flows["drone"] = self.scene.search(
                 self.player.node, "drone", reverse=True
             )
         if not hasattr(self, "fallback_staging"):
             self.fallback_staging = {}
-        ground_components = self.scene.movement_components("enemy")
+        ground_components = self.scene.movement_components(enemy_profile)
         for actor in self.live:
             if actor.edge:
                 continue
-            flow = self.flows["drone" if actor.drone else "enemy"]
+            flow = self.flows["drone" if actor.aerial or actor.drone else "enemy"]
             actor.unreachable = not math.isfinite(flow.d[actor.node])
             if actor.node == self.player.node:
                 d = distance(actor.pos, self.player.pos)
@@ -2931,13 +2950,13 @@ class World:
                             i,
                         ),
                     )
-                    visible = [
-                        i
-                        for i in candidates[:48]
-                        if self.scene.visible(
-                            add(self.scene.nodes[i], 0.85), add(self.player.pos, 1.55)
-                        )
-                    ]
+                    visible = []
+                    for i in candidates:
+                        if self.scene.visible(add(self.scene.nodes[i], .85), add(self.player.pos, 1.55)):
+                            if all(distance(self.scene.nodes[i], self.scene.nodes[old]) >= .8 for old in visible):
+                                visible.append(i)
+                                if len(visible) == 4:
+                                    break
                     lanes = []
                     for node in visible or candidates:
                         if all(
@@ -2974,11 +2993,20 @@ class World:
                 key = (component, nearest)
                 if key not in self.fallback:
                     self.fallback[key] = self.scene.search(
-                        nearest, "enemy", reverse=True
+                        nearest, enemy_profile, reverse=True
                     )
                     if len(self.fallback) > 128:
                         self.fallback.pop(next(iter(self.fallback)))
                 actor.route = route(self.fallback[key], actor.node, 4)
+        if self.c["movement"] != "fixed" and not self.player.edge and self.player.route:
+            # A route targets a previous snapshot. Stop at a supported source
+            # endpoint when enemies become shootable; never finish a long trip
+            # to a dead target or cancel a jump while airborne.
+            preview = self.combat.preview(self.t)
+            if preview and self._can_fire_from(self.player.pos, preview):
+                self.player.route.clear()
+                self.next_plan = self.t + .5
+                return
         if (
             self.c["movement"] != "fixed"
             and not self.player.edge
@@ -3102,6 +3130,23 @@ class World:
                         self.stats["failedPathPlans"] += 1
         self.next_plan = self.t + 0.5
 
+    def _can_fire_from(self, position, shot):
+        geometry = self.geometry(shot)
+        origin = add(position, 1.55)
+        for actor in self.live:
+            if actor.dead or self.combat.targets[actor.id].protected:
+                continue
+            point = self.aimpoint(actor)[0]
+            if distance(origin, point) > geometry["range"] or not self.scene.visible(origin, point):
+                continue
+            recipients, _ = self.recipients(shot, origin, point, geometry, planning=True)
+            for target, component, head, scale, at in recipients:
+                victim = self.combat.targets[target.id]
+                if (not victim.protected and sum(victim.pools) > 0
+                        and self.combat.estimate(shot, target.id, component, head, scale, at) > 0):
+                    return True
+        return False
+
     def local_edge(self, actor, end):
         length = distance(actor.pos, end)
         return Edge(
@@ -3181,7 +3226,8 @@ class World:
         ):
             return False
         actor.crowd_retry_after = now + 1.0
-        components = self.scene.movement_components("enemy")
+        profile = "enemy-gap" if self.c.get("npcShortGap", False) else "enemy"
+        components = self.scene.movement_components(profile)
         component = components[actor.node]
         origin = actor.pos
         # Face centers alone cannot resolve two source paths merging at a
@@ -3218,7 +3264,7 @@ class World:
         # merge. Rejoin only an already planned source node, using a bounded
         # fully supported direct walk; never introduce an inter-floor route.
         onward = actor.route
-        flow = self.flows.get("drone" if actor.drone else "enemy")
+        flow = self.flows.get("drone" if actor.drone or getattr(actor, "aerial", False) else "enemy")
         if flow is not None and math.isfinite(flow.d[edge["node"]]):
             onward = route(flow, edge["node"], 8)
         planned = [(edge["node"], onward)]
@@ -3347,7 +3393,7 @@ class World:
                 "points": points,
                 "index": 1,
                 "node": edge["node"] if resume else node,
-                "speed": 5.0 if actor.drone else 3.6,
+                "speed": 5.0 if actor.drone or getattr(actor, "aerial", False) else 3.6,
                 "kind": "crowd-yield",
             }
             if not resume:
@@ -3372,7 +3418,52 @@ class World:
                 if link.key in self.scene.disabled:
                     actor.route = []
                     break
+                airborne = actor.id != -1 and (
+                    link.kind == "npc-short-gap"
+                    or (actor.drone or getattr(actor, "aerial", False))
+                    and link.kind in ("bullet-jump", "jump-down", "drop")
+                )
+                if airborne:
+                    # Alternate source arcs can share the same narrow crossing.
+                    # Keep its reservation until the existing edge finishes;
+                    # a check of current landing occupancy alone misses actors
+                    # already approaching that landing through another arc.
+                    corridor = frozenset((actor.node, link.node))
+                    reserved = any(
+                        other is not actor and not other.dead and other.edge
+                        and (other.edge["kind"] == "npc-short-gap" or (other.drone or getattr(other, "aerial", False))
+                             and other.edge["kind"] in ("bullet-jump", "jump-down", "drop"))
+                        and (frozenset((other.node, other.edge["node"])) == corridor
+                             or distance(link.points[-1], other.edge["points"][-1]) < .65)
+                        for other in self.live
+                    )
+                    occupied = any(
+                        other is not actor and not other.dead
+                        and distance(link.points[-1], other.pos) < .65
+                        for other in self.live
+                    )
+                    if reserved or occupied:
+                        actor.route.insert(0, link)
+                        self.stats["crowdWaitSeconds"] += remaining
+                        actor.crowd_blocked_seconds = getattr(actor, "crowd_blocked_seconds", 0.0) + remaining
+                        # A waiting actor may itself occupy an inbound landing.
+                        # Use existing supported ground avoidance at its real
+                        # feet; never begin or divert an airborne edge to yield.
+                        if (actor.crowd_blocked_seconds >= .8 - EPS
+                            and start + elapsed >= getattr(actor, "crowd_retry_after", -1.0)
+                            and any(other is not actor and not other.dead
+                                    and (distance(actor.pos, other.pos) < .85
+                                         or other.edge and distance(actor.pos, other.edge["points"][-1]) < .65)
+                                    for other in self.live)):
+                            actor.edge = dict(points=[actor.pos, actor.pos], index=1,
+                                              node=actor.node, speed=3.6, kind="walk")
+                            if self._yield_crowded_edge(actor, start + elapsed):
+                                continue
+                            actor.edge = None
+                        break
                 points = list(link.points)
+                if link.kind == "npc-short-gap" and actor.id != -1:
+                    self.stats["npcShortGaps"] += 1
                 # A shared source edge is cached independently of this actor's
                 # current feet. A failed local approach must not disable the
                 # source edge for every other actor.
@@ -3411,7 +3502,8 @@ class World:
                     break
                 length = sum(distance(a, b) for a, b in zip(points, points[1:]))
                 duration = link.time(
-                    "player" if actor.id == -1 else "drone" if actor.drone else "enemy"
+                    "player" if actor.id == -1 else "drone" if actor.drone or getattr(actor, "aerial", False)
+                    else "enemy-gap" if self.c.get("npcShortGap", False) else "enemy"
                 )
                 actor.edge = dict(
                     points=points,
@@ -3452,9 +3544,20 @@ class World:
             travel = min(length, speed * remaining)
             spent = travel / max(EPS, speed)
             candidate = mix(actor.pos, end, travel / length) if length > EPS else end
+            if actor.id != -1:
+                # Tiny event-clock steps are not meaningful progress through
+                # a crowd. Only actual feet update this checkpoint; candidate
+                # geometry queries remain read-only.
+                if (not hasattr(actor, "crowd_progress_since") or distance(
+                    actor.pos, getattr(actor, "crowd_progress_position", actor.pos)
+                ) >= .1):
+                    actor.crowd_progress_position = actor.pos
+                    actor.crowd_progress_since = start + elapsed
             if actor.id != -1 and not self._crowd_segment_clear(
                 actor, actor.pos, candidate
             ):
+                if start + elapsed - actor.crowd_progress_since >= .8:
+                    actor.crowd_blocked_seconds = max(getattr(actor, "crowd_blocked_seconds", 0.0), .8)
                 self.stats["crowdWaitSeconds"] += remaining
                 actor.crowd_blocked_seconds = (
                     getattr(actor, "crowd_blocked_seconds", 0.0) + remaining
@@ -3667,6 +3770,7 @@ class World:
                 self.scene.sources,
                 doorGeometry=self.scene.door_source,
                 groundGeometry=self.scene.ground_source,
+                npcGapGeometry={**self.scene.npc_gap_source, "shortGapEnabled": self.c["npcShortGap"]},
                 spawnRules=({"profile": self.c["spawnProfile"],
                              "enemySpecsSha256": hashlib.sha256((ROOT / "data/arena/enemy-specs.json.gz").read_bytes()).hexdigest(),
                              "rules": spawn_rules()} if self.source_spawns else {"profile": "custom"}),

@@ -108,3 +108,13 @@ Movement is always open by scenario policy. `doorSight=open|closed` applies sepa
 `visual-ground-geometry.json.gz` contains only exact source floor/stair triangles used as witnesses for admitted local ground connections, with mesh hashes and triangle IDs. It is not a wholesale conversion of decoration to collision. Both sidecars are recorded in exported result sources.
 
 Rebuild with `tools/import_arena_scene.py --source-doors --case-root <case> --packages-bin <Packages.bin_H>` and `--source-ground` for the bounded witnessed ground pass. Complete raw source geometry is kept in the research case, not copied into the runtime as unclassified collision.
+
+
+## NPC traversal sidecar and source Hover classification
+
+`npc-gap-geometry.json.gz` (`arena-npc-gaps/v1`, `catalog.npcGapGeometry`) has two distinct route kinds. `source-surface-walk` uses fully supported existing scene CSG/NAV triangles, with scene/hash and collision triangle provenance; it adds no collision and is always eligible. `npc-short-gap` is an explicit conservative scenario approximation, enabled only for the `enemy-gap` runtime profile; strict `enemy` and player routes exclude it. Source NPC jump capability does not prove these endpoints or timing are native offmesh. Rebuild with `python tools/import_arena_scene.py --source-npc-gaps --packages-bin <Packages.bin_H>`; `--visual-map-id` limits a repair.
+
+EnemySpecs `movement` metadata comes from resolved locomotion type/follower and Avatar physics attributes (`Flyer=1`), including per-variant evidence. Only `smallHoverCompatible` rows use the current small flying proxy. Classification does not imply arbitrary free flight or affect Arbitration-specific gameplay. The original source still uses a Ground pathfinder. Re-running `import_enemy_specs` regenerates these fields.
+
+
+GasCity Door4969 uses `gas-door4969-source-route.json`, a reviewed source-triangle recipe. Reproduce with `--source-ground --visual-map-id corpus-gas-city-defense --ground-surface-face 2062 --ground-support-entity 4955 --ground-support-entity 4956 --ground-support-entity 2681 --ground-support-recipe data/arena/gas-door4969-source-route.json`, plus the extracted `--case-root` and `--packages-bin`. The importer rechecks static physics, mesh SHA and exact source triangles; only dense-route witnesses are admitted. The two Trim entities with disabled physics are not included. The route uses the established center-foot support policy, not a claim of full-footprint support.
