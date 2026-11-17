@@ -1,72 +1,80 @@
-# 场景导航回归记录（2026-11-17）
+# 场景导航回归记录（2026-11-17，arena-world-v9）
 
-本轮使用用户当前伯斯顿Prime配装、160起点、等级增长开启、4人仲裁拦截定额清场。固定seed20261116；地图使用全部已接入区域，各本图怪组独立运行。这里测试的是场景运动与伤害接线，不代表还原原生占点任务。
+本轮使用用户当前8卡伯斯顿Prime、灵化循环、160起点、等级增长开启、4人仲裁拦截定额清场，固定seed20261116。全地图区域，每组运行20清场周期或1800模拟秒；这是场景清场模型，不是占点任务的原生轮次。
 
-## 覆盖与口径
+## 验收口径
 
-25张模板共37个可运行本图怪组组合，每组最终复测3个周期，共7473击杀，37组均清场。另进行过每组20周期/1800模拟秒的压力扫描；中途命中墙钟预算不会被称为AI死循环。最终运行使用2个独立单线程进程，诊断预算45秒；产品默认仍30秒。
+25张已接入模板、37个可运行本图怪组分别运行。同图不同派系单独覆盖。长期停滞定义为实际脚点在0.2米内，同时距按回放插值的战甲位置超过3米，两个条件连续成立超过15模拟秒。靠近战甲时的等待不累计到之后远离的时段。观察到的长停顿再检查真实World的路径、冻结、保护、身体碰撞、生命与伤害，不能仅靠最终清场判定成功，也不把高血量目标持续受伤误判为卡怪。
 
-“远处停步”指目标净位置在0.2米内停留超过15模拟秒，同时与战甲距离超过3米。该指标会包含源导航缺连接、拥挤等候，也可能受状态控制影响；不能仅凭此判定永久卡死。下表如实保留未消除的停步，不以最终清场掩盖。
+诊断矩阵使用2个独立单线程进程、120秒墙钟预算，以完成长时覆盖；产品默认仍30秒。并发、构建与UI争用会影响墙钟，表中耗时不是产品独占性能承诺。
 
-## 图与本图怪组结果
+## 已关闭的根因
 
-| 模板 | 来源怪组 | 基线远处停步¹ | 修正后远处停步 | 最长（模拟秒） | 最终周期 / 击杀 | 实际计算秒² |
-|---|---|---:|---:|---:|---:|---:|
-| 1999-temple-defense-underground | DisruptionScaldraSpec | 0 | 0 | 0.00 | 3 / 209 | 2.34 |
-| corpus-gas-city-defense | CorpusGasRemasterDefenseSquad | 4 | 0 | 0.00 | 3 / 203 | 3.12 |
-| corpus-gas-city-defense | InfestedDefenseA | 5 | 0 | 0.00 | 3 / 204 | 5.50 |
-| corpus-ice-defense | CorpusSquadDefenseB | 4 | 3 | 24.51 | 3 / 205 | 3.69 |
-| corpus-ice-defense | InfestedDefenseB | 10 | 2 | 19.10 | 3 / 196 | 4.41 |
-| corpus-outpost-defense-one | CorpusSquadDefenseB | 1 | 5 | 24.84 | 3 / 207 | 2.95 |
-| corpus-outpost-defense-one | InfestedDefenseB | 7 | 2 | 26.31 | 3 / 203 | 4.53 |
-| corpus-outpost-defense-two | CorpusSquadDefenseB | 0 | 0 | 0.00 | 3 / 200 | 2.18 |
-| corpus-outpost-defense-two | InfestedDefenseB | 1 | 0 | 0.00 | 3 / 200 | 4.71 |
-| corpus-ship-defense | CorpusShipSquadDefenseB | 0 | 0 | 0.00 | 3 / 203 | 4.63 |
-| corpus-ship-defense | InfestedDefenseA | 0 | 0 | 0.00 | 3 / 199 | 6.44 |
-| corpus-ship-defense | InfestedDefenseB | 0 | 0 | 0.00 | 3 / 203 | 6.79 |
-| entrati-lab-mirror-defense-ear | EntratiMirrorDefenseSpec | 29 | 13 | 58.50 | 3 / 199 | 35.96 |
-| entrati-lab-mirror-defense-eye | EntratiMirrorDefenseSpec | 47 | 10 | 87.60 | 3 / 203 | 37.73 |
-| grineer-asteroid-defense | GrineerDefenseAAsteroid | 0 | 0 | 0.00 | 3 / 214 | 1.52 |
-| grineer-asteroid-defense | InfestedDefenseA | 2 | 0 | 0.00 | 3 / 195 | 5.34 |
-| grineer-asteroid-defense | InfestedDefenseB | 5 | 0 | 0.00 | 3 / 199 | 3.82 |
-| grineer-forest-defense | GrineerDefenseForest | 0 | 0 | 0.00 | 3 / 206 | 1.67 |
-| grineer-forest-defense | InfestedDefenseA | 1 | 0 | 0.00 | 3 / 196 | 4.80 |
-| grineer-forest-interception-01 | GrineerDefenseForest | 0 | 0 | 0.00 | 3 / 200 | 1.41 |
-| grineer-forest-interception-02 | GrineerDefenseForest | 0 | 0 | 0.00 | 3 / 206 | 1.97 |
-| grineer-fortress-defense | GrineerDefenseFortress | 19 | 19 | 104.04 | 3 / 200 | 4.19 |
-| grineer-galleon-defense | GrineerDefenseA | 0 | 0 | 0.00 | 3 / 202 | 2.37 |
-| grineer-ocean-defense-02 | SeaLabGrineerDefenseA | 0 | 0 | 0.00 | 3 / 203 | 1.82 |
-| grineer-ocean-defense-03 | SeaLabGrineerDefenseA | 0 | 0 | 0.00 | 3 / 202 | 2.02 |
-| grineer-settlement-defense | DesertGrineerDefenseA | 0 | 0 | 0.00 | 3 / 206 | 1.43 |
-| grineer-settlement-defense | InfestedDefenseA | 0 | 0 | 0.00 | 3 / 194 | 4.65 |
-| grineer-shipyards-defense | GrineerShipyardsDefenseA | 0 | 0 | 0.00 | 3 / 204 | 2.20 |
-| grineer-shipyards-defense | InfestedDefenseB | 0 | 0 | 0.00 | 3 / 200 | 4.77 |
-| grineer-shipyards-interception | GrineerShipyardsDefenseA | 0 | 0 | 0.00 | 3 / 203 | 1.88 |
-| infested-corpus-defense | InfestedDefenseB | 7 | 7 | 32.74 | 3 / 203 | 5.62 |
-| lastwish-corpus-mirror-defense | CorpusGrineerDesertMix | 48 | 18 | 62.42 | 3 / 203 | 3.84 |
-| lastwish-grineer-mirror-defense | CorpusGrineerDesertMix | 0 | 0 | 0.00 | 3 / 211 | 2.11 |
-| orokin-derelict-defense | InfestedDefenseB | 0 | 0 | 0.00 | 3 / 198 | 4.36 |
-| orokin-moon-defense | GrineerMoonDefense | 3 | 1 | 19.31 | 3 / 197 | 3.15 |
-| orokin-tower-defense | OrokinDefenseSquad | 0 | 0 | 0.00 | 3 / 199 | 3.01 |
-| orokin-tower-defense | OrokinDefenseSquadB | 0 | 0 | 0.00 | 3 / 198 | 4.05 |
+- 源CSG/NAV已有支撑但导入漏连；分离连续地面通路与可关闭NPC动作，不新增地板。
+- 出生区孤岛：赤毒要塞、镜像防御、前哨站、感染飞船、冰原、月球、森林和1999场景分别审阅起落、源动作与全身体轨迹；8图单独记录行动输入哈希。普通缺口、受限动作、审核下落与确切EndJumpPoints保持不同来源与限值。
+- 拥挤退让后立即返回被占据面中心；现在连尾段也检查NPC碰撞，必要时只完成真实有支撑的小步退让再重新规划。
+- 空中落点被地面进边抢占；普通地面进边现遵守预约，闲置落点占用者可沿检查通过的地面退让，冻结目标不被强制移动。
+- 虚空塔约60.25度的原生可走坡被通用避让阈值拒绝；只认可实际命中的、属于当前源walk的NAV三角，不改法线、不豁免墙体。
+- 源分量仍无法通行时玩家长期只打近怪；现在按等待年龄主动找能对指定目标实际造成伤害的合法射击位，固定站桩保持原位置。
+- 高血量目标持续受伤但71秒才被击杀，遭60秒无击杀误熔断；现按真实实扣伤害或击杀进展判断，保留单周期、总时长、墙钟与事件数上限。
 
-¹ 基线只统计原地15秒，不区分距战甲，且使用15秒预算；表中数量不能当作同时间覆盖的严格百分比改善。原始与修正版回放均保留在本地诊断目录。
-² 批量并发、编译和诊断争用会影响墙钟；这些数字不作为产品独立运行延迟承诺。
+## 覆盖边界
 
-## 已修复的根因
+NPC动作仍是有源能力证据、经过真实几何检验的场景近似，非已恢复的完整原生寻路。1999的18个出生点仍无满足当前动作限值的普通NPC通路，由玩家合法走位清理；固定站桩或关闭NPC跨越时，可达范围以源图和射程/视线为准，不能保证任意点全图清场。大型飞行单位真实体积、高度控制及游戏实测事项仍保留原诊断，不属于本轮已发现AI缺陷。
 
-- 原有CSG地板完整却因导入必须新增visual witness而漏掉连接。
-- 无原生offmesh记录的窄缺口，通过明确可关闭的保守NPC短跨越场景模型接入；不生成地板。
-- 不同空中弧线同时通过同一狭窄通道相互锁住，现起步前预约。
-- 毫米级事件步反复清零堵塞计时，现按实际脚点有效位移触发让位。
-- 小型普通飞行敌人误用地面图，现按源Hover/Flyer字段独立分配。
-- 全图Dijkstra反复执行占用计算预算，现可选Rust求路并复用任务内缓存。
+## 逐图结果
 
-## 剩余限制
+最终37组均未出现连续超过15秒的远处静止。35组完成20周期；英择谛耳/眼按用户原配装到1800秒时间上限，分别完成8/6周期，末段仍持续有效伤害。合计714个完整周期、48,098击杀。没有无进展熔断、单周期熔断或墙钟预算截断。
 
-10组在这次完整3周期中仍出现至少一次远处停步，尤其赤毒要塞、部分镜像防御与前哨站一。部分源NAV孤岛没有已证实可通行的门/跳落/地面连接；不放宽普通墙体或凭空造桥。大型飞行敌人的真实体积和高度控制尚未接入小型Hover代理。英择谛普通敌多为非头部弱点，用户的爆头配装不能等价于同等级普通Corpus的击杀速度。
+| 模板 | 本图来源怪组 | 周期 / 击杀 | 模拟秒 | 计算秒¹ | 持续远停 >15秒 | 结束 |
+|---|---|---:|---:|---:|---:|---|
+| 1999地下神庙防御候选场景 | DisruptionScaldraSpec | 20 / 1387 | 553.02 | 19.74 | 0 | 20周期清场 |
+| Corpus燃气城防御模板 | CorpusGasRemasterDefenseSquad | 20 / 1340 | 1211.39 | 29.44 | 0 | 20周期清场 |
+| Corpus燃气城防御模板 | InfestedDefenseA | 20 / 1331 | 1264.77 | 43.52 | 0 | 20周期清场 |
+| Corpus冰原防御模板 | CorpusSquadDefenseB | 20 / 1346 | 601.41 | 19.79 | 0 | 20周期清场 |
+| Corpus冰原防御模板 | InfestedDefenseB | 20 / 1325 | 658.29 | 28.06 | 0 | 20周期清场 |
+| Corpus前哨站防御模板一 | CorpusSquadDefenseB | 20 / 1357 | 505.22 | 19.65 | 0 | 20周期清场 |
+| Corpus前哨站防御模板一 | InfestedDefenseB | 20 / 1335 | 536.18 | 32.52 | 0 | 20周期清场 |
+| Corpus前哨站防御模板二 | CorpusSquadDefenseB | 20 / 1363 | 506.09 | 18.90 | 0 | 20周期清场 |
+| Corpus前哨站防御模板二 | InfestedDefenseB | 20 / 1332 | 603.09 | 31.64 | 0 | 20周期清场 |
+| Corpus飞船防御模板 | CorpusShipSquadDefenseB | 20 / 1351 | 604.97 | 29.98 | 0 | 20周期清场 |
+| Corpus飞船防御模板 | InfestedDefenseA | 20 / 1328 | 667.70 | 42.69 | 0 | 20周期清场 |
+| Corpus飞船防御模板 | InfestedDefenseB | 20 / 1339 | 674.56 | 41.90 | 0 | 20周期清场 |
+| Entrati实验室镜像防御模板耳 | EntratiMirrorDefenseSpec | 8 / 604 | 1800.00 | 116.65 | 0 | 1800秒上限 |
+| Entrati实验室镜像防御模板眼 | EntratiMirrorDefenseSpec | 6 / 466 | 1800.00 | 82.39 | 0 | 1800秒上限 |
+| Grineer小行星防御模板 | GrineerDefenseAAsteroid | 20 / 1379 | 403.77 | 12.09 | 0 | 20周期清场 |
+| Grineer小行星防御模板 | InfestedDefenseA | 20 / 1352 | 435.02 | 28.10 | 0 | 20周期清场 |
+| Grineer小行星防御模板 | InfestedDefenseB | 20 / 1350 | 444.20 | 28.76 | 0 | 20周期清场 |
+| Grineer森林防御模板 | GrineerDefenseForest | 20 / 1367 | 410.91 | 12.43 | 0 | 20周期清场 |
+| Grineer森林防御模板 | InfestedDefenseA | 20 / 1319 | 489.15 | 28.81 | 0 | 20周期清场 |
+| Grineer森林拦截模板一 | GrineerDefenseForest | 20 / 1353 | 555.39 | 13.78 | 0 | 20周期清场 |
+| Grineer森林拦截模板二 | GrineerDefenseForest | 20 / 1333 | 971.00 | 17.47 | 0 | 20周期清场 |
+| Grineer要塞防御模板 | GrineerDefenseFortress | 20 / 1338 | 1496.67 | 25.40 | 0 | 20周期清场 |
+| Grineer战舰防御模板 | GrineerDefenseA | 20 / 1330 | 864.54 | 18.09 | 0 | 20周期清场 |
+| Grineer海底实验室防御模板二 | SeaLabGrineerDefenseA | 20 / 1337 | 470.50 | 14.13 | 0 | 20周期清场 |
+| Grineer海底实验室防御模板三 | SeaLabGrineerDefenseA | 20 / 1358 | 621.46 | 16.96 | 0 | 20周期清场 |
+| Grineer沙漠营地防御模板 | DesertGrineerDefenseA | 20 / 1372 | 381.69 | 11.69 | 0 | 20周期清场 |
+| Grineer沙漠营地防御模板 | InfestedDefenseA | 20 / 1315 | 452.16 | 29.47 | 0 | 20周期清场 |
+| Grineer船坞防御模板 | GrineerShipyardsDefenseA | 20 / 1355 | 639.31 | 17.39 | 0 | 20周期清场 |
+| Grineer船坞防御模板 | InfestedDefenseB | 20 / 1330 | 655.30 | 35.39 | 0 | 20周期清场 |
+| Grineer船坞拦截模板 | GrineerShipyardsDefenseA | 20 / 1347 | 583.79 | 14.43 | 0 | 20周期清场 |
+| Infested Corpus舰船防御模板 | InfestedDefenseB | 20 / 1342 | 1195.60 | 39.48 | 0 | 20周期清场 |
+| Corpus镜像防御模板 | CorpusGrineerDesertMix | 20 / 1344 | 976.57 | 25.42 | 0 | 20周期清场 |
+| Grineer镜像防御模板 | CorpusGrineerDesertMix | 20 / 1366 | 339.54 | 15.66 | 0 | 20周期清场 |
+| Orokin遗迹防御模板 | InfestedDefenseB | 20 / 1345 | 1208.97 | 38.38 | 0 | 20周期清场 |
+| Orokin月球防御模板 | GrineerMoonDefense | 20 / 1328 | 870.01 | 19.95 | 0 | 20周期清场 |
+| Orokin塔防御模板 | OrokinDefenseSquad | 20 / 1324 | 1002.63 | 22.33 | 0 | 20周期清场 |
+| Orokin塔防御模板 | OrokinDefenseSquadB | 20 / 1310 | 1101.20 | 30.05 | 0 | 20周期清场 |
 
-待后续源连接或实测校准项保留在ARENA.md和本地实施记录中；本次不宣称全图全怪组完全无等待。
+¹ 诊断矩阵并发耗时；Eye单独完整运行。产品仍按默认30秒墙钟返回已完成部分，不承诺所有高等级配装在30秒内跑完20周期。
 
+旧v8最终3周期按相同持续条件重算为10组、71次远停；此前80次的口径错误包含了靠近玩家时的旧等待。本轮覆盖更长，不以这两个不同覆盖量计算百分比提速。
 
-用户原燃气城完整20周期复验：真实8卡伯斯顿Prime、灵化循环、160起点并开启拦截等级增长、4人、固定seed。最终1338击杀、1275.79模拟秒，源码23.71秒、成品真实浏览器24.64秒（事件指纹7613316b2c2430b1一致），远离战甲的连续15秒停步为0；此前原回放16周期后耗尽30秒预算、29个目标连续停步超过15秒。最后修复是Door4969确切静态门框/Inlay底部三角支持，严格地面也可通行，未扩大门框穿越范围。上述矩阵燃气城两组已据此复算。
+## 兼容与成品验证
+
+- 复用现有核心、Rust兼容、评分身份和场景World用例，68项通过；本轮新增测试文件0、测试函数0。
+- 原船坞高层固定站位：20波1200杀、15.49计算秒，playerTravelSeconds=0，回放中玩家只有一个坐标且与原固定点相同，远处停滞0。
+- 最终EXE真实浏览器，原燃气城8卡配装：20周期1340杀、1211.4模拟秒、29.82计算秒；终帧0目标，源码/成品完整回放相同，事件指纹`f05862f35f591478`。检查了页面文字、回放、JSON导出和深浅色，浏览器console error为0。
+- 成品SHA256：`44339857e5b9754095f381d8a4d443a6ba6d587a9c8981ffbfe819c2d7b4b346`。运行源与导航副本哈希写入本地交付清单；源码保持评分身份`905f6fed37c72431`，本轮无需武器缓存重烘焙。
+
+原始回放、失败现场和复验在本地`.local/arena-validation/crowd-completion-20261117`、`crowd-final-20261117`与最终`crowd-delivery-20261117`保存。它们是诊断证据，不新增常规测试文件，也不提交大型一次性回放。

@@ -680,6 +680,8 @@ def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():
     walker.pos=before;walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":3.6,"kind":"source-surface-walk"}
     walker.crowd_retry_after=0.
     assert world._yield_crowded_edge(walker,2.)
+    assert all(world._crowd_segment_clear(walker,a,b)
+               for a,b in zip(walker.edge["points"],walker.edge["points"][1:]))
     walker.drone=True
     walker.pos=before;walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":5.,"kind":"walk"}
     assert world._yield_crowded_edge(walker,3.)
@@ -692,6 +694,12 @@ def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():
     walker.pos=before;walker.route=[]
     walker.edge={"points":[before,(2.,0.,0.)],"index":1,"node":0,"speed":3.6,"kind":"walk"}
     assert world._yield_crowded_edge(walker,4.) and walker.edge["node"]==1
+    walker.pos=before;walker.route=[]
+    walker.edge={"points":[before,before],"index":1,"node":0,"speed":3.6,"kind":"walk"}
+    assert world._yield_crowded_edge(walker,4.5,clear_landing=before)
+    assert distance(walker.edge["points"][-1],before)>=.75
+    assert all(world._crowd_segment_clear(walker,a,b)
+               for a,b in zip(walker.edge["points"],walker.edge["points"][1:]))
     world.flows={}
     # A tightly packed door merge needs only a .2m tangent step. Resuming
     # behind that step would restore the same two-actor standstill.
@@ -745,6 +753,16 @@ def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():
                                     infinitePuncture=False,ignoresAvatars=False,projectile=True)
     world.plan()
     assert world.player.route==[vantage_edge] and world.stats["firingPositionPlans"]==3
+    # A source-island target keeps its cleanup route despite other nearby
+    # targets; reaching the endpoint must allow damage to that exact target.
+    isolated=Actor(9,2,(30.,0.,0.),unreachable=True);isolated.staging_since=0.
+    world.live=[isolated];world.t=2.;world.player.route=[]
+    world.combat.targets={9:SimpleNamespace(protected=False,frozen_until=-1.)}
+    world.combat.preview=lambda t:object()
+    world._can_fire_from=lambda p,s,*,target_id=None:p[0]>=1. and target_id==9
+    assert world._plan_staged_target() and world.player.route==[vantage_edge]
+    assert world.staging_target_id==9
+    assert world._plan_staged_target() and world.player.route==[vantage_edge]
     # Two different airborne arcs through the same corridor must not start
     # together and block each other halfway across. Release follows completion.
     crossing=Edge(0,1,((0.,0.,0.),(1.,.45,0.),(2.,0.,0.)),"npc-short-gap",1.,False,1.,2.,key="air")
@@ -752,6 +770,11 @@ def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():
     queued=Actor(7,0,(0.,0.,0.),route=[crossing],tape={"path":[]})
     world.live=[first,queued];world.stats["crowdWaitSeconds"]=0.;world.c["npcShortGap"]=True
     assert world.move_actor(queued,.1,0.)==0. and queued.route==[crossing]
+    assert queued.edge is None and queued.pos==(0.,0.,0.)
+    # Ground arrivals must also respect the in-flight landing reservation.
+    ground_arrival=Edge(0,1,((0.,0.,0.),(2.,0.,0.)),"walk",1.,True,1.,2.,key="ground")
+    queued.route=[ground_arrival]
+    assert world.move_actor(queued,.1,.1)==0. and queued.route==[ground_arrival]
     assert queued.edge is None and queued.pos==(0.,0.,0.)
 
 
@@ -798,6 +821,17 @@ def test_arena_source_door_query_channels():
     jumping=ArenaScene(raw,native=False,npc_gaps={"links":[gap]})
     assert not jumping.path(0,1,"enemy") and not jumping.path(0,1,"player")
     assert jumping.path(0,1,"enemy-gap")[0].kind=="npc-short-gap"
+    # Source-admitted steep NAV remains valid for its own walk; a nearby
+    # CSG face must never inherit that exemption or have its normal rewritten.
+    slope=[[x,1.75*z,z] for x,_,z in floor]
+    steep={**raw,"nav":{**raw["nav"],"vertices":slope,"triangles":[[0,1,2],[0,2,3]]},
+           "collision":{"vertices":wall+slope,"triangles":[[0,1,2],[0,2,3],[4,5,6],[4,6,7]]}}
+    slope_scene=ArenaScene(steep,native=False)
+    foot=slope_scene.ground_support((0.,0.,0.))
+    assert foot.normal[1]<.5 and slope_scene.source_nav_support(foot,{0,1})
+    assert not slope_scene.source_nav_support(foot,set())
+    wall_hit=slope_scene.raycast((0.,2.,0.),(1.,0.,0.),3.)
+    assert not slope_scene.source_nav_support(wall_hit,{0,1})
 
 
 def test_defense_schedule_cumulative_merge_quotas_and_cap_shortfall():

@@ -3772,6 +3772,636 @@ def import_source_npc_gaps(packages_path, output, *, map_ids=None):
     return payload
 
 
+def _npc_action_gap_route(scene, a, b, pa, pb, *, reviewed_drop=False):
+    """Explicit optional NPC JumpAcross model, distinct from short-gap policy.
+
+    Only source-spawn islands or authored-action neighbourhoods can propose
+    this transition. Parameters are a scenario approximation, not native reach.
+    """
+
+    def mix(x, y, t):
+        return tuple(x[k] * (1 - t) + y[k] * t for k in range(3))
+
+    def inset(p, c):
+        length = math.dist(p, c)
+        return mix(p, c, min(1, 0.3 / length)) if length > 1e-8 else p
+
+    start, end = inset(pa, scene.nodes[a]), inset(pb, scene.nodes[b])
+    span = math.hypot(start[0] - end[0], start[2] - end[2])
+    drop_only = end[1] - start[1] < -2
+    if (
+        span > 4
+        or span < 0.05
+        or end[1] - start[1] > 2
+        or end[1] - start[1] < (-4.0 if reviewed_drop else -3.5)
+    ):
+        return None, "action-model-span-or-height"
+
+    def support(p):
+        hits = scene.collision.all_hits((p[0], p[1] + 0.45, p[2]), (0, -1, 0), 0.9)
+        hits = [
+            h
+            for h in hits
+            if abs(h.normal[1]) >= 0.55 and abs(h.position[1] - p[1]) <= 0.45
+        ]
+        return min(hits, key=lambda h: abs(h.position[1] - p[1])) if hits else None
+
+    segments = []
+    for x, y in ((scene.nodes[a], start), (end, scene.nodes[b])):
+        n = max(1, math.ceil(math.dist(x, y) / 0.06))
+        points = []
+        for i in range(n + 1):
+            h = support(mix(x, y, i / n))
+            if h is None:
+                return None, "action-approach-no-support"
+            if points and abs(h.position[1] - points[-1][1]) > 0.45:
+                return None, "action-approach-step"
+            points.append(h.position)
+        if not scene.check_motion(points, radius=0.22, ground_step=True)["clear"]:
+            return None, "action-approach-body"
+        segments.append(points)
+    start, end = segments[0][-1], segments[1][0]
+    n = max(2, math.ceil(span / 0.04))
+    baseline = [mix(start, end, i / n) for i in range(n + 1)]
+    hits = [support(p) for p in baseline]
+    missing = [i for i, h in enumerate(hits) if h is None]
+    if not missing:
+        return _source_csg_surface_route(scene, a, b, start, end)
+    # Every approach remains supported; a single airborne traversal may span
+    # several cracks, bounded by the envelope from first to last missing sample.
+    if not hits[0] or not hits[-1]:
+        return None, "action-noncontiguous-gap"
+    width = (missing[-1] - missing[0] + 2) * span / n
+    if width > 2.5:
+        return None, "action-unsupported-span-over2.5"
+    for lift in ((0.0, 0.15, 0.45, 0.6) if drop_only else (0.6, 1.2, 1.8)):
+        arc = [
+            (
+                p[0],
+                (
+                    start[1] * (1 - (i / n) ** 2) + end[1] * (i / n) ** 2
+                    if drop_only
+                    else p[1]
+                )
+                + 4 * lift * (i / n) * (1 - i / n),
+                p[2],
+            )
+            for i, p in enumerate(baseline)
+        ]
+        points = [*segments[0][:-1], *arc, *segments[1][1:]]
+        if scene.check_motion(points, radius=0.22, heights=(0.5, 1, 1.65))["clear"]:
+            length = sum(math.dist(x, y) for x, y in zip(points, points[1:]))
+            seconds = max(0.65, length / 3.6)
+            return {
+                "kind": "npc-short-gap",
+                "points": points,
+                "seconds": seconds,
+                "enemySeconds": seconds,
+                "unsupportedSpan": width,
+                "arcLift": lift,
+                "dropOnly": drop_only,
+                "takeoff": start,
+                "landing": end,
+            }, None
+    return None, "action-arc-body"
+
+
+def import_source_npc_actions(
+    case_root, packages_path, output, *, map_ids, repair_walks=None, action_pairs=None
+):
+    """Bounded source-spawn/action island transitions, no player-jump promotion."""
+    from collections import Counter, defaultdict
+    from import_melee_mechanics import Packages
+    from wfarsenal.arena_scene import (
+        ArenaScene,
+        load_asset,
+        load_source_doors,
+        _load_source_geometry,
+    )
+
+    if not map_ids:
+        raise ValueError("--source-npc-actions requires explicit --visual-map-id scope")
+    package = Packages(packages_path)
+    root = output.parents[1]
+    catalog_path = output / "catalog.json"
+    catalog = json.loads(catalog_path.read_text(encoding="utf8"))
+    target = output / "npc-gap-geometry.json.gz"
+    payload = json.loads(gzip.decompress(target.read_bytes()))
+    for mid in map_ids:
+        entry = catalog["maps"][mid]
+        record = payload["maps"][mid]
+        record["links"] = [
+            l for l in record["links"] if not l["source"].get("sourceIslandActionModel")
+        ]
+        scene = ArenaScene(
+            load_asset(mid, "scene", root=root),
+            load_asset(mid, "navigation", root=root),
+            map_id=mid,
+            doors=load_source_doors(mid, root=root),
+            ground=_load_source_geometry(
+                mid, "groundGeometry", "arena-source-ground/v1", root=root
+            ),
+            npc_gaps=record,
+        )
+        name = entry["sourceTile"].rsplit("/", 1)[-1]
+        source = case_root / "work/geometry" / ("map-coverage/" + name)
+        es, level = _read_visual_level(source, entry["sourceTile"])
+        # Retain inputHashes: those describe the original short-gap links.
+        # Actions/portal repairs are validated against this separate snapshot.
+        action_inputs = dict(
+            scene=entry["assets"]["scene"]["sha256"],
+            navigation=entry["assets"]["navigation"]["sha256"],
+            doorGeometry=catalog.get("doorGeometry", {}).get("sha256"),
+            groundGeometry=catalog.get("groundGeometry", {}).get("sha256"),
+            packages=package.sha256,
+            levelHeader=level["levelHeaderSha256"],
+            levelBody=level["levelBodySha256"],
+        )
+        record["actionModelInputHashes"] = dict(
+            action_inputs,
+            canonicalSha256=hashlib.sha256(json.dumps(
+                action_inputs, sort_keys=True, separators=(",", ":")
+            ).encode("utf8")).hexdigest(),
+        )
+        action_bases = (
+            "/EE/Types/Game/DynamicNavmeshBridge",
+            "/EE/Types/Actions/JumpAction",
+            "/EE/Types/Actions/JumpAcross",
+            "/EE/Types/Actions/JumpDown",
+        )
+        actions = []
+        for entity in es:
+            typ = entity["type"]
+            for _ in range(20):
+                if typ in action_bases:
+                    actions.append(entity)
+                    break
+                typ = package.parent(typ)
+                if not typ:
+                    break
+        nav = scene.raw["nav"]
+        verts, faces = nav["vertices"], nav["triangles"]
+        counts = Counter(
+            tuple(sorted((a, b)))
+            for f in faces
+            for a, b in ((f[0], f[1]), (f[1], f[2]), (f[2], f[0]))
+        )
+        boundary = [
+            (f, verts[a], verts[b])
+            for f, tri in enumerate(faces)
+            for a, b in ((tri[0], tri[1]), (tri[1], tri[2]), (tri[2], tri[0]))
+            if counts[tuple(sorted((a, b)))] == 1
+        ]
+        cells = defaultdict(set)
+        for i, (_, a, b) in enumerate(boundary):
+            n = max(1, math.ceil(math.dist(a, b) / 0.5))
+            for j in range(n + 1):
+                cells[
+                    tuple(
+                        math.floor((a[k] * (1 - j / n) + b[k] * j / n) / 2)
+                        for k in range(3)
+                    )
+                ].add(i)
+        failures = Counter()
+        new = []
+        initial = len(set(scene.movement_components("enemy-gap")))
+        for iteration in range(6):
+            components = scene.movement_components("enemy-gap")
+            goal = scene.search(scene.start["face"], "enemy-gap", reverse=True)
+            unreachable = {
+                components[s["face"]]
+                for s in scene.spawns
+                if s.get("accepted") and not math.isfinite(goal.distances[s["face"]])
+            }
+            if not unreachable:
+                break
+            rows = defaultdict(list)
+            seen = set()
+            for i, (a, x, y) in enumerate(boundary):
+                if components[a] not in unreachable:
+                    continue
+                n = max(1, math.ceil(math.dist(x, y) / 0.5))
+                near = set()
+                for j in range(n + 1):
+                    key = tuple(
+                        math.floor((x[k] * (1 - j / n) + y[k] * j / n) / 2)
+                        for k in range(3)
+                    )
+                    for dx in range(-2, 3):
+                        for dy in range(-1, 2):
+                            for dz in range(-2, 3):
+                                near.update(
+                                    cells[(key[0] + dx, key[1] + dy, key[2] + dz)]
+                                )
+                for k in near:
+                    b, u, v = boundary[k]
+                    if components[a] == components[b] or (i, k) in seen:
+                        continue
+                    seen.add((i, k))
+                    pa, pb = _npc_gap_nearest_segments(x, y, u, v)
+                    if (
+                        math.hypot(pa[0] - pb[0], pa[2] - pb[2]) > 3.3
+                        or abs(pa[1] - pb[1]) > 3.5
+                    ):
+                        continue
+                    pair = tuple(sorted((components[a], components[b])))
+                    row = (math.dist(pa, pb), a, b, tuple(pa), tuple(pb))
+                    candidates = rows[pair]
+                    if row not in candidates:
+                        candidates.append(row)
+                        candidates.sort()
+                        del candidates[64:]
+            accepted = set()
+            for pair, candidates in sorted(rows.items(), key=lambda item: item[1][0]):
+                if pair in accepted:
+                    continue
+                for _, a, b, pa, pb in candidates:
+                    if pb[1] - pa[1] > 2:
+                        a, b, pa, pb = b, a, pb, pa
+                    route, error = _npc_action_gap_route(scene, a, b, pa, pb)
+                    if route is None:
+                        failures[error] += 1
+                        continue
+                    nearby = sorted(
+                        actions,
+                        key=lambda e: min(
+                            math.dist(e["position"], pa), math.dist(e["position"], pb)
+                        ),
+                    )[:2]
+                    source = {
+                        "type": "scenario-source-spawn-island-action",
+                        "sourceIslandActionModel": True,
+                        "qualification": "explicit NPC scenario movement approximation bounded to real admitted source-spawn ground islands; NOT recovered native offmesh or validated native reach; individually supported approaches/feet and full body trajectory; no floor or wall exemptions",
+                        "sourceNavFaces": [a, b],
+                        "sourceSceneSha256": entry["assets"]["scene"]["jsonSha256"],
+                        "sourceLevel": level,
+                        "capabilitySource": "/EE/Types/Actions/JumpAcross",
+                        "spawnIslandComponents": list(pair),
+                        "takeoff": route["takeoff"],
+                        "landing": route["landing"],
+                        "maxUnsupportedSpan": 2.5,
+                        "maxEndpointHeightDifference": (
+                            3.5 if route.get("dropOnly") else 2
+                        ),
+                        "dropOnly": route.get("dropOnly", False),
+                        "dropCapabilitySource": (
+                            "/EE/Types/Actions/JumpDown"
+                            if route.get("dropOnly")
+                            else None
+                        ),
+                        "unsupportedSpan": route.get("unsupportedSpan", 0),
+                        "arcLift": route.get("arcLift", 0),
+                        "bodyRadius": 0.22,
+                        "bodyHeights": [0.5, 1, 1.65],
+                        "nearbyAuthoredActions": [
+                            dict(
+                                e,
+                                distance=min(
+                                    math.dist(e["position"], pa),
+                                    math.dist(e["position"], pb),
+                                ),
+                            )
+                            for e in nearby
+                        ],
+                    }
+                    if route["kind"] == "source-surface-walk":
+                        source.update(
+                            type="continuous-original-scene-supported-boundary",
+                            qualification="source continuous center and +/- .22m footprint support at .04m; actual original collision triangles; no airborne gap, new floor or wall exemption",
+                            collisionTriangleIds=route["collisionTriangleIds"],
+                        )
+                    directed = [(a, b, route["points"])]
+                    if not route.get("dropOnly"):
+                        directed.append((b, a, route["points"][::-1]))
+                    for u, v, pts in directed:
+                        link = {
+                            "from": u,
+                            "to": v,
+                            "points": pts,
+                            "kind": route["kind"],
+                            "seconds": route["seconds"],
+                            "enemySeconds": route["enemySeconds"],
+                            "enemy": route["kind"] == "source-surface-walk",
+                            "source": source,
+                        }
+                        new.append(link)
+                        scene._add(
+                            u,
+                            v,
+                            pts,
+                            link["kind"],
+                            link["seconds"],
+                            link["enemy"],
+                            link["enemySeconds"],
+                            source,
+                        )
+                    scene._movement_component_cache = None
+                    accepted.add(pair)
+                    break
+            if not accepted:
+                break
+        # Recover only explicit source EndJumpPoints references. Launch/landing
+        # anchors project to exact real NAV triangles within the source .5m
+        # AnchorMaxDistFromNavmesh contract; arc timing remains scenario-modelled.
+        jump_entities = [e for e in es if e["type"] == "/EE/Types/Actions/JumpAction"]
+        jump_index = {}
+        for e in jump_entities:
+            match = re.search(r"^Instance=(\d+)$", e["attributes"], re.M)
+            if match:
+                jump_index[e["scope"], int(match[1])] = e
+
+        def nav_anchor(position):
+            best = None
+            for face, tri in enumerate(faces):
+                xyz = [verts[i] for i in tri]
+                normal = _cross(_sub(xyz[1], xyz[0]), _sub(xyz[2], xyz[0]))
+                if abs(normal[1]) < 0.55 * math.sqrt(_dot(normal, normal)):
+                    continue
+                foot = _closest_triangle(position, *xyz)
+                distance = math.dist(position, foot)
+                if best is None or distance < best[0]:
+                    best = (distance, face, foot)
+            return best if best and best[0] <= 0.5 else None
+
+        authored_count = 0
+        for entity in jump_entities:
+            refs = re.search(r"EndJumpPoints=\{([^}]+)\}", entity["attributes"])
+            if not refs:
+                continue
+            anchor = nav_anchor(entity["position"])
+            if not anchor:
+                continue
+            _, a, launch = anchor
+            for number in re.findall(r"JumpAction(\d+)", refs[1]):
+                target_entity = jump_index.get((entity["scope"], int(number)))
+                if not target_entity:
+                    continue
+                target_anchor = nav_anchor(target_entity["position"])
+                if not target_anchor:
+                    continue
+                _, b, landing = target_anchor
+                flow = scene.search(scene.start["face"], "enemy-gap", reverse=True)
+                if math.isfinite(flow.distances[a]) or not math.isfinite(
+                    flow.distances[b]
+                ):
+                    continue
+                span = math.dist(launch, landing)
+                if span > 20:
+                    continue
+                for lift in (0.2, 0.6, 1.2, 2.0, 3.0):
+                    count = max(40, math.ceil(span / 0.06))
+                    arc = [
+                        tuple(
+                            launch[j] * (1 - i / count)
+                            + landing[j] * (i / count)
+                            + (
+                                4 * lift * (i / count) * (1 - i / count)
+                                if j == 1
+                                else 0
+                            )
+                            for j in range(3)
+                        )
+                        for i in range(count + 1)
+                    ]
+                    pts = [scene.nodes[a], *arc, scene.nodes[b]]
+                    if not scene.check_motion(pts, radius=0.22, heights=(0.5, 1, 1.65))[
+                        "clear"
+                    ]:
+                        continue
+                    seconds = max(
+                        0.65, sum(math.dist(x, y) for x, y in zip(pts, pts[1:])) / 3.6
+                    )
+                    src = {
+                        "type": "source-authored-npc-jump-reference",
+                        "sourceIslandActionModel": True,
+                        "qualification": "exact LEVEL EndJumpPoints entity pair and source NPC-only JumpAction; exact source NAV anchors<=.5m; scenario arc/timing, NOT recovered native trajectory; full body rails; no floor or collision exemptions",
+                        "sourceEntity": entity,
+                        "sourceTargetEntity": target_entity,
+                        "sourceLevel": level,
+                        "sourceNavFaces": [a, b],
+                        "takeoff": launch,
+                        "landing": landing,
+                        "arcLift": lift,
+                        "anchorDistances": [anchor[0], target_anchor[0]],
+                        "bodyRadius": 0.22,
+                        "bodyHeights": [0.5, 1, 1.65],
+                    }
+                    link = {
+                        "from": a,
+                        "to": b,
+                        "kind": "npc-short-gap",
+                        "points": pts,
+                        "seconds": seconds,
+                        "enemySeconds": seconds,
+                        "enemy": False,
+                        "source": src,
+                    }
+                    new.append(link)
+                    scene._add(a, b, pts, link["kind"], seconds, False, seconds, src)
+                    scene._movement_component_cache = None
+                    authored_count += 1
+                    break
+        for pair in action_pairs or []:
+            a, b = (int(x) for x in pair.split(":"))
+            route, error = _npc_action_gap_route(
+                scene, a, b, scene.nodes[a], scene.nodes[b], reviewed_drop=True
+            )
+            if route is None:
+                # Exact reviewed face pair may have large triangles: use their
+                # real boundary feet rather than inventing a centroid reach.
+                for ai,aj in ((0,1),(1,2),(2,0)):
+                    for bi,bj in ((0,1),(1,2),(2,0)):
+                        pa,pb=_npc_gap_nearest_segments(verts[faces[a][ai]],verts[faces[a][aj]],verts[faces[b][bi]],verts[faces[b][bj]])
+                        route,error=_npc_action_gap_route(scene,a,b,pa,pb)
+                        if route is not None:break
+                    if route is not None:break
+            if route is None:
+                raise ValueError("explicit source NPC action failed: " + str(error))
+            src = {
+                "type": (
+                    "scenario-reviewed-source-npc-drop"
+                    if route.get("dropOnly")
+                    else "scenario-reviewed-source-npc-action"
+                ),
+                "sourceIslandActionModel": True,
+                "sourceNavFaces": [a, b],
+                "sourceSceneSha256": entry["assets"]["scene"]["jsonSha256"],
+                "qualification": "reviewed actual source NAV endpoints with source NPC JumpDown capability, reviewed scene drop<=4m (explicit scenario bound, not source reach); scenario trajectory/timing, not native offmesh; supported takeoff/landing and full .22 body rails; no reverse upward edge, new floor or wall exemptions",
+                "capabilitySource": "/EE/Types/Actions/JumpDown",
+                "dropOnly": route.get("dropOnly", False),
+                "reviewedDropBound": 4.0,
+                "takeoff": route["takeoff"],
+                "landing": route["landing"],
+                "unsupportedSpan": route["unsupportedSpan"],
+                "arcLift": route["arcLift"],
+            }
+            link = {
+                "from": a,
+                "to": b,
+                "points": route["points"],
+                "kind": "npc-short-gap",
+                "enemy": False,
+                "seconds": route["seconds"],
+                "enemySeconds": route["enemySeconds"],
+                "source": src,
+            }
+            new.append(link)
+            scene._add(
+                a,
+                b,
+                link["points"],
+                link["kind"],
+                link["seconds"],
+                False,
+                link["enemySeconds"],
+                src,
+            )
+            scene._movement_component_cache = None
+        # Explicit native portal-route repair: preserve the original graph edge,
+        # add a distinct supported surface route. A NAV marker on a steep sliver
+        # may project at most .3m to a real upward source triangle.
+        for pair in repair_walks or []:
+            a, b = (int(x) for x in pair.split(":"))
+            if not any(
+                e.node == b and e.source.get("type") == "native-nav-portal"
+                for e in scene.graph[a]
+            ):
+                raise ValueError(
+                    "native walk repair must name an existing source portal"
+                )
+            pts = []
+            support_points = []
+            used = set()
+            endpoint_offsets = []
+            for k in range(
+                max(2, math.ceil(math.dist(scene.nodes[a], scene.nodes[b]) / 0.04)) + 1
+            ):
+                count = max(
+                    2, math.ceil(math.dist(scene.nodes[a], scene.nodes[b]) / 0.04)
+                )
+                t = k / count
+                expected = tuple(
+                    scene.nodes[a][j] * (1 - t) + scene.nodes[b][j] * t
+                    for j in range(3)
+                )
+                hits = [
+                    h
+                    for h in scene.collision.all_hits(
+                        (expected[0], expected[1] + 0.45, expected[2]), (0, -1, 0), 0.9
+                    )
+                    if abs(h.normal[1]) >= 0.55
+                ]
+                if hits:
+                    h = min(hits, key=lambda h: abs(h.position[1] - expected[1]))
+                    foot = h.position
+                    used.add(h.triangle)
+                elif k in (0, count):
+                    options = []
+                    for index, tri in enumerate(scene.raw["collision"]["triangles"]):
+                        xyz = [scene.raw["collision"]["vertices"][i] for i in tri]
+                        normal = _cross(_sub(xyz[1], xyz[0]), _sub(xyz[2], xyz[0]))
+                        if abs(normal[1]) < 0.55 * math.sqrt(_dot(normal, normal)):
+                            continue
+                        q = _closest_triangle(expected, *xyz)
+                        dist = math.dist(q, expected)
+                        if dist <= 0.3:
+                            options.append((dist, index, q))
+                    if not options:
+                        raise ValueError("native marker has no nearby real support")
+                    dist, index, foot = min(options)
+                    used.add(index)
+                    endpoint_offsets.append(dist)
+                else:
+                    raise ValueError("native walk repair interior lacks real support")
+                if pts and abs(pts[-1][1] - foot[1]) > 0.45:
+                    raise ValueError("native repair step bound")
+                support_points.append(foot)
+                if abs(foot[1] - expected[1]) > 0.3:
+                    raise ValueError("native repair NAV/support offset exceeds .3m")
+                pts.append((expected[0], max(expected[1], foot[1]), expected[2]))
+            pts = [scene.nodes[a], *pts, scene.nodes[b]]
+            if not scene.check_motion(pts, radius=0.22, ground_step=True)["clear"]:
+                raise ValueError("native repair body blocked")
+            length = sum(math.dist(x, y) for x, y in zip(pts, pts[1:]))
+            src = {
+                "type": "source-native-portal-supported-route-repair",
+                "sourceIslandActionModel": True,
+                "qualification": "original source portal preserved; alternate direct surface route filters steep first-hit slivers, center support every .04m, endpoint NAV marker correction<=.3m onto actual upward source triangle; full .22 body rails; no synthetic floor",
+                "sourceNavFaces": [a, b],
+                "sourceSceneSha256": entry["assets"]["scene"]["jsonSha256"],
+                "collisionTriangleIds": sorted(used),
+                "endpointMarkerOffsets": endpoint_offsets,
+                "supportPoints": support_points,
+                "maxNavSupportTolerance": 0.3,
+            }
+            for u, v, path in ((a, b, pts), (b, a, pts[::-1])):
+                link = {
+                    "from": u,
+                    "to": v,
+                    "kind": "source-surface-walk",
+                    "points": path,
+                    "seconds": length / 6,
+                    "enemySeconds": length / 3.6,
+                    "enemy": True,
+                    "source": src,
+                }
+                new.append(link)
+                scene._add(
+                    u,
+                    v,
+                    path,
+                    link["kind"],
+                    link["seconds"],
+                    True,
+                    link["enemySeconds"],
+                    src,
+                )
+            scene._movement_component_cache = None
+        record["links"].extend(new)
+        flow = scene.search(scene.start["face"], "enemy-gap", reverse=True)
+        record["summary"]["sourceIslandActionDirectedLinks"] = len(new)
+        record["summary"]["sourceIslandComponentsBefore"] = initial
+        record["summary"]["sourceIslandComponentsAfter"] = len(
+            set(scene.movement_components("enemy-gap"))
+        )
+        record["summary"]["sourceSpawnUnreachableAfter"] = sum(
+            not math.isfinite(flow.distances[x["face"]])
+            for x in scene.spawns
+            if x.get("accepted")
+        )
+        record["actionModelFailures"] = dict(failures)
+        print(
+            json.dumps(
+                {"mapId": mid, "summary": record["summary"], "failures": dict(failures)}
+            ),
+            flush=True,
+        )
+    payload["sourceIslandActionPolicy"] = {
+        "qualification": "explicit optional NPC scene approximation, separate from conservative .8m short-gap model",
+        "maxUnsupportedSpan": 2.5,
+        "maxEndpointHeightDifference": 2,
+        "maxOneWayDrop": 3.5,
+        "dropCapabilitySource": "/EE/Types/Actions/JumpDown",
+        "maxArcLift": 1.8,
+        "capabilitySource": "/EE/Types/Actions/JumpAcross",
+        "packagesSha256": package.sha256,
+    }
+    raw = compact(payload)
+    target.write_bytes(gzip.compress(raw, compresslevel=9, mtime=0))
+    latest = json.loads(catalog_path.read_text(encoding="utf8"))
+    latest["npcGapGeometry"].update(
+        sha256=sha(target),
+        jsonSha256=hashlib.sha256(raw).hexdigest(),
+        compressedBytes=target.stat().st_size,
+        jsonBytes=len(raw),
+        mapSummaries={k: v["summary"] for k, v in payload["maps"].items()},
+    )
+    catalog_path.write_text(
+        json.dumps(latest, ensure_ascii=False, indent=2) + "\n", encoding="utf8"
+    )
+    return payload
+
+
 def import_enemy_specs(
     specs_path: Path,
     packages_path: Path,
@@ -4457,6 +5087,9 @@ def main():
     parser.add_argument("--source-ground", action="store_true")
     parser.add_argument("--source-materials", action="store_true")
     parser.add_argument("--source-npc-gaps", action="store_true")
+    parser.add_argument("--source-npc-actions", action="store_true")
+    parser.add_argument("--npc-repair-walk", action="append")
+    parser.add_argument("--npc-action-pair", action="append")
     parser.add_argument("--source-doors", action="store_true")
     parser.add_argument("--ground-surface-face", type=int, action="append")
     parser.add_argument("--ground-support-entity", type=int, action="append")
@@ -4477,6 +5110,11 @@ def main():
     parser.add_argument("--enemy-specs-only", action="store_true")
     parser.add_argument("--mission-coverage", type=Path)
     args = parser.parse_args()
+    if args.source_npc_actions:
+        if not args.case_root or not args.packages_bin:
+            parser.error("--source-npc-actions requires --case-root --packages-bin")
+        import_source_npc_actions(args.case_root,args.packages_bin,args.output,map_ids=args.visual_map_id,repair_walks=args.npc_repair_walk,action_pairs=args.npc_action_pair)
+        return
     if args.source_npc_gaps:
         if not args.packages_bin:
             parser.error("--source-npc-gaps requires --packages-bin")

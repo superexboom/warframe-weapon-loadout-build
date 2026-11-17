@@ -9887,10 +9887,10 @@
   "npcGapGeometry": {
     "file": "npc-gap-geometry.json.gz",
     "schema": "arena-npc-gaps/v1",
-    "sha256": "16098448bf818e039220b46d04e0a372dcf85f4509a719d2d9610bc8131b62e0",
-    "jsonSha256": "934ea909b60d9a03c3bc71925391db4547e510421a2d4e4bfb33dd4a873d0267",
-    "compressedBytes": 867292,
-    "jsonBytes": 4735819,
+    "sha256": "7e5a60548d3b075a1fea51b6d0b334449348806156818b9aec0ee87a5d3c4f60",
+    "jsonSha256": "67ec7c0d69a72d7a452e4de84dfc12336a5a8e51bf3c9858e03fb6c7baff37de",
+    "compressedBytes": 1189379,
+    "jsonBytes": 6273763,
     "mapSummaries": {
       "corpus-ship-defense": {
         "boundaryEdges": 3867,
@@ -9962,7 +9962,11 @@
         "directedGapLinks": 0,
         "directedSourceWalkLinks": 0,
         "groundComponentsBefore": 40,
-        "groundComponentsAfter": 40
+        "groundComponentsAfter": 40,
+        "sourceIslandActionDirectedLinks": 50,
+        "sourceIslandComponentsBefore": 40,
+        "sourceIslandComponentsAfter": 17,
+        "sourceSpawnUnreachableAfter": 0
       },
       "grineer-asteroid-defense": {
         "boundaryEdges": 1329,
@@ -9980,7 +9984,11 @@
         "directedGapLinks": 16,
         "directedSourceWalkLinks": 0,
         "groundComponentsBefore": 81,
-        "groundComponentsAfter": 77
+        "groundComponentsAfter": 77,
+        "sourceIslandActionDirectedLinks": 15,
+        "sourceIslandComponentsBefore": 77,
+        "sourceIslandComponentsAfter": 74,
+        "sourceSpawnUnreachableAfter": 0
       },
       "grineer-forest-interception-01": {
         "boundaryEdges": 2051,
@@ -10007,7 +10015,11 @@
         "directedGapLinks": 0,
         "directedSourceWalkLinks": 0,
         "groundComponentsBefore": 17,
-        "groundComponentsAfter": 17
+        "groundComponentsAfter": 17,
+        "sourceIslandActionDirectedLinks": 32,
+        "sourceIslandComponentsBefore": 17,
+        "sourceIslandComponentsAfter": 3,
+        "sourceSpawnUnreachableAfter": 0
       },
       "grineer-settlement-defense": {
         "boundaryEdges": 4159,
@@ -10034,7 +10046,11 @@
         "directedGapLinks": 112,
         "directedSourceWalkLinks": 0,
         "groundComponentsBefore": 40,
-        "groundComponentsAfter": 25
+        "groundComponentsAfter": 25,
+        "sourceIslandActionDirectedLinks": 5,
+        "sourceIslandComponentsBefore": 25,
+        "sourceIslandComponentsAfter": 24,
+        "sourceSpawnUnreachableAfter": 0
       },
       "orokin-tower-defense": {
         "boundaryEdges": 4801,
@@ -10061,7 +10077,11 @@
         "directedGapLinks": 254,
         "directedSourceWalkLinks": 0,
         "groundComponentsBefore": 207,
-        "groundComponentsAfter": 170
+        "groundComponentsAfter": 170,
+        "sourceIslandActionDirectedLinks": 14,
+        "sourceIslandComponentsBefore": 170,
+        "sourceIslandComponentsAfter": 167,
+        "sourceSpawnUnreachableAfter": 0
       },
       "entrati-lab-mirror-defense-ear": {
         "boundaryEdges": 1086,
@@ -10097,7 +10117,11 @@
         "directedGapLinks": 112,
         "directedSourceWalkLinks": 0,
         "groundComponentsBefore": 100,
-        "groundComponentsAfter": 79
+        "groundComponentsAfter": 79,
+        "sourceIslandActionDirectedLinks": 24,
+        "sourceIslandComponentsBefore": 79,
+        "sourceIslandComponentsAfter": 67,
+        "sourceSpawnUnreachableAfter": 0
       },
       "1999-temple-defense-underground": {
         "boundaryEdges": 2038,
@@ -10106,7 +10130,11 @@
         "directedGapLinks": 18,
         "directedSourceWalkLinks": 0,
         "groundComponentsBefore": 39,
-        "groundComponentsAfter": 35
+        "groundComponentsAfter": 35,
+        "sourceIslandActionDirectedLinks": 45,
+        "sourceIslandComponentsBefore": 35,
+        "sourceIslandComponentsAfter": 18,
+        "sourceSpawnUnreachableAfter": 18
       },
       "corpus-ice-defense": {
         "boundaryEdges": 4553,
@@ -10115,7 +10143,11 @@
         "directedGapLinks": 18,
         "directedSourceWalkLinks": 0,
         "groundComponentsBefore": 46,
-        "groundComponentsAfter": 43
+        "groundComponentsAfter": 43,
+        "sourceIslandActionDirectedLinks": 27,
+        "sourceIslandComponentsBefore": 43,
+        "sourceIslandComponentsAfter": 32,
+        "sourceSpawnUnreachableAfter": 0
       }
     },
     "qualification": "source-supported continuous walks plus explicitly optional NPC short-gap approximation; not recovered native offmesh; no new floors"

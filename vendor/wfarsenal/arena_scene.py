@@ -389,6 +389,17 @@ class ArenaScene:
                 link.get("source"),
             )
         collision = raw["collision"]
+        # The scene importer appends exact source NAV faces after CSG. Keep
+        # that identity for source-walk support; nearby walls are not NAV.
+        nav_vertices, nav_triangles = raw["nav"].get("vertices", []), raw["nav"].get("triangles", [])
+        nav_offset = len(collision["vertices"]) - len(nav_vertices)
+        nav_start = len(collision["triangles"]) - len(nav_triangles)
+        self._nav_collision_start = nav_start if (
+            nav_vertices and nav_triangles and nav_offset >= 0 and nav_start >= 0
+            and collision["vertices"][nav_offset:] == nav_vertices
+            and all(tuple(a) == tuple(nav_offset + k for k in b)
+                    for a, b in zip(collision["triangles"][nav_start:], nav_triangles))
+        ) else None
         support = (ground or {}).get("support", {})
         # Admitted source floor faces remain a separate asset/provenance. They
         # are physical surfaces for every ray channel, including body clearance;
@@ -816,6 +827,11 @@ class ArenaScene:
             "groundConnectivityQualification": "current ordinary-enemy directed graph; missing native offmesh/ladder source links remain unreachable; no player-parkour substitution",
             "qualification": "explicit source NAV triangle, proxy footprint radius .22/body clearance1.8; vertical correction<=.2; no nearest-face relocation",
         }
+
+    def source_nav_support(self, hit, allowed_faces):
+        """The actual hit is a source NAV face already admitted by this walk."""
+        return (self._nav_collision_start is not None
+                and hit.triangle - self._nav_collision_start in allowed_faces)
 
     def ground_support(self, position, *, max_drop=2.0, max_rise=0.5):
         """Nearest downward proxy support; not a native walkability assertion."""

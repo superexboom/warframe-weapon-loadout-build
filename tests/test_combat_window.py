@@ -51,6 +51,17 @@ def test_arena_world_uses_explicit_slots_and_ends_without_mutating_the_request(m
     again=World(context).run()
     assert result['stats']['eventHash']==again['stats']['eventHash']
 
+    # Continuous real damage keeps a durable target active beyond the no-kill
+    # window, while an actor that cannot attack still hits the progress fuse.
+    slow_context=app._arena_context(dict(loadout=p,scenario=dict(
+        enemy=p['enemy'],level=170,enemies=1,waves=1,seconds=2,noKill=1,droneEvery=0)))
+    slow=World(slow_context); progress=slow.run()
+    assert progress['status']=='time_limit' and progress['stats']['kills']==0
+    assert progress['stats']['directDamage']>0 and slow.last_damage>1.
+    blocked=World(slow_context);monkeypatch.setattr(blocked,'choose',lambda:None)
+    stalled=blocked.run()
+    assert stalled['status']=='limited' and stalled['stats']['seconds']==pytest.approx(1.)
+
     # The only visible target can lie beyond sixteen nearer occluded enemies.
     # Movement sees it and holds position, so the shooting shortlist must too.
     from types import SimpleNamespace as NS
