@@ -1271,6 +1271,55 @@ def _read_visual_level(source: Path, tile_path: str):
     }
 
 
+def _read_static_visual_instances(header: Path, body: Path, resource: str):
+    """LEVELSTATIC29/30 source placements; source XYZ is already in NAV units."""
+    import struct
+
+    h, b = header.read_bytes(), body.read_bytes()
+    reader = _TileReader(h, 16)
+    reader.strings()
+    reader.u32()
+    version = reader.u32()
+    if version not in (29, 30):
+        raise ValueError(f"unsupported static visual resource {version}: {resource}")
+    reader.strings()  # physics type references
+    if reader.u32() != 0:
+        raise ValueError("unexpected static header prefix")
+    count = reader.u32()
+    index_count = sum(reader.u32() + reader.u32() for _ in range(reader.u32()))
+    models = reader.strings()
+    # Additional resources, texture pairs, naturals, attributes, lights, materials.
+    tables = [reader.strings() for _ in range(7)]
+    indices2, blocks20, blocks48, zero, matrices, count2, final_zero = (reader.u32() for _ in range(7))
+    if reader.pos != len(h) or zero or final_zero or count != count2:
+        raise ValueError("static visual header not fully matched")
+    records = count * 48 + index_count * 2 + indices2 * 2 + blocks20 * 20 + blocks48 * 48 + matrices * 36
+    if records + count * 176 != len(b):
+        raise ValueError("static visual body not fully matched")
+    provenance = dict(resource=resource, version=version, headerSha256=sha(header),
+                      bodySha256=sha(body), sourceObjects=count, modelReferences=len(models),
+                      sourceMaterialReferences=len(tables[-1]),
+                      headerFullyConsumed=True, bodyFullyConsumed=True,
+                      qualification="original static XYZ/quaternion/uniform scale; source units verified against current exporter and NAV; no half-scale conversion")
+    entities = []
+    for i in range(count):
+        position = list(struct.unpack_from("<3f", b, i * 48))
+        rotation = list(struct.unpack_from("<4f", b, i * 48 + 16))
+        scale = struct.unpack_from("<f", b, i * 48 + 32)[0]
+        model = struct.unpack_from("<H", b, records + i * 176 + 120)[0]
+        natural, material, matrix = struct.unpack_from("<3H", b, records + i * 176 + 128)
+        if model >= len(models):
+            raise ValueError("static visual model reference outside source table")
+        entities.append(dict(
+            id=-(i+1), type="/EE/Types/Engine/Decoration", position=position,
+            quaternion=rotation, scope=resource+"/",
+            attributes=f"Instance={i}\nMesh={models[model]}\nMeshScale={scale!r}\n",
+            staticSource=dict(resource=resource, objectIndex=i, modelIndex=model,
+                              naturalIndex=natural, materialIndex=material, matrixIndex=matrix),
+        ))
+    return entities, provenance
+
+
 def _decode_visual_glb(path: Path, source_path: str):
     """Reverse exporter static-Z mirror; preserve groups without invented UVs."""
     import struct
@@ -1445,6 +1494,32 @@ def complete_visual_maps(
         prior_asset = entry["assets"]["visual-map"]
         old = json.loads(gzip.decompress((output / prior_asset["file"]).read_bytes()))
         metadata = dict(old.get("metadata", {}))
+        static_sources = []
+        resources = set()
+        for entity in entities:
+            match = re.search(r"^StaticLevel=(.+)$", entity["attributes"], re.M)
+            if match:
+                ref = match[1].strip('"')
+                resources.add(ref if ref.startswith("/") else tile + "/" + ref)
+        raw_static = workspace / "static-resources"
+        for resource in sorted(resources):
+            header = raw_static / "Debug" / (resource.lstrip("/") + "_H")
+            body = header.with_name(header.name[:-2] + "_B")
+            if not header.exists() or not body.exists():
+                result = subprocess.run([
+                    str(exporter), "--game", "Warframe", "--cache-dir", str(cache_dir),
+                    "--write-raw", "--package", "AnimRetarget", "--internal-path", resource,
+                    "--output-path", str(raw_static),
+                ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=60)
+                with (workspace / "export.log").open("ab") as log:
+                    log.write(("\nSTATIC " + resource + "\n").encode() + result.stdout)
+            extra, proof = _read_static_visual_instances(header, body, resource)
+            offset = sum(row["sourceObjects"] for row in static_sources)
+            for entity in extra:
+                entity["id"] -= offset
+            entities.extend(extra)
+            static_sources.append(proof)
+        metadata["staticLevelSources"] = static_sources
         meshes, instances, materials, matids, meshids, omissions = (
             [],
             [],
@@ -1575,6 +1650,8 @@ def complete_visual_maps(
                 or ("/Fx/" in path and not re.search(r"IceFloorMesh", path))
             ):
                 reason = "dynamic-mover-character-or-effect"
+            elif path == "/EE/Editor/Darkitect/Objects/DeferredDecalProjector.fbx":
+                reason = "editor-decal-projector-proxy-not-render-surface"
             elif path == "/EE/Objects/FogVolumeSphere.lwo":
                 reason = "source-fog-volume-not-visible-floor-geometry"
             elif re.search(r"/Decals/|/Water/|/Skybox/", path, re.I):
@@ -1768,15 +1845,19 @@ def complete_visual_maps(
                         )
                     ),
                     "materialOverrides": overrides,
-                    "qualification": "exact absolute source-level instance; external shared Mesh resolved by full path; no extra prefab transform",
+                    **({"staticSource": entity["staticSource"]} if "staticSource" in entity else {}),
+                    "qualification": "exact absolute source placement; external shared Mesh resolved by full path; no extra prefab transform",
                 }
             )
         report = {
-            "parserVersion": PARSER_VERSION + "/complete-static-visual-v1",
+            "parserVersion": PARSER_VERSION + "/complete-static-visual-v2",
             "sourceTile": tile,
             **provenance,
             "packagesSha256": sha(packages_bin),
             "previousInstances": len(old.get("instances", [])),
+            "staticLevelSourceObjects": sum(row["sourceObjects"] for row in static_sources),
+            "assembledStaticLevelInstances": sum("staticSource" in row for row in instances),
+            "staticLevelResources": len(static_sources),
             "meshBearingEntities": explicit_count + inherited_count,
             "explicitMeshInstances": explicit_count,
             "inheritedMeshInstances": inherited_count,

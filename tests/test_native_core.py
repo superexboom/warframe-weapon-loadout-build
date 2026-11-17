@@ -147,6 +147,26 @@ def test_capped_stack_add_matches_python():
 
 
 def test_arena_spatial_bvh_nearest_all_hits_and_segment_bounds():
+    # LEVELSTATIC30 contains source placements outside the LEVEL entity list.
+    # Keep source units and rotations; a legacy exporter /2 scaling loses floors.
+    import struct
+    from types import SimpleNamespace
+    from tools.import_arena_scene import _read_static_visual_instances
+    model=b"/Lotus/Objects/Test/SewerWall.fbx"
+    header=(bytes(16)+struct.pack("<9I",0,0,30,0,0,1,1,1,0)
+            +struct.pack("<2I",1,len(model))+model+bytes(7*4)
+            +struct.pack("<7I",0,0,0,0,0,1,0))
+    body=bytearray(48+2+176)
+    struct.pack_into("<3f",body,0,24.,.25,-28.)
+    struct.pack_into("<4f",body,16,0.,0.,0.,1.)
+    struct.pack_into("<f",body,32,1.25)
+    struct.pack_into("<H",body,50+120,0)
+    struct.pack_into("<3H",body,50+128,65535,65535,65535)
+    instances,proof=_read_static_visual_instances(SimpleNamespace(read_bytes=lambda:header),
+        SimpleNamespace(read_bytes=lambda:bytes(body)),"/Lotus/Levels/Test/0.static")
+    assert proof["bodyFullyConsumed"] and proof["sourceObjects"]==1
+    assert instances[0]["position"]==[24.,.25,-28.] and instances[0]["quaternion"]==[0.,0.,0.,1.]
+    assert "MeshScale=1.25" in instances[0]["attributes"] and instances[0]["staticSource"]["objectIndex"]==0
     from wfarsenal.arena_scene import TriangleBVH
     from tools.import_arena_scene import _triangulate_nav_polygon, _ZeroAreaNavFace
 

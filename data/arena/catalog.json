@@ -5962,10 +5962,10 @@
         },
         "visual-map": {
           "file": "1999-temple-defense-underground.visual-map.json.gz",
-          "sha256": "9350269e4080cb41f40bfebc811f5e55b326ea47b7b81639ff547abd358d2938",
-          "jsonSha256": "016441b435e92e4c1db3b3299282f0ae59a5d9499eca576be50fcaa1b9765f34",
-          "compressedBytes": 1515400,
-          "jsonBytes": 5411138
+          "sha256": "100a84ecb2858a7ac234b107a23b336d34afe970715a598dae88e8798720c4a6",
+          "jsonSha256": "4877bd131a414b5e83e4ee9f7bbc248445c93c7ca33b15d744885c8a67893666",
+          "compressedBytes": 5417993,
+          "jsonBytes": 18344278
         },
         "visual-map-collision-candidates": {
           "file": "1999-temple-defense-underground.visual-map-collision-candidates.json.gz",
