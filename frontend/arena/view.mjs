@@ -1,6 +1,6 @@
 import * as THREE from './vendor/three.module.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {createClearView, exteriorScenery} from './clear-view.mjs';
+import {createClearView, lensLayer} from './clear-view.mjs';
 import {shell} from './shell.js';
 export function mountArena(host){
 host.innerHTML='<div class="arena-layout">'+shell+'</div>';
@@ -8,7 +8,7 @@ let loadout=null,catalog=null,mapId='',visualUrl='',job=null,pollTimer=null,acti
 let currentReplay=null,catalogLoading=false;
 const replaysByMap=new Map();
 let selectedEnemy='',enemyIndex=new Map();
-let viewPrefs={clipMode:'roof',colors:'semantic',quality:'balanced',marker:true,clearView:true};try{const stored=JSON.parse(localStorage.getItem('arena-view-v1')||'null');if(stored)viewPrefs={...viewPrefs,...stored};}catch{}
+let viewPrefs={clipMode:'roof',colors:'semantic',quality:'balanced',marker:true,clearView:true,lensRadius:18};try{const stored=JSON.parse(localStorage.getItem('arena-view-v1')||'null');if(stored)viewPrefs={...viewPrefs,...stored};}catch{}
 for(const [key,values]of Object.entries({clipMode:['roof','player','full'],colors:['semantic','gray'],quality:['low','balanced','high']}))if(!values.includes(viewPrefs[key]))viewPrefs[key]=values[0];
 const saveViewPrefs=()=>{try{localStorage.setItem('arena-view-v1',JSON.stringify(viewPrefs));}catch{}};
 let busyState=false,fixedPosition=null,pickingStanding=false,standingPending=false,standingRequest=0,navPicker=null,pointerStart=null,regionBeforeFixed=null;
@@ -18,16 +18,16 @@ $('sceneParameters').open=!narrowLayout.matches;
 narrowLayout.addEventListener('change',event=>{$('sceneParameters').open=!event.matches;});
 let raw,result,playing=false,time=0,follow=false,loaded=false,last=performance.now(),frames=0,frameStart=last,fps=0;
 const scene=new THREE.Scene(),viewer=$('viewer'),renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,viewPrefs.quality==='high'?2:viewPrefs.quality==='low'?1:1.5));renderer.localClippingEnabled=true;viewer.prepend(renderer.domElement);
-renderer.info.autoReset=false; // Count the NAV pass and main scene as one displayed frame.
+renderer.info.autoReset=false; // Count a refreshed lens and the main scene in the same frame.
 const camera=new THREE.PerspectiveCamera(43,1,.1,1500),controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.08;controls.minDistance=10;controls.maxDistance=600;
-scene.add(new THREE.HemisphereLight(0xcde5ff,0x4b5669,.9));let sun=new THREE.DirectionalLight(0xffffff,1.25);sun.position.set(60,150,90);scene.add(sun);
-let detailedGroup=null,exteriorCount=0,clipMode=viewPrefs.clipMode,walkCeiling=20,materialRows=[],renderCost=0,renderedFrames=0,lastRender=0,clipStatusHeight=null;const plane=new THREE.Plane(new THREE.Vector3(0,-1,0),20),mapGroup=new THREE.Group();scene.add(mapGroup);let grid=new THREE.GridHelper(230,23,0x35495a,0x23313f);grid.position.y=-21;grid.material.transparent=true;grid.material.opacity=.25;scene.add(grid);
-const clearView=createClearView(renderer,camera,plane);
+const sky=new THREE.HemisphereLight(0xcde5ff,0x4b5669,.9),sun=new THREE.DirectionalLight(0xffffff,1.25);sun.position.set(60,150,90);sky.layers.enable(lensLayer);sun.layers.enable(lensLayer);scene.add(sky,sun);
+let detailedGroup=null,clipMode=viewPrefs.clipMode,walkCeiling=20,materialRows=[],renderCost=0,renderedFrames=0,lastRender=0,clipStatusHeight=null;const plane=new THREE.Plane(new THREE.Vector3(0,-1,0),20),mapGroup=new THREE.Group();scene.add(mapGroup);let grid=new THREE.GridHelper(230,23,0x35495a,0x23313f);grid.position.y=-21;grid.material.transparent=true;grid.material.opacity=.25;scene.add(grid);
+const clearView=createClearView(renderer,scene,camera);
 function clearing(){return viewPrefs.clearView!==false&&clipMode!=='full';}
 function syncScenery(){
   const available=Boolean(detailedGroup?.visible)&&clipMode!=='full',enabled=available&&clearing();
-  for(const mesh of detailedGroup?.children||[]){mesh.count=enabled?mesh.userData.interior:mesh.instanceMatrix.count;mesh.visible=mesh.count>0;}
   $('clearView').checked=enabled;$('clearView').disabled=!available;
+  $('lensRadius').disabled=!enabled;
   clipStatusHeight=null;syncClip();
 }
 let player=new THREE.Mesh(new THREE.CapsuleGeometry(.55,1.1,4,8),new THREE.MeshBasicMaterial({color:0x38c6e9,depthTest:false,depthWrite:false,transparent:true}));player.renderOrder=8;scene.add(player);player.visible=false;
@@ -55,15 +55,19 @@ function syncClip(){
   if(clipMode!=='manual')$('cut').value=plane.constant;
   $('clipMode').value=clipMode;$('floor').textContent=clipMode==='player'?'最高可站层':'当前层';
   const rounded=Math.round(plane.constant*10)/10;
-  if(clipStatusHeight!==rounded){clipStatusHeight=rounded;$('viewHint').textContent=clipMode==='full'?'完整外观 · 保留全部已还原的布景。':(clipMode==='roof'?'最高可站层 '+walkCeiling.toFixed(1)+' m + 2.2 m 净空':clipMode==='player'?'跟随战甲':'手动剖切')+' · 切面 Y '+rounded.toFixed(1)+' m'+(detailedGroup?.visible&&clearing()?' · 避开地面前景遮挡'+(exteriorCount?'，收起 '+exteriorCount+' 个场外布景':'')+'。':'。');}
+  if(clipStatusHeight!==rounded){clipStatusHeight=rounded;$('viewHint').textContent=clipMode==='full'?'完整外观 · 保留全部已还原的布景。':(clipMode==='roof'?'最高可站层 '+walkCeiling.toFixed(1)+' m + 2.2 m 净空':clipMode==='player'?'跟随战甲':'手动剖切')+' · 切面 Y '+rounded.toFixed(1)+' m。';}
 }
 function selectClip(mode){clipMode=mode;if(mode!=='manual'){viewPrefs.clipMode=mode;saveViewPrefs();}syncScenery();}
 function setMaterialAppearance(){
+  clearView.invalidate();
   const gray=$('mapColors').value==='gray',emissive=$('renderQuality').value!=='low';
   for(const row of materialRows){const p=row.palette;row.material.color.set(gray?'#7d8890':p?.color||row.fallback);row.material.roughness=gray ? .94 : (p?.roughness??.88);row.material.metalness=gray?0:(p?.metalness??.08);row.material.emissive.set(!gray&&emissive&&p?.emissiveColor?p.emissiveColor:'#000000');row.material.emissiveIntensity=!gray&&emissive ? .35 : 0;}
 }
 $('clipMode').value=clipMode;$('mapColors').value=viewPrefs.colors;$('renderQuality').value=viewPrefs.quality;$('occludedMarker').checked=viewPrefs.marker!==false;
 $('clearView').onchange=()=>{viewPrefs.clearView=$('clearView').checked;saveViewPrefs();syncScenery();};
+$('lensRadius').value=viewPrefs.lensRadius;
+const syncRadius=()=>{viewPrefs.lensRadius=$('lensRadius').valueAsNumber;$('lensRadiusValue').textContent=viewPrefs.lensRadius+'%';};
+syncRadius();$('lensRadius').oninput=syncRadius;$('lensRadius').onchange=saveViewPrefs;
 $('clipMode').onchange=()=>selectClip($('clipMode').value);
 $('mapColors').onchange=()=>{viewPrefs.colors=$('mapColors').value;saveViewPrefs();setMaterialAppearance();};
 $('renderQuality').onchange=()=>{viewPrefs.quality=$('renderQuality').value;saveViewPrefs();renderer.setPixelRatio(Math.min(devicePixelRatio,viewPrefs.quality==='high'?2:viewPrefs.quality==='low'?1:1.5));renderer.setSize(viewer.clientWidth,viewer.clientHeight,false);setMaterialAppearance();};
@@ -120,26 +124,22 @@ async function loadVisual(){
     const materials=materialRows.map(row=>{row.material.onBeforeCompile=clearView.attach;return row.material;});setMaterialAppearance();
     const groups=new Map();
     for(const item of data.instances){const key=item.meshId+':'+JSON.stringify(item.materialOverrides);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(item);}
-    let rendered=0,exterior=0;const visualBounds=new THREE.Box3(),instanceBounds=new THREE.Box3(),isExterior=exteriorScenery(raw.nav);
+    let rendered=0;const visualBounds=new THREE.Box3();
     for(const instances of groups.values()){
       const first=instances[0],source=data.meshes[first.meshId];
       const mats=source.groups.map((group,index)=>materials[first.materialOverrides?.[index]??group.materialId]||materials[group.materialId]);
       const mesh=new THREE.InstancedMesh(geometries[first.meshId],mats,instances.length);
-      let interior=0,outer=instances.length;
-      if(!mesh.geometry.boundingBox)mesh.geometry.computeBoundingBox();
-      const localBounds=mesh.geometry.boundingBox;
-      for(const item of instances){
+      mesh.layers.enable(lensLayer);
+      for(let i=0;i<instances.length;i++){
+        const item=instances[i];
         dummy.position.fromArray(item.position);dummy.quaternion.fromArray(item.quaternion);dummy.scale.setScalar(item.scale);dummy.updateMatrix();
-        const outside=isExterior(source,instanceBounds.copy(localBounds).applyMatrix4(dummy.matrix));
-        mesh.setMatrixAt(outside?--outer:interior++,dummy.matrix);
+        mesh.setMatrixAt(i,dummy.matrix);
       }
-      mesh.userData.interior=interior;exterior+=instances.length-interior;
       mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.computeBoundingBox();
       visualBounds.union(mesh.boundingBox);detailedGroup.add(mesh);rendered+=source.indices.length/3*instances.length;
     }
     dummy.quaternion.identity();dummy.scale.setScalar(1);
     mapGroup.visible=false;
-    exteriorCount=exterior;
     if(!visualBounds.isEmpty())extendClipBounds(visualBounds);syncScenery();
     $('detail').disabled=false;$('detail').textContent='导航代理';
     const coverage=data.metadata?.visualCoverage;
@@ -350,18 +350,24 @@ function setStandingPicking(enabled){
   if(pickingStanding){playing=false;$('play').textContent='播放';$('standingStatus').textContent='选点模式：单击半透明可行走面，后台验证；退出选点后恢复旋转/拖动。';viewer.focus({preventScroll:true});viewer.scrollIntoView({block:'nearest'});}
 }
 viewer.addEventListener('keydown',event=>{if(pickingStanding&&event.key==='Escape'){setStandingPicking(false);$('standingPick').focus();}});
+function previewStandingPoint(){
+  if(!loaded||result)return;
+  const point=$('movement').value==='fixed'&&fixedPosition?fixedPosition.position:raw.start.position;
+  player.position.fromArray(point);player.position.y+=1;
+}
 function clearStandingPoint(message='尚未选择合法站点'){
   standingRequest++;standingPending=false;fixedPosition=null;standingMarker.visible=false;setStandingPicking(false);
+  previewStandingPoint();
   $('standingPoint').textContent='尚未选择合法站点';$('standingStatus').textContent=message;updateRunState();
 }
 function syncStandingMode(){
   const fixed=$('movement').value==='fixed';$('standingPanel').hidden=!fixed;
+  previewStandingPoint();
   if(fixed){if(regionBeforeFixed===null)regionBeforeFixed=$('region').value;$('region').value='full';}else if(regionBeforeFixed!==null){$('region').value=regionBeforeFixed;regionBeforeFixed=null;}
   if(!fixed)setStandingPicking(false);standingMarker.visible=fixed&&!!fixedPosition;
   if(fixed&&!fixedPosition&&!pickingStanding)$('standingStatus').textContent=loaded?'点击“进入选点模式”，从可站立区域选择并验证。':'请等待地图可行走面加载。';updateRunState();
 }
 function rebuildStandingNav(){
-  clearView.clear();
   if(navPicker){scene.remove(navPicker);navPicker.geometry.dispose();navPicker.material.dispose();navPicker=null;}
   if(!raw?.nav?.vertices||!raw.nav.triangles)return;
   const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(raw.nav.vertices.flat(),3));geometry.setIndex(raw.nav.triangles.flat());
@@ -369,6 +375,7 @@ function rebuildStandingNav(){
 }
 function displayStandingPoint(response){
   fixedPosition={face:response.face,position:[...response.position]};standingMarker.position.fromArray(response.position);standingMarker.position.y+=.04;standingMarker.visible=$('movement').value==='fixed';
+  previewStandingPoint();
   $('standingPoint').textContent='X '+response.position[0].toFixed(2)+' / Y '+response.position[1].toFixed(2)+' / Z '+response.position[2].toFixed(2);
   $('standingStatus').textContent='站点验证通过。普通地面敌人可接近的出生点 '+response.enemyReachableSpawns+'/'+response.candidateSpawns+'。玩家保持该位置；固定站点可能限制敌人接近，不保证全图可达。';
 }
@@ -475,7 +482,7 @@ function animate(now){
  paintReplay();controls.update();if(clipMode==='player')syncClip();
  occludedRing.visible=loaded&&player.visible&&viewPrefs.marker!==false;
  if(occludedRing.visible){camera.updateMatrixWorld();markerView.copy(player.position).applyMatrix4(camera.matrixWorldInverse);const depth=-markerView.z;occludedRing.visible=depth>camera.near&&depth<camera.far;if(occludedRing.visible){occludedRing.position.copy(player.position);occludedRing.quaternion.copy(camera.quaternion);const radius=14*2*depth*Math.tan(THREE.MathUtils.degToRad(camera.fov*.5))/Math.max(1,viewer.clientHeight);occludedRing.scale.setScalar(radius);}}
- const renderBegin=performance.now();renderer.info.reset();clearView.prepare(navPicker?.geometry,detailedGroup?.visible&&clearing());renderer.render(scene,camera);renderCost+=performance.now()-renderBegin;renderedFrames++;frames++;
+ const renderBegin=performance.now();renderer.info.reset();clearView.prepare(loaded&&player.visible&&detailedGroup?.visible&&clearing()&&!pickingStanding?player.position:null,viewPrefs.lensRadius/100,plane.constant);renderer.render(scene,camera);renderCost+=performance.now()-renderBegin;renderedFrames++;frames++;
  if(now-frameStart>=1000){$('fps').textContent=Math.round(frames*1000/(now-frameStart))+' FPS · '+renderer.info.render.triangles.toLocaleString()+' 面 · '+renderer.info.render.calls+' 次绘制 · CPU提交 '+(renderCost/Math.max(1,renderedFrames)).toFixed(1)+' ms';frames=0;frameStart=now;renderCost=0;renderedFrames=0;}
 }
 raf=requestAnimationFrame(animate);

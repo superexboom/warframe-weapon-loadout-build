@@ -114,8 +114,9 @@ export const shell = `
       <label>地图配色<select id="arena-mapColors"><option value="semantic">材质辨识配色</option><option value="gray">简洁灰模</option></select></label>
       <label>渲染档位<select id="arena-renderQuality"><option value="low">轻量 · 30帧 / 1×</option><option value="balanced" selected>均衡 · 60帧 / 1.5×</option><option value="high">高画质 · 屏幕帧率 / 2×</option></select></label>
       <label class="cut">剖切高度<input id="arena-cut" type="range" min="-21" max="20" step=".5" value="20"></label>
-      <label class="arena-check"><input id="arena-clearView" type="checkbox" disabled>避开前景遮挡</label>
+      <label class="arena-check"><input id="arena-clearView" type="checkbox" disabled>角色周围遮挡半透明</label>
       <label class="arena-check"><input id="arena-occludedMarker" type="checkbox" checked>遮挡位置圆环</label>
+      <label><span>透视圈半径 <output id="arena-lensRadiusValue" for="arena-lensRadius">18%</output></span><input id="arena-lensRadius" type="range" min="10" max="30" step="1" value="18" disabled aria-label="透视圈半径（画面短边百分比）"></label>
       <small id="arena-viewHint">显示设置仅影响回放，不改变碰撞、伤害或解算结果。</small>
     </div>
   </details>
