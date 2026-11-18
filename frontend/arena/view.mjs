@@ -1,21 +1,35 @@
 import * as THREE from './vendor/three.module.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
+import {createClearView, exteriorScenery} from './clear-view.mjs';
 import {shell} from './shell.js';
 export function mountArena(host){
 host.innerHTML='<div class="arena-layout">'+shell+'</div>';
-let loadout=null,catalog=null,mapId='',visualUrl='',jobId=null,pollTimer=null,active=false,loadToken=0;
-let jobLoadout=null,resultLoadout=null,resultMap='',catalogLoading=false;
+let loadout=null,catalog=null,mapId='',visualUrl='',job=null,pollTimer=null,active=false,loadToken=0;
+let currentReplay=null,catalogLoading=false;
+const replaysByMap=new Map();
 let selectedEnemy='',enemyIndex=new Map();
-let viewPrefs={clipMode:'roof',colors:'semantic',quality:'balanced',marker:true};try{const stored=JSON.parse(localStorage.getItem('arena-view-v1')||'null');if(stored)viewPrefs={...viewPrefs,...stored};}catch{}
+let viewPrefs={clipMode:'roof',colors:'semantic',quality:'balanced',marker:true,clearView:true};try{const stored=JSON.parse(localStorage.getItem('arena-view-v1')||'null');if(stored)viewPrefs={...viewPrefs,...stored};}catch{}
 for(const [key,values]of Object.entries({clipMode:['roof','player','full'],colors:['semantic','gray'],quality:['low','balanced','high']}))if(!values.includes(viewPrefs[key]))viewPrefs[key]=values[0];
 const saveViewPrefs=()=>{try{localStorage.setItem('arena-view-v1',JSON.stringify(viewPrefs));}catch{}};
 let busyState=false,fixedPosition=null,pickingStanding=false,standingPending=false,standingRequest=0,navPicker=null,pointerStart=null,regionBeforeFixed=null;
 const $=id=>host.querySelector('[id="arena-'+id+'"]'),format=t=>{let n=Math.round(t*10);return Math.floor(n/600).toString().padStart(2,'0')+':'+((n%600)/10).toFixed(1).padStart(4,'0');};
+const narrowLayout=matchMedia('(max-width: 850px)');
+$('sceneParameters').open=!narrowLayout.matches;
+narrowLayout.addEventListener('change',event=>{$('sceneParameters').open=!event.matches;});
 let raw,result,playing=false,time=0,follow=false,loaded=false,last=performance.now(),frames=0,frameStart=last,fps=0;
 const scene=new THREE.Scene(),viewer=$('viewer'),renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,viewPrefs.quality==='high'?2:viewPrefs.quality==='low'?1:1.5));renderer.localClippingEnabled=true;viewer.prepend(renderer.domElement);
+renderer.info.autoReset=false; // Count the NAV pass and main scene as one displayed frame.
 const camera=new THREE.PerspectiveCamera(43,1,.1,1500),controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.08;controls.minDistance=10;controls.maxDistance=600;
 scene.add(new THREE.HemisphereLight(0xcde5ff,0x4b5669,.9));let sun=new THREE.DirectionalLight(0xffffff,1.25);sun.position.set(60,150,90);scene.add(sun);
-let detailedGroup=null,visualInfo=null,clipMode=viewPrefs.clipMode,walkCeiling=20,materialRows=[],renderCost=0,renderedFrames=0,lastRender=0,clipStatusHeight=null;const plane=new THREE.Plane(new THREE.Vector3(0,-1,0),20),mapGroup=new THREE.Group();scene.add(mapGroup);let grid=new THREE.GridHelper(230,23,0x35495a,0x23313f);grid.position.y=-21;grid.material.transparent=true;grid.material.opacity=.25;scene.add(grid);
+let detailedGroup=null,exteriorCount=0,clipMode=viewPrefs.clipMode,walkCeiling=20,materialRows=[],renderCost=0,renderedFrames=0,lastRender=0,clipStatusHeight=null;const plane=new THREE.Plane(new THREE.Vector3(0,-1,0),20),mapGroup=new THREE.Group();scene.add(mapGroup);let grid=new THREE.GridHelper(230,23,0x35495a,0x23313f);grid.position.y=-21;grid.material.transparent=true;grid.material.opacity=.25;scene.add(grid);
+const clearView=createClearView(renderer,camera,plane);
+function clearing(){return viewPrefs.clearView!==false&&clipMode!=='full';}
+function syncScenery(){
+  const available=Boolean(detailedGroup?.visible)&&clipMode!=='full',enabled=available&&clearing();
+  for(const mesh of detailedGroup?.children||[]){mesh.count=enabled?mesh.userData.interior:mesh.instanceMatrix.count;mesh.visible=mesh.count>0;}
+  $('clearView').checked=enabled;$('clearView').disabled=!available;
+  clipStatusHeight=null;syncClip();
+}
 let player=new THREE.Mesh(new THREE.CapsuleGeometry(.55,1.1,4,8),new THREE.MeshBasicMaterial({color:0x38c6e9,depthTest:false,depthWrite:false,transparent:true}));player.renderOrder=8;scene.add(player);player.visible=false;
 // The GPU depth test shows the ring only where map geometry covers the player.
 const occludedRing=new THREE.Mesh(new THREE.RingGeometry(.76,1,32),new THREE.MeshBasicMaterial({color:0x72e8ff,side:THREE.DoubleSide,transparent:true,opacity:.95,depthTest:true,depthFunc:THREE.GreaterDepth,depthWrite:false}));occludedRing.renderOrder=4;occludedRing.frustumCulled=false;occludedRing.visible=false;scene.add(occludedRing);const markerView=new THREE.Vector3();
@@ -41,19 +55,20 @@ function syncClip(){
   if(clipMode!=='manual')$('cut').value=plane.constant;
   $('clipMode').value=clipMode;$('floor').textContent=clipMode==='player'?'最高可站层':'当前层';
   const rounded=Math.round(plane.constant*10)/10;
-  if(clipStatusHeight!==rounded){clipStatusHeight=rounded;$('viewHint').textContent=(clipMode==='roof'?'已建模可达地面最高 Y '+walkCeiling.toFixed(1)+'，保留 2.2m 人物净空。':clipMode==='player'?'剖切随战甲高度更新。':clipMode==='full'?'保留完整外观。':'手动剖切。')+'当前切面 Y '+rounded.toFixed(1)+'；配色为材质分类示意，显示设置不改变解算。';}
+  if(clipStatusHeight!==rounded){clipStatusHeight=rounded;$('viewHint').textContent=clipMode==='full'?'完整外观 · 保留全部已还原的布景。':(clipMode==='roof'?'最高可站层 '+walkCeiling.toFixed(1)+' m + 2.2 m 净空':clipMode==='player'?'跟随战甲':'手动剖切')+' · 切面 Y '+rounded.toFixed(1)+' m'+(detailedGroup?.visible&&clearing()?' · 避开地面前景遮挡'+(exteriorCount?'，收起 '+exteriorCount+' 个场外布景':'')+'。':'。');}
 }
-function selectClip(mode){clipMode=mode;clipStatusHeight=null;if(mode!=='manual'){viewPrefs.clipMode=mode;saveViewPrefs();}syncClip();}
+function selectClip(mode){clipMode=mode;if(mode!=='manual'){viewPrefs.clipMode=mode;saveViewPrefs();}syncScenery();}
 function setMaterialAppearance(){
   const gray=$('mapColors').value==='gray',emissive=$('renderQuality').value!=='low';
   for(const row of materialRows){const p=row.palette;row.material.color.set(gray?'#7d8890':p?.color||row.fallback);row.material.roughness=gray ? .94 : (p?.roughness??.88);row.material.metalness=gray?0:(p?.metalness??.08);row.material.emissive.set(!gray&&emissive&&p?.emissiveColor?p.emissiveColor:'#000000');row.material.emissiveIntensity=!gray&&emissive ? .35 : 0;}
 }
 $('clipMode').value=clipMode;$('mapColors').value=viewPrefs.colors;$('renderQuality').value=viewPrefs.quality;$('occludedMarker').checked=viewPrefs.marker!==false;
+$('clearView').onchange=()=>{viewPrefs.clearView=$('clearView').checked;saveViewPrefs();syncScenery();};
 $('clipMode').onchange=()=>selectClip($('clipMode').value);
 $('mapColors').onchange=()=>{viewPrefs.colors=$('mapColors').value;saveViewPrefs();setMaterialAppearance();};
 $('renderQuality').onchange=()=>{viewPrefs.quality=$('renderQuality').value;saveViewPrefs();renderer.setPixelRatio(Math.min(devicePixelRatio,viewPrefs.quality==='high'?2:viewPrefs.quality==='low'?1:1.5));renderer.setSize(viewer.clientWidth,viewer.clientHeight,false);setMaterialAppearance();};
 $('occludedMarker').onchange=()=>{viewPrefs.marker=$('occludedMarker').checked;saveViewPrefs();};
-$('reset').onclick=reset;$('top').onclick=()=>{camera.position.copy(mapCenter).add(new THREE.Vector3(0,mapExtent*1.35,.1));controls.target.copy(mapCenter);controls.update();};$('follow').onclick=()=>{follow=!follow;$('follow').textContent=follow?'停止跟随':'跟随战甲';};$('cut').oninput=()=>selectClip('manual');$('detail').onclick=()=>{if(!detailedGroup)return;detailedGroup.visible=!detailedGroup.visible;mapGroup.visible=!detailedGroup.visible;$('detail').textContent=detailedGroup.visible?'导航代理':'精细地图';};
+$('reset').onclick=reset;$('top').onclick=()=>{camera.position.copy(mapCenter).add(new THREE.Vector3(0,mapExtent*1.35,.1));controls.target.copy(mapCenter);controls.update();};$('follow').onclick=()=>{follow=!follow;$('follow').textContent=follow?'停止跟随':'跟随战甲';};$('cut').oninput=()=>selectClip('manual');$('detail').onclick=()=>{if(!detailedGroup)return;detailedGroup.visible=!detailedGroup.visible;mapGroup.visible=!detailedGroup.visible;$('detail').textContent=detailedGroup.visible?'导航代理':'精细地图';syncScenery();};
 $('floor').onclick=()=>{if(raw)selectClip(clipMode==='player'?'roof':'player');};
 new ResizeObserver(()=>{let w=viewer.clientWidth,h=viewer.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}).observe(viewer);
 function upper(path,t){let l=0,r=path.length;while(l<r){let m=(l+r)>>1;if(path[m][0]<=t)l=m+1;else r=m;}return l;}
@@ -64,7 +79,7 @@ function paintFields(t){
  for(const [id,mesh]of fieldMeshes)mesh.visible=false;
  for(const [id,event]of states){if(!event.position||(event.expires!=null&&event.expires<t)||['expire','explode','replace'].includes(event.kind))continue;let mesh=fieldMeshes.get(id);if(!mesh){mesh=new THREE.Mesh(new THREE.SphereGeometry(1,12,6),new THREE.MeshBasicMaterial({color:event.entityType==='stug'?0xb4db7d:0x70bec8,wireframe:true,transparent:true,opacity:.28,depthTest:false,depthWrite:false}));fieldMeshes.set(id,mesh);fieldGroup.add(mesh);}mesh.visible=true;let point=event.position;if(event.host!=null){let actor=result.replay.actors.find(a=>a.id===event.host);if(actor&&actor.birth<=t&&(actor.death==null||actor.death>t))point=position(actor.path,t);}mesh.position.fromArray(point);mesh.scale.setScalar(Math.max(.2,event.radius||.4));}
 }
-function paintReplay(){if(!result||resultMap!==mapId||Math.abs(time-lastPaint)<.03)return;lastPaint=time;let r=result.replay,pp=position(r.player,time);const motion=(r.moves||[]).findLast(move=>move.start<=time&&time<move.start+move.duration);player.position.set(pp[0],pp[1]+1,pp[2]);player.visible=true;if(follow){let delta=new THREE.Vector3(pp[0],pp[1]+1,pp[2]).sub(controls.target);controls.target.add(delta);camera.position.add(delta);}
+function paintReplay(force=false){if(!loaded||!result||time===lastPaint||(!force&&time!==0&&time!==result.stats.seconds&&Math.abs(time-lastPaint)<.03))return;lastPaint=time;let r=result.replay,pp=position(r.player,time);const motion=(r.moves||[]).findLast(move=>move.start<=time&&time<move.start+move.duration);player.position.set(pp[0],pp[1]+1,pp[2]);player.visible=true;if(follow){let delta=new THREE.Vector3(pp[0],pp[1]+1,pp[2]).sub(controls.target);controls.target.add(delta);camera.position.add(delta);}
  let bi=0,di=0,trail=[];for(let a of r.actors){if(a.birth>time||(a.death!=null&&a.death<=time))continue;let p=position(a.path,time);dummy.position.set(p[0],p[1]+.95,p[2]);dummy.updateMatrix();if(a.type==='drone'){if(di>=drones.instanceMatrix.count)continue;drones.setMatrixAt(di++,dummy.matrix);}else {if(bi>=bodies.instanceMatrix.count)continue;bodies.setMatrixAt(bi,dummy.matrix);color.set(a.type==='heavy'?0xed9a64:0xe26e77);bodies.setColorAt(bi++,color);}let from=upper(a.path,time-6),to=upper(a.path,time);for(let j=Math.max(1,from);j<to;j++)trail.push(...a.path[j-1].slice(1),...a.path[j].slice(1));}
  bodies.count=bi;drones.count=di;bodies.instanceMatrix.needsUpdate=true;drones.instanceMatrix.needsUpdate=true;if(bodies.instanceColor)bodies.instanceColor.needsUpdate=true;linePositions(trails,trail);let end=upper(r.player,time);linePositions(playerTrail,r.player.slice(0,end).flatMap(p=>[p[1],p[2]+.15,p[3]]));
  let shotPositions=[];for(let s of r.shots){if(s[0]>time)break;if(time-s[0]>.8)continue;shotPositions.push(...s.slice(1,7));}linePositions(rays,shotPositions);linePositions(killMarks,r.kills.filter(k=>k[0]<=time&&time-k[0]<8).flatMap(k=>[k[2],k[3]+.7,k[4]]));
@@ -90,7 +105,7 @@ function extendClipBounds(bounds){
   syncClip();
 }
 async function loadVisual(){
-  const token=loadToken,url=visualUrl,begin=performance.now();
+  const token=loadToken,url=visualUrl;
   try{
     const data=await json(url);if(token!==loadToken)return;
     detailedGroup=new THREE.Group();scene.add(detailedGroup);
@@ -102,70 +117,151 @@ async function loadVisual(){
       return geometry;
     });
     materialRows=data.materials.map(source=>({material:new THREE.MeshStandardMaterial({color:source.color,side:THREE.DoubleSide,roughness:.85,metalness:.12,clippingPlanes:[plane]}),fallback:source.color,palette:catalog.materialPalette?.materials?.[source.sourcePath.replaceAll('\\','/')]}));
-    const materials=materialRows.map(row=>row.material);setMaterialAppearance();
+    const materials=materialRows.map(row=>{row.material.onBeforeCompile=clearView.attach;return row.material;});setMaterialAppearance();
     const groups=new Map();
     for(const item of data.instances){const key=item.meshId+':'+JSON.stringify(item.materialOverrides);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(item);}
-    let rendered=0;const visualBounds=new THREE.Box3();
+    let rendered=0,exterior=0;const visualBounds=new THREE.Box3(),instanceBounds=new THREE.Box3(),isExterior=exteriorScenery(raw.nav);
     for(const instances of groups.values()){
       const first=instances[0],source=data.meshes[first.meshId];
       const mats=source.groups.map((group,index)=>materials[first.materialOverrides?.[index]??group.materialId]||materials[group.materialId]);
       const mesh=new THREE.InstancedMesh(geometries[first.meshId],mats,instances.length);
-      for(const [index,item]of instances.entries()){
-        dummy.position.fromArray(item.position);dummy.quaternion.fromArray(item.quaternion);dummy.scale.setScalar(item.scale);dummy.updateMatrix();mesh.setMatrixAt(index,dummy.matrix);
+      let interior=0,outer=instances.length;
+      if(!mesh.geometry.boundingBox)mesh.geometry.computeBoundingBox();
+      const localBounds=mesh.geometry.boundingBox;
+      for(const item of instances){
+        dummy.position.fromArray(item.position);dummy.quaternion.fromArray(item.quaternion);dummy.scale.setScalar(item.scale);dummy.updateMatrix();
+        const outside=isExterior(source,instanceBounds.copy(localBounds).applyMatrix4(dummy.matrix));
+        mesh.setMatrixAt(outside?--outer:interior++,dummy.matrix);
       }
+      mesh.userData.interior=interior;exterior+=instances.length-interior;
       mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.computeBoundingBox();
       visualBounds.union(mesh.boundingBox);detailedGroup.add(mesh);rendered+=source.indices.length/3*instances.length;
     }
     dummy.quaternion.identity();dummy.scale.setScalar(1);
-    if(!visualBounds.isEmpty())extendClipBounds(visualBounds);
     mapGroup.visible=false;
-    visualInfo={meshes:data.meshes.length,instances:data.instances.length,triangles:rendered,loadMs:Math.round(performance.now()-begin)};
+    exteriorCount=exterior;
+    if(!visualBounds.isEmpty())extendClipBounds(visualBounds);syncScenery();
     $('detail').disabled=false;$('detail').textContent='导航代理';
     const coverage=data.metadata?.visualCoverage;
     $('sceneMeta').textContent=data.instances.length.toLocaleString()+' 个真实实例 / '+Math.round(rendered/10000)+' 万面 · 轻量材质配色 / 无贴图';
     if(coverage){const omitted=coverage.missingMeshInstances+coverage.unsupportedRiggedMeshInstances;if(omitted>0)$('sceneMeta').textContent+=' · '+omitted+' 个来源实例未解析';}
-    if(!jobId)$('status').textContent='地图就绪；点击开始才计算。';
+    if(!job&&!result)$('status').textContent='地图就绪；点击开始才计算。';
   }catch(error){if(token!==loadToken)return;$('status').textContent='导航可用；地图外观加载失败：'+error.message;console.error(error);}
 }
 
-const json=async(url,body)=>{const r=await fetch(url,body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const value=await r.json();if(!r.ok){const message=value.message||value.error?.message||value.error||'请求失败';throw new Error(typeof message==='string'?message:JSON.stringify(message));}return value;};
+const json=async(url,body)=>{const r=await fetch(url,body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const value=await r.json();if(!r.ok){const message=value.message||value.error?.message||value.error||'请求失败';const error=new Error(typeof message==='string'?message:JSON.stringify(message));error.status=r.status;throw error;}return value;};
 const option=(select,id,name)=>{const o=document.createElement('option');o.value=id;o.textContent=name;select.append(o);};
 function diagnostics(value){let items=[];if(Array.isArray(value))items=value;else if(value)for(let [key,v]of Object.entries(value)){if(Array.isArray(v))items.push(...v);else if(v&&typeof v==='string')items.push(key+': '+v);}items=[...new Set(items.map(x=>typeof x==='string'?x:JSON.stringify(x)))];const box=$('diagnostics');box.hidden=!items.length;box.replaceChildren();if(items.length){const b=document.createElement('b');b.textContent='模型覆盖提示 · '+items.length;box.append(b);const ul=document.createElement('ul');for(let text of items){const li=document.createElement('li');li.textContent=text;ul.append(li);}box.append(ul);}}
-function updateRunState(){const missingFixed=$('movement').value==='fixed'&&!fixedPosition;$('run').disabled=busyState||!catalog||!loadout||!loaded||missingFixed||standingPending||($('spawnProfile').value!=='custom'&&$('enemySpec').value==='single');$('cancel').disabled=!busyState;$('map').disabled=busyState;$('movement').disabled=busyState;$('doorSight').disabled=busyState;for(const id of ['spawnProfile','squadSize','missionDifficulty','missionTier','eximusMultiplier','directorHardCap','interceptionProgress','npcShortGap'])$(id).disabled=busyState;$('npcShortGap').disabled=busyState;$('levelGrowth').disabled=busyState||$('spawnProfile').value==='custom';$('region').disabled=busyState||$('movement').value==='fixed';$('standingPick').disabled=busyState||!loaded||standingPending;$('standingClear').disabled=busyState||!fixedPosition||standingPending;}
+function updateRunState(){const missingFixed=$('movement').value==='fixed'&&!fixedPosition;$('run').disabled=busyState||!catalog||!loadout||!loaded||missingFixed||standingPending||($('spawnProfile').value!=='custom'&&$('enemySpec').value==='single');$('cancel').disabled=!job?.id||job.cancelling;$('map').disabled=busyState;$('movement').disabled=busyState;$('doorSight').disabled=busyState;for(const id of ['spawnProfile','squadSize','missionDifficulty','missionTier','eximusMultiplier','directorHardCap','interceptionProgress','npcShortGap'])$(id).disabled=busyState;$('npcShortGap').disabled=busyState;$('levelGrowth').disabled=busyState||$('spawnProfile').value==='custom';$('region').disabled=busyState||$('movement').value==='fixed';$('standingPick').disabled=busyState||!loaded||standingPending;$('standingClear').disabled=busyState||!fixedPosition||standingPending;}
 function busy(value){busyState=value;if(value)setStandingPicking(false);updateRunState();}
 function config(){return {...(catalog?.defaults||{}),map:mapId,mapId,spawnProfile:$('spawnProfile').value,squadSize:Number($('squadSize').value),directorHardCap:Number($('directorHardCap').value),missionDifficulty:Number($('missionDifficulty').value),interceptionProgress:Number($('interceptionProgress').value),missionTier:Number($('missionTier').value),eximusMultiplier:Number($('eximusMultiplier').value),mode:$('budget').value,waves:20,seconds:1800,maxWave:$('spawnProfile').value.includes('interception')?600:180,waveWait:Number($('wait').value),seed:Number($('seed').value)||20261116,enemies:Math.max(1,Math.min(128,Number($('enemies').value)||60)),aliveCap:Number(catalog?.defaults?.aliveCap)||128,region:$('region').value,enemy:selectedEnemy||$('enemy').value,enemySpec:$('enemySpec').value||'single',levelGrowth:$('levelGrowth').checked&&$('spawnProfile').value!=='custom',tier:Number($('tier').value)||0,level:Number($('level').value)||160,headshots:$('head').value==='head',movement:$('movement').value,doorSight:$('doorSight').value,npcShortGap:$('npcShortGap').checked,fixedPosition:$('movement').value==='fixed'?structuredClone(fixedPosition):null};}
-function accept(r){for(const mesh of fieldMeshes.values()){mesh.geometry.dispose();mesh.material.dispose();fieldGroup.remove(mesh);}fieldMeshes.clear();resultLoadout=structuredClone(jobLoadout||loadout);resultMap=mapId;result=r;if(r.scenario?.movement==='fixed')displayStandingPoint(r.scenario.fixedPosition);result.replay??={};for(let key of ['actors','player','shots','kills','waves','moves','fields'])result.replay[key]??=[];time=0;lastPaint=-1;playing=false;let s=r.stats||{};$('timeline').max=s.seconds||0;$('timeline').disabled=false;$('play').disabled=false;$('play').textContent='播放';$('export').disabled=false;$('simTime').textContent=format(s.seconds||0);$('kills').textContent=(s.waves||0)+' / '+(s.kills||0);$('wall').textContent=((s.totalElapsedMs??s.elapsedMs??0)/1000).toFixed(2)+' s';$('multi').textContent=s.maxGroupKill??'—';$('jump').textContent=s.jumps??'—';$('vitus').textContent=Number(s.vitusExpected||0).toLocaleString('zh-CN',{maximumFractionDigits:2});$('vitusDetail').textContent='仅本次已模拟 '+format(s.seconds||0)+' 累计：无人机击杀 '+Number(s.droneKills||0)+' · 掉率 '+(Number(s.vitusDropChance??.06)*100).toLocaleString('zh-CN',{maximumFractionDigits:2})+'% · 模拟随机掉落 '+Number(s.vitusSample||0)+'。平均期望不是保底；未完成部分不外推。';$('resultTitle').textContent=r.reason||r.status||'模拟完成';$('resultText').textContent=(s.shots||0)+' 次开火 · 直接伤害 '+Number(s.directDamage||0).toLocaleString('zh-CN',{maximumFractionDigits:1})+' · 状态伤害 '+Number(s.dotDamage||0).toLocaleString('zh-CN',{maximumFractionDigits:1})+' · 无人机爆炸 '+Number(s.droneExplosionDamage||0).toLocaleString('zh-CN',{maximumFractionDigits:1})+' · 换弹 '+(s.reloads||0)+' 次 / 形态切换 '+(s.transforms||0)+' 次 · 路径失败 '+(s.failedPathPlans||0)+' 次 · 合法避让 '+(s.crowdDetours||0)+' 次 · NPC跨越 '+(s.npcShortGaps||0)+' 次 · 剩余 '+(s.live||0)+' 个目标（地面暂不可达 '+(s.liveUnreachable||0)+'）。'+(s.confirmedDoors!=null?' 门口 '+s.confirmedDoors+' 处 · 通行常开 · 门视线'+(s.doorSight==='closed'?'关闭遮挡':'开放')+'。':'');if(r.scenario?.spawnProfile&&r.scenario.spawnProfile!=='custom')$('resultText').textContent+=' 来源规则：已生成普通目标 '+(s.regularSpawned||0)+'（含卓越者 '+(s.eximusSpawned||0)+'）/ 独立无人机 '+(s.dronesSpawned||0)+'。每波配额与准入层级已写入导出回放。';$('fingerprint').textContent='事件指纹 '+(s.eventHash||'—')+' · '+(r.model||'');diagnostics(r.diagnostics||r.unsupported);$('status').textContent='任务已结束，可播放、拖动或导出。';paintReplay();}
-async function poll(){clearTimeout(pollTimer);if(!jobId||!active)return;try{const data=await json('/api/arena/jobs?id='+encodeURIComponent(jobId));const p=data.progress||{};$('status').textContent='后台 '+(data.status||'running')+' · 模拟 '+format(p.t??p.seconds??0)+' · 第 '+(p.wave||0)+' 波';if(data.result){jobId=null;busy(false);accept(data.result);return;}if(['completed','failed','cancelled','limited'].includes(data.status)){jobId=null;busy(false);$('status').textContent=typeof(data.message||data.error)==='object'?JSON.stringify(data.message||data.error):(data.message||data.error||data.status);diagnostics(data.diagnostics);return;}}catch(e){$('status').textContent=e.message;}pollTimer=setTimeout(poll,500);}
-$('run').onclick=async()=>{if(!loadout||jobId||busyState||standingPending||($('movement').value==='fixed'&&!fixedPosition))return;busy(true);playing=false;try{jobLoadout=structuredClone(loadout);const data=await json('/api/arena/jobs',{loadout:jobLoadout,scenario:config()});jobId=data.id;if(!jobId)throw new Error('任务响应缺少 id');$('status').textContent='任务已创建';poll();}catch(e){busy(false);$('status').textContent=e.message;}};
-$('cancel').onclick=async()=>{if(!jobId)return;try{await json('/api/arena/cancel',{id:jobId});$('status').textContent='正在取消后台任务…';poll();}catch(e){$('status').textContent=e.message;}};
-$('back').onclick=()=>host.dispatchEvent(new CustomEvent('arena-back',{bubbles:true}));
-$('play').onclick=()=>{if(!result||resultMap!==mapId)return;if(time>=result.stats.seconds)time=0;playing=!playing;$('play').textContent=playing?'暂停':'播放';};
-$('timeline').oninput=()=>{const value=Number($('timeline').value),end=Number($('timeline').max);time=end-value<Number($('timeline').step)?end:value;playing=false;$('play').textContent='播放';paintReplay();};
-$('export').onclick=()=>{if(!result)return;let url=URL.createObjectURL(new Blob([JSON.stringify({loadout:resultLoadout,result})],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='arena-replay-'+(result.stats.eventHash||Date.now())+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
-async function loadMap(){
-  const token=++loadToken;mapId=$('map').value;loaded=false;raw=null;clearStandingPoint('地图已切换，请重新选择合法站点。');refreshSpecOptions();updateRunState();lastPaint=-1;clipMode=viewPrefs.clipMode;clipStatusHeight=null;materialRows=[];$('floor').textContent='当前层';occludedRing.visible=false;bodies.count=0;drones.count=0;
+function clearReplayMeshes(){
+  bodies.count=0;drones.count=0;
   for(const object of [trails,playerTrail,rays,killMarks,jumpTrail])linePositions(object,[]);
-  for(const mesh of fieldMeshes.values())mesh.visible=false;
-  $('play').disabled=!result||resultMap!==mapId;$('timeline').disabled=!result||resultMap!==mapId;
+  for(const mesh of fieldMeshes.values()){mesh.geometry.dispose();mesh.material.dispose();fieldGroup.remove(mesh);}
+  fieldMeshes.clear();
+}
+function showReplay(entry){
+  currentReplay=entry||null;result=entry?.result||null;time=entry?.time||0;lastPaint=-1;playing=false;
+  clearReplayMeshes();
+  const r=result,s=r?.stats;
+  $('timeline').max=s?.seconds||0;$('timeline').value=time;
+  for(const id of ['timeline','play','export'])$(id).disabled=!r;
+  $('play').textContent='播放';
+  if(!r){
+    $('clock').textContent=format(0);$('viewMetrics').textContent='拖动旋转 · 右键平移 · 滚轮缩放';
+    for(const id of ['simTime','kills','wall','multi','jump','vitus'])$(id).textContent='—';
+    $('vitusDetail').textContent='仅累计本次已模拟部分的平均期望；中止时不外推剩余波次。';
+    $('resultTitle').textContent='等待首次运行';$('resultText').textContent='';
+    $('fingerprint').textContent='独立后端任务 · 固定 seed · 当前配装快照';diagnostics(catalog?.unsupported||catalog?.diagnostics);return;
+  }
+  $('simTime').textContent=format(s.seconds||0);$('kills').textContent=(s.waves||0)+' / '+(s.kills||0);$('wall').textContent=((s.totalElapsedMs??s.elapsedMs??0)/1000).toFixed(2)+' s';$('multi').textContent=s.maxGroupKill??'—';$('jump').textContent=s.jumps??'—';$('vitus').textContent=Number(s.vitusExpected||0).toLocaleString('zh-CN',{maximumFractionDigits:2});$('vitusDetail').textContent='仅本次已模拟 '+format(s.seconds||0)+' 累计：无人机击杀 '+Number(s.droneKills||0)+' · 掉率 '+(Number(s.vitusDropChance??.06)*100).toLocaleString('zh-CN',{maximumFractionDigits:2})+'% · 模拟随机掉落 '+Number(s.vitusSample||0)+'。平均期望不是保底；未完成部分不外推。';$('resultTitle').textContent=[r.weaponName,r.reason||r.status||'模拟完成'].filter(Boolean).join(' · ');$('resultText').textContent=(s.shots||0)+' 次开火 · 直接伤害 '+Number(s.directDamage||0).toLocaleString('zh-CN',{maximumFractionDigits:1})+' · 状态伤害 '+Number(s.dotDamage||0).toLocaleString('zh-CN',{maximumFractionDigits:1})+' · 无人机爆炸 '+Number(s.droneExplosionDamage||0).toLocaleString('zh-CN',{maximumFractionDigits:1})+' · 换弹 '+(s.reloads||0)+' 次 / 形态切换 '+(s.transforms||0)+' 次 · 路径失败 '+(s.failedPathPlans||0)+' 次 · 合法避让 '+(s.crowdDetours||0)+' 次 · NPC跨越 '+(s.npcShortGaps||0)+' 次 · 剩余 '+(s.live||0)+' 个目标（地面暂不可达 '+(s.liveUnreachable||0)+'）。'+(s.confirmedDoors!=null?' 门口 '+s.confirmedDoors+' 处 · 通行常开 · 门视线'+(s.doorSight==='closed'?'关闭遮挡':'开放')+'。':'');if(r.scenario?.spawnProfile&&r.scenario.spawnProfile!=='custom')$('resultText').textContent+=' 来源规则：已生成普通目标 '+(s.regularSpawned||0)+'（含卓越者 '+(s.eximusSpawned||0)+'）/ 独立无人机 '+(s.dronesSpawned||0)+'。每波配额与准入层级已写入导出回放。';$('fingerprint').textContent='事件指纹 '+(s.eventHash||'—')+' · '+(r.model||'');diagnostics(r.diagnostics||r.unsupported);$('status').textContent='任务已结束，可播放、拖动或导出。';paintReplay();
+}
+function accept(r,submitted){
+  const resultMap=r.scenario?.mapId||submitted.mapId;
+  r.replay??={};for(const key of ['actors','player','shots','kills','waves','moves','fields'])r.replay[key]??=[];
+  const entry={result:r,loadout:submitted.loadout,time:0};
+  replaysByMap.delete(resultMap);replaysByMap.set(resultMap,entry);
+  if(replaysByMap.size>2)replaysByMap.delete(replaysByMap.keys().next().value);
+  if(resultMap!==mapId||!loaded)return;
+  if(r.scenario?.movement==='fixed'&&r.scenario.fixedPosition)displayStandingPoint(r.scenario.fixedPosition);
+  showReplay(entry);
+}
+function finishJob(submitted){if(job!==submitted)return false;job=null;busy(false);return true;}
+async function poll(submitted=job){
+  if(!active||!submitted?.id||job!==submitted||submitted.polling)return;
+  clearTimeout(pollTimer);submitted.polling=true;
+  try{
+    const data=await json('/api/arena/jobs?id='+encodeURIComponent(submitted.id));
+    if(job!==submitted||data.id&&data.id!==submitted.id)return;
+    if(data.result){finishJob(submitted);accept(data.result,submitted);return;}
+    if(['completed','failed','cancelled','limited'].includes(data.status)){
+      finishJob(submitted);const message=data.message||data.error;
+      $('status').textContent=typeof message==='object'?JSON.stringify(message):(message||data.status);diagnostics(data.diagnostics);return;
+    }
+    const p=data.progress||{};
+    $('status').textContent=(submitted.cancelling?'正在取消':'后台 '+(data.status||'running'))+' · 模拟 '+format(p.t??p.seconds??0)+' · 第 '+(p.wave||0)+' 波';
+  }catch(e){
+    if(job!==submitted)return;
+    if(e.status===404)finishJob(submitted);
+    $('status').textContent=e.message;
+  }finally{
+    submitted.polling=false;
+    if(active&&job===submitted)pollTimer=setTimeout(()=>poll(submitted),500);
+  }
+}
+$('run').onclick=async()=>{
+  if(job||$('run').disabled)return;
+  const submitted={id:null,mapId,loadout:structuredClone(loadout),polling:false,cancelling:false},scenario=config();
+  job=submitted;busy(true);playing=false;$('play').textContent='播放';$('status').textContent='正在创建后台任务…';
+  try{
+    const data=await json('/api/arena/jobs',{loadout:submitted.loadout,scenario});
+    if(job!==submitted)return;
+    if(!data.id)throw new Error('任务响应缺少 id');
+    submitted.id=data.id;updateRunState();$('status').textContent='任务已创建';poll(submitted);
+  }catch(e){if(finishJob(submitted))$('status').textContent=e.message;}
+};
+$('cancel').onclick=async()=>{
+  const submitted=job;if(!submitted?.id||submitted.cancelling)return;
+  submitted.cancelling=true;updateRunState();
+  try{
+    await json('/api/arena/cancel',{id:submitted.id});
+    if(job!==submitted)return;
+    $('status').textContent='正在取消后台任务…';poll(submitted);
+  }catch(e){if(job===submitted){submitted.cancelling=false;updateRunState();$('status').textContent=e.message;}}
+};
+$('back').onclick=()=>host.dispatchEvent(new CustomEvent('arena-back',{bubbles:true}));
+$('play').onclick=()=>{if(!result)return;if(time>=result.stats.seconds){time=0;paintReplay();}playing=!playing;$('play').textContent=playing?'暂停':'播放';};
+$('timeline').oninput=()=>{if(!result)return;const value=Number($('timeline').value),end=Number($('timeline').max);time=end-value<Number($('timeline').step)?end:value;playing=false;$('play').textContent='播放';paintReplay(true);};
+$('export').onclick=()=>{if(!currentReplay)return;const {loadout,result}=currentReplay;let url=URL.createObjectURL(new Blob([JSON.stringify({loadout,result})],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='arena-replay-'+(result.stats.eventHash||Date.now())+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+async function loadMap(){
+  const token=++loadToken;
+  if(currentReplay)currentReplay.time=time;
+  mapId=$('map').value;loaded=false;raw=null;showReplay(null);
+  clearStandingPoint('地图已切换，请重新选择合法站点。');refreshSpecOptions();updateRunState();clipMode=viewPrefs.clipMode;clipStatusHeight=null;materialRows=[];$('floor').textContent='当前层';occludedRing.visible=false;player.visible=false;grid.visible=false;
+  disposeMapGroup(mapGroup);disposeMapGroup(detailedGroup);if(detailedGroup){scene.remove(detailedGroup);detailedGroup=null;}
+  syncScenery();
+  rebuildStandingNav();
   const map=catalog.maps.find(item=>(item.id||item.mapId)===mapId)||{},base='/api/arena/assets/'+encodeURIComponent(mapId)+'/';
   visualUrl=map.visualUrl||base+'visual-map.json';showMapMissions(map);
-  $('sceneMeta').textContent='正在读取地图…';$('status').textContent='正在读取地图…';$('detail').disabled=true;
+  $('sceneMeta').textContent='正在读取地图…';$('status').textContent='正在读取地图…';$('viewHint').textContent='';$('detail').disabled=true;
   try{
     const data=await json(map.sceneUrl||base+'scene.json');if(token!==loadToken)return;raw=data;walkCeiling=topStandableHeight(raw);
     const bounds=new THREE.Box3();for(const point of raw.collision.vertices)bounds.expandByPoint(new THREE.Vector3(...point));
     const walkBounds=new THREE.Box3();for(const point of raw.nav.nodePositions)walkBounds.expandByPoint(new THREE.Vector3(...point));
     walkBounds.getCenter(mapCenter);const size=walkBounds.getSize(new THREE.Vector3());mapExtent=Math.max(size.x,size.z,size.y,30);
-    $('cut').min=Math.floor(bounds.min.y-2);$('cut').max=Math.ceil(bounds.max.y+2);$('cut').value=$('cut').max;plane.constant=Number($('cut').value);grid.position.y=bounds.min.y-1;reset();
-    disposeMapGroup(mapGroup);disposeMapGroup(detailedGroup);if(detailedGroup){scene.remove(detailedGroup);detailedGroup=null;}
+    $('cut').min=Math.floor(bounds.min.y-2);$('cut').max=Math.ceil(bounds.max.y+2);$('cut').value=$('cut').max;plane.constant=Number($('cut').value);grid.position.y=bounds.min.y-1;grid.visible=true;reset();
     const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(raw.collision.vertices.flat(),3));geometry.setIndex(raw.collision.triangles.flat());geometry.computeVertexNormals();
     mapGroup.add(new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:0x668b9c,side:THREE.DoubleSide,roughness:1,transparent:true,opacity:.8,clippingPlanes:[plane]})));mapGroup.visible=true;
     if(raw.start?.position){player.position.fromArray(raw.start.position);player.position.y+=1;player.visible=true;}
-    syncClip();rebuildStandingNav();loaded=true;syncStandingMode();updateRunState();$('sceneMeta').textContent=(raw.nav?.triangles?.length||0).toLocaleString()+' 导航面';loadVisual();
-  }catch(error){if(token!==loadToken)return;loaded=false;setStandingPicking(false);updateRunState();$('status').textContent='地图显示加载失败：'+error.message;}
+    syncClip();rebuildStandingNav();loaded=true;syncStandingMode();updateRunState();$('sceneMeta').textContent=(raw.nav?.triangles?.length||0).toLocaleString()+' 导航面';
+    const entry=replaysByMap.get(mapId);if(entry)showReplay(entry);else $('status').textContent='导航就绪；正在读取地图外观…';
+    loadVisual();
+  }catch(error){if(token!==loadToken)return;loaded=false;raw=null;player.visible=false;grid.visible=false;disposeMapGroup(mapGroup);rebuildStandingNav();setStandingPicking(false);updateRunState();$('sceneMeta').textContent='地图未加载';$('status').textContent='地图显示加载失败：'+error.message;}
 }
 
-$('map').onchange=()=>{playing=false;loadMap();};
-for(let id of ['region','budget','wait','movement','doorSight','enemies','seed','head','enemy','level','enemySpec','tier','spawnProfile','squadSize','missionDifficulty','missionTier','eximusMultiplier','levelGrowth','directorHardCap','interceptionProgress','npcShortGap'])$(id).addEventListener('change',()=>{if(!jobId)$('status').textContent='配置已修改，点击开始才重新计算。';});
+$('map').onchange=loadMap;
+for(let id of ['region','budget','wait','movement','doorSight','enemies','seed','head','enemy','level','enemySpec','tier','spawnProfile','squadSize','missionDifficulty','missionTier','eximusMultiplier','levelGrowth','directorHardCap','interceptionProgress','npcShortGap'])$(id).addEventListener('change',()=>{if(!job)$('status').textContent='配置已修改，点击开始才重新计算。';});
 function missionPlanet(mission){return mission.planetZh||mission.planet;}
 function missionNode(mission){return mission.nodeNameZh&&mission.nodeNameZh!==mission.nodeName?mission.nodeNameZh+' ('+mission.nodeName+')':mission.nodeName;}
 function missionType(mission){return ({'mirror-defense':'镜像防御','1999-defense':'1999 防御','archwing':'空战拦截'}[mission.variant]||mission.missionTypeZh||mission.missionType);}
@@ -176,6 +272,7 @@ function mapOptionLabel(map){
 function showMapMissions(map){
   const missions=map.missions||[],planets=[...new Set(missions.map(missionPlanet))];
   $('mapTitle').textContent=map.nameZh||map.name||map.id;
+  $('mapBrief').textContent=[planets.slice(0,2).join(' / '),[...new Set(missions.map(missionType).filter(Boolean))].slice(0,2).join(' / ')].filter(Boolean).join(' · ');
   const doors=map.doorSummary;
   $('doorInfo').textContent=doors?'已确认 '+doors.confirmedDoors+' 处门口，其中 '+doors.doorsWithUsableLinks+' 处已接入通行。':'本图尚无可确认的门口连接；不会开放普通墙体。';
   $('mapSummary').textContent=planets.length?planets.join(' / '):'节点对应关系待核对';
@@ -250,8 +347,9 @@ function setStandingPicking(enabled){
   pickingStanding=!!enabled&&$('movement').value==='fixed'&&loaded&&!busyState&&!standingPending;
   controls.enabled=!pickingStanding;controls.update();if(navPicker)navPicker.visible=pickingStanding;
   viewer.classList.toggle('is-standing-pick',pickingStanding);$('standingPick').textContent=pickingStanding?'退出选点模式':'进入选点模式';$('standingPick').setAttribute('aria-pressed',String(pickingStanding));
-  if(pickingStanding){playing=false;$('play').textContent='播放';$('standingStatus').textContent='选点模式：单击半透明可行走面，后台验证；退出选点后恢复旋转/拖动。';}
+  if(pickingStanding){playing=false;$('play').textContent='播放';$('standingStatus').textContent='选点模式：单击半透明可行走面，后台验证；退出选点后恢复旋转/拖动。';viewer.focus({preventScroll:true});viewer.scrollIntoView({block:'nearest'});}
 }
+viewer.addEventListener('keydown',event=>{if(pickingStanding&&event.key==='Escape'){setStandingPicking(false);$('standingPick').focus();}});
 function clearStandingPoint(message='尚未选择合法站点'){
   standingRequest++;standingPending=false;fixedPosition=null;standingMarker.visible=false;setStandingPicking(false);
   $('standingPoint').textContent='尚未选择合法站点';$('standingStatus').textContent=message;updateRunState();
@@ -263,6 +361,7 @@ function syncStandingMode(){
   if(fixed&&!fixedPosition&&!pickingStanding)$('standingStatus').textContent=loaded?'点击“进入选点模式”，从可站立区域选择并验证。':'请等待地图可行走面加载。';updateRunState();
 }
 function rebuildStandingNav(){
+  clearView.clear();
   if(navPicker){scene.remove(navPicker);navPicker.geometry.dispose();navPicker.material.dispose();navPicker=null;}
   if(!raw?.nav?.vertices||!raw.nav.triangles)return;
   const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(raw.nav.vertices.flat(),3));geometry.setIndex(raw.nav.triangles.flat());
@@ -308,7 +407,8 @@ function syncSpawnProfile(){
   $('levelGrowthHelp').textContent=interception?'默认关闭。按拦截轮次公式增长，受 difficulty 影响；20个清场周期可能明显涨级，不沿用防御第20波仅+11级的结论。':source?'默认关闭；单值起点前10波保持，第20波增加11级，仅作用于新出生敌人。':'等级增长只用于来源规则；当前固定等级。';
   $('limitsText').innerHTML=interception?'单周期 600 秒 · 60 秒无伤害或击杀进展熔断<br>最长模拟 30 分钟 · 计算预算 30 秒':'单波 180 秒 · 60 秒无伤害或击杀进展熔断<br>最长模拟 30 分钟 · 计算预算 30 秒';
   $('interceptionFields').hidden=!interception;$('sourceSpawnFields').hidden=!source;
-  $('enemies').disabled=source&&!interception;$('tier').disabled=source;
+  $('enemies').disabled=source&&!interception;$('enemies').closest('label').hidden=source&&!interception;
+  $('tier').disabled=source;$('tier').closest('label').hidden=source;
   $('quotaLabel').textContent=interception?'每清场周期目标数量':'自定义每波目标数量';
   $('missionTier').closest('label').hidden=interception;
   $('spawnHelp').textContent=source?(single?'来源规则需要选择敌人编组；单一敌人请使用自定义工况。':interception?'使用来源小队间隔、人数上限与累计tier，固定所选进度并关闭占点突袭。按下方指定数量清场后进入下一周期；不是实际拦截得分轮次。原生池合并和空间计数仍有近似，详见结果说明。':'每波数量由队伍人数、起始等级、波次及仲裁修正计算，再按累计层级编排配额；每0.25秒最多尝试生成1只。最终数量见回放波次记录。拦截图选择此规则仅是防御清怪实验，不等同原生拦截刷新。'):'当前固定数量/层级和每7只一只无人机为可复现测试工况，不等同游戏每波敌人数。';
@@ -375,9 +475,9 @@ function animate(now){
  paintReplay();controls.update();if(clipMode==='player')syncClip();
  occludedRing.visible=loaded&&player.visible&&viewPrefs.marker!==false;
  if(occludedRing.visible){camera.updateMatrixWorld();markerView.copy(player.position).applyMatrix4(camera.matrixWorldInverse);const depth=-markerView.z;occludedRing.visible=depth>camera.near&&depth<camera.far;if(occludedRing.visible){occludedRing.position.copy(player.position);occludedRing.quaternion.copy(camera.quaternion);const radius=14*2*depth*Math.tan(THREE.MathUtils.degToRad(camera.fov*.5))/Math.max(1,viewer.clientHeight);occludedRing.scale.setScalar(radius);}}
- const renderBegin=performance.now();renderer.render(scene,camera);renderCost+=performance.now()-renderBegin;renderedFrames++;frames++;
+ const renderBegin=performance.now();renderer.info.reset();clearView.prepare(navPicker?.geometry,detailedGroup?.visible&&clearing());renderer.render(scene,camera);renderCost+=performance.now()-renderBegin;renderedFrames++;frames++;
  if(now-frameStart>=1000){$('fps').textContent=Math.round(frames*1000/(now-frameStart))+' FPS · '+renderer.info.render.triangles.toLocaleString()+' 面 · '+renderer.info.render.calls+' 次绘制 · CPU提交 '+(renderCost/Math.max(1,renderedFrames)).toFixed(1)+' ms';frames=0;frameStart=now;renderCost=0;renderedFrames=0;}
 }
 raf=requestAnimationFrame(animate);
-return {open(payload,label){if(payload&&jobId){$('status').textContent='正在运行的任务保留原配装；取消后重新进入可更新快照。';payload=null;}if(payload){loadout=structuredClone(payload);$('weaponInfo').textContent=label+' · 已冻结当前槽位、紫卡、赋能与灵化';$('level').value=payload.level||160;$('head').value=payload.headshotChance>0?'head':'body';if(catalog&&payload.enemy&&enemyIndex.has(payload.enemy)){selectedEnemy=payload.enemy;filterEnemies();}if(result)$('status').textContent='配装快照已更新；上一结果仍绑定原快照，点击开始才重算。';}active=true;busy(!!jobId);if(!catalog)loadCatalog();else if(jobId)poll();requestAnimationFrame(()=>{const w=viewer.clientWidth,h=viewer.clientHeight;if(w&&h){renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}});},hide(){active=false;playing=false;setStandingPicking(false);clearTimeout(pollTimer);},get hasLoadout(){return !!loadout;}};
+return {open(payload,label){if(payload&&job){$('status').textContent='正在运行的任务保留原配装；取消后重新进入可更新快照。';payload=null;}if(payload){loadout=structuredClone(payload);$('weaponInfo').textContent=label+' · 已冻结当前槽位、紫卡、赋能与灵化';$('level').value=payload.level||160;$('head').value=payload.headshotChance>0?'head':'body';if(catalog&&payload.enemy&&enemyIndex.has(payload.enemy)){selectedEnemy=payload.enemy;filterEnemies();}if(result)$('status').textContent='配装快照已更新；上一结果仍绑定原快照，点击开始才重算。';}active=true;busy(!!job);if(!catalog)loadCatalog();else if(job?.id)poll(job);requestAnimationFrame(()=>{const w=viewer.clientWidth,h=viewer.clientHeight;if(w&&h){renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}});},hide(){active=false;playing=false;$('play').textContent='播放';setStandingPicking(false);clearTimeout(pollTimer);},get hasLoadout(){return !!loadout;}};
 }
