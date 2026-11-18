@@ -1,5 +1,6 @@
 """All companion Riven requests must use the same actor policy as builds."""
 from copy import deepcopy
+import json
 import pytest
 import app
 from tests.test_riven_disposition_20261023 import _engine_request
@@ -40,6 +41,32 @@ def test_riven_entry_pins_companion_actor_policy_before_optimizer(weapon,player_
     malformed['stats'].append(dict(code=forbidden, value=20., negative=True))
     with pytest.raises(app.SimulationError, match='not allowed'):
         _engine_request(malformed)
+
+
+def test_default_companion_uses_its_own_statics_context(monkeypatch):
+    weapon = next(w for w in app.CATALOG['weapons'] if w.get('nameEn') == 'Cryotra')
+    optimizer = app.optimizer
+    disposition = weapon['disposition']
+    scale = optimizer.theoretical_structure_scale(2, False)
+    bases = app.RIVEN_BASE_VALUES[weapon['rivenType']]
+    payload = dict(weapon=weapon['path'], disposition=disposition, profile='fast', fireMode=0,
+                   _bakeStaticsOnly=True, stats=[dict(code=code, value=bases[code] * disposition * scale,
+                                                    negative=False) for code in ('D', 'S')])
+
+    def stop_before_scoring(*_args, **_kwargs):
+        raise RuntimeError('before baseline scoring')
+
+    monkeypatch.setattr(optimizer, '_optimize', stop_before_scoring)
+    statics = {}
+    for extra in ({}, {'companionPlayerStacks': True}, {'distance': 12.},
+                  {'combatState': {'selfShieldBreakAt': 5.}}):
+        request = _engine_request({**payload, **extra})
+        with pytest.raises(RuntimeError, match='before baseline scoring'):
+            optimizer.analyze_riven_request(app.EXPORT_DIR, request, statics_cache=statics)
+        assert len(statics) == 1
+        key = json.loads(next(iter(statics)))
+        assert key['weapon'] == weapon['path']
+        assert key['benchmark']['scenario']['combatState'] == {'companion': True, 'companionPlayerStacks': False}
 
 
 def test_new_companion_mechanics_dependencies_invalidate_statics(monkeypatch):

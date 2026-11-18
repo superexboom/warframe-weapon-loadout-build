@@ -25,6 +25,7 @@ from .search_session import SESSION, session_request, memoized_search, heartbeat
 # Scored no-Riven baselines per exact inputs (see analyze_riven_request._reconstruct).
 _BASELINE_EVALUATIONS: OrderedDict = OrderedDict()
 
+from .companion import is_companion
 from .damage import (
     BASE_ELEMENTS,
     MELEE_SLOTS,
@@ -5347,6 +5348,15 @@ def analyze_riven_request(
     ranking_metric = ('windowedDps' if objective_metric == 'killsPerMinute'
                       and benchmark_context is not None and profile != 'fast'
                       else objective_metric)
+    default_scenario = _default_analysis_scenario(scenario, metric)
+    state = scenario.combat_state
+    # The application's companion policy adds actor state even to a default
+    # request. Admit just that preset, retaining its state in the cache key.
+    default_companion = (
+        is_companion(weapon) and len(state) == 2
+        and state.get('companion') is True and state.get('companionPlayerStacks') is False
+        and _default_analysis_scenario(replace(scenario, combat_state={}), metric)
+    )
     cacheable = (
         statics_cache is not None
         and (not record_overridden or bool(request.get("_cacheDefaultInnate"))
@@ -5358,7 +5368,7 @@ def analyze_riven_request(
         and request.get("arcanes") is None
         # A fixed caller preset (the Bot) may cache its own scenario; the
         # scenario then joins the cache key below.
-        and (_default_analysis_scenario(scenario, metric) or bool(request.get("_cacheScenario")))
+        and (default_scenario or default_companion or bool(request.get("_cacheScenario")))
         and timeline_seconds is None
         and not has_search_constraints
     )
@@ -5371,7 +5381,7 @@ def analyze_riven_request(
             "heavyAttack": bool(scenario.heavy_attack),
         }
     )
-    if not _default_analysis_scenario(scenario, metric):
+    if not default_scenario:
         _bm["scenario"] = _scenario_context(scenario)
     if melee_context:
         _bm["melee"] = melee_context
