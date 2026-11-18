@@ -79,3 +79,24 @@ def test_arena_only_source_edits_reuse_identity_but_real_score_changes_invalidat
     replacements.clear()
     replacements[source_app] = original[source_app] + b"\nUNREVIEWED_SCORE_GLOBAL = 1\n"
     assert app._analysis_inputs_fingerprint() != baseline
+
+
+def test_native_binary_bytes_are_input_only_when_native_is_enabled(monkeypatch, tmp_path):
+    from types import SimpleNamespace
+    from wfarsenal import mods_native, native_replay, status_native
+
+    binary = tmp_path / 'wfcore.pyd'
+    binary.write_bytes(b'first native core')
+    for adapter in (mods_native, native_replay, status_native):
+        monkeypatch.setattr(adapter, 'wfcore', SimpleNamespace(__file__=str(binary)))
+        monkeypatch.setattr(adapter, 'ENABLED', False)
+    reference = app._analysis_inputs_fingerprint()
+    monkeypatch.setattr(native_replay, 'ENABLED', True)
+    first = app._analysis_inputs_fingerprint()
+    binary.write_bytes(b'changed native core')
+    assert app._analysis_inputs_fingerprint() != first != reference
+    binary.unlink()
+    with pytest.raises(app.SimulationError, match='native core unreadable'):
+        app._analysis_inputs_fingerprint()
+    monkeypatch.setattr(native_replay, 'ENABLED', False)
+    assert app._analysis_inputs_fingerprint() == reference

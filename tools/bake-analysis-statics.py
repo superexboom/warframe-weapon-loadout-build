@@ -6,7 +6,7 @@
 
 对 catalog 中全部可分析武器 × 开火模式 × 档位烘焙一次武器级静态结果，
 statics cache 落盘到 .local/cache/riven-analysis-statics.json。
-同一游戏版本内只跑一次：缓存指纹（导出+引擎哈希）变化时自动整体失效。
+按武器校验分片：共享规则变化时重烘；仅武器数据变化时保留未受影响的分片。
 
 一个任务 = 一把武器的一个开火模式：同一个工作进程依次烘焙所选的每个档位，
 每档同时烘焙 3 条和 2 条正面词条两套推荐（基准配装与流派基础第二次直接命中），
@@ -33,7 +33,8 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from tools.run_riven_acceptance_bake import MAX_BAKE_WORKERS, limited_workers
+from tools.run_riven_acceptance_bake import limited_workers
+from tools import incremental_bake as incremental
 
 # Select the actual Bot runtime before any app import, also in spawned workers.
 # The bundle worker is part of its cache identity; Portable caches are distinct.
@@ -53,7 +54,7 @@ if BOT_BUNDLE:
         raise RuntimeError('Bot bake imported app outside the selected bundle')
 
 SHARD_ROOT = ROOT / ".local" / "cache"
-SHARD_SCHEMA_VERSION = 3
+SHARD_SCHEMA_VERSION = incremental.SHARD_SCHEMA
 _TABLE_MODE, _TABLE_CHANNEL = 'off', None
 
 
@@ -94,7 +95,7 @@ def _trigger_stats(app: Any, weapon_type: str, disposition: float, positives: in
     return [{"code": line.code, "value": line.value, "negative": False} for line in selected[:positives]]
 
 
-def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]]) -> list[dict]:
+def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]], dependency=None) -> list[dict]:
     """独立进程：一把武器一个开火模式，按档位各写一个分片 JSON。
 
     F14（审计修复）：worker 进程入口即关闭共享主缓存持久化
@@ -170,14 +171,10 @@ def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]])
             if (context.get('weapon') == weapon_path and context.get('fireMode') == fire_mode
                     and context.get('profile') == profile):
                 entries[key] = value
-        if not any(all(len(value.get('counts', {}).get(str(n), {}).get('recommended', [])) == n
-                       for n in positive_counts) for value in entries.values()):
+        if not entries or not all(len(value.get('counts', {}).get(str(n), {}).get('recommended', [])) == n
+                                  for value in entries.values() for n in positive_counts):
             outcomes.append({'weapon': weapon_path, 'profile': profile, 'ok': False,
                              'error': 'missing complete positive structures for the requested context'})
-            continue
-        if not entries:
-            outcomes.append({"weapon": weapon_path, "profile": profile, "ok": False,
-                             "error": "no statics entries produced (candidate generation failed)"})
             continue
         # Workers must never write the shared main cache.  They only emit their
         # own shard; the parent process performs the single atomic merge after all
@@ -191,23 +188,11 @@ def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]])
                              'error': 'inputs changed during analysis; shard rejected'})
             continue
         try:
-            shard = Path(shard_path)
-            shard.parent.mkdir(parents=True, exist_ok=True)
-            temporary = shard.with_suffix(".tmp")
-            temporary.write_text(
-                json.dumps(
-                    {
-                        "schemaVersion": SHARD_SCHEMA_VERSION,
-                        "cacheVersion": app.ANALYSIS_STATICS_CACHE_VERSION,
-                        "inputs": worker_inputs,
-                        "profile": profile,
-                        "entries": entries,
-                    },
-                    ensure_ascii=False,
-                ),
-                encoding="utf-8",
-            )
-            temporary.replace(shard)
+            payload = dict(schemaVersion=SHARD_SCHEMA_VERSION, cacheVersion=app.ANALYSIS_STATICS_CACHE_VERSION,
+                           inputs=worker_inputs, profile=profile, entries=entries)
+            if dependency is not None:
+                payload['dependencies'] = incremental.shard_proof(*dependency, entries)
+            incremental.atomic(Path(shard_path), payload)
         except OSError as exc:
             outcomes.append({"weapon": weapon_path, "profile": profile, "ok": False, "error": f"shard write: {exc}"})
             continue
@@ -296,6 +281,7 @@ def main() -> int:
     parser.add_argument('--report', type=Path,
                         help='覆盖与失败报告，运行时逐项更新；多个档位时路径里写 {profile}（如 out/{profile}.json）')
     parser.add_argument('--dry-run', action='store_true', help='仅列出任务和当前分片覆盖')
+    parser.add_argument('--force-recompute', action='store_true', help='忽略现有分片，冷烘所选任务（用于对照）')
     parser.add_argument('--shards-only', action='store_true', help='只生成并校验分片；不发布主缓存')
     parser.add_argument('--status-tables', choices=('off', 'rust', 'cuda'), default='off',
                         help='离线预计算重复状态概率；默认关闭。cuda 使用一个共享设备，并逐字节核对 Rust 结果')
@@ -329,6 +315,7 @@ def main() -> int:
     if args.report and len(profiles) > 1 and "{profile}" not in str(args.report):
         parser.error("several profiles need {profile} in --report")
 
+    started = time.perf_counter()
     import app
     from wfarsenal import parallel
 
@@ -336,27 +323,27 @@ def main() -> int:
                   9 if args.status_tables == 'cuda' else 10)
     cache_version = app.ANALYSIS_STATICS_CACHE_VERSION
     try:
-        input_fingerprint = app._analysis_inputs_fingerprint()
+        dependencies = None if BOT_BUNDLE else incremental.bake_inventory(app)
+        input_fingerprint = dependencies[0] if dependencies else app._analysis_inputs_fingerprint()
+        if dependencies and input_fingerprint != app.ANALYSIS_STATICS_RUNTIME_INPUTS:
+            raise app.SimulationError('inputs changed after the runtime started')
     except app.SimulationError as exc:
         print(f"cannot bake: {exc}")
         return 2
     shard_root = args.shard_dir or SHARD_ROOT
     shard_dirs = {profile: shard_root / f"riven-statics-shards-{profile}" for profile in profiles}
 
-    def shard_is_current(path: Path, profile: str) -> bool:
+    def proof_for(weapon):
+        return (dependencies[1], dependencies[2][weapon]) if dependencies else None
+
+    def read_qualified(path, profile, weapon, mode):
         try:
-            payload = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
-            return False
-        return (
-            isinstance(payload, dict)
-            and payload.get("schemaVersion") == SHARD_SCHEMA_VERSION
-            and payload.get("cacheVersion") == cache_version
-            and payload.get("inputs") == input_fingerprint
-            and payload.get("profile") == profile
-            and isinstance(payload.get("entries"), dict)
-            and bool(payload.get("entries"))
-        )
+            payload = json.loads(path.read_bytes())
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            return None
+        if incremental.qualified_shard(payload, profile, weapon, mode, positive_counts, cache_version, proof_for(weapon)):
+            return payload
+        return None
 
     weapons = _catalog_weapons()
     full_roster_size = len(weapons)
@@ -368,13 +355,13 @@ def main() -> int:
         parser.error('selected weapons cover the full roster; explicit authorization and --allow-full-bake are required')
     print(f"baking {len(weapons)} weapons, profiles={','.join(profiles)}, workers={workers}, status-tables={args.status_tables}")
 
-    for directory in shard_dirs.values():
-        directory.mkdir(parents=True, exist_ok=True)
     planned = []
-    expected_shards = {profile: set() for profile in profiles}
+    expected_shards = {profile: {} for profile in profiles}
     failures = {profile: [] for profile in profiles}
     completed = {profile: [] for profile in profiles}
     skipped = {profile: 0 for profile in profiles}
+    reused = {profile: 0 for profile in profiles}
+    reused_targets = {profile: [] for profile in profiles}
     excluded_modes = 0
     skipped_no_damage = 0
     for weapon in weapons:
@@ -404,22 +391,27 @@ def main() -> int:
             pending = []
             for profile in profiles:
                 shard = shard_dirs[profile] / f"{tag}.json"
-                expected_shards[profile].add(shard)
-                # 幂等续跑：分片已存在且当前则跳过（烘焙被中断后可续）。
-                if shard.is_file() and shard_is_current(shard, profile):
+                expected_shards[profile][shard] = (weapon['path'], mode)
+                payload = None if args.force_recompute else read_qualified(shard, profile, weapon['path'], mode)
+                if payload is not None and payload.get('inputs') == input_fingerprint:
                     skipped[profile] += 1
+                elif payload is not None and dependencies:
+                    reused[profile] += 1
+                    reused_targets[profile].append((weapon['path'], mode))
+                    if not args.dry_run:
+                        payload['inputs'] = input_fingerprint
+                        incremental.atomic(shard, payload)
                 else:
                     pending.append((profile, str(shard)))
             if pending:
                 planned.append((_task_cost(raw_weapon), (weapon["path"], mode, pending, positive_counts)))
     tasks = [task for _cost, task in sorted(planned, key=lambda item: item[0])]
     pending_shards = sum(len(task[2]) for task in tasks)
-    if any(skipped.values()):
-        print(f"resuming: {sum(skipped.values())} shards already baked, {pending_shards} to go")
+    if any(skipped.values()) or any(reused.values()):
+        print(f"resuming: {sum(skipped.values())} current, {sum(reused.values())} reusable, {pending_shards} to go")
     if skipped_no_damage:
         print(f"skipping {skipped_no_damage} raw fire modes without damage data")
 
-    started = time.time()
     coordinator = None
 
     def report(status_of):
@@ -436,10 +428,14 @@ def main() -> int:
                            **({'gpuCoordinator': dict(coordinator.summary)} if coordinator is not None else {}),
                            cacheVersion=cache_version, inputs=input_fingerprint,
                            weapons=len(weapons), expectedShards=len(expected_shards[profile]),
-                           skippedCurrent=skipped[profile], completed=len(completed[profile]),
+                           skippedCurrent=skipped[profile], reusedIncremental=reused[profile],
+                           pendingShards=len(expected_shards[profile])-skipped[profile]-reused[profile],
+                           **(dict(reusableTargets=reused_targets[profile], pendingTargets=[(w, m) for w, m, jobs, _ in tasks
+                                  if any(p == profile for p, _path in jobs)]) if args.dry_run else {}),
+                           completed=len(completed[profile]),
                            excludedModes=excluded_modes, failures=failures[profile],
                            targetWork=completed[profile],
-                           elapsedSeconds=round(time.time() - started, 3))
+                           elapsedSeconds=round(time.perf_counter() - started, 3))
             path.parent.mkdir(parents=True, exist_ok=True)
             temp = path.with_suffix('.tmp')
             temp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
@@ -449,8 +445,11 @@ def main() -> int:
     if args.dry_run:
         for profile in profiles:
             print(f'{profile}: expected {len(expected_shards[profile])}, current {skipped[profile]}, '
-                  f'pending {len(expected_shards[profile]) - skipped[profile]}, excluded {excluded_modes}')
+                  f'reusable {reused[profile]}, pending {len(expected_shards[profile]) - skipped[profile] - reused[profile]}, excluded {excluded_modes}')
         return 0
+    if not any(expected_shards.values()):
+        print('nothing to bake (no matching weapons/modes); main cache unchanged')
+        return 1
     done = failed = 0
     channel = None
     if tasks and args.status_tables == 'cuda':
@@ -463,7 +462,7 @@ def main() -> int:
         max_workers=workers, mp_context=multiprocessing.get_context('spawn'),
         initializer=_init_worker, initargs=(args.status_tables, channel),
     ) as pool:
-        futures = {pool.submit(_shard_worker, task): task for task in tasks}
+        futures = {pool.submit(_shard_worker, task, proof_for(task[0])): task for task in tasks}
         for future in as_completed(futures):
             weapon_path, mode, pending, _counts = futures[future]
             try:
@@ -483,7 +482,7 @@ def main() -> int:
                     failures[outcome["profile"]].append({**outcome, 'fireMode': mode})
                     print(f"  FAIL {outcome['weapon']} [{outcome['profile']}]: {outcome['error']}")
                 if done % 25 == 0:
-                    elapsed = time.time() - started
+                    elapsed = time.perf_counter() - started
                     print(f"  {done}/{pending_shards} ({elapsed:.0f}s, {failed} failed)")
             report(lambda _profile: 'running')
 
@@ -502,33 +501,23 @@ def main() -> int:
         for key, value in app.ANALYSIS_STATICS_CACHE.items()
         if isinstance(value, dict)
     }
-    rejected_shards = 0
+    verified = {profile: 0 for profile in profiles}
     for profile in profiles:
-        for shard in sorted(expected_shards[profile]):
-            try:
-                payload = json.loads(shard.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError):
-                rejected_shards += 1
+        missing = []
+        for shard, owner in sorted(expected_shards[profile].items()):
+            payload = read_qualified(shard, profile, *owner)
+            if payload is None or payload.get('inputs') != input_fingerprint:
+                missing.append(str(shard))
                 continue
-            if (
-                not isinstance(payload, dict)
-                or payload.get("schemaVersion") != SHARD_SCHEMA_VERSION
-                or payload.get("cacheVersion") != cache_version
-                or payload.get("inputs") != input_fingerprint
-                or payload.get("inputs") == "__unreadable_inputs__"
-                or payload.get("profile") != profile
-            ):
-                rejected_shards += 1
-                continue
-            for key, value in (payload.get("entries") or {}).items():
-                if isinstance(value, dict):
-                    merged[key] = value
-        missing = [str(shard) for shard in expected_shards[profile] if not shard_is_current(shard, profile)]
+            verified[profile] += 1
+            if not args.shards_only:
+                merged.update(payload['entries'])
         if missing:
             failures[profile].append(dict(error='missing-current-shards', shards=sorted(missing)))
             failed = max(failed, len(missing))
     failed_profiles = {profile for profile in profiles if failures[profile]}
-    if app._analysis_inputs_fingerprint() != input_fingerprint:
+    changed = incremental.bake_inventory(app) != dependencies if dependencies else app._analysis_inputs_fingerprint() != input_fingerprint
+    if changed:
         for profile in profiles:
             failures[profile].append(dict(error='inputs-changed-during-bake'))
         report(lambda _profile: 'failed-inputs-changed')
@@ -537,26 +526,22 @@ def main() -> int:
     if args.shards_only:
         report(lambda profile: 'partial' if profile in failed_profiles else 'shards-complete')
         for profile in profiles:
-            current = sum(1 for shard in expected_shards[profile] if shard_is_current(shard, profile))
-            print(f'{profile}: verified {current}/{len(expected_shards[profile])} shards; main cache unchanged')
-        print(f"total {time.time() - started:.0f}s")
+            print(f'{profile}: verified {verified[profile]}/{len(expected_shards[profile])} shards; main cache unchanged')
+        print(f"total {time.perf_counter() - started:.0f}s")
         return int(bool(failed))
+    if failed:
+        report(lambda profile: 'partial' if profile in failed_profiles else 'shards-complete')
+        print('incomplete selection; main cache unchanged')
+        return 1
     app.ANALYSIS_STATICS_CACHE.clear()
     app.ANALYSIS_STATICS_CACHE.update(merged)
     app.ANALYSIS_STATICS_CACHE["__dirty__"] = True
     app._persist_analysis_statics_cache()
     print(f"merged {len(merged)} entries into main cache")
-    if rejected_shards:
-        print(f"rejected {rejected_shards} stale/unreadable shards")
-    print(f"total {time.time() - started:.0f}s, {failed} failed of {pending_shards}")
+    print(f"total {time.perf_counter() - started:.0f}s, {failed} failed of {pending_shards}")
     report(lambda profile: 'partial' if profile in failed_profiles else 'complete')
     # F14 边界：有失败时不得报 0——「条目非空、worker 没抛异常」不等于
     # 语义正确。失败数 > 0 时返回 1，让 CI/批处理能感知部分失败。
-    if failed:
-        return 1
-    if not tasks and not any(skipped.values()):
-        print("nothing to bake (no weapons/modes selected)")
-        return 1
     return 0
 
 

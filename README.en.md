@@ -65,6 +65,8 @@ The executable is written to `.local/artifacts/release/Warframe-Weapon-Loadout-B
 
 ## Development Checks
 
+Portable cache bakes resume by weapon automatically. Keep the shard directory between revisions and use `python tools/bake-analysis-statics.py --profile deep --dry-run --report .local/cache/deep-plan.json` to see which weapons can be reused and which must run. Changes to shared scoring rules still invalidate the full roster. See the [mechanics, cold and warm request timings, and incremental bake measurements](docs/PORTABLE-INCREMENTAL-AND-WARM-CPU-20261118.md).
+
 Run `python -m pytest -q` for regression tests and `python tools/check_runtime.py` to check the frozen dataset and actual import paths. The loadout, manual simulation and contribution APIs accept an explicit `windowSeconds` (0.1–600 seconds); the default stays 30 seconds. Compared scores must use the same battle window.
 
 The optional WFSim comparison tools require Node.js and PyYAML. They fetch public reference assets and replay builds locally, without submitting board entries or baking caches:

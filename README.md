@@ -113,15 +113,21 @@ THIRD_PARTY_NOTICES.md 第三方来源与授权说明
 
 ### 增量烘焙缓存
 
-`tools/incremental_bake.py` 为完整缓存建立按依赖校验的不可变归档。先在改动前 `save`，修改数据后 `restore`，最后仍运行正常烘焙补齐缺项并验证覆盖。Bot 使用 `--bot-bundle <组件目录>`，Portable 使用 `--shard-dir .local/cache` 将可复用结果恢复为烘焙分片。
+Portable 的常规烘焙自动检查逐武器分片。保留原来的 `--shard-dir` 即可续跑；先用下面的命令查看哪些分片仍是当前版本、哪些可从上版复用、哪些需要重算。`--dry-run` 不修改分片。首次使用新格式需要为选中的目标冷烘一次；主缓存或旧分片不能作为逐武器的依赖证明。
+
+```powershell
+python tools/bake-analysis-statics.py --profile deep --dry-run --report .local/cache/deep-plan.json
+```
+
+烘焙档位、火力模式和两正／三正结构都要匹配。单把武器的导出记录或已核实归属的连发、蓄力、每发装填数据变化，只重烘该武器；引擎、原生库、公共 MOD／敌人／赋能、模组部件、未知数据或烘焙策略变化时全部重烘。独立的靶场场景和页面入口不参与单体紫卡烘焙。`--force-recompute` 可对同一选择强制冷算验证。另可用 `tools/incremental_bake.py` 保存不可变归档、恢复到其他缓存目录：
 
 ```powershell
 python tools/incremental_bake.py save --store .local/cache/incremental-portable --shard-dir .local/cache
 python tools/incremental_bake.py restore --store .local/cache/incremental-portable --shard-dir .local/cache
 ```
 
-当前支持同一计算核心下的武器记录局部变化：只保留最终武器记录及公共依赖均未变的结果。引擎代码、原生库、MOD、赋能、敌人、组合部件或其他公共数据变化时，保守拒绝复用。归档校验 SHA-256、保留旧文件备份；它不会绕过正常缓存加载、目标覆盖和数值校验。Bot 复用后须运行自己的 `rebuild_cache.ps1` 并刷新完整性清单。GPU 加速与增量复用是独立机制。
+归档校验 SHA-256，恢复时保留旧主缓存备份。Bot 仍有独立的 `--bot-bundle` 归档及 `rebuild_cache.ps1` 验证、清单和发布流程。
 
 Portable 离线烘焙可用 `--status-tables cuda` 预计算病毒、腐蚀和磁力的状态概率表。默认关闭；RTX 5080 的完整分片对照尚未显示提速。[实测结果和复现命令](tools/gpu_bake/README.md)。
 
-默认 CPU/Rust 路径的性能对照见 [Portable 深度搜索与烘焙](docs/PORTABLE-CPU-DEEP-20261118.md)，包含 `deep`、`fast` 冷分片和已有分片时的实际紫卡解算。
+本轮的[机制校准、冷／热请求和增量烘焙实测](docs/PORTABLE-INCREMENTAL-AND-WARM-CPU-20261118.md)包括逐武器复用的正确性、实测耗时及复现命令。早期 `deep`／`fast` 对照见 [Portable 深度搜索与烘焙](docs/PORTABLE-CPU-DEEP-20261118.md)。

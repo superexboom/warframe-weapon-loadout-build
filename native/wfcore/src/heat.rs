@@ -108,7 +108,7 @@ struct Entry {
     weight: f64,
     stacks: f64,
     seeds: f64,
-    young: FMap,
+    young: Vec<(u64, f64)>,
     mature: f64,
     scale: f64,
 }
@@ -196,7 +196,7 @@ impl HeatChains {
         self.weight = 0.0;
         self.stacks = 0.0;
         self.seeds = 0.0;
-        self.young = FMap::default();
+        self.young.clear();
         self.mature = 0.0;
         self.dead.clear();
         self.boost.clear();
@@ -210,8 +210,8 @@ impl HeatChains {
         self.t = t;
         self.events.clear();
         self.sequence = 0;
-        self.young_index = FxIndexMap::default();
-        self.dead_levels = FMap::default();
+        self.young_index.clear();
+        self.dead_levels.clear();
         self.up = 0.0;
         self.down = 0.0;
         self.tail = 0.0;
@@ -514,10 +514,22 @@ impl HeatChains {
             self.schedule_boost(item);
         }
         let alive = self.weight * g;
-        let mut young: FMap = self.young.iter().map(|(k, v)| (*k, p * *v * g)).collect();
         let kt = fkey(t);
-        let prev = *young.get(&kt).unwrap_or(&0.0);
-        if !refresh_only { young.insert(kt, prev + p * pmax(0.0, 1.0 - alive)); }
+        let q = if a <= 0.0 { 1.0 } else { g * a };
+        let mut young = Vec::with_capacity(self.young.len() + usize::from(!refresh_only));
+        let extra = if refresh_only { None } else { Some(p * pmax(0.0, 1.0 - alive)) };
+        let mut have_current = false;
+        for (&key, &value) in &self.young {
+            let mut mass = p * value * g;
+            if key == kt {
+                if let Some(extra) = extra { mass += extra; }
+                have_current = true;
+            }
+            young.push((key, mass / q));
+        }
+        if !have_current {
+            if let Some(extra) = extra { young.push((kt, (0.0 + extra) / q)); }
+        }
         let v0 = if refresh_only { p * alive } else { p };
         let v1 = p * self.stacks * g + n;
         let v2 = p * self.seeds * g + seed;
@@ -531,19 +543,17 @@ impl HeatChains {
             for &item in self.dead.iter() {
                 self.dead_arena[item].cleared = true;
             }
-            self.young = FMap::default();
+            self.young.clear();
             self.dead.clear();
             self.g = 1.0;
             self.down = 0.0;
-            self.dead_levels = FMap::default();
+            self.dead_levels.clear();
         } else {
-            self.g = g * a;
+            self.g = q;
         }
-        let q = self.g;
         let weight = v0 / q;
         let stacks = v1 / q;
         let seeds = v2 / q;
-        let young: FMap = young.into_iter().map(|(k, v)| (k, v / q)).collect();
         let mature = v4 / q;
         self.serial += 1;
         self.weight += weight;
@@ -551,8 +561,7 @@ impl HeatChains {
         self.seeds += seeds;
         self.mature += mature;
         for (k, v) in young.iter() {
-            let prev = *self.young.get(k).unwrap_or(&0.0);
-            self.young.insert(*k, prev + *v);
+            *self.young.entry(*k).or_insert(0.0) += *v;
         }
         self.entries.push(Entry {
             end: t + duration,
@@ -595,7 +604,7 @@ impl HeatChains {
         self.stacks *= q;
         self.seeds *= q;
         self.mature *= q;
-        self.young = std::mem::take(&mut self.young).into_iter().map(|(k, v)| (k, v * q)).collect();
+        for v in self.young.values_mut() { *v *= q; }
         let dead: Vec<usize> = self.dead.iter().copied().collect();
         for item in dead {
             for v in self.dead_arena[item].levels.values_mut() {

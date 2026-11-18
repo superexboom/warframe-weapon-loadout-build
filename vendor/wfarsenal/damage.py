@@ -1502,6 +1502,46 @@ def with_innate(weapon: Mapping[str, Any], effects: ModEffectList, fire_mode: in
     return ModEffectList([*effects, *terms], skipped=effects.skipped)
 
 
+_MOTOVORE_PATH = '/Lotus/Weapons/Infested/InfestedLich/Melee/InfestedHammer/InfLichHammerWeapon'
+_MOTOVORE_SLASH_WHEEL = ModEffect('WEAPON_PROC_CHANCE', 'STACKING_MULTIPLY', 1.0,
+                                  source_path='innate:coda-motovore-slash-wheel')
+
+
+def motovore_wheel_effects(weapon, effects, fire_mode, scenario):
+    """M131: the ordinary Slash wheel joins the additive status bracket."""
+    if (weapon.get('path') != _MOTOVORE_PATH or scenario.heavy_attack or fire_mode != 0
+            or weapon.get('__selectedFireMode__', 0) != 0 or weapon.get('__innateResolved__')
+            or scenario.combat_state.get('meleeRoute', 'combo') != 'combo'):
+        return effects
+    mode = (weapon.get('fireModes') or [{}])[0]
+    types = (mode.get('damage') or {}).get('types') or {}
+    if not all(types.get(dtype, 0.0) > 0.0 for dtype in PHYSICAL_TYPES):
+        return effects
+    if any(dtype == 'DT_IMPACT' and value for dtype, value in _read_innate_elements(weapon)[0]):
+        return effects  # Impact progenitor's wheel selection is unmeasured.
+    effects = ModEffectList(effects, skipped=getattr(effects, 'skipped', ()))
+    totals = {dtype: types[dtype] for dtype in PHYSICAL_TYPES}
+    for effect in effects:
+        if (not effect.supported or effect.damage_type not in totals
+                or effect.upgrade_type not in ('WEAPON_PERCENT_BASE_DAMAGE_ADDED',
+                                               'WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE')):
+            continue
+        if effect.valid_type and effect.valid_type.rstrip('/') not in (*weapon.get('ancestry', ()), _MOTOVORE_PATH):
+            continue
+        if _qualifier_rejection(effect, weapon, scenario):
+            continue
+        # The exported ordinary card already supplies its Motovore-specific
+        # potency. Do not extrapolate ranks, negative Rivens or other phases.
+        if (effect.value < 0.0 or effect.operation != 'STACKING_MULTIPLY'
+                or effect.upgrade_type != 'WEAPON_PERCENT_BASE_DAMAGE_ADDED'
+                or (effect.source_path or '').startswith('riven:')):
+            return effects
+        totals[effect.damage_type] += types[effect.damage_type] * effect.value
+    if all(totals['DT_SLASH'] > totals[dtype] for dtype in ('DT_IMPACT', 'DT_PUNCTURE')):
+        effects.append(_MOTOVORE_SLASH_WHEEL)
+    return effects
+
+
 def apply_mods(
     weapon: Mapping[str, Any],
     effects: Iterable[ModEffect],
@@ -1692,6 +1732,7 @@ def _apply_mods_spec_py(
     effect_list = with_innate(weapon, ModEffectList(
         list(effects), skipped=getattr(effects, "skipped", ())
     ), fire_mode)
+    effect_list = motovore_wheel_effects(weapon, effect_list, fire_mode, scenario)
     heavy = weapon.get("heavyAttack")
     if scenario.heavy_attack and isinstance(heavy, Mapping):
         components = heavy.get("components")
@@ -3745,6 +3786,12 @@ def _status_weights(stats: ModdedStats) -> dict[str, float]:
     return quantize_damage_vector(stats.damage_types, base)
 
 
+def devourer_blocks_radiation(target) -> bool:
+    # M87 observes rejected Radiation status on this exact variant; the
+    # damage component and its contribution to the roll are still present.
+    return target.get('path') == '/Lotus/Types/Enemies/Grineer/Disruption/Avatars/DemoDevourerAvatar'
+
+
 def expected_status_procs(
     stats: ModdedStats,
     *,
@@ -3904,6 +3951,8 @@ def expected_dot_damage(
         target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES
     )
     procs = expected_status_procs(stats, forced_procs=forced_procs, hit_location=location)
+    if devourer_blocks_radiation(target):
+        procs.pop('DT_RADIATION', None)
     dot_base = (
         stats.dot_base_damage
         if stats.dot_base_damage is not None
@@ -4624,9 +4673,10 @@ def windowed_status_damage(
     # Refreshable Heat and part-landing Electricity/Gas share the event kernel
     # with manual replay. This preserves E[seed * latest landing], including
     # forced/independent proc sources, instead of multiplying two averages.
-    event_dots = {"DT_FIRE", "DT_ELECTRICITY", "DT_GAS"}
+    event_dots = {"DT_FIRE", "DT_ELECTRICITY", "DT_GAS", "DT_SENTIENT"}
     event_procs = expected_status_procs(stats, forced_procs=forced_procs)
-    if any(event_procs.get(d, 0.0) > 0.0 for d in event_dots) and isinstance(target, Mapping) and target.get('health'):
+    if (isinstance(target, Mapping) and target.get('health')
+            and (devourer_blocks_radiation(target) or any(event_procs.get(d, 0.0) > 0.0 for d in event_dots))):
         from .combat_replay import replay
         return replay(
             stats, target, attacks_per_second=attacks_per_second, window_seconds=window_seconds,

@@ -666,11 +666,14 @@ def _mod_card(
 
 
 def _candidate_mods(
-    exports: Mapping[str, Any], weapon: Mapping[str, Any], scenario: Scenario
+    exports: Mapping[str, Any], weapon: Mapping[str, Any], scenario: Scenario, *,
+    availability_only: bool = False,
 ) -> tuple[list[_Card], int]:
     cards: list[_Card] = []
     rejected = 0
-    shells = _set_shells(exports["mods"])
+    # A set shell contributes when evaluating a build. It never affects
+    # whether _mod_card admits the member into the catalog.
+    shells = {} if availability_only else _set_shells(exports["mods"])
     reach: Mapping[str, Any] | None = None
     from .runtime_adapters import double_tap_configuration
     for mod in exports["mods"]:
@@ -701,6 +704,8 @@ def _candidate_mods(
         )
         if card is None:
             rejected += 1
+        elif availability_only:
+            return [card], rejected
         else:
             cards.append(card)
     # Reach is a comfort reservation for ordinary melee builds. Hammers

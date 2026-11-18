@@ -20,43 +20,47 @@ $bundleArguments = @('tools/data_pipeline.py', 'bundle', $packageRoot)
 if ($Snapshot) { $bundleArguments += @('--snapshot', $Snapshot) }
 python @bundleArguments
 if ($LASTEXITCODE -ne 0) { throw "Frozen runtime validation failed." }
+# Native engine core (Rust, native/wfcore). Without a Rust toolchain the build
+# can reuse an existing core or package the Python reference.
+if (Get-Command cargo -ErrorAction SilentlyContinue) {
+    python tools/build_native.py
+    if ($LASTEXITCODE -ne 0) { throw "Native core build failed." }
+} else {
+    Write-Warning "cargo not found: staging the installed native core if available."
+}
 $cacheArguments = @('tools/stage_portable_cache.py', $packageRoot)
 if ($RequireBakedCache) { $cacheArguments += '--require-cache' }
 python @cacheArguments
 if ($LASTEXITCODE -ne 0) { throw "Runtime source identity or baked cache staging failed." }
 
-# Native engine core (Rust, native/wfcore). Without a Rust toolchain the build
-# still succeeds and the engine runs its Python reference, only slower.
 $nativeArguments = @()
-if (Get-Command cargo -ErrorAction SilentlyContinue) {
-    python tools/build_native.py
-    if ($LASTEXITCODE -ne 0) { throw "Native core build failed." }
-} else {
-    Write-Warning "cargo not found: packaging without the native engine core (Python reference only)."
-}
-$nativeCore = Join-Path $projectRoot "vendor\wfarsenal\wfcore.pyd"
+$nativeCore = Join-Path $packageRoot "wfarsenal\wfcore.pyd"
 if (Test-Path -LiteralPath $nativeCore) {
     $nativeArguments = @('--add-binary', "$nativeCore;wfarsenal", '--hidden-import', 'wfarsenal.wfcore')
 }
-python -m PyInstaller @nativeArguments `
+$moduleSourceArguments = foreach ($source in Get-ChildItem -LiteralPath (Join-Path $packageRoot 'wfarsenal') -Filter '*.py' -File) {
+    '--add-data'
+    "$($source.FullName);wfarsenal"
+}
+python -m PyInstaller @nativeArguments @moduleSourceArguments `
     --noconfirm `
     --clean `
+    --noupx `
     --onefile `
     --name $appName `
     --workpath (Join-Path $buildRoot "work") `
     --specpath (Join-Path $buildRoot "spec") `
     --distpath $distRoot `
-    --paths (Join-Path $projectRoot "vendor") `
+    --paths $packageRoot `
     --add-data "$(Join-Path $packageRoot 'frontend');frontend" `
     --add-data "$(Join-Path $packageRoot 'data');data" `
-    --add-data "$(Join-Path $packageRoot 'wfarsenal');wfarsenal" `
     --add-data "$(Join-Path $packageRoot 'app.py');." `
     --add-data "$(Join-Path $projectRoot 'README.md');." `
     --add-data "$(Join-Path $projectRoot 'README.en.md');." `
     --add-data "$(Join-Path $projectRoot 'LICENSE');." `
     --add-data "$(Join-Path $projectRoot 'THIRD_PARTY_NOTICES.md');." `
     --icon (Join-Path $projectRoot "frontend\assets\riven\riven-icon.ico") `
-    app.py
+    (Join-Path $packageRoot 'app.py')
 if ($LASTEXITCODE -ne 0) { throw "PyInstaller build failed." }
 
 New-Item -ItemType Directory -Path $releaseRoot -Force | Out-Null

@@ -3,7 +3,8 @@
 All score input files are still read and hashed. Only app.py and parallel.py
 may supply audited baseline bytes, and only if a complete AST comparison after
 specific arena-only reversals proves all remaining source identical. Unknown
-changes fall back to exact source bytes, invalidating old cache normally.
+changes keep their own identity. On newer app revisions only the bodies of
+the five isolated arena entry points can be omitted; every other byte stays.
 """
 
 from __future__ import annotations
@@ -36,6 +37,13 @@ def _same(node, expression):
     return _dump(node) == _dump(ast.parse(expression, mode="eval").body)
 
 
+def _arena_entry(node):
+    if not isinstance(node, ast.FunctionDef) or node.name not in ARENA_FUNCTIONS:
+        return False
+    expected = 'def f(): pass' if node.name == 'arena_catalog_payload' else 'def f(payload): pass'
+    return not node.decorator_list and node.returns is None and _dump(node.args) == _dump(ast.parse(expected).body[0].args)
+
+
 class _AppArenaOnly(ast.NodeTransformer):
     """Reverse only the reviewed arena patch, preserving all other HTTP code."""
 
@@ -44,22 +52,8 @@ class _AppArenaOnly(ast.NodeTransformer):
         self.handler = False
 
     def visit_FunctionDef(self, node):
-        if self.function is None and not self.handler and node.name in ARENA_FUNCTIONS:
-            signature = (
-                "def f(): pass"
-                if node.name == "arena_catalog_payload"
-                else "def f(payload): pass"
-            )
-            expected_args = ast.parse(signature).body[0].args
-            # Decorators/defaults/annotations execute while importing app and
-            # could mutate scoring globals. Only the reviewed inert signatures
-            # qualify, not arbitrary functions sharing an arena-looking name.
-            if (
-                not node.decorator_list
-                and node.returns is None
-                and _dump(node.args) == _dump(expected_args)
-            ):
-                return None
+        if self.function is None and not self.handler and _arena_entry(node):
+            return None
         before = self.function
         self.function = node.name
         node = self.generic_visit(node)
@@ -225,6 +219,29 @@ def _baseline(root: Path):
     }
 
 
+@lru_cache(maxsize=4)
+def _score_python(name, source, root):
+    baseline, projected = _baseline(root)[name]
+    try:
+        tree = ast.parse(source.decode('utf-8-sig'))
+        if name == 'app.py':
+            lines = source.splitlines(keepends=True)
+            # Keep the declaration as written; remove only complete standalone
+            # bodies. Defaults, decorators, module statements and HTTP routes
+            # still affect the cache as soon as they change.
+            for node in reversed(tree.body):
+                if _arena_entry(node) and node.body[0].lineno > node.lineno:
+                    lines[node.lineno:node.end_lineno] = [b'    pass\n']
+            current = b''.join(lines)
+            visitor = _AppArenaOnly()
+        else:
+            current = source
+            visitor = _ParallelArenaOnly()
+        return baseline if _dump(visitor.visit(tree)) == projected else current
+    except (SyntaxError, UnicodeError, ValueError):
+        return source
+
+
 def score_source_bytes(name: str, source: bytes, root: Path) -> bytes:
     """Return exact pre-arena bytes only after full retained-AST equality.
 
@@ -235,9 +252,4 @@ def score_source_bytes(name: str, source: bytes, root: Path) -> bytes:
     """
     if name not in ("app.py", "parallel.py"):
         return source
-    baseline, projected = _baseline(Path(root).resolve())[name]
-    try:
-        same = projected_source(name, source) == projected
-    except (SyntaxError, UnicodeError, ValueError):
-        same = False
-    return baseline if same else source
+    return _score_python(name, source, Path(root).resolve())

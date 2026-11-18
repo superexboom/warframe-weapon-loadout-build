@@ -11,18 +11,27 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+NATIVE_NAME = 'wfcore.pyd' if os.name == 'nt' else 'wfcore.so'
 
 
 def _metadata(destination: Path) -> dict:
     code = """import json,sys
 sys.path.insert(0,sys.argv[1]);sys.frozen=True;sys._MEIPASS=sys.argv[1]
 import app
+from pathlib import Path
+from wfarsenal import native_replay
+expected = Path(sys.argv[1]) / 'wfarsenal' / sys.argv[2]
+loaded = getattr(native_replay.wfcore, '__file__', None)
+if expected.is_file() and (not loaded or Path(loaded).resolve() != expected.resolve()):
+    raise RuntimeError('the staged native core could not be loaded: ' + str(expected))
 print(json.dumps(dict(inputs=app._analysis_inputs_fingerprint(),buildLabel=app.EXPORTS['buildLabel'],
                      stances=app._stances_fingerprint(),cacheVersion=app.ANALYSIS_STATICS_CACHE_VERSION)))
 """
     env = dict(os.environ, WF_RIVEN_ROOT=str(destination), WF_ANALYZER_SERIAL='1',
                WF_ANALYSIS_STATICS_CACHE_PATH=str(destination / '.probe-cache.json'))
-    result = subprocess.run([sys.executable, '-I', '-c', code, str(destination)], env=env,
+    for key in ('WF_NATIVE', 'WF_NATIVE_MODS', 'WF_NATIVE_STATUS', 'WF_NATIVE_SHADOW', 'WF_NATIVE_HEALTH_BATCH'):
+        env.pop(key, None)  # A distributed runtime normally starts with these unset.
+    result = subprocess.run([sys.executable, '-I', '-c', code, str(destination), NATIVE_NAME], env=env,
                             capture_output=True, text=True, encoding='utf-8', timeout=90)
     if result.returncode:
         raise RuntimeError('staged runtime identity failed:\n' + result.stderr[-6000:])
@@ -44,6 +53,12 @@ def stage(root: Path, destination: Path, *, require_cache: bool = False) -> dict
     module_dir.mkdir(parents=True, exist_ok=True)
     for source in (root / 'vendor/wfarsenal').glob('*.py'):
         shutil.copy2(source, module_dir / source.name)
+    native = root / 'vendor/wfarsenal' / NATIVE_NAME
+    staged_native = module_dir / NATIVE_NAME
+    if native.is_file():
+        shutil.copy2(native, staged_native)
+    elif staged_native.is_file():
+        staged_native.unlink()
     for name in ('app.py', 'data_sources.py', 'enemy_assets.py'):
         shutil.copy2(root / name, destination / name)
     metadata = _metadata(destination)

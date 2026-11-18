@@ -37,6 +37,92 @@ CASES = {
 }
 DEFAULT_CASES = list(CASES)
 
+
+def measure_cache_states(runtime, shards, weapon, mode):
+    """Run in a fresh child. Change only cache state; always time the same card."""
+    import statistics
+    sys.path.insert(0, str(runtime))
+    import app
+    row = next(w for w in app.CATALOG['weapons'] if weapon in (w['path'], w.get('nameEn')))
+    raw = app.optimizer.resolve_record(app.EXPORTS['weapons'], row['path'], kind='weapon')
+    bases = app.RIVEN_BASE_VALUES[app.optimizer._riven_type(None, raw)]
+    disposition = float(row['disposition'])
+    payload = dict(weapon=row['path'], disposition=disposition, profile='deep',
+                   stats=[dict(code=k, value=bases[k]*disposition, negative=False) for k in ('0','1')])
+    if app.ANALYSIS_STATICS_CACHE:
+        raise ValueError('benchmark requires an isolated, initially empty runtime cache')
+
+    class Reads(dict):
+        hits = 0
+        def get(self, key, default=None):
+            value = super().get(key, default)
+            if isinstance(value, dict) and value.get('counts'):
+                self.hits += 1
+            return value
+
+    statics = Reads()
+    if mode != 'cold':
+        import runpy
+        default_modes = runpy.run_path(str(runtime/'tools/bake-analysis-statics.py'))['_default_analysis_modes']
+        fire_mode, = default_modes(raw)
+        tag = hashlib.sha1(f"{row['path']}#{fire_mode}".encode()).hexdigest()[:12]
+        shard = json.loads((shards/'riven-statics-shards-deep'/f'{tag}.json').read_bytes())
+        if (shard['inputs'] != app._analysis_inputs_fingerprint() or shard['profile'] != 'deep'
+                or shard['cacheVersion'] != app.ANALYSIS_STATICS_CACHE_VERSION):
+            raise ValueError('deep shard does not match this runtime')
+        # The regular loader must accept the shard after it becomes a main
+        # cache. Keep disk I/O for startup separate from user request latency.
+        main_cache = dict(inputs=shard['inputs'], cacheVersion=shard['cacheVersion'], buildLabel=app.EXPORTS['buildLabel'],
+                          stances=app._stances_fingerprint(), entries=shard['entries'])
+        app.ANALYSIS_STATICS_CACHE_PATH.write_text(json.dumps(main_cache, ensure_ascii=False), encoding='utf-8')
+        statics.update(app._load_analysis_statics_cache())
+        app.ANALYSIS_STATICS_CACHE_MTIME_NS = app.ANALYSIS_STATICS_CACHE_PATH.stat().st_mtime_ns
+        if statics != shard['entries']:
+            raise ValueError('runtime rejected the baked main cache')
+    app.ANALYSIS_STATICS_CACHE = statics
+    if mode == 'other-card':
+        alternate = [dict(line, value=line['value']*.96) for line in payload['stats']]
+        app.analyze_payload(dict(payload, stats=alternate))
+    statics.hits = 0
+    started = time.perf_counter()
+    result = app.analyze_payload(payload)
+    elapsed = time.perf_counter() - started
+    work = result['searchWork']
+    if result['responseCache'] != 'miss' or not work['evaluations'] or work['limited'] or bool(statics.hits) != (mode != 'cold'):
+        raise ValueError(f'unexpected measured state {mode}: {result["responseCache"]}, {statics.hits} static hits, {work}')
+    def answer(value):
+        body = {k:value[k] for k in ('actual','baseline','recommendedPositive','fatalNegative','fatalNegativeAbove','incarnonChoices')}
+        return hashlib.sha256(json.dumps(_strip(body), sort_keys=True, ensure_ascii=False, default=str).encode()).hexdigest()
+    result_hash = answer(result)
+    exact_times = []
+    for _ in range(7):
+        started = time.perf_counter()
+        hit = app.analyze_payload(payload)
+        exact_times.append(time.perf_counter()-started)
+        if hit['responseCache'] != 'exact-request-hit' or answer(hit) != result_hash:
+            raise ValueError('identical request did not return the same cached answer')
+    return dict(seconds=elapsed, exactSeconds=statistics.median(exact_times), evaluations=work['evaluations'],
+                staticsHit=mode!='cold', digest=result_hash, actualScore=result['actual']['objectiveScore'])
+
+
+def cache_states(args):
+    runtime, shards = args.runtime_root.resolve(), args.shard_dir.resolve()
+    results = {}
+    for weapon in args.weapon:
+        rows = results[weapon] = {}
+        for mode in ('cold','statics','other-card'):
+            with tempfile.TemporaryDirectory() as tmp:
+                env = dict(os.environ, PYTHONUTF8='1', WF_ANALYZER_SERIAL='1', WF_ENGINE_WORKERS='1',
+                           RAYON_NUM_THREADS='1', WF_CONCURRENT_SEARCHES='1', WF_NATIVE_SHADOW='0',
+                           WF_ANALYSIS_STATICS_CACHE_PATH=str(Path(tmp)/'statics.json'))
+                command = [sys.executable, str(Path(__file__).resolve()), '_cache_case', str(runtime), str(shards), weapon, mode]
+                output = subprocess.check_output(command, env=env, cwd=runtime, encoding='utf-8')
+                rows[mode] = json.loads(output)
+                print(weapon, mode, rows[mode], flush=True)
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.write_text(json.dumps(results, indent=2), encoding='utf-8')
+    return 0
+
 CHILD = r'''
 import json, sys, time
 sys.path.insert(0, sys.argv[1])
@@ -148,16 +234,26 @@ def run_case(name: str, workers: int | None, keep: Path | None = None) -> dict:
 
 
 def main() -> int:
+    if len(sys.argv) == 6 and sys.argv[1] == '_cache_case':
+        print(json.dumps(measure_cache_states(Path(sys.argv[2]), Path(sys.argv[3]), *sys.argv[4:])))
+        return 0
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = parser.add_subparsers(dest="command", required=True)
     run = sub.add_parser("run")
     run.add_argument("out", type=Path)
     run.add_argument("--cases", default=",".join(DEFAULT_CASES))
     run.add_argument("--workers", type=int)
+    cache = sub.add_parser('cache-states', help='time real deep requests with empty, disk-static, warm process and exact caches')
+    cache.add_argument('out', type=Path)
+    cache.add_argument('--runtime-root', type=Path, default=ROOT)
+    cache.add_argument('--shard-dir', type=Path, required=True)
+    cache.add_argument('--weapon', action='append', required=True, help='exact catalog path or English name (repeatable)')
     cmp_ = sub.add_parser("compare")
     cmp_.add_argument("before", type=Path)
     cmp_.add_argument("after", type=Path)
     args = parser.parse_args()
+    if args.command == 'cache-states':
+        return cache_states(args)
     if args.command == "run":
         results = {}
         for name in [c for c in args.cases.split(",") if c]:

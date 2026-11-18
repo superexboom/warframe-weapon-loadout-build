@@ -226,6 +226,8 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("NATIVE_CRIT_FACTOR", 1)?;
     m.add("ELECTRIC_GAS_PROC_PILE", 2)?;
     m.add("MAGNETIC_BREAK_PACKET", 1)?;
+    m.add("DEVOURER_RADIATION_ACCEPTANCE", 1)?;
+    m.add("TAU_STATUS_VULNERABILITY", 1)?;
     m.add("SELECTIVE_KILL_PROBE", 1)?;
     m.add("ALT_EMBEDDED_LIFECYCLE", 3)?;
     m.add("MELEE_INITIAL_COMBO_RECOVERY", 1)?;

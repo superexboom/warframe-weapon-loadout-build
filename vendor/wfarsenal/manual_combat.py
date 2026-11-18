@@ -1049,6 +1049,7 @@ def prepare(
         child_groups = {}
         if extra.get('embedded'):
             components = [*components, dict(extra['embedded'], __embedded=True)]
+        radial_scenario = None
         for component in components:
             if component and component.get('currentSourceCoFraction'):
                 fractions=component['currentSourceCoFraction']
@@ -1098,9 +1099,11 @@ def prepare(
                     # its field, so it stays.
                     part_fx = ModEffectList(e for e in part_fx
                                             if not (e.upgrade_type == 'WEAPON_DAMAGE_AMOUNT' and e.operation == 'ADD_BASE'))
+                if radial_scenario is None:
+                    radial_scenario = scenario_with(scenario, incarnon_cycle=False, victim_status_count=count_ceiling)
                 part, part_spec = apply_mods_spec(
                     _part_record(wp, ('radial', idx, repr(component), repr(extra.get('compression'))), radial_part),
-                    part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
+                    part_fx, scenario=radial_scenario)
                 if component.get('__grimoirePart') is not None:
                     part=copy(part)
                     scale=float(component.get('damageMultiplier',1.))
@@ -1125,15 +1128,22 @@ def prepare(
                     scale = st.headshot_bonus_multiplier
                     part = replace(part,damage_types={k:v*scale for k,v in part.damage_types.items()},
                                    dot_base_damage=part.dot_base_damage*scale if part.dot_base_damage is not None else None)
-                part = replace(part, radial_only=True, radial_victim_crit=bool(component.get("takes_victim_crit")), weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
+                # apply_mods_spec returns owned stats; set contact flags before
+                # publishing or retaining any reference to this packet.
+                part.radial_only = True
+                part.radial_victim_crit = bool(component.get('takes_victim_crit'))
+                part.weakpoint_damage_bonus = 0.0
+                part.weakpoint_crit_chance_bonus = 0.0
+                part.weakpoint_crit_chance_relative = 0.0
+                part.headshot_bonus_multiplier = 1.0
                 if component.get('takes_multishot') is False:
-                    part = replace(part, multishot=1.0)
+                    part.multishot = 1.0
                 if component.get('parentMultishotPolicy'):
                     parents = (min(1., st.multishot) if component['parentMultishotPolicy'] == 'normal-parent'
                                else max(0., st.multishot - 1.))
-                    part = replace(part, multishot=parents)
+                    part.multishot = parents
                 if component.get('count'):
-                    part = replace(part, multishot=part.multishot * float(component['count']))
+                    part.multishot *= float(component['count'])
                 if component.get('__phantasmaChild'):
                     part._phantasma_child = True
                 part._co_spec = part_spec

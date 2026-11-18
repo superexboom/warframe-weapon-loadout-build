@@ -3,7 +3,7 @@ import pytest
 
 import app
 from wfarsenal import combat_replay, native_replay
-from wfarsenal.damage import ModEffectList, Scenario, _apply_mods_spec_py, apply_mods, with_innate
+from wfarsenal.damage import ModEffect, ModEffectList, Scenario, _apply_mods_spec_py, apply_mods, mod_effects, with_innate
 from wfarsenal.event_profiles import weapon_passives
 from wfarsenal.manual_combat import prepare
 
@@ -15,6 +15,40 @@ TARGET = dict(health=3000., shield=0., armour=0., overguard=0., baseLevel=1, hea
 
 def _weapon(name):
     return next(w for w in app.EXPORTS['weapons'] if w.get('nameEn') == name)
+
+
+def test_m131_motovore_status_bracket_and_collision_force():
+    weapon = _weapon('Coda Motovore')
+    scenario = Scenario(combat_state={'meleeRoute': 'combo'})
+    damage = weapon['fireModes'][0]['damage']
+    base = damage['procChance']
+    assert base == pytest.approx(.30)
+
+    def ranked(name):
+        mod = next(row for row in app.EXPORTS['mods'] if row['path'] == '/Lotus/Upgrades/Mods/Melee/' + name)
+        return mod_effects(mod, mod['maxRank'], scenario)
+
+    prowess = ranked('WeaponStunChanceMod')
+    collision = ranked('WeaponEventMeleeImpactDamageMod')
+    panel = apply_mods(weapon, prowess, scenario=scenario)
+    reference, _ = _apply_mods_spec_py(weapon, prowess, scenario=scenario)
+    assert panel.status_chance == reference.status_chance == base * (1. + (prowess[0].value + 1.))
+    assert panel.status_chance == pytest.approx(.87)
+    combat = prepare(dict(weapon=weapon, fire_mode=0, effects=prowess, scenario=scenario), [], [])
+    resolved, _ = combat['resolve']('selected', {})
+    assert resolved.status_chance == panel.status_chance
+    collision_panel = apply_mods(weapon, collision, scenario=scenario)
+    assert collision_panel.damage_types['DT_IMPACT'] / damage['types']['DT_IMPACT'] - 1. == pytest.approx(7.2)
+    assert collision_panel.damage_types['DT_SLASH'] == damage['types']['DT_SLASH']
+    assert collision_panel.status_chance == base
+
+    tied = {**weapon, 'fireModes': [{**weapon['fireModes'][0], 'damage': {**damage,
+            'types': {dtype: 80. for dtype in damage['types']}}}]}
+    negative = ModEffect('WEAPON_PERCENT_BASE_DAMAGE_ADDED', 'STACKING_MULTIPLY', -.1,
+                         damage_type='DT_IMPACT', source_path='riven:negative-impact')
+    for w, effects, sc in ((tied, prowess, scenario), (weapon, [*prowess, negative], scenario),
+                           (weapon, prowess, Scenario(combat_state={'meleeRoute': 'slamBullet'}))):
+        assert apply_mods(w, effects, scenario=sc).status_chance == pytest.approx(.57)
 
 
 def _replay(name, head, reference=False, window=10., timeline=False, decay=None):

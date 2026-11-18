@@ -20,6 +20,7 @@ def test_resolve_cache_is_not_pickled():
 
 
 def test_replay_key_follows_every_stat_and_context():
+    from wfarsenal.search_combat import _context_snapshot
     stats = _stats("Soma Prime")
     data = dict(engine=dict(weapon={"path": "/w"}, effects=[], scenario=None, fire_mode=0),
                 mods=[], arcanes=[], choices={})
@@ -28,6 +29,11 @@ def test_replay_key_follows_every_stat_and_context():
     assert _replay_key(replace(stats, crit_chance=stats.crit_chance + 0.01), data, '{"level": 170}') != key
     assert _replay_key(stats, data, '{"level": 100}') != key
     assert _replay_key(stats, dict(data, choices={"tier2": "b"}), '{"level": 170}') != key
+    context = {"target": {"hitProxies": [{"damageAtten": 2.0}]}, "level": 170}
+    key = _context_snapshot(context)
+    assert _context_snapshot(copy.deepcopy(context)) == key
+    context["target"]["hitProxies"][0]["damageAtten"] = 3.0
+    assert _context_snapshot(context) != key
 
 
 @pytest.fixture
@@ -100,6 +106,15 @@ def test_candidate_cache_separates_rolls_contexts_and_legality(candidate_cache, 
                 assert (found.score, found.capacity, found.riven_index, found.stats.damage_types) == (
                     reference.score, reference.capacity, reference.riven_index, reference.stats.damage_types)
     assert candidate_cache.STATS["hits"] == len(combinations)
+    # A shallow target snapshot used to miss this in-place proxy edit.
+    target = kwargs['target_context']['target']
+    target['hitProxies'] = [dict(part='HEAD', damageAtten=2.)]
+    aiming = dict(kwargs, target_context=dict(kwargs['target_context'], headshotChance=1.))
+    o._evaluate(weapon, (card,), riven, **aiming)
+    misses = candidate_cache.STATS['misses']
+    target['hitProxies'][0]['damageAtten'] = 5.
+    o._evaluate(weapon, (card,), riven, **aiming)
+    assert candidate_cache.STATS['misses'] == misses + 1
 
 
 def test_candidate_hit_still_honours_cancellation(candidate_cache):

@@ -46,6 +46,71 @@ def run(st=None, tg=None, **kw):
     return replay(st, tg or target(), **args)
 
 
+def test_arena_irradiate_weights_live_radiation_probability_and_neighbour_defenses(monkeypatch):
+    from wfarsenal import arena_combat as arena
+    arcane = next(a for a in app.EXPORTS['arcanes'] if a.get('nameEn') == 'Secondary Irradiate')
+    laetum = next(w for w in app.EXPORTS['weapons'] if w.get('nameEn') == 'Laetum')
+
+    def fixture(incarnon=False, p=1., carrier='natural', path=laetum['path']):
+        types = {'DT_RADIATION': 160., 'DT_IMPACT': 160.} if carrier == 'natural' else {'DT_RADIATION': 320.}
+        direct = stats(damage_types=types, dot_base_damage=320., status_chance=p if carrier == 'natural' else 0.,
+                       native_forced_procs={'DT_RADIATION': p} if carrier == 'forced' else {},
+                       independent_proc_chances={'DT_RADIATION': p} if carrier == 'independent' else {}, fire_rate=4.)
+        radial = replace(direct, radial_only=True)
+        monkeypatch.setattr(arena, 'prepare', lambda *_a, **_kw: dict(
+            resolve=lambda *_: (direct, radial), selectedIncarnon=incarnon))
+        engine = dict(weapon={**laetum, 'path': path}, fire_mode=int(incarnon))
+        combat = arena.ArenaCombat(engine, arcane_records=[(arcane, 5, None)])
+        combat.add_target('site', target(1e6), position=(21., 0., 0.))
+        combat.add_target('near', target(1e6))
+        combat.add_target('shield', {**target(1e6), 'shield': 2e5, 'factionDamageModifiers': {'DT_RADIATION': -.5}})
+        combat.add_target('lethal', target(50.))
+        combat.add_target('blocked', target()).protected = True
+        calls = []
+
+        def nearby(ident, radius, now):
+            calls.append((ident, radius, now))
+            return ['site', 'near', 'near', 'shield', 'lethal', 'blocked']
+
+        combat.nearby = nearby
+        return combat, calls
+
+    for incarnon, p, carrier, other, coeff in ((False, 1., 'natural', False, 1.8),
+                                                (True, .99, 'forced', False, 3.6),
+                                                (True, 1., 'independent', True, 1.8)):
+        combat, calls = fixture(incarnon, p, carrier, '/other-weapon' if other else laetum['path'])
+        origin, near, shield, lethal, blocked = combat.targets.values()
+        probability = (.5 if carrier == 'natural' else p) ** 10
+        pool = origin.irradiate_radiation
+        for i in range(10):
+            shot = combat.prepare_shot(i * .25)
+            combat.hit(shot, 'site')
+            combat.finish_shot(shot)
+            assert not calls
+            assert pool.distribution()[10] == pytest.approx(0. if i < 9 else probability)
+        shot = combat.prepare_shot(2.5)
+        if carrier == 'independent':
+            combat.hit(shot, 'site', component='radial', radial_scale=0.)
+        assert not calls
+        direct_damage = combat.hit(shot, 'site')['damage']
+        combat.finish_shot(shot)
+        assert calls == [('site', 7., 2.5)]
+        assert near.damage == pytest.approx(direct_damage * probability * coeff)
+        assert shield.health == shield.full[2]
+        assert shield.full[1] - shield.shield == pytest.approx(near.damage * (.75 if carrier == 'natural' else .5))
+        assert combat.kills == int(near.damage >= 50.) and lethal.alive == (near.damage < 50.)
+        assert blocked.damage == 0. and origin.damage == pytest.approx(11 * direct_damage)
+        echoes = [row for row in combat.drain_events() if row['kind'] == 'irradiate']
+        assert [row['target_id'] for row in echoes] == ['near', 'shield', 'lethal']
+        assert all(row['position'] == origin.position and row['probability'] == pytest.approx(probability)
+                   for row in echoes)
+        for when, expected_calls in ((9., 2), (15., 2)):
+            shot = combat.prepare_shot(when)
+            combat.hit(shot, 'site')
+            combat.finish_shot(shot)
+            assert len(calls) == expected_calls  # Default handler: 12 s, independently expiring.
+
+
 def guard_replay_progress(monkeypatch):
     queue=replay.__globals__['heapq']
     original=queue.heappop
@@ -59,6 +124,81 @@ def guard_replay_progress(monkeypatch):
         assert repeated<100, 'events repeated without advancing simulation time'
         return event
     monkeypatch.setitem(replay.__globals__,'heapq',SimpleNamespace(heappop=pop,heappush=queue.heappush))
+
+
+def test_devourer_radiation_acceptance_preserves_damage_and_impact(monkeypatch):
+    from wfarsenal import arena_combat
+    from wfarsenal.damage import expected_status_damage
+
+    path = '/Lotus/Types/Enemies/Grineer/Disruption/Avatars/DemoDevourerAvatar'
+    actual = next(e for e in app.EXPORTS['enemies'] if e['path'] == path)
+    # Explicitly copy the faction bracket so the only difference is reception.
+    from wfarsenal.damage import faction_bracket
+    actual = dict(actual, factionBracket=faction_bracket(actual))
+    control = dict(actual, path='/OtherDevourer')
+    st = stats(damage_types={'DT_RADIATION': 50., 'DT_IMPACT': 50.}, fire_rate=1.)
+    forced = {'DT_RADIATION': 1.}
+    combat = {'resolve': lambda *_: (st, None)}
+    expected = expected_status_damage(st, actual, forced_procs=forced)['expectedProcs']
+    assert expected == {'DT_IMPACT': .5}
+    observed = [run(st, tg, combat=dict(combat), forced_procs=forced,
+                    window_seconds=2., collect_timeline=False) for tg in (actual, control)]
+    assert observed[0]['directWindow'] == observed[1]['directWindow']
+    assert observed[0]['procCounts'] == {'DT_IMPACT': 1.}
+    assert observed[1]['procCounts']['DT_RADIATION'] == 3.
+
+    monkeypatch.setattr(arena_combat, 'prepare', lambda *a, **kw: dict(combat))
+    scene = arena_combat.ArenaCombat({}, common_options={'forced_procs': forced})
+    victim = scene.add_target('host', actual)
+    shot = scene.prepare_shot(0., False, 'host')
+    scene.hit(shot, 'host')
+    scene.finish_shot(shot)
+    assert victim.damage > 0.
+    assert 'DT_RADIATION' not in victim.presence and 'DT_IMPACT' in victim.presence
+    scene.combat['syndicate'] = dict(id='sequence', damageType='DT_RADIATION', affinityToFill=1.)
+    scene.syndicate_affinity = 1.
+    scene.syndicate_targets = lambda *_: ['host']
+    before = victim.damage
+    scene._syndicate_burst(1.)
+    assert victim.damage > before and 'DT_RADIATION' not in victim.presence
+
+
+def test_haalvu_tau_status_stacks_in_replay_and_arena(monkeypatch):
+    from wfarsenal import arena_combat
+    from wfarsenal.damage import Scenario
+    from wfarsenal.manual_combat import prepare
+
+    weapon = next(w for w in app.EXPORTS['weapons'] if w.get('nameEn') == 'Haalvu')
+    for mode in (0, 1):
+        st = apply_mods(weapon, [], fire_mode=mode)
+        engine = dict(weapon=weapon, scenario=Scenario(), effects=[], fire_mode=mode)
+        result = run(st, target(), combat=prepare(engine, [], []),
+                     window_seconds=9., collect_timeline=False)
+        assert set(st.damage_types) == {'DT_SENTIENT'}
+        initial = result['shots'] * st.status_chance
+        assert initial < result['procCounts']['DT_SENTIENT'] <= 2. * initial
+
+    st = stats(damage_types={'DT_IMPACT': 100.})
+    monkeypatch.setattr(arena_combat, 'prepare', lambda *a, **kw: dict(resolve=lambda *_: (st, None)))
+    scene = arena_combat.ArenaCombat({})
+    host = scene.add_target('host', target())
+    other = scene.add_target('other', target())
+    st = replace(st, status_chance=2.1, native_forced_procs={'DT_SENTIENT': 5.})
+    shot = scene.prepare_shot(0., False, 'host')
+    scene.hit(shot, 'host')
+    scene.finish_shot(shot)
+    assert scene._packet(host, st, False)[1]['DT_IMPACT'] == pytest.approx(3.15)
+    assert scene._packet(other, st, False)[1]['DT_IMPACT'] == pytest.approx(2.1)
+    shot = scene.prepare_shot(1., False, 'host')
+    scene.hit(shot, 'host')
+    scene.finish_shot(shot)
+    assert scene._packet(host, st, False)[1]['DT_IMPACT'] == pytest.approx(4.2)
+    scene.advance(8.5)
+    scene._clean(host, 8.5)
+    assert scene._packet(host, st, False)[1]['DT_IMPACT'] == pytest.approx(3.15)
+    scene.advance(9.5)
+    scene._clean(host, 9.5)
+    assert scene._packet(host, st, False)[1]['DT_IMPACT'] == pytest.approx(2.1)
 
 
 def test_negative_duration_refresh_still_ticks_and_stacks():

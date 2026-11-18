@@ -108,6 +108,9 @@ def score(stats, target: Mapping[str, Any], target_kwargs: Mapping[str, Any], *,
     """``sustained_status_damage(...)["totalDps" if total else "directDps"]``."""
     if not isinstance(target, Mapping):
         raise Unsupported("no target")
+    from .damage import devourer_blocks_radiation
+    if devourer_blocks_radiation(target):
+        raise Unsupported('target-specific status acceptance uses the Python panel')
     if getattr(wfcore, 'ELECTRIC_GAS_PROC_PILE', 0) < 2:
         raise Unsupported('core predates electric/gas seed and landing contract')
     if getattr(stats,'ignore_headshot_bonus',False) and not getattr(wfcore,'IGNORE_HEADSHOT_BONUS',0):

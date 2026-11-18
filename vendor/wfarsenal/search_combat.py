@@ -1,13 +1,13 @@
 """Shared loadout event scoring for optimizer candidates and final checks."""
 from __future__ import annotations
 import hashlib
-import json
 import math
 import pickle
 from collections import OrderedDict
 from collections.abc import Mapping
 from dataclasses import replace
 from functools import lru_cache
+from operator import itemgetter
 
 
 class ResolveCache(dict):
@@ -37,6 +37,7 @@ def bind(stats, weapon, cards, effects, scenario, passives):
 _REPLAYS = OrderedDict()
 _REPLAYS_MAX = 4096
 _UNHASHED = {"_combat_inputs", "_combat_scores", "_resolve_cache"}
+_field_getter = lru_cache(maxsize=16)(itemgetter)
 
 
 # Content digests of weapon and MOD records, by record_keys.record_key:
@@ -61,13 +62,19 @@ def _record_digest(record):
 def _loadout_digest(stats, data):
     """Digest the loadout once for a batch of independently keyed target contexts."""
     fields = stats.__dataclass_fields__
-    extras = sorted((k, v) for k, v in vars(stats).items() if k not in fields and k not in _UNHASHED)
+    values = vars(stats)
+    extras = sorted((k, v) for k, v in values.items() if k not in fields and k not in _UNHASHED)
     engine = data["engine"]
     engine_key = (_record_digest(engine["weapon"]), engine["effects"], engine["scenario"], engine["fire_mode"])
     mods = [(_record_digest(record), rank, extra) for record, rank, extra in data["mods"]]
     tail = (engine_key, mods, data["arcanes"], data["choices"])
     try:
-        blob = pickle.dumps((type(stats), tuple(getattr(stats, name) for name in fields), extras, *tail), protocol=5)
+        try:
+            declared = (_field_getter(*fields)(values) if len(fields) > 1
+                        else tuple(getattr(stats, name) for name in fields))
+        except KeyError:  # Older or custom stats may leave class defaults out of __dict__.
+            declared = tuple(getattr(stats, name) for name in fields)
+        blob = pickle.dumps((type(stats), declared, extras, *tail), protocol=5)
     except (TypeError, pickle.PicklingError):
         # Extension attributes may only expose their value through repr.
         blob = pickle.dumps((repr(stats), [(k, repr(v)) for k, v in extras], *tail), protocol=5)
@@ -76,8 +83,14 @@ def _loadout_digest(stats, data):
 
 @lru_cache(maxsize=128)
 def _context_digest(context_key):
-    # Thousands of loadouts use the same few JSON targets. Keep them out of the shared replay keys.
-    return hashlib.blake2b(context_key.encode('utf-8', 'surrogatepass'), digest_size=20).digest()
+    if isinstance(context_key, str):
+        context_key = context_key.encode('utf-8', 'surrogatepass')
+    return hashlib.blake2b(context_key, digest_size=20).digest()
+
+
+def _context_snapshot(context):
+    # Compare the current values, including nested types and iteration order.
+    return pickle.dumps(context, protocol=5)
 
 
 def _replay_key(stats, data, context_key):
@@ -85,19 +98,28 @@ def _replay_key(stats, data, context_key):
 
 
 def window(stats, context, *, score_only=False):
+    from . import native_replay
     from .manual_combat import prepare
     from .combat_replay import replay
+    from .search_session import check_cancelled
+    check_cancelled()
     data = stats._combat_inputs
-    key = json.dumps(context, sort_keys=True, ensure_ascii=False, default=str)
+    try:
+        context_key = None if native_replay.SHADOW else _context_snapshot(context)
+    except (TypeError, AttributeError, pickle.PicklingError):
+        context_key = None
     cache = stats._combat_scores
-    if score_only and (key, False) in cache:
-        return cache[key, False]
-    context_key = key
-    key = (key, score_only)
-    if key in cache:
-        return cache[key]
-    shared = (score_only, _replay_key(stats, data, context_key))
-    result = _REPLAYS.get(shared)
+    shared = None
+    result = None
+    if context_key is not None:
+        loadout, context_key = _replay_key(stats, data, context_key)
+        key = (loadout, context_key, score_only)
+        if score_only and (loadout, context_key, False) in cache:
+            return cache[loadout, context_key, False]
+        if key in cache:
+            return cache[key]
+        shared = (score_only, (loadout, context_key))
+        result = _REPLAYS.get(shared)
     if result is not None:
         # Concurrent searches of one request share this cache (loadout_search).
         try:
@@ -136,8 +158,9 @@ def window(stats, context, *, score_only=False):
     for reason in result.get("unsupported") or []:
         if reason not in stats.unsupported:
             stats.unsupported.append(reason)
-    cache[key] = result
-    _REPLAYS[shared] = result
+    if shared is not None:
+        cache[key] = result
+        _REPLAYS[shared] = result
     while len(_REPLAYS) > _REPLAYS_MAX:
         try:
             _REPLAYS.popitem(last=False)
@@ -176,21 +199,26 @@ def windows(stats, contexts):
                   and base['enemy_enhancements'].keys() == other['enemy_enhancements'].keys()
                   and all(other['enemy_enhancements'][k] is v for k, v in base['enemy_enhancements'].items()))
         if not copied:
-            if base_signature is None:
-                base_signature = json.dumps(base, sort_keys=True, ensure_ascii=False, default=str)
-            if json.dumps(other, sort_keys=True, ensure_ascii=False, default=str) != base_signature:
+            try:
+                if base_signature is None:
+                    base_signature = _context_snapshot(base)
+                matches = _context_snapshot(other) == base_signature
+            except (TypeError, AttributeError, pickle.PicklingError):
+                return None
+            if not matches:
                 return None
     cache = stats._combat_scores
     rows, pending = [None] * len(contexts), []
-    loadout = None
+    loadout = _loadout_digest(stats, data)
     for i, context in enumerate(contexts):
-        key = json.dumps(context, sort_keys=True, ensure_ascii=False, default=str)
-        value = cache.get((key, False)) or cache.get((key, True))
+        try:
+            key = _context_digest(_context_snapshot(context))
+        except (TypeError, AttributeError, pickle.PicklingError):
+            return None
+        value = cache.get((loadout, key, False)) or cache.get((loadout, key, True))
         shared = None
         if value is None:
-            if loadout is None:
-                loadout = _loadout_digest(stats, data)
-            shared = (True, (loadout, _context_digest(key)))
+            shared = (True, (loadout, key))
             value = _REPLAYS.get(shared)
         if value is not None:
             rows[i] = value
@@ -228,7 +256,7 @@ def windows(stats, contexts):
             return None
         for (i, key, shared, _), result in zip(pending, results):
             rows[i] = result
-            cache[key, True] = result
+            cache[loadout, key, True] = result
             _REPLAYS[shared] = result
         while len(_REPLAYS) > _REPLAYS_MAX:
             try:

@@ -265,7 +265,7 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
 
 def apply(weapon, effects, fire_mode, scenario, *, need_spec=True):
     """(ModdedStats, CoSpec) like the reference, or Unsupported."""
-    from .damage import CoSpec, ModdedStats, ModEffectList, innate_terms_for, with_innate
+    from .damage import CoSpec, ModdedStats, ModEffectList, innate_terms_for, motovore_wheel_effects, with_innate
 
     if innate_terms_for(weapon, fire_mode):
         effects = with_innate(weapon, ModEffectList(list(effects), skipped=getattr(effects, "skipped", ())), fire_mode)
@@ -277,8 +277,9 @@ def apply(weapon, effects, fire_mode, scenario, *, need_spec=True):
     if SHADOW and not isinstance(effects, list):
         from .damage import ModEffectList
         effects = ModEffectList(list(effects), skipped=skipped)
+    native_effects = motovore_wheel_effects(weapon, effects, fire_mode, scenario)
     prep = prep_for(weapon, fire_mode, scenario)
-    fields, spec_parts = wfcore.apply_mods(prep.core, effects, skipped, scenario.victim_status_count, need_spec)
+    fields, spec_parts = wfcore.apply_mods(prep.core, native_effects, skipped, scenario.victim_status_count, need_spec)
     fields["innate_element_candidates"] = prep.candidates
     source_mode=weapon['fireModes'][fire_mode]
     if source_mode.get('nativeAmmoFree'):fields['ammo_cost']=0.

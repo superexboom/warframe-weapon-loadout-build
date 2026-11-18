@@ -14,7 +14,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 # Bake workers are whole processes running serial analyses; beyond the
 # logical threads they only contend.
-MAX_BAKE_WORKERS=os.cpu_count() or 8
+MAX_BAKE_WORKERS=min(10, os.cpu_count() or 8)
 
 
 def limited_workers(value) -> int:

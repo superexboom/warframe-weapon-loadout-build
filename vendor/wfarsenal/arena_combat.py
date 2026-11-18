@@ -22,6 +22,8 @@ from .proc_probability import (
     HeatChains,
     ProcPile,
     StatusPresence,
+    _arrival_kernel,
+    _fold,
     no_status_probability,
     proc_pile_outcomes,
 )
@@ -41,8 +43,106 @@ DURATIONS = {
     "DT_MAGNETIC": 6.0,
     "DT_FREEZE": 6.0,
     "DT_PUNCTURE": 10.0,
+    "DT_SENTIENT": 8.0,
+    "DT_RADIATION": 12.0,  # BaseRadiationDamageProc, ordinary target handler
 }
 CAPS = {"DT_VIRAL": 10, "DT_CORROSIVE": 10, "DT_MAGNETIC": 10, "DT_PUNCTURE": 5}
+_IRRADIATE = '/Lotus/Upgrades/CosmeticEnhancers/Offensive/RadialDamageOnMaxRadiationStackHit'
+_LAETUM = '/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol'
+_RADIATION = 'DT_RADIATION'
+_RAD_CAP = 10
+
+
+class _RadiationPool(CappedPool):
+    """Arena-only count distribution for nondecreasing expiry cohorts."""
+
+    def __init__(self):
+        super().__init__(_RAD_CAP)
+        self.latest_expiry = -math.inf
+
+    def add_kernel(self, end, kernel):
+        inverted = bool(self) and end < self.latest_expiry
+        if inverted:
+            # CappedPool cannot tell which older worlds a shorter proc evicted.
+            self.reset()
+        self.latest_expiry = end
+        if kernel and any(n and p for n, p in kernel):
+            self.back.append((end, kernel))
+            self.back_dist = _fold(self.back_dist, kernel, self.cap)
+            self._dist = self._stats = None
+            self.version += 1
+        return inverted
+
+
+def _radiation_kernel(stats, forced):
+    def convolve(left, right):
+        dist = [0.] * (_RAD_CAP + 1)
+        for n, p in left:
+            dist[n] = p
+        return tuple((n, p) for n, p in enumerate(_fold(dist, right, _RAD_CAP)) if p)
+
+    unit = ((0, 1.),)
+
+    def rolls(chance, weight):
+        return convolve(repeat(bernoulli(weight), int(chance)), bernoulli(chance % 1 * weight))
+
+    def bernoulli(p):
+        return ((0, 1. - p), (1, p)) if 0. < p < 1. else (((1, 1.),) if p else unit)
+
+    def repeat(kernel, n):
+        out = unit
+        while n:
+            if n & 1:
+                out = convolve(out, kernel)
+            n >>= 1
+            if n:
+                kernel = convolve(kernel, kernel)
+        return out
+
+    def counter(count):
+        count = max(0., count)
+        return convolve(((min(_RAD_CAP, int(count)), 1.),), bernoulli(count % 1.))
+
+    weights = dm._status_weights(stats)
+    total = sum(v for v in weights.values() if v > 0.)
+    share = max(0., weights.get(_RADIATION, 0.)) / total if total else 0.
+    chance = max(0., stats.status_chance)
+    separate = convolve(counter(stats.native_forced_procs.get(_RADIATION, 0.)),
+                        bernoulli(min(1., max(0., stats.independent_proc_chances.get(_RADIATION, 0.)))))
+    pellets = max(0., stats.multishot)
+    whole = int(pellets)
+    fraction = pellets - whole
+    if stats.continuous:
+        merged = lambda n: convolve(rolls(chance * n, share), separate) if n else unit
+        low, high = merged(whole), merged(whole + 1) if fraction else unit
+    else:
+        pellet = convolve(rolls(chance, share), separate)
+        low = repeat(pellet, whole)
+        high = convolve(low, pellet) if fraction else unit
+    if fraction:
+        mix = [0.] * (_RAD_CAP + 1)
+        for row, p in ((low, 1. - fraction), (high, fraction)):
+            for n, mass in row:
+                mix[n] += p * mass
+        low = tuple((n, p) for n, p in enumerate(mix) if p)
+    return convolve(low, counter(forced))
+
+
+def _irradiate_configuration(records):
+    for arcane, rank, options in records:
+        if arcane.get('path') != _IRRADIATE or type(rank) is not int or not 0 <= rank <= 5:
+            continue
+        trigger = arcane.get('trigger') or {}
+        script = (arcane.get('runtimeScripts') or {}).get('apply') or {}
+        if (trigger.get('conditions') == ['OnMaxRadiationHitCondition']
+                and (options or {}).get('uptime', 1.) == 1.
+                and script.get('Script') == 'RadialDamageOnMaxRadiationStackHit.lua'
+                and script.get('Function') == 'ApplyUpgrade'
+                and all(script.get(k) == v for k, v in (
+                    ('_cooldownBase', 0), ('_cooldownPerLevel', 0), ('_damageToSpreadBase', .80000001),
+                    ('_damageToSpreadPerLevel', .2), ('_radiusToSpreadBase', 4.5), ('_radiusToSpreadPerLevel', .5)))):
+            return (.8 + .2 * rank, 4.5 + .5 * rank)
+    return None
 
 
 class UnsupportedArenaCombat(ValueError):
@@ -66,6 +166,7 @@ class ArenaTarget:
         default_factory=lambda: {k: CappedPool(v) for k, v in CAPS.items()}
     )
     presence: dict = field(default_factory=dict)
+    irradiate_radiation: _RadiationPool | None = None
     heat: HeatChains = field(default_factory=HeatChains)
     piles: dict = field(
         default_factory=lambda: {"DT_ELECTRICITY": ProcPile(radial=True), "DT_GAS": ProcPile(10, radial=True)}
@@ -166,6 +267,8 @@ class ArenaCombat:
     ):
         self.engine = engine_context
         self.options = dict(common_options or {})
+        arcane_records = tuple(arcane_records)
+        self.irradiate = _irradiate_configuration(arcane_records)
         self.combat = prepare(
             engine_context,
             mod_records,
@@ -279,6 +382,8 @@ class ArenaCombat:
         self._encumber_time = -math.inf
         self._encumber_remaining = 1.0
         self.diagnostics = list(dict.fromkeys(self.combat.get("unsupported") or ()))
+        if self.irradiate:
+            self.diagnostics.append('arena-irradiate-expected-damage-no-recipient-status-or-native-notification-merging')
         self.unsupported = []
         for k in (
             "melee",
@@ -414,6 +519,8 @@ class ArenaCombat:
             id, dict(enemy_record), level, tuple(position), defenses, full.copy(), full
         )
         self.targets[id] = v
+        if self.irradiate:
+            v.irradiate_radiation = _RadiationPool()
         return v
 
     def drain_events(self):
@@ -583,11 +690,18 @@ class ArenaCombat:
         for rows in v.states.values():
             while rows and rows[0][0] < t - EPS:
                 rows.popleft()
+        if v.irradiate_radiation:
+            v.irradiate_radiation.expire(math.nextafter(t + EPS, math.inf))
         if 0 <= v.frozen_until <= t + EPS:
             end = v.frozen_until + 6 * v.frozen_scale
             v.states["DT_FREEZE"] = deque([(end, 3.0)])
             v.presence.setdefault("DT_FREEZE", StatusPresence()).add(end, 0.0)
             v.frozen_until = -1.0
+
+    def _irradiate_radiation(self, v, expiry, kernel):
+        if (v.irradiate_radiation is not None and not dm.devourer_blocks_radiation(v.record)
+                and v.irradiate_radiation.add_kernel(expiry, kernel)):
+            self._diagnose_once('arena-irradiate-mixed-expiry-existing-probability-not-retained')
 
     def advance(self, t):
         t = float(t)
@@ -1479,6 +1593,9 @@ class ArenaCombat:
         self._clean(v, t)
         st = self._component(shot, component)
         primary_contact = st is shot.stats
+        radiation = v.irradiate_radiation
+        echo = (min(1., radiation.distribution()[_RAD_CAP]) if radiation and primary_contact
+                and not st.radial_only and not shot.external_part else 0.)
         shot.victim_gate = {dtype: p.probability(t) for dtype, p in v.presence.items()}
         self._victim_gate = shot.victim_gate
         self._contact_factor(shot, st, update=True)
@@ -1615,9 +1732,35 @@ class ArenaCombat:
                 ("on-noncrit-no-proc", count * (1.0 - critical)
                  * (1.0 if v.status_immune else no_proc))
             )
-        return dict(
-            damage=self.total_damage - before, killed=not v.alive, protected=False
-        )
+        primary_damage = self.total_damage - before
+        if echo and v.alive and primary_damage > 0.0 and count > 0.0:
+            self._irradiate_echo(v, shot, distance, scale, t, echo)
+        return dict(damage=primary_damage, killed=not v.alive, protected=False)
+
+    def _irradiate_echo(self, origin, shot, distance, scale, t, probability):
+        if self.nearby is None:
+            return
+        coeff, radius = self.irradiate
+        weapon = self.engine.get('weapon') or {}
+        incarnon = shot.form == 'incarnon' or (shot.form != 'base' and self.combat.get('selectedIncarnon'))
+        if weapon.get('path') == _LAETUM and incarnon:
+            coeff *= 2.  # M59: recipient scale, not a second notification.
+        recipients = dict.fromkeys(x.id if isinstance(x, ArenaTarget) else x
+                                   for x in self.nearby(origin.id, radius, t))
+        for ident in recipients:
+            v = self.targets.get(ident)
+            if v is None or v is origin or not v.alive or v.protected:
+                continue
+            self._clean(v, t)
+            st, _ = self._victim_stats(shot, v, shot.stats, False, distance)
+            packet = self._mixed_packet(v, st, False, shot.enervate_weights)
+            vector = {dtype: n * coeff * scale * shot.beam_scale * probability for dtype, n in packet[0].items()}
+            before = v.damage
+            self._take(v, vector, t, 'arcane', stats=st, mode=shot.form, extra=True)
+            if v.damage > before:
+                self._events.append(dict(kind='irradiate', source_id=origin.id, target_id=v.id,
+                                         time=t, probability=probability, damage=v.damage-before,
+                                         position=origin.position))
 
     def fire_shot(self, shot, t=None):
         """Launch once; many launched shots may coexist in the world."""
@@ -2093,6 +2236,7 @@ class ArenaCombat:
         # Victim defenses are applied at landing, independently of cached seeds.
         if v.status_immune:
             return self._direct_vector(v, st, head), {}, {}, {}
+        st = self._tau_view(v, st)
         key = (
             repr(st),
             head,
@@ -2158,6 +2302,11 @@ class ArenaCombat:
             self._packet_cache.clear()
         self._packet_cache[key] = result
         return result
+
+    def _tau_view(self, v, st):
+        pool = v.pooled.get('DT_SENTIENT')
+        count = pool.stats()[1] if pool is not None else 0.
+        return replace(st, status_chance=st.status_chance * (1. + .1 * count)) if count and st.status_chance > 0. else st
 
     def _take(self, v, vector, t, source, head=0.0, stats=None, mode=None, extra=False):
         if not v.alive or v.protected:
@@ -2437,7 +2586,8 @@ class ArenaCombat:
             died = self._take(
                 v, {dtype: float(config.get("damage", 1000.0))}, t, "syndicate"
             )
-            if died or v.protected or v.status_immune or spec["id"] == "justice":
+            if (died or v.protected or v.status_immune or spec["id"] == "justice"
+                    or dtype == _RADIATION and dm.devourer_blocks_radiation(v.record)):
                 continue
             duration = (
                 8.0
@@ -2448,6 +2598,8 @@ class ArenaCombat:
                 v.pooled[dtype].add(t + duration, 0.0, 1.0)
             else:
                 v.states.setdefault(dtype, deque()).append((t + duration, 1.0))
+            if dtype == _RADIATION:
+                self._irradiate_radiation(v, t + duration, ((1, 1.),))
             v.presence.setdefault(dtype, StatusPresence()).add(t + duration, 0.0)
             if dtype in ("DT_GAS", "DT_POISON"):
                 for j in range(6) if dtype == "DT_GAS" else range(1, 7):
@@ -2637,10 +2789,12 @@ class ArenaCombat:
         proc_items = (
             sorted(procs.items()) if self.combat.get("empowered") else procs.items()
         )
+        status_view = self._tau_view(v, st)
         for dtype, count in proc_items:
             count *= rate
             duration_scale = dm.proc_duration_scale(st, dtype)
-            if count <= 0 or dtype == "DT_FREEZE" and v.frozen_until > t:
+            if (count <= 0 or dtype == "DT_FREEZE" and v.frozen_until > t
+                    or dtype == "DT_RADIATION" and dm.devourer_blocks_radiation(v.record)):
                 continue
             self._defer_signal("proc-" + dtype, t, count)
             self._defer_signal("on-proc", t, count)
@@ -2659,9 +2813,21 @@ class ArenaCombat:
                 if self._empowered_hit(v, st, dtype, count, t, natural, mode):
                     return
                 continue
+            if self.irradiate and dtype == _RADIATION:
+                if natural and rate == 1.:
+                    forced = (self.options.get('forced_procs') or {}).get(dtype, 0.)
+                    kernel = _radiation_kernel(status_view, forced)
+                    if dtype in st.crit_proc_chances or dtype in st.impact_proc_conversions:
+                        self._diagnose_once('arena-irradiate-crit-and-converted-radiation-excluded')
+                elif not natural and rate == 1. and count <= 1.:
+                    kernel = _arrival_kernel(1. - count, count, _RAD_CAP)
+                else:
+                    kernel = None
+                    self._diagnose_once('arena-irradiate-unbound-radiation-count-distribution')
+                self._irradiate_radiation(v, t + duration, kernel)
             absent = (
                 no_status_probability(
-                    st, dtype, self.options.get("forced_procs"), float(head)
+                    status_view, dtype, self.options.get("forced_procs"), float(head)
                 )
                 ** rate
             )
@@ -2697,6 +2863,10 @@ class ArenaCombat:
                 v.heat_acc = row["accumulatorPerSecondPerAttack"] * scale
                 v.heat_stats = st
                 v.heat_mode = mode
+            elif dtype == 'DT_SENTIENT':
+                if dtype not in v.pooled:
+                    v.pooled[dtype] = CappedPool(10.)
+                v.pooled[dtype].add(t + duration, absent, count)
             elif dtype in v.pooled:
                 v.pooled[dtype].add(t + duration, absent, count)
             elif dtype in v.piles and row:

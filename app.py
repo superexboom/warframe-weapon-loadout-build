@@ -676,6 +676,7 @@ def _stances_fingerprint() -> str:
 
 def _analysis_inputs_fingerprint() -> str:
     from wfarsenal.cache_identity import score_source_bytes
+    from wfarsenal import mods_native, native_replay, status_native
 
     digest = hashlib.sha1()
     digest.update(
@@ -731,7 +732,14 @@ def _analysis_inputs_fingerprint() -> str:
         # by the static optimizer candidate set yet, so changing its notes
         # must not invalidate an otherwise identical baked static cache.
         STANCE_DATA_PATH,
+        UTILITY_MOD_DATA_PATH,
+        EXALTED_WEAPON_DATA_PATH,
+        WARFRAME_DATA_PATH,
         Path(optimizer.__file__),
+        Path(optimizer.__file__).with_name('cache_identity.py'),
+        Path(optimizer.__file__).with_name('record_keys.py'),
+        Path(optimizer.__file__).with_name('incarnon_conditions.py'),
+        Path(optimizer.__file__).with_name('exalted.py'),
         Path(optimizer.__file__).with_name("damage.py"),
         Path(optimizer.__file__).with_name("simulator.py"),
         Path(optimizer.__file__).with_name("catalog_releases.py"),
@@ -788,6 +796,21 @@ def _analysis_inputs_fingerprint() -> str:
             raise SimulationError(
                 f"analysis input dependency unreadable: {path}"
             ) from None
+    # Hash the extension that the scoring adapters have loaded, never a
+    # guessed checkout path or a precomputed package manifest.
+    adapters = (native_replay, mods_native, status_native)
+    enabled = tuple(bool(adapter.ENABLED) for adapter in adapters)
+    digest.update(b'\0score-native-runtime\0' + bytes(enabled))
+    if enabled[0]:
+        digest.update(bytes((bool(native_replay.HEALTH_BATCH),)))
+    for adapter, active in zip(adapters, enabled):
+        if active:
+            path = Path(adapter.wfcore.__file__)
+            try:
+                digest.update(hashlib.sha256(path.read_bytes()).digest())
+            except OSError:
+                raise SimulationError(f"analysis native core unreadable: {path}") from None
+            break  # All three adapters import the same wfarsenal.wfcore module.
     return digest.hexdigest()[:16]
 
 
@@ -808,11 +831,12 @@ def _read_analysis_statics_cache(path: Path, inputs_fingerprint: str) -> dict[st
     return dict(entries) if isinstance(entries, dict) else {}
 
 
-def _load_analysis_statics_cache() -> dict[str, Any]:
-    try:
-        inputs_fingerprint = _analysis_inputs_fingerprint()
-    except SimulationError:
-        return {}
+def _load_analysis_statics_cache(inputs_fingerprint: str | None = None) -> dict[str, Any]:
+    if inputs_fingerprint is None:
+        try:
+            inputs_fingerprint = _analysis_inputs_fingerprint()
+        except SimulationError:
+            return {}
     entries = (_read_analysis_statics_cache(BUNDLED_ANALYSIS_STATICS_CACHE_PATH, inputs_fingerprint)
                if getattr(sys, "frozen", False) else {})
     # A valid local update wins; an old or partial local cache cannot hide
@@ -825,7 +849,7 @@ try:
     ANALYSIS_STATICS_RUNTIME_INPUTS = _analysis_inputs_fingerprint()
 except SimulationError:
     ANALYSIS_STATICS_RUNTIME_INPUTS = None
-ANALYSIS_STATICS_CACHE: dict[str, Any] = _load_analysis_statics_cache()
+ANALYSIS_STATICS_CACHE: dict[str, Any] = _load_analysis_statics_cache(ANALYSIS_STATICS_RUNTIME_INPUTS) if ANALYSIS_STATICS_RUNTIME_INPUTS else {}
 try:
     ANALYSIS_STATICS_CACHE_MTIME_NS = ANALYSIS_STATICS_CACHE_PATH.stat().st_mtime_ns
 except OSError:
@@ -841,7 +865,12 @@ def _refresh_analysis_statics_cache_if_newer() -> None:
         return
     if mtime <= ANALYSIS_STATICS_CACHE_MTIME_NS:
         return
-    loaded = _load_analysis_statics_cache()
+    try:
+        if _analysis_inputs_fingerprint() != ANALYSIS_STATICS_RUNTIME_INPUTS:
+            return  # The loaded engine cannot use a new on-disk runtime's entries.
+    except SimulationError:
+        return
+    loaded = _load_analysis_statics_cache(ANALYSIS_STATICS_RUNTIME_INPUTS)
     ANALYSIS_STATICS_CACHE_MTIME_NS = mtime
     if loaded:
         ANALYSIS_STATICS_CACHE.clear()
@@ -874,7 +903,7 @@ def _persist_analysis_statics_cache() -> None:
         # A running preview may still hold code from before a workspace update.
         # It cannot label those in-memory results with the new on-disk engine.
         return
-    disk_entries = _load_analysis_statics_cache()
+    disk_entries = _load_analysis_statics_cache(inputs_fingerprint)
     disk_entries.update({key:value for key,value in ANALYSIS_STATICS_CACHE.items()
                          if isinstance(value,dict)})
     ANALYSIS_STATICS_CACHE.update(disk_entries)
@@ -1686,6 +1715,7 @@ def _weapon_build_issue(weapon: Mapping[str, Any], weapon_type: str) -> str | No
             optimizer._scenario(
                 "attackDps" if weapon_type in {"melee", "zaw"} else "sustainedDps"
             ),
+            availability_only=True,
         )
     except (SimulationError, TypeError, ValueError) as exc:
         return str(exc)

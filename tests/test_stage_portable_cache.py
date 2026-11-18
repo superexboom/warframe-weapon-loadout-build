@@ -35,6 +35,18 @@ def test_staging_carries_matching_cache_and_only_source_identity_files(tmp_path,
     assert sorted(p.name for p in (destination / 'wfarsenal').iterdir()) == ['__init__.py', 'damage.py', 'optimizer.py']
 
 
+def test_staging_reads_the_binary_it_will_package_and_clears_a_stale_copy(tmp_path, monkeypatch):
+    root, destination, _cache = fixture(tmp_path, monkeypatch)
+    source = root / 'vendor/wfarsenal' / staging.NATIVE_NAME
+    source.write_bytes(b'native core')
+    staged = destination / 'wfarsenal' / staging.NATIVE_NAME
+    monkeypatch.setattr(staging, '_metadata', lambda _: {'inputs': staged.read_bytes().hex()})
+    assert staging.stage(root, destination)['inputs'] == b'native core'.hex()
+    source.unlink()
+    monkeypatch.setattr(staging, '_metadata', lambda _: {'inputs': 'reference' if not staged.exists() else 'stale'})
+    assert staging.stage(root, destination)['inputs'] == 'reference'
+
+
 def test_staging_never_keeps_a_stale_seed_when_identity_changes(tmp_path, monkeypatch):
     root, destination, cache = fixture(tmp_path, monkeypatch)
     staging.stage(root, destination, require_cache=True)

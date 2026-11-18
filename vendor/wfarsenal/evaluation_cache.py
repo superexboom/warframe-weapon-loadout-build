@@ -7,7 +7,7 @@ import os
 import pickle
 from threading import RLock
 
-from .search_combat import _record_digest
+from .search_combat import _context_digest, _context_snapshot, _record_digest
 from .record_keys import record_key, pin
 
 ENABLED = os.environ.get("WF_EVALUATION_CACHE", "1") != "0"
@@ -50,9 +50,7 @@ def key(weapon, cards, riven, *, scenario, metric, passives, slot_limit,
     if not ENABLED:
         return None
     try:
-        context = None if target_context is None else tuple(
-            (k, _record_digest(v) if k == "target" and isinstance(v, dict) else v)
-            for k, v in target_context.items())
+        context = None if target_context is None else _context_digest(_context_snapshot(target_context))
         wire = (_record_digest(weapon), tuple(map(_card, cards)), _card(riven), scenario,
                 metric, _card(passives), slot_limit, capacity_limit, tuple(map(_card, special_cards)),
                 special_capacity_cost, context, fixed_riven_index, reorder_elements)

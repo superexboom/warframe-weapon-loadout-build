@@ -326,10 +326,12 @@ def _reference_trajectory(
         # low-health gate then reads that share).
         full[2] *= 1.0 - execute
     pools = full.copy()
+    from .damage import devourer_blocks_radiation
     from .magnetic_break import electricity_immune, retained_source, target_proxy, f32
     magnetic_proxy = target_proxy(target) if full[0] or full[1] else None
     magnetic_weakness = combat.get('magneticWeaknessBonus')
     magnetic_electric_immune = electricity_immune(target)
+    blocks_radiation = devourer_blocks_radiation(target)
     ehp = sum(full)
     armour_base = float(defenses.get("armour") or 0.0)
     cache = dict(
@@ -365,6 +367,8 @@ def _reference_trajectory(
         "DT_MAGNETIC": 6.0,
         "DT_FREEZE": 6.0,
         "DT_PUNCTURE": 10.0,
+        "DT_SENTIENT": 8.0,
+        "DT_RADIATION": 12.0,
     }
     caps = {
         "DT_VIRAL": 10.0,
@@ -373,6 +377,7 @@ def _reference_trajectory(
         "DT_FREEZE": 10.0,
         "DT_PUNCTURE": 5.0,
         "DT_GAS": 10.0,
+        "DT_SENTIENT": 10.0,
     }
     states = {}
     blast_procs = deque()
@@ -1136,8 +1141,20 @@ def _reference_trajectory(
 
     bare_def = {**defenses, "armour": 0.0, "overguard": 0.0, "shield": 0.0}
     probes = {}
+    tau_views = {}
+
+    def tau_view(st):
+        pool = pooled.get('DT_SENTIENT')
+        count = pool.stats()[1] if pool is not None else 0.
+        if not count or st.status_chance <= 0.:
+            return st
+        key = id(st), count
+        if key not in tau_views:
+            tau_views[key] = st, replace(st, status_chance=st.status_chance * (1. + .1 * count))
+        return tau_views[key][1]
 
     def attack_data(st, aim):
+        st = tau_view(st)
         key = (id(st), aim)
         if key in probes:
             return probes[key][1]
@@ -1394,12 +1411,14 @@ def _reference_trajectory(
                 add_procs(st,aim,t,({},dict.fromkeys(STATUS_POOL,weight/len(STATUS_POOL)),extra_rows,extra_non),False)
         if gen != generation:
             return  # A derived status hit killed the original target.
+        status_view = tau_view(st)
         # Stable ordering for grouped expected instances, independent of hash seed.
         proc_items = sorted(procs.items()) if empowered else procs.items()
         for dtype, n in proc_items:
             scale = proc_duration_scale(st, dtype)
             n *= max(status_rate_multiplier, 0.0)
-            if n <= 0.0 or dtype == 'DT_FREEZE' and frozen_until > t:
+            if (n <= 0.0 or dtype == 'DT_FREEZE' and frozen_until > t
+                    or blocks_radiation and dtype == 'DT_RADIATION'):
                 continue
             proc_counts[dtype]=proc_counts.get(dtype,0.0)+n
             signal("proc-" + dtype, t, n)
@@ -1416,7 +1435,7 @@ def _reference_trajectory(
                 if empowered_hit(st, dtype, n, t, allow_encumber):
                     return
                 continue
-            absence=no_status_probability(st,dtype,forced_procs,aim)**max(status_rate_multiplier,0.)
+            absence=no_status_probability(status_view,dtype,forced_procs,aim)**max(status_rate_multiplier,0.)
             # Explicit derived event packets can supply procs independently
             # of this weapon's natural distribution.
             if absence>=1. and n>0.:absence=1.-min(n,1.)
@@ -1440,6 +1459,10 @@ def _reference_trajectory(
                         own=mode==form
                         chain.add(t,absence,n if own else 0.,n*row["seedPerSecondPerProc"] if own else 0.,duration,scale,refresh_only=not own)
                     heat_source_acc[form]=row["accumulatorPerSecondPerAttack"]
+            elif dtype == 'DT_SENTIENT':
+                if dtype not in pooled:
+                    pooled[dtype] = CappedPool(caps[dtype])
+                pooled[dtype].add(t + duration, absence, n)
             elif dtype in pooled:
                 pooled[dtype].add(t + duration, absence, n)
             elif dtype in proc_piles and row:
@@ -1777,7 +1800,7 @@ def _reference_trajectory(
                     "damage": totals["syndicate"] - before,
                 }
             )
-            if not died and syndrome["id"] != "justice":
+            if not died and syndrome["id"] != "justice" and not (blocks_radiation and syndrome['damageType'] == 'DT_RADIATION'):
                 dtype = syndrome["damageType"]
                 duration = (
                     8.0

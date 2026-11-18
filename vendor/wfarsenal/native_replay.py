@@ -405,7 +405,8 @@ _TARGET_SETUPS: dict = {}
 
 def _target_setup(target, level, armour_strip, steel_path, enemy_enhancements):
     from .damage import (enemy_defenses, _hit_location_info, _faction_damage_deltas, _damage_type_set,
-                         faction_bracket, DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES, DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES)
+                         devourer_blocks_radiation, faction_bracket, DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES,
+                         DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES)
     try:
         options = None if enemy_enhancements is None else tuple(sorted(enemy_enhancements.items()))
         from .record_keys import record_key
@@ -439,6 +440,7 @@ def _target_setup(target, level, armour_strip, steel_path, enemy_enhancements):
         faction_bracket=faction_bracket(target),
         magnetic_proxy=target_proxy(target) if full[0] or full[1] else None,
         magnetic_electric_immune=electricity_immune(target),
+        blocks_radiation=devourer_blocks_radiation(target),
     )
     locations = {}
     for location in ("body", "head"):
@@ -529,7 +531,12 @@ def trajectory(
     defenses, full, ehp, armour_base, cache, locations, bare_def, tables = _target_setup(
         target, level, armour_strip, steel_path, enemy_enhancements)
     magnetic_packet = getattr(wfcore, 'MAGNETIC_BREAK_PACKET', 0)
-    if not magnetic_packet and (full[0] or full[1]):
+    tau_runtime = getattr(wfcore, 'TAU_STATUS_VULNERABILITY', 0)
+    has_tau = ('DT_SENTIENT' in stats.damage_types or 'DT_SENTIENT' in (forced_procs or {})
+               or 'DT_SENTIENT' in stats.native_forced_procs or 'DT_SENTIENT' in stats.independent_proc_chances)
+    if ((not magnetic_packet and (full[0] or full[1]))
+            or (has_tau and not tau_runtime)
+            or (cache['blocks_radiation'] and not getattr(wfcore, 'DEVOURER_RADIATION_ACCEPTANCE', 0))):
         STATS['fallback'] += 1
         return None
     execute = float((combat or {}).get('executeBelow') or 0.0)
@@ -609,6 +616,7 @@ def trajectory(
         armourBypass=list(cache['armour_bypass']), shieldBypass=list(cache['shield_bypass']),
         magneticProxy=cache['magnetic_proxy'], magneticWeaknessBonus=combat.get('magneticWeaknessBonus'),
         magneticElectricImmune=cache['magnetic_electric_immune'],
+        blocksRadiation=cache['blocks_radiation'],
         extraHits=[(dtype, float(share)) for dtype, share, _forced in extra_hits], extraScale=float(extra_scale),
         weaponSlot=str(combat.get("weaponSlot") or ""), distance=combat.get("distance"),
         punchthrough=float(state.get('punchthroughTargets', 0) or 0),
