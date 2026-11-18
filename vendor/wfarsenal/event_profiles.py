@@ -329,17 +329,16 @@ SPOOL_PROFILES = {
         'spool':{'initial':1,'maximum':12,'ammoDivisor':3,'rateStart':.2,'rateShots':8,'spindown':2.}},
 }
 
-# Fire-rate spin-up only (no multishot spool): pinned WFSim 5809c383+ release
-# dc8413a8fab9, attack.sustained_fire_rate, wiki-transcribed there. Each shot
-# fires at start + (end - start) * min(shots / overShots, 1) of the live rate;
-# the count restarts after any pause (fight/after.rs). Kuva Kohm keeps its
-# raw-path SPOOL_PROFILES entry.
+# Fire-rate spin-up only (no multishot spool). Entries without nativeMaxShots
+# retain WFSim's wiki curves. Coda Bubonico's primary mode alone has the
+# 2026.10.28 client fixture for AutomaticZeroDurationRefire (WFSim 27f4b19fa3).
 FIRE_RATE_SPOOL_PROFILES = {
     '/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannon': {
         'directTotal': 41.0, 'referenceId': 'coda_bubonico',
         'referenceSource': 'data/weapons/primary/coda_bubonico.yaml',
-        'referenceSha256': '6270b1893dfa04558162ee1cc56495c090c3e54a0fa4bf8caffba765776e182e',
-        'fireRateSpool': {'start': 0.3, 'end': 1.0, 'overShots': 6.0}},
+        'referenceSha256': '51c8f67bd6678953d5636c186686c4c9ac769c13b844b0a4209da3296066c47e',
+        'fireRateSpool': {'start': 0.30000001, 'end': 1.0, 'nativeMaxShots': 12,
+                          'sourceRpm': 320.0, 'sourceRate': 5.333333}},
     '/Lotus/Weapons/Tenno/Rifle/HeavyRifle': {
         'directTotal': 25.0, 'referenceId': 'gorgon',
         'referenceSource': 'data/weapons/primary/gorgon.yaml',

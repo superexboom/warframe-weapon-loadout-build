@@ -10,6 +10,7 @@ from wfarsenal.combat_replay import replay
 from tests.test_combat_replay import target
 
 PRISMA_GORGON = '/Lotus/Weapons/Grineer/LongGuns/VoidTraderGorgon/VTGorgon'
+CODA_BUBONICO = '/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannon'
 EVIDENCE = Path(__file__).resolve().parent / 'fixtures/hunter_munitions_cases_20261005.json'
 
 
@@ -17,11 +18,12 @@ def weapon(path):
     return next(w for w in app.EXPORTS['weapons'] if w['path'] == path)
 
 
-def run(path, window):
+def run(path, window, *, collect_timeline=True):
     w = weapon(path)
     st = apply_mods(w, [])
     combat = prepare(dict(weapon=w, fire_mode=0, effects=[], scenario=Scenario()), [], [])
-    return st, replay(st, target(), attacks_per_second=st.fire_rate, window_seconds=window, combat=combat)
+    return st, replay(st, target(), attacks_per_second=st.fire_rate, window_seconds=window,
+                      combat=combat, collect_timeline=collect_timeline)
 
 
 def test_profiles_bind_to_matching_base_attack_only():
@@ -47,6 +49,22 @@ def test_spin_up_costs_the_ramp_time_per_magazine():
     first = [row['time'] for row in result['spoolTrace']][:int(st.magazine)]
     ramp = sum(1 / (st.fire_rate * (.2 + .8 * n / 6)) for n in range(6))
     assert first[-1] == pytest.approx(ramp + (int(st.magazine) - 7) / st.fire_rate)
+
+
+def test_coda_bubonico_uses_refire_timer_after_two_fire_updates():
+    assert 'fireRateSpool' not in base_profile(weapon(CODA_BUBONICO), 1)
+    assert [p for p, x in FIRE_RATE_SPOOL_PROFILES.items() if x['fireRateSpool'].get('nativeMaxShots')] == [CODA_BUBONICO]
+    _, result = run(CODA_BUBONICO, 3.)
+    trace = result['spoolTrace']
+    # WFSim's client fixture continuous-rate-2026-10-28.json, successive_fire_entries.
+    entries = [1.6000001430511475, 2.222222328186035, 2.844444751739502,
+               3.4666666984558105, 4.088889122009277, 4.711111068725586, 5.333333492279053]
+    waits = [0.44999998807907104, 0.3515624701976776, 0.2884615361690521,
+             0.2445652037858963, 0.21226415038108826, 0.1875, 0.1875]
+    assert [row['fireRate'] for row in trace[:7]] == entries
+    assert [row['refireRate'] for row in trace[:7]] == entries[1:] + [entries[-1]]
+    assert [b['time'] - a['time'] for a, b in zip(trace[:7], trace[1:8])] == pytest.approx(waits, abs=1e-12)
+    assert run(CODA_BUBONICO, .451, collect_timeline=False)[1]['shots'] == 2
 
 
 def test_benchmark_baselines_match_recorded_wfsim_reference():

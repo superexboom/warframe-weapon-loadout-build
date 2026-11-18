@@ -363,8 +363,9 @@ def prepare(
     companion_sequence = projectile_sequence(weapon, mode_index)
     from .projectile_lanes import profile as physical_lane_profile, lane_mode as physical_lane_mode
     from .event_profiles import base_profile
-    physical_lanes = physical_lane_profile(base_profile(weapon, mode_index))
-    periodic=base_profile(weapon,mode_index).get('periodicTriggers') or []
+    selected_attack = base_profile(weapon, mode_index)
+    physical_lanes = physical_lane_profile(selected_attack)
+    periodic = selected_attack.get('periodicTriggers') or []
     if any(field.get('expiresWithSourceOwner') for field in periodic):
         notes.append('source-owned-field-same-frame-enter-update-and-replacement-order-approximated')
     if any(field.get('defaultEnabled') and field.get('refreshPolicy')=='independent-finite-fields-no-source-replacement' for field in periodic):
@@ -661,13 +662,12 @@ def prepare(
         dynamic.append((native_trigger['id'], [ModEffect(e['upgradeType'], e['operation'], e['value'], damage_type=e.get('damageType'), source_path=native_trigger['source']) for e in native_trigger['effects']]))
     profile = ref["incarnon"].get(weapon.get("path"))
     modes = weapon["fireModes"]
-    from .event_profiles import base_profile, native_burst, reloads_after_every_shot
+    from .event_profiles import native_burst, reloads_after_every_shot
     base_attack = base_profile({**weapon, 'isIncarnonForm': False, '__selectedFireMode__': 0}, 0)
     if modes[0].get('trigger')=='/Lotus/Language/Menu/Loadout_TriggerSemiAutoFireOnUp':
         # Press/release pairs keep the native per-shot timer. No assumed
         # release speed or extra shots are granted by treating them as a pair.
         base_attack={**base_attack,'burst':{'count':2,'delay_seconds':1./float(modes[0]['fireRate'])}}
-    selected_attack = base_profile(weapon, mode_index)
     from .projectile_events import quanta_strategy, quanta_strategy_cycle, grimoire_strategy
     paid_cube = quanta_strategy(weapon, mode_index, scenario.combat_state)
     chain_orb = grimoire_strategy(weapon, mode_index, scenario.combat_state)
@@ -755,7 +755,8 @@ def prepare(
     }
 
     form_weapons = {}
-    # The event profile of each form record (read only below).
+    original_profiles = {mode_index: selected_attack}
+    # Scenario-adjusted profiles preserve their existing per-mode scope.
     form_profiles = {}
 
     def live_co_callback(unit, wp, source_form):
@@ -853,8 +854,8 @@ def prepare(
                           if companion_sequence else None)
         volley_rounds = float(stacks.get('__chargeVolleyRounds', 1.))
         form_key = (form != "base", idx, sequence_index, volley_rounds,physical_index)
-        wp = form_weapons.get(form_key)
-        if wp is None:
+        prepared_form = form_weapons.get(form_key)
+        if prepared_form is None:
             wp = {
                 **weapon,
                 "isIncarnonForm": form != "base" and weapon.get("isIncarnonForm", False),
@@ -886,24 +887,28 @@ def prepare(
                 # the heavy-attack record (x6 on a hammer, the whole throw on
                 # a glaive).
                 wp.pop('heavyAttack', None)
-            form_weapons[form_key] = wp
+            prepared_form = wp, base_profile(wp, idx)
+            form_weapons[form_key] = prepared_form
+        wp, raw_form_profile = prepared_form
         if wp.get('isIncarnonForm'):
             for terms in form_dynamic:
                 fx.extend(terms)
-        if (last_round and last_round_multishot and form != 'incarnon' and not wp.get('isIncarnonForm')
-                and not base_profile(weapon, idx).get('chargeVolley')):
-            fx.append(ModEffect('WEAPON_FIRE_ITERATIONS', 'ADD', last_round_multishot,
-                                source_path='incarnon:last-round-multishot'))
+        if last_round and last_round_multishot and form != 'incarnon' and not wp.get('isIncarnonForm'):
+            if idx not in original_profiles:
+                original_profiles[idx] = base_profile(weapon, idx)
+            if not original_profiles[idx].get('chargeVolley'):
+                fx.append(ModEffect('WEAPON_FIRE_ITERATIONS', 'ADD', last_round_multishot,
+                                    source_path='incarnon:last-round-multishot'))
         form_scenario = scenario_with(
             scenario, incarnon_cycle=False, victim_status_count=count_ceiling,
             heavy_attack=bool(stacks.get('__heavy')) or scenario.heavy_attack,
         )
         battery_parameter_fx = []
-        if base_profile(wp, idx).get('fullClipCharge'):
+        if raw_form_profile.get('fullClipCharge'):
             scoped = {'WEAPON_BATTERY_REGEN_RATE', 'WEAPON_RELOAD_EMPTY_BATTERY'}
             battery_parameter_fx = [e for e in fx if e.upgrade_type in scoped]
             fx = ModEffectList([e for e in fx if e.upgrade_type not in scoped], skipped=fx.skipped)
-        direct_shiver=bool(base_profile(wp,idx).get('directTakesVictimStackDamage'))
+        direct_shiver=bool(raw_form_profile.get('directTakesVictimStackDamage'))
         direct_shiver_fixed=None
         if direct_shiver:
             direct_shiver_fixed=max((float(e.runtime_chance or 0.) for e in fx
@@ -963,10 +968,10 @@ def prepare(
             radial._co_spec = radial_spec
         extra = form_profiles.get((form != "base", idx))
         if physical_index is not None:
-            extra={**base_profile(wp,idx),'radials':[physical_lanes['lanes'][physical_index]['radial']]}
+            extra={**raw_form_profile,'radials':[physical_lanes['lanes'][physical_index]['radial']]}
         if extra is None:
             from .event_profiles import perfect_release
-            extra, _ = perfect_release(base_profile(wp, idx), modes[idx], scenario.combat_state)
+            extra, _ = perfect_release(raw_form_profile, modes[idx], scenario.combat_state)
             form_profiles[(form != "base", idx)] = extra
         stackable = extra.get('stackable')
         if stackable:
@@ -1654,9 +1659,12 @@ def prepare(
         return resolve_cache[key]
 
     entry = cached if resolve_cache is not None else resolve
-    from .delayed_radial_events import profile_admitted, components as event_components
+    from .delayed_radial_events import admitted as event_admitted, components as event_components
+    parts = [part for attack in (base_attack, selected_attack) for part in event_components(attack)]
+    from .magnetic_break import weapon_weakness
     return dict(
         resolve=entry,
+        magneticWeaknessBonus=weapon_weakness(weapon.get('path')),
         projectileSequence=companion_sequence,
         sourceOwnedFields=any(field.get('defaultEnabled') and field.get('expiresWithSourceOwner') for field in periodic),
         finiteFields=any(field.get('defaultEnabled') and field.get('refreshPolicy')=='independent-finite-fields-no-source-replacement' for field in periodic),
@@ -1671,10 +1679,9 @@ def prepare(
         chargeVolley=any(attack.get('chargeVolley') for attack in (base_attack, selected_attack)),
         chargeBeforeFire=bool(selected_attack.get('fullClipCharge') or (selected_attack.get('charge') or {}).get('beforeFire')),
         nativeFireGate=bool(selected_attack.get('nativeFireCooldownSeconds')),
-        delayedRadialEvents=bool(paid_cube or zymos_policy or chain_orb or selected_attack.get('attachedTicks') or selected_attack.get('noxAvatarLifecycle')) or any(profile_admitted(attack) for attack in (base_attack, selected_attack)),
-        victimStackParts=bool(zymos_policy) or bool(selected_attack.get('directTakesVictimStackDamage')) or any(part.get('takes_victim_stack_damage') for attack in (base_attack,selected_attack) for part in event_components(attack)),
-        radialCritStatus=bool(zymos_policy or chain_orb or selected_attack.get('noxAvatarLifecycle')) or any(part.get('takes_victim_crit') for attack in (base_attack,selected_attack)
-                             for part in event_components(attack)),
+        delayedRadialEvents=bool(paid_cube or zymos_policy or chain_orb or selected_attack.get('attachedTicks') or selected_attack.get('noxAvatarLifecycle')) or any(event_admitted(part) for part in parts),
+        victimStackParts=bool(zymos_policy) or bool(selected_attack.get('directTakesVictimStackDamage')) or any(part.get('takes_victim_stack_damage') for part in parts),
+        radialCritStatus=bool(zymos_policy or chain_orb or selected_attack.get('noxAvatarLifecycle')) or any(part.get('takes_victim_crit') for part in parts),
         melee=melee,
         comboTierKeys=combo_tier_keys,
         beamRampFloors={

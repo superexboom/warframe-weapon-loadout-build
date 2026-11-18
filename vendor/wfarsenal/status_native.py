@@ -19,7 +19,7 @@ try:  # pragma: no cover - exercised when the native core is built
 except ImportError:  # pragma: no cover
     wfcore = None
 
-ENABLED = (wfcore is not None and hasattr(wfcore, "SustainedTarget") and getattr(wfcore,"NATIVE_TYPE_QUANTIZATION",0) and os.environ.get("WF_NATIVE") != "0"
+ENABLED = (wfcore is not None and hasattr(wfcore, "SustainedTarget") and getattr(wfcore,"NATIVE_CRIT_FACTOR",0) and os.environ.get("WF_NATIVE") != "0"
            and os.environ.get("WF_NATIVE_STATUS") != "0")
 SHADOW = os.environ.get("WF_NATIVE_SHADOW") == "1"
 
@@ -108,7 +108,7 @@ def score(stats, target: Mapping[str, Any], target_kwargs: Mapping[str, Any], *,
     """``sustained_status_damage(...)["totalDps" if total else "directDps"]``."""
     if not isinstance(target, Mapping):
         raise Unsupported("no target")
-    if not getattr(wfcore, 'ELECTRIC_GAS_PROC_PILE', 0):
+    if getattr(wfcore, 'ELECTRIC_GAS_PROC_PILE', 0) < 2:
         raise Unsupported('core predates electric/gas seed and landing contract')
     if getattr(stats,'ignore_headshot_bonus',False) and not getattr(wfcore,'IGNORE_HEADSHOT_BONUS',0):
         raise Unsupported('core predates native projectile headshot rules')

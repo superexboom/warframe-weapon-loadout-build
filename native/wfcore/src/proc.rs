@@ -4,7 +4,7 @@
 
 use crate::pymath::{erfc, expm1, floor_i, log, pmax, pmin, pow, psum, sqrt, ceil_i};
 use std::cmp::Ordering;
-use std::collections::{BinaryHeap, VecDeque};
+use std::collections::{BTreeMap, BinaryHeap, VecDeque};
 use std::rc::Rc;
 
 // Electricity/Gas conditional moments, in reference operation order.
@@ -29,11 +29,13 @@ pub struct PileBucket {
 pub struct PileKernel {
     pub rows: Vec<PileBucket>,
     pub mass: f64,
+    low: Vec<PileOutcome>,
 }
 
 impl PileKernel {
     pub fn new(outcomes: &[PileOutcome]) -> Self {
         let mut rows: Vec<PileBucket> = Vec::new();
+        let mut low = Vec::new();
         for o in outcomes {
             let q = o.probability;
             if q <= 0.0 { continue; }
@@ -44,6 +46,7 @@ impl PileKernel {
             let v = &mut rows[index].values;
             v[0] += q;
             if o.count > 0 {
+                if o.seed < 0.5 { low.push(*o); }
                 v[1] += q*o.seed;
                 v[2] += q*o.accumulator;
                 v[3] += q*o.landing;
@@ -56,7 +59,7 @@ impl PileKernel {
         }
         rows.sort_by_key(|r|r.count);
         let mass=psum(rows.iter().map(|r|r.values[0]));
-        Self {rows,mass}
+        Self {rows,mass,low}
     }
 }
 
@@ -75,6 +78,8 @@ pub struct ProcPile {
     pub next: Option<f64>,
     pub token: u64,
     cached: Option<(f64, [f64; 4], Option<u8>, Option<usize>)>,
+    low_count: usize,
+    pub radial_floor_limited: bool,
 }
 
 pub struct PileTick {
@@ -89,10 +94,12 @@ pub struct PileTick {
 
 impl ProcPile {
     pub fn new(cap: Option<usize>) -> Self {
-        Self { cap, events: Vec::new(), next: None, token: 1, cached: None }
+        Self { cap, events: Vec::new(), next: None, token: 1, cached: None,
+            low_count: 0, radial_floor_limited: false }
     }
     pub fn reset(&mut self) {
         self.events.clear();
+        self.low_count = 0;
         self.next = None;
         self.token += 1;
         self.cached = None;
@@ -105,6 +112,7 @@ impl ProcPile {
             Some((t, self.token))
         } else { None };
         let end = self.next.unwrap() + (ceil_i(duration - 1e-9).max(1) as f64) - 1.0;
+        self.low_count += usize::from(!kernel.low.is_empty());
         self.events.push(PileEvent { end, kernel, origin, source });
         self.cached = None;
         schedule
@@ -112,16 +120,33 @@ impl ProcPile {
     pub fn moments(&mut self, t: f64) -> [f64; 4] {
         if let Some((when, value, _, _)) = self.cached { if when == t { return value; } }
         let _timer = crate::counters::Timer::start(crate::counters::PILE_MOMENTS);
-        let cap = self.cap.unwrap_or(1);
-        let mut dp = [[0.0; 9]; 11];
+        let (mut result, origin, source) = match self.cap {
+            Some(10) => self.compute_moments::<true, 11>(10, t),
+            Some(cap) => self.compute_moments::<true, 11>(cap, t),
+            None => self.compute_moments::<false, 2>(1, t),
+        };
+        if self.low_count != 0 {
+            if let Some(correction) = self.floor_correction(t) {
+                result[0] += correction[0]; result[1] += correction[1];
+            } else {
+                self.radial_floor_limited = true;
+            }
+        }
+        self.cached = Some((t, result, origin, source));
+        result
+    }
+    fn compute_moments<const BOUNDED: bool, const ROWS: usize>(&self, cap: usize, t: f64)
+        -> ([f64; 4], Option<u8>, Option<usize>) {
+        let cutoff = t - 1e-9;
+        let mut dp = [[0.0; 9]; ROWS];
         dp[0][0] = 1.0;
         let (mut origin, mut source) = (None, None);
         for event in self.events.iter().rev() {
-            let live = event.end >= t - 1e-9;
-            let mut next = [[0.0; 9]; 11];
+            let live = event.end >= cutoff;
+            let mut next = [[0.0; 9]; ROWS];
             for (k, row) in dp[..=cap].iter().enumerate() {
                 if row[0] <= 0.0 { continue; }
-                if self.cap.is_some() && k == cap {
+                if BOUNDED && k == cap {
                     for (i, value) in row.iter().enumerate() { next[cap][i] += event.kernel.mass * value; }
                     continue;
                 }
@@ -129,13 +154,13 @@ impl ProcPile {
                     let [q,b,c,l,hn,bl,bh,cl,ch] = bucket.values;
                     if q <= 0.0 { continue; }
                     let n = bucket.count;
-                    let dest = if self.cap.is_some() { cap.min(k + n) } else { usize::from(k > 0 || n > 0) };
+                    let dest = if BOUNDED { cap.min(k + n) } else { usize::from(k > 0 || n > 0) };
                     let mut values = row.map(|x|q*x);
                     if n > 0 && k == 0 {
                         values[1] = row[0]*l;
                         values[2] = row[0]*hn;
                     }
-                    let kept = if self.cap.is_some() { n.min(cap-k) } else { n };
+                    let kept = if BOUNDED { n.min(cap-k) } else { n };
                     if kept > 0 && live {
                         origin = event.origin; source = event.source;
                         if k == 0 {
@@ -157,11 +182,51 @@ impl ProcPile {
             }
             dp = next;
         }
-        let mut totals = [0.0; 9];
-        for i in 0..9 { totals[i] = psum(dp[..=cap].iter().map(|row| row[i])); }
-        let result = [totals[3] + totals[5], totals[4] + totals[6], totals[7], totals[8]];
-        self.cached = Some((t, result, origin, source));
-        result
+        let total = |i: usize| psum(dp[..=cap].iter().map(|row| row[i]));
+        let result = [total(3) + total(5), total(4) + total(6), total(7), total(8)];
+        (result, origin, source)
+    }
+    fn floor_correction(&self, t: f64) -> Option<[f64; 2]> {
+        // Only worlds below a summed half-seed of .5 need a correction.
+        let mut dp = BTreeMap::from([((0usize, 0u64, false), [1.0, 0.0, 0.0])]);
+        for event in self.events.iter().rev() {
+            let live = event.end >= t - 1e-9;
+            let mut next = BTreeMap::<_, [f64; 3]>::new();
+            for (&(k, bits, paid), &[p, f, h]) in &dp {
+                if p <= 0.0 { continue; }
+                let mut add = |key, values: [f64; 3]| {
+                    for (row, v) in next.entry(key).or_insert([0.0; 3]).iter_mut().zip(values) { *row += v; }
+                    next.len() <= 4096
+                };
+                if self.cap == Some(k) {
+                    let mass = event.kernel.mass;
+                    if !add((k, bits, paid), [mass*p, mass*f, mass*h]) { return None; }
+                    continue;
+                }
+                let mut visit = |n: usize, q: f64, half_seed: f64, landing: f64, weak: f64| {
+                    let kept = if live { self.cap.map_or(n, |cap| n.min(cap-k)) } else { 0 };
+                    let seed = f64::from_bits(bits) + kept as f64 * half_seed;
+                    if q <= 0.0 || seed >= 0.5 { return true; }
+                    let rank = self.cap.map_or(usize::from(k != 0 || n != 0), |cap| cap.min(k+n));
+                    let values = if n != 0 && k == 0 { [q*p, p*landing, p*weak] } else { [q*p,q*f,q*h] };
+                    add((rank, seed.to_bits(), paid || kept != 0), values)
+                };
+                for bucket in &event.kernel.rows {
+                    let r = bucket.values;
+                    if (!live || bucket.count == 0) && !visit(bucket.count, r[0], 0.0, r[3], r[4]) { return None; }
+                }
+                if live {
+                    for o in &event.kernel.low {
+                        let landing = o.probability * o.landing;
+                        if !visit(o.count, o.probability, o.seed, landing, if o.weak { landing } else { 0.0 }) { return None; }
+                    }
+                }
+            }
+            dp = next;
+            if dp.is_empty() { break; }
+        }
+        Some([1, 2].map(|i| psum(dp.iter().filter(|((_, _, paid), _)| *paid)
+            .map(|((_, bits, _), v)| (0.5 - f64::from_bits(*bits)) * v[i]))))
     }
     pub fn tick(&mut self, t: f64, token: u64) -> Option<PileTick> {
         if token != self.token || self.next.is_none() || (t-self.next.unwrap()).abs() > 1e-8 { return None; }
@@ -172,6 +237,7 @@ impl ProcPile {
         let schedule = match oldest {
             None => { self.reset(); None },
             Some(i) => {
+                self.low_count -= self.events[..i].iter().filter(|e| !e.kernel.low.is_empty()).count();
                 self.events.drain(..i);
                 self.cached = None;
                 Some((t + 1.0, self.token))

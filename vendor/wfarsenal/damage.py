@@ -1348,19 +1348,27 @@ class ModdedStats:
         )
 
 
+def _tier_factor(tier: int, multiplier: float) -> float:
+    if not tier:
+        return 1.0
+    step = _float32(_float32(multiplier) - 1.0)
+    return max(0.0, _float32(1.0 + _float32(tier * step)))
+
+
 def effective_crit_multiplier(chance: float, multiplier: float) -> float:
     """Return the average damage multiplier from critical hits.
 
     Each whole 100% of crit chance guarantees one more crit tier. Tier *n* multiplies
     by ``1 + n * (multiplier - 1)``.
     """
-    if multiplier <= 1.0 or chance <= 0.0:
+    if chance <= 0.0:
         return 1.0
     guaranteed = int(chance)
     remainder = chance - guaranteed
-    low = 1.0 + guaranteed * (multiplier - 1.0)
-    high = 1.0 + (guaranteed + 1) * (multiplier - 1.0)
-    return low * (1.0 - remainder) + high * remainder
+    low = _tier_factor(guaranteed, multiplier)
+    if not remainder:
+        return low
+    return low * (1.0 - remainder) + _tier_factor(guaranteed + 1, multiplier) * remainder
 
 
 def crit_tier_seed_distribution(
@@ -1400,12 +1408,12 @@ def crit_tier_seed_distribution(
         rate=promotion if tier>0 else 0.0
         promoted[tier]=promoted.get(tier,0.0)+weight*(1-rate)
         if rate:promoted[tier+1]=promoted.get(tier+1,0.0)+weight*rate
-    cd=max(1.0,crit_multiplier*float(critical_multiplier_factor))
+    cd=crit_multiplier*float(critical_multiplier_factor)
     if critical_only:
         promoted={tier:weight for tier,weight in promoted.items() if tier>0}
         total=sum(promoted.values())
         promoted={tier:weight/total for tier,weight in promoted.items()} if total>0 else {}
-    return [(weight, max(1.0,noncrit_damage_multiplier) if tier==0 else 1+tier*(cd-1))
+    return [(weight, max(1.0,noncrit_damage_multiplier) if tier==0 else _tier_factor(tier,cd))
             for tier,weight in sorted(promoted.items()) if weight>0]
 
 
@@ -1437,20 +1445,15 @@ def effective_hit_multiplier(
         or double_crit_chance < 0.0
     ):
         raise ValueError("double_crit_chance must be a finite non-negative number")
-    crit = effective_crit_multiplier(
-        crit_chance, crit_multiplier * float(critical_multiplier_factor)
-    )
-    # A Vigilante promotion is only rolled for hits that already crit.  For a
-    # fractional crit chance that is ``crit_chance`` of hits; at 100%+ every hit
-    # is critical.  One extra tier contributes (critMultiplier - 1) on average.
-    promotion = (
-        min(max(float(crit_chance), 0.0), 1.0)
-        * min(float(double_crit_chance), 1.0)
-        * max(crit_multiplier * float(critical_multiplier_factor) - 1.0, 0.0)
-    )
+    if double_crit_chance and crit_chance > 0.0:
+        # A tier promotion can reduce damage to zero; clamp before averaging.
+        return sum(p * factor for p, factor in crit_tier_seed_distribution(
+            crit_chance, crit_multiplier, noncrit_damage_multiplier, critical_multiplier_factor,
+            double_crit_chance=double_crit_chance))
+    crit = effective_crit_multiplier(crit_chance, crit_multiplier * float(critical_multiplier_factor))
     noncrit_chance = min(1.0, max(1.0 - crit_chance, 0.0))
     noncrit_bonus = max(noncrit_damage_multiplier - 1.0, 0.0)
-    return crit + promotion + noncrit_chance * noncrit_bonus
+    return crit + noncrit_chance * noncrit_bonus
 
 
 # -- mod application ------------------------------------------------------------------
@@ -3002,6 +3005,26 @@ def _eximus_shield_base(base: float, level: float) -> float:
     return base * scale
 
 
+_STEEL_PATH_SHIELD_AURA = _float32(1.58114)
+_CORRUPTED_CREWMAN_CONTROLLER = '/Lotus/Types/Enemies/Corpus/Spaceman/AIWeek/RifleSpacemanDamageController'
+
+
+def _native_shield_maximum(base, delta, curve, steel_path, aura_reduction):
+    f32 = _float32
+    low_scale, low_exponent, high_scale, high_exponent = map(f32, curve)
+    delta = f32(max(0., delta))
+    low = f32(1. + f32(low_scale * f32(delta ** low_exponent)))
+    high = f32(1. + f32(high_scale * f32(delta ** high_exponent)))
+    t = min(1., max(0., f32(f32(delta - 70.) / 10.)))
+    blend = f32(f32(t * t) * f32(3. - f32(2. * t)))
+    curve_value = f32(low + f32(f32(high - low) * blend))
+    sp = _STEEL_PATH_SHIELD_AURA if steel_path else 1.
+    initial = math.floor(f32(f32(f32(base) * sp) + .5))
+    stored = math.floor(f32(f32(initial * curve_value) + .5))
+    maximum = f32(f32(stored * sp) * f32(1. - f32(aura_reduction)))
+    return float(math.floor(f32(maximum + .5)))
+
+
 def _overguard_level_multiplier(level: float) -> float:
     """Evaluate the Eximus/Overguard absolute-level f32 smoothstep curve."""
     level = max(float(level), 1.0)
@@ -3133,21 +3156,30 @@ def _enemy_defenses(
         if shield > 0.0:
             shield = _eximus_shield_base(shield, enhancement_level)
 
+    shield_curve = FACTION_SHIELD_SCALING.get(faction, DEFAULT_SHIELD_SCALING)
+    shield_base_level = base_level
+    if (shield_base_level is None and target.get('path') == '/Lotus/Types/Enemies/Orokin/RifleSpacemanAvatar'
+            and target.get('damageController') == _CORRUPTED_CREWMAN_CONTROLLER):
+        shield_base_level = 1.
+    native_shield = (shield > 0. and level is not None and shield_base_level is not None
+                     and not enhancements['eximus'] and not enhancements['empowered'])
+    if native_shield:
+        shield = _native_shield_maximum(shield, level - shield_base_level, shield_curve,
+                                        steel_path, enhancements['auraShieldReduction'])
     if level is not None and base_level is not None:
         health *= _level_curve_multiplier(
             max(level - base_level, 0.0),
             FACTION_HEALTH_SCALING.get(faction, DEFAULT_HEALTH_SCALING),
         )
-        shield *= _level_curve_multiplier(
-            max(level - base_level, 0.0),
-            FACTION_SHIELD_SCALING.get(faction, DEFAULT_SHIELD_SCALING),
-        )
+        if not native_shield:
+            shield *= _level_curve_multiplier(max(level - base_level, 0.0), shield_curve)
 
     path_multiplier = STEEL_PATH_DEFENSE_MULTIPLIER if steel_path else 1.0
     shield_multiplier = path_multiplier
     armour_multiplier = 1.0
     health *= path_multiplier
-    shield *= shield_multiplier
+    if not native_shield:
+        shield *= shield_multiplier
     # Current Wiki data separates Steel Path health/shield bonuses from armor;
     # applying 2.5x to armor overstates mitigation and makes faction comparisons
     # wrong.  Keep the explicit multiplier here for future sourced variants.
@@ -3183,7 +3215,8 @@ def _enemy_defenses(
     if enhancements["noOverguard"]:
         overguard = 0.0
     armour *= 1.0 - enhancements["auraArmourReduction"]
-    shield *= 1.0 - enhancements["auraShieldReduction"]
+    if not native_shield:
+        shield *= 1.0 - enhancements["auraShieldReduction"]
     if any(
         target.get(key)
         for key in (
@@ -3257,8 +3290,8 @@ def quantize_base_crit_damage(cd: float) -> float:
     CD bonuses (Incarnon "Critical Parallel" +0.4) must add into the base
     BEFORE quantization; RELATIVE (%) mods (Vital Sense) multiply AFTER.
     """
-    step = 32.0 / 4095.0
-    return math.floor(float(cd) / step + .5) * step
+    scaled = _float32(min(32.0, max(0.0, _float32(cd))) * 127.96875)
+    return _float32(int(_float32(scaled + .5)) * _float32(32.0 / 4095.0))
 
 
 # 临界：flat CD（ADD/ADD_BASE 操作）与相对 CD（STACKING_MULTIPLY/MULTIPLY）
@@ -3373,15 +3406,8 @@ def damage_against_cached_armour(
             damage_type: amount * _weapon_hit_damage_multiplier(stats, hit_multiplier)
             for damage_type, amount in per_type.items()
         }
-    raw = sum(per_type.values()) * effective_hit_multiplier(
-        max(stats.crit_chance + crit_chance_add, 0.0) if crit_chance_add else stats.crit_chance,
-        max(stats.crit_multiplier + crit_multiplier_add, 1.0) if crit_multiplier_add else stats.crit_multiplier,
-        stats.noncrit_damage_multiplier,
-        hit_critical_multiplier,
-        double_crit_chance=stats.double_crit_chance,
-    )
-    raw = _apply_weakpoint_folding(
-        raw, stats, hit_multiplier, hit_critical_multiplier,
+    raw = sum(per_type.values()) * _location_hit_factor(
+        stats, hit_multiplier, hit_critical_multiplier,
         crit_chance_add=crit_chance_add, crit_multiplier_add=crit_multiplier_add,
     )
     return {
@@ -3407,8 +3433,7 @@ def _weakpoint_noncrit_scale(stats: "ModdedStats", hit_multiplier: float) -> flo
     return scale
 
 
-def _apply_weakpoint_folding(
-    raw: float,
+def _location_hit_factor(
     stats: "ModdedStats",
     hit_multiplier: float,
     hit_critical_multiplier: float,
@@ -3416,46 +3441,12 @@ def _apply_weakpoint_folding(
     crit_chance_add: float = 0.0,
     crit_multiplier_add: float = 0.0,
 ) -> float:
-    # WFSim 69e6a139 MECHANICS weak-point bracket. Prior disassembly only
-    # established the gate, not the arithmetic (its openQuestions say so).
-    if stats.radial_only:
-        return raw
-    weakpoint_share = 1.0 if hit_multiplier > 1.0 + 1e-9 else 0.0
-    if weakpoint_share <= 0.0:
-        if stats.bodyshot_crit_multiplier!=1.:
-            cc=max(stats.crit_chance+crit_chance_add,0.)
-            cd=max(stats.crit_multiplier+crit_multiplier_add,1.)
-            original=effective_hit_multiplier(cc,cd,stats.noncrit_damage_multiplier,
-                hit_critical_multiplier,double_crit_chance=stats.double_crit_chance)
-            modified=effective_hit_multiplier(cc*stats.bodyshot_crit_multiplier,cd,stats.noncrit_damage_multiplier,
-                hit_critical_multiplier,double_crit_chance=stats.double_crit_chance)
-            raw*=modified/original if original else 1.
-        return raw
-    raw *= _weakpoint_noncrit_scale(stats, hit_multiplier)
-    weak_crit = stats.weakpoint_crit_chance_bonus + stats.base_crit_chance * stats.weakpoint_crit_chance_relative
-    if weak_crit != 0.0:
-        base_cc = (
-            max(stats.crit_chance + crit_chance_add, 0.0)
-            if crit_chance_add
-            else stats.crit_chance
-        )
-        base_cd = (
-            max(stats.crit_multiplier + crit_multiplier_add, 1.0)
-            if crit_multiplier_add
-            else stats.crit_multiplier
-        )
-        base_crit = effective_hit_multiplier(
-            base_cc, base_cd, stats.noncrit_damage_multiplier,
-            hit_critical_multiplier, double_crit_chance=stats.double_crit_chance,
-        )
-        boosted_crit = effective_hit_multiplier(
-            max(base_cc + weak_crit, 0.0),
-            base_cd, stats.noncrit_damage_multiplier,
-            hit_critical_multiplier, double_crit_chance=stats.double_crit_chance,
-        )
-        if base_crit > 0.0:
-            raw *= 1.0 + (boosted_crit / base_crit - 1.0)
-    return raw
+    # Apply the location to the chance before computing damage. A zero factor
+    # at the unmodified chance cannot be divided out to recover the raw shot.
+    cc = _part_crit_chance(stats, hit_multiplier > 1.0 + 1e-9, crit_chance_add)
+    return effective_hit_multiplier(cc, stats.crit_multiplier + crit_multiplier_add,
+        stats.noncrit_damage_multiplier, hit_critical_multiplier,
+        double_crit_chance=stats.double_crit_chance) * _weakpoint_noncrit_scale(stats, hit_multiplier)
 
 
 def _weapon_hit_damage_multiplier(stats: "ModdedStats", multiplier: float) -> float:
@@ -3564,16 +3555,7 @@ def damage_against(
             damage_type: amount * _weapon_hit_damage_multiplier(stats, hit_multiplier)
             for damage_type, amount in per_type.items()
         }
-    raw = sum(per_type.values()) * effective_hit_multiplier(
-        stats.crit_chance,
-        stats.crit_multiplier,
-        stats.noncrit_damage_multiplier,
-        hit_critical_multiplier,
-        double_crit_chance=stats.double_crit_chance,
-    )
-    raw = _apply_weakpoint_folding(
-        raw, stats, hit_multiplier, hit_critical_multiplier
-    )
+    raw = sum(per_type.values()) * _location_hit_factor(stats, hit_multiplier, hit_critical_multiplier)
     return {
         "perType": per_type,
         "perHit": raw,
@@ -3725,10 +3707,14 @@ def location_crit_chance(stats: ModdedStats, hit_location: str | None = None) ->
     the weak-point bonuses, matching ``combat_replay.enervate_hit``. A radial
     part strikes no body part.
     """
-    chance = max(float(stats.crit_chance), 0.0)
+    return _part_crit_chance(stats, _normalise_hit_location(hit_location) == 'head')
+
+
+def _part_crit_chance(stats: ModdedStats, head: bool, extra: float = 0.0) -> float:
+    chance = float(stats.crit_chance) + extra
     if stats.radial_only:
-        return chance
-    if _normalise_hit_location(hit_location) == "head":
+        return max(chance, 0.0)
+    if head:
         weak = (stats.weakpoint_crit_chance_bonus
                 + stats.base_crit_chance * stats.weakpoint_crit_chance_relative)
         return max(chance + weak, 0.0)
@@ -3752,6 +3738,13 @@ def crit_proc_probability(
     return min(chance, 1.0) * crit * (1.0 - forced)
 
 
+def _status_weights(stats: ModdedStats) -> dict[str, float]:
+    # M130: ordinary rolls read the packet's quantized composition. Weapon- or
+    # script-forced counters are submitted separately, even with no drawn weight.
+    base = stats.dot_base_damage if stats.dot_base_damage is not None else stats.total_damage
+    return quantize_damage_vector(stats.damage_types, base)
+
+
 def expected_status_procs(
     stats: ModdedStats,
     *,
@@ -3772,21 +3765,13 @@ def expected_status_procs(
     random_total = chance * shots
     if stats.continuous:
         shots = 1.0 if shots > 0 else 0.0
-    weights = {
-        dtype: max(float(amount), 0.0)
-        for dtype, amount in stats.damage_types.items()
-        if isinstance(dtype, str) and isinstance(amount, (int, float))
-    }
-    total_weight = sum(weights.values())
     result: dict[str, float] = {}
-    if random_total and total_weight:
-        result.update(
-            {
-                dtype: random_total * amount / total_weight
-                for dtype, amount in weights.items()
-                if amount
-            }
-        )
+    if random_total:
+        weights = _status_weights(stats)
+        total_weight = sum(amount for amount in weights.values() if amount > 0.)
+        if total_weight:
+            result = {dtype: random_total * amount / total_weight
+                      for dtype, amount in weights.items() if amount > 0.}
 
     # PT_ELECTROCUTION is verified by the native electric-proc adapter and raw
     # attack ForcedProcs. A zero status chance does not suppress this event.
@@ -3936,14 +3921,14 @@ def expected_dot_damage(
     # average.  In the linear closed-form path the two agree exactly; the
     # split matters for the stepped windowed model and future per-tick reads.
     seed_tiers = crit_tier_seed_distribution(
-        stats.crit_chance,
+        _part_crit_chance(stats, hit_multiplier > 1.0 + 1e-9),
         stats.crit_multiplier,
         stats.noncrit_damage_multiplier,
         hit_critical_multiplier,
         double_crit_chance=stats.double_crit_chance,
     )
     crit = sum(weight * factor for weight, factor in seed_tiers)
-    weak_seed_scale = _apply_weakpoint_folding(1.0, stats, hit_multiplier, hit_critical_multiplier)
+    weak_seed_scale = _weakpoint_noncrit_scale(stats, hit_multiplier)
     # A crit-conditioned proc (Hunter Munitions) is seeded only by critical
     # hits, so its seed is E[crit multiplier | crit] at this location's crit
     # chance, not the all-hit average. The location's crit-chance bonuses are
@@ -4009,8 +3994,8 @@ def expected_dot_damage(
         # +1 accumulator per tick group (wfsim MEASUREMENTS M58, AGPL-3.0):
         # Heat/Electricity/Gas consolidate into ONE tick group sharing a single
         # +1; Slash and Toxin tick independently so every live stack carries
-        # its own.  The +1 scales with the elemental/proc-damage multipliers
-        # (it rides the M bracket of the tick formula) but not with crit/base.
+        # its own. Electric/Gas apply the own-element and target bracket
+        # after the radial minimum; their initial 1 is not status damage.
         shared_group = dtype in {"DT_FIRE", "DT_ELECTRICITY", "DT_GAS"}
         accumulator = 1.0 if shared_group else min(count, 10.0)
         accumulator_multiplier = max(float(elemental), 0.0) * proc_damage
@@ -4023,27 +4008,21 @@ def expected_dot_damage(
         landing_weak = landing_head
         landing_multiplier = (float(stats.headshot_bonus_multiplier)
                               if landing_weak else 1.0)
+        radial_scale = elemental_factor * max(float(faction_mod), 0.0) * target_multiplier
         if part_landing:
-            # M58/M100: the accumulator gets C and one faction layer; the
-            # applying hit's seed already carries the other faction layer.
-            accumulator_multiplier *= coefficient * max(float(faction_mod), 0.0) * target_multiplier
-        # Per-tier seed: each tier's procs tick at their own seed factor.
-        # The M58 +1 accumulator rides M (elemental/proc-damage), not the
-        # seed, so it is added once per tick group at the averaged tier only
-        # in the closed-form path (the stepped model re-derives it per step).
+            accumulator_multiplier = coefficient * radial_scale
+        # A radial seed is already scaled by the coefficient, but excludes
+        # the group's downstream bracket from the latest successful record.
         # Crit-conditioned procs join as their own tier group, weighted by
         # their share of this type's expected procs.
-        unit = (
-            coefficient
-            * seed_basis
-            * _proc_seed_merge_multiplier(stats, dtype, forced_procs)
-            * elemental_factor
-            * proc_damage
-            * stats.falloff_multiplier
-            * _weapon_hit_damage_multiplier(stats, hit_multiplier)
-            * target_multiplier
-            * max(float(faction_mod), 0.0) ** 2
-        )
+        unit = coefficient * seed_basis * _proc_seed_merge_multiplier(stats, dtype, forced_procs)
+        if part_landing:
+            unit = (unit * proc_damage * stats.falloff_multiplier
+                    * _weapon_hit_damage_multiplier(stats, hit_multiplier) * max(float(faction_mod), 0.0))
+        else:
+            unit = (unit * elemental_factor * proc_damage * stats.falloff_multiplier
+                    * _weapon_hit_damage_multiplier(stats, hit_multiplier) * target_multiplier
+                    * max(float(faction_mod), 0.0) ** 2)
         crit_share = 0.0
         if dtype in stats.crit_proc_chances and crit_seed_tiers:
             shots = 1.0 if stats.continuous else max(float(stats.multishot), 0.0)
@@ -4058,16 +4037,26 @@ def expected_dot_damage(
             for weight, factor in crit_seed_tiers
         ]
         per_second_by_tier = [(w, ps) for w, ps in per_second_by_tier if w > 0.0]
-        seed_per_second_no_acc = sum(weight * ps for weight, ps in per_second_by_tier)
-        per_second = (seed_per_second_no_acc + accumulator * accumulator_multiplier) * landing_multiplier
+        radial_seed = sum(weight * ps for weight, ps in per_second_by_tier)
+        seed_per_second_no_acc = radial_seed * radial_scale if part_landing else radial_seed
+        if part_landing:
+            per_second = sum(weight * max(coefficient + ps, 1.0) for weight, ps in per_second_by_tier)
+            per_second *= radial_scale * landing_multiplier
+        else:
+            per_second = (seed_per_second_no_acc + accumulator * accumulator_multiplier) * landing_multiplier
         type_duration = DOT_BASE_DURATION_SECONDS * proc_duration_scale(stats, dtype)
         damage = per_second * type_duration
         if part_landing:
             from .proc_probability import no_status_probability
             presence = 1.0 - no_status_probability(
                 stats, dtype, forced_procs, aim=1.0 if location == "head" else 0.0)
-            expected = ((seed_per_second_no_acc * count + accumulator_multiplier * presence)
-                        * landing_multiplier * type_duration)
+            # The closed form knows a single-stack group when count equals
+            # presence. Multi-stack floor expectations belong to event replay.
+            if count == presence:
+                expected = per_second * presence * type_duration
+            else:
+                expected = ((seed_per_second_no_acc * count + accumulator_multiplier * presence)
+                            * landing_multiplier * type_duration)
         else:
             expected = damage * count
         breakdown[dtype] = {
@@ -4082,7 +4071,8 @@ def expected_dot_damage(
             # 种子分层明细（供步进模型按 tier 重算 per-tick 放大器）：
             # [(weight, per_second_excl_accumulator)] per crit tier。
             "seedTiers": [
-                {"weight": weight, "perSecond": ps} for weight, ps in per_second_by_tier
+                {"weight": weight, "perSecond": ps * radial_scale if part_landing else ps}
+                for weight, ps in per_second_by_tier
             ],
             "targetMultiplier": target_multiplier,
             "perSecond": per_second,
@@ -4101,6 +4091,8 @@ def expected_dot_damage(
             # Stored seeds exclude the second landing bracket. Consumers must
             # apply the latest successful proc's landing to the entire group.
             "landingMultiplier": landing_multiplier,
+            **({"radialSeed": radial_seed, "radialLanding": radial_scale * landing_multiplier}
+               if part_landing else {}),
             "landingHead": landing_head,
             "landingWeakEligible": landing_weak,
             "seedPerSecondPerProc": seed_per_second_no_acc,
@@ -4386,7 +4378,7 @@ def sustained_status_damage(
     adjusted_stats = replace(
         stats,
         crit_chance=max(float(stats.crit_chance) + puncture_crit, 0.0),
-        crit_multiplier=max(float(stats.crit_multiplier) + cold_crit, 1.0),
+        crit_multiplier=float(stats.crit_multiplier) + cold_crit,
     )
     kwargs = {
         "level": level,
@@ -4462,9 +4454,9 @@ def sustained_status_damage(
             # Preserve the steady model's average-live-stack approximation:
             # a positive mean count represents a present group. The windowed
             # event kernel resolves occupancy and latest-landing correlation.
-            value = ((float(row["seedPerSecondPerProc"]) * active_procs
-                      + (float(row["accumulatorPerSecondPerAttack"]) if active_procs > 0.0 else 0.0))
-                     * float(row["landingMultiplier"]) * average_hit_multiplier)
+            value = ((float(row["radialSeed"]) * active_procs
+                      + (float(row["coefficient"]) if active_procs > 0.0 else 0.0))
+                     * float(row["radialLanding"]) * average_hit_multiplier)
         else:
             value = float(row.get("expectedDamage") or 0.0) * damage_rate
         dot_by_type[dtype] = value * damage_multiplier

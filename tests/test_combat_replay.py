@@ -276,6 +276,11 @@ def test_immediate_dot_survives_short_positive_duration(dtype):
     )
     r = run(st, window_seconds=0.5)
     assert r["dotWindow"] == pytest.approx(50.5)
+    # Even a weak packet pays the local minimum before its own element;
+    # status damage scales the stored seed, never the initial 1.
+    weak = replace(st, dot_base_damage=.1, proc_damage_multiplier=4., dot_elemental_multipliers={dtype: 2.})
+    assert run(weak, window_seconds=.5, collect_timeline=False)['dotWindow'] == pytest.approx(2.)
+    assert run(replace(weak,dot_base_damage=2.), window_seconds=.5, collect_timeline=False)['dotWindow'] == pytest.approx(9.)
 
 
 def test_gas_discards_oldest_damage_instances_at_ten():
@@ -313,6 +318,19 @@ def test_electric_gas_pile_retains_latest_landing_correlation():
         (.125, n, 3. if head else 1., .5, 2. if head else 1., head)
         for n in (1, 2) for head in (False, True)])
     assert pile.moments(0.) == pytest.approx((14.125, 6.75, 9.5, 1.))
+
+
+    # A weak packet arriving after a strong landing changes the entire group's floor.
+    pile = ProcPile(10, radial=True)
+    pile.add(0., 6., [(1., 1, .3, .5, 2., False)])
+    pile.add(0., 1., [(1., 1, .3, .5, 3., True)])
+    assert pile.moments(0.) == pytest.approx((3.3, 3.3, 2., 1.))
+    assert pile.moments(1.) == pytest.approx((3., 3., 1., 1.))
+    pile.reset()
+    for _ in range(2):
+        pile.add(0., 6., [(.5, 0, 0., 0., 1., False), (.5, 1, .4, .5, 2., False)])
+    # Exactly one success pays 2; two successes pay 2.6; zero pays nothing.
+    assert pile.moments(0.) == pytest.approx((1.65, 0., 1., .75))
 
 
 def test_blast_fuse_scales_with_duration_and_ten_stacks_detonate(monkeypatch):
@@ -644,6 +662,22 @@ def test_arena_independent_proc_clocks_and_neighbour_damage(monkeypatch,dtype):
     for t in (.25,.5,.75,1.,1.25,1.5,1.75,2.): other.advance(t)
     assert other.targets['a'].damage==pytest.approx(a.damage)
     assert other.targets['b'].damage==pytest.approx(b.damage)
+    if dtype == 'DT_ELECTRICITY':
+        # Break damage is its own body packet. Only its forced proc is blocked
+        # by Electricity immunity, and it cannot retarget after the host dies.
+        magnetic = arena.ArenaCombat({})
+        for id, immune in (('live', []), ('immune', ['DT_ELECTRICITY']), ('retired', [])):
+            victim = magnetic.add_target(id, dict(target(1000.), shield=1000., statusImmunities=immune))
+            victim.pooled['DT_MAGNETIC'].add(6., 0., 10.)
+            magnetic._take(victim, {'DT_IMPACT': 1000. / 4.25}, 0., 'direct', stats=st)
+            assert victim.shield == 0 and victim.health == pytest.approx(950.)
+            assert ('DT_ELECTRICITY' in victim.presence) == (not immune)
+        magnetic._take(magnetic.targets['retired'], {'DT_IMPACT': 2000.}, 0., 'direct', stats=st)
+        fresh = magnetic.add_target('new', target(1000.))
+        magnetic.advance(1.)
+        assert magnetic.targets['live'].health == pytest.approx(950. - 2 * 25.5)
+        assert magnetic.targets['immune'].health == pytest.approx(950.)
+        assert fresh.damage == 0. and not fresh.presence
 
 
 def test_arena_fixed_actor_and_unreachable_staging_use_ground_graph_cache():

@@ -1,3 +1,4 @@
+from collections import Counter
 from copy import copy,deepcopy
 import pytest
 import app
@@ -64,15 +65,30 @@ def test_first_magazine_normal_only_first_shot_after_completed_reload_is_doubled
 
 @pytest.mark.parametrize('ms',[1,2.5])
 def test_extended_ticks_only_after_normal_expiry_and_multishot_does_not_consume_twice(ms):
-    c,st=simple_combat(ms=ms);plain,pst=simple_combat(False,ms)
-    short=replay(st,target(),combat=c,attacks_per_second=1,window_seconds=12.9)
-    short_plain=replay(pst,target(),combat=plain,attacks_per_second=1,window_seconds=12.9)
+    def trace(enabled, window):
+        c, st = simple_combat(enabled, ms)
+        events = []
+        result = replay(st, target(), combat=c, attacks_per_second=1, window_seconds=window,
+                        life_curve=events)
+        return result, Counter((t, damage) for t, damage, _, source in events if source == 'direct')
+
+    short, short_events = trace(True, 12.9)
+    short_plain, short_plain_events = trace(False, 12.9)
+    assert short_events == short_plain_events
     assert short['directWindow']==pytest.approx(short_plain['directWindow'])
-    long=replay(st,target(),combat=c,attacks_per_second=1,window_seconds=13.1)
-    long_plain=replay(pst,target(),combat=plain,attacks_per_second=1,window_seconds=13.1)
-    assert long['directWindow']-long_plain['directWindow']==pytest.approx(40*ms)
+    long, long_events = trace(True, 13.1)
+    long_plain, long_plain_events = trace(False, 13.1)
+    # At 2 s both ordinary clouds tick, with no new shot. Contact refresh
+    # resolves the real cloud packet, so its value need not be base damage * ms.
+    cloud_ticks = [damage for (t, damage), n in long_plain_events.items() if t == 2. for _ in range(n)]
+    assert len(cloud_ticks) == 2 and cloud_ticks[0] == cloud_ticks[1] > 0.
+    assert not (long_plain_events - long_events)
+    assert long_events - long_plain_events == {(13., cloud_ticks[0]): 1}
+    assert long['directWindow']-long_plain['directWindow']==pytest.approx(cloud_ticks[0])
     assert long['shots']==long_plain['shots'] and long['reloads']==long_plain['reloads']
     assert long['fieldDuration']['boostedShots']==4
+    assert [row['time'] for row in long['fieldDuration']['events'] if row['multiplier'] == 2.] == [3., 6., 9., 12.]
+    assert long['fieldDuration']['events'][-1] == dict(time=13., form='selected', durationSeconds=10, multiplier=1.)
 
 def test_killing_direct_shot_consumes_charge_without_spawning_field_on_next_target():
     c,st=simple_combat();r=replay(st,target(hp=1),combat=c,attacks_per_second=1,window_seconds=4.1)

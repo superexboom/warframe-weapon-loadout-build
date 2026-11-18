@@ -166,10 +166,7 @@ impl Context<'_> {
                 e.1 *= applied_hm;
             }
         }
-        let mut raw = psum(per_type.iter().map(|e| e.1))
-            * tables::effective_hit_multiplier(s.crit_chance, s.crit_multiplier, s.noncrit_damage_multiplier, hcm,
-                                               s.double_crit_chance);
-        raw = tables::apply_weakpoint_folding(raw, s, hm, hcm);
+        let raw = psum(per_type.iter().map(|e| e.1)) * tables::location_hit_factor(s, hm, hcm);
         (per_type, raw * s.multishot)
     }
 
@@ -274,7 +271,7 @@ pub fn sustained_status(
     let puncture_crit = pmin(0.05 * puncture_count, 0.05 * core.stack_cap(puncture, 5.0));
     let mut adjusted = core.clone();
     adjusted.crit_chance = pmax(core.crit_chance + puncture_crit, 0.0);
-    adjusted.crit_multiplier = pmax(core.crit_multiplier + cold_crit, 1.0);
+    adjusted.crit_multiplier = core.crit_multiplier + cold_crit;
 
     let combined_armour = ctx.armour(combined_strip);
     let (per_type, per_shot) = ctx.damage_against(&adjusted, combined_armour);

@@ -223,7 +223,9 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<spatial::SpatialIndex>()?;
     m.add_class::<spatial::PathGraph>()?;
     m.add("ABI", 1)?;
-    m.add("ELECTRIC_GAS_PROC_PILE", 1)?;
+    m.add("NATIVE_CRIT_FACTOR", 1)?;
+    m.add("ELECTRIC_GAS_PROC_PILE", 2)?;
+    m.add("MAGNETIC_BREAK_PACKET", 1)?;
     m.add("SELECTIVE_KILL_PROBE", 1)?;
     m.add("ALT_EMBEDDED_LIFECYCLE", 3)?;
     m.add("MELEE_INITIAL_COMBO_RECOVERY", 1)?;
@@ -238,6 +240,7 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("FULL_CLIP_CHARGE_WAIT_POLICY", 1)?;
     m.add("NEUTRAL_FINITE_FIELD_SOURCE", 2)?;
     m.add("NATIVE_FIRE_COOLDOWN", 1)?;
+    m.add("NATIVE_CONTINUOUS_RATE_REFIRE", 1)?;
     m.add("DELAYED_RADIAL_EVENTS", 3)?;
     m.add("RADIAL_VICTIM_CRIT", 1)?;
     m.add("QUANTA_PAID_PRIMARY", 1)?;

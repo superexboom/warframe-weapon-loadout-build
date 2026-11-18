@@ -117,6 +117,18 @@ def test_event_cards_offer_no_force_and_unmodelled_say_why():
     assert ROWS["Arcane Avenger"]["stateControls"]["model"] == "manual"
 
 
+def test_primary_debilitate_is_visible_and_never_adds_status_chance():
+    row = ROWS["Primary Debilitate"]
+    assert row["scoreExcluded"] is True
+    assert row["stateControls"]["force"] is False
+    assert row["stateControls"]["model"] == "unmodelled"
+    plain = _run("Phantasma Prime")
+    equipped = _run("Phantasma Prime", [_arcane("Primary Debilitate", stacks=10, uptime=1)])
+    assert equipped["arcanes"][0]["applied"] is False
+    assert equipped["moddedStats"]["status_chance"] == plain["moddedStats"]["status_chance"]
+    assert _window(equipped) == _window(plain)
+
+
 def test_crepuscular_counts_once():
     buff = [{"id": "arcane-crepuscular"}]
     crit = lambda **kw: app.simulate_manual_payload(dict(  # noqa: E731

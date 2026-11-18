@@ -76,11 +76,30 @@ def test_magnetic_break_uses_ordinary_electric_context(pool):
     events=result['magneticBreaks']
     assert len(events)==1 and events[0]['pool']==pool
     assert events[0]['stacks']==2
-    seed=500*.03*2/6*2*3
+    seed=30.  # trunc(500 * .005 * 2) * status^2 * electricity * 0.5
     assert events[0]['seedPerTick']==pytest.approx(seed)
-    # Proc damage once; electric element and duration now apply, with one
-    # ordinary group accumulator. Half duration gives three shared ticks.
-    assert result['dotByType']['DT_ELECTRICITY']==pytest.approx((seed+.5*2*3)*3)
+    # The accumulator does not receive status damage. Electricity immunity
+    # leaves the immediate packet and suppresses only the three shared ticks.
+    assert result['dotByType']['DT_ELECTRICITY']==pytest.approx((seed+.5*3)*3)
+    immune=replay(st,{**tg,'statusImmunities':['DT_ELECTRICITY']},attacks_per_second=1,
+                  window_seconds=9,level=1)
+    assert immune['directWindow']==pytest.approx(result['directWindow'])
+    assert 'DT_ELECTRICITY' not in immune['dotByType']
+
+    if pool=='shield':
+        from wfarsenal.damage import enemy_defenses
+        from wfarsenal.magnetic_break import retained_source, target_proxy, weapon_weakness
+        crewman=next(e for e in app.EXPORTS['enemies']
+                     if e.get('path')=='/Lotus/Types/Enemies/Orokin/RifleSpacemanAvatar')
+        weakness=weapon_weakness(raw('weapons','Kuva Nukor')['path'])
+        assert weakness==0.
+        proxy=target_proxy(crewman)
+        for level, aura, maximum, tick in [(80,0,16128,807),(100,0,19157,958),
+                                          (120,0,21948,1098),(80,.18,13225,662)]:
+            shield=enemy_defenses(crewman,level=level,steel_path=True,
+                                  enemy_enhancements={'auraShieldReduction':aura})['shield']
+            assert shield==maximum
+            assert int(.5*(retained_source(shield,10,weakness,proxy,1.)+1.)+.5)==tick
 
 def test_battery_recharge_is_not_a_reload_trigger():
     weapon=raw('weapons','Tenet Cycron');sc=Scenario(trigger_policy='emergent')

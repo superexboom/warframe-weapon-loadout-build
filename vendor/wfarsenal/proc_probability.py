@@ -14,9 +14,10 @@ def crit_proc_instance_probability(stats, damage_type, aim=0.):
 
 
 def no_status_probability(stats, damage_type, forced=None, aim=0.):
-    weights={k:max(float(v),0.) for k,v in stats.damage_types.items()}
-    total=sum(weights.values())
-    share=weights.get(damage_type,0.)/total if total else 0.
+    from .damage import _status_weights
+    weights=_status_weights(stats)
+    total=sum(v for v in weights.values() if v>0.)
+    share=max(0.,weights.get(damage_type,0.))/total if total else 0.
     chance=max(float(stats.status_chance),0.)
     multishot=max(float(stats.multishot),0.)
     forced_per=stats.native_forced_procs.get(damage_type,0.)
@@ -412,16 +413,18 @@ def proc_pile_outcomes(stats, branches, expected_count):
 
 class PileKernel:
     """Joint moments grouped by count, within one ordered pellet opportunity."""
-    __slots__ = ('rows', 'mass')
+    __slots__ = ('rows', 'mass', 'low')
 
     def __init__(self, outcomes):
-        rows = {}
+        rows, low = {}, []
         for q, n, seed, accumulator, landing, weak in outcomes:
             if q <= 0.:
                 continue
             row = rows.setdefault(n, [0.] * 9)
             row[0] += q
             if n:
+                if seed < .5:
+                    low.append((n, q, seed, q * landing, q * landing if weak else 0.))
                 qs, qa, ql = q * seed, q * accumulator, q * landing
                 row[1] += qs
                 row[2] += qa
@@ -433,6 +436,7 @@ class PileKernel:
                 row[8] += qa * landing if weak else 0.
         self.rows = tuple(sorted(rows.items()))
         self.mass = sum(row[0] for _, row in self.rows)
+        self.low = tuple(low)
 
     def absence(self):
         return self.rows[0][1][0] if self.rows and self.rows[0][0] == 0 else 0.
@@ -449,13 +453,16 @@ class ProcPile:
     clock starts at the first possible application; random first-clock phases
     are not split. Latest landing does not roll back when its seed expires.
     """
-    def __init__(self, cap=None):
+    def __init__(self, cap=None, *, radial=False):
         self.cap = cap
+        self.radial = radial
+        self.radial_floor_limited = False
         self.reset()
 
     def reset(self):
         self.events = []
         self.next = None
+        self.low_count = 0
         self.token = getattr(self, 'token', 0) + 1
         self._cached = None
 
@@ -475,6 +482,7 @@ class ProcPile:
         # duration joining a later shared boundary.
         end = self.next + max(1, int(math.ceil(duration - 1e-9))) - 1
         self.events.append((end, kernel, origin, source))
+        self.low_count += bool(kernel.low)
         self._cached = None
         return schedule
 
@@ -527,8 +535,51 @@ class ProcPile:
             dp = nxt
         totals = [sum(row[i] for row in dp) for i in range(9)]
         result = (totals[3] + totals[5], totals[4] + totals[6], totals[7], totals[8])
+        if self.radial and self.low_count:
+            correction = self._floor_correction(t)
+            if correction is None:
+                self.radial_floor_limited = True
+            else:
+                result = (result[0] + correction[0], result[1] + correction[1], *result[2:])
         self._cached = (t, result, origin, source)
         return result
+
+    def _floor_correction(self, t):
+        # Only worlds below a summed half-seed of .5 need a correction.
+        dp = {(0, 0., False): (1., 0., 0.)}
+        for end, kernel, _, _ in reversed(self.events):
+            live = end >= t - 1e-9
+            nxt = {}
+            branches = [(n, b[0], 0., b[3], b[4]) for n, b in kernel.rows if not live or n == 0]
+            if live:
+                branches.extend(kernel.low)
+
+            def add(key, values):
+                a, b, c = nxt.get(key, (0., 0., 0.))
+                p, f, h = values
+                nxt[key] = (a+p, b+f, c+h)
+
+            for (k, seed, paid), (p, f, h) in sorted(dp.items()):
+                if p <= 0.:
+                    continue
+                if self.cap is not None and k == self.cap:
+                    add((k, seed, paid), (kernel.mass*p, kernel.mass*f, kernel.mass*h))
+                    continue
+                for n, q, half_seed, landing, weak in branches:
+                    kept = (min(n, self.cap-k) if self.cap is not None else n) if live else 0
+                    value = seed + kept * half_seed
+                    if q <= 0. or value >= .5:
+                        continue
+                    rank = min(self.cap, k+n) if self.cap is not None else int(bool(k or n))
+                    add((rank, value, paid or bool(kept)),
+                        (q*p, p*landing, p*weak) if n and not k else (q*p, q*f, q*h))
+                    if len(nxt) > 4096:
+                        return None
+            dp = nxt
+            if not dp:
+                break
+        return tuple(sum((.5-seed) * v[i] for (_, seed, paid), v in sorted(dp.items()) if paid)
+                     for i in (1, 2))
 
     def tick(self, t, token):
         if token != self.token or self.next is None or abs(t-self.next) > 1e-8:
@@ -543,6 +594,7 @@ class ProcPile:
             self.reset()
             schedule = None
         else:
+            self.low_count -= sum(bool(k.low) for _, k, _, _ in self.events[:oldest])
             self.events = self.events[oldest:]
             self._cached = None
             schedule = (self.next, self.token)
@@ -665,14 +717,17 @@ def crit_cv2(stats,aim):
     Crit tiers are the dominant per-hit spread. Multishot pellets roll
     independently; a merged beam tick rolls once.
     """
-    cm=max(float(stats.crit_multiplier),1.)-1.
+    from .damage import _tier_factor
     weak=stats.weakpoint_crit_chance_bonus+stats.base_crit_chance*stats.weakpoint_crit_chance_relative
     mean=square=0.
     for weight,chance in ((1.-aim,stats.crit_chance*stats.bodyshot_crit_multiplier),(aim,stats.crit_chance+weak)):
         if weight<=0.:continue
         chance=max(0.,chance);f=chance-math.floor(chance)
-        m=1.+chance*cm
-        mean+=weight*m;square+=weight*(m*m+f*(1.-f)*cm*cm)
+        tier = math.floor(chance)
+        low = _tier_factor(tier, stats.crit_multiplier)
+        high = _tier_factor(tier + 1, stats.crit_multiplier) if f else low
+        m = (1.-f)*low + f*high
+        mean+=weight*m;square+=weight*(m*m+f*(1.-f)*(high-low)**2)
     if mean<=0.:return 0.
     pellets=1. if stats.continuous else max(float(stats.multishot),1.)
     return max(0.,square/(mean*mean)-1.)/pellets

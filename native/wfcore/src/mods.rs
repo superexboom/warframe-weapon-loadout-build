@@ -79,8 +79,8 @@ fn pysum(values: impl IntoIterator<Item = f64>) -> Num {
 
 /// `quantize_base_crit_damage`
 fn quantize(cd: f64) -> f64 {
-    let step = 32.0 / 4095.0;
-    (cd / step + 0.5).floor() * step
+    let scaled = (cd as f32).clamp(0.0, 32.0) * 127.96875;
+    ((scaled + 0.5).trunc() * (32.0_f32 / 4095.0_f32)) as f64
 }
 
 /// `damage._combine` over (op, value) parts.

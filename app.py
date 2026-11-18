@@ -744,6 +744,8 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("mods_native.py"),
         Path(optimizer.__file__).with_name("status_native.py"),
         Path(optimizer.__file__).with_name("proc_probability.py"),
+        Path(optimizer.__file__).with_name("magnetic_break.py"),
+        Path(optimizer.__file__).with_name("magnetic_weapon_sources.py"),
         Path(optimizer.__file__).with_name("beam_ramp.py"),
         Path(optimizer.__file__).with_name("manual_combat.py"),
         Path(optimizer.__file__).with_name("delayed_radial_events.py"),
@@ -2912,8 +2914,10 @@ _ARCANE_CONDITION_NOTES = {
     '/Lotus/Upgrades/CosmeticEnhancers/Offensive/HeavyAttackDamageAndShieldOnShieldBreak':
         '只作用于重击；护盾被击破跟随上方「自身护盾击破类效果强制生效」。',
 }
+_PRIMARY_DEBILITATE = '/Lotus/Upgrades/CosmeticEnhancers/Offensive/SplitStatusProcsOnStackedStatusHit'
 # Cards kept in the list whose effect cannot reach a single-target replay.
 _ARCANE_UNMODELLED_NOTES = {
+    _PRIMARY_DEBILITATE: '复合异常达到 10 层且本次命中包含该异常时才可拆分；同一子包内相同基础异常只施加一次，子包按身体命中处理。尚未确认每次攻击的实际回调次数与包内异常的联合分布，单目标不计入评分。',
     '/Lotus/Upgrades/CosmeticEnhancers/Offensive/RadialDamageOnMaxRadiationStackHit': '伤害只溅射给周围其他敌人，单目标解算中不计。',
     '/Lotus/Upgrades/CosmeticEnhancers/Offensive/HeavyCritOnRegularMelee': '普通攻击叠层、重击消耗；解算未建模这段叠层，暂不计算。',
     '/Lotus/Upgrades/CosmeticEnhancers/Offensive/PermaComboOnFinisher': '只在处决击杀时增加初始连击，解算中没有处决。',
@@ -2966,7 +2970,9 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
         support = arcane.get("support") if isinstance(arcane.get("support"), Mapping) else {}
         from wfarsenal.status_arcanes import configuration as status_configuration
         status_spec = status_configuration(arcane, int(arcane.get('maxRank') or 0))
-        if not arcane.get('path') or (not status_spec and (not support.get('manualState') or not int(support.get('weaponEffects') or 0))):
+        path = arcane.get('path')
+        score_excluded = path == _PRIMARY_DEBILITATE
+        if not path or (not score_excluded and not status_spec and (not support.get('manualState') or not int(support.get('weaponEffects') or 0))):
             continue
         trigger = arcane.get("trigger") if isinstance(arcane.get("trigger"), Mapping) else {}
         from wfarsenal.enervate import configuration
@@ -3029,6 +3035,7 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
             "iconAsset": f"/assets/arcanes/{Path(icon).name}" if icon else None,
             "compatibility": compatibility,
             "slotKind": slot_kind,
+            "scoreExcluded": score_excluded,
             "equipmentType": arcane.get("equipmentType"),
             "compatibilityTags": list(arcane.get("compatibilityTags") or ()),
             "incompatibilityTags": list(arcane.get("incompatibilityTags") or ()),
@@ -3746,6 +3753,7 @@ def _auto_loadout(
     if auto_arcane:
         no_arcane_score = evaluation.score
         candidates = [row for row in MANUAL_ARCANES if str(row.get("slotKind") or "weapon") == "weapon"
+                      and not row.get("scoreExcluded")
                       and optimizer._arcane_matches_weapon(
                           optimizer.resolve_record(EXPORTS["arcanes"], row["path"], kind="arcane"), weapon)]
         picked: list[dict[str, Any]] = []
@@ -6897,7 +6905,8 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
         # re-simulate. Ranks come from the request's arcanes[] entries.
         if path.startswith("__arcane__:"):
             arcane_path = path.split(":", 1)[1]
-            if arcane_path in MANUAL_ARCANES_BY_PATH and path not in seen:
+            meta = MANUAL_ARCANES_BY_PATH.get(arcane_path)
+            if meta and not meta.get("scoreExcluded") and path not in seen:
                 seen.add(path)
                 candidates.append(path)
             continue

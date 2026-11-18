@@ -13,6 +13,7 @@ from dataclasses import dataclass, field, replace
 from typing import Any
 from . import damage as dm
 from .manual_combat import prepare, reference
+from .magnetic_break import electricity_immune, retained_source, target_proxy, f32
 from .sniper import ShotCombo
 from .consecutive_hits import ConsecutiveHits
 from .projectile_lanes import plan as plan_physical_lanes
@@ -67,7 +68,7 @@ class ArenaTarget:
     presence: dict = field(default_factory=dict)
     heat: HeatChains = field(default_factory=HeatChains)
     piles: dict = field(
-        default_factory=lambda: {"DT_ELECTRICITY": ProcPile(), "DT_GAS": ProcPile(10)}
+        default_factory=lambda: {"DT_ELECTRICITY": ProcPile(radial=True), "DT_GAS": ProcPile(10, radial=True)}
     )
     heat_acc: float = 0.0
     heat_token: int = 0
@@ -641,10 +642,13 @@ class ArenaCombat:
                     )
             elif kind == "pile":
                 dtype, token = payload
-                paid = v.piles[dtype].tick(when, token)
+                pile = v.piles[dtype]
+                paid = pile.tick(when, token)
                 if paid is None:
                     continue
                 amount, weak, count, alive, mode, st, schedule = paid
+                if pile.radial_floor_limited:
+                    self._diagnose_once("电气/毒气的单包最低伤害在高分支数时使用近似。")
                 ids = [v.id]
                 radius = (
                     3.0 if dtype == "DT_ELECTRICITY" else 3.0 + min(count, 10.0) * 0.3
@@ -654,6 +658,8 @@ class ArenaCombat:
                         x.id if isinstance(x, ArenaTarget) else x
                         for x in self.nearby(v.id, radius, when)
                     ]
+                else:
+                    self._diagnose_once("电气/毒气范围伤害缺少空间邻居数据，只结算挂载目标。")
                 for other_id in dict.fromkeys(ids):
                     other = self.targets.get(other_id)
                     if other and other.alive:
@@ -663,7 +669,7 @@ class ArenaCombat:
                             {dtype: amount},
                             when,
                             "dot",
-                            head=(weak / amount if amount > 0 else 0.0),
+                            head=(weak / amount if other is v and amount > 0 else 0.0),
                             stats=st,
                             mode=mode,
                         )
@@ -2185,6 +2191,7 @@ class ArenaCombat:
             return raw * factor
 
         left, applied, broke = 1.0, 0.0, False
+        overguard_broke = False
         if v.overguard > 0:
             value = sum(
                 x * (1.5 if k in ("DT_VOID", "DT_RADIANT") else 1.0)
@@ -2210,9 +2217,8 @@ class ArenaCombat:
             applied += drain
             left -= share
             if v.overguard <= EPS:
-                self._magnetic_break(v, t, 0, stats, mode)
-                if source != "drone-explosion":
-                    self._defer_signal("on-overguard-broken", t)
+                v.pools[0] = 0.0
+                overguard_broke = True
         if left > 0 and v.shield > 0:
             shield = sum(
                 x * max(0.0, 1.0 + deltas.get(k, 0.0))
@@ -2233,10 +2239,8 @@ class ArenaCombat:
             applied += a + b
             left -= share
             if v.shield <= EPS:
+                v.pools[1] = 0.0
                 broke = True
-                self._magnetic_break(v, t, 1, stats, mode)
-                if source != "drone-explosion":
-                    self._defer_signal("on-shield-broken", t)
         if left > 0 and v.shield <= EPS and v.health > 0:
             value = sum(health_value(k, x) for k, x in vector.items()) * left
             if broke:
@@ -2259,6 +2263,11 @@ class ArenaCombat:
             if source == "blast-area":
                 self.blast_neighbour_damage += applied
         if v.health <= EPS and v.overguard <= EPS:
+            if source != "drone-explosion":
+                if overguard_broke:
+                    self._defer_signal("on-overguard-broken", t)
+                if broke:
+                    self._defer_signal("on-shield-broken", t)
             v.alive = False
             v.death_time = t
             self.kills += 1
@@ -2321,6 +2330,13 @@ class ArenaCombat:
             if v.blasts:
                 self._release_blast(v, t)
             return True
+        for pool, broken, signal in ((0, overguard_broke, "on-overguard-broken"), (1, broke, "on-shield-broken")):
+            if broken:
+                killed = self._magnetic_break(v, t, pool, stats, mode, weapon_source)
+                if source != "drone-explosion":
+                    self._defer_signal(signal, t)
+                if killed:
+                    return True
         if source == "direct" and stats is not None and stats.extra_hits and not extra:
             faction = stats.faction_damage_multipliers.get("", 1.0)
             if v.record.get("faction"):
@@ -2459,26 +2475,41 @@ class ArenaCombat:
         else:
             self._signal(kind, t, weight)
 
-    def _magnetic_break(self, v, t, index, st, mode):
-        stacks = min(self._count(v, "DT_MAGNETIC", t), 10.0)
-        if stacks <= 0 or st is None:
-            return
+    def _diagnose_once(self, note):
+        if note not in self.diagnostics:
+            self.diagnostics.append(note)
+
+    def _magnetic_break(self, v, t, index, st, mode, weapon_source):
+        dist = v.pooled["DT_MAGNETIC"].distribution()
+        probability = sum(dist[1:])
+        if probability <= 0:
+            return False
+        if st is None or not weapon_source:
+            self._diagnose_once("磁力破盾/超宏的来源没有可用武器数据，此次未计入额外电伤及异常。")
+            return False
         duration_scale = dm.proc_duration_scale(st, "DT_ELECTRICITY")
-        if duration_scale <= 0:
-            return
         faction = st.faction_damage_multipliers.get("", 1.0)
         if v.record.get("faction"):
             faction *= st.faction_damage_multipliers.get(v.record["faction"], 1.0)
         faction *= dm.faction_bracket(v.record)
-        bracket = max(
-            0.0, st.dot_elemental_multipliers.get("DT_ELECTRICITY", 1.0)
-        ) * max(0.0, st.proc_damage_multiplier)
-        seed = v.full[index] * 0.03 * stacks / 6 * faction**2 * bracket
-        probability = v.presence.get("DT_MAGNETIC", StatusPresence()).probability(t)
-        outcomes = [
-            (1.0 - probability, 0, 0.0, 0.0, 1.0, False),
-            (probability, 1, seed, 0.5 * faction * bracket, 1.0, False),
-        ]
+        status = f32(max(st.proc_damage_multiplier, 0.0))
+        landing = faction * max(st.dot_elemental_multipliers.get("DT_ELECTRICITY", 1.0), 0.0)
+        weakness, proxy = self.combat.get("magneticWeaknessBonus"), target_proxy(v.record)
+        if weakness is None or proxy is None:
+            self._diagnose_once("磁力破盾/超宏缺少可验证的武器弱点或目标代理数据，未使用其修正。")
+        outcomes = [(dist[0], 0, 0.0, 0.0, 1.0, False)]
+        direct = 0.0
+        for stacks, weight in enumerate(dist[1:], 1):
+            if weight:
+                retained = retained_source(v.full[index], stacks, weakness, proxy, status)
+                direct += retained * weight
+                seed = 0.5 * f32(f32(retained * status) * faction)
+                outcomes.append((weight, 1, seed, 0.5, landing, False))
+        if direct > 0.0 and self._take(v, {"DT_ELECTRICITY": direct * faction}, t,
+                                       "direct", stats=st, mode=mode, extra=True):
+            return True
+        if duration_scale <= 0.0 or v.status_immune or electricity_immune(v.record):
+            return False
         v.presence.setdefault("DT_ELECTRICITY", StatusPresence()).add(
             t + 6.0 * duration_scale, 1.0 - probability
         )
@@ -2489,6 +2520,7 @@ class ArenaCombat:
         )
         if schedule:
             self._push(schedule[0], "pile", v, ("DT_ELECTRICITY", schedule[1]))
+        return False
 
     def _empowered_hit(self, v, st, dtype, count, t, natural, mode):
         spec = self.combat.get("empowered")

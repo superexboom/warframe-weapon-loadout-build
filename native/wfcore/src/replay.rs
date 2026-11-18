@@ -674,7 +674,7 @@ pub struct Replay<'py> {
     tables: TargetTables,
     battery: Option<(f64, f64, f64)>,
     spool: Option<SpoolSpec>,
-    rate_spool: Option<(f64, f64, f64)>,
+    rate_spool: Option<RateSpoolSpec>,
     shell: Option<(f64, f64, f64)>,
     shot_combo: Option<ShotCombo>,
     reload_after_every_shot: bool,
@@ -833,6 +833,9 @@ pub struct Replay<'py> {
     proc_counts: FxIndexMap<D, f64>,
     dot_by_type: FxIndexMap<D, f64>,
     magnetic_breaks: Vec<(f64, usize, f64, f64, i64)>,
+    magnetic_proxy: Option<(f32, f32)>,
+    magnetic_weakness: Option<f32>,
+    magnetic_electric_immune: bool,
     sources: Vec<Source>,
     ammo: f64,
     shot_in_progress: bool,
@@ -930,6 +933,7 @@ impl<'py> Replay<'py> {
             burst_base, burst_rate_base, burst_incarnon, burst_rate_incarnon, beam_floor_base, last_burst,
             tap_other, tap, tap_hits, tap_expires, field_duration, field_duration_ready,
             field_duration_used, enervate_views, enervate_weights, proc_counts, dot_by_type, magnetic_breaks,
+            magnetic_proxy, magnetic_weakness, magnetic_electric_immune,
             ammo, shot_in_progress, reloads, last_round, current_time, beam_progress,
             beam_last, actor_signal, actor_signal_used, armour_view, stats_by_ptr, model_cache,
             model_key, tick_chains, co_specs, varied, elements, hit_specs,
@@ -2290,7 +2294,6 @@ impl<'py> Replay<'py> {
             return v;
         }
         let s = &self.stats[st];
-        let cm = pmax(s.crit_multiplier, 1.0) - 1.0;
         let weak = s.weakpoint_crit_chance_bonus + s.base_crit_chance * s.weakpoint_crit_chance_relative;
         let mut mean = 0.0;
         let mut square = 0.0;
@@ -2300,9 +2303,12 @@ impl<'py> Replay<'py> {
             }
             let chance = pmax(0.0, chance);
             let fr = chance - chance.floor();
-            let m = 1.0 + chance * cm;
+            let tier = floor_i(chance);
+            let low = tables::tier_factor(tier, s.crit_multiplier);
+            let high = if fr > 0.0 { tables::tier_factor(tier + 1, s.crit_multiplier) } else { low };
+            let m = (1.0-fr)*low + fr*high;
             mean += weight * m;
-            square += weight * (m * m + fr * (1.0 - fr) * cm * cm);
+            square += weight * (m * m + fr * (1.0 - fr) * (high-low).powi(2));
         }
         let value = if mean <= 0.0 {
             0.0
@@ -2379,30 +2385,49 @@ impl<'py> Replay<'py> {
         Ok(best)
     }
 
-    fn magnetic_break(&mut self, t: f64, pool_index: usize) -> PyResult<()> {
-        let stacks = pmin(self.count(MAGNETIC), 10.0);
-        if stacks <= 0.0 { return Ok(()); }
+    fn magnetic_break(&mut self, t: f64, pool_index: usize, weapon_source: bool) -> PyResult<bool> {
+        let dist = self.pooled[pooled_index(MAGNETIC).unwrap()].distribution();
+        let probability = psum(dist.iter().skip(1).copied());
+        if probability <= 0.0 { return Ok(false); }
+        let stacks = psum(dist.iter().enumerate().map(|(n, p)| n as f64 * p));
+        let dist = dist.clone();
         let active = match self.proc_source { Some(st)=>st, None=>self.model(t)?.0 };
         let core=&self.stats[active].core;
         let scale=core.duration_scale(ELECTRICITY);
-        if scale<=0.0 {return Ok(());}
         let faction=core.faction_all*core.faction_target*core.faction_bracket;
-        let bracket=pmax(core.dot_elemental_multipliers.iter().find(|e|e.0==ELECTRICITY).map(|e|e.1).unwrap_or(1.0),0.0)*pmax(core.proc_damage_multiplier,0.0);
-        let per_tick=self.full[pool_index]*0.03*stacks/6.0*pow(faction,2.0)*bracket;
-        let accumulator=0.5*faction*bracket;
+        let electric=pmax(core.dot_elemental_multipliers.iter().find(|e|e.0==ELECTRICITY).map(|e|e.1).unwrap_or(1.0),0.0);
+        let status=pmax(core.proc_damage_multiplier,0.0) as f32;
+        let landing=faction*electric;
+        let mut direct = 0.0;
+        let mut child = 0.0;
+        let mut outcomes = vec![PileOutcome {probability:dist[0],count:0,seed:0.0,accumulator:0.0,landing:1.0,weak:false}];
+        for (n, weight) in dist.into_iter().enumerate().skip(1).filter(|(_, weight)| *weight != 0.0) {
+            let mut retained = (((self.full[pool_index] as f32) * 0.005_f32) * n as f32).trunc();
+            if let (Some(weapon), Some((weakness, attenuation))) = (self.magnetic_weakness, self.magnetic_proxy) {
+                let divisor = 1.0_f32 + weapon.max(0.0) * weakness;
+                retained = (((retained / divisor + 0.5_f32).floor()) * status) * attenuation;
+            } else {
+                retained *= status;
+            }
+            direct += retained as f64 * weight;
+            let seed = 0.5 * (((retained * status) as f64 * faction) as f32) as f64;
+            child += seed * weight;
+            outcomes.push(PileOutcome {probability:weight,count:1,seed,accumulator:0.5,landing,weak:false});
+        }
+        let per_tick=child/probability*landing;
         self.magnetic_breaks.push((t,pool_index,stacks,per_tick,self.gen));
+        if direct > 0.0 && self.settle_damage(&vec![(ELECTRICITY,direct*faction)],t,DIRECT,WeakKill::Flag(false),0.0,true,None,weapon_source,true)? {
+            return Ok(true);
+        }
+        if scale <= 0.0 || self.magnetic_electric_immune { return Ok(false); }
         let duration=6.0*scale;
-        let probability=self.presence.get_mut(&MAGNETIC).map(|p|p.probability(t)).unwrap_or(1.0);
         self.presence.entry(ELECTRICITY).or_default().add(t+duration,1.0-probability);
         *self.proc_counts.entry(ELECTRICITY).or_insert(0.0)+=probability;
-        self.add_pile(ELECTRICITY,t,duration,&[Rc::new(PileKernel::new(&[
-            PileOutcome {probability:1.0-probability,count:0,seed:0.0,accumulator:0.0,landing:1.0,weak:false},
-            PileOutcome {probability,count:1,seed:per_tick,accumulator,landing:1.0,weak:false},
-        ]))],active);
+        self.add_pile(ELECTRICITY,t,duration,&[Rc::new(PileKernel::new(&outcomes))],active);
         let signal=self.proc_signal(ELECTRICITY);
         self.signal(&signal,t,probability);
         self.signal("on-proc",t,probability);
-        Ok(())
+        Ok(false)
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -2415,6 +2440,10 @@ impl<'py> Replay<'py> {
     }
 
     fn take_with_source_credit(&mut self, vector: &Vector, t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool, damage_event: Option<(f64,f64)>, weapon_source: bool) -> PyResult<bool> {
+        self.settle_damage(vector,t,source,weak_kill,cv2,extra,damage_event,weapon_source,false)
+    }
+
+    fn settle_damage(&mut self, vector: &Vector, t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool, damage_event: Option<(f64,f64)>, weapon_source: bool, magnetic_packet: bool) -> PyResult<bool> {
         let _timer = crate::counters::Timer::start(crate::counters::TAKE);
         if let Some((alignment, _, _)) = self.onos {
             if self.onos_crits && self.form != BASE && (self.onos_ticks as f64) < alignment
@@ -2428,6 +2457,7 @@ impl<'py> Replay<'py> {
         let mut earlier_hit = 0.0;
         let mut health_hit = 0.0;
         let mut remaining = 0.0;
+        let mut overguard_broke = false;
         let mut shield_broke = false;
         if self.pools[0] > 0.0 {
             let mut value = psum(vector.iter().map(|(k, raw)| raw * if *k == VOID || *k == RADIANT { 1.5 } else { 1.0 }))
@@ -2453,8 +2483,7 @@ impl<'py> Replay<'py> {
             left -= fraction;
             if self.pools[0] <= 1e-9 {
                 self.pools[0] = 0.0;
-                self.magnetic_break(t, 0)?;
-                self.signal("on-overguard-broken", t, 1.0);
+                overguard_broke = true;
             }
         }
         if left > 0.0 && self.pools[1] > 0.0 {
@@ -2487,8 +2516,6 @@ impl<'py> Replay<'py> {
             if self.pools[1] <= 1e-9 {
                 self.pools[1] = 0.0;
                 shield_broke = true;
-                self.magnetic_break(t, 1)?;
-                self.signal("on-shield-broken", t, 1.0);
             }
         }
         if left > 0.0 && self.pools[1] <= 1e-9 && self.pools[2] > 0.0 {
@@ -2526,7 +2553,7 @@ impl<'py> Replay<'py> {
             WeakKill::Value(v) => v,
         };
         if self.track_weak_kills {
-            self.attribution.add(t, earlier_hit, health_hit, cv2, weak, source == DIRECT);
+            self.attribution.add(t, earlier_hit, health_hit, cv2, weak, source == DIRECT && !magnetic_packet);
         }
         if let (Some(curve), 0) = (self.life_curve.as_mut(), self.gen) {
             // One target life: (time, health damage, its variance, source).
@@ -2541,13 +2568,25 @@ impl<'py> Replay<'py> {
             }
         }
         if self.ehp > 0.0 && self.pools[0] <= 1e-7 && self.pools[2] <= 1e-7 {
+            if overguard_broke { self.signal("on-overguard-broken", t, 1.0); }
+            if shield_broke { self.signal("on-shield-broken", t, 1.0); }
             let resume = self.resume_time(t)?;
-            let weak = if self.track_weak_kills {
+            let weak = if self.track_weak_kills && !magnetic_packet {
                 self.attribution.crossing(t, remaining, resume)
                     .map_err(|_| PyIndexError::new_err("list index out of range"))?.0
             } else { 0.0 };
             self.die(t, weak, weapon_source && source != SYNDICATE, weapon_source)?;
             return Ok(true);
+        }
+        if overguard_broke {
+            let killed = self.magnetic_break(t, 0, weapon_source && source != SYNDICATE)?;
+            self.signal("on-overguard-broken", t, 1.0);
+            if killed { return Ok(true); }
+        }
+        if shield_broke {
+            let killed = self.magnetic_break(t, 1, weapon_source && source != SYNDICATE)?;
+            self.signal("on-shield-broken", t, 1.0);
+            if killed { return Ok(true); }
         }
         if weapon_source && !self.extra_hits.is_empty() && source == DIRECT && !extra {
             let trigger = psum(vector.iter().map(|x| x.1));
@@ -2677,11 +2716,11 @@ impl<'py> Replay<'py> {
         let mut scaled = Packet { vector: Vec::new(), procs: data.procs.clone(),
                                   rows: data.rows.clone(), non: data.non.clone() };
         for row in scaled.rows.values_mut() {
-            row.seed *= scale;
-            row.accumulator *= scale;
-            for branch in &mut row.branches {
-                branch.seed *= scale;
-                branch.accumulator *= scale;
+            if row.branches.is_empty() {
+                row.seed *= scale;
+                row.accumulator *= scale;
+            } else {
+                for branch in &mut row.branches { branch.landing *= scale; }
             }
         }
         for value in scaled.non.values_mut() { *value *= scale; }
@@ -3307,6 +3346,28 @@ struct SpoolSpec {
     rate_shots: f64,
     ammo_divisor: f64,
     spindown: f64,
+}
+
+#[derive(Clone, Copy)]
+enum RateSpoolSpec {
+    Reference { start: f64, end: f64, over: f64 },
+    Native { start: f32, end: f32, maximum: u32, source_rpm: f64, source_rate: f64 },
+}
+
+impl RateSpoolSpec {
+    fn refire(self, rate: f64, cycles: i64) -> (f64, Option<f64>) {
+        match self {
+            Self::Reference { start, end, over } => (rate * (start + (end - start) * pmin(cycles as f64 / over, 1.0)), None),
+            Self::Native { start, end, maximum, source_rpm, source_rate } => {
+                // Each automatic FIRE cycle advances the counter twice before REFIRE_WAIT.
+                let count = ((cycles + 1) * 2).min(i64::from(maximum));
+                let rps = (rate * source_rpm / source_rate) as f32 * (1.0_f32 / 60.0_f32);
+                let progress = count as f32 / maximum as f32;
+                let refire = rps * (start + (end - start) * progress);
+                (f64::from(refire), Some(f64::from(1.0_f32 / refire)))
+            }
+        }
+    }
 }
 
 #[derive(Clone)]
@@ -4344,11 +4405,12 @@ impl<'py> Replay<'py> {
                         });
                         spool_shots += 1;
                     }
-                    if let (Some((start, end, over)), true) = (self.rate_spool, self.form != INCARNON) {
+                    let mut native_refire_delay = None;
+                    if let (Some(spool), true) = (self.rate_spool, self.form != INCARNON) {
                         if t > rate_spool_due + 1e-9 {
                             rate_spool_shots = 0;
                         }
-                        speed *= start + (end - start) * pmin(rate_spool_shots as f64 / over, 1.0);
+                        (speed, native_refire_delay) = spool.refire(speed, rate_spool_shots);
                         rate_spool_shots += 1;
                     }
                     self.attacks += 1;
@@ -4818,7 +4880,7 @@ impl<'py> Replay<'py> {
                     let s = &self.stats[active];
                     let mut delay = match s.bow_draw {
                         Some(v) => v,
-                        None => 1.0 / speed + if s.charge_before_fire || (self.form == INCARNON
+                        None => native_refire_delay.unwrap_or_else(|| 1.0 / speed) + if s.charge_before_fire || (self.form == INCARNON
                             && self.cycle.map(|c| c.charge_before_fire).unwrap_or(false)) {
                                 0.0
                             } else { s.charge_time },
@@ -4976,6 +5038,9 @@ fn health_batch_inner<'py>(
         replay.pools = full;
         replay.ehp = ehp;
         replay.run()?;
+        if replay.proc_piles.values().any(|p| p.radial_floor_limited) {
+            return Err(NativeUnsupported::new_err("electric-gas-radial-floor-state-limit"));
+        }
         let score = replay.kills as f64 + if ehp != 0.0 { 1.0 - psum(replay.pools) / ehp } else { 0.0 };
         let damage = psum(replay.totals);
         let kpm = if replay.window != 0.0 { score * 60.0 / replay.window } else { 0.0 };
@@ -5075,7 +5140,17 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         None => None,
     };
     let rate_spool = match opt_dict("fireRateSpool")? {
-        Some(d) => Some((get_f(&d, "start", 1.0)?, get_f(&d, "end", 1.0)?, get_f(&d, "overShots", 1.0)?)),
+        Some(d) => {
+            let start = get_f(&d, "start", 1.0)?;
+            let end = get_f(&d, "end", 1.0)?;
+            let maximum = get_f(&d, "nativeMaxShots", 0.0)? as u32;
+            Some(if maximum > 0 {
+                RateSpoolSpec::Native { start: start as f32, end: end as f32, maximum,
+                    source_rpm: get_f(&d, "sourceRpm", 0.0)?, source_rate: get_f(&d, "sourceRate", 1.0)? }
+            } else {
+                RateSpoolSpec::Reference { start, end, over: get_f(&d, "overShots", 1.0)? }
+            })
+        }
         None => None,
     };
     let shell = match opt_dict("shellReload")? {
@@ -5574,6 +5649,15 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         proc_counts: FxIndexMap::default(),
         dot_by_type: FxIndexMap::default(),
         magnetic_breaks: Vec::new(),
+        magnetic_proxy: match config.get_item("magneticProxy")? {
+            Some(v) if !v.is_none() => Some(v.extract()?),
+            _ => None,
+        },
+        magnetic_weakness: match config.get_item("magneticWeaknessBonus")? {
+            Some(v) if !v.is_none() => Some(v.extract()?),
+            _ => None,
+        },
+        magnetic_electric_immune: truthy(config, "magneticElectricImmune")?,
         sources,
         ammo: 0.0,
         shot_in_progress: false,
@@ -5647,6 +5731,9 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
 fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bound<'py, PyAny>) -> PyResult<Bound<'py, PyDict>> {
     let mut replay = prepare_replay(py, config, helper)?;
     replay.run()?;
+    if replay.proc_piles.values().any(|p| p.radial_floor_limited) {
+        return Err(NativeUnsupported::new_err("electric-gas-radial-floor-state-limit"));
+    }
     let _result_timer = crate::counters::Timer::start(crate::counters::RESULT);
     // Core results; the Python wrapper assembles the reference's result dict.
     let out = PyDict::new(py);

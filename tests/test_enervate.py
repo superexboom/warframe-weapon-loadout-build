@@ -158,7 +158,12 @@ def test_ignored_alt_event_preserves_state_under_current_contract():
 
 
 def test_crit_seed_promotion_matches_direct_expectation():
-    from wfarsenal.damage import crit_tier_seed_distribution,effective_hit_multiplier
+    from wfarsenal.damage import crit_tier_seed_distribution,effective_hit_multiplier,quantize_base_crit_damage
+    half=quantize_base_crit_damage(.5)
+    assert half==.5001221299171448 and effective_hit_multiplier(2,half)==.0002442598342895508
+    # One third-tier promotion floors to zero; the unpromoted tier keeps its seed.
+    assert effective_hit_multiplier(2,half,double_crit_chance=.5)==.0001221299171447754
+    assert crit_tier_seed_distribution(2,half,double_crit_chance=.5)==[(.5,.0002442598342895508),(.5,0.)]
     for chance in [-2,0,.4,1,1.7,3.2]:
         for noncrit in [1,12]:
             pairs=crit_tier_seed_distribution(chance,2.5,noncrit,2,double_crit_chance=.4)

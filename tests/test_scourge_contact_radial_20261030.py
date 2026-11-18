@@ -89,7 +89,8 @@ def test_actual_contact_route_keeps_charge_reload_and_one_spear(source,monkeypat
 
 
 def test_native_fraction_quantization_ties_round_up_and_keep_source_loss(monkeypatch):
-    from wfarsenal.damage import ModdedStats,quantize_damage_vector,quantize_base_crit_damage
+    from wfarsenal.damage import ModdedStats,quantize_damage_vector,quantize_base_crit_damage,expected_status_procs
+    from wfarsenal.proc_probability import no_status_probability
     # Exact fractions from one original-byte140dc9010 packet control. These
     # are arithmetic contracts, not a claim that a current catalog roll hit a tie.
     assert quantize_base_crit_damage(256.5*32/4095)==pytest.approx(257.*32/4095)
@@ -102,3 +103,8 @@ def test_native_fraction_quantization_ties_round_up_and_keep_source_loss(monkeyp
     before=native_replay.STATS['native']
     result=combat_replay.replay(st,TARGET,attacks_per_second=.001,window_seconds=.01,combat=fight,collect_timeline=False)
     assert result['directWindow']==.75 and native_replay.STATS['native']>before
+    st.damage_types={'DT_IMPACT':.014,'DT_ELECTRICITY':.986}
+    st.status_chance=1.
+    assert expected_status_procs(st)=={'DT_ELECTRICITY':1.} and no_status_probability(st,'DT_IMPACT')==1.
+    st.native_forced_procs={'DT_IMPACT':1.}
+    assert expected_status_procs(st)['DT_IMPACT']==1. and no_status_probability(st,'DT_IMPACT')==0.

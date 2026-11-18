@@ -7134,7 +7134,8 @@ async function scheduleEquippedGains() {
   // 装备贡献候选：MOD + 紫卡 + 已配赋能（__arcane__:<path> 通道，后端移除
   // 该赋能测损失）。赋能随 buildPayloadFromForm 的 arcanes 字段一起下发。
   const equipped = state.manualSlots.filter(Boolean).map((mod) => mod.__riven ? "__riven__" : mod.path);
-  const arcaneKeys = (payload.arcanes || []).filter(Boolean).map((item) => `__arcane__:${item.path}`);
+  const excludedArcanePaths = new Set(arcaneRecords().filter((item) => item.scoreExcluded).map((item) => item.path));
+  const arcaneKeys = (payload.arcanes || []).filter((item) => item && !excludedArcanePaths.has(item.path)).map((item) => `__arcane__:${item.path}`);
   const allCandidates = [...equipped, ...arcaneKeys];
   if (!allCandidates.length) { state.equippedGains = null; paintEquippedGains(); return; }
   try {

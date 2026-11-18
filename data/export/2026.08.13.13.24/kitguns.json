@@ -74,7 +74,7 @@
      "fireRateRaw": 720,
      "index": 0,
      "isAlternateFire": false,
-     "multishot": 1,
+     "multishot": 5,
      "reloadTime": 2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerContinous",
      "unsupported": [

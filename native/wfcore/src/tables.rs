@@ -128,67 +128,45 @@ impl Core {
     }
 }
 
+pub(crate) fn tier_factor(tier: i64, multiplier: f64) -> f64 {
+    if tier == 0 { return 1.0; }
+    (1.0 + tier as f32 * (multiplier as f32 - 1.0)).max(0.0) as f64
+}
+
 pub fn effective_crit_multiplier(chance: f64, multiplier: f64) -> f64 {
-    if multiplier <= 1.0 || chance <= 0.0 {
+    if chance <= 0.0 {
         return 1.0;
     }
-    let guaranteed = trunc_i(chance) as f64;
-    let remainder = chance - guaranteed;
-    let low = 1.0 + guaranteed * (multiplier - 1.0);
-    let high = 1.0 + (guaranteed + 1.0) * (multiplier - 1.0);
-    low * (1.0 - remainder) + high * remainder
+    let guaranteed = trunc_i(chance);
+    let remainder = chance - guaranteed as f64;
+    let low = tier_factor(guaranteed, multiplier);
+    if remainder == 0.0 { low } else { low * (1.0 - remainder) + tier_factor(guaranteed + 1, multiplier) * remainder }
 }
 
 pub fn effective_hit_multiplier(cc: f64, cm: f64, noncrit: f64, factor: f64, double: f64) -> f64 {
+    if double > 0.0 && cc > 0.0 {
+        return psum(crit_tier_seed_distribution(cc, cm, noncrit, factor, double, false).map(|(p,f)| p*f));
+    }
     let crit = effective_crit_multiplier(cc, cm * factor);
-    let promotion = pmin(pmax(cc, 0.0), 1.0) * pmin(double, 1.0) * pmax(cm * factor - 1.0, 0.0);
     let noncrit_chance = pmin(1.0, pmax(1.0 - cc, 0.0));
     let noncrit_bonus = pmax(noncrit - 1.0, 0.0);
-    crit + promotion + noncrit_chance * noncrit_bonus
+    crit + noncrit_chance * noncrit_bonus
 }
 
-pub fn crit_tier_seed_distribution(cc: f64, cm: f64, noncrit: f64, factor: f64, double: f64, critical_only: bool) -> Vec<(f64, f64)> {
+fn crit_tier_seed_distribution(cc: f64, cm: f64, noncrit: f64, factor: f64, double: f64, critical_only: bool) -> impl Clone + Iterator<Item=(f64,f64)> {
     let chance = pmax(cc, 0.0);
     let whole = trunc_i(chance);
     let fraction = chance - whole as f64;
     let promotion = pmin(1.0, pmax(0.0, double));
-    let mut tiers: Vec<(i64, f64)> = vec![(whole, 1.0 - fraction)];
-    if fraction != 0.0 {
-        tiers.push((whole + 1, fraction));
-    }
-    let mut promoted: Vec<(i64, f64)> = Vec::new();
-    let bump = |m: &mut Vec<(i64, f64)>, tier: i64, x: f64| {
-        if let Some(slot) = m.iter_mut().find(|e| e.0 == tier) {
-            slot.1 += x;
-        } else {
-            m.push((tier, 0.0 + x));
-        }
-    };
-    for (tier, weight) in tiers {
-        let rate = if tier > 0 { promotion } else { 0.0 };
-        bump(&mut promoted, tier, weight * (1.0 - rate));
-        if rate != 0.0 {
-            bump(&mut promoted, tier + 1, weight * rate);
-        }
-    }
-    let cd = pmax(1.0, cm * factor);
-    if critical_only {
-        promoted.retain(|e| e.0 > 0);
-        let total = psum(promoted.iter().map(|e| e.1));
-        if total > 0.0 {
-            for e in promoted.iter_mut() {
-                e.1 /= total;
-            }
-        } else {
-            promoted.clear();
-        }
-    }
-    promoted.sort_by_key(|e| e.0);
-    promoted
-        .into_iter()
-        .filter(|e| e.1 > 0.0)
-        .map(|(tier, w)| (w, if tier == 0 { pmax(1.0, noncrit) } else { 1.0 + tier as f64 * (cd - 1.0) }))
-        .collect()
+    let lower_promotion = if whole > 0 { promotion } else { 0.0 };
+    let mut weights = [(1.0-fraction)*(1.0-lower_promotion),
+        (1.0-fraction)*lower_promotion + fraction*(1.0-promotion), fraction*promotion];
+    if critical_only && whole == 0 { weights[0] = 0.0; }
+    let total = if critical_only { psum(weights) } else { 1.0 };
+    weights.into_iter().enumerate().filter(|(_,w)| *w > 0.0).map(move |(i,w)| {
+        let tier = whole + i as i64;
+        (w / total, if tier == 0 { pmax(1.0, noncrit) } else { tier_factor(tier, cm * factor) })
+    })
 }
 
 fn weakpoint_noncrit_scale(s: &Core, hm: f64) -> f64 {
@@ -202,32 +180,9 @@ fn weakpoint_noncrit_scale(s: &Core, hm: f64) -> f64 {
     scale
 }
 
-pub(crate) fn apply_weakpoint_folding(raw: f64, s: &Core, hm: f64, hcm: f64) -> f64 {
-    let mut raw = raw;
-    if s.radial_only {
-        return raw;
-    }
-    let share = if hm > 1.0 + 1e-9 { 1.0 } else { 0.0 };
-    if share <= 0.0 {
-        if s.bodyshot_crit_multiplier != 1.0 {
-            let cc = pmax(s.crit_chance, 0.0);
-            let cd = pmax(s.crit_multiplier, 1.0);
-            let original = effective_hit_multiplier(cc, cd, s.noncrit_damage_multiplier, hcm, s.double_crit_chance);
-            let modified = effective_hit_multiplier(cc * s.bodyshot_crit_multiplier, cd, s.noncrit_damage_multiplier, hcm, s.double_crit_chance);
-            raw *= if original != 0.0 { modified / original } else { 1.0 };
-        }
-        return raw;
-    }
-    raw *= weakpoint_noncrit_scale(s, hm);
-    let weak = s.weakpoint_crit_chance_bonus + s.base_crit_chance * s.weakpoint_crit_chance_relative;
-    if weak != 0.0 {
-        let base = effective_hit_multiplier(s.crit_chance, s.crit_multiplier, s.noncrit_damage_multiplier, hcm, s.double_crit_chance);
-        let boosted = effective_hit_multiplier(pmax(s.crit_chance + weak, 0.0), s.crit_multiplier, s.noncrit_damage_multiplier, hcm, s.double_crit_chance);
-        if base > 0.0 {
-            raw *= 1.0 + (boosted / base - 1.0);
-        }
-    }
-    raw
+pub(crate) fn location_hit_factor(s: &Core, hm: f64, hcm: f64) -> f64 {
+    effective_hit_multiplier(location_crit_chance(s, hm > 1.0 + 1e-9), s.crit_multiplier,
+        s.noncrit_damage_multiplier, hcm, s.double_crit_chance) * weakpoint_noncrit_scale(s, hm)
 }
 
 pub(crate) fn quantize(damage: &Vector, modded_base: f64) -> Vector {
@@ -267,16 +222,14 @@ fn direct(s: &Core, loc: Location, tables: &TargetTables) -> (Vector, f64) {
             e.1 *= applied_hm;
         }
     }
-    let mut raw = psum(per_type.iter().map(|e| e.1))
-        * effective_hit_multiplier(s.crit_chance, s.crit_multiplier, s.noncrit_damage_multiplier, hcm, s.double_crit_chance);
-    raw = apply_weakpoint_folding(raw, s, hm, hcm);
+    let raw = psum(per_type.iter().map(|e| e.1)) * location_hit_factor(s, hm, hcm);
     (per_type, raw * pmax(s.multishot, 0.0))
 }
 
 fn location_crit_chance(s: &Core, head: bool) -> f64 {
-    let chance = pmax(s.crit_chance, 0.0);
+    let chance = s.crit_chance;
     if s.radial_only {
-        return chance;
+        return pmax(chance, 0.0);
     }
     if head {
         let weak = s.weakpoint_crit_chance_bonus + s.base_crit_chance * s.weakpoint_crit_chance_relative;
@@ -295,19 +248,26 @@ pub fn crit_proc_probability(s: &Core, d: D, head: bool) -> f64 {
     pmin(chance, 1.0) * crit * (1.0 - forced)
 }
 
+fn status_weights(s: &Core) -> Vector {
+    quantize(&s.damage_types, s.dot_base_damage.unwrap_or_else(|| s.total_damage()))
+}
+
 pub fn expected_status_procs(s: &Core, forced: &Vector, head: bool) -> Vector {
+    let weights = if s.status_chance > 0.0 { status_weights(s) } else { Vec::new() };
+    expected_procs_with_weights(s, forced, head, &weights, psum(weights.iter().map(|e| e.1).filter(|x| *x > 0.0)))
+}
+
+fn expected_procs_with_weights(s: &Core, forced: &Vector, head: bool, weights: &Vector, total_weight: f64) -> Vector {
     let chance = pmax(s.status_chance, 0.0);
     let mut shots = pmax(s.multishot, 0.0);
     let random_total = chance * shots;
     if s.continuous {
         shots = if shots > 0.0 { 1.0 } else { 0.0 };
     }
-    let weights: Vector = s.damage_types.iter().map(|(d, a)| (*d, pmax(*a, 0.0))).collect();
-    let total_weight = psum(weights.iter().map(|e| e.1));
     let mut result: Vector = Vec::new();
     if random_total != 0.0 && total_weight != 0.0 {
-        for (d, a) in &weights {
-            if *a != 0.0 {
+        for (d, a) in weights {
+            if *a > 0.0 {
                 result.push((*d, random_total * a / total_weight));
             }
         }
@@ -345,13 +305,15 @@ pub fn expected_status_procs(s: &Core, forced: &Vector, head: bool) -> Vector {
 /// No application probability from the actual packet view. `multishot` is
 /// one ordinary pellet, or the merged beam roll; `extra` is forced per instance.
 pub fn no_status_probability(s: &Core, d: D, aim: f64, multishot: f64, extra: f64) -> f64 {
+    let weights = status_weights(s);
+    let total = psum(weights.iter().map(|e| e.1).filter(|x| *x > 0.0));
+    let share = if total > 0.0 { get(&weights,d).unwrap_or(0.0).max(0.0)/total } else { 0.0 };
+    no_status_with_share(s, d, aim, multishot, extra, share)
+}
+
+fn no_status_with_share(s: &Core, d: D, aim: f64, multishot: f64, extra: f64, share: f64) -> f64 {
     let crit = if s.crit_proc_chances.iter().any(|x| x.0 == d) {
         (1.0 - aim) * crit_proc_probability(s, d, false) + aim * crit_proc_probability(s, d, true)
-    } else { 0.0 };
-    let weights: Vec<(D, f64)> = s.damage_types.iter().map(|(k, v)| (*k, pmax(*v, 0.0))).collect();
-    let total = psum(weights.iter().map(|x| x.1));
-    let share = if total != 0.0 {
-        weights.iter().find(|x| x.0 == d).map(|x| x.1).unwrap_or(0.0) / total
     } else { 0.0 };
     let chance = pmax(s.status_chance, 0.0);
     let multishot = pmax(multishot, 0.0);
@@ -449,18 +411,17 @@ pub(crate) fn status(s: &Core, loc_index: usize, tables: &TargetTables) -> Statu
     let (hm, hcm) = (loc.hit_multiplier, if s.ignore_headshot_bonus { 1.0 } else { loc.hit_critical_multiplier });
     let applied_hm = if s.ignore_headshot_bonus || s.area_direct { 1.0 } else { hm };
     let forced = &tables.forced_procs;
-    let procs = expected_status_procs(s, forced, loc.head);
+    let weights = if s.status_chance > 0.0 { status_weights(s) } else { Vec::new() };
+    let weight_sum = psum(weights.iter().map(|e| e.1).filter(|x| *x > 0.0));
+    let procs = expected_procs_with_weights(s, forced, loc.head, &weights, weight_sum);
     let dot_base = pmax(match s.dot_base_damage {
         Some(v) => v,
         None => s.total_damage(),
     }, 0.0);
-    let seed_tiers = crit_tier_seed_distribution(s.crit_chance, s.crit_multiplier, s.noncrit_damage_multiplier, hcm, s.double_crit_chance, false);
-    let weak_seed_scale = apply_weakpoint_folding(1.0, s, hm, hcm);
-    let crit_seed_tiers = if !s.crit_proc_chances.is_empty() {
-        crit_tier_seed_distribution(location_crit_chance(s, loc.head), s.crit_multiplier, 1.0, hcm, s.double_crit_chance, true)
-    } else {
-        Vec::new()
-    };
+    let seed_tiers = crit_tier_seed_distribution(location_crit_chance(s, hm > 1.0 + 1e-9), s.crit_multiplier, s.noncrit_damage_multiplier, hcm, s.double_crit_chance, false);
+    let weak_seed_scale = weakpoint_noncrit_scale(s, hm);
+    let crit_seed_tiers = (!s.crit_proc_chances.is_empty()).then(||
+        crit_tier_seed_distribution(location_crit_chance(s, loc.head), s.crit_multiplier, 1.0, hcm, s.double_crit_chance, true));
     let crit_seed_scale = weakpoint_noncrit_scale(s, hm);
     let proc_damage = pmax(s.proc_damage_multiplier, 0.0);
     let faction_mod = s.faction_mod(tables);
@@ -496,28 +457,34 @@ pub(crate) fn status(s: &Core, loc_index: usize, tables: &TargetTables) -> Statu
         // ignore_headshot_bonus suppresses raw part/crit multipliers, not
         // the head event or its independent Deadhead-like landing bracket.
         let landing_weak_eligible = landing_head;
-        let landing = if landing_weak_eligible { s.headshot_bonus_multiplier } else { 1.0 };
-        let accumulator_multiplier = pmax(elemental, 0.0) * proc_damage
-            * if part_landing { coefficient * pmax(faction_mod, 0.0) * target_multiplier } else { 1.0 };
-        let unit = coefficient * seed_basis * seed_merge(s, d, forced) * elemental_factor * proc_damage
-            * s.falloff_multiplier * applied_hm * target_multiplier * pow(pmax(faction_mod, 0.0), 2.0);
+        let radial_scale = elemental_factor * pmax(faction_mod, 0.0) * target_multiplier;
+        let landing = (if landing_weak_eligible { s.headshot_bonus_multiplier } else { 1.0 })
+            * if part_landing { radial_scale } else { 1.0 };
+        let accumulator_multiplier = if part_landing { coefficient } else { pmax(elemental, 0.0) * proc_damage };
+        let unit = coefficient * seed_basis * seed_merge(s, d, forced);
+        let unit = if part_landing {
+            unit * proc_damage * s.falloff_multiplier * applied_hm * pmax(faction_mod, 0.0)
+        } else {
+            unit * elemental_factor * proc_damage * s.falloff_multiplier * applied_hm
+                * target_multiplier * pow(pmax(faction_mod, 0.0), 2.0)
+        };
         let mut crit_share = 0.0;
-        if get(&s.crit_proc_chances, d).is_some() && !crit_seed_tiers.is_empty() {
+        if get(&s.crit_proc_chances, d).is_some() {
             let shots = if s.continuous { 1.0 } else { pmax(s.multishot, 0.0) };
             crit_share = pmin(shots * crit_proc_probability(s, d, loc.head) / count, 1.0);
         }
-        let mut tiers: Vec<(f64, f64)> = seed_tiers.iter().map(|(w, f)| ((1.0 - crit_share) * w, unit * f * weak_seed_scale)).collect();
-        tiers.extend(crit_seed_tiers.iter().map(|(w, f)| (crit_share * w, unit * f * crit_seed_scale)));
-        tiers.retain(|e| e.0 > 0.0);
-        let seed = psum(tiers.iter().map(|(w, ps)| w * ps));
+        let tiers = seed_tiers.clone().map(|(w,f)| ((1.0-crit_share)*w, unit*f*weak_seed_scale))
+            .chain(crit_seed_tiers.clone().into_iter().flatten().map(|(w,f)| (crit_share*w, unit*f*crit_seed_scale)));
+        let seed = psum(tiers.filter(|(w,_)| *w > 0.0).map(|(w,ps)| w*ps));
         let duration = 6.0 * s.duration_scale(d);
         let accumulator = accumulator * accumulator_multiplier;
         let pellets = pmax(s.multishot, 0.0);
         let instances = if s.continuous { 1.0 } else { pellets };
         let extra = if instances > 0.0 { get(forced, d).unwrap_or(0.0) / instances } else { 0.0 };
         let absence = if part_landing {
-            no_status_probability(s, d, if loc.head { 1.0 } else { 0.0 },
-                                  if s.continuous { pellets } else { 1.0 }, extra)
+            let share = if weight_sum > 0.0 { get(&weights,d).unwrap_or(0.0).max(0.0)/weight_sum } else { 0.0 };
+            no_status_with_share(s, d, if loc.head { 1.0 } else { 0.0 },
+                                 if s.continuous { pellets } else { 1.0 }, extra, share)
         } else { 1.0 };
         let branches = if part_landing {
             vec![LandingBranch { weight: 1.0, procs: count, absence, seed, accumulator, landing,

@@ -152,7 +152,9 @@ def main() -> int:
             "isAlternateFire": bool(state.get("IsAlternateFire")),
             "ammoCost": fire.get("ammoRequirement"),
             "ammoType": fire.get("ammoType"),
-            "multishot": 1 if unsupported else fire.get("fireIterations", 1),
+            # Chains and clusters are separate from native emissions. In particular,
+            # secondary Vermisplicer's loader status budget is shared by five tendrils.
+            "multishot": fire.get("fireIterations", 1),
             "fireRateRaw": state.get("fireRate"),
             "fireRate": (float(state["fireRate"]) / 60.0) if state.get("fireRate") else None,
             "reloadTime": state.get("reloadTime"),

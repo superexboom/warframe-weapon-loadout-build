@@ -11,6 +11,7 @@ import pytest
 
 import app
 from wfarsenal import optimizer
+from wfarsenal.damage import ModEffect, apply_mods, expected_status_procs
 
 EXPORT = app.ROOT / "data/export/2026.08.13.13.24"
 WINNERS = EXPORT / "modular_winners.json"
@@ -35,6 +36,31 @@ def test_every_kitgun_takes_the_pistol_riven():
     assert optimizer._weapon_type(None, assembled) != "pistol"  # mechanics keep the primary class
     braton = next(w for w in app.EXPORTS["weapons"] if w.get("nameEn") == "Braton Prime")
     assert optimizer._riven_type(None, braton) == "rifle"
+
+
+def test_vermisplicer_normalizes_the_shot_budget_by_native_tendrils():
+    kitguns = app.EXPORTS["kitguns"]
+    parts = _kitgun("secondary", "Vermisplicer")
+    parts[2] = next(p for p, row in kitguns["clips"].items() if row["nameEn"] == "Ramflare")
+    secondary = app.resolve_kitgun_record(_base("LotusModularSecondaryBeam"), parts, kitguns)
+    base = apply_mods(secondary, [])
+    assert base.multishot == 5
+    assert base.status_chance == pytest.approx(0.078)
+    assert sum(expected_status_procs(base).values()) == pytest.approx(0.39)
+
+    modded = apply_mods(secondary, [
+        ModEffect("WEAPON_PROC_CHANCE", "STACKING_MULTIPLY", 0.9),
+        ModEffect("WEAPON_FIRE_ITERATIONS", "STACKING_MULTIPLY", 1.2),
+    ])
+    assert modded.multishot == pytest.approx(11)
+    assert modded.status_chance == pytest.approx(0.078 * 1.9)
+    assert sum(expected_status_procs(modded).values()) == pytest.approx(0.078 * 1.9 * 11)
+
+    parts[1] = _kitgun("primary", "Vermisplicer")[1]
+    primary = app.resolve_kitgun_record(_base("LotusModularPrimaryBeam"), parts, kitguns)
+    base = apply_mods(primary, [])
+    assert base.multishot == 1
+    assert base.status_chance == pytest.approx(0.39)
 
 
 def test_assemblies_cache_under_their_parts():

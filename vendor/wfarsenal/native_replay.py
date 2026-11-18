@@ -33,7 +33,7 @@ _UNSUPPORTED_COMBAT = (
 
 
 def supported(stats, options) -> bool:
-    if not ENABLED or not getattr(wfcore,"ELECTRIC_GAS_PROC_PILE",0) or not getattr(wfcore,"NATIVE_TYPE_QUANTIZATION",0) or options.get("collect_timeline", True):
+    if not ENABLED or getattr(wfcore,"ELECTRIC_GAS_PROC_PILE",0) < 2 or not getattr(wfcore,"NATIVE_CRIT_FACTOR",0) or options.get("collect_timeline", True):
         return False
     draw = options.get("weak_draw")
     if draw is not None and not callable(getattr(draw, "native_spec", None)):
@@ -86,6 +86,8 @@ def supported(stats, options) -> bool:
     if combat.get('quantaStrategy') and not getattr(wfcore,'QUANTA_PAID_PRIMARY',0):
         return False
     if combat.get('nativeFireGate') and not getattr(wfcore, 'NATIVE_FIRE_COOLDOWN', 0):
+        return False
+    if (combat.get('fireRateSpool') or {}).get('nativeMaxShots') and not getattr(wfcore, 'NATIVE_CONTINUOUS_RATE_REFIRE', 0):
         return False
     if combat.get('chargeBeforeFire') and not getattr(wfcore, 'ORDINARY_CHARGED_WINDUP', 0):
         return False
@@ -422,6 +424,7 @@ def _target_setup(target, level, armour_strip, steel_path, enemy_enhancements):
         enemy_enhancements=enemy_enhancements,
     )
     full = [float(defenses.get(k) or 0.0) for k in ("overguard", "shield", "health")]
+    from .magnetic_break import electricity_immune, target_proxy
     ehp = sum(full)
     armour_base = float(defenses.get("armour") or 0.0)
     cache = dict(
@@ -434,6 +437,8 @@ def _target_setup(target, level, armour_strip, steel_path, enemy_enhancements):
         ),
         target_faction=str(target.get("faction") or ""),
         faction_bracket=faction_bracket(target),
+        magnetic_proxy=target_proxy(target) if full[0] or full[1] else None,
+        magnetic_electric_immune=electricity_immune(target),
     )
     locations = {}
     for location in ("body", "head"):
@@ -523,6 +528,10 @@ def trajectory(
     rate = max(0.0, float(attacks_per_second))
     defenses, full, ehp, armour_base, cache, locations, bare_def, tables = _target_setup(
         target, level, armour_strip, steel_path, enemy_enhancements)
+    magnetic_packet = getattr(wfcore, 'MAGNETIC_BREAK_PACKET', 0)
+    if not magnetic_packet and (full[0] or full[1]):
+        STATS['fallback'] += 1
+        return None
     execute = float((combat or {}).get('executeBelow') or 0.0)
     if execute:
         # combat_replay: Enkaus's dissolve leaves only the health above it.
@@ -598,6 +607,8 @@ def trajectory(
         full=full, ehp=float(ehp), armourBase=armour_base, elementalArmourStrip=float(elemental_armour_strip),
         forcedProcs=dict(forced_procs or {}), factionDeltas=dict(cache['faction_deltas']),
         armourBypass=list(cache['armour_bypass']), shieldBypass=list(cache['shield_bypass']),
+        magneticProxy=cache['magnetic_proxy'], magneticWeaknessBonus=combat.get('magneticWeaknessBonus'),
+        magneticElectricImmune=cache['magnetic_electric_immune'],
         extraHits=[(dtype, float(share)) for dtype, share, _forced in extra_hits], extraScale=float(extra_scale),
         weaponSlot=str(combat.get("weaponSlot") or ""), distance=combat.get("distance"),
         punchthrough=float(state.get('punchthroughTargets', 0) or 0),
@@ -640,6 +651,9 @@ def trajectory(
             targets = []
             for enhancements in health_targets:
                 _, pools, _, _, _, _, _, _ = _target_setup(target, level, armour_strip, steel_path, enhancements)
+                if not magnetic_packet and (pools[0] or pools[1]):
+                    STATS['fallback'] += 1
+                    return None
                 pools = list(pools)
                 if execute:
                     pools[2] *= 1.0 - execute
@@ -837,7 +851,9 @@ def trajectory(
             "gas-mixed-duration-cumulative-newer-rank",
             'spread-hit-loss-not-modeled',
         ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
-          + (['fire-rate-spool-reference-transcribed','fire-rate-spool-resets-on-any-pause'] if combat.get('fireRateSpool') else [])
+          + ((
+              [] if combat['fireRateSpool'].get('nativeMaxShots') else ['fire-rate-spool-reference-transcribed']
+          ) + ['fire-rate-spool-resets-on-any-pause'] if combat.get('fireRateSpool') else [])
           + ([('alternox-full-batch-ordered-expected-slots' if manual_detonation.get('impactThenEmbed') else 'talons-expected-projectile-capacity'),'manual-detonation-explicit-player-cadence'] if manual_detonation else [])
           + (['onos-native-alignment-shots-held-rate-and-postfire-cadence','onos-radial-target-coverage-explicit']
              if combat.get('onosCharge') else [])

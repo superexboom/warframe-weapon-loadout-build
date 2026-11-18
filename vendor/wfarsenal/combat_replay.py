@@ -16,6 +16,23 @@ _GOLDEN = (5 ** .5 - 1) / 2
 REPLAY_EVENT_LIMIT = 10_000_000
 
 
+def _native_spool_rates(spec, rate, prior_cycles):
+    from .damage import _float32 as f32
+
+    maximum = spec['nativeMaxShots']
+    counter = min(prior_cycles * 2, maximum)
+    # Recover the RPM before the export's rounding to six decimal places.
+    rps = f32(f32(rate * spec['sourceRpm'] / spec['sourceRate']) * f32(1. / 60.))
+    start, end = f32(spec['start']), f32(spec['end'])
+
+    def at(count):
+        return f32(rps * f32(start + f32(f32(end - start) * f32(count / maximum))))
+
+    # The second FIRE update supplies the REFIRE_WAIT timer.
+    refire = at(min(counter + 2, maximum))
+    return at(counter), refire, f32(1. / refire)
+
+
 class _KillProbe:
     """Keep outcomes fractional; track relevant kills and empty-magazine draws."""
 
@@ -309,6 +326,10 @@ def _reference_trajectory(
         # low-health gate then reads that share).
         full[2] *= 1.0 - execute
     pools = full.copy()
+    from .magnetic_break import electricity_immune, retained_source, target_proxy, f32
+    magnetic_proxy = target_proxy(target) if full[0] or full[1] else None
+    magnetic_weakness = combat.get('magneticWeaknessBonus')
+    magnetic_electric_immune = electricity_immune(target)
     ehp = sum(full)
     armour_base = float(defenses.get("armour") or 0.0)
     cache = dict(
@@ -393,7 +414,7 @@ def _reference_trajectory(
     heat_stats = None
     heat_source_stats = {}
     magnetic_breaks = []
-    proc_piles = {"DT_ELECTRICITY": ProcPile(), "DT_GAS": ProcPile(10)}
+    proc_piles = {"DT_ELECTRICITY": ProcPile(radial=True), "DT_GAS": ProcPile(10, radial=True)}
     fortifier = combat.get('fortifier')
     fortifier_damage = fortifier_stolen = 0.0
     self_overguard = 0.0
@@ -833,34 +854,48 @@ def _reference_trajectory(
         upcoming = [event[0] for event in heap if event[2] in ('fire', 'reload-complete')]
         return min(upcoming) if upcoming else None
 
-    def magnetic_break(t, pool_index, origin_mode=None, proc_source=None):
-        stacks = min(count('DT_MAGNETIC'), 10.0)
-        if stacks <= 0:
-            return
+    def magnetic_break(t, pool_index, origin_mode, proc_source, weapon_source):
+        dist = pooled['DT_MAGNETIC'].distribution()
+        probability = sum(dist[1:])
+        if probability <= 0.:
+            return False
+        stacks = sum(n * p for n, p in enumerate(dist))
         st = proc_source if proc_source is not None else model(t)[0]
         scale = proc_duration_scale(st, 'DT_ELECTRICITY')
-        if scale <= 0.:
-            return
         faction = st.faction_damage_multipliers.get('', 1.)
         if cache['target_faction']:
             faction *= st.faction_damage_multipliers.get(cache['target_faction'], 1.)
         faction *= cache['faction_bracket']
-        bracket = max(st.dot_elemental_multipliers.get('DT_ELECTRICITY', 1.), 0.) * max(st.proc_damage_multiplier, 0.)
-        per_tick = full[pool_index] * .03 * stacks / 6 * faction ** 2 * bracket
-        accumulator = .5 * faction * bracket
+        status = f32(max(st.proc_damage_multiplier, 0.))
+        electric = max(st.dot_elemental_multipliers.get('DT_ELECTRICITY', 1.), 0.)
+        direct = child = 0.
+        landing = faction * electric
+        outcomes = [(dist[0], 0, 0., 0., 1., False)]
+        for n, weight in enumerate(dist[1:], 1):
+            if weight:
+                retained = retained_source(full[pool_index], n, magnetic_weakness, magnetic_proxy, status)
+                direct += retained * weight
+                seed = .5 * f32(f32(retained * status) * faction)
+                child += seed * weight
+                outcomes.append((weight, 1, seed, .5, landing, False))
+        per_tick = child / probability * landing
         magnetic_breaks.append(dict(time=t, pool=('overguard', 'shield')[pool_index],
                                     stacks=stacks, seedPerTick=per_tick, targetGeneration=gen))
-        probability = presence['DT_MAGNETIC'].probability(t) if 'DT_MAGNETIC' in presence else 1.
+        if direct > 0. and take({'DT_ELECTRICITY': direct * faction}, t, 'direct',
+                                extra=True, origin_mode=origin_mode, proc_source=st,
+                                magnetic_packet=True, weapon_source=weapon_source):
+            return True
+        if scale <= 0. or magnetic_electric_immune:
+            return False
         duration = 6. * scale
         presence.setdefault('DT_ELECTRICITY', StatusPresence()).add(t+duration, 1.-probability)
         proc_counts['DT_ELECTRICITY'] = proc_counts.get('DT_ELECTRICITY', 0) + probability
-        outcomes = [(1.-probability, 0, 0., 0., 1., False),
-                    (probability, 1, per_tick, accumulator, 1., False)]
         schedule = proc_piles['DT_ELECTRICITY'].add(t, duration, outcomes, origin_mode or form, st)
         if schedule:
             push(schedule[0], 'proc-pile', ('DT_ELECTRICITY',schedule[1]), gen)
         signal('proc-DT_ELECTRICITY', t, probability)
         signal('on-proc', t, probability)
+        return False
 
     # Extra Hits (Toxic Lash, Xata's Whisper, Resupply): a second instance
     # beside each weapon hit, worth a share of the finished hit in one type.
@@ -904,7 +939,7 @@ def _reference_trajectory(
             add_procs(part, aim, t, radial_packet, damage_scale=sniper_factor)
         noncrit_no_proc_hit(part, aim, t)
 
-    def take(vector, t, source, weak_kill=False, cv2=0.0, extra=False, damage_event=None, weapon_source=True, origin_mode=None, proc_source=None):
+    def take(vector, t, source, weak_kill=False, cv2=0.0, extra=False, damage_event=None, weapon_source=True, origin_mode=None, proc_source=None, magnetic_packet=False):
         # Spend one attack fraction across pools. Shield bypass acts in parallel.
         # Residual damage never leaks to the next target.
         nonlocal fortifier_damage, fortifier_stolen, self_overguard, onos_hits
@@ -914,7 +949,7 @@ def _reference_trajectory(
         left = 1.0
         applied = 0.0
         earlier_hit = health_hit = remaining = 0.0
-        shield_broke = False
+        overguard_broke = shield_broke = False
 
         def health_value(dtype, raw):
             mult = max(
@@ -946,8 +981,7 @@ def _reference_trajectory(
             left -= fraction
             if pools[0] <= 1e-9:
                 pools[0] = 0.0  # Retire the pool before a same-timestamp event can break it again.
-                magnetic_break(t, 0, origin_mode, proc_source)
-                signal('on-overguard-broken', t)
+                overguard_broke = True
         if left > 0.0 and pools[1] > 0.0:
             shield = sum(
                 raw * max(0.0, 1.0 + cache["faction_deltas"].get(k, 0.0))
@@ -976,8 +1010,6 @@ def _reference_trajectory(
             if pools[1] <= 1e-9:
                 pools[1] = 0.0
                 shield_broke = True
-                magnetic_break(t, 1, origin_mode, proc_source)
-                signal('on-shield-broken', t)
         if left > 0.0 and pools[1] <= 1e-9 and pools[2] > 0.0:
             value = sum(health_value(k, raw) for k, raw in vector.items())
             amount = value * left
@@ -997,7 +1029,7 @@ def _reference_trajectory(
             dtype=next(iter(vector));dot_by_type[dtype]=dot_by_type.get(dtype,0.0)+applied
         attribution.add(t, earlier_hit, health_hit, cv2,
                         (head if weak_kill else 0.) if isinstance(weak_kill,bool) else weak_kill,
-                        source == 'direct')
+                        source == 'direct' and not magnetic_packet)
         if life_curve is not None and gen == 0:
             # One target life: (time, health damage, its variance, source).
             life_curve.append((t, health_hit + earlier_hit, (health_hit + earlier_hit) ** 2 * cv2, source))
@@ -1006,8 +1038,23 @@ def _reference_trajectory(
             signal('on-hit', t, damage_event[0])
             signal('on-crit', t, damage_event[1])
         if ehp > 0.0 and pools[0] <= 1e-7 and pools[2] <= 1e-7:
-            die(t, attribution.crossing(t, remaining, resume_time(t))[0], weapon_source and source != "syndicate", weapon_source, origin_mode)
+            if overguard_broke:
+                signal('on-overguard-broken', t)
+            if shield_broke:
+                signal('on-shield-broken', t)
+            weak = False if magnetic_packet else attribution.crossing(t, remaining, resume_time(t))[0]
+            die(t, weak, weapon_source and source != "syndicate", weapon_source, origin_mode)
             return True
+        if overguard_broke:
+            killed = magnetic_break(t, 0, origin_mode, proc_source, weapon_source and source != 'syndicate')
+            signal('on-overguard-broken', t)
+            if killed:
+                return True
+        if shield_broke:
+            killed = magnetic_break(t, 1, origin_mode, proc_source, weapon_source and source != 'syndicate')
+            signal('on-shield-broken', t)
+            if killed:
+                return True
         if weapon_source and extra_hits and source == 'direct' and not extra:
             trigger = sum(vector.values())
             for dtype, share, _forced in extra_hits:
@@ -1151,8 +1198,8 @@ def _reference_trajectory(
             if dtype in ("DT_ELECTRICITY", "DT_GAS"):
                 rows[dtype]['landingBranches'] = [dict(
                     weight=weight, procs=probe['expectedProcs'].get(dtype, 0.),
-                    seed=row['seedPerSecondPerProc'], accumulator=row['accumulatorPerSecondPerAttack'],
-                    landing=row['landingMultiplier'], head=row['landingHead'],
+                    seed=row['radialSeed'], accumulator=.5,
+                    landing=row['radialLanding'], head=row['landingHead'],
                     weak=row['landingWeakEligible'], aim=location,
                     absence=no_status_probability(one, dtype, per_forced, location))
                     for weight, probe, row, location in ((1.-aim,b,r,0.),(aim,h,hr,1.)) if weight > 0.]
@@ -1308,7 +1355,7 @@ def _reference_trajectory(
         if damage_scale!=1.:
             rows={k:{**row,'seedPerSecondPerProc':row['seedPerSecondPerProc']*damage_scale,
                      'accumulatorPerSecondPerAttack':row['accumulatorPerSecondPerAttack']*damage_scale,
-                     **({'landingBranches':[{**b,'seed':b['seed']*damage_scale,'accumulator':b['accumulator']*damage_scale} for b in row['landingBranches']]} if 'landingBranches' in row else {})}
+                     **({'landingBranches':[{**b,'landing':b['landing']*damage_scale} for b in row['landingBranches']]} if 'landingBranches' in row else {})}
                   for k,row in rows.items()}
             non={k:{**row,'perProc':row['perProc']*damage_scale} for k,row in non.items()}
         if combat.get('punctureArmorStrip') and not st.radial_only and allow_encumber:
@@ -2041,14 +2088,20 @@ def _reference_trajectory(
                 if collect_timeline:spool_trace.append(dict(time=t,pellets=pellets,fireRate=speed,ammoCost=active.ammo_cost))
                 spool_shots+=1
             rate_spool=combat.get('fireRateSpool') if combat and form!='incarnon' else None
+            native_refire_delay = None
             if rate_spool:
                 # WFSim fight/after.rs: any pause (reload, transform, a dry
                 # magazine) leaves this shot later than the last one made it
                 # due, which is releasing the trigger; the spin-up restarts.
                 if t > rate_spool_due + 1e-9:
                     rate_spool_shots = 0
-                speed*=rate_spool['start']+(rate_spool['end']-rate_spool['start'])*min(rate_spool_shots/rate_spool['overShots'],1.)
-                if collect_timeline:spool_trace.append(dict(time=t,fireRate=speed))
+                if rate_spool.get('nativeMaxShots'):
+                    entry, speed, native_refire_delay = _native_spool_rates(rate_spool, speed, rate_spool_shots)
+                    if collect_timeline:
+                        spool_trace.append(dict(time=t, fireRate=entry, refireRate=speed))
+                else:
+                    speed*=rate_spool['start']+(rate_spool['end']-rate_spool['start'])*min(rate_spool_shots/rate_spool['overShots'],1.)
+                    if collect_timeline:spool_trace.append(dict(time=t,fireRate=speed))
                 rate_spool_shots+=1
             attacks += 1
             shot_in_progress = True
@@ -2396,7 +2449,8 @@ def _reference_trajectory(
                 shot_in_progress=False
             charge_after = (0. if getattr(active, '_charge_before_fire', False) or (cycle and form == 'incarnon' and cycle.get('chargeBeforeFire'))
                             else getattr(active, '_charge_time', 0.))
-            delay = getattr(active, '_bow_draw', 1.0 / speed + charge_after)
+            refire_delay = 1.0 / speed if native_refire_delay is None else native_refire_delay
+            delay = getattr(active, '_bow_draw', refire_delay + charge_after)
             if onos and form!='base':
                 power = onos_ticks>=onos['alignmentShots']
                 if collect_timeline:
@@ -2649,7 +2703,8 @@ def _reference_trajectory(
         ),
         "continuousKillEvents": True,
         "activePool": "overguard" if full[0] else ("shield" if full[1] else "health"),
-        "unsupported": unsupported,
+        "unsupported": unsupported + (['electric-gas-radial-floor-state-limit']
+            if any(p.radial_floor_limited for p in proc_piles.values()) else []),
         **({"finiteFieldPackets":finite_field_packets,"finiteFieldActivations":finite_field_activations,"finiteFieldTrace":finite_field_trace} if combat.get("finiteFields") else {}),
         **({"sourceOwnedFieldPackets":source_field_packets,"sourceOwnedFieldActivations":source_field_activations,"sourceOwnedFieldTrace":source_field_trace} if combat.get("sourceOwnedFields") else {}),
         **({"physicalProjectileTrace":physical_trace,"physicalProjectilePhase":physical_phase} if physical_lanes else {}),
@@ -2666,7 +2721,9 @@ def _reference_trajectory(
             "gas-mixed-duration-cumulative-newer-rank",
             'spread-hit-loss-not-modeled',
         ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
-          + (['fire-rate-spool-reference-transcribed','fire-rate-spool-resets-on-any-pause'] if combat.get('fireRateSpool') else [])
+          + ((
+              [] if combat['fireRateSpool'].get('nativeMaxShots') else ['fire-rate-spool-reference-transcribed']
+          ) + ['fire-rate-spool-resets-on-any-pause'] if combat.get('fireRateSpool') else [])
           + ([('alternox-full-batch-ordered-expected-slots' if manual_detonation.get('impactThenEmbed') else 'talons-expected-projectile-capacity'),'manual-detonation-explicit-player-cadence'] if manual_detonation else [])
           + (['onos-native-alignment-shots-held-rate-and-postfire-cadence','onos-radial-target-coverage-explicit'] if onos else [])
           + (ASSUMPTIONS if enervate else [])
