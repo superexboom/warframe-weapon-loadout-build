@@ -14,11 +14,21 @@ class Cuda:
         self.context = c.c_void_p()
         self.module = c.c_void_p()
         self.allocations = []
+        if nvrtc_dir and not list(nvrtc_dir.glob('nvrtc64_*.dll')) and (nvrtc_dir / 'x64').is_dir():
+            nvrtc_dir = nvrtc_dir / 'x64'
         self.dll_dir = os.add_dll_directory(str(nvrtc_dir.resolve())) if nvrtc_dir else None
         self.driver = c.WinDLL("nvcuda.dll")
         # NVRTC loads its companion by basename, outside Python's DLL loader.
-        self.builtins = c.CDLL(str((nvrtc_dir / "nvrtc-builtins64_129.dll").resolve())) if nvrtc_dir else None
-        self.nvrtc = c.CDLL(str((nvrtc_dir / "nvrtc64_120_0.dll").resolve())) if nvrtc_dir else None
+        self.builtins = self.nvrtc = None
+        if nvrtc_dir:
+            # Use the two DLLs shipped together in the selected SDK.
+            def sdk_dll(pattern):
+                paths = [p for p in nvrtc_dir.glob(pattern) if p.name.count('.') == 1]
+                if len(paths) != 1:
+                    raise RuntimeError(f'Expected one {pattern} in {nvrtc_dir}; select one NVRTC runtime directory')
+                return str(paths[0].resolve())
+            self.builtins = c.CDLL(sdk_dll('nvrtc-builtins64_*.dll'))
+            self.nvrtc = c.CDLL(sdk_dll('nvrtc64_*.dll'))
         self.functions = {}
         for name, args in [
             ("cuInit", [c.c_uint]), ("cuDeviceGet", [c.POINTER(c.c_int), c.c_int]),

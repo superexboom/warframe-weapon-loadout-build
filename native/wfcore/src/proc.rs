@@ -183,6 +183,9 @@ impl ProcPile {
 
 // ── CappedPool ────────────────────────────────────────────────────────────
 
+#[path = "bake_pool.rs"]
+pub(crate) mod bake_pool;
+
 pub type Kernel = Vec<(usize, f64)>;
 
 pub fn arrival_kernel(absence: f64, count: f64, cap: usize) -> Option<Kernel> {
@@ -225,6 +228,8 @@ pub struct CappedPool {
     front: Vec<(f64, Kernel, Vec<f64>)>,
     back: Vec<(f64, Kernel)>,
     back_dist: Vec<f64>,
+    bake_prefix: Option<bake_pool::Key>,
+    bake_enabled: bool,
     dist: Option<Vec<f64>>,
     stats: Option<(f64, f64)>,
     pub version: u64,
@@ -238,6 +243,8 @@ impl CappedPool {
             front: Vec::new(),
             back: Vec::new(),
             back_dist: Vec::new(),
+            bake_prefix: None,
+            bake_enabled: cap == bake_pool::CAP && bake_pool::enabled(),
             dist: None,
             stats: None,
             version: 0,
@@ -256,6 +263,7 @@ impl CappedPool {
         self.front.clear();
         self.back.clear();
         self.back_dist = self.unit();
+        self.bake_prefix = None;
         self.dist = None;
         self.stats = None;
         self.version += 1;
@@ -270,7 +278,11 @@ impl CappedPool {
             Some(k) => k,
             None => return false,
         };
-        self.back_dist = fold(&self.back_dist, &kernel, self.cap);
+        if !self.bake_enabled || !bake_pool::copy_prefix(
+            &mut self.bake_prefix, self.back.len() + 1, absence, count, &mut self.back_dist,
+        ) {
+            self.back_dist = fold(&self.back_dist, &kernel, self.cap);
+        }
         self.back.push((end, kernel));
         self.dist = None;
         self.stats = None;
@@ -285,6 +297,7 @@ impl CappedPool {
             self.front.push((end, kernel, dist.clone()));
         }
         self.back_dist = self.unit();
+        self.bake_prefix = None;
     }
 
     pub fn expire(&mut self, t: f64) {

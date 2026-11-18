@@ -4,6 +4,7 @@
 //! operation for operation, so results are bit-identical; the Python side
 //! falls back to the reference when this library is missing.
 use pyo3::prelude::*;
+use pyo3::types::{PyBytes, PyDict};
 
 pub mod co;
 pub mod counters;
@@ -89,6 +90,42 @@ impl PyCappedPool {
     fn version(&self) -> u64 {
         self.inner.version
     }
+}
+
+#[pyfunction]
+fn bake_pool_capture(limit: usize) -> PyResult<()> {
+    proc::bake_pool::capture(limit).map_err(pyo3::exceptions::PyValueError::new_err)
+}
+
+#[pyfunction]
+fn bake_pool_pending() -> Vec<(f64, f64)> {
+    proc::bake_pool::pending()
+}
+
+#[pyfunction]
+fn bake_pool_reference(py: Python<'_>, keys: Vec<(f64, f64)>, steps: usize) -> PyResult<Py<PyBytes>> {
+    let data = proc::bake_pool::reference(keys, steps).map_err(pyo3::exceptions::PyValueError::new_err)?;
+    Ok(PyBytes::new(py, &data).unbind())
+}
+
+#[pyfunction]
+fn bake_pool_install(keys: Vec<(f64, f64)>, steps: usize, data: &Bound<'_, PyBytes>) -> PyResult<()> {
+    proc::bake_pool::install(keys, steps, data.as_bytes()).map_err(pyo3::exceptions::PyValueError::new_err)
+}
+
+#[pyfunction]
+fn bake_pool_stats(py: Python<'_>) -> PyResult<Bound<'_, PyDict>> {
+    let (hits, misses, keys) = proc::bake_pool::stats();
+    let out = PyDict::new(py);
+    out.set_item("hits", hits)?;
+    out.set_item("misses", misses)?;
+    out.set_item("keys", keys)?;
+    Ok(out)
+}
+
+#[pyfunction]
+fn bake_pool_stop() {
+    proc::bake_pool::stop();
 }
 
 #[pyclass(name = "StatusPresence", unsendable)]
@@ -225,6 +262,12 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("RELOAD_SCALED_TRANSFORMS", 1)?;
     m.add_class::<PyHeatChains>()?;
     m.add_class::<PyCappedPool>()?;
+    m.add_function(wrap_pyfunction!(bake_pool_capture, m)?)?;
+    m.add_function(wrap_pyfunction!(bake_pool_pending, m)?)?;
+    m.add_function(wrap_pyfunction!(bake_pool_reference, m)?)?;
+    m.add_function(wrap_pyfunction!(bake_pool_install, m)?)?;
+    m.add_function(wrap_pyfunction!(bake_pool_stats, m)?)?;
+    m.add_function(wrap_pyfunction!(bake_pool_stop, m)?)?;
     m.add_class::<PyStatusPresence>()?;
     m.add_class::<PyKillAttribution>()?;
     m.add_function(wrap_pyfunction!(capped_stack_add_dists, m)?)?;

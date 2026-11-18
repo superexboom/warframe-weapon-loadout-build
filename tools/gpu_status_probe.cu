@@ -1,8 +1,6 @@
 // Exact operation-order prototype of proc::arrival_kernel + proc::fold.
 // One thread owns one independent status-distribution recurrence.
-extern "C" __global__ void status_batch(const double* input, double* output, int count, int steps) {
-    int lane = blockIdx.x * blockDim.x + threadIdx.x;
-    if (lane >= count) return;
+__device__ void status_row(const double* input, double* output, int lane, int row, int steps) {
     double absence = input[lane * 2], expected = input[lane * 2 + 1];
     double p = fmin(1.0, fmax(0.0, 1.0 - absence));
     int shifts[3], used = 0;
@@ -27,9 +25,19 @@ extern "C" __global__ void status_batch(const double* input, double* output, int
             for (int k = 0; k <= 10; ++k) dist[k] = next[k];
         }
     }
-    for (int k = 0; k <= 10; ++k) output[lane * 11 + k] = dist[k];
+    for (int k = 0; k <= 10; ++k) output[row * 11 + k] = dist[k];
 }
 
+extern "C" __global__ void status_batch(const double* input, double* output, int count, int steps) {
+    int lane = blockIdx.x * blockDim.x + threadIdx.x;
+    if (lane < count) status_row(input, output, lane, lane, steps);
+}
+
+// One thread per (probability pair, prefix length). A worker consumes every prefix.
+extern "C" __global__ void pool_prefixes(const double* input, double* output, int count, int steps) {
+    int row = blockIdx.x * blockDim.x + threadIdx.x;
+    if (row < count * steps) status_row(input, output, row / steps, row, 1 + row % steps);
+}
 
 // Bounded form of the production two-stack CappedPool. Supports expiry,
 // changing arrivals, target resets and a distribution query at every event.

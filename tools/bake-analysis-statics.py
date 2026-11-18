@@ -20,11 +20,13 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import multiprocessing
 import os
 import subprocess
 import sys
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
+from contextlib import nullcontext
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -52,6 +54,13 @@ if BOT_BUNDLE:
 
 SHARD_ROOT = ROOT / ".local" / "cache"
 SHARD_SCHEMA_VERSION = 3
+_TABLE_MODE, _TABLE_CHANNEL = 'off', None
+
+
+def _init_worker(table_mode, table_channel):
+    global _TABLE_MODE, _TABLE_CHANNEL
+    _TABLE_MODE, _TABLE_CHANNEL = table_mode, table_channel
+    os.environ.update(WF_ANALYZER_SERIAL='1', WF_CONCURRENT_SEARCHES='1', WF_ENGINE_WORKERS='1')
 
 
 def _catalog_weapons() -> list[dict]:
@@ -126,25 +135,27 @@ def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]])
             # used), then two: the second request finds the baseline,
             # hardness nodes and archetype bases in the statics and only adds
             # the two-positive recommendation and negatives.
-            for positives in positive_counts:
-                payload = {
-                    "weapon": weapon_path,
-                    "disposition": disposition,
-                    "profile": profile,
-                    "fireMode": fire_mode,
-                    "_bakeStaticsOnly": True,
-                    "stats": _trigger_stats(app, weapon_type, disposition, positives),
-                }
-                if BOT_BUNDLE:
-                    import bot_riven
-                    # This is a synthetic trigger, not an OCR card. Keep the
-                    # engine's legal Riven family (primary Kitguns use pistol
-                    # Rivens) rather than the Bot's legacy OCR clamp family.
-                    trigger_stats = payload['stats']
-                    payload, _ = bot_riven._payload({**payload, 'stats': []}, profile)
-                    payload.update(stats=trigger_stats, _bakeStaticsOnly=True)
-                response = app.analyze_payload(payload)
-                work[str(positives)] = response.get('searchWork') or {}
+            table_work = {}
+            if _TABLE_MODE != 'off':
+                from tools.gpu_bake.pool_tables import shard_tables
+                table_scope = shard_tables(_TABLE_MODE, _TABLE_CHANNEL)
+            else:
+                table_scope = nullcontext(table_work)
+            with table_scope as table_work:
+                for positives in positive_counts:
+                    payload = {
+                        "weapon": weapon_path, "disposition": disposition, "profile": profile,
+                        "fireMode": fire_mode, "_bakeStaticsOnly": True,
+                        "stats": _trigger_stats(app, weapon_type, disposition, positives),
+                    }
+                    if BOT_BUNDLE:
+                        import bot_riven
+                        # Primary Kitguns use pistol Rivens; these are engine triggers, not OCR cards.
+                        trigger_stats = payload['stats']
+                        payload, _ = bot_riven._payload({**payload, 'stats': []}, profile)
+                        payload.update(stats=trigger_stats, _bakeStaticsOnly=True)
+                    response = app.analyze_payload(payload)
+                    work[str(positives)] = response.get('searchWork') or {}
         except Exception as exc:  # noqa: BLE001
             outcomes.append({"weapon": weapon_path, "profile": profile, "ok": False, "error": str(exc)[:200]})
             continue
@@ -202,6 +213,7 @@ def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]])
             continue
         outcomes.append({"weapon": weapon_path, "fireMode": fire_mode, "profile": profile,
                          "ok": True, "entries": len(entries), "searchWork": work,
+                         **({'statusTables': table_work} if table_work else {}),
                          "elapsedSeconds": time.perf_counter() - started,
                          "cpuSeconds": time.process_time() - cpu_started})
     return outcomes
@@ -277,7 +289,7 @@ def main() -> int:
     parser.add_argument("--profile", type=_profiles, default=["standard"],
                         help="档位，逗号分隔（fast,standard）：一个任务池烘焙全部档位")
     parser.add_argument("--workers", type=limited_workers, default=None,
-                        help="并行进程数（默认与分析计算池相同：物理核心数再加四分之一）")
+                        help="并行解算进程数，最多 10；CUDA 模式最多 9 个，另留 1 个 GPU 协调线程")
     parser.add_argument("--weapon", action="append", default=None, help="只烘焙指定武器（可多次）")
     parser.add_argument("--limit", type=int, default=None, help="只烘焙前 N 把（冒烟用）")
     parser.add_argument("--fire-modes", action="store_true", help="烘焙全部开火模式（默认与普通分析同口径：灵化取末模式，其余取主模式）")
@@ -285,6 +297,9 @@ def main() -> int:
                         help='覆盖与失败报告，运行时逐项更新；多个档位时路径里写 {profile}（如 out/{profile}.json）')
     parser.add_argument('--dry-run', action='store_true', help='仅列出任务和当前分片覆盖')
     parser.add_argument('--shards-only', action='store_true', help='只生成并校验分片；不发布主缓存')
+    parser.add_argument('--status-tables', choices=('off', 'rust', 'cuda'), default='off',
+                        help='离线预计算重复状态概率；默认关闭。cuda 使用一个共享设备，并逐字节核对 Rust 结果')
+    parser.add_argument('--nvrtc-dir', type=Path, help='含 NVRTC 和 builtins 的目录；也可设置 CUDA_PATH')
     parser.add_argument('--allow-full-bake', action='store_true', help='Use only after explicit user authorization for a full-roster bake')
     parser.add_argument('--positives', default='3,2',
                         help='烘焙的正面词条数（逗号分隔，默认 3,2：两套推荐都进缓存；只写 3 与旧流程相同）')
@@ -293,6 +308,8 @@ def main() -> int:
     parser.add_argument('--bot-bundle', type=Path,
                         help='Bake the actual Bot runtime with its fixed preset (fast only)')
     args = parser.parse_args()
+    if BOT_BUNDLE and args.status_tables != 'off':
+        parser.error('--status-tables is supported only by the Portable bake worker')
     if BOT_BUNDLE and getattr(bot_riven, 'BAKE_PROFILE', 'fast') != 'fast':
         parser.error('This Bot requires its owned deep bake, Incarnon routes and damage references; '
                      'use tools/wfarsenal/rebuild_cache.ps1 instead of the legacy fast adapter')
@@ -315,7 +332,8 @@ def main() -> int:
     import app
     from wfarsenal import parallel
 
-    workers = args.workers or limited_workers(parallel.default_workers())
+    workers = min(args.workers or limited_workers(parallel.default_workers()),
+                  9 if args.status_tables == 'cuda' else 10)
     cache_version = app.ANALYSIS_STATICS_CACHE_VERSION
     try:
         input_fingerprint = app._analysis_inputs_fingerprint()
@@ -348,7 +366,7 @@ def main() -> int:
         weapons = weapons[: args.limit]
     if not args.dry_run and not args.allow_full_bake and full_roster_size and len(weapons) == full_roster_size:
         parser.error('selected weapons cover the full roster; explicit authorization and --allow-full-bake are required')
-    print(f"baking {len(weapons)} weapons, profiles={','.join(profiles)}, workers={workers}")
+    print(f"baking {len(weapons)} weapons, profiles={','.join(profiles)}, workers={workers}, status-tables={args.status_tables}")
 
     for directory in shard_dirs.values():
         directory.mkdir(parents=True, exist_ok=True)
@@ -402,6 +420,7 @@ def main() -> int:
         print(f"skipping {skipped_no_damage} raw fire modes without damage data")
 
     started = time.time()
+    coordinator = None
 
     def report(status_of):
         if not args.report:
@@ -411,7 +430,10 @@ def main() -> int:
             payload = dict(status=status_of(profile), updatedAt=datetime.now(timezone.utc).isoformat(),
                            profile=profile, fireModes=args.fire_modes, workers=workers,
                            botBundle=str(BOT_BUNDLE) if BOT_BUNDLE else None,
-                           gpuEnabled=False, positiveCounts=positive_counts,
+                           gpuEnabled=(args.status_tables == 'cuda' and any(
+                               row.get('statusTables', {}).get('hits', 0) for row in completed[profile])),
+                           statusTableMode=args.status_tables, positiveCounts=positive_counts,
+                           **({'gpuCoordinator': dict(coordinator.summary)} if coordinator is not None else {}),
                            cacheVersion=cache_version, inputs=input_fingerprint,
                            weapons=len(weapons), expectedShards=len(expected_shards[profile]),
                            skippedCurrent=skipped[profile], completed=len(completed[profile]),
@@ -430,7 +452,17 @@ def main() -> int:
                   f'pending {len(expected_shards[profile]) - skipped[profile]}, excluded {excluded_modes}')
         return 0
     done = failed = 0
-    with ProcessPoolExecutor(max_workers=workers) as pool:
+    channel = None
+    if tasks and args.status_tables == 'cuda':
+        from tools.gpu_bake.pool_tables import PoolBroker
+        # Spawn workers share one queue and one device context. The CUDA driver never enters a worker.
+        channel = multiprocessing.get_context('spawn').SimpleQueue()
+        nvrtc_dir = args.nvrtc_dir or (Path(os.environ['CUDA_PATH']) / 'bin' if os.getenv('CUDA_PATH') else None)
+        coordinator = PoolBroker(channel, nvrtc_dir)
+    with coordinator or nullcontext(), ProcessPoolExecutor(
+        max_workers=workers, mp_context=multiprocessing.get_context('spawn'),
+        initializer=_init_worker, initargs=(args.status_tables, channel),
+    ) as pool:
         futures = {pool.submit(_shard_worker, task): task for task in tasks}
         for future in as_completed(futures):
             weapon_path, mode, pending, _counts = futures[future]
@@ -441,6 +473,9 @@ def main() -> int:
                              'error': f'{type(exc).__name__}: {exc}'} for profile, _shard in pending]
             for outcome in outcomes:
                 done += 1
+                table_error = outcome.get('statusTables', {}).get('error')
+                if table_error:
+                    print(f"  {outcome['weapon']} [{outcome['profile']}]: CPU fallback: {table_error}")
                 if outcome["ok"]:
                     completed[outcome["profile"]].append(outcome)
                 else:
@@ -451,6 +486,11 @@ def main() -> int:
                     elapsed = time.time() - started
                     print(f"  {done}/{pending_shards} ({elapsed:.0f}s, {failed} failed)")
             report(lambda _profile: 'running')
+
+    if args.status_tables != 'off':
+        table_rows = [row['statusTables'] for group in completed.values() for row in group if 'statusTables' in row]
+        print(f"{args.status_tables} status tables: {sum(row['builtKeys'] for row in table_rows)} generated, "
+              f"{sum(row['hits'] for row in table_rows)} replay hits")
 
     # 合并分片到主缓存
     # Preserve other profiles already baked into the main cache.

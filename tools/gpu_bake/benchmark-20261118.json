@@ -1,0 +1,200 @@
+{
+  "date": "2026-11-18",
+  "scope": "Portable, two cold fast shards per mode; one run each. 100 fixed-build replays are a separate correctness workload.",
+  "engineFingerprint": "5ed976bf545120d9",
+  "cacheVersion": 26,
+  "nativeBinarySha256": "2bf1694842936abe932233948777297bea2e6eb5c8d9174b73d7e74e30d46aa1",
+  "profile": "fast",
+  "workers": 2,
+  "positiveCounts": [
+    3,
+    2
+  ],
+  "identicalShardSha256": {
+    "/Lotus/Weapons/Grineer/LongGuns/GrineerM16Homage/GrineerM16Rifle": "cb08ccf567f20c147a677da537ada48e6d973e8ed76c5726a9af3e42dbdf13e3",
+    "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionWeapon": "7751a58dd33e3bc13e29085f84cbe498038e4e66b96e5121845ae2a7932c6f26"
+  },
+  "completeBakes": {
+    "off": {
+      "gpuEnabled": false,
+      "elapsedSeconds": 121.647,
+      "weapons": [
+        {
+          "weapon": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionWeapon",
+          "fireMode": 0,
+          "entries": 1,
+          "elapsedSeconds": 61.41653999999835,
+          "cpuSeconds": 61.171875
+        },
+        {
+          "weapon": "/Lotus/Weapons/Grineer/LongGuns/GrineerM16Homage/GrineerM16Rifle",
+          "fireMode": 0,
+          "entries": 1,
+          "elapsedSeconds": 116.59193310000046,
+          "cpuSeconds": 116.28125
+        }
+      ]
+    },
+    "rust": {
+      "gpuEnabled": false,
+      "elapsedSeconds": 115.918,
+      "weapons": [
+        {
+          "weapon": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionWeapon",
+          "fireMode": 0,
+          "entries": 1,
+          "statusTables": {
+            "mode": "rust",
+            "hits": 146548,
+            "misses": 633446,
+            "keys": 512,
+            "builtKeys": 592,
+            "batches": 51,
+            "prepareSeconds": 0.0016996999984257855
+          },
+          "elapsedSeconds": 63.42638850000003,
+          "cpuSeconds": 63.09375
+        },
+        {
+          "weapon": "/Lotus/Weapons/Grineer/LongGuns/GrineerM16Homage/GrineerM16Rifle",
+          "fireMode": 0,
+          "entries": 1,
+          "statusTables": {
+            "mode": "rust",
+            "hits": 5105280,
+            "misses": 9943646,
+            "keys": 512,
+            "builtKeys": 10905,
+            "batches": 110,
+            "prepareSeconds": 0.022176599995873403
+          },
+          "elapsedSeconds": 110.98118160000013,
+          "cpuSeconds": 110.65625
+        }
+      ]
+    },
+    "cuda": {
+      "gpuEnabled": true,
+      "gpuCoordinator": {
+        "device": "NVIDIA GeForce RTX 5080",
+        "error": null,
+        "batches": 167,
+        "verifiedKeys": 12026,
+        "startupSeconds": 0.11102279999977327,
+        "deviceSeconds": 0.05118669999865233,
+        "referenceSeconds": 0.01603049998084316
+      },
+      "elapsedSeconds": 125.352,
+      "weapons": [
+        {
+          "weapon": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionWeapon",
+          "fireMode": 0,
+          "entries": 1,
+          "statusTables": {
+            "mode": "cuda",
+            "hits": 147186,
+            "misses": 632808,
+            "keys": 512,
+            "builtKeys": 592,
+            "batches": 50,
+            "prepareSeconds": 0.12198889999490348
+          },
+          "elapsedSeconds": 64.15214430000196,
+          "cpuSeconds": 63.875
+        },
+        {
+          "weapon": "/Lotus/Weapons/Grineer/LongGuns/GrineerM16Homage/GrineerM16Rifle",
+          "fireMode": 0,
+          "entries": 1,
+          "statusTables": {
+            "mode": "cuda",
+            "hits": 5152726,
+            "misses": 9896200,
+            "keys": 512,
+            "builtKeys": 11434,
+            "batches": 117,
+            "prepareSeconds": 0.2271505999888177
+          },
+          "elapsedSeconds": 120.22133300000132,
+          "cpuSeconds": 119.71875
+        }
+      ]
+    }
+  },
+  "fixedLoadouts": {
+    "scope": "30-second fixed-loadout combat replays; not full optimizer bakes",
+    "seed": 20261118,
+    "engineFingerprint": "5ed976bf545120d9",
+    "cases": 100,
+    "target": {
+      "target": {
+        "health": 30000.0,
+        "shield": 4000.0,
+        "overguard": 0.0,
+        "armour": 200.0,
+        "baseLevel": 1
+      },
+      "level": 1,
+      "windowSeconds": 30.0,
+      "headshotChance": 0.0
+    },
+    "scoreFields": [
+      "killsPerMinute",
+      "windowDps",
+      "totalWindowDamage"
+    ],
+    "maxInstalledKeys": 512,
+    "steps": 24,
+    "setupSeconds": 0.07760269999926095,
+    "capture": {
+      "sweepSeconds": 0.11272480000116047,
+      "nativeCalls": 100,
+      "nativeFallbacks": 0,
+      "hits": 0,
+      "misses": 13504,
+      "installedKeys": 0
+    },
+    "off": {
+      "sweepSeconds": 0.09147370000209776,
+      "nativeCalls": 100,
+      "nativeFallbacks": 0,
+      "hits": 0,
+      "misses": 0,
+      "installedKeys": 0
+    },
+    "distinctObservedKeys": 65,
+    "keysTimed": 65,
+    "captureSaturatedFights": 0,
+    "rust": {
+      "sweepSeconds": 0.08545400000002701,
+      "nativeCalls": 100,
+      "nativeFallbacks": 0,
+      "hits": 6813,
+      "misses": 6691,
+      "installedKeys": 65,
+      "buildSeconds": 0.0001483999985794071,
+      "installSeconds": 3.870000000461005e-05,
+      "totalSeconds": 0.08564109999861103
+    },
+    "cuda": {
+      "device": "NVIDIA GeForce RTX 5080",
+      "startupSeconds": 0.11765830000149435,
+      "buildSeconds": 0.0007796999998390675,
+      "tableExact": true,
+      "verifySeconds": 8.700000762473792e-06,
+      "installSeconds": 5.4200001613935456e-05,
+      "sweepSeconds": 0.17874980000124197,
+      "nativeCalls": 100,
+      "nativeFallbacks": 0,
+      "hits": 6813,
+      "misses": 6691,
+      "installedKeys": 65,
+      "totalSeconds": 0.2973991000035312
+    },
+    "exactReplays": {
+      "rust": 100,
+      "cuda": 100
+    },
+    "passed": true
+  }
+}

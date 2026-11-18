@@ -1,4 +1,4 @@
-"""Bounded, exact GPU microbenchmarks with 1/8/16 CPU lanes and transfer costs.
+"""Bounded, exact GPU microbenchmarks with 1/8/10 CPU lanes and transfer costs.
 
 No simulation/cache result is produced. Both kernels must match production
 Rust proc arithmetic bit for bit; timings never claim complete bake speedup.
@@ -43,20 +43,23 @@ pub unsafe extern "C" fn bench(input:*const f64,output:*mut f64,count:usize,step
 
 def main():
  ap=argparse.ArgumentParser(description=__doc__)
- ap.add_argument('--simfleet-root',type=Path,required=True);ap.add_argument('--nvrtc-dir',type=Path,required=True)
+ ap.add_argument('--simfleet-root',type=Path,help='optional external hardware adapter (default: bundled)');ap.add_argument('--nvrtc-dir',type=Path,required=True)
  ap.add_argument('--output',type=Path,required=True);ap.add_argument('--repeats',type=int,default=3)
  args=ap.parse_args();out=args.output.resolve()
  if out.exists():ap.error('new directory required')
  out.mkdir(parents=True)
- sys.path.insert(0,str(args.simfleet_root/'experiments/hardware'));from cuda_driver import Cuda
- source=out/'cpu.rs';source.write_text(f'#[path={json.dumps((ROOT/"native/wfcore/src/pymath.rs").as_posix())}] mod pymath;\n'+f'#[path={json.dumps((ROOT/"native/wfcore/src/proc.rs").as_posix())}] mod proc;\n'+RUST,encoding='utf-8')
+ if args.simfleet_root:
+  sys.path.insert(0,str(args.simfleet_root/'experiments/hardware'));from cuda_driver import Cuda
+ else:
+  from gpu_bake.cuda_driver import Cuda
+ source=out/'cpu.rs';source.write_text(''.join(f'#[path={json.dumps((ROOT/"native/wfcore/src"/(name+".rs")).as_posix())}] mod {name};\n' for name in ('pymath','counters','proc'))+RUST,encoding='utf-8')
  compile_result=subprocess.run(['rustc','--crate-type','cdylib','-O','--edition=2021','-A','dead_code',str(source),'-o',str(out/'cpu.dll')],capture_output=True,text=True)
  if compile_result.returncode:raise RuntimeError(compile_result.stderr)
  cpu=c.CDLL(str(out/'cpu.dll'));cpu.bench.argtypes=[c.c_void_p,c.c_void_p,c.c_size_t,c.c_size_t,c.c_size_t,c.c_size_t]
  def load():
   return subprocess.check_output(['nvidia-smi','--query-gpu=utilization.gpu,utilization.memory,memory.used,power.draw','--format=csv,noheader'],text=True).strip()
  rows=[];before=load()
- with Cuda(args.nvrtc_dir.resolve()) as gpu,ThreadPoolExecutor(max_workers=16) as pool:
+ with Cuda(args.nvrtc_dir.resolve()) as gpu,ThreadPoolExecutor(max_workers=10) as pool:
   start=time.perf_counter();ptx=gpu.compile(ROOT/'tools/gpu_status_probe.cu');compile_seconds=time.perf_counter()-start
   for kind,name in [(0,'status_batch'),(1,'pool_batch')]:
    for steps in (30,180):
@@ -66,9 +69,9 @@ def main():
       absence=rng.uniform(.02,.99);inputs[2*i]=absence;inputs[2*i+1]=(1-absence)*rng.uniform(.2,3.)
      expected=(c.c_double*(count*width))();actual=(c.c_double*(count*width))();parallel=(c.c_double*(count*width))()
      din=gpu.allocate(c.sizeof(inputs));dout=gpu.allocate(c.sizeof(actual))
-     timings={str(n):[] for n in (1,8,16)};costs={str(n):[] for n in (1,8,16)};gt=[];kt=[];ut=[];dt=[]
+     timings={str(n):[] for n in (1,8,10)};costs={str(n):[] for n in (1,8,10)};gt=[];kt=[];ut=[];dt=[]
      for repeat in range(args.repeats+1):
-      for workers in (1,8,16):
+      for workers in (1,8,10):
        start=time.perf_counter();pc=time.process_time()
        if workers==1:cpu.bench(inputs,expected,count,steps,0,kind)
        else:

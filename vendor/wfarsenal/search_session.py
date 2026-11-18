@@ -35,6 +35,8 @@ def check_cancelled():
 # the engine between two evaluations: the HTTP layer sets the hook, which
 # hands the engine over and takes it back.
 YIELD = ContextVar('search_yield', default=None)
+# An offline worker can drain sampled native inputs at existing progress beats.
+BAKE_PROGRESS = ContextVar('bake_progress', default=None)
 
 
 def session_request(fn):
@@ -47,7 +49,7 @@ def session_request(fn):
             # A bake has no interactive budget (its statics must not depend on
             # the machine's load) but shares the request's search memo.
             token = SESSION.set(dict(start=time.monotonic(), deadline=float('inf'), phaseSeconds=float('inf'),
-                                     stage='baseline', hook=None, evaluations=0, memoHits=0, memo=OrderedDict(),
+                                     stage='baseline', hook=BAKE_PROGRESS.get(), evaluations=0, memoHits=0, memo=OrderedDict(),
                                      searches=OrderedDict(), limited=0, lastBeat=0.))
             try:
                 result = fn(*args, **kwargs)
