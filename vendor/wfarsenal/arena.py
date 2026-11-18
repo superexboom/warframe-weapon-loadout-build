@@ -15,7 +15,7 @@ from . import parallel
 from .arena_scene import load_scene, distance, Edge, ROOT
 from .arena_combat import ArenaCombat, UnsupportedArenaCombat
 
-MODEL = "arena-world-v9"
+MODEL = "arena-world-v10"
 VITUS_DROP_CHANCE = 0.06
 DRONE = "/Lotus/Types/Enemies/Corpus/Drones/AIWeek/CorpusEliteShieldDroneAvatar"
 EPS = 1e-8
@@ -39,7 +39,7 @@ def defaults(enemy=""):
         directorHardCap=40,
         spawnEvery=1.0,
         spawnBatch=3,
-        waveWait=3.0,
+        waveWait=None,
         maxWave=180.0,
         noKill=60.0,
         wallSeconds=30.0,
@@ -64,6 +64,8 @@ def normalize_scenario(value):
         raise ValueError("scenario must be an object")
     c = {**defaults(), **value}
     c["mapId"] = str(c.get("mapId") or c.get("map") or "corpus-ship-defense")
+    if c["waveWait"] is None:
+        c["waveWait"] = 6.0 if c["spawnProfile"] == "defense" else 3.0
     for key, low, high in [
         ("waves", 1, 20),
         ("squadSize", 1, 4),
@@ -237,6 +239,7 @@ class World:
             context["cycle_enabled"],
         )
         self.combat.nearby = self.nearby
+        self.combat.blast_recipients = self.blast_recipients
         self.combat.syndicate_targets = lambda radius, t: [
             a.id
             for a in self.live
@@ -412,6 +415,21 @@ class World:
             and self.scene.visible(add(origin, 0.8), add(a.pos, 0.8))
         ]
 
+    @staticmethod
+    def distance_to_body(origin, actor):
+        p = actor.pos
+        r, low, high = (0.45, 0.4, 1.3) if actor.drone else (0.38, 0.07, 1.88)
+        nearest = (max(p[0]-r, min(p[0]+r, origin[0])),
+                   max(p[1]+low, min(p[1]+high, origin[1])),
+                   max(p[2]-r, min(p[2]+r, origin[2])))
+        return distance(origin, nearest)
+
+    def blast_recipients(self, id, radius, t):
+        origin = add(self.combat.targets[id].position, 0.85)
+        return [a.id for a in self.live if a.id != id and not a.dead
+                and self.distance_to_body(origin, a) <= radius
+                and self.scene.visible(origin, add(a.pos, 0.85))]
+
     def protection(self):
         drones = [a for a in self.live if a.drone and not a.dead]
         for actor in self.live:
@@ -466,13 +484,7 @@ class World:
             for recipient in self.live:
                 # Native falloff uses the closest point of the recipient AABB.
                 # These bounds enclose this arena's existing body/head proxies.
-                low = add(recipient.pos, 0.4 if recipient.drone else 0.07)
-                high = add(recipient.pos, 1.3 if recipient.drone else 1.88)
-                radius = 0.45 if recipient.drone else 0.38
-                nearest = (max(low[0]-radius, min(high[0]+radius, origin[0])),
-                           max(low[1], min(high[1], origin[1])),
-                           max(low[2]-radius, min(high[2]+radius, origin[2])))
-                factor = max(0.0, 1.0 - distance(origin, nearest) / 20.0)
+                factor = max(0.0, 1.0 - self.distance_to_body(origin, recipient) / 20.0)
                 if factor > 0:
                     self.combat.drone_explosion(recipient.id, amount * factor, when)
             self.replay["combat"].append(dict(
@@ -515,7 +527,7 @@ class World:
             self.wave_target = self.c["enemies"]
             self.wave_pool = [r for r in self.spec_entries
                               if r["tier"] <= params["tier"] and r["probability"] > 0]
-            self.squad_delay = params["defaultDelay"]
+            self.squad_delay = params["initialDelay"]
             self.initial_squad = params["initialCount"]
             if not self.initial_squad:
                 self.next_spawn = self.t + self.squad_delay
@@ -549,7 +561,8 @@ class World:
             self.wave_rush_count = math.floor(self.wave_target * 0.25)
             if schedule["bossCount"]:
                 self.boss_spawn_wave = self.wave
-            info.update(spawnProfile=self.c["spawnProfile"], **params,
+            info.update({**params, "rushCount": self.wave_rush_count},
+                        spawnProfile=self.c["spawnProfile"],
                         schedule=schedule, targetCount=self.wave_target,
                         spawnAttemptSeconds=0.25, directorHardCap=self.c["directorHardCap"])
             self.diagnostics.extend(schedule["qualifications"])
@@ -666,13 +679,15 @@ class World:
                 elapsed_seconds=self.t, eximus_multiplier=self.c["eximusMultiplier"],
             )["leaderChance"]
             initial = self.initial_squad > 0
-            batch = self.initial_squad if initial else int(
-                params["minSquad"] + self.spawn_random()
-                * (params["maxSquad"] - params["minSquad"] + 1))
-            self.initial_squad = 0
-            if not initial and len(self.live) + params["capMinimumSquad"] > self.wave_alive_cap:
+            if initial:
+                batch = self.initial_squad
+                self.initial_squad = 0
+            elif len(self.live) + params["capMinimumSquad"] > self.wave_alive_cap:
                 batch = 0
                 squad_allowed = False
+            else:
+                batch = int(params["minSquad"] + self.spawn_random()
+                            * (params["maxSquad"] - params["minSquad"] + 1))
         for _ in range(min(batch, self.wave_target - self.generated)):
             admission_cap = self.c["directorHardCap"] if self.interception else self.wave_alive_cap
             if len(self.live) >= admission_cap:
@@ -3747,7 +3762,10 @@ class World:
             at_end = self.t >= self.c["seconds"] - EPS
             if not self.wave_pending and not at_end:
                 if self.next_spawn <= self.t + EPS:
+                    alive_before = len(self.live)
                     self.spawn()
+                    if len(self.live) > alive_before and any(a.drone for a in self.live):
+                        self.protection()
                 if self.t >= self.next_plan - EPS:
                     self.plan()
                 if self.t >= self.next_fire - EPS and self.live:
@@ -3856,6 +3874,7 @@ class World:
             pathSearches=self.scene.metrics["pathSearches"],
             directDamage=self.combat.direct_damage,
             dotDamage=self.combat.dot_damage,
+            blastNeighbourDamage=self.combat.blast_neighbour_damage,
             droneExplosionDamage=self.combat.drone_explosion_damage,
             reloads=self.combat.reloads,
             transforms=self.combat.transforms,

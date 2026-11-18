@@ -111,6 +111,12 @@
       "source": "WaveDefend P25 pc808-840",
       "qualification": "Successful native spawn attempts may be slower; scene uses source spawn points with occupied-point checks."
     },
+    "waveWait": {
+      "defenseSeconds": 6,
+      "arbitrationSeconds": 3,
+      "source": "WaveDefend P48 pc1684-1686 -> P33 pc33-45",
+      "qualification": "Scenario can explicitly override the delay. This does not include native wave-clear polling or other mission transitions."
+    },
     "boss": {
       "cadence": 3,
       "tiers": "highest existing in 9..9+regularTier-1; default9",
@@ -121,6 +127,7 @@
       "source": "P26 pc491-635; P11; P16; P25 pc780-794",
       "scheduleAndAttemptRolls": true,
       "rushLastFraction": 0.25,
+      "rushCount": "floor(final scheduled count * 0.25), after spacing and truncation",
       "rushMinimum": {
         "missionTier0": 0.2,
         "missionTierPositive": 0.25
@@ -247,7 +254,7 @@
     "tier": "floor(min(lerp(stageTierLow,stageTierHigh,difficulty)+(round-1)/2,8)); source tiers<=current",
     "maxAlive": "Utilities.Round(lerp([7,13,22,25],[10,20,26,29],difficulty)*[.9,.95,1][stage]); hard-cap bound",
     "roundQualification": "Utilities.Round=floor(f32(x+.5)) proven; calling private key identity1357905729 remains unclosed",
-    "schedule": "after delay and live+max(rawMinSquad,1)<=softM, one squad without per-member softM truncation; hardcap still applies. Gate failure keeps current delay; admitted attempt resets delay if>=max, else max if now full, else adds increment. Initial batch restarts for each scenario quota cycle.",
+    "schedule": "SquadLib P21 pc34/37 and P18 pc99-101: the first cycle starts with zero delay. Draw one squad only after the delay and live+max(rawMinSquad,1)<=softM gates, without per-member softM truncation; hardcap still applies. Gate failure keeps current delay; admitted attempt resets delay if>=max, else max if now full, else adds increment. Later quota cycles restart the initial batch and default delay as a scenario rule.",
     "leaderChance": "Territory P34 uses persistent elapsedSeconds, offset=floor(lerp(120,0,difficulty)); chance0 before offset+60 then lerp(.02,.15,min((elapsed-offset-60)/2940,1))*nativeMultiplier",
     "level": "round1=start; later ceil(f32(start*powf(lerp(1.2,1.05,difficulty),round-1))); scenario equal low/high endpoints, disabled by default",
     "weightedSelection": "Native selector filters runtime tier/cap/level/faction/tag/canEnhance, sums weights with ADDSS and subtracts each weight from roll until selected. Scene uses mapped raw rows with per-Agent live caps; native merge/countgroup/override incomplete.",

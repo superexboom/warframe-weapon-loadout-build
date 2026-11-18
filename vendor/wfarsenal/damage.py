@@ -4145,8 +4145,8 @@ def expected_status_damage(
 
     The existing five DoTs remain authoritative through :func:`expected_dot_damage`.
     Blast is a delayed non-DoT hit per proc: 30% of modded base damage, unaffected
-    by elemental bonuses. Its 3x area component is exposed only as ``aoePotential``
-    and is deliberately excluded from the single-target total.
+    by elemental bonuses. Its early detonation deals 3x the original seed to
+    neighbours, exposed separately as ``aoePotential`` from the host damage.
     """
     target = target or {}
     dot = expected_dot_damage(
@@ -4241,7 +4241,7 @@ def expected_status_damage(
             * max(float(faction_mod), 0.0) ** 2
         )
         expected = per_proc * blast_count
-        aoe_potential = expected * BLAST_AOE_MULTIPLIER
+        aoe_potential = expected * (BLAST_AOE_MULTIPLIER / BLAST_DAMAGE_COEFFICIENT)
         breakdown["DT_EXPLOSION"] = {
             "expectedProcs": blast_count,
             "coefficient": BLAST_DAMAGE_COEFFICIENT,

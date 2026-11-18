@@ -57,7 +57,7 @@ export const shell = `
     <summary>高级模拟设置</summary>
     <div class="arena-fields">
       <label>地图范围<select id="arena-region"><option value="focus">中心区域</option><option value="full">全部已接入区域</option></select></label>
-      <label>波间等待<select id="arena-wait"><option value="3">3 秒</option><option value="15">15 秒</option></select></label>
+      <label>波间等待<select id="arena-wait"><option value="">按规则 (默认)</option><option value="3">3 秒</option><option value="6">6 秒</option><option value="15">15 秒</option></select></label>
       <label>门的视线<select id="arena-doorSight"><option value="open">常开 · 门不遮挡视线</option><option value="closed">关闭遮挡 · 仅影响视线</option></select></label>
       <label class="arena-check"><input id="arena-npcShortGap" type="checkbox" checked aria-describedby="arena-npcGapInfo">NPC 跨越（场景近似）</label>
       <p id="arena-npcGapInfo" class="arena-field-note">允许跨过已检查的窄隙（≤0.8 米）和出生区动作空段（跨度≤2.5 米、上升≤2 米、下落≤3.5 米），另含审核过的≤4 米下落和源指定跳点。</p>

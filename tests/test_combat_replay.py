@@ -315,7 +315,7 @@ def test_electric_gas_pile_retains_latest_landing_correlation():
     assert pile.moments(0.) == pytest.approx((14.125, 6.75, 9.5, 1.))
 
 
-def test_blast_fuse_scales_with_duration_and_ten_stacks_detonate():
+def test_blast_fuse_scales_with_duration_and_ten_stacks_detonate(monkeypatch):
     st = stats(
         damage_types={"DT_EXPLOSION": 100.0},
         fire_rate=1.0,
@@ -327,6 +327,31 @@ def test_blast_fuse_scales_with_duration_and_ten_stacks_detonate():
         replace(st, fire_rate=100.0, proc_duration_multiplier=1.0), window_seconds=0.15
     )
     assert fast["nonDotWindow"] == pytest.approx(300.0)
+
+    from wfarsenal import arena_combat
+    from wfarsenal.arena import World
+    monkeypatch.setattr(arena_combat, 'prepare', lambda *a, **k: dict(resolve=lambda *args:(st,None)))
+    world=World.__new__(World); combat=world.combat=arena_combat.ArenaCombat({})
+    world.scene=SimpleNamespace(visible=lambda origin, end: end[0]>=0)
+    world.live=[]; combat.blast_recipients=world.blast_recipients
+    for key,x in [('host',0),('near',1),('edge',5.3),('far',5.6),('wall',-2),('aura',2)]:
+        v=combat.add_target(key,target(2000 if key=='host' else 10000),position=(x,0,0))
+        v.protected=key=='aura'; v.status_immune=key=='edge'
+        world.live.append(SimpleNamespace(id=key,pos=v.position,drone=False,dead=False))
+    def fire(t):
+        shot=combat.prepare_shot(t,False,'host');combat.hit(shot,'host');combat.finish_shot(shot)
+    fire(0.);combat.advance(.5)
+    assert combat.targets['host'].damage==pytest.approx(130.) and combat.blast_neighbour_damage==0.
+    assert 'DT_EXPLOSION' not in combat.targets['host'].presence
+    st=replace(st,status_chance=10.,proc_duration_multiplier=1.)
+    fire(1.)
+    assert combat.targets['host'].damage==pytest.approx(530.)  # original host gets no 5m hit
+    assert 'DT_EXPLOSION' not in combat.targets['host'].presence
+    assert [combat.targets[k].damage for k in ('near','edge')]==pytest.approx([3000.,3000.])
+    st=replace(st,status_chance=1.);fire(2.)
+    st=replace(st,status_chance=0.,damage_types={'DT_IMPACT':3000.});fire(3.);combat.advance(6.)
+    assert [combat.targets[k].damage for k in ('near','edge','far','wall','aura')]==pytest.approx([3300.,3300.,0.,0.,0.])
+    assert not combat.targets['near'].presence and not combat.targets['host'].blasts
 
 
 def test_selected_incarnon_ignores_ammo_efficiency():
@@ -835,6 +860,7 @@ def test_arena_source_door_query_channels():
 
 
 def test_defense_schedule_cumulative_merge_quotas_and_cap_shortfall():
+    from wfarsenal.arena import World, normalize_scenario
     from wfarsenal.arena_spawns import (defense_tier, defense_wave_parameters,
                                         defense_enemy_level, build_defense_schedule)
 
@@ -889,6 +915,20 @@ def test_defense_schedule_cumulative_merge_quotas_and_cap_shortfall():
     assert all(row["scheduledBoss"] and row["scheduledEximus"]
                for row in result["entries"][-2:])
     assert result["bossQuota"]["tiers"] == [9] and bosses == before
+
+    world = World.__new__(World)
+    world.c = normalize_scenario({"spawnProfile": "defense", "level": 30, "waveWait": None})
+    assert world.c["waveWait"] == 6
+    assert normalize_scenario({"spawnProfile": "arbitration"})["waveWait"] == 3
+    assert normalize_scenario({"spawnProfile": "defense", "waveWait": 3})["waveWait"] == 3
+    world.t, world.wave, world.boss_spawn_wave = 0.0, 2, 0
+    world.interception, world.source_spawns = False, True
+    world.replay, world.diagnostics = {"waves": []}, []
+    world.spec_entries = world.raw_spec_entries = pool[:1] + bosses
+    world.spawn_random = lambda: 0.5
+    world.start_wave()
+    wave = world.replay["waves"][0]
+    assert (wave["requestedTotal"], wave["targetCount"], wave["rushCount"]) == (23, 6, 1)
 
 
     from wfarsenal.arena_spawns import interception_parameters, interception_enemy_level
@@ -984,24 +1024,50 @@ def test_arbitration_drone_opportunities_keep_ordinary_quota_and_respect_cap(mon
     assert len([e for e in world.replay["combat"] if e["kind"]=="drone-explosion"])==3
     assert world.combat.sources[0]["stacks"]==0.
 
+    # Planning in the spawn turn must see the aura, including for existing actors.
+    world.c.update(seconds=1., wallSeconds=10.)
+    world.cancelled=lambda:False
+    world.start_wave=lambda:None
+    world.wave_pending=False;world.wave_target=9;world.events=[]
+    world.next_spawn=world.next_plan=0.;world.next_drone_maintenance=1.
+    world.spawn=lambda:World._spawn_actor(world,enemy,{"face":0},drone=True)
+
+    class PlanReached(Exception):
+        pass
+
+    def check_plan():
+        assert world.combat.protected_ids=={ordinary.id}
+        raise PlanReached
+
+    world.plan=check_plan
+    with pytest.raises(PlanReached):
+        world.run()
+
 
 def test_interception_squad_gate_keeps_delay_and_allows_soft_cap_overshoot():
-    from wfarsenal.arena import World, Actor
-    from wfarsenal.arena_spawns import interception_parameters
+    from wfarsenal.arena import World, Actor, normalize_scenario
 
-    world=World.__new__(World)
-    world.c=dict(spawnProfile="interception",squadSize=4,missionDifficulty=1.,
-                 interceptionProgress=.5,level=30,eximusMultiplier=1.,directorHardCap=40,seed=1)
-    world.t=0.;world.wave=1;world.source_spawns=True;world.interception=True
-    world.interception_params=interception_parameters(1,4,1.,.5,30,40)
-    world.wave_alive_cap=29;world.wave_target=60;world.generated=26;world.initial_squad=0
-    world.squad_delay=1.;world.stats={"spawnQueued":0,"peakAlive":0};world.spawn_random=lambda:.99
+    world = World.__new__(World)
+    world.c = normalize_scenario({"spawnProfile": "interception", "level": 30, "seed": 1})
+    world.t, world.wave = 0.0, 0
+    world.interception = world.source_spawns = True
+    world.spec_entries = [dict(agent="a", tier=0, probability=1., maxSimultaneous=0, resolvedAvatarPath="enemy")]
+    world.replay, world.diagnostics = {"waves": []}, []
+    world.start_wave()
+    assert (world.squad_delay, world.next_spawn) == (0.0, 0.0)
+    world.t = 30.0
+    world.start_wave()
+    assert (world.squad_delay, world.next_spawn) == (6.0, 36.0)
+
+    world.c.update(squadSize=4, missionDifficulty=1.)
+    world.start_wave()
+    world.t, world.generated, world.initial_squad = 0., 26, 0
+    world.stats={"spawnQueued":0,"peakAlive":0};world.spawn_random=lambda:.99
     world.scene=SimpleNamespace(nodes=tuple((i*2.,0.,0.) for i in range(40)))
     world.spawn_points=[{"face":i} for i in range(40)]
     world.live=[Actor(i,i,world.scene.nodes[i],tape={"sourceAgent":"a"}) for i in range(25)]
     world.actors={a.id:a for a in world.live}
     world.enemy={"path":"enemy"};world.enemies={"enemy":world.enemy}
-    world.wave_pool=[dict(agent="a",tier=0,probability=1.,maxSimultaneous=0,resolvedAvatarPath="enemy")]
     def spawn(enemy,point,**kw):
         actor=Actor(len(world.actors),point["face"],world.scene.nodes[point["face"]],tape={"sourceAgent":"a"})
         world.live.append(actor);world.actors[actor.id]=actor
@@ -1009,5 +1075,9 @@ def test_interception_squad_gate_keeps_delay_and_allows_soft_cap_overshoot():
     world._spawn_actor=spawn;world.arbitration_drone=lambda anchor:None
     world.spawn()
     assert len(world.live)==30 and world.generated==31  # gate25+4<=29 permits all5
+    def unexpected_draw():
+        pytest.fail("a rejected replenishment must not consume a squad draw")
+
+    world.spawn_random = unexpected_draw
     world.squad_delay=2.;world.t=2.;world.spawn()
     assert len(world.live)==30 and world.next_spawn==4. and world.squad_delay==2.

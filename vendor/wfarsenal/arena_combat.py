@@ -194,6 +194,7 @@ class ArenaCombat:
             self.sources.append(q)
         self.targets = {}
         self.nearby = None
+        self.blast_recipients = None
         self.protected_ids = None
         self.time = 0.0
         self._packet_cache = {}
@@ -237,6 +238,8 @@ class ArenaCombat:
         self.total_damage = 0.0
         self.direct_damage = 0.0
         self.dot_damage = 0.0
+        self.blast_neighbour_damage = 0.0
+        self.blast_fatal_hit_unresolved = False
         self.drone_explosion_damage = 0.0
         self.base_ammo = None
         self.beam = BeamRamp()
@@ -607,7 +610,7 @@ class ArenaCombat:
             if kind == "syndicate":
                 self._syndicate_burst(when)
                 continue
-            if not v.alive and not (kind == "pile" and payload[0] == "DT_GAS"):
+            if not v.alive and kind != "blast-area" and not (kind == "pile" and payload[0] == "DT_GAS"):
                 continue
             processed += 1
             if processed > 1000000:
@@ -666,18 +669,32 @@ class ArenaCombat:
                         )
                 if schedule:
                     self._push(schedule[0], "pile", v, (dtype, schedule[1]))
+            elif kind == "blast-area":
+                amount, st, mode = payload
+                if self.blast_recipients:
+                    for other_id in self.blast_recipients(v.id, 5.0, when):
+                        other = self.targets[other_id]
+                        if not other.alive or other.protected:
+                            continue
+                        self._clean(other, when)
+                        self._take(other, {"DT_EXPLOSION": amount}, when, "blast-area", stats=st, mode=mode)
             elif kind == "blast":
                 if payload["count"] <= 0:
                     continue
+                # Consume this fuse before a lethal hit can release other stacks.
+                amount = payload["count"] * max(1.0, payload["per"])
+                payload["count"] = 0.0
+                v.blasts.remove(payload)
+                if not v.blasts:
+                    v.presence.pop("DT_EXPLOSION", None)
                 self._take(
                     v,
-                    {"DT_EXPLOSION": payload["count"] * payload["per"]},
+                    {"DT_EXPLOSION": amount},
                     when,
                     "dot",
                     stats=payload["stats"],
                     mode=payload["mode"],
                 )
-                payload["count"] = 0.0
                 if self.enervate:
                     self.enervate.advance(
                         when, event_probability=payload.get("hitProbability", 1.0)
@@ -1477,6 +1494,10 @@ class ArenaCombat:
         )
         if v.alive:
             self._procs(v, st, aim, t, packet, scale, shot.form)
+        elif (not self.blast_fatal_hit_unresolved and scale > 0
+              and packet[1].get("DT_EXPLOSION", 0.0) > 0):
+            self.blast_fatal_hit_unresolved = True
+            self.diagnostics.append("致命一击自身的新爆炸层与死亡回调先后未证实；本次只引爆先前已挂层。")
         if (
             self.combat.get("onosCharge")
             and shot.onos_phase == "power"
@@ -2235,6 +2256,8 @@ class ArenaCombat:
             self.drone_explosion_damage += applied
         else:
             self.dot_damage += applied
+            if source == "blast-area":
+                self.blast_neighbour_damage += applied
         if v.health <= EPS and v.overguard <= EPS:
             v.alive = False
             v.death_time = t
@@ -2295,6 +2318,8 @@ class ArenaCombat:
             ):
                 self.gauge = min(float(self.cycle["hits"]), self.gauge + 1.0)
             v.heat.reset()
+            if v.blasts:
+                self._release_blast(v, t)
             return True
         if source == "direct" and stats is not None and stats.extra_hits and not extra:
             faction = stats.faction_damage_multipliers.get("", 1.0)
@@ -2486,6 +2511,20 @@ class ArenaCombat:
             mode=mode,
         )
 
+    def _release_blast(self, v, t):
+        stacks, v.blasts = v.blasts, []
+        v.presence.pop("DT_EXPLOSION", None)
+        total = sum(row["count"] * row["per"] for row in stacks)
+        newest = stacks[-1]
+        for row in stacks:
+            row["count"] = 0.0  # queued natural fuses are now spent
+        st, mode = newest["stats"], newest["mode"]
+        if self.blast_recipients and total > 0:
+            area = total * (dm.BLAST_AOE_MULTIPLIER / dm.BLAST_DAMAGE_COEFFICIENT)
+            self._push(t, "blast-area", v, (area, st, mode))
+        if v.alive:
+            self._take(v, {"DT_EXPLOSION": total}, t, "dot", stats=st, mode=mode)
+
     def _procs(self, v, st, head, t, packet, scale, mode, natural=True):
         if v.status_immune or v.protected:
             return
@@ -2579,6 +2618,7 @@ class ArenaCombat:
                 continue
             row = rows.get(dtype)
             duration = (
+                dm.BLAST_DELAY_SECONDS * duration_scale if dtype == "DT_EXPLOSION" else
                 row["durationSeconds"]
                 if row
                 else DURATIONS.get(dtype, 6.0) * duration_scale
@@ -2633,8 +2673,8 @@ class ArenaCombat:
                     if schedule:
                         self._push(schedule[0], "pile", v, (dtype, schedule[1]))
             elif dtype in non:
-                active = [x for x in v.blasts if x["count"] > 0]
-                kept = min(count, max(0.0, 10.0 - sum(x["count"] for x in active)))
+                active_count = sum(x["count"] for x in v.blasts)
+                kept = min(count, 10.0 - active_count)
                 item = dict(
                     count=kept,
                     per=non[dtype]["perProc"] * scale,
@@ -2649,14 +2689,10 @@ class ArenaCombat:
                     ),
                 )
                 v.blasts.append(item)
-                self._push(t + 1.5 * duration_scale, "blast", v, item)
-                if sum(x["count"] for x in active) + kept >= 10.0 - EPS:
-                    value = sum(x["count"] * x["per"] for x in [*active, item])
-                    for x in [*active, item]:
-                        x["count"] = 0.0
-                    self._take(
-                        v, {"DT_EXPLOSION": value}, t, "dot", stats=st, mode=mode
-                    )
+                if active_count + kept >= 10.0 - EPS:
+                    self._release_blast(v, t)
+                else:
+                    self._push(t + duration, "blast", v, item)
             else:
                 state = v.states.setdefault(dtype, deque())
                 state.append((t + duration, count))
