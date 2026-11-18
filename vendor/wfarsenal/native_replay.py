@@ -592,6 +592,7 @@ def trajectory(
                             segments=helper.melee_segments())
     config = dict(
         stats=stats, resolver=combat['resolve'], window=window, head=head, rate=rate,
+        scoreOnly=bool(score_only and life_curve is None and not collect_timeline),
         punctureCap=proc_stack_cap(stats, 'DT_PUNCTURE', 5.0),
         statusRateMultiplier=float(status_rate_multiplier), damageRateMultiplier=float(damage_rate_multiplier),
         full=full, ehp=float(ehp), armourBase=armour_base, elementalArmourStrip=float(elemental_armour_strip),
@@ -670,14 +671,16 @@ def trajectory(
         q["stacks"] = stacks
     pools = core["pools"]
     kills = core["kills"]
+    score = kills + (1 - sum(pools) / ehp if ehp else 0.0)
+    if config['scoreOnly']:
+        overflows = core['mineOverflows'] if 'mineOverflows' in core else core['mines'][3]
+        unsupported.extend(['talons-single-throw-deployment-overflow-unmodeled'] * overflows)
+        damage = sum(core['totals'])
+        return dict(killsPerMinute=score * 60 / window if window else 0.0,
+                    windowDps=damage / window if window else 0.0,
+                    totalWindowDamage=damage, unsupported=unsupported, limitations=[])
     totals = dict(zip(("direct", "dot", "nonDot", "syndicate", "arcane"), core["totals"]))
     averaged = {k: 0.0 for k in names.values()}
-    score = kills + (1 - sum(pools) / ehp if ehp else 0.0)
-    if score_only and life_curve is None and not collect_timeline:
-        unsupported.extend(['talons-single-throw-deployment-overflow-unmodeled'] * core["mines"][3])
-        return dict(killsPerMinute=score * 60 / window if window else 0.0,
-                    windowDps=sum(totals.values()) / window if window else 0.0,
-                    totalWindowDamage=sum(totals.values()), unsupported=unsupported, limitations=[])
     initial = damage_against_cached_armour(
         stats, armour_base, defenses, target=target, _target_cache=locations["body"]
     )

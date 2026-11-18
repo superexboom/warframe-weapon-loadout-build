@@ -45,7 +45,7 @@ class Unsupported(Exception):
 
 
 class Prep:
-    __slots__ = ("weapon", "pinned", "core", "zoom", "candidates", "base_obj", "base_total_obj")
+    __slots__ = ("weapon", "pinned", "core", "zoom", "candidates", "base_obj", "base_total_obj", "ignore_headshot_bonus")
 
 
 def _scenario_key(scenario) -> tuple:
@@ -73,7 +73,7 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
         SUPPORTED_WEAPON_UPGRADE_TYPES, _KNOWN_MULTIPART_PATHS, _qualifier_rejection, _read_innate_elements,
         _require_nonnegative_finite, archgun_arcane_type_applies,
     )
-    from .event_profiles import (base_profile, co_profile, perfect_release, reloads_after_every_shot,
+    from .event_profiles import (base_profile, co_profile, ignores_headshot_bonus, perfect_release, reloads_after_every_shot,
                                  super_crit_on_status, super_status_on_crit)
     from .sniper import zoom_effects
     from .beam_ramp import is_furis_beam
@@ -244,10 +244,12 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
         orbStacks=state.get('orbStacks', 1),
         orbSpecial=bool(state.get('orbSpecialShield', False)),
         radialOnly=damage.get('source') in ('ExplosiveAttack', 'RadialDamage', 'EmbedDeathAttack', 'StackingAttack'),
+        ignoreHeadshotBonus=ignores_headshot_bonus(weapon, fire_mode),
         forced=list(forced.items()),
         ammoCost=float(mode.get("ammoCost") or 1),
     )
     prep = Prep()
+    prep.ignore_headshot_bonus = config['ignoreHeadshotBonus']
     prep.weapon = weapon
     prep.pinned = pin(weapon)
     prep.zoom = list(zoom_effects(weapon, fire_mode, scenario))
@@ -282,10 +284,10 @@ def apply(weapon, effects, fire_mode, scenario, *, need_spec=True):
     if source_mode.get('nativeAmmoFree'):fields['ammo_cost']=0.
     if source_mode.get('nativeFireCooldownSeconds'):
         fields['fire_rate']=min(fields['fire_rate'],1./source_mode['nativeFireCooldownSeconds'])
-    from .event_profiles import ignores_headshot_bonus
-    ignored = ignores_headshot_bonus(weapon, fire_mode)
-    fields = {name:value for key,value in fields.items() for name,value in
-              ([(key,value),('radial_victim_crit',False),('ignore_headshot_bonus',ignored)] if key=='radial_only' else [(key,value)])}
+    if 'ignore_headshot_bonus' not in fields:  # Compatibility with an older Portable core.
+        fields = {name:value for key,value in fields.items() for name,value in
+                  ([(key,value),('radial_victim_crit',False),('ignore_headshot_bonus',prep.ignore_headshot_bonus)]
+                   if key=='radial_only' else [(key,value)])}
     fields.setdefault("delayed_radial_hit_event", False)
     stats = ModdedStats.__new__(ModdedStats)
     stats.__dict__.update(fields)

@@ -342,6 +342,7 @@ pub struct ModsPrep {
     orb_stacks: i64,
     orb_special: bool,
     radial_only: bool,
+    ignore_headshot_bonus: Option<bool>,
     forced: Vec<(String, f64)>,
     ammo_cost: f64,
     cache: Mutex<FxHashMap<usize, Arc<Entry>>>,
@@ -457,6 +458,7 @@ impl ModsPrep {
             orb_stacks: get(config, "orbStacks")?.extract()?,
             orb_special: get(config, "orbSpecial")?.extract()?,
             radial_only: get(config, "radialOnly")?.extract()?,
+            ignore_headshot_bonus: config.get_item("ignoreHeadshotBonus")?.map(|v| v.extract()).transpose()?,
             forced: get(config, "forced")?.extract()?,
             ammo_cost: get(config, "ammoCost")?.extract()?,
             cache: Mutex::new(FxHashMap::default()),
@@ -1171,6 +1173,11 @@ pub fn apply_mods<'py>(
     out.set_item("co_assumed_count", vsc)?;
     out.set_item("continuous", continuous)?;
     out.set_item("radial_only", prep.radial_only)?;
+    // Older adapters insert these two fields themselves when the key is absent.
+    if let Some(ignored) = prep.ignore_headshot_bonus {
+        out.set_item("radial_victim_crit", false)?;
+        out.set_item("ignore_headshot_bonus", ignored)?;
+    }
     out.set_item("explosion_radius_multiplier", combine(1.0, &[&ap.ops(b!("WEAPON_EXPLOSION_RADIUS"))]))?;
     let forced_py = PyDict::new(py);
     for (k, v) in forced.iter() {

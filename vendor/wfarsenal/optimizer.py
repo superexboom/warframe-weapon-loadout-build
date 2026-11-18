@@ -1670,19 +1670,16 @@ def _effects(cards: Sequence[_Card], scenario: Scenario) -> ModEffectList:
             if card.set_shell is not None:
                 set_shells[set_id] = card.set_shell
     for card in cards:
-        current = ModEffectList(card.effects, skipped=card.skipped)
+        current = card.effects
         if card.record is not None:
             set_id = _set_key(card.record.get("modSet"))
             pieces = set_counts.get(set_id, 0)
             if pieces and card.record.get("modSetValues"):
                 multiplier = _buff_set_multiplier(card.record, pieces)
                 if multiplier != 1.0:
-                    current = ModEffectList(
-                        (with_value(effect, effect.value * multiplier) for effect in current),
-                        skipped=current.skipped,
-                    )
+                    current = (with_value(effect, effect.value * multiplier) for effect in current)
         result.extend(current)
-        result.skipped.extend(current.skipped)
+        result.skipped.extend(card.skipped)
     for set_id, pieces in set_counts.items():
         shell = set_shells.get(set_id)
         if shell is not None:
@@ -2081,24 +2078,23 @@ def _score(
             # which turns shots-to-kill steps into a monotone ramp.
             single = {key: value for key, value in context.items() if key != "hardnessNodes"}
             from .search_combat import windows
-            contexts = []
+            contexts, groups = [], []
             for node in nodes:
                 scale, spread = float(node["healthScale"]), float(node.get("healthSpread") or 0.0)
                 points = (scale * (1.0 - spread), scale * (1.0 + spread)) if spread > 0 else (scale,)
                 contexts.extend(_with_health_scale(single, point) for point in points)
+                groups.append((float(node['weight']), len(points)))
             batched = windows(stats, contexts)
             values = iter(batched) if batched is not None else None
             field = {"killsPerMinute": "killsPerMinute", "windowedDps": "windowDps",
                      "windowedTotalDamage": "totalWindowDamage"}[metric]
             total = weights = 0.0
-            for node in nodes:
-                scale, spread = float(node["healthScale"]), float(node.get("healthSpread") or 0.0)
-                points = (scale * (1.0 - spread), scale * (1.0 + spread)) if spread > 0 else (scale,)
-                value = (sum(float(next(values)[field]) for _ in points) if values is not None else
-                         sum(_score(stats, metric, projectile_events, _with_health_scale(single, point))
-                             for point in points)) / len(points)
-                total += float(node["weight"]) * math.log(max(value, 1e-12))
-                weights += float(node["weight"])
+            scores = ((float(row[field]) for row in values) if values is not None else
+                      (_score(stats, metric, projectile_events, ctx) for ctx in contexts))
+            for weight, count in groups:
+                value = sum(next(scores) for _ in range(count)) / count
+                total += weight * math.log(max(value, 1e-12))
+                weights += weight
             return math.exp(total / weights)
         target = context.get("target")
         target = target if isinstance(target, Mapping) else None

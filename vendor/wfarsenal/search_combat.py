@@ -7,6 +7,7 @@ import pickle
 from collections import OrderedDict
 from collections.abc import Mapping
 from dataclasses import replace
+from functools import lru_cache
 
 
 class ResolveCache(dict):
@@ -57,20 +58,30 @@ def _record_digest(record):
     return digest
 
 
-def _replay_key(stats, data, context_key):
-    """Digest of everything a window replay reads; equal digests, equal replays."""
+def _loadout_digest(stats, data):
+    """Digest the loadout once for a batch of independently keyed target contexts."""
     fields = stats.__dataclass_fields__
     extras = sorted((k, v) for k, v in vars(stats).items() if k not in fields and k not in _UNHASHED)
     engine = data["engine"]
     engine_key = (_record_digest(engine["weapon"]), engine["effects"], engine["scenario"], engine["fire_mode"])
     mods = [(_record_digest(record), rank, extra) for record, rank, extra in data["mods"]]
-    tail = (engine_key, mods, data["arcanes"], data["choices"], context_key)
+    tail = (engine_key, mods, data["arcanes"], data["choices"])
     try:
         blob = pickle.dumps((type(stats), tuple(getattr(stats, name) for name in fields), extras, *tail), protocol=5)
     except (TypeError, pickle.PicklingError):
         # Extension attributes may only expose their value through repr.
         blob = pickle.dumps((repr(stats), [(k, repr(v)) for k, v in extras], *tail), protocol=5)
     return hashlib.blake2b(blob, digest_size=20).digest()
+
+
+@lru_cache(maxsize=128)
+def _context_digest(context_key):
+    # Thousands of loadouts use the same few JSON targets. Keep them out of the shared replay keys.
+    return hashlib.blake2b(context_key.encode('utf-8', 'surrogatepass'), digest_size=20).digest()
+
+
+def _replay_key(stats, data, context_key):
+    return _loadout_digest(stats, data), _context_digest(context_key)
 
 
 def window(stats, context, *, score_only=False):
@@ -151,21 +162,35 @@ def windows(stats, contexts):
     if not data or 'engine' not in data:
         return None
     check_cancelled()
-    signatures = []
-    for context in contexts:
-        other = {**context, 'enemy_enhancements': {k: v for k, v in (context.get('enemy_enhancements') or {}).items()
-                                                 if k != 'healthScale'}}
-        signatures.append(json.dumps(other, sort_keys=True, ensure_ascii=False, default=str))
-    if any(signature != signatures[0] for signature in signatures[1:]):
-        return None
+    first = contexts[0]
+    def common_target(context):
+        return {**context, 'enemy_enhancements': {k: v for k, v in (context.get('enemy_enhancements') or {}).items()
+                                                  if k != 'healthScale'}}
+    base = common_target(first)
+    base_signature = None
+    for context in contexts[1:]:
+        # Hardness nodes are shallow copies of one target. For independently supplied
+        # contexts retain the original type-sensitive check (including nested values).
+        other = common_target(context)
+        copied = (base.keys() == other.keys() and all(other[k] is v for k, v in base.items() if k != 'enemy_enhancements')
+                  and base['enemy_enhancements'].keys() == other['enemy_enhancements'].keys()
+                  and all(other['enemy_enhancements'][k] is v for k, v in base['enemy_enhancements'].items()))
+        if not copied:
+            if base_signature is None:
+                base_signature = json.dumps(base, sort_keys=True, ensure_ascii=False, default=str)
+            if json.dumps(other, sort_keys=True, ensure_ascii=False, default=str) != base_signature:
+                return None
     cache = stats._combat_scores
     rows, pending = [None] * len(contexts), []
+    loadout = None
     for i, context in enumerate(contexts):
         key = json.dumps(context, sort_keys=True, ensure_ascii=False, default=str)
         value = cache.get((key, False)) or cache.get((key, True))
         shared = None
         if value is None:
-            shared = (True, _replay_key(stats, data, key))
+            if loadout is None:
+                loadout = _loadout_digest(stats, data)
+            shared = (True, (loadout, _context_digest(key)))
             value = _REPLAYS.get(shared)
         if value is not None:
             rows[i] = value

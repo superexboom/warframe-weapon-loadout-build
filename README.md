@@ -123,3 +123,5 @@ python tools/incremental_bake.py restore --store .local/cache/incremental-portab
 当前支持同一计算核心下的武器记录局部变化：只保留最终武器记录及公共依赖均未变的结果。引擎代码、原生库、MOD、赋能、敌人、组合部件或其他公共数据变化时，保守拒绝复用。归档校验 SHA-256、保留旧文件备份；它不会绕过正常缓存加载、目标覆盖和数值校验。Bot 复用后须运行自己的 `rebuild_cache.ps1` 并刷新完整性清单。GPU 加速与增量复用是独立机制。
 
 Portable 离线烘焙可用 `--status-tables cuda` 预计算病毒、腐蚀和磁力的状态概率表。默认关闭；RTX 5080 的完整分片对照尚未显示提速。[实测结果和复现命令](tools/gpu_bake/README.md)。
+
+默认 CPU/Rust 路径的性能对照见 [Portable 深度搜索与烘焙](docs/PORTABLE-CPU-DEEP-20261118.md)，包含 `deep`、`fast` 冷分片和已有分片时的实际紫卡解算。

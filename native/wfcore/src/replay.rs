@@ -740,6 +740,7 @@ pub struct Replay<'py> {
     heat_sources: [HeatChains; 2],
     heat_source_acc: [f64; 2],
     attribution: KillAttribution,
+    track_weak_kills: bool,
     puncture_strip: f64,
     frozen_until: f64,
     frozen_scale: f64,
@@ -916,7 +917,7 @@ impl<'py> Replay<'py> {
             melee_last_hit, melee_combo_at, melee_recovery_token, melee_recovery_initial, melee_buff_boundary, melee_pending, melee_index, heavy_flag, no_co_flag, melee_heavy_now,
             affinity_per_kill, affinity, syndicate_ready, syndicate_events, pools, states,
             pooled, presence, proc_piles, dots, dot_modes, dot_sources, proc_source, heat_proc_source, heat_mode_sources, damage_origin, blasts, blast_procs,
-            heat_acc, heat_token, heat_chains, heat_sources, heat_source_acc, attribution, puncture_strip, frozen_until,
+            heat_acc, heat_token, heat_chains, heat_sources, heat_source_acc, attribution, track_weak_kills, puncture_strip, frozen_until,
             frozen_scale, heap, seq, gen, kills, weak_kill_events,
             weak_draw, weak_index, weak_uncertainty, attacks, stale, first_kill,
             last_kill, min_interval, totals, fortifier, fortifier_damage, fortifier_stolen,
@@ -1514,7 +1515,7 @@ impl<'py> Replay<'py> {
                 return value;
             }
         }
-        let dist = self.pooled[1].distribution().clone();
+        let dist = self.pooled[1].distribution();
         let mut s = PySum::new();
         for (k, w) in dist.iter().enumerate() {
             if *w > 0.0 {
@@ -2524,7 +2525,9 @@ impl<'py> Replay<'py> {
             WeakKill::Flag(false) => 0.0,
             WeakKill::Value(v) => v,
         };
-        self.attribution.add(t, earlier_hit, health_hit, cv2, weak, source == DIRECT);
+        if self.track_weak_kills {
+            self.attribution.add(t, earlier_hit, health_hit, cv2, weak, source == DIRECT);
+        }
         if let (Some(curve), 0) = (self.life_curve.as_mut(), self.gen) {
             // One target life: (time, health damage, its variance, source).
             let hit = health_hit + earlier_hit;
@@ -2539,11 +2542,11 @@ impl<'py> Replay<'py> {
         }
         if self.ehp > 0.0 && self.pools[0] <= 1e-7 && self.pools[2] <= 1e-7 {
             let resume = self.resume_time(t)?;
-            let crossing = self
-                .attribution
-                .crossing(t, remaining, resume)
-                .map_err(|_| PyIndexError::new_err("list index out of range"))?;
-            self.die(t, crossing.0, weapon_source && source != SYNDICATE, weapon_source)?;
+            let weak = if self.track_weak_kills {
+                self.attribution.crossing(t, remaining, resume)
+                    .map_err(|_| PyIndexError::new_err("list index out of range"))?.0
+            } else { 0.0 };
+            self.die(t, weak, weapon_source && source != SYNDICATE, weapon_source)?;
             return Ok(true);
         }
         if weapon_source && !self.extra_hits.is_empty() && source == DIRECT && !extra {
@@ -5478,6 +5481,7 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
             pmax(1.0, if rate > 0.0 { 1.0 / rate } else { 0.0 }),
             if rate > 0.0 { Some(1.0 / rate) } else { None },
         ),
+        track_weak_kills: true,
         puncture_strip: 0.0,
         frozen_until: -1.0,
         heap: BinaryHeap::new(),
@@ -5599,6 +5603,16 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         types,
         frozen_scale: 1.0,
     };
+    if truthy(config, "scoreOnly")? {
+        // A score has no weak-kill statistic. Keep attribution when it can feed
+        // a branch, restored ammo, or any lifecycle hook of a trigger source.
+        let signal = "on-headshot-kill";
+        replay.track_weak_kills = replay.weak_draw.is_some()
+            || replay.restore.as_ref().is_some_and(|r| r.kind == signal)
+            || replay.sources.iter().any(|s| s.kind.as_deref() == Some(signal)
+                || s.consume_on.as_deref() == Some(signal) || s.lock_on.as_deref() == Some(signal)
+                || s.toggle_on.as_deref() == Some(signal) || s.reset_on.iter().any(|r| r == signal));
+    }
     // Initial stats and ammo, then the reference's pushes in order.
     let initial = item("stats")?;
     replay.view(&initial)?;
@@ -5636,6 +5650,17 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
     let _result_timer = crate::counters::Timer::start(crate::counters::RESULT);
     // Core results; the Python wrapper assembles the reference's result dict.
     let out = PyDict::new(py);
+    if truthy(config, "scoreOnly")? {
+        out.set_item("kills", replay.kills)?;
+        out.set_item("attacks", replay.attacks)?;
+        out.set_item("pools", replay.pools.to_vec())?;
+        out.set_item("totals", replay.totals.to_vec())?;
+        out.set_item("weakUncertainty", replay.weak_uncertainty)?;
+        out.set_item("weakIndex", replay.weak_index)?;
+        out.set_item("mineOverflows", replay.mine_overflows)?;
+        write_combat_state(&replay, &out)?;
+        return Ok(out);
+    }
     let opt = |v: Option<f64>| -> PyObject {
         match v {
             Some(x) => x.into_pyobject(py).unwrap().into_any().unbind(),
@@ -5718,8 +5743,13 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
         syndicate_events.append(d)?;
     }
     out.set_item("syndicateEvents", syndicate_events)?;
+    write_combat_state(&replay, &out)?;
+    Ok(out)
+}
+
+fn write_combat_state<'py>(replay: &Replay<'py>, out: &Bound<'py, PyDict>) -> PyResult<()> {
     out.set_item("lastRound", replay.last_round)?;
-    let victim = PyDict::new(py);
+    let victim = PyDict::new(replay.py);
     for (k, v) in &replay.victim_before {
         victim.set_item(replay.types.name(*k), *v)?;
     }
@@ -5727,11 +5757,7 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
     out.set_item("actorSignalUsed", replay.actor_signal_used)?;
     let stacks: Vec<f64> = replay.sources.iter().map(|q| q.stacks).collect();
     out.set_item("sourceStacks", stacks)?;
-    let _ = &replay.first_shot;
-    for q in &replay.sources {
-        let _ = q.obj.bind(py);
-    }
-    Ok(out)
+    Ok(())
 }
 
 

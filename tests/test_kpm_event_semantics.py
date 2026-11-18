@@ -279,11 +279,14 @@ def test_uncertain_weakpoint_kill_feedback_branches_deterministically():
     st=stats(damage_types={'DT_FIRE':100.,'DT_IMPACT':100.},crit_chance=.5,crit_multiplier=3.,
              status_chance=1.,fire_rate=2.,dot_base_damage=300.)
     source=dict(id='dead',label='Deadhead',kind='on-headshot-kill',maxStacks=3.,perEvent=1.,duration=24.)
-    def go(sources):
-        return run(st,target(1500.),headshot_chance=1.,window_seconds=10.,trigger_sources=sources)
-    first,again=go([deepcopy(source)]),go([deepcopy(source)])
+    def go(sources, **options):
+        return run(st,target(1500.),headshot_chance=1.,window_seconds=10.,trigger_sources=sources,**options)
+    first=go([deepcopy(source)])
+    again=go([deepcopy(source)], score_only=True, collect_timeline=False)
     assert first['killBranches']['count']==16
+    assert again['killBranches']==first['killBranches']
     assert first['killsPerMinute']==again['killsPerMinute']
+    assert first['totalWindowDamage']==again['totalWindowDamage']
     assert 0<first['weakpointKillEvents']<first['killEvents']
     assert len(first['timeline'])==len(go([])['timeline'])
     assert 'killBranches' not in go([])
