@@ -3,6 +3,7 @@ from __future__ import annotations
 import heapq
 import math
 from collections import deque
+from collections.abc import Mapping
 from dataclasses import replace
 from copy import copy
 
@@ -311,12 +312,19 @@ def _reference_trajectory(
     step = max(0.01, float(time_step))
     head = min(1.0, max(0.0, float(headshot_chance)))
     rate = max(0.0, float(attacks_per_second))
+    raw_enhancements = dict(enemy_enhancements) if isinstance(enemy_enhancements, dict) else dict(enemy_enhancements or {})
+    raw_priming_input = raw_enhancements.pop("primingStacks", None)
+    static_priming = (
+        {str(k): float(v) for k, v in raw_priming_input.items() if isinstance(v, (int, float)) and not isinstance(v, bool) and float(v) > 0.0}
+        if isinstance(raw_priming_input, Mapping) and not combat.get("companionAssister")
+        else {}
+    )
     defenses = enemy_defenses(
         target,
         level=level,
         armour_strip=armour_strip,
         steel_path=steel_path,
-        enemy_enhancements=enemy_enhancements,
+        enemy_enhancements=raw_enhancements,
     )
     full = [float(defenses.get(k) or 0.0) for k in ("overguard", "shield", "health")]
     execute = float(combat.get('executeBelow') or 0.0)
@@ -389,8 +397,31 @@ def _reference_trajectory(
     # Cold keeps the expected-count trim: its freeze is a threshold on it.
     # A weapon's extra Puncture stacks (Evensong) raise the victim's cap.
     caps['DT_PUNCTURE'] = proc_stack_cap(stats, 'DT_PUNCTURE', caps['DT_PUNCTURE'])
+    caps['DT_CORROSIVE'] = proc_stack_cap(stats, 'DT_CORROSIVE', caps['DT_CORROSIVE'])
     pooled={dtype:CappedPool(caps[dtype]) for dtype in ('DT_VIRAL','DT_CORROSIVE','DT_MAGNETIC','DT_PUNCTURE')}
     presence={}
+    vicious_strip_live = 0.0
+
+    def seed_static_priming():
+        nonlocal frozen_until, frozen_scale
+        if not static_priming:
+            return
+        for dtype, amount in static_priming.items():
+            cap_val = caps.get(dtype, 10.0)
+            clamped = min(amount, cap_val)
+            if clamped <= 0.0:
+                continue
+            presence.setdefault(dtype, StatusPresence()).add(math.inf, max(0.0, 1.0 - min(clamped, 1.0)))
+            if dtype in pooled:
+                pooled[dtype].add(math.inf, max(0.0, 1.0 - min(clamped, 1.0)), clamped)
+            elif dtype == "DT_FREEZE":
+                eff_cold = min(clamped, 4.0 if pools[0] > 0.0 else 10.0)
+                states["DT_FREEZE"] = deque([(math.inf, eff_cold)])
+                if eff_cold >= 10.0 - 1e-9 and pools[0] <= 0.0:
+                    frozen_until = math.inf
+                    frozen_scale = 1.0
+            else:
+                states[dtype] = deque([(math.inf, clamped)])
     attribution=KillAttribution(max(DOT_TICK_SECONDS,1./rate if rate>0 else 0.),interval=1./rate if rate>0 else None)
     spreads={}
 
@@ -597,9 +628,9 @@ def _reference_trajectory(
     def armour(t):
         # 26 % at the first stack, +6 % per further one: E = .20 P(N>=1) + .06 E[N].
         present, c = pooled["DT_CORROSIVE"].stats()
-        cs = min(0.20 * present + 0.06 * c, 0.8)
+        cs = min(0.20 * present + 0.06 * c, 1.0)
         return (
-            armour_base * (1 - elemental_armour_strip) * (1 - cs) * (1 - heat_strip(t)) * (1-puncture_strip)
+            armour_base * (1 - elemental_armour_strip) * (1 - cs) * (1 - heat_strip(t)) * (1-puncture_strip) * (1-vicious_strip_live)
         )
 
     armour_view = [None, 1.0]
@@ -608,12 +639,12 @@ def _reference_trajectory(
         # Armour DR is convex in the Corrosive strip, so the expected damage
         # factor averages the DR over the stack distribution, not E[stacks].
         pool = pooled["DT_CORROSIVE"]
-        rest = armour_base * (1 - elemental_armour_strip) * (1 - heat_strip(t)) * (1 - puncture_strip)
+        rest = armour_base * (1 - elemental_armour_strip) * (1 - heat_strip(t)) * (1 - puncture_strip) * (1 - vicious_strip_live)
         key = (pool.version, rest)
         if armour_view[0] != key:
             armour_view[0] = key
             armour_view[1] = sum(
-                w * (1.0 - _armour_reduction(rest * (1 - (0.0 if k == 0 else min(0.26 + 0.06 * (k - 1), 0.8)))))
+                w * (1.0 - _armour_reduction(rest * (1 - (0.0 if k == 0 else min(0.26 + 0.06 * (k - 1), 1.0)))))
                 for k, w in enumerate(pool.distribution()) if w > 0.0
             )
         return armour_view[1]
@@ -772,8 +803,9 @@ def _reference_trajectory(
             q['expires'] = math.inf
 
     def die(t, weak_kill=False, weapon_kill=True, allow_kill_triggers=True, origin_mode=None):
-        nonlocal kills, gen, first_kill, last_kill, min_interval, affinity, frozen_until, puncture_strip, ammo, pending_magazine_restore,weak_kill_events,gauge
+        nonlocal kills, gen, first_kill, last_kill, min_interval, affinity, frozen_until, puncture_strip, vicious_strip_live, ammo, pending_magazine_restore,weak_kill_events,gauge
         nonlocal waiting_mines, stale
+        unique_procs_before_death = sum(p.probability(t) for p in presence.values()) if comp_precepts else 0.0
         kills += 1
         if cycle and cycle.get('chargeOn') == 'kills' and (origin_mode if source_mode_charge and origin_mode is not None else form) == 'base' and weapon_kill:
             gauge = min(cycle['hits'], gauge + 1.0)  # native AddChargeConditions PRIMARY_KILL
@@ -807,9 +839,20 @@ def _reference_trajectory(
         heat_chains.reset()
         for chain in heat_sources.values():chain.reset()
         puncture_strip = 0.
+        vicious_strip_live = 0.
+        seed_static_priming()
+        if comp_precepts and unique_procs_before_death >= 2.5:
+            for idx, p in enumerate(comp_precepts):
+                red = float(p.get("killCooldownReduction") or 0.0)
+                if red > 0.0 and comp_precept_ready[idx] > t + 1e-6:
+                    comp_precept_ready[idx] = max(t + 0.01, comp_precept_ready[idx] - red)
+                    push(comp_precept_ready[idx], "companion-precept", idx)
         if not allow_kill_triggers:
             return  # Neutral field kill credit is unproven; keep damage/KPM only.
         signal("on-kill", t)
+        self_dmg_kill = float(combat.get("selfDamageOnKill") or 0.0)
+        if self_dmg_kill > 0.0 and self_overguard <= 1e-9:
+            signal("on-damaged", t, 1.0)
         slot = str(combat.get("weaponSlot") or "").lower()
         if "longgun" in slot or slot in ("primary", "rifle"):
             signal("on-primary-kill", t)
@@ -904,17 +947,17 @@ def _reference_trajectory(
 
     # Extra Hits (Toxic Lash, Xata's Whisper, Resupply): a second instance
     # beside each weapon hit, worth a share of the finished hit in one type.
-    # Faction applies again and so does the body part (wiki Extra_Hit); a hit
-    # that kills fires none.
+    # Faction applies again; only Xata's Whisper (DT_VOID) lacks a forced 1x
+    # weakpoint multiplier and applies body-part again (wiki Extra_Hit).
     extra_hits = tuple(getattr(stats, 'extra_hits', ()) or ())
-    extra_scale = 1.0
+    extra_faction_scale = 1.0
+    extra_head_part = 1.0
     if extra_hits:
-        extra_scale = stats.faction_damage_multipliers.get('', 1.0)
+        extra_faction_scale = stats.faction_damage_multipliers.get('', 1.0)
         if cache['target_faction']:
-            extra_scale *= stats.faction_damage_multipliers.get(cache['target_faction'], 1.0)
-        extra_scale *= cache['faction_bracket']
-        head_part = float(locations['head']['hit_multiplier'] or 1.0)
-        extra_scale *= ((1 - head) + head * head_part * head_part) / ((1 - head) + head * head_part)
+            extra_faction_scale *= stats.faction_damage_multipliers.get(cache['target_faction'], 1.0)
+        extra_faction_scale *= cache['faction_bracket']
+        extra_head_part = float(locations['head']['hit_multiplier'] or 1.0)
 
     def radial_hit(part, sniper_factor, t, weight=None, aim=0., contact=False):
         unit=getattr(part,'_live_co_unit',None)
@@ -965,25 +1008,35 @@ def _reference_trajectory(
             return raw * mult
 
         if pools[0] > 0.0:
-            value = sum(
+            plain = sum(
                 raw * (1.5 if k in ("DT_VOID", "DT_RADIANT") else 1.0)
                 for k, raw in vector.items()
             ) * vulnerability("DT_MAGNETIC")
-            if weapon_source and fortifier and source != 'syndicate':
-                value *= 1.0 + (fortifier['multiplier'] - 1.0) * fortifier.get('uptime', 1.0)
-            if value <= 0.0:
+            if plain <= 0.0:
                 return False
-            fraction = min(left, pools[0] / value)
-            drain = value * fraction
+            active_fortifier = fortifier if (weapon_source and fortifier and source != 'syndicate') else None
+            eff_mult = (
+                1.0 + (active_fortifier['multiplier'] - 1.0) * active_fortifier.get('uptime', 1.0)
+                if active_fortifier
+                else 1.0
+            )
+            if eff_mult > 1.0 and plain * left < pools[0]:
+                # WFSim M120: an instance that cannot break Overguard on its own
+                # deals min(plain * mult, overguard) to Overguard and 0 past it.
+                drain = min(pools[0], plain * left * eff_mult)
+                left = 0.0
+            else:
+                fraction = min(left, pools[0] / plain)
+                drain = plain * fraction
+                left -= fraction
             pools[0] = max(0.0, pools[0] - drain)
             earlier_hit += drain
-            if weapon_source and fortifier and source != 'syndicate':
+            if active_fortifier:
                 fortifier_damage += drain
-                stolen = drain * fortifier['steal'] * fortifier.get('uptime', 1.0)
+                stolen = drain * active_fortifier['steal'] * active_fortifier.get('uptime', 1.0)
                 fortifier_stolen += stolen
-                self_overguard = min(fortifier['cap'], self_overguard + stolen)
+                self_overguard = min(active_fortifier['cap'], self_overguard + stolen)
             applied += drain
-            left -= fraction
             if pools[0] <= 1e-9:
                 pools[0] = 0.0  # Retire the pool before a same-timestamp event can break it again.
                 overguard_broke = True
@@ -998,32 +1051,39 @@ def _reference_trajectory(
                 for k, raw in vector.items()
                 if k in cache["shield_bypass"]
             )
-            fraction = min(
-                left,
-                pools[1] / shield if shield > 0 else math.inf,
-                pools[2] / bypass if bypass > 0 else math.inf,
-            )
-            a = min(pools[1], shield * fraction)
-            b = min(pools[2], bypass * fraction)
+            sh_fraction = min(left, pools[1] / shield if shield > 0 else math.inf)
+            a = min(pools[1], shield * sh_fraction)
             pools[1] -= a
-            pools[2] -= b
-            applied += a + b
+            applied += a
             earlier_hit += a
-            health_hit += bypass * fraction
-            remaining += b
-            left -= fraction
             if pools[1] <= 1e-9:
                 pools[1] = 0.0
                 shield_broke = True
-        if left > 0.0 and pools[1] <= 1e-9 and pools[2] > 0.0:
+            left_non = left - sh_fraction
+            amount = bypass * left
+            if left_non > 0.0 and pools[1] <= 1e-9:
+                non_bypass = sum(
+                    health_value(k, raw)
+                    for k, raw in vector.items()
+                    if k not in cache["shield_bypass"]
+                )
+                non_amount = non_bypass * left_non
+                if shield_broke:
+                    # The shield gate (WFSim M61, in game): the hit that breaks an
+                    # enemy shield passes 5% of its non-bypass excess to health; a
+                    # direct weakpoint hit bypasses the gate.
+                    weak = (head if weak_kill else 0.) if isinstance(weak_kill, bool) else weak_kill
+                    non_amount *= weak + (1.0 - weak) * SHIELD_GATE_LEAK
+                amount += non_amount
+            if amount > 0.0 and pools[2] > 0.0:
+                drain = min(pools[2], amount)
+                pools[2] -= drain
+                applied += drain
+                health_hit += amount
+                remaining += drain
+        elif left > 0.0 and pools[1] <= 1e-9 and pools[2] > 0.0:
             value = sum(health_value(k, raw) for k, raw in vector.items())
             amount = value * left
-            if shield_broke:
-                # The shield gate (WFSim M61, in game): the hit that breaks an
-                # enemy shield passes 5% of its excess to health; a direct
-                # weakpoint hit bypasses the gate.
-                weak = (head if weak_kill else 0.) if isinstance(weak_kill, bool) else weak_kill
-                amount *= weak + (1.0 - weak) * SHIELD_GATE_LEAK
             drain = min(pools[2], amount)
             pools[2] -= drain
             applied += drain
@@ -1062,8 +1122,15 @@ def _reference_trajectory(
                 return True
         if weapon_source and extra_hits and source == 'direct' and not extra:
             trigger = sum(vector.values())
+            weak_extra = (head if weak_kill else 0.) if isinstance(weak_kill, bool) else weak_kill
             for dtype, share, _forced in extra_hits:
-                if trigger > 0.0 and take({dtype: trigger * share * extra_scale}, t, source, weak_kill, cv2, extra=True, proc_source=proc_source):
+                part_again = (
+                    ((1.0 - weak_extra) + weak_extra * extra_head_part * extra_head_part)
+                    / ((1.0 - weak_extra) + weak_extra * extra_head_part)
+                    if dtype == 'DT_VOID' and weak_extra > 0.0
+                    else 1.0
+                )
+                if trigger > 0.0 and take({dtype: trigger * share * extra_faction_scale * part_again}, t, source, weak_kill, cv2, extra=True, proc_source=proc_source):
                     return True
         return False
 
@@ -1365,7 +1432,7 @@ def _reference_trajectory(
         empowered_by_type[dtype] = empowered_by_type.get(dtype, 0.0) + totals['arcane'] - before
         return died
 
-    def add_procs(st, aim, t, data=None, allow_encumber=True, damage_scale=1.):
+    def add_procs(st, aim, t, data=None, allow_encumber=True, damage_scale=1., companion_source=False):
         nonlocal frozen_until,frozen_scale,encumber_time,encumber_remaining,encumber_expected,cryogenic_expected,puncture_strip,heat_stats
         generation = gen
         _, procs, rows, non = data if data is not None else packet(st, aim)
@@ -1375,7 +1442,7 @@ def _reference_trajectory(
                      **({'landingBranches':[{**b,'landing':b['landing']*damage_scale} for b in row['landingBranches']]} if 'landingBranches' in row else {})}
                   for k,row in rows.items()}
             non={k:{**row,'perProc':row['perProc']*damage_scale} for k,row in non.items()}
-        if combat.get('punctureArmorStrip') and not st.radial_only and allow_encumber:
+        if combat.get('punctureArmorStrip') and not st.radial_only and allow_encumber and not companion_source:
             from .damage import expected_status_procs
             forced=st.native_forced_procs.get('DT_PUNCTURE',0.)+(forced_procs or {}).get('DT_PUNCTURE',0.)
             if forced:
@@ -1421,10 +1488,14 @@ def _reference_trajectory(
                     or blocks_radiation and dtype == 'DT_RADIATION'):
                 continue
             proc_counts[dtype]=proc_counts.get(dtype,0.0)+n
-            signal("proc-" + dtype, t, n)
-            signal("on-proc", t, n)
+            if companion_source:
+                if dtype in ("DT_FREEZE", "DT_FIRE"):
+                    signal("proc-" + dtype, t, n)
+            else:
+                signal("proc-" + dtype, t, n)
+                signal("on-proc", t, n)
             if scale <= 0.0:
-                if empowered_hit(st, dtype, n, t, allow_encumber):
+                if not companion_source and empowered_hit(st, dtype, n, t, allow_encumber):
                     return
                 continue
             row = rows.get(dtype)
@@ -1432,7 +1503,7 @@ def _reference_trajectory(
                 row["durationSeconds"] if row else durations.get(dtype, 6.0) * scale
             )
             if duration <= 0.0:
-                if empowered_hit(st, dtype, n, t, allow_encumber):
+                if not companion_source and empowered_hit(st, dtype, n, t, allow_encumber):
                     return
                 continue
             absence=no_status_probability(status_view,dtype,forced_procs,aim)**max(status_rate_multiplier,0.)
@@ -1517,24 +1588,74 @@ def _reference_trajectory(
                         if sum(p["count"] for p in blast_procs) >= 10.0:
                             push(t, "blast-all", None, gen)
 
-            if empowered_hit(st, dtype, n, t, allow_encumber):
+            if not companion_source and empowered_hit(st, dtype, n, t, allow_encumber):
                 return
 
         # The derived Cold application is not elemental damage or a status-
         # chance modifier. The ordinary status path owns duration, Overguard's
         # four-stack limit and the freeze cycle. It cannot trigger itself.
-        if cryogenic:
+        if cryogenic and not companion_source:
             extra_cold = max(procs.get('DT_PUNCTURE', 0.0), 0.0) * cryogenic['coldStacks'] * cryogenic.get('uptime', 1.0)
             if extra_cold > 0:
                 before = proc_counts.get('DT_FREEZE', 0.0)
                 add_procs(st, aim, t, ({}, {'DT_FREEZE':extra_cold}, {}, {}), False)
                 cryogenic_expected += proc_counts.get('DT_FREEZE', 0.0) - before
 
+    seed_static_priming()
+    rb_reloads_cfg = combat.get("reinforcedBondReloads") if isinstance(combat.get("reinforcedBondReloads"), Mapping) else None
+    rb_activated = False
+    rb_completed_reloads = 0
+
+    assister = combat.get("companionAssister") if isinstance(combat.get("companionAssister"), Mapping) else None
+    comp_stats = None
+    comp_vec = {}
+    comp_procs = {}
+    comp_rows = {}
+    comp_non = {}
+    comp_ammo = 0.0
+    comp_interval = 0.5
+    comp_reload = 0.0
+    comp_strip = 0.0
+    comp_precepts = []
+    comp_precept_ready = []
+    if assister is not None:
+        from .damage import ModdedStats as _CompStats
+        comp_stats = _CompStats(
+            damage_types=dict(assister.get("damageTypes") or {}),
+            crit_chance=float(assister.get("critChance") or 0.0),
+            crit_multiplier=float(assister.get("critMultiplier") or 1.0),
+            status_chance=float(assister.get("statusChance") or 0.0),
+            multishot=float(assister.get("multishot") or 1.0),
+            fire_rate=max(0.01, float(assister.get("fireRate") or 1.0)),
+            magazine=float(assister.get("magazine") or 0.0),
+            reload_time=float(assister.get("reloadTime") or 0.0),
+            continuous=bool(assister.get("continuous")),
+            noncrit_damage_multiplier=float(assister.get("noncritDamageMultiplier") or 1.0),
+            double_crit_chance=float(assister.get("doubleCritChance") or 0.0),
+            dot_base_damage=assister.get("dotBaseDamage"),
+            proc_duration_multiplier=float(assister.get("procDurationMultiplier") or 1.0),
+            proc_damage_multiplier=float(assister.get("procDamageMultiplier") or 1.0),
+            dot_elemental_multipliers=dict(assister.get("dotElementalMultipliers") or {}),
+            faction_damage_multipliers=dict(assister.get("factionDamageMultipliers") or {}),
+        )
+        comp_vec, _auto_p, comp_rows, comp_non = attack_data(comp_stats, 0.0)
+        comp_procs = dict(assister.get("procsPerShot") or _auto_p)
+        comp_ammo = float(comp_stats.magazine or 0.0)
+        comp_interval = max(0.02, float(assister.get("interval") or (1.0 / comp_stats.fire_rate)))
+        comp_reload = max(0.0, float(comp_stats.reload_time or 0.0))
+        comp_strip = max(0.0, float(assister.get("armorStripOnHit") or 0.0))
+        comp_precepts = list(assister.get("manifoldPrecepts") or ())
+        comp_precept_ready = [0.1 for _ in comp_precepts]
+
     if combat:
         ammo = model(0.0)[0].magazine
     push(0.0, "fire")
+    if comp_stats is not None:
+        push(0.05, "companion-attack")
+        for idx in range(len(comp_precepts)):
+            push(comp_precept_ready[idx], "companion-precept", idx)
     state=combat.get('projectileState') or {}
-    for key,kind in [('selfShieldBreak','on-shield-broken'),('selfOverguardBreak','on-overguard-broken'),('selfShieldHit','on-shield-hit'),('equipFromPrimary','on-equip-from-primary'),('abilityUse','on-warframe-ability')]:
+    for key,kind in [('selfShieldBreak','on-shield-broken'),('selfOverguardBreak','on-overguard-broken'),('selfShieldHit','on-shield-hit'),('selfDamageHit','on-damaged'),('equipFromPrimary','on-equip-from-primary'),('abilityUse','on-warframe-ability')]:
         if key+'At' in state:
             first=state[key+'At']
             interval=state.get(key+'Interval',0.)
@@ -1817,6 +1938,44 @@ def _reference_trajectory(
             combat['_actorSignal']=True
             signal(payload,t)
             combat['_actorSignal']=False
+        elif kind == "companion-attack":
+            if comp_stats is None or t >= window - 1e-9:
+                continue
+            if comp_stats.magazine > 0.0 and comp_ammo <= 1e-9 and comp_reload > 0.0:
+                comp_ammo = comp_stats.magazine
+                push(t + comp_reload, "companion-attack")
+                continue
+            if comp_stats.magazine > 0.0:
+                comp_ammo -= 1.0
+            if comp_strip > 0.0:
+                vicious_strip_live = min(1.0, vicious_strip_live + comp_strip)
+            comp_allow_player_stacks = bool((combat.get("projectileState") or {}).get("companionPlayerStacks"))
+            died = (
+                take(comp_vec, t, "direct", weak_kill=False, cv2=0.0, weapon_source=comp_allow_player_stacks, proc_source=comp_stats)
+                if comp_vec
+                else False
+            )
+            if not died:
+                add_procs(comp_stats, 0.0, t, (comp_vec, comp_procs, comp_rows, comp_non), allow_encumber=False, companion_source=True)
+            push(t + comp_interval, "companion-attack")
+        elif kind == "companion-precept":
+            idx = int(payload)
+            if comp_stats is None or idx >= len(comp_precepts) or t >= window - 1e-9:
+                continue
+            if t < comp_precept_ready[idx] - 1e-6:
+                continue
+            p = comp_precepts[idx]
+            comp_precept_ready[idx] = t + max(1.0, float(p.get("cooldown") or 5.0))
+            push(comp_precept_ready[idx], "companion-precept", idx)
+            p_dmg = float(p.get("damage") or 0.0)
+            p_dtype = str(p.get("damageType") or "DT_ELECTRICITY")
+            died = (
+                take({p_dtype: p_dmg}, t, "direct", weak_kill=False, cv2=0.0, weapon_source=False, proc_source=comp_stats)
+                if p_dmg > 0.0
+                else False
+            )
+            if not died and p.get("procs"):
+                add_procs(comp_stats, 0.0, t, ({}, dict(p["procs"]), comp_rows, comp_non), allow_encumber=False, companion_source=True)
         elif kind == "transform":
             if tap:
                 tap.swap(t)
@@ -1860,6 +2019,10 @@ def _reference_trajectory(
             if field_duration and payload:
                 field_duration_ready = True
             old_magazine=model(t)[0].magazine
+            rb_completed_reloads += 1
+            if rb_reloads_cfg and not rb_activated and rb_completed_reloads >= int(rb_reloads_cfg.get("reloadsNeeded") or 1):
+                rb_activated = True
+                signal("on-reinforced-bond-ready", t, 1.0)
             signal("on-reload-complete", t)
             if payload:
                 signal("on-reload-empty-complete", t)
@@ -2150,10 +2313,11 @@ def _reference_trajectory(
                 # New arrow replaces the previous arrow even if its direct hit
                 # kills; all old owner callbacks then fail this token check.
                 source_field_token+=1
+            burst_rounds_left = max(1, burst_size - burst_round) if burst else 3
             if (
                 combat.get("lastBurst")
                 and form == "base"
-                and ammo <= 3
+                and ammo <= burst_rounds_left * max(active.ammo_cost, 0.0) + 1e-9
                 and not combat.get("multishotLocked")
             ):
                 active = replace(active, multishot=active.multishot * 6.0)

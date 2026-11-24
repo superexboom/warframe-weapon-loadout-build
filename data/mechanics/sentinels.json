@@ -624,7 +624,8 @@
         "同伴每秒恢复 +10 生命 -12.5 秒同伴恢复时间",
         "同伴每秒恢复 +12 生命 -15 秒同伴恢复时间"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/CompanionMediPetKit.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/CompanionMediPetKit.png",
+      "modFamily": "/Lotus/Upgrades/Mods/Sentinel/Events/Index/CompanionMedipetKitMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/Expert/KubrowPackLeaderExpertMod",
@@ -679,7 +680,8 @@
         "每次击中生命值恢复 +167 +2,000 超宏防护上限",
         "每次击中生命值恢复 +183 +2,200 超宏防护上限"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowPackLeader.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowPackLeader.png",
+      "modFamily": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowPackLeaderMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowLinkArmourMaxMod",
@@ -728,7 +730,8 @@
         "最大护甲增加战甲护甲的 +114%",
         "最大护甲增加战甲护甲的 +125%"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowArmorLink.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowArmorLink.png",
+      "modFamily": "/Lotus/Upgrades/Mods/BaseArmourMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowLinkHealthMaxMod",
@@ -777,7 +780,8 @@
         "生命值增加战甲最大生命值的 +114%",
         "生命值增加战甲最大生命值的 +125%"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowLifeLink.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowLifeLink.png",
+      "modFamily": "/Lotus/Upgrades/Mods/BaseHealthMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowLinkShieldMaxMod",
@@ -826,7 +830,8 @@
         "护盾增加战甲最大护盾的 +114%",
         "护盾增加战甲最大护盾的 +125%"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowShieldLink.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowShieldLink.png",
+      "modFamily": "/Lotus/Upgrades/Mods/BaseShieldMaxMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowMasterBleedoutMod",
@@ -870,7 +875,8 @@
         "当你的生命值低于 35% 时，获得 10 秒的 62% 伤害减免，同时你的同伴变得无敌，并在 10 秒内吸引敌人火力。冷却时间 60 秒。",
         "当你的生命值低于 35% 时，获得 10 秒的 75% 伤害减免，同时你的同伴变得无敌，并在 10 秒内吸引敌人火力。冷却时间 60 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowBleedOut.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowBleedOut.png",
+      "modFamily": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowMasterBleedoutMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowPackLeaderMod",
@@ -915,7 +921,8 @@
         "每次击中生命值恢复 +83 +1,000 超宏防护上限",
         "每次击中生命值恢复 +100 +1,200 超宏防护上限"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowPackLeader.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowPackLeader.png",
+      "modFamily": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowPackLeaderMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelArmourMod",
@@ -964,7 +971,8 @@
         "+227% 护甲",
         "+250% 护甲"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSteelFiberMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSteelFiberMod.png",
+      "modFamily": "/Lotus/Upgrades/Mods/BaseArmourMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelDropChanceMod",
@@ -1007,7 +1015,8 @@
         "同伴每 15 秒标记一个目标，持续 15 秒。目标被击杀时有额外 167% 几率掉落物品。",
         "同伴每 15 秒标记一个目标，持续 15 秒。目标被击杀时有额外 200% 几率掉落物品。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSalvageScanner.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSalvageScanner.png",
+      "modFamily": "/Lotus/Upgrades/Mods/Sentinel/SentinelDropChanceMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelExplosionMod",
@@ -1052,7 +1061,8 @@
         "在能力丧失时爆炸，在 15 米半径内造成 500 <DT_EXPLOSION_COLOR>爆炸伤害，并击倒附近的敌人。",
         "在能力丧失时爆炸，在 18 米半径内造成 600 <DT_EXPLOSION_COLOR>爆炸伤害，并击倒附近的敌人。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSelfDestructMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSelfDestructMod.png",
+      "modFamily": "/Lotus/Upgrades/Mods/Sentinel/SentinelExplosionMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelHealthMaxMod",
@@ -1101,7 +1111,8 @@
         "+227% 生命值",
         "+250% 生命值"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelPlaceholderMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelPlaceholderMod.png",
+      "modFamily": "/Lotus/Upgrades/Mods/BaseHealthMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelLootRadarEnemyRadarExpertMod",
@@ -1156,7 +1167,8 @@
         "+50 米寻物雷达 +30 米侦敌雷达",
         "+55 米寻物雷达 +33 米侦敌雷达"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/AnimalInstincts.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/AnimalInstincts.png",
+      "modFamily": "/Lotus/Upgrades/Mods/Sentinel/SentinelLootRadarEnemyRadarMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelLootRadarEnemyRadarMod",
@@ -1201,7 +1213,8 @@
         "+25 米寻物雷达 +15 米侦敌雷达",
         "+30 米寻物雷达 +18 米侦敌雷达"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/AnimalInstincts.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/AnimalInstincts.png",
+      "modFamily": "/Lotus/Upgrades/Mods/Sentinel/SentinelLootRadarEnemyRadarMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelOverheatDamageMod",
@@ -1252,7 +1265,8 @@
         "武器每次击中造成 4.2% <DT_FIRE_COLOR>火焰伤害。伤害最多叠加 84%。未命中 5 秒后重置。",
         "武器每次击中造成 5% <DT_FIRE_COLOR>火焰伤害。伤害最多叠加 100%。未命中 5 秒后重置。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelFiredUpMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelFiredUpMod.png",
+      "modFamily": "/Lotus/Upgrades/Mods/Sentinel/SentinelOverheatDamageMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelRepairKitMod",
@@ -1291,7 +1305,8 @@
         "同伴每秒恢复 +15 生命",
         "同伴每秒恢复 +18 生命"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRepairKit.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRepairKit.png",
+      "modFamily": "/Lotus/Upgrades/Mods/Sentinel/SentinelRepairKitMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelShieldMaxMod",
@@ -1340,7 +1355,8 @@
         "+227% 护盾容量",
         "+250% 护盾容量"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRedirectionMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRedirectionMod.png",
+      "modFamily": "/Lotus/Upgrades/Mods/BaseShieldMaxMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelShieldRechargeRateMod",
@@ -1385,7 +1401,8 @@
         "+75% 护盾恢复 -37.5% 护盾恢复延迟",
         "+90% 护盾恢复 -45% 护盾恢复延迟"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelFastDeflectionMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelFastDeflectionMod.png",
+      "modFamily": "/Lotus/Upgrades/Mods/BaseShieldRechargeRateMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sets/Synth/SentinelSynthDeconstructMod",
@@ -1417,7 +1434,8 @@
         "受到同伴攻击的敌人在被击杀时有 20% 的几率会掉落一个生命球。",
         "受到同伴攻击的敌人在被击杀时有 25% 的几率会掉落一个生命球。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Synth/SentinelSynthDeconstructMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Synth/SentinelSynthDeconstructMod.png",
+      "modFamily": "/Lotus/Upgrades/Mods/Sets/Synth/SentinelSynthDeconstructMod"
     },
     {
       "path": "/Lotus/Upgrades/Mods/Sets/Synth/SentinelSynthFibersMod",
@@ -1445,7 +1463,8 @@
         "生命球可增加同伴 75% 的护甲，持续 9 秒。",
         "生命球可增加同伴 100% 的护甲，持续 12 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Synth/SentinelSynthFibersMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Synth/SentinelSynthFibersMod.png",
+      "modFamily": "/Lotus/Upgrades/Mods/Sets/Synth/SentinelSynthFibersMod"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/AntigravDilator",
@@ -1473,7 +1492,8 @@
         "增加拥有者 +30% 的跳跃高度",
         "增加拥有者 +40% 的跳跃高度"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Parkour/AntigravDilator.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Parkour/AntigravDilator.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/AntigravDilator"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/ArcTrap",
@@ -1507,7 +1527,8 @@
         "守护会以迅雷不及掩耳的速度攻击 10 米内的 6 名敌人，造成 100<DT_ELECTRICITY_COLOR>电击伤害，并有 10% 的几率附加负面状态。",
         "守护会以迅雷不及掩耳的速度攻击 10 米内的 7 名敌人，造成 100<DT_ELECTRICITY_COLOR>电击伤害，并有 10% 的几率附加负面状态。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ArcDroneArcTrap.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ArcDroneArcTrap.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/ArcTrap"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Bait",
@@ -1558,7 +1579,8 @@
         "18 米内的敌人会被你吸引。一旦他们进入 5.5 米范围内，他们会爆发出 200 伤害。在爆发前击杀他们可以增加引诱时间并减少冷却时间。",
         "20 米内的敌人会被你吸引。一旦他们进入 6 米范围内，他们会爆发出 250 伤害。在爆发前击杀他们可以增加引诱时间并减少冷却时间。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelFatalAttractionMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelFatalAttractionMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/Bait"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/CodexScannerPrecept",
@@ -1601,7 +1623,8 @@
         "赫利俄斯守护会消耗资料库扫描器，来扫描 44 米范围内的物件及敌人，耗时 2.6 秒。",
         "赫利俄斯守护会消耗资料库扫描器，来扫描 50 米范围内的物件及敌人，耗时 2.0 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelInvestigatorMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelInvestigatorMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/CodexScannerPrecept"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/CoolantLeak",
@@ -1629,7 +1652,8 @@
         "当附近有多个敌人时，释放一个范围 8 米的 <DT_FREEZE_COLOR>冰冻爆炸。叠加 3 层异常状态。冷却时间为 10 秒。",
         "当附近有多个敌人时，释放一个范围 10 米的 <DT_FREEZE_COLOR>冰冻爆炸。叠加 3 层异常状态。冷却时间为 10 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelCoolantLeakMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelCoolantLeakMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/CoolantLeak"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/CrowdDispersion",
@@ -1664,7 +1688,8 @@
         "当周围有复数名敌人时，释放出一道半径 9.2 米的击倒震波，并造成 9.2 伤害。",
         "当周围有复数名敌人时，释放出一道半径 10.0 米的击倒震波，并造成 10.0 伤害。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelCrowdDispersionMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelCrowdDispersionMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/CrowdDispersion"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Events/CorpusArena/ShieldAuraPrecept",
@@ -1706,7 +1731,8 @@
         "增加战甲最大护盾和 50% 护盾再生速度，持续 9 秒。",
         "增加战甲最大护盾和 60% 护盾再生速度，持续 10 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/SentinelShieldingPrecept.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/SentinelShieldingPrecept.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/Events/CorpusArena/ShieldAuraPrecept"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Events/ProjectNightwatch/SentinelHealthRegenPreceptNightwatchMod",
@@ -1751,7 +1777,8 @@
         "守护会不时治疗它的主人，于 4 秒内恢复 10% 血量",
         "守护会不时治疗它的主人，于 4 秒内恢复 12% 血量"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelHealthRegenPreceptNightwatchMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelHealthRegenPreceptNightwatchMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/Events/ProjectNightwatch/SentinelHealthRegenPreceptNightwatchMod"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/GatherEnemies",
@@ -1786,7 +1813,8 @@
         "鹦鹉螺把目标范围 25 米内的敌人强行聚集以便于瞄准。冷却时间：15 秒。",
         "鹦鹉螺把目标范围 30 米内的敌人强行聚集以便于瞄准。冷却时间：15 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelGatherEnemies.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelGatherEnemies.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/GatherEnemies"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Ghost",
@@ -1822,7 +1850,8 @@
         "当敌人靠近至 22 米范围内时自动隐匿主人，若攻击将会中断隐匿。",
         "当敌人靠近至 24 米范围内时自动隐匿主人，若攻击将会中断隐匿。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelGhostMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelGhostMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/Ghost"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/GhostAugmentCard",
@@ -1861,7 +1890,8 @@
         "当幽灵的隐身破除时，阴影的拥有者将获得 +180% 武器伤害，持续 3 秒。",
         "当幽灵的隐身破除时，阴影的拥有者将获得 +240% 武器伤害，持续 3 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/GhostAugmentCard.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/GhostAugmentCard.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/GhostAugmentCard"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Guardian",
@@ -1901,7 +1931,8 @@
         "在主人护盾耗尽时为其补充92% 护盾。",
         "在主人护盾耗尽时为其补充100% 护盾。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelGaurdianMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelGaurdianMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/Guardian"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/HeadShot",
@@ -1943,7 +1974,8 @@
         "守护在蓄能后，朝 64.1 米范围内的第一名敌人击发强力射击。",
         "守护在蓄能后，朝 70 米范围内的第一名敌人击发强力射击。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ArcDroneHeadshot.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ArcDroneHeadshot.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/HealBot",
@@ -1980,7 +2012,8 @@
         "壁面蹬冲每 <LOWER_IS_BETTER>6 米后即可在 3 秒内恢复 +30 生命值。此效果最多可叠加 3 倍。",
         "壁面蹬冲每 <LOWER_IS_BETTER>3 米后即可在 4 秒内恢复 +40 生命值。此效果最多可叠加 3 倍。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/Healbot.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/Healbot.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/HealBot"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/ItemDropOnAssist",
@@ -2015,7 +2048,8 @@
         "死亡魔方协助击杀 <LOWER_IS_BETTER>11 次后，将掉落一个能量球。",
         "死亡魔方协助击杀 <LOWER_IS_BETTER>10 次后，将掉落一个能量球。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ItemDropOnAssist.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ItemDropOnAssist.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/ItemDropOnAssist"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/ItemVacum",
@@ -2050,7 +2084,8 @@
         "提升弹药携带量 17% 并在捡取弹药后的 2.5 秒将其转换为目前使用中的武器弹药类型。",
         "提升弹药携带量 25% 并在捡取弹药后的 2 秒将其转换为目前使用中的武器弹药类型。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ItemVacuumMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ItemVacuumMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/ItemVacum"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/LocateResources",
@@ -2080,7 +2115,8 @@
         "显示 45 米范围内的资源箱和矿床。每 3 秒自动破坏资源箱并收集资源。",
         "显示 60 米范围内的资源箱和矿床。每 3 秒自动破坏资源箱并收集资源。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/LocateResources.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/LocateResources.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/LocateResources"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Looter",
@@ -2115,7 +2151,8 @@
         "发射脉冲波来打开 20 米范围内的战利品储存箱。",
         "发射脉冲波来打开 22 米范围内的战利品储存箱。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelLooterMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelLooterMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/Looter"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/PlantScannerPrecept",
@@ -2157,7 +2194,8 @@
         "奥克绪罗斯守护将在 <LOWER_IS_BETTER>2.6 秒内自动拾取 44 米范围内的任何植物。",
         "奥克绪罗斯守护将在 <LOWER_IS_BETTER>2.0 秒内自动拾取 50 米范围内的任何植物。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/PlantScannerPrecept.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/PlantScannerPrecept.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/PlantScannerPrecept"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/PrimedRegen",
@@ -2218,7 +2256,8 @@
         "守护恢复时间减少 32 秒。复活时具有 10 秒的无敌状态。",
         "守护恢复时间减少 35 秒。复活时具有 10 秒的无敌状态。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRegenMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRegenMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/Regen"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/ProcAbsorb",
@@ -2253,7 +2292,8 @@
         "每 <LOWER_IS_BETTER>7 秒，守护将防止其拥有者受到异常状态。",
         "每 <LOWER_IS_BETTER>5 秒，守护将防止其拥有者受到异常状态。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelProcAbsorb.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelProcAbsorb.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/ProcAbsorb"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Regen",
@@ -2304,7 +2344,8 @@
         "守护恢复时间减少 17 秒。复活时具有 10 秒的无敌状态。",
         "守护恢复时间减少 20 秒。复活时具有 10 秒的无敌状态。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRegenMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRegenMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/Regen"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/RepairShip",
@@ -2339,7 +2380,8 @@
         "鹦鹉螺有 85% 的几率修复附近的航道星舰舰体损伤并扑灭航道星舰上的火灾。冷却时间：20 秒。",
         "鹦鹉螺有 100% 的几率修复附近的航道星舰舰体损伤并扑灭航道星舰上的火灾。冷却时间：20 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRepairShip.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRepairShip.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/RepairShip"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/RespawnSelf",
@@ -2399,7 +2441,8 @@
         "能量球可减少 6 秒守护恢复倒计时。每收集一个能量球，引灵会恢复 250 过载护盾。引灵的最大过载护盾增加 750。",
         "能量球可减少 6 秒守护恢复倒计时。每收集一个能量球，引灵会恢复 300 过载护盾。引灵的最大过载护盾增加 900。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRespawnSelf.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRespawnSelf.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/RespawnSelf"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Revenge",
@@ -2435,7 +2478,8 @@
         "除非敌人在 9.1 米范围内攻击其主人，否则守护不会攻击敌人",
         "除非敌人在 10 米范围内攻击其主人，否则守护不会攻击敌人"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRevengeMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRevengeMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/RevivePlayer",
@@ -2485,7 +2529,8 @@
         "守护使自己失去战斗能力，在 <LOWER_IS_BETTER>5 秒内复活其倒地的主人，使其恢复 75% 的生命值和护盾。守护恢复倒计时增加 15 秒。 +15 秒同伴恢复时间",
         "守护使自己失去战斗能力，在 <LOWER_IS_BETTER>4 秒内复活其倒地的主人，使其恢复 100% 的生命值和护盾。守护恢复倒计时增加 15 秒。 +15 秒同伴恢复时间"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSacrificeMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSacrificeMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/RevivePlayer"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Sanctuary",
@@ -2538,7 +2583,8 @@
         "在救助倒地同伴的玩家身边产生一层拥有生命值 1650 的护盾",
         "在救助倒地同伴的玩家身边产生一层拥有生命值 1800 的护盾"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSanctuaryMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSanctuaryMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/Sanctuary"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack",
@@ -2570,7 +2616,8 @@
         "守护会攻击 27.4 米范围内的第一名可视敌人。",
         "守护会攻击 30 米范围内的第一名可视敌人。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelAssaultMode.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelAssaultMode.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/ShieldVampire",
@@ -2604,7 +2651,8 @@
         "爆破 10 米内的敌人，将 150 伤害转换成战甲护盾",
         "爆破 10 米内的敌人，将 200 伤害转换成战甲护盾"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelShieldVampireMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelShieldVampireMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/ShieldVampire"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/TaserStun",
@@ -2638,7 +2686,8 @@
         "每 6 秒，守护会持续电击 15 米内的单名敌人以达到牵制效果。",
         "每 5 秒，守护会持续电击 15 米内的单名敌人以达到牵制效果。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ArcDroneTaserStun.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ArcDroneTaserStun.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/TaserStun"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/ThrowGlaivePrecept",
@@ -2669,7 +2718,8 @@
         "让赫利俄斯守护以 3 个机体组件来攻击 10 米距离内的敌人。",
         "让赫利俄斯守护以 3 个机体组件来攻击 10 米距离内的敌人。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelTargetingReceptorMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelTargetingReceptorMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Thumper",
@@ -2711,7 +2761,8 @@
         "引灵会攻击 54.9 米范围内的第一名可视敌人。",
         "引灵会攻击 60 米范围内的第一名可视敌人。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelThumperMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelThumperMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum",
@@ -2743,7 +2794,8 @@
         "12.5 米同伴收集链接。探测并收集物品，这包括收集 MOD。",
         "13.5 米同伴收集链接。探测并收集物品，这包括收集 MOD。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/CarrierVaccuumMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/CarrierVaccuumMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Vaporize",
@@ -2778,7 +2830,8 @@
         "每隔 10 秒，守护将使 25 米范围内的敌人眩晕并造成 600 点伤害。所造成的伤害受守护武器 Mod 影响。",
         "每隔 10 秒，守护将使 30 米范围内的敌人眩晕并造成 600 点伤害。所造成的伤害受守护武器 Mod 影响。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSwiftDethMod.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSwiftDethMod.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/Vaporize"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/AlacrityField",
@@ -2838,7 +2891,8 @@
         "如果同伴的最大护盾或过载护盾超过 1200，那么你的射速会增加 50%。重新装填可为你的同伴恢复 125 过载护盾。",
         "如果同伴的最大护盾或过载护盾超过 1200，那么你的射速会增加 60%。重新装填可为你的同伴恢复 150 过载护盾。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelAlacrityField.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelAlacrityField.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/AlacrityField"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/BondedExaltation",
@@ -2915,7 +2969,8 @@
         "当引导技能被激活时，同伴近战攻击会产生 4 米的冲击波，造成其 25% 的近战伤害。你的同伴造成的伤害会使你的技能效率提高 2.5%，持续 10 秒。最多 10 层。",
         "当引导技能被激活时，同伴近战攻击会产生 4 米的冲击波，造成其 30% 的近战伤害。你的同伴造成的伤害会使你的技能效率提高 3%，持续 12 秒。最多 10 层。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelBondedExaltation.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelBondedExaltation.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/BondedExaltation"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/BoneSplitter",
@@ -2978,7 +3033,8 @@
         "同伴近战攻击会削减敌人 12.5% 的护甲。最近受到技能伤害的敌人会把效果扩散到周围 7.5 米内的敌人身上。",
         "同伴近战攻击会削减敌人 15% 的护甲。最近受到技能伤害的敌人会把效果扩散到周围 9 米内的敌人身上。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelBoneSplitter.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelBoneSplitter.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/BoneSplitter"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/CompoundingLaceration",
@@ -3047,7 +3103,8 @@
         "同伴武器能造成的异常状态可由同伴指令 Mod 触发。杀死具有 <LOWER_IS_BETTER>4 种或更多独特异常状态效果的敌人可减少同伴技能冷却时间 2.5 秒。",
         "同伴武器能造成的异常状态可由同伴指令 Mod 触发。杀死具有 <LOWER_IS_BETTER>3 种或更多独特异常状态效果的敌人可减少同伴技能冷却时间 3 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelCompoundingLaceration.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelCompoundingLaceration.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/CompoundingLaceration"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/Copilot",
@@ -3098,7 +3155,8 @@
         "空中击杀会使同伴恢复时间减少 2.5 秒，爆头击杀减少 7.5 秒。当战甲在空中时，同伴会创造一个最大增加至 30% 并拥有 8.5 米范围的冰冻区域，落地后持续 3 秒。",
         "空中击杀会使同伴恢复时间减少 3 秒，爆头击杀减少 9 秒。当战甲在空中时，同伴会创造一个最大增加至 35% 并拥有 10 米范围的冰冻区域，落地后持续 3 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelCopilot.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelCopilot.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/Copilot"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/EximusHunter",
@@ -3149,7 +3207,8 @@
         "击杀卓越者敌人会给你的同伴带来 100% 随机元素伤害增益，持续 30 秒，并减少同伴恢复时间 15 秒。",
         "击杀卓越者敌人会给你的同伴带来 120% 随机元素伤害增益，持续 30 秒，并减少同伴恢复时间 18 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelEximusHunter.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelEximusHunter.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/EximusHunter"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/MutualNourishment",
@@ -3196,7 +3255,8 @@
         "生命球可恢复额外 50 生命值，并减少同伴恢复时间 2.5 秒。",
         "生命球可恢复额外 60 生命值，并减少同伴恢复时间 3 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelMutualNourishment.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelMutualNourishment.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/MutualNourishment"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/PredatoryResponse",
@@ -3261,7 +3321,8 @@
         "处决和怜悯之击可以让你的同伴获得 8 秒的隐身能力，且攻击不会中断。最多持续 60 秒。",
         "处决和怜悯之击可以让你的同伴获得 10 秒的隐身能力，且攻击不会中断。最多持续 60 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelPredatoryResponse.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelPredatoryResponse.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/PredatoryResponse"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/PreyDrive",
@@ -3308,7 +3369,8 @@
         "当你的同伴施放带有冷却时间的技能 <LOWER_IS_BETTER>6 次之后，你将可以不用消耗能量来施放一个战甲技能。",
         "当你的同伴施放带有冷却时间的技能 <LOWER_IS_BETTER>5 次之后，你将可以不用消耗能量来施放一个战甲技能。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelPreyDrive.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelPreyDrive.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/PreyDrive"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/Proliferation",
@@ -3359,7 +3421,8 @@
         "当你的同伴杀死一个处于异常状态的敌人时，42% 的异常状态效果会扩散到 7.5 米内的其他敌人。最多叠加 100 层。",
         "当你的同伴杀死一个处于异常状态的敌人时，50% 的异常状态效果会扩散到 9 米内的其他敌人。最多叠加 100 层。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelProliferation.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelProliferation.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/Proliferation"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/TenaciousPartner",
@@ -3401,7 +3464,8 @@
         "爆头击杀会使同伴恢复倒计时减少 2.5 秒。如果同伴的暴击几率超过 50%，那么你将获得 +1.0x 最终暴击伤害倍率。",
         "爆头击杀会使同伴恢复倒计时减少 3 秒。如果同伴的暴击几率超过 50%，那么你将获得 +1.2x 最终暴击伤害倍率。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelTenaciousPartner.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelTenaciousPartner.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/TenaciousPartner"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/VoidClone",
@@ -3444,7 +3508,8 @@
         "每消耗 100 能量，同伴就会复制自己，最多有 3 个复制体。复制体存活 25 秒且无法使用技能，它们的击杀有 41% 的几率掉落能量球。",
         "每消耗 100 能量，同伴就会复制自己，最多有 3 个复制体。复制体存活 30 秒且无法使用技能，它们的击杀有 50% 的几率掉落能量球。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelVoidClone.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelVoidClone.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/VoidClone"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/VoidVinculum",
@@ -3510,7 +3575,8 @@
         "当指挥官或漂泊者造成伤害时，给同伴的攻击带来 50% 伤害和 25% <DT_RADIANT_COLOR>虚空伤害，持续 10 秒。此外，同伴的虚空伤害还能为指挥官或漂泊者增加 +25% 增幅器和能量效率，持续 5 秒。",
         "当指挥官或漂泊者造成伤害时，给同伴的攻击带来 60% 伤害和 30% <DT_RADIANT_COLOR>虚空伤害，持续 10 秒。此外，同伴的虚空伤害还能为指挥官或漂泊者增加 +30% 增幅器和能量效率，持续 5 秒。"
       ],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelVoidVinculum.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelVoidVinculum.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/VoidVinculum"
     },
     {
       "path": "/Lotus/Types/Sentinels/SentinelPrecepts/WeaknessScanPrecept",
@@ -3531,7 +3597,8 @@
       "scripts": [],
       "levelStatsEn": [],
       "levelStatsZh": [],
-      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelWeaknessScanPrecept.png"
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelWeaknessScanPrecept.png",
+      "modFamily": "/Lotus/Types/Sentinels/SentinelPrecepts/WeaknessScanPrecept"
     }
   ]
 }

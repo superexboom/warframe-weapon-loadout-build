@@ -38,7 +38,14 @@ def test_fortifier_only_overguard_actual_drain_and_no_spill_buff():
     r=replay(st,tg,attacks_per_second=1,window_seconds=.1,combat={'fortifier':configuration(raw(FORTIFIER),5)})
     assert r['fortifier']['overguardDamage']==pytest.approx(400)
     assert r['fortifier']['selfOverguard']==pytest.approx(4)
-    assert r['directWindow']==pytest.approx(450)
+    # WFSim M120: plain 100 < 400 Overguard -> capped at 400 with zero spill to health.
+    assert r['directWindow']==pytest.approx(400)
+    # WFSim M120: plain 1000 >= 500 Overguard breaks it alone -> 500 OG + 500 health (no x8).
+    tg_break=target(hp=2000);tg_break['overguard']=500
+    st_break=replace(st,damage_types={'DT_IMPACT':1000})
+    rb=replay(st_break,tg_break,attacks_per_second=1,window_seconds=.1,combat={'fortifier':configuration(raw(FORTIFIER),5)})
+    assert rb['fortifier']['overguardDamage']==pytest.approx(500)
+    assert rb['directWindow']==pytest.approx(1000)
     tg['overguard']=0
     a=replay(st,tg,attacks_per_second=1,window_seconds=.1)
     b=replay(st,tg,attacks_per_second=1,window_seconds=.1,combat={'fortifier':configuration(raw(FORTIFIER),5)})

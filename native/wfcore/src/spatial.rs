@@ -15,29 +15,43 @@ fn cross(a: V, b: V) -> V {
         a[0] * b[1] - a[1] * b[0],
     ]
 }
-#[derive(Clone)]
+#[derive(Clone, Copy)]
+struct Tri {
+    id: usize,
+    a: V,
+    e1: V,
+    e2: V,
+}
+#[derive(Clone, Copy)]
 struct Node {
     lo: V,
     hi: V,
-    left: Option<usize>,
-    right: Option<usize>,
-    ids: Vec<usize>,
+    left: u32,
+    right: u32,
+    start: u32,
+    len: u32,
 }
 #[pyclass]
 pub struct SpatialIndex {
-    vertices: Vec<V>,
-    triangles: Vec<[usize; 3]>,
     nodes: Vec<Node>,
+    leaf_tris: Vec<Tri>,
+    normals: Vec<V>,
 }
 impl SpatialIndex {
-    fn build(&mut self, mut ids: Vec<usize>) -> usize {
+    fn build(
+        &mut self,
+        vertices: &[V],
+        triangles: &[[usize; 3]],
+        tris: &[Tri],
+        mut ids: Vec<usize>,
+    ) -> usize {
         let mut lo = [f64::INFINITY; 3];
         let mut hi = [f64::NEG_INFINITY; 3];
         for &k in &ids {
-            for &v in &self.triangles[k] {
+            for &v in &triangles[k] {
                 for a in 0..3 {
-                    lo[a] = lo[a].min(self.vertices[v][a]);
-                    hi[a] = hi[a].max(self.vertices[v][a]);
+                    lo[a] = lo[a].min(vertices[v][a]);
+                    hi[a] = hi[a].max(vertices[v][a]);
                 }
             }
         }
@@ -45,12 +59,19 @@ impl SpatialIndex {
         self.nodes.push(Node {
             lo,
             hi,
-            left: None,
-            right: None,
-            ids: Vec::new(),
+            left: u32::MAX,
+            right: u32::MAX,
+            start: 0,
+            len: 0,
         });
         if ids.len() <= 12 {
-            self.nodes[index].ids = ids;
+            let start = self.leaf_tris.len() as u32;
+            let len = ids.len() as u32;
+            for k in ids {
+                self.leaf_tris.push(tris[k]);
+            }
+            self.nodes[index].start = start;
+            self.nodes[index].len = len;
         } else {
             let mut axis = 0;
             for a in 1..3 {
@@ -60,27 +81,28 @@ impl SpatialIndex {
             }
             ids.sort_by(|&a, &b| {
                 let center = |k: usize| {
-                    let t = self.triangles[k];
-                    (self.vertices[t[0]][axis]
-                        + self.vertices[t[1]][axis]
-                        + self.vertices[t[2]][axis])
+                    let t = triangles[k];
+                    (vertices[t[0]][axis]
+                        + vertices[t[1]][axis]
+                        + vertices[t[2]][axis])
                         / 3.
                 };
                 center(a).total_cmp(&center(b)).then(a.cmp(&b))
             });
             let other = ids.split_off(ids.len() / 2);
-            let left = self.build(ids);
-            let right = self.build(other);
-            self.nodes[index].left = Some(left);
-            self.nodes[index].right = Some(right);
+            let left = self.build(vertices, triangles, tris, ids) as u32;
+            let right = self.build(vertices, triangles, tris, other) as u32;
+            self.nodes[index].left = left;
+            self.nodes[index].right = right;
         }
         index
     }
-    fn boxed(node: &Node, o: V, d: V, mut lower: f64, mut upper: f64) -> bool {
+    #[inline]
+    fn boxed(node: &Node, o: V, d: V, mut lower: f64, mut upper: f64) -> Option<f64> {
         for i in 0..3 {
             if d[i].abs() < 1e-15 {
                 if o[i] < node.lo[i] - 1e-8 || o[i] > node.hi[i] + 1e-8 {
-                    return false;
+                    return None;
                 }
             } else {
                 let mut a = (node.lo[i] - o[i]) / d[i];
@@ -91,17 +113,17 @@ impl SpatialIndex {
                 lower = lower.max(a);
                 upper = upper.min(b);
                 if lower > upper {
-                    return false;
+                    return None;
                 }
             }
         }
-        true
+        Some(lower)
     }
-    fn triangle(&self, k: usize, o: V, d: V, lower: f64, upper: f64) -> Option<f64> {
-        let t = self.triangles[k];
-        let a = self.vertices[t[0]];
-        let e1 = sub(self.vertices[t[1]], a);
-        let e2 = sub(self.vertices[t[2]], a);
+    #[inline]
+    fn triangle(tri: &Tri, o: V, d: V, lower: f64, upper: f64) -> Option<f64> {
+        let a = tri.a;
+        let e1 = tri.e1;
+        let e2 = tri.e2;
         let h = cross(d, e2);
         let det = dot(e1, h);
         if det.abs() < 1e-10 {
@@ -125,6 +147,7 @@ impl SpatialIndex {
             None
         }
     }
+    #[inline]
     fn ray(o: V, d: V, maxdist: f64, minimum: f64) -> PyResult<V> {
         let len = dot(d, d).sqrt();
         if o.iter().chain(d.iter()).any(|x| !x.is_finite())
@@ -138,6 +161,60 @@ impl SpatialIndex {
         }
         Ok([d[0] / len, d[1] / len, d[2] / len])
     }
+    #[inline]
+    fn raycast_core(
+        &self,
+        origin: V,
+        d: V,
+        maxdist: f64,
+        min_distance: f64,
+    ) -> Option<(f64, usize)> {
+        if self.nodes.is_empty() {
+            return None;
+        }
+        let mut upper = maxdist;
+        let mut result: Option<(f64, usize)> = None;
+        let mut stack = [0usize; 64];
+        stack[0] = 0;
+        let mut sp = 1usize;
+        while sp > 0 {
+            sp -= 1;
+            let k = stack[sp];
+            let n = &self.nodes[k];
+            if Self::boxed(n, origin, d, min_distance, upper).is_none() {
+                continue;
+            }
+            if n.left != u32::MAX {
+                stack[sp] = n.right as usize;
+                sp += 1;
+                stack[sp] = n.left as usize;
+                sp += 1;
+            } else {
+                let start = n.start as usize;
+                let end = start + n.len as usize;
+                for tri in &self.leaf_tris[start..end] {
+                    if let Some(v) = Self::triangle(tri, origin, d, min_distance, upper) {
+                        if result.is_none() || v < upper || (v == upper && tri.id < result.unwrap().1) {
+                            upper = v;
+                            result = Some((v, tri.id));
+                        }
+                    }
+                }
+            }
+        }
+        result
+    }
+    #[inline]
+    fn raycast_one(
+        &self,
+        origin: V,
+        direction: V,
+        maxdist: f64,
+        min_distance: f64,
+    ) -> PyResult<Option<(f64, usize)>> {
+        let d = Self::ray(origin, direction, maxdist, min_distance)?;
+        Ok(self.raycast_core(origin, d, maxdist, min_distance))
+    }
 }
 #[pymethods]
 impl SpatialIndex {
@@ -149,13 +226,29 @@ impl SpatialIndex {
             return Err(PyValueError::new_err("invalid triangle geometry"));
         }
         let n = triangles.len();
+        let mut tris: Vec<Tri> = Vec::with_capacity(n);
+        let mut normals: Vec<V> = Vec::with_capacity(n);
+        for (id, t) in triangles.iter().enumerate() {
+            let a = vertices[t[0]];
+            let e1 = sub(vertices[t[1]], a);
+            let e2 = sub(vertices[t[2]], a);
+            let raw_n = cross(e1, e2);
+            let nlen = dot(raw_n, raw_n).sqrt();
+            let unit_n = if nlen != 0.0 {
+                [raw_n[0] / nlen, raw_n[1] / nlen, raw_n[2] / nlen]
+            } else {
+                [0.0, 0.0, 0.0]
+            };
+            tris.push(Tri { id, a, e1, e2 });
+            normals.push(unit_n);
+        }
         let mut value = Self {
-            vertices,
-            triangles,
-            nodes: Vec::new(),
+            nodes: Vec::with_capacity((n / 4).max(1)),
+            leaf_tris: Vec::with_capacity(n),
+            normals,
         };
         if n > 0 {
-            value.build((0..n).collect());
+            value.build(&vertices, &triangles, &tris, (0..n).collect());
         }
         Ok(value)
     }
@@ -167,38 +260,46 @@ impl SpatialIndex {
         maxdist: f64,
         min_distance: f64,
     ) -> PyResult<Option<(f64, usize)>> {
-        let d = Self::ray(origin, direction, maxdist, min_distance)?;
-        let mut upper = maxdist;
-        let mut result: Option<(f64, usize)> = None;
-        let mut stack = if self.nodes.is_empty() {
-            vec![]
-        } else {
-            vec![0]
-        };
-        while let Some(k) = stack.pop() {
-            let n = &self.nodes[k];
-            if !Self::boxed(n, origin, d, min_distance, upper) {
-                continue;
-            }
-            if let Some(left) = n.left {
-                stack.push(n.right.unwrap());
-                stack.push(left);
-            } else {
-                for &t in &n.ids {
-                    if let Some(v) = self.triangle(t, origin, d, min_distance, upper) {
-                        if result.is_none() || v < upper || (v == upper && t < result.unwrap().1) {
-                            upper = v;
-                            result = Some((v, t));
-                        }
-                    }
-                }
-            }
+        self.raycast_one(origin, direction, maxdist, min_distance)
+    }
+    #[pyo3(signature=(origin,direction,maxdist=f64::INFINITY,min_distance=1e-5))]
+    fn raycast_hit(
+        &self,
+        origin: V,
+        direction: V,
+        maxdist: f64,
+        min_distance: f64,
+    ) -> PyResult<Option<(f64, usize, V, V)>> {
+        let norm = dot(direction, direction).sqrt();
+        if origin.iter().chain(direction.iter()).any(|x| !x.is_finite())
+            || norm <= 1e-15
+            || maxdist < 0.0
+            || maxdist.is_nan()
+            || !min_distance.is_finite()
+            || min_distance < 0.0
+        {
+            return Err(PyValueError::new_err("invalid ray length/direction"));
         }
-        Ok(result)
+        let d1 = [direction[0] / norm, direction[1] / norm, direction[2] / norm];
+        let d2 = Self::ray(origin, d1, maxdist, min_distance)?;
+        let Some((length, k)) = self.raycast_core(origin, d2, maxdist, min_distance) else {
+            return Ok(None);
+        };
+        let mut normal = self.normals[k];
+        if dot(normal, d1) > 0.0 {
+            normal = [-normal[0], -normal[1], -normal[2]];
+        }
+        let point = [
+            origin[0] + d1[0] * length,
+            origin[1] + d1[1] * length,
+            origin[2] + d1[2] * length,
+        ];
+        Ok(Some((length, k, point, normal)))
     }
     #[pyo3(signature=(origin,direction,maxdist=f64::INFINITY,min_distance=1e-5,max_hits=4096))]
     fn all_hits(
         &self,
+        py: Python<'_>,
         origin: V,
         direction: V,
         maxdist: f64,
@@ -206,36 +307,51 @@ impl SpatialIndex {
         max_hits: usize,
     ) -> PyResult<Vec<(f64, usize)>> {
         let d = Self::ray(origin, direction, maxdist, min_distance)?;
-        let mut result = Vec::new();
-        let mut stack = if self.nodes.is_empty() {
-            vec![]
-        } else {
-            vec![0]
-        };
-        while let Some(k) = stack.pop() {
-            let n = &self.nodes[k];
-            if !Self::boxed(n, origin, d, min_distance, maxdist) {
-                continue;
+        Ok(py.detach(|| {
+            let mut result = Vec::new();
+            if self.nodes.is_empty() {
+                return result;
             }
-            if let Some(left) = n.left {
-                stack.push(n.right.unwrap());
-                stack.push(left);
-            } else {
-                for &t in &n.ids {
-                    if let Some(v) = self.triangle(t, origin, d, min_distance, maxdist) {
-                        result.push((v, t));
+            let mut stack = [0usize; 64];
+            stack[0] = 0;
+            let mut sp = 1usize;
+            while sp > 0 {
+                sp -= 1;
+                let k = stack[sp];
+                let n = &self.nodes[k];
+                if Self::boxed(n, origin, d, min_distance, maxdist).is_none() {
+                    continue;
+                }
+                if n.left != u32::MAX {
+                    stack[sp] = n.right as usize;
+                    sp += 1;
+                    stack[sp] = n.left as usize;
+                    sp += 1;
+                } else {
+                    let start = n.start as usize;
+                    let end = start + n.len as usize;
+                    for tri in &self.leaf_tris[start..end] {
+                        if let Some(v) = Self::triangle(tri, origin, d, min_distance, maxdist) {
+                            result.push((v, tri.id));
+                        }
                     }
                 }
             }
-        }
-        result.sort_by(|a, b| a.0.total_cmp(&b.0).then(a.1.cmp(&b.1)));
-        result.truncate(max_hits);
-        Ok(result)
+            result.sort_by(|a, b| a.0.total_cmp(&b.0).then(a.1.cmp(&b.1)));
+            result.truncate(max_hits);
+            result
+        }))
     }
-    fn raycast_batch(&self, rays: Vec<(V, V, f64)>) -> PyResult<Vec<Option<(f64, usize)>>> {
-        rays.into_iter()
-            .map(|(o, d, m)| self.raycast(o, d, m, 1e-5))
-            .collect()
+    fn raycast_batch(
+        &self,
+        py: Python<'_>,
+        rays: Vec<(V, V, f64)>,
+    ) -> PyResult<Vec<Option<(f64, usize)>>> {
+        py.detach(|| {
+            rays.into_iter()
+                .map(|(o, d, m)| self.raycast_one(o, d, m, 1e-5))
+                .collect()
+        })
     }
 }
 
@@ -315,11 +431,14 @@ impl PathGraph {
         Ok(py.detach(|| {
             use std::cmp::Reverse;
             use std::collections::{BinaryHeap, HashSet};
-            let keys: HashSet<usize> = disabled_ids.into_iter().collect();
             // A dense edge mask avoids hash lookup in the Dijkstra hot loop
             // without allocating by potentially sparse external key ID.
-            let blocked: Vec<bool> = self.edges.iter()
-                .map(|edge| keys.contains(&edge.key_id)).collect();
+            let blocked: Vec<bool> = if disabled_ids.is_empty() {
+                Vec::new()
+            } else {
+                let keys: HashSet<usize> = disabled_ids.into_iter().collect();
+                self.edges.iter().map(|edge| keys.contains(&edge.key_id)).collect()
+            };
             let count = self.forward.len();
             let mut distances = vec![f64::INFINITY; count];
             let mut previous = vec![-1; count];
@@ -333,7 +452,7 @@ impl PathGraph {
                     continue;
                 }
                 for &index in &adjacency[node] {
-                    if blocked[index] {
+                    if !blocked.is_empty() && blocked[index] {
                         continue;
                     }
                     let edge = &self.edges[index];

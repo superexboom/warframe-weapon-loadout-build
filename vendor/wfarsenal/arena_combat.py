@@ -179,6 +179,11 @@ class ArenaTarget:
     frozen_scale: float = 1.0
     blasts: list = field(default_factory=list)
     puncture_strip: float = 0.0
+    vicious_strip: float = 0.0
+    vip_cap: int | None = None
+    last_damaged_at: float = -math.inf
+    shield_depleted_at: float = -math.inf
+    shield_updated_at: float = 0.0
     damage: float = 0.0
     death_time: float | None = None
 
@@ -268,10 +273,12 @@ class ArenaCombat:
         self.engine = engine_context
         self.options = dict(common_options or {})
         arcane_records = tuple(arcane_records)
+        extra_dyn = tuple(self.options.get("dynamic_sources") or ())
+        effective_mod_records = (*mod_records, *extra_dyn) if extra_dyn else mod_records
         self.irradiate = _irradiate_configuration(arcane_records)
         self.combat = prepare(
             engine_context,
-            mod_records,
+            effective_mod_records,
             arcane_records,
             incarnon_choices=incarnon_choices,
             cycle_enabled=cycle_enabled,
@@ -300,6 +307,12 @@ class ArenaCombat:
         self.nearby = None
         self.blast_recipients = None
         self.protected_ids = None
+        self.dynamic_state_provider = None
+        self.on_proc_applied = None
+        self.on_kill_callback = None
+        self.on_reload_callback = None
+        self.capture_kill_statuses = False
+        self.sequence_index = 0
         self.time = 0.0
         self._packet_cache = {}
         self._direct_cache = {}
@@ -399,6 +412,8 @@ class ArenaCombat:
         ):
             admitted = set(self.options.get("delivery_kinds") or ())
             admission = {
+                "melee": "melee",
+                "projectileSequence": "projectileSequence",
                 "manualDetonation": "manualDetonation",
                 "sourceOwnedFields": "sourceOwned",
                 "finiteFields": "finiteField",
@@ -473,6 +488,12 @@ class ArenaCombat:
             if stacks is not None
             else {q["id"]: q["stacks"] for q in self.sources}
         )
+        if self.dynamic_state_provider is not None and stacks is None:
+            dyn = self.dynamic_state_provider(self.time)
+            if dyn:
+                state.update(dyn)
+        if self.combat.get("projectileSequence") and "__projectileSequenceIndex" not in state:
+            state["__projectileSequenceIndex"] = self.sequence_index
         if self.combat.get("onosCharge") and (form or self.form) != "base":
             onos = self.combat["onosCharge"]
             state.setdefault("__onosPower", self.onos_ticks >= onos["alignmentShots"])
@@ -502,7 +523,7 @@ class ArenaCombat:
             self._model_sources[id(part)] = part
         return st, parts
 
-    def add_target(self, id, enemy_record, level=1, position=(0.0, 0.0, 0.0)):
+    def add_target(self, id, enemy_record, level=1, position=(0.0, 0.0, 0.0), *, boss=False):
         if id in self.targets:
             raise ValueError("Arena target ids cannot be reused")
         opts = {
@@ -518,6 +539,14 @@ class ArenaCombat:
         v = ArenaTarget(
             id, dict(enemy_record), level, tuple(position), defenses, full.copy(), full
         )
+        if boss and self.options.get("vip_status_cap", False):
+            v.vip_cap = 4
+            v.pooled = {k: CappedPool(min(cap, 4)) for k, cap in CAPS.items()}
+            v.piles["DT_GAS"] = ProcPile(4, radial=True)
+        elif self.options.get("corrosive_max_stacks"):
+            corr_cap = max(10, int(self.options["corrosive_max_stacks"]))
+            if corr_cap != 10:
+                v.pooled["DT_CORROSIVE"] = CappedPool(corr_cap)
         self.targets[id] = v
         if self.irradiate:
             v.irradiate_radiation = _RadiationPool()
@@ -683,7 +712,28 @@ class ArenaCombat:
                 q["stacks"] = min(q["maxStacks"], q["stacks"] + delta)
             q["expires"] = t + q["duration"] if q["duration"] else math.inf
 
+    def on_companion_proc(self, dtype, t, count=1.0):
+        """Signal companion elemental status procs (e.g. DT_FREEZE -> Primary Frostbite, DT_FIRE -> Cascadia Flare)."""
+        if count <= 0:
+            return
+        t = float(t)
+        if t > self.time + EPS:
+            events = self.advance(t)
+            self._events.extend(events)
+        else:
+            self._clean_sources(self.time)
+        self._defer_signal("proc-" + dtype, max(t, self.time), float(count))
+
     def _clean(self, v, t):
+        if self.options.get("enemy_shield_recharge") and v.alive and v.full[1] > 0.0:
+            if v.pools[1] < v.full[1] and math.isfinite(v.last_damaged_at):
+                delay = 4.0 if v.shield_depleted_at >= v.last_damaged_at - EPS else 1.0
+                ready = v.last_damaged_at + delay
+                start = max(v.shield_updated_at, ready)
+                if t > start:
+                    rate = 15.0 + 0.05 * v.full[1]
+                    v.pools[1] = min(v.full[1], v.pools[1] + (t - start) * rate)
+            v.shield_updated_at = max(v.shield_updated_at, t)
         v.heat.expire(t)
         for pool in v.pooled.values():
             pool.expire(t)
@@ -834,8 +884,27 @@ class ArenaCombat:
                     self._source_push(when + interval, kind, payload)
             else:
                 q, interval = payload
-                q["stacks"] = min(q["maxStacks"], q["stacks"] + q["perEvent"])
-                q["expires"] = when + q["duration"] if q["duration"] else math.inf
+                delta = q["perEvent"]
+                if q.get("noRefresh"):
+                    delta *= max(0.0, 1.0 - q["stacks"] / q["maxStacks"])
+                if delta > 0:
+                    if q["decay"] == "union":
+                        p = min(1.0, delta)
+                        q["expiries"].append((when + q["duration"], p))
+                        q["stacks"] = 1.0 - math.prod(1.0 - n for _, n in q["expiries"])
+                    elif q["decay"] == "per-stack":
+                        q["expiries"].append((when + q["duration"], delta))
+                        excess = sum(n for _, n in q["expiries"]) - q["maxStacks"]
+                        while excess > EPS and q["expiries"]:
+                            end, n = q["expiries"].pop(0)
+                            remove = min(excess, n)
+                            excess -= remove
+                            if n > remove:
+                                q["expiries"].insert(0, (end, n - remove))
+                        q["stacks"] = min(q["maxStacks"], q["stacks"] + delta)
+                    else:
+                        q["stacks"] = min(q["maxStacks"], q["stacks"] + delta)
+                    q["expires"] = when + q["duration"] if q["duration"] else math.inf
                 self._source_push(when + interval, kind, payload)
         self.time = t
         self._clean_sources(t)
@@ -1028,6 +1097,8 @@ class ArenaCombat:
             if self.ammo <= EPS:
                 self._signal("on-reload-empty", t)
             self._signal("on-reload", t)
+            if self.on_reload_callback is not None:
+                self.on_reload_callback(t)
             self._force_reload = False
             reloaded, _ = self._resolve()
             seconds = reloaded.reload_time
@@ -1135,13 +1206,20 @@ class ArenaCombat:
                 group["closed"] = True
                 self._burst_round = 0
         self._shot_id += 1
+        shot_stacks = {q["id"]: q["stacks"] for q in self.sources}
+        if self.dynamic_state_provider is not None:
+            dyn = self.dynamic_state_provider(t)
+            if dyn:
+                shot_stacks.update(dyn)
+        if self.combat.get("projectileSequence"):
+            shot_stacks["__projectileSequenceIndex"] = self.sequence_index
         shot = ArenaShot(
             self._shot_id,
             t,
             self.form,
             copy(st),
             tuple(copy(x) for x in radials),
-            {q["id"]: q["stacks"] for q in self.sources},
+            shot_stacks,
             bool(head),
             0.0 if infinite else cost,
             interval,
@@ -1792,6 +1870,10 @@ class ArenaCombat:
         self.rate_spool_due = t + shot.interval
         self._force_reload = bool(self.combat.get("reloadAfterEveryShot"))
         self._signal("on-fire", t)
+        if self.combat.get("projectileSequence"):
+            self.sequence_index = (self.sequence_index + 1) % int(
+                self.combat["projectileSequence"]["length"]
+            )
         if shot.physical_lanes:
             self.physical_phase = shot.phase_after
             self.physical_trace.append(
@@ -1925,12 +2007,25 @@ class ArenaCombat:
             raise ValueError("Preview cannot look backwards")
         probe = copy(self)
         probe.time = float(t)
-        probe.sources = deepcopy(self.sources)
+        probe.sources = [dict(q, expiries=list(q["expiries"])) for q in self.sources]
         probe._clean_sources(t)
-        v = deepcopy(self.targets.get(target_id))
-        if v:
-            probe._clean(v, t)
+        orig_v = self.targets.get(target_id)
+        if orig_v is not None:
+            v = copy(orig_v)
+            if 0 <= orig_v.frozen_until <= t + EPS:
+                v.presence = {k: deepcopy(p) for k, p in orig_v.presence.items()}
+                end = orig_v.frozen_until + 6 * orig_v.frozen_scale
+                v.presence.setdefault("DT_FREEZE", StatusPresence()).add(end, 0.0)
+                v.frozen_until = -1.0
+        else:
+            v = None
         state = {q["id"]: q["stacks"] for q in probe.sources}
+        if self.dynamic_state_provider is not None:
+            dyn = self.dynamic_state_provider(float(t))
+            if dyn:
+                state.update(dyn)
+        if self.combat.get("projectileSequence"):
+            state["__projectileSequenceIndex"] = self.sequence_index
         loaded = (
             max(
                 1.0,
@@ -2021,51 +2116,128 @@ class ArenaCombat:
                 * (1.0 if k in armor_bypass else armor)
             )
 
-        left = 1.0
-        applied = 0.0
-        broke = False
-        if v.overguard > 0:
-            value = sum(
-                n * (1.5 if k in ("DT_VOID", "DT_RADIANT") else 1.0)
-                for k, n in vector.items()
-            ) * self._vulnerability(v, "DT_MAGNETIC")
-            if value <= 0:
-                return 0.0
-            fortifier = self.combat.get("fortifier")
-            if fortifier:
-                value *= 1.0 + (fortifier["multiplier"] - 1.0) * fortifier.get(
-                    "uptime", 1.0
+        def settle_pools(vec, og_pool, sh_pool, hp_pool):
+            left = 1.0
+            paid_total = 0.0
+            broke = False
+            if og_pool > 0:
+                value = sum(
+                    n * (1.5 if k in ("DT_VOID", "DT_RADIANT") else 1.0)
+                    for k, n in vec.items()
+                ) * self._vulnerability(v, "DT_MAGNETIC")
+                if value <= 0:
+                    return 0.0, og_pool, sh_pool, hp_pool
+                fortifier = self.combat.get("fortifier")
+                if fortifier:
+                    value *= 1.0 + (fortifier["multiplier"] - 1.0) * fortifier.get(
+                        "uptime", 1.0
+                    )
+                share = min(left, og_pool / value)
+                og_paid = min(og_pool, value * share)
+                paid_total += og_paid
+                og_pool = max(0.0, og_pool - og_paid)
+                left -= share
+            if left > 0 and sh_pool > 0:
+                value = sum(
+                    n * max(0.0, 1.0 + delta.get(k, 0.0))
+                    for k, n in vec.items()
+                    if k not in bypass
+                ) * self._vulnerability(v, "DT_MAGNETIC")
+                leak = sum(hv(k, n) for k, n in vec.items() if k in bypass)
+                share = min(
+                    left,
+                    sh_pool / value if value > 0 else math.inf,
+                    hp_pool / leak if leak > 0 else math.inf,
                 )
-            share = min(left, v.overguard / value)
-            applied += value * share
-            left -= share
-        if left > 0 and v.shield > 0:
-            value = sum(
-                n * max(0.0, 1.0 + delta.get(k, 0.0))
-                for k, n in vector.items()
-                if k not in bypass
-            ) * self._vulnerability(v, "DT_MAGNETIC")
-            leak = sum(hv(k, n) for k, n in vector.items() if k in bypass)
-            share = min(
-                left,
-                v.shield / value if value > 0 else math.inf,
-                v.health / leak if leak > 0 else math.inf,
-            )
-            paid = min(v.shield, value * share)
-            hp = min(v.health, leak * share)
-            applied += paid + hp
-            left -= share
-            broke = paid >= v.shield - EPS
-            if not broke:
-                return applied
-            health_left = v.health - hp
-        else:
-            health_left = v.health
-        if left > 0:
-            amount = sum(hv(k, n) for k, n in vector.items()) * left
-            if broke:
-                amount *= float(aim) + (1.0 - float(aim)) * 0.05
-            applied += min(health_left, amount)
+                paid = min(sh_pool, value * share)
+                hp = min(hp_pool, leak * share)
+                paid_total += paid + hp
+                sh_pool = max(0.0, sh_pool - paid)
+                hp_pool = max(0.0, hp_pool - hp)
+                left -= share
+                broke = paid >= sh_pool + paid - EPS
+                if not broke:
+                    return paid_total, og_pool, sh_pool, hp_pool
+            if left > 0 and hp_pool > 0:
+                amount = sum(hv(k, n) for k, n in vec.items()) * left
+                if broke:
+                    amount *= float(aim) + (1.0 - float(aim)) * 0.05
+                hp_paid = min(hp_pool, amount)
+                paid_total += hp_paid
+                hp_pool = max(0.0, hp_pool - hp_paid)
+            return paid_total, og_pool, sh_pool, hp_pool
+
+        if not st.extra_hits:
+            left = 1.0
+            applied = 0.0
+            broke = False
+            if v.overguard > 0:
+                value = sum(
+                    n * (1.5 if k in ("DT_VOID", "DT_RADIANT") else 1.0)
+                    for k, n in vector.items()
+                ) * self._vulnerability(v, "DT_MAGNETIC")
+                if value <= 0:
+                    return 0.0
+                fortifier = self.combat.get("fortifier")
+                if fortifier:
+                    value *= 1.0 + (fortifier["multiplier"] - 1.0) * fortifier.get(
+                        "uptime", 1.0
+                    )
+                share = min(left, v.overguard / value)
+                applied += value * share
+                left -= share
+            if left > 0 and v.shield > 0:
+                value = sum(
+                    n * max(0.0, 1.0 + delta.get(k, 0.0))
+                    for k, n in vector.items()
+                    if k not in bypass
+                ) * self._vulnerability(v, "DT_MAGNETIC")
+                leak = sum(hv(k, n) for k, n in vector.items() if k in bypass)
+                share = min(
+                    left,
+                    v.shield / value if value > 0 else math.inf,
+                    v.health / leak if leak > 0 else math.inf,
+                )
+                paid = min(v.shield, value * share)
+                hp = min(v.health, leak * share)
+                applied += paid + hp
+                left -= share
+                broke = paid >= v.shield - EPS
+                if not broke:
+                    return applied
+                health_left = v.health - hp
+            else:
+                health_left = v.health
+            if left > 0:
+                amount = sum(hv(k, n) for k, n in vector.items()) * left
+                if broke:
+                    amount *= float(aim) + (1.0 - float(aim)) * 0.05
+                applied += min(health_left, amount)
+            return applied
+
+        applied, og_rem, sh_rem, hp_rem = settle_pools(
+            vector, v.overguard, v.shield, v.health
+        )
+        raw_sum = sum(vector.values())
+        if raw_sum > 0 and (hp_rem > EPS or og_rem > EPS):
+            faction = st.faction_damage_multipliers.get("", 1.0)
+            if v.record.get("faction"):
+                faction *= st.faction_damage_multipliers.get(v.record["faction"], 1.0)
+            faction *= dm.faction_bracket(v.record)
+            _, hm, _, _, _ = dm._hit_location_info(v.record, "head" if aim else "body")
+            for dtype, share, _ in st.extra_hits:
+                if hp_rem <= EPS and og_rem <= EPS:
+                    break
+                part_again = (
+                    hm if (dtype == "DT_VOID" and aim and not st.radial_only) else 1.0
+                )
+                extra_paid, og_rem, sh_rem, hp_rem = settle_pools(
+                    {dtype: raw_sum * share * faction * part_again},
+                    og_rem,
+                    sh_rem,
+                    hp_rem,
+                )
+                applied += extra_paid
         return applied
 
     def _count(self, v, dtype, t):
@@ -2090,15 +2262,19 @@ class ArenaCombat:
             * (1.0 - v.heat.strip(t))
             * (1.0 - v.puncture_strip)
         )
+        if v.vicious_strip > 0.0:
+            base *= max(0.0, 1.0 - v.vicious_strip)
+        corr_pool = v.pooled["DT_CORROSIVE"]
+        max_corr_strip = 1.0 if corr_pool.cap > 10 else 0.8
         return sum(
             weight
             * (
                 1.0
                 - dm._armour_reduction(
-                    base * (1.0 - (0.0 if k == 0 else min(0.26 + 0.06 * (k - 1), 0.8)))
+                    base * (1.0 - (0.0 if k == 0 else min(0.26 + 0.06 * (k - 1), max_corr_strip)))
                 )
             )
-            for k, weight in enumerate(v.pooled["DT_CORROSIVE"].distribution())
+            for k, weight in enumerate(corr_pool.distribution())
             if weight
         )
 
@@ -2232,16 +2408,75 @@ class ArenaCombat:
         self._direct_cache[key] = vector
         return vector
 
+    @staticmethod
+    def _stats_packet_key(st):
+        ipc = st.impact_proc_conversions
+        ipc_key = (
+            tuple((k, tuple(tuple(row.items()) for row in rows)) for k, rows in ipc.items())
+            if ipc
+            else ()
+        )
+        return (
+            tuple(st.damage_types.items()),
+            tuple(st.innate_damage_types.items()) if st.innate_damage_types else (),
+            st.crit_chance,
+            st.crit_multiplier,
+            st.base_crit_chance,
+            st.low_crit_threshold,
+            st.low_crit_damage_base,
+            st.low_crit_damage_bonus,
+            st.double_crit_chance,
+            st.noncrit_damage_multiplier,
+            st.bodyshot_crit_multiplier,
+            st.weakpoint_damage_bonus,
+            st.weakpoint_crit_chance_bonus,
+            st.weakpoint_crit_chance_relative,
+            st.headshot_bonus_multiplier,
+            st.ignore_headshot_bonus,
+            st.radial_only,
+            st.radial_victim_crit,
+            st.area_direct,
+            st.dot_base_damage,
+            st.proc_damage_multiplier,
+            st.proc_duration_multiplier,
+            tuple(st.proc_duration_types.items()) if st.proc_duration_types else (),
+            tuple(st.proc_max_stacks.items()) if st.proc_max_stacks else (),
+            tuple(st.dot_elemental_multipliers.items()) if st.dot_elemental_multipliers else (),
+            tuple(st.faction_damage_multipliers.items()) if st.faction_damage_multipliers else (),
+            st.falloff_multiplier,
+            st.multishot,
+            st.continuous,
+            st.status_chance,
+            tuple(st.independent_proc_chances.items()) if st.independent_proc_chances else (),
+            tuple(st.crit_proc_chances.items()) if st.crit_proc_chances else (),
+            tuple(st.native_forced_procs.items()) if st.native_forced_procs else (),
+            ipc_key,
+        )
+
     def _packet(self, v, st, head):
         # Victim defenses are applied at landing, independently of cached seeds.
         if v.status_immune:
             return self._direct_vector(v, st, head), {}, {}, {}
         st = self._tau_view(v, st)
+        proxies = v.record.get("hitProxies")
+        proxy_cache = getattr(self, "_proxy_repr_cache", None)
+        if proxy_cache is None:
+            proxy_cache = {}
+            self._proxy_repr_cache = proxy_cache
+        pid = id(proxies)
+        phit = proxy_cache.get(pid)
+        if phit is not None and phit[0] is proxies:
+            proxy_key = phit[1]
+        else:
+            proxy_key = repr(proxies if proxies is not None else [])
+            if len(proxy_cache) >= 256:
+                proxy_cache.clear()
+            proxy_cache[pid] = (proxies, proxy_key)
         key = (
-            repr(st),
+            self._stats_packet_key(st),
             head,
             str(v.record.get("faction", "")),
-            repr(v.record.get("hitProxies", [])),
+            proxy_key,
             dm.faction_bracket(v.record),
         )
         if key in self._packet_cache:
@@ -2342,19 +2577,26 @@ class ArenaCombat:
         left, applied, broke = 1.0, 0.0, False
         overguard_broke = False
         if v.overguard > 0:
-            value = sum(
+            plain = sum(
                 x * (1.5 if k in ("DT_VOID", "DT_RADIANT") else 1.0)
                 for k, x in vector.items()
             ) * self._vulnerability(v, "DT_MAGNETIC")
-            if value <= 0:
+            if plain <= 0:
                 return False
             fortifier = self.combat.get("fortifier") if weapon_source else None
-            if fortifier:
-                value *= 1.0 + (fortifier["multiplier"] - 1.0) * fortifier.get(
-                    "uptime", 1.0
-                )
-            share = min(left, v.overguard / value)
-            drain = value * share
+            eff_mult = (
+                1.0
+                + (fortifier["multiplier"] - 1.0) * fortifier.get("uptime", 1.0)
+                if fortifier
+                else 1.0
+            )
+            if eff_mult > 1.0 and plain * left < v.overguard:
+                drain = min(v.overguard, plain * left * eff_mult)
+                left = 0.0
+            else:
+                share = min(left, v.overguard / plain)
+                drain = plain * share
+                left -= share
             if fortifier:
                 self.fortifier_damage += drain
                 self.self_overguard = min(
@@ -2364,7 +2606,6 @@ class ArenaCombat:
                 )
             v.pools[0] = max(0.0, v.overguard - drain)
             applied += drain
-            left -= share
             if v.overguard <= EPS:
                 v.pools[0] = 0.0
                 overguard_broke = True
@@ -2377,26 +2618,39 @@ class ArenaCombat:
             bypass = sum(
                 health_value(k, x) for k, x in vector.items() if k in shield_bypass
             )
-            share = min(
-                left,
-                v.shield / shield if shield > 0 else math.inf,
-                v.health / bypass if bypass > 0 else math.inf,
-            )
-            a, b = min(v.shield, shield * share), min(v.health, bypass * share)
+            sh_share = min(left, v.shield / shield if shield > 0 else math.inf)
+            a = min(v.shield, shield * sh_share)
             v.pools[1] = max(0.0, v.shield - a)
-            v.pools[2] = max(0.0, v.health - b)
-            applied += a + b
-            left -= share
+            applied += a
             if v.shield <= EPS:
                 v.pools[1] = 0.0
                 broke = True
-        if left > 0 and v.shield <= EPS and v.health > 0:
+            left_non = left - sh_share
+            amount = bypass * left
+            if left_non > 0 and v.shield <= EPS:
+                non_bypass = sum(
+                    health_value(k, x)
+                    for k, x in vector.items()
+                    if k not in shield_bypass
+                )
+                non_amount = non_bypass * left_non
+                if broke:
+                    non_amount *= head + (1.0 - head) * 0.05
+                amount += non_amount
+            if amount > 0 and v.health > 0:
+                drain = min(v.health, amount)
+                v.pools[2] = max(0.0, v.health - drain)
+                applied += drain
+        elif left > 0 and v.shield <= EPS and v.health > 0:
             value = sum(health_value(k, x) for k, x in vector.items()) * left
-            if broke:
-                value *= head + (1.0 - head) * 0.05
             drain = min(v.health, value)
             v.pools[2] = max(0.0, v.health - drain)
             applied += drain
+        if self.options.get("enemy_shield_recharge") and applied > 0.0:
+            v.last_damaged_at = t
+            v.shield_updated_at = t
+            if broke:
+                v.shield_depleted_at = t
         v.damage += applied
         self.total_damage += applied
         if source == "direct":
@@ -2420,17 +2674,26 @@ class ArenaCombat:
             v.alive = False
             v.death_time = t
             self.kills += 1
-            self._events.append(
-                dict(
-                    kind="kill",
-                    target_id=v.id,
-                    targetId=v.id,
-                    time=t,
-                    source=source,
-                    headshot=bool(head),
-                    position=v.position,
-                )
+            kill_event = dict(
+                kind="kill",
+                target_id=v.id,
+                targetId=v.id,
+                time=t,
+                source=source,
+                headshot=bool(head),
+                position=v.position,
             )
+            if self.capture_kill_statuses:
+                snap = {}
+                for dt_k in (*v.pooled.keys(), *v.piles.keys(), *v.states.keys(), "DT_FIRE"):
+                    cnt = self._count(v, dt_k, t)
+                    if cnt > EPS:
+                        snap[dt_k] = cnt
+                kill_event["activeStatuses"] = snap
+                kill_event["heatSeed"] = v.heat.seed() if v.heat.active() else 0.0
+            self._events.append(kill_event)
+            if self.on_kill_callback is not None:
+                self.on_kill_callback(v, t, weapon_source)
             if weapon_source:
                 self._syndicate_kill(v, t)
             for kind, n in (
@@ -2495,9 +2758,10 @@ class ArenaCombat:
             faction *= dm.faction_bracket(v.record)
             _, hm, _, _, _ = dm._hit_location_info(v.record, "head" if head else "body")
             for dtype, share, _ in stats.extra_hits:
+                part_again = hm if (dtype == "DT_VOID" and head and not stats.radial_only) else 1.0
                 if self._take(
                     v,
-                    {dtype: sum(vector.values()) * share * faction * hm},
+                    {dtype: sum(vector.values()) * share * faction * part_again},
                     t,
                     source,
                     head,
@@ -2798,6 +3062,8 @@ class ArenaCombat:
                 continue
             self._defer_signal("proc-" + dtype, t, count)
             self._defer_signal("on-proc", t, count)
+            if self.on_proc_applied is not None:
+                self.on_proc_applied(v, dtype, count, t)
             if duration_scale <= 0:
                 if self._empowered_hit(v, st, dtype, count, t, natural, mode):
                     return
@@ -2865,7 +3131,7 @@ class ArenaCombat:
                 v.heat_mode = mode
             elif dtype == 'DT_SENTIENT':
                 if dtype not in v.pooled:
-                    v.pooled[dtype] = CappedPool(10.)
+                    v.pooled[dtype] = CappedPool(float(v.vip_cap) if v.vip_cap else 10.)
                 v.pooled[dtype].add(t + duration, absent, count)
             elif dtype in v.pooled:
                 v.pooled[dtype].add(t + duration, absent, count)
@@ -2875,8 +3141,9 @@ class ArenaCombat:
                     if schedule:
                         self._push(schedule[0], "pile", v, (dtype, schedule[1]))
             elif dtype in non:
+                blast_cap = float(v.vip_cap) if v.vip_cap else 10.0
                 active_count = sum(x["count"] for x in v.blasts)
-                kept = min(count, 10.0 - active_count)
+                kept = min(count, max(0.0, blast_cap - active_count))
                 item = dict(
                     count=kept,
                     per=non[dtype]["perProc"] * scale,
@@ -2891,7 +3158,7 @@ class ArenaCombat:
                     ),
                 )
                 v.blasts.append(item)
-                if active_count + kept >= 10.0 - EPS:
+                if not v.vip_cap and active_count + kept >= 10.0 - EPS:
                     self._release_blast(v, t)
                 else:
                     self._push(t + duration, "blast", v, item)
@@ -2899,7 +3166,7 @@ class ArenaCombat:
                 state = v.states.setdefault(dtype, deque())
                 state.append((t + duration, count))
                 if dtype == "DT_FREEZE":
-                    cap = 4.0 if v.overguard > 0 else 10.0
+                    cap = float(v.vip_cap) if v.vip_cap else (4.0 if v.overguard > 0 else 10.0)
                     excess = sum(n for _, n in state) - cap
                     while state and excess > EPS:
                         end, n = state.popleft()
@@ -2907,7 +3174,7 @@ class ArenaCombat:
                         excess -= remove
                         if n > remove:
                             state.appendleft((end, n - remove))
-                    if v.overguard <= EPS and sum(n for _, n in state) >= 10.0 - EPS:
+                    if not v.vip_cap and v.overguard <= EPS and sum(n for _, n in state) >= 10.0 - EPS:
                         v.frozen_until = t + 3 * duration_scale
                         v.frozen_scale = duration_scale
                 if row:

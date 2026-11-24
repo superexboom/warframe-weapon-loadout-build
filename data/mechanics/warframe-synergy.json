@@ -1,0 +1,2045 @@
+{
+  "schemaVersion": 1,
+  "description": "Engine-owned Warframe mechanics sidecar: catalog display repairs, Helminth & augment compatibility rules, conversion arcane metadata, and cross-entity weaponBridge rules.",
+  "catalogRepairs": {
+    "shards": {
+      "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHPBoostFromImpact": {
+        "nameZh": "琥珀执刑官源力石 · 通过 爆炸伤害击杀的每个敌人可增加 1 生命值。最多增加 300 最大生命值。",
+        "description": "通过 <DT_EXPLOSION_COLOR>爆炸伤害击杀的每个敌人可增加 1 生命值。最多增加 300 最大生命值。",
+        "effects": [
+          {
+            "upgradeType": "NONE",
+            "operation": "ADD",
+            "value": 1,
+            "descriptionTag": "/Lotus/Language/Alchemy/ArchonUpgradeWarframeImpactHPIncrease"
+          }
+        ]
+      },
+      "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHPBoostFromImpactMythic": {
+        "nameZh": "琥珀执刑官源力石 (Tau) · 通过 爆炸伤害击杀的每个敌人可增加 2 生命值。最多增加 450 最大生命值。",
+        "description": "通过 <DT_EXPLOSION_COLOR>爆炸伤害击杀的每个敌人可增加 2 生命值。最多增加 450 最大生命值。"
+      },
+      "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWeaponCritBoostFromHeat": {
+        "nameZh": "琥珀执刑官源力石 · 每击杀一个受 火焰伤害影响的敌人，次要武器的暴击几率增加 +1%，最高可达 50%。",
+        "description": "每击杀一个受 <DT_FIRE_COLOR>火焰伤害影响的敌人，次要武器的暴击几率增加 +1%，最高可达 50%。"
+      },
+      "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWeaponCritBoostFromHeatMythic": {
+        "nameZh": "琥珀执刑官源力石 (Tau) · 每击杀一个受 火焰伤害影响的敌人，次要武器的暴击几率增加 +1.5%，最高可达 75%。",
+        "description": "每击杀一个受 <DT_FIRE_COLOR>火焰伤害影响的敌人，次要武器的暴击几率增加 +1.5%，最高可达 75%。"
+      },
+      "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamage": {
+        "nameZh": "紫红执刑官源力石 · 获得 +30% 主要武器 电击伤害。每装备一个深红、蔚蓝或紫晶执刑官源力石，获得额外 +10% 的效果。电击和 Mod 效果组合。",
+        "description": "获得 +30% 主要武器 <DT_ELECTRICITY_COLOR>电击伤害。每装备一个深红、蔚蓝或紫晶执刑官源力石，获得额外 +10% 的效果。<DT_ELECTRICITY_COLOR>电击和 Mod 效果组合。"
+      },
+      "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamageMythic": {
+        "nameZh": "紫红执刑官源力石 (Tau) · 获得 +45% 主要武器 电击伤害。每装备一个深红、蔚蓝或紫晶执刑官源力石，获得额外 +15% 的效果。电击和 Mod 效果组合。",
+        "description": "获得 +45% 主要武器 <DT_ELECTRICITY_COLOR>电击伤害。每装备一个深红、蔚蓝或紫晶执刑官源力石，获得额外 +15% 的效果。<DT_ELECTRICITY_COLOR>电击和 Mod 效果组合。"
+      },
+      "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCritDamageBoost": {
+        "nameZh": "紫红执刑官源力石 · 获得 +25% 近战暴击伤害。当最大能量超过 500 时，伤害加成加倍。",
+        "description": "获得 +25% 近战暴击伤害。当最大能量超过 500 时，伤害加成加倍。"
+      },
+      "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCritDamageBoostMythic": {
+        "nameZh": "紫红执刑官源力石 (Tau) · 获得 +37.5% 近战暴击伤害。当最大能量超过 500 时，伤害加成加倍。",
+        "description": "获得 +37.5% 近战暴击伤害。当最大能量超过 500 时，伤害加成加倍。"
+      }
+    },
+    "invigoration": {
+      "/Lotus/Upgrades/Invigorations/Utility/UtilityInvigorationStatusResistance": {
+        "nameZh": "状态免疫",
+        "description": "状态免疫"
+      }
+    },
+    "helminthDisplayNamesEn": {
+      "/Lotus/Powersuits/Alchemist/Abilities/AlchemistVialAbility": "Vial Rush",
+      "/Lotus/Powersuits/Ninja/Abilities/GlaiveAbility": "Shuriken",
+      "/Lotus/Powersuits/Brawler/Abilities/BrawlerGazeAbility": "Petrify",
+      "/Lotus/Powersuits/Pacifist/Abilities/PacifistWaveAbility": "Lull",
+      "/Lotus/Powersuits/Choir/Abilities/ChoirEyesAbility": "Ophanim Eyes",
+      "/Lotus/Powersuits/Dragon/Abilities/DragonLuckAbility": "Elemental Ward",
+      "/Lotus/Powersuits/ConcreteFrame/Abilities/ConcretePillarAbility": "Chyrinka Pillar",
+      "/Lotus/Powersuits/Dagath/Abilities/DagathVolleyAbility": "Wyrd Scythes",
+      "/Lotus/Powersuits/DemonFrame/Abilities/DemonFrameHealAbility": "Remedium",
+      "/Lotus/Powersuits/Ember/Abilities/FireBlastAbility": "Fire Blast",
+      "/Lotus/Powersuits/YinYang/Abilities/YinYangTargetAbility": "Rest & Rage",
+      "/Lotus/Powersuits/Excalibur/Abilities/RadialBlindAbility": "Radial Blind",
+      "/Lotus/Powersuits/Frost/Abilities/IceSpikeAbility": "Ice Wave",
+      "/Lotus/Powersuits/Frumentarius/Abilities/FrumentariusCloakAbility": "Evade",
+      "/Lotus/Powersuits/Glass/Abilities/GlassFragmentAbility": "Spectrorage",
+      "/Lotus/Powersuits/Garuda/Abilities/GarudaSiphonAbility": "Blood Altar",
+      "/Lotus/Powersuits/Runner/Abilities/RunnerTransferAbility": "Thermal Sunder",
+      "/Lotus/Powersuits/Geode/Abilities/GeodeShardsAbility": "Fractured Blast",
+      "/Lotus/Powersuits/Devourer/Abilities/DevourerConsumeAbility": "Nourish",
+      "/Lotus/Powersuits/Gyre/Abilities/GyreSphereAbility": "Coil Horizon",
+      "/Lotus/Powersuits/Priest/Abilities/PriestCondemnAbility": "Condemn",
+      "/Lotus/Powersuits/PowersuitAbilities/HelminthEfficiencyAbility": "Energized Munitions",
+      "/Lotus/Powersuits/PowersuitAbilities/HelminthCompanionAbility": "Master's Summons",
+      "/Lotus/Powersuits/PowersuitAbilities/HelminthEnergyShareAbility": "Voracious Metastasis",
+      "/Lotus/Powersuits/PowersuitAbilities/HelminthHackAbility": "Perspicacity",
+      "/Lotus/Powersuits/PowersuitAbilities/HelminthMaxStatusAbility": "Sickening Pulse",
+      "/Lotus/Powersuits/PowersuitAbilities/HelminthProcBlockAbility": "Hideous Resistance",
+      "/Lotus/Powersuits/PowersuitAbilities/HelminthShieldArmorAbility": "Parasitic Armor",
+      "/Lotus/Powersuits/PowersuitAbilities/HelminthShieldsAbility": "Rebuild Shields",
+      "/Lotus/Powersuits/PowersuitAbilities/HelminthSpeedAbility": "Infested Mobility",
+      "/Lotus/Powersuits/PowersuitAbilities/HelminthStatusAbility": "Expedite Suffering",
+      "/Lotus/Powersuits/PowersuitAbilities/HelminthStrengthAbility": "Empower",
+      "/Lotus/Powersuits/PowersuitAbilities/HelminthStunAbility": "Marked For Death",
+      "/Lotus/Powersuits/PowersuitAbilities/HelminthTreasureAbility": "Golden Instinct",
+      "/Lotus/Powersuits/IronFrame/Abilities/IronFrameStripAbility": "Pillage",
+      "/Lotus/Powersuits/Hoplite/Abilities/HopliteBashAbility": "Tharros Strike",
+      "/Lotus/Powersuits/Pirate/Abilities/CannonBarrageAbility": "Tempest Barrage",
+      "/Lotus/Powersuits/Sandman/Abilities/SandmanBlastAbility": "Desiccation",
+      "/Lotus/Powersuits/Inkblot/Abilities/InkCloneAbility": "Self Portrait",
+      "/Lotus/Powersuits/Ranger/Abilities/RangerQuiverAbility": "Quiver",
+      "/Lotus/Powersuits/Khora/Abilities/KhoraTwirlAbility": "Ensnare",
+      "/Lotus/Powersuits/Koumei/Abilities/KoumeiBlockAbility": "Omamori",
+      "/Lotus/Powersuits/Cowgirl/Abilities/RussianRouletteAbility": "Shooting Gallery",
+      "/Lotus/Powersuits/Harlequin/Abilities/LightAbility": "Eclipse",
+      "/Lotus/Powersuits/Necro/Abilities/TerrorTotemAbility": "Terrify",
+      "/Lotus/Powersuits/Nezha/Abilities/NezhaTrailAbility": "Fire Walker",
+      "/Lotus/Powersuits/Infestation/Abilities/InfestTendrilsAbility": "Larva",
+      "/Lotus/Powersuits/Nokko/Abilities/NokkoPowerShroomAbility": "Brightbonnet",
+      "/Lotus/Powersuits/AntiMatter/Abilities/NullStarAbility": "Null Star",
+      "/Lotus/Powersuits/Jade/Abilities/MindControlAbility": "Mind Control",
+      "/Lotus/Powersuits/Bard/Abilities/BardCharmAbility": "Resonator",
+      "/Lotus/Powersuits/Oraxia/Abilities/OraxiaEntangleAbility": "Webbed Embrace",
+      "/Lotus/Powersuits/SiriusOrion/Abilities/OrionBuffAbility": "Astral Shell",
+      "/Lotus/Powersuits/Pagemaster/Abilities/PagemasterDeathAbility": "Dark Verse",
+      "/Lotus/Powersuits/PaxDuviricus/Abilities/PaxTeleportAbility": "Wrathful Advance",
+      "/Lotus/Powersuits/Odalisk/Abilities/OdaliskDispensaryAbility": "Dispensary",
+      "/Lotus/Powersuits/Revenant/Abilities/RevenantAfflictionAbility": "Reave",
+      "/Lotus/Powersuits/Rhino/Abilities/RhinoRoarAbility": "Roar",
+      "/Lotus/Powersuits/Saryn/Abilities/ShedAbility": "Molt",
+      "/Lotus/Powersuits/Sentient/Abilities/SentientStompAbility": "Sentient Wrath",
+      "/Lotus/Powersuits/SiriusOrion/Abilities/SiriusBuffAbility": "Jade Stars",
+      "/Lotus/Powersuits/Temple/Abilities/TempleShredAbility": "Pyrotechnics",
+      "/Lotus/Powersuits/Fairy/Abilities/FairyDustAbility": "Spellbind",
+      "/Lotus/Powersuits/Trinity/Abilities/WellOfLifeAbility": "Well Of Life",
+      "/Lotus/Powersuits/Berserker/Abilities/BerserkerScreamAbility": "Warcry",
+      "/Lotus/Powersuits/Trapper/Abilities/ZapTrapAbility": "Tesla Nervos",
+      "/Lotus/Powersuits/Werewolf/Abilities/WerewolfLeapAbility": "Lycath's Hunt",
+      "/Lotus/Powersuits/Wisp/Abilities/WispHarnessAbility": "Breach Surge",
+      "/Lotus/Powersuits/Wraith/Abilities/WraithGloomAbility": "Gloom",
+      "/Lotus/Powersuits/MonkeyKing/Abilities/MonkeyDeathNewAbility": "Defy",
+      "/Lotus/Powersuits/BrokenFrame/Abilities/BrokenRotAbility": "Xata's Whisper",
+      "/Lotus/Powersuits/Yareli/Abilities/YareliDisksAbility": "Aquablades",
+      "/Lotus/Powersuits/Tengu/Abilities/TenguBurstAbility": "Airburst",
+      "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility": "Neote"
+    },
+    "nonSelfAuraPaths": [
+      "/Lotus/Upgrades/Mods/Aura/EnemyArmorReductionAuraMod",
+      "/Lotus/Upgrades/Mods/Aura/EnemyShieldReductionAuraMod",
+      "/Lotus/Upgrades/Mods/Aura/InfestationSpeedReductionAuraMod",
+      "/Lotus/Upgrades/Mods/Aura/WarframeAuraLoyalHerdMod"
+    ],
+    "perRankValueMods": [
+      "/Lotus/Powersuits/Tengu/TenguDisablePassiveMod",
+      "/Lotus/Powersuits/Nezha/NezhaDisablePassiveMod",
+      "/Lotus/Powersuits/Excalibur/ExcaliburUmbraPassiveAugmentCard",
+      "/Lotus/Upgrades/Mods/Sets/Spider/SpiderModA",
+      "/Lotus/Powersuits/Berserker/GrappleAugmentCard"
+    ]
+  },
+  "modFamilyOverrides": {},
+  "augmentAbilityMap": {
+    "/Lotus/Powersuits/Alchemist/AlchemistPassiveAugmentCard": "PASSIVE",
+    "/Lotus/Powersuits/Alchemist/AlchemistTransmuteAugmentCard": "/Lotus/Powersuits/Alchemist/Abilities/AlchemistTransmuteAbility",
+    "/Lotus/Powersuits/Alchemist/SerpentAugmentCard": "/Lotus/Powersuits/Alchemist/Abilities/AlchemistSerpentAbility",
+    "/Lotus/Powersuits/AntiMatter/AntiMatterDropAugmentCard": "/Lotus/Powersuits/AntiMatter/Abilities/AntiMatterDrop",
+    "/Lotus/Powersuits/AntiMatter/MolecularPrimeAugmentCard": "/Lotus/Powersuits/AntiMatter/Abilities/MolecularPrimeAbility",
+    "/Lotus/Powersuits/AntiMatter/NullStarAugmentCard": "/Lotus/Powersuits/AntiMatter/Abilities/NullStarAbility",
+    "/Lotus/Powersuits/AntiMatter/WormHoleAugmentCard": "/Lotus/Powersuits/AntiMatter/Abilities/WormHoleAbility",
+    "/Lotus/Powersuits/Banshee/EarthQuakeAugmentCard": "/Lotus/Powersuits/Banshee/Abilities/SonicEarthQuakeAbility",
+    "/Lotus/Powersuits/Banshee/PushAugmentCard": "/Lotus/Powersuits/Banshee/Abilities/PushAbility",
+    "/Lotus/Powersuits/Banshee/SilenceAugmentCard": "/Lotus/Powersuits/Banshee/Abilities/SilenceAbility",
+    "/Lotus/Powersuits/Banshee/SonarAugmentCard": "/Lotus/Powersuits/Banshee/Abilities/SonarAbility",
+    "/Lotus/Powersuits/Bard/BardCharmAugmentCard": "/Lotus/Powersuits/Bard/Abilities/BardCharmAbility",
+    "/Lotus/Powersuits/Bard/BardMusicAugmentCard": "/Lotus/Powersuits/Bard/Abilities/BardMusicAbility",
+    "/Lotus/Powersuits/Berserker/GrappleAugmentCard": "/Lotus/Powersuits/Berserker/Abilities/GrappleHookAbility",
+    "/Lotus/Powersuits/Berserker/IntimidateAugmentCard": "/Lotus/Powersuits/Berserker/Abilities/BerserkerScreamAbility",
+    "/Lotus/Powersuits/Berserker/LastStandAugmentCard": "/Lotus/Powersuits/Berserker/Abilities/LastStandAbility",
+    "/Lotus/Powersuits/Berserker/LastStandAugmentTwoCard": "/Lotus/Powersuits/Berserker/Abilities/LastStandAbility",
+    "/Lotus/Powersuits/Berserker/ShieldBashAugmentCard": "/Lotus/Powersuits/Berserker/Abilities/ShieldBashAbility",
+    "/Lotus/Powersuits/Brawler/BrawlerBarrierAugmentCard": "/Lotus/Powersuits/Brawler/Abilities/BrawlerBarrierAbility",
+    "/Lotus/Powersuits/Brawler/BrawlerGazeAugmentCard": "/Lotus/Powersuits/Brawler/Abilities/BrawlerGazeAbility",
+    "/Lotus/Powersuits/Brawler/BrawlerPassiveAugmentCard": "PASSIVE",
+    "/Lotus/Powersuits/Brawler/BrawlerPunchAugmentCard": "/Lotus/Powersuits/Brawler/Abilities/BrawlerPunchAbility",
+    "/Lotus/Powersuits/Brawler/BrawlerSummonAugmentCard": "/Lotus/Powersuits/Brawler/Abilities/BrawlerSummonAbility",
+    "/Lotus/Powersuits/BrokenFrame/BrokenDestructAugmentCard": "/Lotus/Powersuits/BrokenFrame/Abilities/BrokenDestructAbility",
+    "/Lotus/Powersuits/BrokenFrame/EmbraceAugmentCard": "/Lotus/Powersuits/BrokenFrame/Abilities/BrokenEmbraceAbility",
+    "/Lotus/Powersuits/BrokenFrame/GraspAugmentCard": "/Lotus/Powersuits/BrokenFrame/Abilities/BrokenGraspAbility",
+    "/Lotus/Powersuits/Choir/ChoirPoolAugmentCard": "/Lotus/Powersuits/Choir/Abilities/ChoirPoolAbility",
+    "/Lotus/Powersuits/ConcreteFrame/ConcreteLaserAugmentCard": "/Lotus/Powersuits/ConcreteFrame/Abilities/ConcreteLaserAbility",
+    "/Lotus/Powersuits/ConcreteFrame/ConcreteWallAugmentCard": "/Lotus/Powersuits/ConcreteFrame/Abilities/ConcreteWallAbility",
+    "/Lotus/Powersuits/Cowgirl/BallisticBatteryAugmentCard": "/Lotus/Powersuits/Cowgirl/Abilities/BallisticBatteryAbility",
+    "/Lotus/Powersuits/Cowgirl/RicochetArmourAugmentCard": "/Lotus/Powersuits/Cowgirl/Abilities/RicochetArmorAbility",
+    "/Lotus/Powersuits/Cowgirl/RussianRouletteAugmentCard": "/Lotus/Powersuits/Cowgirl/Abilities/RussianRouletteAbility",
+    "/Lotus/Powersuits/Dagath/DagathApparitionAugmentCard": "/Lotus/Powersuits/Dagath/Abilities/DagathApparitionAbility",
+    "/Lotus/Powersuits/Devourer/DevourerBowlAugmentCard": "/Lotus/Powersuits/Devourer/Abilities/DevourerBowlAbility",
+    "/Lotus/Powersuits/Devourer/DevourerConsumeAugmentCard": "/Lotus/Powersuits/Devourer/Abilities/DevourerConsumeAbility",
+    "/Lotus/Powersuits/Devourer/DevourerDevourAugmentCard": "/Lotus/Powersuits/Devourer/Abilities/DevourerDevourAbility",
+    "/Lotus/Powersuits/Devourer/DevourerRegurgitateAugmentCard": "/Lotus/Powersuits/Devourer/Abilities/DevourerRegurgitateAbility",
+    "/Lotus/Powersuits/Dragon/DragonLuckAugmentCard": "/Lotus/Powersuits/Dragon/Abilities/DragonLuckAbility",
+    "/Lotus/Powersuits/Dragon/DragonPeltAugmentCard": "/Lotus/Powersuits/Dragon/Abilities/DragonPeltAbility",
+    "/Lotus/Powersuits/Dragon/DragonScalesAugmentCard": "/Lotus/Powersuits/Dragon/Abilities/DragonScalesAbility",
+    "/Lotus/Powersuits/Dragon/DragonScalesAugmentTwoCard": "/Lotus/Powersuits/Dragon/Abilities/DragonScalesAbility",
+    "/Lotus/Powersuits/Ember/FireBallAugmentCard": "/Lotus/Powersuits/Ember/Abilities/FireBallAbility",
+    "/Lotus/Powersuits/Ember/FireBlastAugmentCard": "/Lotus/Powersuits/Ember/Abilities/FireBlastAbility",
+    "/Lotus/Powersuits/Ember/FireSkinAugmentCard": "/Lotus/Powersuits/Ember/Abilities/EmberImmolationAbility",
+    "/Lotus/Powersuits/Ember/WorldOnFireAugmentCard": "/Lotus/Powersuits/Ember/Abilities/EmberInfernoAbility",
+    "/Lotus/Powersuits/Excalibur/ExcaliburUmbraPassiveAugmentCard": "PASSIVE",
+    "/Lotus/Powersuits/Excalibur/RadialBlindAugmentCard": "/Lotus/Powersuits/Excalibur/Abilities/RadialBlindAbility",
+    "/Lotus/Powersuits/Excalibur/RadialJavelinAugmentCard": "/Lotus/Powersuits/Excalibur/Abilities/RadialJavelinAbility",
+    "/Lotus/Powersuits/Excalibur/SlashDashAugmentCard": "/Lotus/Powersuits/Excalibur/Abilities/SlashDashNewAbility",
+    "/Lotus/Powersuits/Excalibur/SwordOfDoomAugmentCard": "/Lotus/Powersuits/Excalibur/Abilities/SwordOfDoomAbility",
+    "/Lotus/Powersuits/Fairy/FairyDisablePassiveMod": "/Lotus/Powersuits/Fairy/Abilities/FairyFlightAbility",
+    "/Lotus/Powersuits/Fairy/FairyDustAugmentCard": "/Lotus/Powersuits/Fairy/Abilities/FairyDustAbility",
+    "/Lotus/Powersuits/Fairy/FairyFlightAugmentCard": "/Lotus/Powersuits/Fairy/Abilities/FairyFlightAbility",
+    "/Lotus/Powersuits/Fairy/FairyLightAugmentCard": "/Lotus/Powersuits/Fairy/Abilities/FairyLightAbility",
+    "/Lotus/Powersuits/Frost/AvalancheAugmentCard": "/Lotus/Powersuits/Frost/Abilities/AvalancheAbility",
+    "/Lotus/Powersuits/Frost/FrostPassiveAugmentCard": "PASSIVE",
+    "/Lotus/Powersuits/Frost/IceShieldAugmentCard": "/Lotus/Powersuits/Frost/Abilities/IceShieldAbility",
+    "/Lotus/Powersuits/Frost/IcicleAugmentCard": "/Lotus/Powersuits/Frost/Abilities/IcicleAbility",
+    "/Lotus/Powersuits/Garuda/GarudaBloodAugmentCard": "/Lotus/Powersuits/Garuda/Abilities/GarudaBloodAbility",
+    "/Lotus/Powersuits/Garuda/GarudaShieldAugmentCard": "/Lotus/Powersuits/Garuda/Abilities/GarudaShieldAbility",
+    "/Lotus/Powersuits/Garuda/GarudaUnstoppableAugmentCard": "/Lotus/Powersuits/Garuda/Abilities/GarudaUnstoppableAbility",
+    "/Lotus/Powersuits/Geode/GeodeCrystalAugmentCard": "/Lotus/Powersuits/Geode/Abilities/GeodeCrystalAbility",
+    "/Lotus/Powersuits/Geode/GeodeGrowthsAugmentCard": "/Lotus/Powersuits/Geode/Abilities/GeodeGrowthsAbility",
+    "/Lotus/Powersuits/Glass/GlassFragmentAugmentCard": "/Lotus/Powersuits/Glass/Abilities/GlassFragmentAbility",
+    "/Lotus/Powersuits/Glass/GlassShankAugmentCard": "/Lotus/Powersuits/Glass/Abilities/GlassShankAbility",
+    "/Lotus/Powersuits/Glass/GlassShatterAugmentCard": "/Lotus/Powersuits/Glass/Abilities/GlassShatterAbility",
+    "/Lotus/Powersuits/Gyre/GyreEnergizedAugmentCard": "/Lotus/Powersuits/Gyre/Abilities/GyreEnergizedAbility",
+    "/Lotus/Powersuits/Gyre/GyreOverchargedAugmentCard": "/Lotus/Powersuits/Gyre/Abilities/GyreOverchargedAbility",
+    "/Lotus/Powersuits/Gyre/GyrePulseAugmentCard": "/Lotus/Powersuits/Gyre/Abilities/GyrePulseAbility",
+    "/Lotus/Powersuits/Gyre/GyreSphereAugmentCard": "/Lotus/Powersuits/Gyre/Abilities/GyreSphereAbility",
+    "/Lotus/Powersuits/Harlequin/IllusionAugmentCard": "/Lotus/Powersuits/Harlequin/Abilities/IllusionAbility",
+    "/Lotus/Powersuits/Harlequin/LightAugmentCard": "/Lotus/Powersuits/Harlequin/Abilities/LightAbility",
+    "/Lotus/Powersuits/Harlequin/ObjectChangeAugmentCard": "/Lotus/Powersuits/Harlequin/Abilities/HarlequinObjectChangeAbility",
+    "/Lotus/Powersuits/Hoplite/HopliteArmyAugmentCard": "/Lotus/Powersuits/Hoplite/Abilities/HopliteArmyAbility",
+    "/Lotus/Powersuits/Hoplite/HopliteBashAugmentCard": "/Lotus/Powersuits/Hoplite/Abilities/HopliteBashAbility",
+    "/Lotus/Powersuits/Hoplite/HopliteImpaleAugmentCard": "/Lotus/Powersuits/Hoplite/Abilities/HopliteImpaleAbility",
+    "/Lotus/Powersuits/Infestation/InfestLinkAugmentCard": "/Lotus/Powersuits/Infestation/Abilities/InfestLinkAbility",
+    "/Lotus/Powersuits/Infestation/InfestPassiveAugmentCard": "PASSIVE",
+    "/Lotus/Powersuits/Infestation/InfestPodsAugmentCard": "/Lotus/Powersuits/Infestation/Abilities/InfestPodsAbility",
+    "/Lotus/Powersuits/Infestation/InfestRuptureAugmentCard": "/Lotus/Powersuits/Infestation/Abilities/InfestRuptureAbility",
+    "/Lotus/Powersuits/Infestation/InfestTendrilsAugmentCard": "/Lotus/Powersuits/Infestation/Abilities/InfestTendrilsAbility",
+    "/Lotus/Powersuits/IronFrame/IronFrameBlastAugmentCard": "/Lotus/Powersuits/IronFrame/Abilities/IronFrameBlastAbility",
+    "/Lotus/Powersuits/IronFrame/IronFrameEruptionAugmentCard": "/Lotus/Powersuits/IronFrame/Abilities/IronFrameEruptionAbility",
+    "/Lotus/Powersuits/IronFrame/IronFrameStripAugmentCard": "/Lotus/Powersuits/IronFrame/Abilities/IronFrameStripAbility",
+    "/Lotus/Powersuits/Jade/ChaosAugmentCard": "/Lotus/Powersuits/Jade/Abilities/ChaosAbility",
+    "/Lotus/Powersuits/Jade/DaggerAugmentCard": "/Lotus/Powersuits/Jade/Abilities/DaggerAbility",
+    "/Lotus/Powersuits/Jade/MindControlAugmentCard": "/Lotus/Powersuits/Jade/Abilities/MindControlAbility",
+    "/Lotus/Powersuits/Jade/SelfBulletAttractorAugmentCard": "/Lotus/Powersuits/Jade/Abilities/SelfBulletAttractorAbility",
+    "/Lotus/Powersuits/Khora/KhoraCageAugmentCard": "/Lotus/Powersuits/Khora/Abilities/KhoraCageAbility",
+    "/Lotus/Powersuits/Khora/KhoraCrackAugmentCard": "/Lotus/Powersuits/Khora/Abilities/KhoraCrackAbility",
+    "/Lotus/Powersuits/Khora/KhoraKavatAugmentCard": "/Lotus/Powersuits/Khora/Abilities/KhoraKavatAbility",
+    "/Lotus/Powersuits/Koumei/KoumeiFortuneAugmentCard": "/Lotus/Powersuits/Koumei/Abilities/KoumeiFortuneAbility",
+    "/Lotus/Powersuits/Koumei/KoumeiStringsAugmentCard": "/Lotus/Powersuits/Koumei/Abilities/KoumeiStringsAbility",
+    "/Lotus/Powersuits/Loki/DecoyAugmentCard": "/Lotus/Powersuits/Loki/Abilities/DecoyAbility",
+    "/Lotus/Powersuits/Loki/DecoyAugmentTwoCard": "/Lotus/Powersuits/Loki/Abilities/DecoyAbility",
+    "/Lotus/Powersuits/Loki/DisarmAugmentCard": "/Lotus/Powersuits/Loki/Abilities/RadialDisarmAbility",
+    "/Lotus/Powersuits/Loki/InvisibilityAugmentCard": "/Lotus/Powersuits/Loki/Abilities/InvisibilityAbility",
+    "/Lotus/Powersuits/Loki/SwitchAugmentCard": "/Lotus/Powersuits/Loki/Abilities/SwitchTeleportAbility",
+    "/Lotus/Powersuits/Mag/BulletAttractorAugmentCard": "/Lotus/Powersuits/Mag/Abilities/BulletAttractorAbility",
+    "/Lotus/Powersuits/Mag/CrushAugmentCard": "/Lotus/Powersuits/Mag/Abilities/CrushAbility",
+    "/Lotus/Powersuits/Mag/PullAugmentCard": "/Lotus/Powersuits/Mag/Abilities/PullAbility",
+    "/Lotus/Powersuits/Mag/ShieldRegenAugmentCard": "/Lotus/Powersuits/Mag/Abilities/ShieldRegenAbility",
+    "/Lotus/Powersuits/Magician/BanishAugmentCard": "/Lotus/Powersuits/Magician/Abilities/BanishAbility",
+    "/Lotus/Powersuits/Magician/TearInSpaceAugmentCard": "/Lotus/Powersuits/Magician/Abilities/TearInSpaceAbility",
+    "/Lotus/Powersuits/Magician/VolatileAugmentCard": "/Lotus/Powersuits/Magician/Abilities/VolatileAbility",
+    "/Lotus/Powersuits/MonkeyKing/MonkeyCloudAugmentCard": "/Lotus/Powersuits/MonkeyKing/Abilities/MonkeyCloudAbility",
+    "/Lotus/Powersuits/MonkeyKing/MonkeyPokeAugmentCard": "/Lotus/Powersuits/MonkeyKing/Abilities/MonkeyHairAbility",
+    "/Lotus/Powersuits/MonkeyKing/MonkeyStaffAugmentCard": "/Lotus/Powersuits/MonkeyKing/Abilities/MonkeyStaffAbility",
+    "/Lotus/Powersuits/Necro/CloneTheDeadAugmentCard": "/Lotus/Powersuits/Necro/Abilities/CloneTheDeadAbility",
+    "/Lotus/Powersuits/Necro/SearchTheDeadAugmentCard": "/Lotus/Powersuits/Necro/Abilities/SearchTheDeadAbility",
+    "/Lotus/Powersuits/Necro/SoulPunchAugmentCard": "/Lotus/Powersuits/Necro/Abilities/SoulPunchAbility",
+    "/Lotus/Powersuits/Necro/TerrorTotemAugmentCard": "/Lotus/Powersuits/Necro/Abilities/TerrorTotemAbility",
+    "/Lotus/Powersuits/Nezha/NezhaDisablePassiveMod": "PASSIVE",
+    "/Lotus/Powersuits/Nezha/NezhaRingAugmentCard": "/Lotus/Powersuits/Nezha/Abilities/NezhaRingAbility",
+    "/Lotus/Powersuits/Nezha/NezhaSashAugmentCard": "/Lotus/Powersuits/Nezha/Abilities/NezhaSashAbility",
+    "/Lotus/Powersuits/Nezha/NezhaSpearAugmentTwoCard": "/Lotus/Powersuits/Nezha/Abilities/NezhaSpearAbility",
+    "/Lotus/Powersuits/Nezha/NezhaTrailAugmentCard": "/Lotus/Powersuits/Nezha/Abilities/NezhaTrailAbility",
+    "/Lotus/Powersuits/Ninja/GlaiveAugmentCard": "/Lotus/Powersuits/Ninja/Abilities/GlaiveAbility",
+    "/Lotus/Powersuits/Ninja/NinjaStormAugmentCard": "/Lotus/Powersuits/Ninja/Abilities/NinjaStormAbility",
+    "/Lotus/Powersuits/Ninja/SmokeScreenAugmentCard": "/Lotus/Powersuits/Ninja/Abilities/SmokeScreenAbility",
+    "/Lotus/Powersuits/Ninja/TeleportToAugmentCard": "/Lotus/Powersuits/Ninja/Abilities/TeleportToAbility",
+    "/Lotus/Powersuits/Nokko/NokkoRerootAugmentCard": "/Lotus/Powersuits/Nokko/Abilities/NokkoShrinkAbility",
+    "/Lotus/Powersuits/Odalisk/OdaliskAnchorAugmentCard": "/Lotus/Powersuits/Odalisk/Abilities/OdaliskAnchorAbility",
+    "/Lotus/Powersuits/Odalisk/OdaliskBFGAugmentCard": "/Lotus/Powersuits/Odalisk/Abilities/OdaliskBFGAbility",
+    "/Lotus/Powersuits/Odalisk/OdaliskDispensaryAugmentCard": "/Lotus/Powersuits/Odalisk/Abilities/OdaliskDispensaryAbility",
+    "/Lotus/Powersuits/Pacifist/PacifistDodgeAugmentCard": "/Lotus/Powersuits/Pacifist/Abilities/PacifistDodgeAbility",
+    "/Lotus/Powersuits/Pacifist/PacifistFistAugmentCard": "/Lotus/Powersuits/Pacifist/Abilities/PacifistFistAbility",
+    "/Lotus/Powersuits/Pacifist/PacifistWaveAugmentCard": "/Lotus/Powersuits/Pacifist/Abilities/PacifistWaveAbility",
+    "/Lotus/Powersuits/Pagemaster/PagemasterBookAugment1Card": "/Lotus/Powersuits/Pagemaster/Abilities/PagemasterBookAbility",
+    "/Lotus/Powersuits/Paladin/ReckoningAugmentCard": "/Lotus/Powersuits/Paladin/Abilities/ReckoningAbility",
+    "/Lotus/Powersuits/Paladin/RegenerationAugmentCard": "/Lotus/Powersuits/Paladin/Abilities/RegenerationAbility",
+    "/Lotus/Powersuits/Paladin/SmiteAugmentCard": "/Lotus/Powersuits/Paladin/Abilities/SmiteAbility",
+    "/Lotus/Powersuits/Paladin/StairwayToHeavenAugmentCard": "/Lotus/Powersuits/Paladin/Abilities/StairwayToHeavenAbility",
+    "/Lotus/Powersuits/PaxDuviricus/PaxBladesAugmentCard": "/Lotus/Powersuits/PaxDuviricus/Abilities/PaxBladesAbility",
+    "/Lotus/Powersuits/PaxDuviricus/PaxFieldAugmentCard": "/Lotus/Powersuits/PaxDuviricus/Abilities/PaxFieldAbility",
+    "/Lotus/Powersuits/Pirate/CannonBarrageAugmentCard": "/Lotus/Powersuits/Pirate/Abilities/CannonBarrageAbility",
+    "/Lotus/Powersuits/Pirate/KrakenAugmentCard": "/Lotus/Powersuits/Pirate/Abilities/KrakenAbility",
+    "/Lotus/Powersuits/Pirate/LiquifyAugmentCard": "/Lotus/Powersuits/Pirate/Abilities/PirateArmourAbility",
+    "/Lotus/Powersuits/Pirate/TidalWaveAugmentCard": "/Lotus/Powersuits/Pirate/Abilities/TidalWaveAbility",
+    "/Lotus/Powersuits/Priest/PriestCondemnAugmentCard": "/Lotus/Powersuits/Priest/Abilities/PriestCondemnAbility",
+    "/Lotus/Powersuits/Priest/PriestPactAugmentCard": "/Lotus/Powersuits/Priest/Abilities/PriestPactAbility",
+    "/Lotus/Powersuits/Priest/PriestRavageAugmentCard": "/Lotus/Powersuits/Priest/Abilities/PriestRavageAbility",
+    "/Lotus/Powersuits/Ranger/RangerBowAugmentCard": "/Lotus/Powersuits/Ranger/Abilities/RangerBowAbility",
+    "/Lotus/Powersuits/Ranger/RangerControlAugmentCard": "/Lotus/Powersuits/Ranger/Abilities/RangerControlAbility",
+    "/Lotus/Powersuits/Ranger/RangerQuiverAugmentCard": "/Lotus/Powersuits/Ranger/Abilities/RangerQuiverAbility",
+    "/Lotus/Powersuits/Ranger/RangerStealAugmentCard": "/Lotus/Powersuits/Ranger/Abilities/RangerStealAbility",
+    "/Lotus/Powersuits/Revenant/RevenantAfflictionAugmentCard": "/Lotus/Powersuits/Revenant/Abilities/RevenantAfflictionAbility",
+    "/Lotus/Powersuits/Revenant/RevenantMarkAugmentCard": "/Lotus/Powersuits/Revenant/Abilities/RevenantMarkAbility",
+    "/Lotus/Powersuits/Revenant/RevenantSentientAugmentCard": "/Lotus/Powersuits/Revenant/Abilities/RevenantSentientAbility",
+    "/Lotus/Powersuits/Rhino/RadialBlastAugmentCard": "/Lotus/Powersuits/Rhino/Abilities/RhinoRoarAbility",
+    "/Lotus/Powersuits/Rhino/RhinoChargeAugmentCard": "/Lotus/Powersuits/Rhino/Abilities/RhinoChargeAbility",
+    "/Lotus/Powersuits/Rhino/RhinoStompAugmentCard": "/Lotus/Powersuits/Rhino/Abilities/RhinoStompAbility",
+    "/Lotus/Powersuits/Runner/RunnerRushAugmentCard": "/Lotus/Powersuits/Runner/Abilities/RunnerRushAbility",
+    "/Lotus/Powersuits/Runner/RunnerTransferAugmentCard": "/Lotus/Powersuits/Runner/Abilities/RunnerTransferAbility",
+    "/Lotus/Powersuits/Sandman/SandmanBlastAugmentCard": "/Lotus/Powersuits/Sandman/Abilities/SandmanBlastAbility",
+    "/Lotus/Powersuits/Sandman/SandmanStormAugmentCard": "/Lotus/Powersuits/Sandman/Abilities/SandmanStormAbility",
+    "/Lotus/Powersuits/Sandman/SandmanSwarmAugmentCard": "/Lotus/Powersuits/Sandman/Abilities/SandmanArmorAbility",
+    "/Lotus/Powersuits/Saryn/PoisonAugmentCard": "/Lotus/Powersuits/Saryn/Abilities/PoisonAbility",
+    "/Lotus/Powersuits/Saryn/PoisonAugmentTwoCard": "/Lotus/Powersuits/Saryn/Abilities/PoisonAbility",
+    "/Lotus/Powersuits/Saryn/ShedAugmentCard": "/Lotus/Powersuits/Saryn/Abilities/ShedAbility",
+    "/Lotus/Powersuits/Saryn/WeaponPoisonAugmentCard": "/Lotus/Powersuits/Saryn/Abilities/WeaponPoisonAbility",
+    "/Lotus/Powersuits/Sentient/SentientWhirlwindAugmentCard": "/Lotus/Powersuits/Sentient/Abilities/SentientWhirlwindAbility",
+    "/Lotus/Powersuits/Temple/TemplePassiveAugment1Card": "PASSIVE",
+    "/Lotus/Powersuits/Tengu/DiveBombAugmentCard": "/Lotus/Powersuits/Tengu/Abilities/TailWindAbility",
+    "/Lotus/Powersuits/Tengu/TenguBurstAugmentCard": "/Lotus/Powersuits/Tengu/Abilities/TenguBurstAbility",
+    "/Lotus/Powersuits/Tengu/TenguDisablePassiveMod": "PASSIVE",
+    "/Lotus/Powersuits/Tengu/TornadoAugmentCard": "/Lotus/Powersuits/Tengu/Abilities/TornadoAbility",
+    "/Lotus/Powersuits/Tengu/TurbulenceAugmentCard": "/Lotus/Powersuits/Tengu/Abilities/TurbulenceAbility",
+    "/Lotus/Powersuits/Trapper/LevTrapAugmentCard": "/Lotus/Powersuits/Trapper/Abilities/LevTrapAbility",
+    "/Lotus/Powersuits/Trapper/MagHoleAugmentCard": "/Lotus/Powersuits/Trapper/Abilities/TrapperStrikeAbility",
+    "/Lotus/Powersuits/Trapper/ZapTrapAugmentCard": "/Lotus/Powersuits/Trapper/Abilities/ZapTrapAbility",
+    "/Lotus/Powersuits/Trinity/BlessingAugmentCard": "/Lotus/Powersuits/Trinity/Abilities/BlessingAbility",
+    "/Lotus/Powersuits/Trinity/EnergyVampireAugmentCard": "/Lotus/Powersuits/Trinity/Abilities/EnergyVampireAbility",
+    "/Lotus/Powersuits/Trinity/LinkAugmentCard": "/Lotus/Powersuits/Trinity/Abilities/LinkAbility",
+    "/Lotus/Powersuits/Trinity/WellOfLifeAugmentCard": "/Lotus/Powersuits/Trinity/Abilities/WellOfLifeAbility",
+    "/Lotus/Powersuits/Volt/OverloadAugmentCard": "/Lotus/Powersuits/Volt/Abilities/OverLoadAbility",
+    "/Lotus/Powersuits/Volt/ShieldAugmentCard": "/Lotus/Powersuits/Volt/Abilities/ShieldAbility",
+    "/Lotus/Powersuits/Volt/ShockAugmentCard": "/Lotus/Powersuits/Volt/Abilities/ShockAbility",
+    "/Lotus/Powersuits/Volt/SpeedAugmentCard": "/Lotus/Powersuits/Volt/Abilities/SpeedAbility",
+    "/Lotus/Powersuits/Werewolf/WerewolfHowlAugmentCard": "/Lotus/Powersuits/Werewolf/Abilities/WerewolfHowlAbility",
+    "/Lotus/Powersuits/Werewolf/WerewolfShroudAugmentCard": "/Lotus/Powersuits/Werewolf/Abilities/WerewolfShroudAbility",
+    "/Lotus/Powersuits/Wisp/WispHarnessAugmentCard": "/Lotus/Powersuits/Wisp/Abilities/WispHarnessAbility",
+    "/Lotus/Powersuits/Wisp/WispReservoirAugmentCard": "/Lotus/Powersuits/Wisp/Abilities/WispReservoirAbility",
+    "/Lotus/Powersuits/Wisp/WispSunAugmentCard": "/Lotus/Powersuits/Wisp/Abilities/WispSunAbility",
+    "/Lotus/Powersuits/Wraith/WraithReapAugmentCard": "/Lotus/Powersuits/Wraith/Abilities/WraithReapAbility",
+    "/Lotus/Powersuits/Wraith/WraithSowAugmentCard": "/Lotus/Powersuits/Wraith/Abilities/WraithSowAbility",
+    "/Lotus/Powersuits/Yareli/YareliBoardAugmentCard": "/Lotus/Powersuits/Yareli/Abilities/YareliBoardAbility",
+    "/Lotus/Powersuits/Yareli/YareliBoardAugmentTwoCard": "/Lotus/Powersuits/Yareli/Abilities/YareliBoardAbility",
+    "/Lotus/Powersuits/Yareli/YareliDisksAugmentCard": "/Lotus/Powersuits/Yareli/Abilities/YareliDisksAbility",
+    "/Lotus/Powersuits/YinYang/YinYangAuraAugmentCard": "/Lotus/Powersuits/YinYang/Abilities/YinYangAuraAbility",
+    "/Lotus/Powersuits/YinYang/YinYangBurstAugmentCard": "/Lotus/Powersuits/YinYang/Abilities/YinYangBurstAbility",
+    "/Lotus/Powersuits/YinYang/YinYangSwitchAugmentCard": "/Lotus/Powersuits/YinYang/Abilities/YinYangSwitchAbility",
+    "/Lotus/Powersuits/YinYang/YinYangTargetAugmentCard": "/Lotus/Powersuits/YinYang/Abilities/YinYangTargetAbility"
+  },
+  "helminthRules": {
+    "damageBuffAbilityPaths": [
+      "/Lotus/Powersuits/Rhino/Abilities/RhinoRoarAbility",
+      "/Lotus/Powersuits/Harlequin/Abilities/LightAbility",
+      "/Lotus/Powersuits/BrokenFrame/Abilities/BrokenRotAbility"
+    ],
+    "damageBuffFrameSlotAbility": {
+      "/Lotus/Powersuits/Rhino": "/Lotus/Powersuits/Rhino/Abilities/RhinoRoarAbility",
+      "/Lotus/Powersuits/Harlequin": "/Lotus/Powersuits/Harlequin/Abilities/LightAbility",
+      "/Lotus/Powersuits/Dragon": "/Lotus/Powersuits/Dragon/Abilities/DragonScalesAbility",
+      "/Lotus/Powersuits/BrokenFrame": "/Lotus/Powersuits/BrokenFrame/Abilities/BrokenRotAbility",
+      "/Lotus/Powersuits/Bard": "/Lotus/Powersuits/Bard/Abilities/BardAmplifyAbility",
+      "/Lotus/Powersuits/Frumentarius": "/Lotus/Powersuits/Frumentarius/Abilities/FrumentariusAmmoAbility",
+      "/Lotus/Powersuits/Oraxia": "/Lotus/Powersuits/Oraxia/Abilities/OraxiaClimbAbility",
+      "/Lotus/Powersuits/Temple": "/Lotus/Powersuits/Temple/Abilities/TempleSoloAbility",
+      "/Lotus/Powersuits/DemonFrame": "/Lotus/Powersuits/DemonFrame/Abilities/DemonFrameCloneAbility"
+    }
+  },
+  "auras": {
+    "/Lotus/Upgrades/Mods/Aura/PlayerRifleDamageAuraMod": {
+      "buffId": "rifle-amp",
+      "base": 0.27,
+      "validTypes": [
+        "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+      ]
+    },
+    "/Lotus/Upgrades/Mods/Aura/PlayerPistolDamageAuraMod": {
+      "buffId": "pistol-amp",
+      "base": 0.27,
+      "validTypes": [
+        "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+      ]
+    },
+    "/Lotus/Upgrades/Mods/Aura/PlayerShellDamageAuraMod": {
+      "buffId": "shotgun-amp",
+      "base": 0.18,
+      "validTypes": [
+        "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun"
+      ]
+    },
+    "/Lotus/Upgrades/Mods/Aura/PlayerSniperDamageAuraMod": {
+      "buffId": "dead-eye",
+      "base": 0.525,
+      "validTypes": [
+        "/Lotus/Weapons/Tenno/Rifle/LotusSniperRifle"
+      ]
+    },
+    "/Lotus/Upgrades/Mods/Aura/PlayerMeleeAuraMod": {
+      "buffId": "steel-charge",
+      "base": 0.6,
+      "validTypes": [
+        "/Lotus/Types/Game/LotusMeleeWeapon"
+      ]
+    },
+    "/Lotus/Upgrades/Mods/Aura/PlayerWeakpointCriticalChanceAuraMod": {
+      "buffId": "worthy-comradery",
+      "base": 0.75,
+      "validTypes": null
+    },
+    "/Lotus/Upgrades/Mods/Aura/PlayerMeleeStartingComboAuraMod": {
+      "buffId": "ready-steel",
+      "base": 24.0,
+      "validTypes": [
+        "/Lotus/Types/Game/LotusMeleeWeapon"
+      ]
+    },
+    "/Lotus/Upgrades/Mods/Aura/EnemyArmorReductionAuraMod": {
+      "buffId": "corrosive-projection",
+      "base": 0.18,
+      "validTypes": null
+    },
+    "/Lotus/Upgrades/Mods/Aura/EnemyShieldReductionAuraMod": {
+      "buffId": "shield-disruption",
+      "base": 0.18,
+      "validTypes": null
+    }
+  },
+  "arcanes": {
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/ArmourOnDamage": {
+      "triggerKind": "onDamaged",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/CritChanceOnDamage": {
+      "triggerKind": "onDamaged",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_CRIT_CHANCE",
+          "operation": "ADD",
+          "valuePerRank": 0.075
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/DamageResistanceStacksOverTime": {
+      "triggerKind": "onParkour",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/ElectricityProcResist": {
+      "triggerKind": "passive",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/FireProcResist": {
+      "triggerKind": "passive",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/FreezeProcResist": {
+      "triggerKind": "passive",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/GolemArcaneShieldRegenOnDamage": {
+      "triggerKind": "onDamaged",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/HealthRegenOnDamage": {
+      "triggerKind": "onDamaged",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/IncreaseMaxHealthOnHealthPickup": {
+      "triggerKind": "onPickup",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/InstantShieldOnDamage": {
+      "triggerKind": "onDamaged",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/InvulnerabilityOnDeathOnMercyKill": {
+      "triggerKind": "onFinisher",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/MagneticProcResist": {
+      "triggerKind": "passive",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/MaxDPSTakenForArmour": {
+      "triggerKind": "passive",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/RadialViralAttackOnOverguardGain": {
+      "triggerKind": "onOverguardGain",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_VIRAL_PRIMER",
+          "operation": "ADD",
+          "values": [
+            1,
+            2,
+            4,
+            6,
+            8,
+            10
+          ]
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/RadiationProcResist": {
+      "triggerKind": "passive",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/ShieldMaxForAbilityStrength": {
+      "triggerKind": "passive",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/SlashProcResist": {
+      "triggerKind": "passive",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/SpeedOnDamage": {
+      "triggerKind": "onDamaged",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/SpeedOnParry": {
+      "triggerKind": "onParkour",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Defensive/StealDefensiveStatsOnRoll": {
+      "triggerKind": "onParkour",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AbilityHeatProcsGiveCritChance": {
+      "triggerKind": "onAbilityStatus",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_CRIT_CHANCE",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.01,
+          "maxStacks": 50
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AbilityPowerOnFreeze": {
+      "triggerKind": "onFreeze",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AbilityStrengthForMaxHealth": {
+      "triggerKind": "passive",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AbilityStrengthOnCast": {
+      "triggerKind": "onAbilityCast",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AbilityStrengthOnSummonAttack": {
+      "triggerKind": "onSummonAttack",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AmmoEfficiencyOnPistolHeadshot": {
+      "triggerKind": "onHeadshotKill",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": -0.17,
+          "validType": "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/ArmorOnHeavyGunEquipped": {
+      "triggerKind": "onHeavyGun",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/CompanionDamageOnResidualContact": {
+      "triggerKind": "residualZone",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GolemArcaneArmorOnFinisher": {
+      "triggerKind": "onFinisher",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GolemArcaneMeleeDamageOnCrit": {
+      "triggerKind": "onCrit",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_MELEE_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.3,
+          "validType": "/Lotus/Types/Game/LotusMeleeWeapon"
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GolemArcanePistolDamageOnHeadshot": {
+      "triggerKind": "onHeadshot",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.5,
+          "validType": "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GolemArcanePistolSpeedOnCrit": {
+      "triggerKind": "onCrit",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.2,
+          "validType": "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GolemArcaneShotgunSpeedOnCrit": {
+      "triggerKind": "onCrit",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.15,
+          "validType": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun"
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GolemArcaneSniperSpeedOnCrit": {
+      "triggerKind": "onCrit",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_RELOAD_SPEED",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.25,
+          "validType": "/Lotus/Weapons/Tenno/Rifle/LotusSniperRifle"
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/HealCompanionOnSixMeleeKills": {
+      "triggerKind": "onKill",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/HealthRegenOnHeadshot": {
+      "triggerKind": "onHeadshotKill",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/InvisibilityOnFinisher": {
+      "triggerKind": "onFinisher",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/LongGunDamageOnHeadshot": {
+      "triggerKind": "onHeadshot",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.3,
+          "validType": "/Lotus/Weapons/Tenno/LotusLongGun"
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/LongGunSpeedOnCrit": {
+      "triggerKind": "onCrit",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.15,
+          "validType": "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MaxEnergyForArmor": {
+      "triggerKind": "passive",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MeleeDmgOnRifleKill": {
+      "triggerKind": "onKill",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_MELEE_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.5,
+          "validType": "/Lotus/Types/Game/LotusMeleeWeapon"
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MeleeSpeedOnHit": {
+      "triggerKind": "onHit",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.1,
+          "validType": "/Lotus/Types/Game/LotusMeleeWeapon"
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OrbsOnResidualContact": {
+      "triggerKind": "residualZone",
+      "weaponRelevant": true,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PowerStrengthOnKill": {
+      "triggerKind": "onKill",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDmgOnMeleeKill": {
+      "triggerKind": "onKill",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.5,
+          "validType": "/Lotus/Weapons/Tenno/LotusLongGun"
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/WeaponDamageOnResidualContact": {
+      "triggerKind": "residualZone",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.02,
+          "maxStacks": 15
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HealthRegenAndArmorOnMeleeKill": {
+      "triggerKind": "onKill",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityDurationOnCast": {
+      "triggerKind": "onAbilityCast",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityEfficiencyOnAbilityObjectCreation": {
+      "triggerKind": "onAbilityCast",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityRadiationProcsCreateUniversalOrbsOnKill": {
+      "triggerKind": "onAbilityStatus",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityStatusProcsGiveAbilityStrengthAndEfficiency": {
+      "triggerKind": "onAbilityStatus",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityStrengthAndCritDamageWhenInvisible": {
+      "triggerKind": "whileInvisible",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_FINAL_CRIT_DAMAGE",
+          "operation": "ADD",
+          "valuePerRank": 0.5
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/GolemArcaneAimGlideOnHeadshot": {
+      "triggerKind": "onHeadshot",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/GolemArcaneBonusDamageOnWallLatch": {
+      "triggerKind": "onWallLatch",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.25
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/GolemArcaneRadialEnergyOnEnergyPickup": {
+      "triggerKind": "onPickup",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/HealAlliesOnEnergySpent": {
+      "triggerKind": "onAbilityCast",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/HealthWhileUsingChanneledAbilities": {
+      "triggerKind": "whileChanneled",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/LongGunDamageOnReload": {
+      "triggerKind": "onReload",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.25,
+          "validType": "/Lotus/Weapons/Tenno/LotusLongGun"
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/NoCostCastChanceOnCast": {
+      "triggerKind": "onAbilityCast",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/PistolDamageOnReload": {
+      "triggerKind": "onReload",
+      "weaponRelevant": true,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+          "operation": "STACKING_MULTIPLY",
+          "valuePerRank": 0.25,
+          "validType": "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+        }
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/RadialHealOnHealthPickup": {
+      "triggerKind": "onPickup",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Utility/RadialKnockdownOnEnergyPickup": {
+      "triggerKind": "onPickup",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Zariman/WarframeOnOperatorAbilityPowerStrength": {
+      "triggerKind": "onOperatorAbility",
+      "weaponRelevant": false,
+      "effects": []
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Zariman/WarframeOnShieldUptimePowerDuration": {
+      "triggerKind": "whileShieldActive",
+      "weaponRelevant": false,
+      "effects": []
+    }
+  },
+  "setModAliases": {
+    "HawkSetMod": "AeroSetMod",
+    "RaptorSetMod": "MotusSetMod",
+    "SpiderSetMod": "ProtonSetMod",
+    "FemurSetMod": "SaxumSetMod",
+    "BonebladeSetMod": "JugulusSetMod",
+    "AshenSetMod": "CarnisSetMod"
+  },
+  "abilities": [
+    {
+      "id": "roar",
+      "helminthId": "roar-helminth",
+      "abilityPath": "/Lotus/Powersuits/Rhino/Abilities/RhinoRoarAbility",
+      "nameEn": "Roar",
+      "nameZh": "战吼",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.5,
+          "helminthBase": 0.3,
+          "scale": "strength",
+          "labelZh": "派系伤害"
+        }
+      ]
+    },
+    {
+      "id": "eclipse",
+      "helminthId": "eclipse-helminth",
+      "abilityPath": "/Lotus/Powersuits/Harlequin/Abilities/LightAbility",
+      "nameEn": "Eclipse",
+      "nameZh": "黯然失色",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_FINAL_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 2.0,
+          "helminthBase": 0.3,
+          "scale": "strength",
+          "labelZh": "最终伤害"
+        }
+      ]
+    },
+    {
+      "id": "xatas-whisper",
+      "helminthId": "xatas-whisper",
+      "abilityPath": "/Lotus/Powersuits/BrokenFrame/Abilities/BrokenRotAbility",
+      "nameEn": "Xata's Whisper",
+      "nameZh": "真理密语",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_EXTRA_HIT",
+          "operation": "ADD",
+          "base": 0.26,
+          "helminthBase": 0.26,
+          "scale": "strength",
+          "damageType": "DT_VOID",
+          "forcedProc": false,
+          "bodyPartAgain": true,
+          "labelZh": "虚空额外命中"
+        }
+      ]
+    },
+    {
+      "id": "nourish",
+      "helminthId": "nourish-helminth",
+      "abilityPath": "/Lotus/Powersuits/Devourer/Abilities/DevourerConsumeAbility",
+      "nameEn": "Nourish",
+      "nameZh": "消化滋养",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.75,
+          "helminthBase": 0.45,
+          "scale": "strength",
+          "damageType": "DT_VIRAL",
+          "labelZh": "附加病毒伤害"
+        }
+      ]
+    },
+    {
+      "id": "toxic-lash",
+      "abilityPath": "/Lotus/Powersuits/Saryn/Abilities/WeaponPoisonAbility",
+      "nameEn": "Toxic Lash",
+      "nameZh": "剧毒鞭笞",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_EXTRA_HIT",
+          "operation": "ADD",
+          "base": 0.3,
+          "scale": "strength",
+          "damageType": "DT_POISON",
+          "forcedProc": true,
+          "runtimeChance": 1.0,
+          "meleeScale": 2.0,
+          "labelZh": "毒素额外命中"
+        }
+      ]
+    },
+    {
+      "id": "resupply",
+      "abilityPath": "/Lotus/Powersuits/Frumentarius/Abilities/FrumentariusAmmoAbility",
+      "nameEn": "Resupply",
+      "nameZh": "补给",
+      "defaultActive": true,
+      "requiresElementChoice": true,
+      "elementOptions": [
+        "DT_FIRE",
+        "DT_FREEZE",
+        "DT_ELECTRICITY",
+        "DT_POISON",
+        "DT_EXPLOSION",
+        "DT_RADIATION",
+        "DT_GAS",
+        "DT_MAGNETIC",
+        "DT_VIRAL",
+        "DT_CORROSIVE"
+      ],
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_EXTRA_HIT",
+          "operation": "ADD",
+          "base": 0.25,
+          "scale": "strength",
+          "damageType": "SELECT",
+          "forcedProc": true,
+          "runtimeChance": 1.0,
+          "sniperScale": 2.0,
+          "labelZh": "所选元素额外命中"
+        }
+      ]
+    },
+    {
+      "id": "vex-armor",
+      "abilityPath": "/Lotus/Powersuits/Dragon/Abilities/DragonScalesAbility",
+      "nameEn": "Vex Armor",
+      "nameZh": "怨怒护甲",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+          "operation": "STACKING_MULTIPLY",
+          "base": 2.75,
+          "scale": "strength",
+          "labelZh": "基础伤害"
+        }
+      ]
+    },
+    {
+      "id": "shooting-gallery",
+      "helminthId": "shooting-gallery",
+      "abilityPath": "/Lotus/Powersuits/Cowgirl/Abilities/RussianRouletteAbility",
+      "nameEn": "Shooting Gallery",
+      "nameZh": "靶场",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.25,
+          "helminthBase": 0.25,
+          "scale": "strength",
+          "labelZh": "基础伤害"
+        }
+      ]
+    },
+    {
+      "id": "octavia-amp",
+      "abilityPath": "/Lotus/Powersuits/Bard/Abilities/BardAmplifyAbility",
+      "nameEn": "Amp",
+      "nameZh": "强音增幅",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+          "operation": "STACKING_MULTIPLY",
+          "base": 2.0,
+          "scale": "strength",
+          "labelZh": "基础伤害"
+        }
+      ]
+    },
+    {
+      "id": "metamorphosis",
+      "abilityPath": "/Lotus/Powersuits/YinYang/Abilities/YinYangSwitchAbility",
+      "nameEn": "Metamorphosis",
+      "nameZh": "昼夜交替",
+      "defaultActive": false,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.25,
+          "scale": "strength",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "labelZh": "枪械基础伤害"
+        }
+      ]
+    },
+    {
+      "id": "provoke",
+      "abilityPath": "/Lotus/Powersuits/YinYang/Abilities/YinYangAuraAbility",
+      "nameEn": "Pacify & Provoke",
+      "nameZh": "轻抚－激怒",
+      "defaultActive": false,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "AVATAR_ABILITY_STRENGTH",
+          "operation": "ADD",
+          "base": 0.2,
+          "cap": 0.5,
+          "augmentCap": 0.8,
+          "augmentModPath": "/Lotus/Powersuits/YinYang/YinYangAuraAugmentCard",
+          "scale": "strength",
+          "labelZh": "友军技能强度加成"
+        }
+      ]
+    },
+    {
+      "id": "warcry",
+      "helminthId": "warcry-helminth",
+      "abilityPath": "/Lotus/Powersuits/Berserker/Abilities/BerserkerScreamAbility",
+      "nameEn": "Warcry",
+      "nameZh": "咆哮",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.5,
+          "helminthBase": 0.3,
+          "scale": "strength",
+          "validTypes": [
+            "/Lotus/Types/Game/LotusMeleeWeapon"
+          ],
+          "labelZh": "近战攻击速度"
+        }
+      ]
+    },
+    {
+      "id": "wrathful-advance",
+      "helminthId": "wrathful-advance-helminth",
+      "abilityPath": "/Lotus/Powersuits/PaxDuviricus/Abilities/PaxTeleportAbility",
+      "nameEn": "Wrathful Advance",
+      "nameZh": "暴怒突进",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_CRIT_CHANCE",
+          "operation": "ADD",
+          "base": 2.0,
+          "helminthBase": 1.0,
+          "scale": "strength",
+          "validTypes": [
+            "/Lotus/Types/Game/LotusMeleeWeapon"
+          ],
+          "labelZh": "近战最终暴击几率"
+        }
+      ]
+    },
+    {
+      "id": "haste-mote",
+      "abilityPath": "/Lotus/Powersuits/Wisp/Abilities/WispReservoirAbility",
+      "nameEn": "Reservoirs: Haste",
+      "nameZh": "储能池 · 急速",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.3,
+          "scale": "strength",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "labelZh": "枪械射速"
+        },
+        {
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.2,
+          "scale": "strength",
+          "validTypes": [
+            "/Lotus/Types/Game/LotusMeleeWeapon"
+          ],
+          "labelZh": "近战攻速"
+        }
+      ]
+    },
+    {
+      "id": "covenant",
+      "abilityPath": "/Lotus/Powersuits/Priest/Abilities/PriestPactAbility",
+      "nameEn": "Covenant",
+      "nameZh": "庇佑圣约",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_CRIT_CHANCE",
+          "operation": "ADD",
+          "base": 0.5,
+          "scale": "none",
+          "labelZh": "最终暴击几率"
+        },
+        {
+          "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+          "operation": "ADD",
+          "base": 1.5,
+          "scale": "none",
+          "labelZh": "弱点额外暴击几率"
+        }
+      ]
+    },
+    {
+      "id": "penance",
+      "abilityPath": "/Lotus/Powersuits/Priest/Abilities/PriestPenanceAbility",
+      "nameEn": "Penance",
+      "nameZh": "苦行加护",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.35,
+          "scale": "strength",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "labelZh": "枪械射速"
+        },
+        {
+          "upgradeType": "WEAPON_RELOAD_SPEED",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.7,
+          "scale": "strength",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "labelZh": "装填速度"
+        }
+      ]
+    },
+    {
+      "id": "molecular-prime",
+      "abilityPath": "/Lotus/Powersuits/AntiMatter/Abilities/MolecularPrimeAbility",
+      "nameEn": "Molecular Prime",
+      "nameZh": "分子填充",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_FINAL_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 1.0,
+          "scale": "none",
+          "labelZh": "伤害易伤"
+        }
+      ]
+    },
+    {
+      "id": "hakchum",
+      "abilityPath": "/Lotus/Powersuits/Duelist/Abilities/DuelistLeapAbility",
+      "nameEn": "Hakchum",
+      "nameZh": "鹤影舞坠",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_FINAL_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 1.5,
+          "scale": "strength",
+          "damageType": "DT_FREEZE",
+          "labelZh": "纯冰冻伤害易伤"
+        }
+      ]
+    },
+    {
+      "id": "volt-speed",
+      "abilityPath": "/Lotus/Powersuits/Volt/Abilities/SpeedAbility",
+      "nameEn": "Speed",
+      "nameZh": "加速",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.75,
+          "scale": "strength",
+          "validTypes": [
+            "/Lotus/Types/Game/LotusMeleeWeapon"
+          ],
+          "labelZh": "近战攻击速度"
+        },
+        {
+          "upgradeType": "WEAPON_RELOAD_SPEED",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.25,
+          "scale": "strength",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "labelZh": "装填速度"
+        }
+      ]
+    },
+    {
+      "id": "electric-shield",
+      "abilityPath": "/Lotus/Powersuits/Volt/Abilities/ShieldAbility",
+      "nameEn": "Electric Shield",
+      "nameZh": "电力屏障",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.5,
+          "scale": "none",
+          "damageType": "DT_ELECTRICITY",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "labelZh": "独立电击伤害"
+        },
+        {
+          "upgradeType": "WEAPON_CRIT_DAMAGE",
+          "operation": "MULTIPLY",
+          "base": 2.0,
+          "scale": "none",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "labelZh": "暴击伤害翻倍"
+        }
+      ]
+    },
+    {
+      "id": "redline",
+      "abilityPath": "/Lotus/Powersuits/Runner/Abilities/RunnerRedlineAbility",
+      "nameEn": "Redline",
+      "nameZh": "赤限",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.75,
+          "scale": "duration",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "labelZh": "枪械射速（满电池）"
+        },
+        {
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.4,
+          "scale": "duration",
+          "validTypes": [
+            "/Lotus/Types/Game/LotusMeleeWeapon"
+          ],
+          "labelZh": "近战攻速（满电池）"
+        },
+        {
+          "upgradeType": "WEAPON_RELOAD_SPEED",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.5,
+          "scale": "duration",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "labelZh": "装填速度（满电池）"
+        }
+      ]
+    },
+    {
+      "id": "hall-of-mirrors",
+      "abilityPath": "/Lotus/Powersuits/Harlequin/Abilities/IllusionAbility",
+      "nameEn": "Hall of Mirrors",
+      "nameZh": "镜厅",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_FINAL_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.4,
+          "scale": "strength",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "augmentMult": 1.5,
+          "augmentModPath": "/Lotus/Powersuits/Harlequin/IllusionAugmentCard",
+          "labelZh": "幻影射击总伤害加成"
+        },
+        {
+          "upgradeType": "RUNTIME_FINAL_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.8,
+          "scale": "strength",
+          "validTypes": [
+            "/Lotus/Types/Game/LotusMeleeWeapon"
+          ],
+          "augmentMult": 1.5,
+          "augmentModPath": "/Lotus/Powersuits/Harlequin/IllusionAugmentCard",
+          "labelZh": "幻影近战总伤害加成"
+        }
+      ]
+    },
+    {
+      "id": "cathode-grace",
+      "abilityPath": "/Lotus/Powersuits/Gyre/Abilities/GyreEnergizedAbility",
+      "nameEn": "Cathode Grace",
+      "nameZh": "阴极泰来",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_CRIT_CHANCE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.5,
+          "scale": "strength",
+          "labelZh": "武器暴击几率"
+        }
+      ]
+    },
+    {
+      "id": "rippers-wail",
+      "abilityPath": "/Lotus/Powersuits/Temple/Abilities/TempleSoloAbility",
+      "nameEn": "Ripper's Wail",
+      "nameZh": "撕裂者之嚎",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.75,
+          "cap": 7.5,
+          "scale": "strength",
+          "damageType": "DT_FIRE",
+          "labelZh": "独立火焰伤害（叠加上限 750%）"
+        }
+      ]
+    },
+    {
+      "id": "overdrive",
+      "abilityPath": "/Lotus/Powersuits/Temple/Abilities/TempleSpeakersAbility",
+      "nameEn": "Overdrive",
+      "nameZh": "超负荷",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_CRIT_CHANCE",
+          "operation": "ADD",
+          "base": 0.25,
+          "backbeatMultiplier": 2.0,
+          "scale": "strength",
+          "labelZh": "目标暴击几率易伤（反拍翻倍）"
+        }
+      ]
+    },
+    {
+      "id": "grave-spirit",
+      "abilityPath": "/Lotus/Powersuits/Dagath/Abilities/DagathApparitionAbility",
+      "nameEn": "Grave Spirit",
+      "nameZh": "墓灵",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_CRIT_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.5,
+          "doomedMultiplier": 2.0,
+          "scale": "strength",
+          "labelZh": "暴击伤害（厄运目标翻倍）"
+        }
+      ]
+    },
+    {
+      "id": "sentient-wrath",
+      "helminthId": "sentient-wrath-helminth",
+      "abilityPath": "/Lotus/Powersuits/Sentient/Abilities/SentientStompAbility",
+      "nameEn": "Sentient Wrath",
+      "nameZh": "Sentient 之怒",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_FINAL_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.35,
+          "helminthBase": 0.35,
+          "scale": "strength",
+          "labelZh": "伤害易伤"
+        }
+      ]
+    },
+    {
+      "id": "fusion-strike",
+      "abilityPath": "/Lotus/Powersuits/Sentient/Abilities/SentientBlastAbility",
+      "nameEn": "Fusion Strike",
+      "nameZh": "融合打击",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "ENEMY_DEFENSE_STRIP",
+          "operation": "ADD",
+          "base": 0.5,
+          "cap": 1.0,
+          "scale": "strength",
+          "stripsArmor": true,
+          "stripsShield": true,
+          "labelZh": "永久护甲与护盾剥离"
+        }
+      ]
+    },
+    {
+      "id": "reap",
+      "abilityPath": "/Lotus/Powersuits/Wraith/Abilities/WraithReapAbility",
+      "nameEn": "Reap",
+      "nameZh": "收割",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_FINAL_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.5,
+          "scale": "strength",
+          "labelZh": "死亡收割伤害易伤"
+        }
+      ]
+    },
+    {
+      "id": "deaths-harvest",
+      "abilityPath": "/Lotus/Powersuits/Wraith/Abilities/ReaperWailAbility",
+      "nameEn": "Death's Harvest",
+      "nameZh": "死亡收割",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_FINAL_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.5,
+          "scale": "strength",
+          "labelZh": "死亡收割伤害易伤"
+        }
+      ]
+    },
+    {
+      "id": "symphony-deathbringer",
+      "abilityPath": "/Lotus/Powersuits/Choir/Abilities/ChoirChorusAbility",
+      "nameEn": "Symphony of Mercy: Deathbringer",
+      "nameZh": "慈悲乐章 · 死亡使者",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+          "operation": "STACKING_MULTIPLY",
+          "base": 1.0,
+          "scale": "strength",
+          "labelZh": "武器伤害加成"
+        }
+      ]
+    },
+    {
+      "id": "jade-judgments",
+      "abilityPath": "/Lotus/Powersuits/Choir/Abilities/ChoirPoolAbility",
+      "nameEn": "Judgments",
+      "nameZh": "圣光审判 · 审判易伤",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_FINAL_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.5,
+          "scale": "none",
+          "labelZh": "审判伤害易伤"
+        }
+      ]
+    },
+    {
+      "id": "ophanim-eyes",
+      "abilityPath": "/Lotus/Powersuits/Choir/Abilities/ChoirEyesAbility",
+      "nameEn": "Ophanim Eyes",
+      "nameZh": "座天使之眼",
+      "defaultActive": false,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "ENEMY_DEFENSE_STRIP",
+          "operation": "ADD",
+          "base": 0.1,
+          "cap": 1.0,
+          "scale": "strength",
+          "stripsArmor": true,
+          "stripsShield": true,
+          "perSecond": true,
+          "labelZh": "每秒护甲与护盾剥离"
+        }
+      ]
+    },
+    {
+      "id": "silken-stride",
+      "abilityPath": "/Lotus/Powersuits/Oraxia/Abilities/OraxiaClimbAbility",
+      "nameEn": "Silken Stride",
+      "nameZh": "蛛丝步法",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.4,
+          "wallLatchMultiplier": 2.0,
+          "scale": "strength",
+          "damageType": "DT_POISON",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "labelZh": "枪械毒素伤害加成（壁面攀附翻倍）"
+        }
+      ]
+    },
+    {
+      "id": "webbed-embrace",
+      "helminthId": "webbed-embrace-helminth",
+      "abilityPath": "/Lotus/Powersuits/Oraxia/Abilities/OraxiaEntangleAbility",
+      "nameEn": "Webbed Embrace",
+      "nameZh": "网缚之拥",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "RUNTIME_FINAL_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "base": 0.5,
+          "helminthBase": 0.5,
+          "scale": "strength",
+          "labelZh": "伤害易伤"
+        }
+      ]
+    },
+    {
+      "id": "energized-munitions",
+      "helminthId": "energized-munitions",
+      "abilityPath": "/Lotus/Powersuits/PowersuitAbilities/HelminthEfficiencyAbility",
+      "nameEn": "Energized Munitions",
+      "nameZh": "充沛军需",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "base": -0.75,
+          "helminthBase": -0.75,
+          "scale": "none",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "labelZh": "弹药效率 +75%"
+        }
+      ]
+    }
+  ],
+  "augments": [
+    {
+      "id": "fireball-frenzy",
+      "modPath": "/Lotus/Powersuits/Ember/FireBallAugmentCard",
+      "abilityPath": "/Lotus/Powersuits/Ember/Abilities/FireBallAbility",
+      "nameEn": "Fireball Frenzy",
+      "nameZh": "狂热火球",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE",
+          "operation": "STACKING_MULTIPLY",
+          "rankValues": [
+            0.5,
+            0.65,
+            0.8,
+            1.0
+          ],
+          "scale": "strength",
+          "damageType": "DT_FIRE",
+          "labelZh": "独立火焰伤害"
+        }
+      ]
+    },
+    {
+      "id": "freeze-force",
+      "modPath": "/Lotus/Powersuits/Frost/IcicleAugmentCard",
+      "abilityPath": "/Lotus/Powersuits/Frost/Abilities/IcicleAbility",
+      "nameEn": "Freeze Force",
+      "nameZh": "寒冰之力",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE",
+          "operation": "STACKING_MULTIPLY",
+          "rankValues": [
+            0.5,
+            0.65,
+            0.8,
+            1.0
+          ],
+          "scale": "strength",
+          "damageType": "DT_FREEZE",
+          "labelZh": "独立冰冻伤害"
+        }
+      ]
+    },
+    {
+      "id": "shock-trooper",
+      "modPath": "/Lotus/Powersuits/Volt/ShockAugmentCard",
+      "abilityPath": "/Lotus/Powersuits/Volt/Abilities/ShockAbility",
+      "nameEn": "Shock Trooper",
+      "nameZh": "电击奇兵",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE",
+          "operation": "STACKING_MULTIPLY",
+          "rankValues": [
+            0.5,
+            0.65,
+            0.8,
+            1.0
+          ],
+          "scale": "strength",
+          "damageType": "DT_ELECTRICITY",
+          "labelZh": "独立电击伤害"
+        }
+      ]
+    },
+    {
+      "id": "smite-infusion",
+      "modPath": "/Lotus/Powersuits/Paladin/SmiteAugmentCard",
+      "abilityPath": "/Lotus/Powersuits/Paladin/Abilities/SmiteAbility",
+      "nameEn": "Smite Infusion",
+      "nameZh": "惩击洗礼",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE",
+          "operation": "STACKING_MULTIPLY",
+          "rankValues": [
+            0.5,
+            0.65,
+            0.8,
+            1.0
+          ],
+          "scale": "strength",
+          "damageType": "DT_RADIATION",
+          "labelZh": "独立辐射伤害"
+        }
+      ]
+    },
+    {
+      "id": "venom-dose",
+      "modPath": "/Lotus/Powersuits/Saryn/PoisonAugmentCard",
+      "abilityPath": "/Lotus/Powersuits/Saryn/Abilities/PoisonAbility",
+      "nameEn": "Venom Dose",
+      "nameZh": "猛毒附加",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE",
+          "operation": "STACKING_MULTIPLY",
+          "rankValues": [
+            0.5,
+            0.65,
+            0.8,
+            1.0
+          ],
+          "scale": "strength",
+          "damageType": "DT_CORROSIVE",
+          "labelZh": "独立腐蚀伤害"
+        }
+      ]
+    },
+    {
+      "id": "valence-formation",
+      "modPath": "/Lotus/Powersuits/Alchemist/AlchemistPassiveAugmentCard",
+      "abilityPath": "PASSIVE",
+      "nameEn": "Valence Formation",
+      "nameZh": "效价炼成",
+      "defaultActive": true,
+      "requiresElementChoice": true,
+      "elementOptions": [
+        "DT_FIRE",
+        "DT_FREEZE",
+        "DT_ELECTRICITY",
+        "DT_POISON",
+        "DT_EXPLOSION",
+        "DT_RADIATION",
+        "DT_GAS",
+        "DT_MAGNETIC",
+        "DT_VIRAL",
+        "DT_CORROSIVE"
+      ],
+      "effects": [
+        {
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE",
+          "operation": "STACKING_MULTIPLY",
+          "rankValues": [
+            0.5,
+            1.0,
+            1.5,
+            2.0
+          ],
+          "scale": "none",
+          "damageType": "SELECT",
+          "forcedProc": true,
+          "labelZh": "独立元素伤害（必定触发异常）"
+        }
+      ]
+    },
+    {
+      "id": "conductive-sphere",
+      "modPath": "/Lotus/Powersuits/Gyre/GyrePulseAugmentCard",
+      "abilityPath": "/Lotus/Powersuits/Gyre/Abilities/GyrePulseAbility",
+      "nameEn": "Conductive Sphere",
+      "nameZh": "导电球",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE",
+          "operation": "STACKING_MULTIPLY",
+          "rankValues": [
+            0.15,
+            0.35,
+            0.55,
+            0.75
+          ],
+          "scale": "none",
+          "damageType": "DT_ELECTRICITY",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "forcedProc": true,
+          "labelZh": "投射物独立电击伤害（必定触发异常）"
+        }
+      ]
+    },
+    {
+      "id": "thermal-transfer",
+      "modPath": "/Lotus/Powersuits/Runner/RunnerTransferAugmentCard",
+      "abilityPath": "/Lotus/Powersuits/Runner/Abilities/RunnerTransferAbility",
+      "nameEn": "Thermal Transfer",
+      "nameZh": "热能传递",
+      "defaultActive": true,
+      "requiresElementChoice": true,
+      "elementOptions": [
+        "DT_FREEZE",
+        "DT_FIRE",
+        "DT_EXPLOSION"
+      ],
+      "effects": [
+        {
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE",
+          "operation": "STACKING_MULTIPLY",
+          "rankValues": [
+            0.4,
+            0.5,
+            0.6,
+            0.75
+          ],
+          "scale": "strength",
+          "damageType": "SELECT",
+          "labelZh": "独立元素伤害"
+        }
+      ]
+    },
+    {
+      "id": "shadow-haze",
+      "modPath": "/Lotus/Powersuits/Wraith/WraithReapAugmentCard",
+      "abilityPath": "/Lotus/Powersuits/Wraith/Abilities/WraithReapAbility",
+      "nameEn": "Shadow Haze",
+      "nameZh": "暗影迷雾",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_CRIT_CHANCE",
+          "operation": "ADD",
+          "rankValues": [
+            0.35,
+            0.4,
+            0.45,
+            0.5
+          ],
+          "scale": "strength",
+          "labelZh": "最终暴击几率加成"
+        }
+      ]
+    },
+    {
+      "id": "biting-frost",
+      "modPath": "/Lotus/Powersuits/Frost/FrostPassiveAugmentCard",
+      "abilityPath": "PASSIVE",
+      "nameEn": "Biting Frost",
+      "nameZh": "刺骨寒霜",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_CRIT_CHANCE",
+          "operation": "STACKING_MULTIPLY",
+          "rankValues": [
+            1.3,
+            1.5,
+            1.75,
+            2.0
+          ],
+          "scale": "none",
+          "labelZh": "对冻结敌人暴击几率"
+        },
+        {
+          "upgradeType": "WEAPON_CRIT_DAMAGE",
+          "operation": "STACKING_MULTIPLY",
+          "rankValues": [
+            0.29,
+            0.5,
+            0.75,
+            1.0
+          ],
+          "scale": "none",
+          "labelZh": "对冻结敌人暴击伤害"
+        }
+      ]
+    },
+    {
+      "id": "critical-surge",
+      "modPath": "/Lotus/Powersuits/Wisp/WispHarnessAugmentCard",
+      "abilityPath": "/Lotus/Powersuits/Wisp/Abilities/WispHarnessAbility",
+      "nameEn": "Critical Surge",
+      "nameZh": "暴击涌流",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_CRIT_CHANCE",
+          "operation": "STACKING_MULTIPLY",
+          "rankValues": [
+            2.5,
+            2.5,
+            2.5,
+            2.5
+          ],
+          "perMeterRankValues": [
+            0.025,
+            0.05,
+            0.075,
+            0.1
+          ],
+          "perMeterScale": "strength",
+          "scale": "none",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun"
+          ],
+          "labelZh": "主要武器暴击几率上限"
+        }
+      ]
+    },
+    {
+      "id": "champions-blessing",
+      "modPath": "/Lotus/Powersuits/Trinity/BlessingAugmentCard",
+      "abilityPath": "/Lotus/Powersuits/Trinity/Abilities/BlessingAbility",
+      "nameEn": "Champion's Blessing",
+      "nameZh": "强者祝福",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_CRIT_CHANCE",
+          "operation": "STACKING_MULTIPLY",
+          "rankValues": [
+            3.5,
+            3.5,
+            3.5,
+            3.5
+          ],
+          "scale": "none",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun",
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+          ],
+          "labelZh": "枪械暴击几率上限"
+        }
+      ]
+    },
+    {
+      "id": "teeming-virulence",
+      "modPath": "/Lotus/Powersuits/Infestation/InfestRuptureAugmentCard",
+      "abilityPath": "/Lotus/Powersuits/Infestation/Abilities/InfestRuptureAbility",
+      "nameEn": "Teeming Virulence",
+      "nameZh": "猛爆致病",
+      "defaultActive": true,
+      "requiresElementChoice": false,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_CRIT_CHANCE",
+          "operation": "STACKING_MULTIPLY",
+          "rankValues": [
+            1.25,
+            1.5,
+            1.75,
+            2.0
+          ],
+          "scale": "strength",
+          "validTypes": [
+            "/Lotus/Weapons/Tenno/LotusLongGun"
+          ],
+          "labelZh": "主要武器暴击几率"
+        }
+      ]
+    }
+  ]
+}

@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#090b10">
-  <meta name="description" content="Warframe 紫卡、武器与战甲离线配装工具">
+  <meta name="description" content="Warframe 紫卡、武器、战甲与同伴离线协同配装工具">
   <link rel="icon" href="/assets/riven/riven-icon.ico">
   <title>Warframe &amp; Weapon Loadout Build</title>
-<link rel="stylesheet" href="/app.css?v=20260902a">
-<link rel="stylesheet" href="/arena/arena.css">
+<link rel="stylesheet" href="/app.css?v=20261124d">
+<link rel="stylesheet" href="/arena/arena.css?v=20261124d">
 <script src="/enemy-images.js" defer></script>
 <script src="/build-config-migrations.js" defer></script>
-<script src="/app.js?v=20260902a" defer></script>
+<script src="/app.js?v=20261124d" defer></script>
 </head>
 <body>
   <div class="boot-screen" id="boot-screen" aria-live="polite">
@@ -69,6 +69,12 @@
           </button>
           <button class="tool-tab" id="warframe-tab" role="tab" aria-selected="false" aria-controls="warframe-tool" data-tab="warframe" type="button">
             <span class="tab-glyph" aria-hidden="true">⬡</span><span>战甲配装</span>
+          </button>
+          <button class="tool-tab" id="companion-tab" role="tab" aria-selected="false" aria-controls="companion-tool" data-tab="companion" type="button">
+            <span class="tab-glyph" aria-hidden="true">◈</span><span>同伴配装</span>
+          </button>
+          <button class="tool-tab is-arena-chip" id="arena-tab-chip" type="button" hidden title="当前处于场景靶场，点击返回武器配装">
+            <span class="tab-glyph" aria-hidden="true">◎</span><span>场景靶场</span>
           </button>
           <div class="tab-context"><span class="context-light" aria-hidden="true"></span>所有计算均在本机完成</div>
         </div>
@@ -449,7 +455,6 @@
                       <span>自动选择进化路线</span>
                       <small>较慢：标准档每次求解约多 7–20 秒</small>
                     </label>
-                    <div class="incarnon-tiers" id="build-incarnon-tiers"></div>
                     <!-- 灵化循环口径开关：常驻灵化（充能池近似零装填，默认）
                          vs 真实循环（池耗尽回基础形态充能，装填按基础形态折算）。 -->
                     <label class="incarnon-cycle-toggle" for="build-incarnon-cycle" title="常驻灵化：不计算形态切换停火。真实循环：按弱点命中充能、实际充能池和切换时间逐事件回放；缺少充能数据时明确标为未建模。">
@@ -457,6 +462,7 @@
                       <span>灵化循环口径</span>
                       <small id="build-incarnon-cycle-note">常驻灵化（默认）</small>
                     </label>
+                    <div class="incarnon-tiers" id="build-incarnon-tiers"></div>
                   </div>
                 </details>
               </section>
@@ -508,6 +514,137 @@
             </div>
 
             <div class="build-setup-folds" id="build-setup-folds">
+              <section class="synergy-hub" id="build-synergy-panel" aria-label="协同配装中枢">
+                <header class="synergy-hub-head">
+                  <div>
+                    <span class="synergy-kicker">LOADOUT SYNERGY HUB</span>
+                    <h3>协同配装中枢</h3>
+                  </div>
+                  <small id="synergy-hub-status">默认关闭为中立战甲基线；开启后实时联动战甲技能、源力石、连结 MOD、异常铺垫与 3D 靶场</small>
+                </header>
+                <div class="synergy-card-grid">
+                  <article class="synergy-card" id="synergy-wf-card">
+                    <div class="synergy-card-head">
+                      <div class="synergy-identity">
+                        <span class="synergy-avatar-wrap">
+                          <img id="synergy-wf-avatar" src="/assets/warframes/portraits/Excalibur.png" alt="战甲头像">
+                        </span>
+                        <div class="synergy-card-title">
+                          <strong>战甲协同</strong>
+                          <small id="synergy-wf-subtitle">默认中立战甲（未参与计算）</small>
+                        </div>
+                      </div>
+                      <label class="synergy-switch" for="synergy-wf-enabled">
+                        <input id="synergy-wf-enabled" type="checkbox">
+                        <span>启用战甲参与计算</span>
+                      </label>
+                    </div>
+                    <div class="synergy-card-body" id="synergy-wf-body" hidden>
+                      <div class="synergy-controls-row">
+                        <div class="field synergy-select-field">
+                          <span>战甲与形态</span>
+                          <input id="synergy-wf-frame" type="hidden" value="">
+                          <button class="warframe-selector-trigger is-synergy-picker" id="synergy-wf-frame-open" type="button" aria-label="选择协同战甲">
+                            <span class="warframe-selector-visual" id="synergy-wf-picker-visual"><i>W</i></span>
+                            <span class="warframe-selector-copy">
+                              <strong id="synergy-wf-picker-name">选择战甲</strong>
+                              <em id="synergy-wf-picker-meta">点击打开搜索选择器</em>
+                            </span>
+                            <b aria-hidden="true">›</b>
+                          </button>
+                        </div>
+                        <div class="synergy-slot-group">
+                          <span>配置槽</span>
+                          <div class="segmented-control synergy-slot-tabs" id="synergy-wf-config-tabs" role="group" aria-label="协同战甲配置槽">
+                            <button class="is-active" type="button" data-synergy-wf-config="A">A</button>
+                            <button type="button" data-synergy-wf-config="B">B</button>
+                            <button type="button" data-synergy-wf-config="C">C</button>
+                          </div>
+                        </div>
+                        <button class="button button-quiet synergy-jump-btn" id="synergy-wf-edit" type="button">编辑战甲 ↗</button>
+                      </div>
+                      <div class="synergy-controls-row synergy-trigger-row">
+                        <label class="field synergy-select-field">
+                          <span>受击触发口径</span>
+                          <select id="synergy-wf-trigger-mode" aria-label="战甲受击触发口径">
+                            <option value="ai" selected>AI 近似实战受击 (默认)</option>
+                            <option value="assumed">受击赋能恒满层</option>
+                            <option value="off">不触发受击</option>
+                          </select>
+                        </label>
+                      </div>
+                      <div class="synergy-abilities-block" id="synergy-wf-abilities-wrap">
+                        <div class="synergy-subhead">
+                          <span>本甲武器增益技能与强化</span>
+                          <small id="synergy-wf-abilities-note">点击胶囊开关技能</small>
+                        </div>
+                        <div class="synergy-ability-pills" id="synergy-wf-abilities"></div>
+                      </div>
+                      <div class="synergy-status-pills" id="synergy-wf-summary" aria-live="polite"></div>
+                    </div>
+                  </article>
+
+                  <article class="synergy-card" id="synergy-comp-card">
+                    <div class="synergy-card-head">
+                      <div class="synergy-identity">
+                        <span class="synergy-avatar-wrap" id="synergy-comp-avatar-wrap">
+                          <img id="synergy-comp-avatar" alt="同伴头像" hidden>
+                          <i id="synergy-comp-avatar-fallback" aria-hidden="true">◈</i>
+                        </span>
+                        <div class="synergy-card-title">
+                          <strong>同伴协同</strong>
+                          <small id="synergy-comp-subtitle">未携带同伴</small>
+                        </div>
+                      </div>
+                      <label class="synergy-switch" for="synergy-comp-enabled">
+                        <input id="synergy-comp-enabled" type="checkbox">
+                        <span>启用同伴参与计算</span>
+                      </label>
+                    </div>
+                    <div class="synergy-card-body" id="synergy-comp-body" hidden>
+                      <div class="synergy-controls-row">
+                        <div class="field synergy-select-field">
+                          <span>携带同伴</span>
+                          <input id="synergy-comp-select" type="hidden" value="">
+                          <button class="warframe-selector-trigger is-synergy-picker" id="synergy-comp-open" type="button" aria-label="选择协同同伴">
+                            <span class="warframe-selector-visual" id="synergy-comp-picker-visual"><i>◈</i></span>
+                            <span class="warframe-selector-copy">
+                              <strong id="synergy-comp-picker-name">选择同伴</strong>
+                              <em id="synergy-comp-picker-meta">点击打开分类搜索</em>
+                            </span>
+                            <b aria-hidden="true">›</b>
+                          </button>
+                        </div>
+                        <div class="synergy-slot-group">
+                          <span>本体配置</span>
+                          <div class="segmented-control synergy-slot-tabs" id="synergy-comp-body-tabs" role="group" aria-label="协同同伴本体配置槽">
+                            <button class="is-active" type="button" data-synergy-comp-body="A">A</button>
+                            <button type="button" data-synergy-comp-body="B">B</button>
+                            <button type="button" data-synergy-comp-body="C">C</button>
+                          </div>
+                        </div>
+                        <button class="button button-quiet synergy-jump-btn" id="synergy-comp-edit" type="button">编辑同伴 ↗</button>
+                      </div>
+                      <div class="synergy-controls-row synergy-comp-weapon-row">
+                        <button class="synergy-paired-weapon is-interactive" id="synergy-comp-weapon-open" type="button" title="点击切换当前同伴可装配的武器">
+                          <span class="synergy-paired-label">配对武器 / 兽爪</span>
+                          <span class="synergy-paired-value"><strong id="synergy-comp-weapon-name">--</strong><b id="synergy-comp-weapon-chevron" aria-hidden="true">›</b></span>
+                        </button>
+                        <div class="synergy-slot-group">
+                          <span>武器配置</span>
+                          <div class="segmented-control synergy-slot-tabs" id="synergy-comp-weapon-tabs" role="group" aria-label="协同同伴武器配置槽">
+                            <button class="is-active" type="button" data-synergy-comp-weapon="A">A</button>
+                            <button type="button" data-synergy-comp-weapon="B">B</button>
+                            <button type="button" data-synergy-comp-weapon="C">C</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="synergy-status-pills" id="synergy-comp-summary" aria-live="polite"></div>
+                    </div>
+                  </article>
+                </div>
+              </section>
+
               <details class="fold build-scenario-fold" id="build-scenario-fold">
                 <summary class="fold-head"><strong>战斗场景</strong><span>目标 / 强化 / 削甲 / 爆头率 / 距离</span></summary>
                 <div class="fold-body">
@@ -818,6 +955,10 @@
         </section>
 
         <section class="warframe-workspace" id="warframe-tool" role="tabpanel" aria-labelledby="warframe-tab" hidden>
+          <div class="synergy-return-bar" id="warframe-return-bar" hidden>
+            <button class="button button-fill synergy-return-btn" id="warframe-return-build" type="button">← 返回武器配装（已同步协同配置）</button>
+            <span class="synergy-return-hint" id="warframe-return-hint">修改已实时保存，返回武器配装将自动按新战甲配置重算</span>
+          </div>
           <aside class="warframe-control-pane">
             <div class="pane-heading">
               <div><span class="section-index">01</span><h2>战甲配置</h2></div>
@@ -885,6 +1026,11 @@
                       <button type="button" data-warframe-config="B" aria-selected="false">B</button>
                       <button type="button" data-warframe-config="C" aria-selected="false">C</button>
                     </div>
+                    <span class="forma-counter" id="warframe-forma-counter" title="当前战甲配装极化统计">
+                      <span>极化</span>
+                      <b id="warframe-strip-forma-count">0</b>
+                      <button type="button" id="warframe-forma-optimize" title="按当前战甲 MOD 重新计算最少极化：自动匹配原生极性与光环/功能槽，锁定槽位不动">最少极化</button>
+                    </span>
                     <span class="config-strip-status" id="warframe-config-status">当前配置自动保存到本机</span>
                     <div class="build-config-actions">
                       <button class="button button-quiet" id="warframe-config-copy" type="button">复制</button>
@@ -934,6 +1080,352 @@
                 <summary><span>资料与计算诊断</span><b id="warframe-diagnostic-count">0</b></summary>
                 <div id="warframe-diagnostic-list"></div>
               </details>
+            </div>
+          </section>
+        </section>
+
+        <section class="warframe-workspace companion-workspace" id="companion-tool" role="tabpanel" aria-labelledby="companion-tab" hidden>
+          <div class="synergy-return-bar" id="companion-return-bar" hidden>
+            <button class="button button-fill synergy-return-btn" id="companion-return-build" type="button">← 返回武器配装（已同步协同配置）</button>
+            <span class="synergy-return-hint" id="companion-return-hint">修改已实时保存，返回武器配装将自动按新同伴配置重算</span>
+          </div>
+
+          <aside class="warframe-control-pane companion-control-pane">
+            <div class="pane-heading">
+              <div><span class="section-index">01</span><h2>同伴配置</h2></div>
+              <span class="pane-badge" id="companion-catalog-status">LAZY LOAD</span>
+            </div>
+            <div class="warframe-control-fields companion-control-fields">
+              <label class="field">
+                <span>同伴</span>
+                <input id="companion-select-input" type="hidden" value="">
+                <button class="warframe-selector-trigger" id="companion-select-open" type="button" aria-label="选择同伴">
+                  <span class="warframe-selector-visual" id="companion-select-visual"><i>◈</i></span>
+                  <span class="warframe-selector-copy">
+                    <small id="companion-select-kind">COMPANION</small>
+                    <strong id="companion-select-name">选择同伴</strong>
+                    <em id="companion-select-description">点击打开分类检索</em>
+                  </span>
+                  <b aria-hidden="true">›</b>
+                </button>
+                <small id="companion-select-caption">共 41 种哨兵 / 恐鸟 / 猎犬 / 野兽同伴</small>
+              </label>
+
+              <section class="warframe-profile companion-profile" aria-live="polite">
+                <img id="companion-portrait" alt="" hidden>
+                <div>
+                  <span class="companion-category-badge" id="companion-category-tag">同伴档案</span>
+                  <strong id="companion-profile-name">--</strong>
+                  <p id="companion-profile-description">选择同伴后展示原生面板与AI战斗行为。</p>
+                </div>
+              </section>
+
+              <section class="companion-modular-box" id="companion-modular-fields" hidden aria-label="模块化部件组装">
+                <div class="companion-box-head">
+                  <strong>模块化组装</strong>
+                  <span id="companion-modular-note">已镀金满级基础值</span>
+                </div>
+                <div class="companion-modular-grid" id="companion-modular-grid"></div>
+              </section>
+
+              <section class="companion-weapon-box" aria-label="配对武器或兽爪">
+                <label class="field">
+                  <span>配对武器 / 兽爪</span>
+                  <select id="companion-weapon-select"></select>
+                  <small id="companion-weapon-caption">按当前同伴种类与装备戒律自动筛选合法武器</small>
+                </label>
+              </section>
+
+              <section class="companion-options-box" aria-label="协同预览与连结条件">
+                <div class="companion-box-head">
+                  <strong>协同上下文与条件开关</strong>
+                  <button class="text-button" id="companion-sync-context" type="button" title="从当前武器配装与战甲配装同步数值">同步当前战甲/主武</button>
+                </div>
+                <div class="companion-wf-link-row">
+                  <div class="field">
+                    <span>关联战甲</span>
+                    <input id="companion-preview-wf-select" type="hidden" value="__auto__">
+                    <button class="warframe-selector-trigger is-synergy-picker" id="companion-preview-wf-open" type="button" aria-label="选择关联战甲">
+                      <span class="warframe-selector-visual" id="companion-preview-wf-visual"><i>W</i></span>
+                      <span class="warframe-selector-copy">
+                        <strong id="companion-preview-wf-name">跟随当前战甲</strong>
+                        <em id="companion-preview-wf-meta">自动同步当前活跃战甲配置</em>
+                      </span>
+                      <b aria-hidden="true">›</b>
+                    </button>
+                  </div>
+                  <label class="field companion-wf-cfg-field">
+                    <span>配置</span>
+                    <select id="companion-preview-wf-config">
+                      <option value="A">A</option>
+                      <option value="B">B</option>
+                      <option value="C">C</option>
+                    </select>
+                  </label>
+                </div>
+                <small class="companion-context-readout" id="companion-preview-wf-readout">默认中立战甲（生命 300 / 护盾 300 / 护甲 100）</small>
+
+                <div class="companion-primary-preview-row">
+                  <label class="field">
+                    <span>猎人协力主武暴率 (%)</span>
+                    <input id="companion-primary-cc" type="number" min="0" max="1000" step="5" value="100">
+                  </label>
+                  <label class="field">
+                    <span>机甲超载主武触发 (%)</span>
+                    <input id="companion-primary-sc" type="number" min="0" max="1000" step="5" value="100">
+                  </label>
+                </div>
+
+                <div class="companion-check-list">
+                  <label class="check-field"><input id="companion-opt-fired-up" type="checkbox" checked><span>过热射击满层预览 (Fired Up)</span></label>
+                  <label class="check-field"><input id="companion-opt-astral-bond" type="checkbox"><span>星界连结激活 (+120% 伤害 / +30% 虚空)</span></label>
+                  <label class="check-field"><input id="companion-opt-ambush" type="checkbox"><span>幽灵伏击激活 (Ambush)</span></label>
+                  <label class="check-field"><input id="companion-opt-player-stacks" type="checkbox" checked><span>战甲同类武器击杀叠满同伴镀层</span></label>
+                </div>
+
+                <div class="companion-inline-selects">
+                  <label class="field">
+                    <span>重大连结元素</span>
+                    <select id="companion-opt-momentous">
+                      <option value="">未触发</option>
+                      <option value="DT_FIRE">火焰 (+120%)</option>
+                      <option value="DT_FREEZE">冰冻 (+120%)</option>
+                      <option value="DT_ELECTRICITY">电击 (+120%)</option>
+                      <option value="DT_POISON">毒素 (+120%)</option>
+                    </select>
+                  </label>
+                  <label class="field">
+                    <span>猫眼覆盖率</span>
+                    <select id="companion-opt-catseye">
+                      <option value="average" selected>平均覆盖</option>
+                      <option value="active">激活峰值</option>
+                      <option value="off">关闭</option>
+                    </select>
+                  </label>
+                </div>
+              </section>
+
+              <p class="form-message" id="companion-message" role="alert" hidden></p>
+            </div>
+          </aside>
+
+          <section class="warframe-result-pane companion-bench-pane" aria-label="同伴配装工作台">
+            <header class="warframe-hud companion-hud">
+              <div>
+                <span id="companion-result-kicker">COMPANION WORKBENCH</span>
+                <strong id="companion-result-name">--</strong>
+              </div>
+              <div class="warframe-capacity">
+                <span id="companion-capacity-label">本体容量</span>
+                <strong id="companion-capacity-readout">-- / 60</strong>
+                <i id="companion-capacity-bar"></i>
+              </div>
+              <div>
+                <span>极化</span>
+                <strong id="companion-forma-readout">0</strong>
+              </div>
+            </header>
+
+            <div class="warframe-result-state" id="companion-loading">
+              <div class="scan-core" aria-hidden="true"><i></i><b></b></div>
+              <p>正在载入同伴与兽爪目录</p>
+            </div>
+
+            <div class="warframe-build-content companion-build-content" id="companion-build-content" hidden>
+              <div class="companion-subview-bar">
+                <div class="segmented-control companion-subview-tabs" id="companion-subview-tabs" role="tablist" aria-label="同伴配卡视图切换">
+                  <button class="is-active" type="button" data-comp-subview="body" role="tab" aria-selected="true">同伴本体配卡 (10 槽)</button>
+                  <button type="button" data-comp-subview="weapon" role="tab" aria-selected="false" id="companion-subview-weapon-btn">同伴武器 / 兽爪配卡 (8 槽)</button>
+                </div>
+                <span class="companion-subview-hint" id="companion-subview-hint">切换子视图分别编辑同伴本体与配对武器，下方联动面板始终同步更新</span>
+                <div class="companion-subview-actions">
+                  <button class="button button-quiet" id="companion-config-import-json" type="button" title="从 JSON 文件导入同伴本体与配对武器/兽爪配置">导入 JSON</button>
+                  <button class="button button-quiet" id="companion-config-export-json" type="button" title="将当前同伴本体与配对武器/兽爪一并导出为 JSON 文件">导出 JSON</button>
+                  <input id="companion-config-import-file" type="file" accept="application/json,.json" hidden>
+                </div>
+              </div>
+
+              <section class="warframe-mod-bench companion-mod-bench" id="companion-body-bench" aria-label="同伴本体 10 槽配卡">
+                <section class="build-config-strip companion-config-strip" aria-label="同伴本体 A / B / C 配置槽">
+                  <div class="config-strip-row">
+                    <strong class="config-strip-label">本体配置槽</strong>
+                    <div class="segmented-control config-tabs" id="companion-body-config-tabs" role="tablist" aria-label="同伴本体配置槽">
+                      <button class="is-active" type="button" data-comp-body-config="A" aria-selected="true">A</button>
+                      <button type="button" data-comp-body-config="B" aria-selected="false">B</button>
+                      <button type="button" data-comp-body-config="C" aria-selected="false">C</button>
+                    </div>
+                    <label class="check-field companion-reactor-check">
+                      <input id="companion-body-reactor" type="checkbox" checked>
+                      <span>反应堆 (60 容量)</span>
+                    </label>
+                    <span class="forma-counter" id="companion-body-forma-counter" title="同伴本体极化统计">
+                      <span>极化</span>
+                      <b id="companion-body-forma-badge">0</b>
+                      <button type="button" id="companion-body-forma-optimize" title="按当前同伴本体 MOD 重新计算最少极化（保持戒律顺序并复用原生与部件极性）">最少极化</button>
+                    </span>
+                    <div class="build-config-actions">
+                      <button class="button button-quiet" id="companion-body-copy" type="button">复制</button>
+                      <button class="button button-quiet" id="companion-body-clear" type="button">清空本体</button>
+                    </div>
+                  </div>
+                </section>
+                <div class="slot-polarity-hint">10 槽本体配卡：装卡超容时自动最少极化，也可点击右上角极性图标手动切换；同族冲突变体自动过滤</div>
+                <div class="companion-slots-grid is-body-grid" id="companion-body-slots"></div>
+              </section>
+
+              <section class="warframe-mod-bench companion-mod-bench" id="companion-weapon-bench" hidden aria-label="同伴武器或兽爪配卡">
+                <section class="build-config-strip companion-config-strip" aria-label="同伴武器 A / B / C 配置槽">
+                  <div class="config-strip-row">
+                    <strong class="config-strip-label" id="companion-weapon-strip-label">武器配置槽</strong>
+                    <div class="segmented-control config-tabs" id="companion-weapon-config-tabs" role="tablist" aria-label="同伴武器配置槽">
+                      <button class="is-active" type="button" data-comp-weapon-config="A" aria-selected="true">A</button>
+                      <button type="button" data-comp-weapon-config="B" aria-selected="false">B</button>
+                      <button type="button" data-comp-weapon-config="C" aria-selected="false">C</button>
+                    </div>
+                    <label class="check-field companion-reactor-check">
+                      <input id="companion-weapon-reactor" type="checkbox" checked>
+                      <span>催化剂 (60 容量)</span>
+                    </label>
+                    <span class="forma-counter" id="companion-weapon-forma-counter" title="配对武器或兽爪极化统计">
+                      <span>极化</span>
+                      <b id="companion-weapon-forma-badge">0</b>
+                      <button type="button" id="companion-weapon-forma-optimize" title="按当前配对武器或兽爪 MOD 重新计算最少极化（保持基础元素合成顺序）">最少极化</button>
+                    </span>
+                    <div class="build-config-actions">
+                      <button class="button button-quiet" id="companion-weapon-copy" type="button">复制</button>
+                      <button class="button button-quiet" id="companion-weapon-clear" type="button">清空武器</button>
+                    </div>
+                  </div>
+                </section>
+
+                <div class="build-bench-toolbar companion-weapon-toolbar" id="companion-weapon-opt-bar">
+                  <div class="bench-toolbar-left companion-opt-controls">
+                    <label class="companion-opt-inline">
+                      <span>优化目标</span>
+                      <select id="companion-weapon-opt-goal" aria-label="同伴武器优化目标">
+                        <option value="dps">综合实战 DPS 最优</option>
+                        <option value="statusPriming">异常触发铺垫最优</option>
+                        <option value="tenaciousBond">坚韧连结 (&gt;50%暴率) 优先</option>
+                        <option value="singleHit">单发直伤最优</option>
+                      </select>
+                    </label>
+                    <label class="companion-opt-inline" id="companion-weapon-opt-element-wrap">
+                      <span>元素限定</span>
+                      <select id="companion-weapon-opt-element" aria-label="同伴武器限定元素">
+                        <option value="">不限定元素</option>
+                        <option value="viral">病毒</option>
+                        <option value="corrosive">腐蚀</option>
+                        <option value="heat">火焰</option>
+                        <option value="cold">冰冻</option>
+                        <option value="electricity">电击</option>
+                        <option value="toxin">毒素</option>
+                        <option value="gas">毒气</option>
+                        <option value="magnetic">磁力</option>
+                        <option value="radiation">辐射</option>
+                        <option value="blast">爆炸</option>
+                      </select>
+                    </label>
+                    <button class="button button-fill" id="companion-weapon-fill-optimal" type="button" title="结合同伴本体增益与当前已装紫卡自动解算最优 8 槽配卡并应用最少极化">⚡ 填充最优</button>
+                  </div>
+                  <div class="bench-toolbar-right">
+                    <button class="button button-quiet" id="companion-weapon-open-standalone" type="button" title="将当前机械同伴武器与 MOD/紫卡同步到「武器配装」页查看击杀时间线与部件贡献">同步到武器配装 ↗</button>
+                  </div>
+                </div>
+
+                <div class="companion-posture-wrap" id="companion-posture-wrap" hidden>
+                  <div class="result-section-title">
+                    <div><span>POSTURE SLOT</span><h3>兽爪专用姿态槽</h3></div>
+                    <small id="companion-posture-note">装备姿态卡可提供额外容量上限与索敌倾向</small>
+                  </div>
+                  <div class="companion-posture-slot" id="companion-posture-slot"></div>
+                </div>
+
+                <div class="companion-riven-bar" id="companion-riven-bar" hidden>
+                  <div class="companion-riven-bar-head">
+                    <div>
+                      <div class="companion-riven-title-line">
+                        <strong>同伴武器紫卡</strong>
+                        <span class="companion-riven-dispo" id="companion-riven-dispo">倾向 --</span>
+                      </div>
+                      <span id="companion-riven-summary">未装备紫卡（如冰凇 Prime 可配紫卡强化热状态伤害或突破 50% 暴率触发坚韧连结）</span>
+                    </div>
+                    <div class="companion-riven-actions">
+                      <button class="button button-quiet" id="companion-riven-toggle" type="button">录入 / 编辑紫卡</button>
+                      <button class="button button-quiet" id="companion-riven-from-fav" type="button">从收藏夹载入</button>
+                      <button class="button button-quiet" id="companion-riven-remove" type="button" hidden>移除紫卡</button>
+                    </div>
+                  </div>
+                  <div class="companion-riven-editor" id="companion-riven-editor" hidden>
+                    <div class="riven-builder-rows companion-riven-builder-rows" id="companion-riven-rows"></div>
+                    <div class="companion-riven-foot">
+                      <button class="button button-quiet" id="companion-riven-add-stat" type="button">＋ 添加词条</button>
+                      <label class="field companion-riven-pol-field">
+                        <span>紫卡极性</span>
+                        <select id="companion-riven-polarity">
+                          <option value="AP_ATTACK">Madurai (V)</option>
+                          <option value="AP_TACTIC">Naramon (-)</option>
+                          <option value="AP_DEFENSE">Vazarin (D)</option>
+                        </select>
+                      </label>
+                      <label class="field companion-riven-slot-field">
+                        <span>放入槽位</span>
+                        <select id="companion-riven-slot">
+                          <option value="0">槽位 01</option>
+                          <option value="1">槽位 02</option>
+                          <option value="2">槽位 03</option>
+                          <option value="3">槽位 04</option>
+                          <option value="4">槽位 05</option>
+                          <option value="5">槽位 06</option>
+                          <option value="6">槽位 07</option>
+                          <option value="7" selected>槽位 08</option>
+                        </select>
+                      </label>
+                      <button class="button button-quiet riven-builder-favorite" id="companion-riven-fav" type="button">☆ 收藏</button>
+                      <button class="button button-fill" id="companion-riven-apply" type="button">放入槽位</button>
+                      <small class="companion-riven-live-note" id="companion-riven-live-note">词条数值范围按武器倾向与正负词条数实时校验；已装备紫卡拖动滑块或改数即自动生效</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="slot-polarity-hint" id="companion-weapon-slot-hint">8 槽武器配卡：装卡超容时自动最少极化，点击空槽检索兼容 MOD</div>
+                <div class="companion-slots-grid is-weapon-grid" id="companion-weapon-slots"></div>
+              </section>
+
+              <section class="warframe-panel-section companion-dashboard" aria-label="实时评估与连结状态面板">
+                <div class="companion-stats-columns">
+                  <div class="companion-stats-col">
+                    <div class="result-section-title">
+                      <div><span>BODY PANEL</span><h3>同伴本体面板</h3></div>
+                      <small id="companion-attack-mode-note">--</small>
+                    </div>
+                    <div class="warframe-panel-grid companion-stat-grid" id="companion-body-stat-grid"></div>
+                  </div>
+                  <div class="companion-stats-col">
+                    <div class="result-section-title">
+                      <div><span>WEAPON PANEL</span><h3 id="companion-weapon-panel-title">配对武器 / 兽爪面板</h3></div>
+                      <small id="companion-weapon-damage-note">--</small>
+                    </div>
+                    <div class="warframe-panel-grid companion-stat-grid" id="companion-weapon-stat-grid"></div>
+                  </div>
+                </div>
+
+                <div class="companion-composition-panel" id="companion-weapon-composition-panel">
+                  <div class="result-section-title">
+                    <div><span>DAMAGE &amp; ELEMENT COMPOSITION</span><h3>同伴武器伤害组成与异常触发</h3></div>
+                    <small id="companion-weapon-target-note">--</small>
+                  </div>
+                  <div class="damage-type-list companion-damage-type-list" id="companion-weapon-composition"></div>
+                </div>
+
+                <div class="companion-bond-panel">
+                  <div class="result-section-title">
+                    <div><span>BOND &amp; BRIDGE</span><h3>连结与跨实体联动状态</h3></div>
+                    <small id="companion-bond-summary-note">实时核算出对玩家武器的连结达标状态、跨实体套装件数与稳态异常铺垫</small>
+                  </div>
+                  <div class="companion-bond-grid" id="companion-bond-grid"></div>
+                  <div class="companion-warnings" id="companion-warnings" hidden></div>
+                </div>
+              </section>
             </div>
           </section>
         </section>
@@ -1008,6 +1500,21 @@
             <div class="mod-picker-body">
               <div class="manual-mod-categories" id="warframe-picker-categories" role="toolbar" aria-label="战甲 MOD 分类" hidden></div>
               <div class="mod-picker-grid" id="warframe-picker-list" role="listbox"></div>
+            </div>
+          </div>
+        </div>
+        <div class="mod-picker" id="companion-picker" role="dialog" aria-modal="true" aria-labelledby="companion-picker-title" hidden>
+          <div class="mod-picker-shell">
+            <div class="mod-picker-head">
+              <div class="mod-picker-title"><span class="section-index" id="companion-picker-index">◈</span><div><h3 id="companion-picker-title">选择同伴</h3><small id="companion-picker-sub">同伴与配卡检索</small></div></div>
+              <div class="mod-picker-tools">
+                <label class="field mod-picker-search"><span class="sr-only">搜索</span><input id="companion-picker-search" type="search" autocomplete="off" placeholder="中文 / 英文 / 效果描述"></label>
+                <button class="icon-button" id="companion-picker-close" type="button" title="关闭" aria-label="关闭同伴选择器">×</button>
+              </div>
+            </div>
+            <div class="mod-picker-body">
+              <div class="manual-mod-categories" id="companion-picker-categories" role="toolbar" aria-label="同伴与 MOD 分类"></div>
+              <div class="mod-picker-grid" id="companion-picker-list" role="listbox"></div>
             </div>
           </div>
         </div>

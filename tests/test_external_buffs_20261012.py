@@ -89,6 +89,27 @@ def test_extra_hits_and_their_forced_statuses():
     assert lashed > plain * 1.3
 
 
+def test_only_xatas_whisper_applies_body_part_multiplier_twice_and_last_burst_checks_real_cost():
+    from wfarsenal.combat_replay import replay
+    from tests.test_combat_replay import stats, target
+    tg = dict(target(hp=1e6), headshotMultiplier=3.0)
+    lash_st = stats(damage_types={"DT_IMPACT": 100.0}, status_chance=0.0, crit_chance=0.0, fire_rate=1.0,
+                    extra_hits=(("DT_POISON", 0.3, False),))
+    xata_st = stats(damage_types={"DT_IMPACT": 100.0}, status_chance=0.0, crit_chance=0.0, fire_rate=1.0,
+                    extra_hits=(("DT_VOID", 0.26, False),))
+    r_lash = replay(lash_st, tg, attacks_per_second=1.0, window_seconds=0.1, headshot_chance=1.0)
+    r_xata = replay(xata_st, tg, attacks_per_second=1.0, window_seconds=0.1, headshot_chance=1.0)
+    # 100 * 3.0 head = 300; Toxic Lash adds 300 * 0.3 * 1.0 = 90; Xata's Whisper adds 300 * 0.26 * 3.0 = 234.
+    assert r_lash["directWindow"] == pytest.approx(390.0)
+    assert r_xata["directWindow"] == pytest.approx(534.0)
+    # WFSim M116: under ammo efficiency (ammo_cost=0.4), a 3-round burst at ammo=2.4 survives (leaves 1.2) and pays nothing.
+    burst_st = stats(damage_types={"DT_IMPACT": 10.0}, status_chance=0.0, crit_chance=0.0, fire_rate=10.0,
+                     magazine=2.4, ammo_cost=0.4, reload_time=5.0, dot_base_damage=None)
+    combat = dict(resolve=lambda *a: (burst_st, None), baseBurst=dict(count=3, delay_seconds=0.05), lastBurst=True)
+    rb = replay(burst_st, target(hp=1e6), attacks_per_second=10.0, window_seconds=0.2, combat=combat)
+    assert rb["directWindow"] == pytest.approx(30.0)
+
+
 def test_squad_auras_on_the_enemy():
     merged = app._external_enemy_enhancements([{"id": "corrosive-projection", "count": 2}, {"id": "shield-disruption", "count": 4}], {})
     assert merged["auraArmourReduction"] == pytest.approx(0.36)

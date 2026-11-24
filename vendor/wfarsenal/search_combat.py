@@ -27,6 +27,7 @@ def bind(stats, weapon, cards, effects, scenario, passives):
         "mods": [(c.record, c.rank, None) for c in cards if c.record and c.record.get("path")],
         "arcanes": list(passives.event_arcanes) if passives else [],
         "choices": dict(passives.incarnon_choices) if passives else {},
+        "combat_extras_json": str(getattr(passives, "combat_extras_json", "") or "") if passives else "",
     }
     stats._combat_scores = {}
     stats._resolve_cache = ResolveCache()
@@ -67,7 +68,8 @@ def _loadout_digest(stats, data):
     engine = data["engine"]
     engine_key = (_record_digest(engine["weapon"]), engine["effects"], engine["scenario"], engine["fire_mode"])
     mods = [(_record_digest(record), rank, extra) for record, rank, extra in data["mods"]]
-    tail = (engine_key, mods, data["arcanes"], data["choices"])
+    extras_json = data.get("combat_extras_json") or ""
+    tail = (engine_key, mods, data["arcanes"], data["choices"], extras_json) if extras_json else (engine_key, mods, data["arcanes"], data["choices"])
     try:
         try:
             declared = (_field_getter(*fields)(values) if len(fields) > 1
@@ -134,11 +136,16 @@ def window(stats, context, *, score_only=False):
     target = context.get("target") or {}
     scenario = data["engine"]["scenario"]
     enhancements = context.get("enemy_enhancements") or {}
+    extras = None
+    if data.get("combat_extras_json"):
+        import json as _json
+        extras = _json.loads(data["combat_extras_json"])
     combat = prepare(
         data["engine"], data["mods"], data["arcanes"],
         cycle_enabled=scenario.incarnon_cycle, assumed=scenario.trigger_policy == "assumed_max",
         incarnon_choices=data["choices"], affinity_target=target, level=context.get("level"),
         eximus=bool(enhancements.get("eximus")), resolve_cache=getattr(stats, "_resolve_cache", None),
+        combat_extras=extras,
     )
     result = replay(
         stats, target, combat=combat, trigger_sources=combat["trigger_sources"],
@@ -182,7 +189,7 @@ def windows(stats, contexts):
             or native_replay.SHADOW or not hasattr(native_replay.wfcore, 'trajectory_health_batch')):
         return None
     data = getattr(stats, '_combat_inputs', None)
-    if not data or 'engine' not in data:
+    if not data or 'engine' not in data or data.get('combat_extras_json'):
         return None
     check_cancelled()
     first = contexts[0]

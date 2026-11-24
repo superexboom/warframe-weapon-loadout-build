@@ -187,6 +187,11 @@ from wfarsenal.simulator import (  # noqa: E402
     resolve_zaw_record,
     simulate,
 )
+from wfarsenal.mod_families import (  # noqa: E402
+    authoritative_mod_family,
+    canonical_mod_family,
+    equipment_additional_bases,
+)
 from wfarsenal.warframe import (  # noqa: E402
     WarframeEngine,
     load_warframe_catalog,
@@ -715,6 +720,7 @@ def _analysis_inputs_fingerprint() -> str:
         ROOT / "data" / "mechanics" / "battery-profiles.json",
         ROOT / "data" / "mechanics" / "weapon-passives.json",
         ROOT / "data" / "mechanics" / "client-updates.json",
+        ROOT / "data" / "mechanics" / "mod-families.json",
         ROOT / "data" / "mechanics" / "sentinels.json",
         ROOT / "data" / "mechanics" / "companion-projectile-sequences.json",
         ROOT / "data" / "mechanics" / "player-only-conditions.json",
@@ -742,6 +748,7 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name('exalted.py'),
         Path(optimizer.__file__).with_name("damage.py"),
         Path(optimizer.__file__).with_name("simulator.py"),
+        Path(optimizer.__file__).with_name("mod_families.py"),
         Path(optimizer.__file__).with_name("catalog_releases.py"),
         Path(optimizer.__file__).with_name("projectile_events.py"),
         Path(optimizer.__file__).with_name("zymos.py"),
@@ -2054,9 +2061,18 @@ def _auto_exilus(
     slot_polarity = _special_slot_polarities(
         weapon, catalog_weapon["weaponType"]
     )["exilus"]
+    equip_path = str(weapon.get("path") or "").strip() or None
+    equipped_families = {
+        _mod_exclusive_family(c.record or {"path": c.key}, equip_path=equip_path)
+        for c in evaluation.cards
+        if c.record is not None or c.key
+    }
     choices = []
     for row in CATALOG_UTILITY_MODS:
         if not _utility_matches_weapon(row, weapon, catalog_weapon):
+            continue
+        row_family = _mod_exclusive_family(row, equip_path=equip_path)
+        if row_family and row_family in equipped_families:
             continue
         max_rank = int(row.get("rank") if row.get("rank") is not None else row.get("maxRank") or 0)
         for rank in dict.fromkeys((max_rank, 0)):
@@ -2401,6 +2417,7 @@ def build_catalog() -> dict[str, Any]:
             "clearElementValue": None,
             "damageModels": ["panel", "target", "custom"],
             "customDamageModel": True,
+            "equipmentAdditionalBases": equipment_additional_bases(),
             "limitations": [
                 "60 capacity, Catalyst and matching Forma are assumed for automatic builds",
                 "element target constrains final damage type, not status weighting",
@@ -2756,7 +2773,7 @@ def _manual_mod_rows() -> list[dict[str, Any]]:
             "rarity": mod.get("rarity") or rabbit_mod.get("Rarity") or "COMMON",
             "maxRank": mod.get("maxRank"),
             "baseDrain": mod.get("baseDrain"),
-            "modFamily": mod.get("modFamily"),
+            "modFamily": authoritative_mod_family(path, mod.get("modFamily")),
             "modSet": mod_set or None,
             "modSetValues": list(mod.get("modSetValues") or ()),
             "setMaxPieces": shell.get("setPieces") or frame_set.get("maxPieces") or mod.get("setMaxPieces"),
@@ -2950,7 +2967,6 @@ _ARCANE_UNMODELLED_NOTES = {
     _PRIMARY_DEBILITATE: '复合异常达到 10 层且本次命中包含该异常时才可拆分；同一子包内相同基础异常只施加一次，子包按身体命中处理。尚未确认每次攻击的实际回调次数与包内异常的联合分布，单目标不计入评分。',
     '/Lotus/Upgrades/CosmeticEnhancers/Offensive/RadialDamageOnMaxRadiationStackHit': '伤害只溅射给周围其他敌人，单目标解算中不计。',
     '/Lotus/Upgrades/CosmeticEnhancers/Offensive/HeavyCritOnRegularMelee': '普通攻击叠层、重击消耗；解算未建模这段叠层，暂不计算。',
-    '/Lotus/Upgrades/CosmeticEnhancers/Offensive/PermaComboOnFinisher': '只在处决击杀时增加初始连击，解算中没有处决。',
     '/Lotus/Upgrades/CosmeticEnhancers/Offensive/CritDamageForPunctureStatus': '「每 10% 穿刺触发几率」的口径没有可靠来源（WFSim 也未建模），暂不计算。',
     '/Lotus/Upgrades/CosmeticEnhancers/Offensive/BonusDamageNextShotForCurEnergy': '每次施放技能只强化下一发，按持续输出计几乎为零，暂不计算。',
     '/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamagePerAmmoOnReload': '每装填一发的增伤与衰减规则写在脚本里，暂不计算。',
@@ -3128,6 +3144,7 @@ def _utility_catalog_row(row: Mapping[str, Any]) -> dict[str, Any]:
     merged["type"] = "weapon-exilus"
     merged["sourceType"] = "Weapon Exilus"
     merged["maxRank"] = merged.get("maxRank") if merged.get("maxRank") is not None else merged.get("rank", 0)
+    merged["modFamily"] = authoritative_mod_family(path, merged.get("modFamily"))
     return merged
 
 
@@ -3144,6 +3161,7 @@ CATALOG["manualModVariants"] = MANUAL_MOD_VARIANTS
 CATALOG["enemies"] = MANUAL_ENEMIES
 CATALOG["arcanes"] = MANUAL_ARCANES
 CATALOG["utilityMods"] = CATALOG_UTILITY_MODS
+CATALOG["buildOptions"]["utilityMods"] = CATALOG_UTILITY_MODS
 CATALOG["modSets"] = dict(WARFRAME_CATALOG.get("modSets") or {})
 CATALOG["manualCounts"] = {
     "mods": len(MANUAL_MODS),
@@ -3524,9 +3542,36 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
             _report_analysis_progress(progress_token, stage)
 
     try:
+        from wfarsenal import synergy as _synergy_mod
+
+        _an_syn = None
+        if _synergy_mod.has_synergy_links(request, weapon):
+            _an_bm = engine_request.get("benchmarkTarget") if isinstance(engine_request.get("benchmarkTarget"), Mapping) else {}
+            _an_enemy_path = str(_an_bm.get("enemy") or _BENCHMARK_ENEMY_PATH)
+            _an_enemy_rec = MANUAL_ENEMIES_BY_PATH.get(_an_enemy_path)
+            _an_scen = optimizer._requested_scenario(engine_request, str(engine_request.get("metric") or "sustainedDps"))
+            _an_lines, _ = optimizer._wire_lines(normalized_stats)
+            _an_syn = _synergy_mod.resolve_synergy(
+                request,
+                weapon=analysis_record or base_record,
+                warframe_engine=WARFRAME_ENGINE,
+                exports=EXPORTS,
+                external_buff_specs=EXTERNAL_BUFFS,
+                enemy_record=_an_enemy_rec,
+                enemy_path=_an_enemy_path,
+                level=int(_an_bm.get("level") or _BENCHMARK_LEVEL),
+                distance=_an_scen.distance,
+                eximus=bool(_an_bm.get("eximus")),
+                riven={"stats": normalized_stats},
+                riven_effects=tuple(eff for ln in _an_lines for eff in ln.effects),
+                innate_selection=innate_selection,
+                base_combat_state=_an_scen.combat_state,
+            )
+            if _an_syn is not None:
+                engine_request = {**engine_request, "_resolvedSynergy": _an_syn}
         with _interactive_analysis_gate():
             # Transport remaining time is not part of a completed answer's identity.
-            cache_request = {k:v for k,v in engine_request.items() if k != '_searchBudgetSeconds'}
+            cache_request = {k:v for k,v in engine_request.items() if k not in {'_searchBudgetSeconds', '_resolvedSynergy'}}
             result_key = json.dumps({'request':cache_request, 'record':analysis_record,
                 'stance':analysis_stance, 'inputs':ANALYSIS_STATICS_RUNTIME_INPUTS,
                 'cacheVersion':ANALYSIS_STATICS_CACHE_VERSION}, sort_keys=True, ensure_ascii=False)
@@ -3957,12 +4002,21 @@ def _exalted_payload(payload: Mapping[str, Any], weapon: Mapping[str, Any]) -> M
     if exalted_weapons.meta(weapon) is None:
         return payload
     out = dict(payload)
+    wf_link = payload.get("warframeLink") if isinstance(payload.get("warframeLink"), Mapping) else None
+    wf_link_enabled = bool(wf_link and wf_link.get("enabled") is True)
+    if wf_link_enabled and not isinstance(payload.get("exaltedFrame"), Mapping):
+        from wfarsenal.synergy import _normalize_warframe_config
+
+        wf_cfg = _normalize_warframe_config(wf_link)
+        ex_meta = exalted_weapons.meta(weapon) or {}
+        fid = wf_cfg.get("frameId") or wf_cfg.get("id") or wf_cfg.get("path") or ((ex_meta.get("framePaths") or [None])[0])
+        out["exaltedFrame"] = {"frameId": fid, "config": wf_cfg}
     loadout: dict[str, Any] = {"arcanes": [], "aura": None, "headshotIssue": exalted_weapons.headshot_issue(weapon)}
     names = {str(row.get("path")): row.get("nameZh") or row.get("nameEn")
              for key in ("arcanes", "mods") for row in WARFRAME_CATALOG.get(key) or () if isinstance(row, Mapping)}
     if exalted_weapons.locks_headshot_aim(weapon):
         out["headshotChance"] = 0.0
-    link = payload.get("exaltedFrame") if isinstance(payload.get("exaltedFrame"), Mapping) else {}
+    link = out.get("exaltedFrame") if isinstance(out.get("exaltedFrame"), Mapping) else {}
     config = link.get("config") if isinstance(link.get("config"), Mapping) else {}
     arcanes = [row for row in out.get("arcanes") or () if isinstance(row, Mapping)
                and str((MANUAL_ARCANES_BY_PATH.get(str(row.get("path") or "")) or {}).get("slotKind") or "weapon") == "weapon"]
@@ -3974,10 +4028,11 @@ def _exalted_payload(payload: Mapping[str, Any], weapon: Mapping[str, Any]) -> M
         record = optimizer.resolve_record(EXPORTS["arcanes"], path, kind="arcane") if meta else None
         if meta and str(meta.get("slotKind") or "") == "warframe" and optimizer._arcane_matches_weapon(record, weapon):
             rank = row.get("rank") if isinstance(row.get("rank"), int) else meta.get("maxRank") or 0
-            arcanes.append({"path": path, "rank": min(int(rank), int(meta.get("maxRank") or rank))})
+            if not wf_link_enabled:
+                arcanes.append({"path": path, "rank": min(int(rank), int(meta.get("maxRank") or rank))})
             loadout["arcanes"].append({"path": path, "nameZh": names.get(path) or meta.get("nameZh"), "counted": True})
         else:
-            loadout["arcanes"].append({"path": path, "nameZh": names.get(path), "counted": False})
+            loadout["arcanes"].append({"path": path, "nameZh": names.get(path), "counted": path == "/Lotus/Upgrades/CosmeticEnhancers/Defensive/CritChanceOnDamage" and wf_link_enabled})
     out["arcanes"] = arcanes
     buffs = [row for row in out.get("externalBuffs") or () if isinstance(row, Mapping)]
     aura = config.get("aura") if isinstance(config.get("aura"), Mapping) else None
@@ -3986,10 +4041,11 @@ def _exalted_payload(payload: Mapping[str, Any], weapon: Mapping[str, Any]) -> M
     if aura_id:
         spec = EXTERNAL_BUFFS[aura_id]
         rank = aura.get("rank") if isinstance(aura.get("rank"), int) else 5
-        buffs.append({"id": aura_id, "value": spec["base"] * (min(max(rank, 0), 5) + 1) / 6.0})
-        mods = [row for row in (config.get("exilus"), *(config.get("normalMods") or ())) if isinstance(row, Mapping)]
-        if any(str(row.get("path") or row.get("id") or "") == EXTERNAL_BUFFS["coaction-drift"]["mod"] for row in mods):
-            buffs.append({"id": "coaction-drift", "value": EXTERNAL_BUFFS["coaction-drift"]["maximum"]})
+        if not wf_link_enabled:
+            buffs.append({"id": aura_id, "value": spec["base"] * (min(max(rank, 0), 5) + 1) / 6.0})
+            mods = [row for row in (config.get("exilus"), *(config.get("normalMods") or ())) if isinstance(row, Mapping)]
+            if any(str(row.get("path") or row.get("id") or "") == EXTERNAL_BUFFS["coaction-drift"]["mod"] for row in mods):
+                buffs.append({"id": "coaction-drift", "value": EXTERNAL_BUFFS["coaction-drift"]["maximum"]})
         loadout["aura"] = {"path": aura_path, "nameZh": names.get(aura_path), "counted": True, "buff": aura_id}
     elif aura_path:
         loadout["aura"] = {"path": aura_path, "nameZh": names.get(aura_path), "counted": False}
@@ -4162,13 +4218,21 @@ def build_weapon_payload(
     candidates, rejected_mods = optimizer._candidate_mods(
         EXPORTS, selected_weapon, scenario
     )
+    explicit_req_paths = {
+        item.strip()
+        for item in (payload.get("requiredMods") or ())
+        if isinstance(payload.get("requiredMods"), list) and isinstance(item, str) and item.strip()
+    }
     candidates = [
         card
         for card in candidates
         if card.record is None
         or (
             str(card.record.get("path") or "") in MANUAL_MODS_BY_PATH
-            and str(card.record.get("path") or "") not in UTILITY_MOD_PATHS
+            and (
+                str(card.record.get("path") or "") not in UTILITY_MOD_PATHS
+                or str(card.record.get("path") or "") in explicit_req_paths
+            )
         )
     ]
     enemy_path = payload.get("enemy")
@@ -4196,6 +4260,37 @@ def build_weapon_payload(
         payload, steel_path=steel_path
     )
     enemy_enhancements = _external_enemy_enhancements(payload.get("externalBuffs"), enemy_enhancements)
+    from wfarsenal import synergy as _synergy_mod
+
+    build_riven_fx: tuple[Any, ...] = ()
+    if isinstance(payload.get("riven"), Mapping) and isinstance(payload["riven"].get("stats"), list):
+        _rv_lines, _ = optimizer._wire_lines(payload["riven"]["stats"])
+        build_riven_fx = tuple(eff for ln in _rv_lines for eff in ln.effects)
+    build_synergy = _synergy_mod.resolve_synergy(
+        payload,
+        weapon=selected_weapon,
+        warframe_engine=WARFRAME_ENGINE,
+        exports=EXPORTS,
+        external_buff_specs=EXTERNAL_BUFFS,
+        enemy_record=target,
+        enemy_path=enemy_path,
+        level=level,
+        distance=scenario.distance,
+        eximus=bool(enemy_enhancements.get("eximus")),
+        mods=fixed_mods if isinstance(fixed_mods, list) else (payload.get("mods") if isinstance(payload.get("mods"), list) else ()),
+        riven=payload.get("riven") if isinstance(payload.get("riven"), Mapping) else None,
+        riven_effects=build_riven_fx,
+        innate_selection=innate_selection,
+        base_combat_state=scenario.combat_state,
+        forced_procs=payload.get("forcedProcs") if isinstance(payload.get("forcedProcs"), Mapping) else None,
+    )
+    if build_synergy is not None:
+        scenario = replace(scenario, combat_state=dict(build_synergy["combat_state"]))
+        armour_strip = max(armour_strip, float(build_synergy.get("armour_strip_floor") or 0.0))
+        for k_enh, v_enh in (build_synergy.get("aura_enemy_patch") or {}).items():
+            enemy_enhancements[k_enh] = min(1.0, float(enemy_enhancements.get(k_enh) or 0.0) + float(v_enh))
+        if build_synergy.get("panel_priming_stacks"):
+            enemy_enhancements = {**enemy_enhancements, "primingStacks": dict(build_synergy["panel_priming_stacks"])}
     target_context = {
         "target": target,
         "level": level,
@@ -4317,6 +4412,18 @@ def build_weapon_payload(
                 if item.get('uptime') is not None:
                     arcane_row['uptime'] = _manual_number(item['uptime'], 'arcanes.uptime', low=0, high=1)
                 validated.append(arcane_row)
+    if optimize_with_arcanes and build_synergy is not None:
+        wf_synergy_active = bool(build_synergy.get("warframe_result"))
+        validated = _synergy_mod.apply_companion_arcane_priming(
+            _synergy_mod.merge_warframe_arcanes(
+                validated,
+                build_synergy.get("panel_warframe_arcanes") or (),
+                MANUAL_ARCANES_BY_PATH,
+                warframe_link_enabled=wf_synergy_active,
+            ),
+            cold_procs_per_sec=float(build_synergy.get("companion_cold_procs_per_sec") or 0.0),
+            heat_procs_per_sec=float(build_synergy.get("companion_heat_procs_per_sec") or 0.0),
+        )
     def arcane_card_for(rows: list[dict[str, Any]]) -> tuple[Any, list[str]]:
         if not rows:
             return None, []
@@ -4325,8 +4432,46 @@ def build_weapon_payload(
             card, _states, unsupported_rows, _normalized = _prepare_manual_arcanes(
                 rows, selected_weapon, event_stats=None,
                 headshot_chance=float(payload.get("headshotChance") or 0.0),
-                combat_state=payload.get("combatState") if isinstance(payload.get("combatState"), Mapping) else {},
+                combat_state=scenario.combat_state,
             )
+            if card is not None and build_synergy is not None:
+                replay_wf_arcs = build_synergy.get("replay_warframe_arcanes") or ()
+                c_ext = build_synergy.get("combat_extras") or {}
+                if replay_wf_arcs or c_ext.get("companionAssister"):
+                    user_weapon_rows = [r for r in rows if str((MANUAL_ARCANES_BY_PATH.get(r["path"]) or {}).get("slotKind") or "weapon") == "weapon"]
+                    clean_weapon_rows = [
+                        (
+                            {"path": r["path"], "rank": r["rank"]}
+                            if c_ext.get("companionAssister")
+                            and r["path"] in {_synergy_mod.PRIMARY_FROSTBITE_PATH, _synergy_mod.CASCADIA_FLARE_PATH}
+                            and not any(
+                                isinstance(u, Mapping) and str(u.get("path") or "").strip() == r["path"] and ("stacks" in u or "uptime" in u)
+                                for u in (payload.get("arcanes") or ())
+                            )
+                            else dict(r)
+                        )
+                        for r in user_weapon_rows
+                    ]
+                    wf_synergy_active = bool(build_synergy.get("warframe_result"))
+                    manual_wf_rows = [] if wf_synergy_active else [
+                        dict(u)
+                        for u in (payload.get("arcanes") or ())
+                        if isinstance(u, Mapping)
+                        and str(u.get("path") or "").strip() in MANUAL_ARCANES_BY_PATH
+                        and str(MANUAL_ARCANES_BY_PATH[str(u.get("path") or "").strip()].get("slotKind") or "weapon") == "warframe"
+                    ]
+                    replay_rows = _synergy_mod.merge_warframe_arcanes(
+                        [*clean_weapon_rows, *manual_wf_rows],
+                        replay_wf_arcs,
+                        MANUAL_ARCANES_BY_PATH,
+                        warframe_link_enabled=wf_synergy_active,
+                    )
+                    replay_ev = tuple(
+                        (optimizer.resolve_record(EXPORTS["arcanes"], r["path"], kind="arcane"), int(r.get("rank") or 0), dict(r))
+                        for r in replay_rows
+                        if optimizer._arcane_matches_weapon(optimizer.resolve_record(EXPORTS["arcanes"], r["path"], kind="arcane"), selected_weapon)
+                    )
+                    card = replace(card, event_arcanes=replay_ev)
             return card, list(unsupported_rows)
         except (SimulationError, TypeError, ValueError):
             return False, ["optimize-arcanes-merge-failed-using-incarnon-only"]
@@ -4337,10 +4482,24 @@ def build_weapon_payload(
         external = ModEffectList([*(external or ()), *sentinel_effects])
     if exalted_weapons.weapon_effects(selected_weapon):
         external = ModEffectList([*(external or ()), *exalted_weapons.weapon_effects(selected_weapon)])
+    ext_set_tuples: tuple[tuple[str, str], ...] = ()
+    ext_combat_json = ""
+    if build_synergy is not None:
+        if build_synergy.get("effects"):
+            external = ModEffectList([*(external or ()), *build_synergy["effects"]])
+        ext_set_tuples = tuple(
+            (str(x.get("path") or ""), str(x.get("setAlias") or x.get("setId") or ""))
+            for x in (build_synergy.get("external_set_mods") or ())
+            if isinstance(x, Mapping) and x.get("path") and (x.get("setAlias") or x.get("setId"))
+        )
+        if build_synergy.get("combat_extras"):
+            ext_combat_json = json.dumps(build_synergy["combat_extras"], sort_keys=True)
     external_card = optimizer._Card(
-        key="__external__", record=None, rank=0, effects=tuple(external),
+        key="__external__", record=None, rank=0, effects=tuple(external or ()),
         skipped=(), drain=0, polarity=None,
-    ) if external else None
+        external_set_mods=ext_set_tuples,
+        combat_extras_json=ext_combat_json,
+    ) if (external or ext_set_tuples or ext_combat_json) else None
 
     def compose_passives(inc_card: Any, arc_card: Any) -> Any:
         passives = optimizer._merge_passives(inc_card, arc_card) if arc_card else inc_card
@@ -4379,10 +4538,63 @@ def build_weapon_payload(
     forced = payload.get('forcedProcs') or {}
     if not isinstance(forced, Mapping):
         raise SimulationError('forcedProcs must be an object')
-    benchmark_context['forcedProcs'] = {str(k): _manual_number(v, 'forcedProcs', low=0) for k,v in forced.items()}
+    merged_forced = {str(k): _manual_number(v, 'forcedProcs', low=0) for k,v in forced.items()}
+    if build_synergy is not None and build_synergy.get("forced_procs"):
+        merged_forced = {**merged_forced, **build_synergy["forced_procs"]}
+    benchmark_context['forcedProcs'] = merged_forced
+    equip_path = str(selected_weapon.get("path") or "").strip() or None
+    locked_exilus = None
+    locked_exilus_card = None
+    locked_exilus_drain = 0
+    locked_exilus_family = ""
+    if payload.get("exilus") is not None:
+        special_raw = payload["exilus"]
+        if not isinstance(special_raw, Mapping):
+            raise SimulationError("exilus must be an object when supplied")
+        sp_path = special_raw.get("path") or special_raw.get("query")
+        meta = UTILITY_MODS_BY_PATH.get(sp_path) if isinstance(sp_path, str) else None
+        if not meta:
+            raise SimulationError("exilus is not a supported utility MOD")
+        if _utility_matches_weapon(meta, selected_weapon, catalog_weapon):
+            sp_max_rank = int(meta.get("rank") if meta.get("rank") is not None else meta.get("maxRank") or 0)
+            sp_rank = _manual_int(special_raw.get("rank", sp_max_rank), "exilus.rank", high=sp_max_rank)
+            sp_raw_drain = int(meta.get("drain") or 0) - sp_max_rank + sp_rank
+            sp_slot_pol = _special_slot_polarities(selected_weapon, catalog_weapon["weaponType"])["exilus"]
+            sp_drain, sp_rel = _polarity_adjusted_drain(sp_raw_drain, meta.get("polarity"), sp_slot_pol)
+            locked_exilus = {
+                **meta,
+                "rank": sp_rank,
+                "rawDrain": sp_raw_drain,
+                "drain": sp_drain,
+                "slotPolarity": sp_slot_pol,
+                "polarityRelation": sp_rel,
+            }
+            locked_exilus_card = _utility_card_at_rank(locked_exilus, scenario, sp_rank)
+            locked_exilus_drain = (
+                (
+                    math.ceil(sp_raw_drain / 2)
+                    if locked_exilus.get("polarity") and locked_exilus.get("polarity") != "AP_UNIVERSAL"
+                    else sp_raw_drain
+                )
+                if fixed_mods is None
+                else int(locked_exilus.get("drain") or 0)
+            )
+            locked_exilus_family = _mod_exclusive_family(locked_exilus, equip_path=equip_path)
+            if fixed_mods is None and locked_exilus_family:
+                for req_p in required_mod_paths:
+                    if _mod_exclusive_family(MANUAL_MODS_BY_PATH[req_p], equip_path=equip_path) == locked_exilus_family:
+                        raise SimulationError(
+                            f"requiredMods MOD {req_p} conflicts with equipped exilus MOD {sp_path} (same modFamily)"
+                        )
+                for cand in candidates:
+                    if cand.record is not None and _mod_exclusive_family(cand.record, equip_path=equip_path) == locked_exilus_family:
+                        if cand.key not in forbidden_keys:
+                            forbidden_keys.append(cand.key)
+    special_cards_tuple = (locked_exilus_card,) if locked_exilus_card is not None else ()
+
     fixed_cards = None
     if fixed_mods is not None:
-        normalized = _manual_normalize_mods(fixed_mods, slot_count)
+        normalized = _manual_normalize_mods(fixed_mods, slot_count, equip_path=equip_path)
         if len({row.get('slot',i) for i,row in enumerate(normalized)}) != len(normalized):
             raise SimulationError('mods contain duplicate slots')
         ordered = sorted(enumerate(normalized),key=lambda pair:pair[1].get('slot',pair[0]))
@@ -4392,11 +4604,15 @@ def build_weapon_payload(
             record = optimizer.resolve_record(EXPORTS['mods'],row['path'],kind='mod')
             if not optimizer._mod_matches_weapon(record, selected_weapon):
                 raise SimulationError('equipped MOD is incompatible with this weapon: '+row['path'])
+            if locked_exilus_family and _mod_exclusive_family(record, equip_path=equip_path) == locked_exilus_family:
+                raise SimulationError(
+                    f"equipped MOD {row['path']} conflicts with equipped exilus MOD {locked_exilus['path']} (same modFamily)"
+                )
             fixed_cards.append(optimizer._mod_card(record,scenario,allow_empty=True,
                 required=row['path'] in required_mod_paths,
                 rank=row['rank'],set_shell=shells.get(optimizer._set_key(record.get('modSet')))))
         violation = optimizer.validate_build(fixed_cards,None,slot_count=slot_count,
-            capacity_limit=capacity_limit,required_mod_keys=required_keys,forbidden_mod_keys=forbidden_keys)
+            capacity_limit=max(0, capacity_limit - locked_exilus_drain),required_mod_keys=required_keys,forbidden_mod_keys=forbidden_keys)
         if violation:
             raise SimulationError('equipped build is invalid: '+violation)
     search_metric = "killsPerMinute" if dual_route else objective
@@ -4406,6 +4622,8 @@ def build_weapon_payload(
         return optimizer._evaluate(selected_weapon, fixed_cards, None, scenario=scenario,
                                    metric=search_metric, passives=passives,
                                    slot_limit=slot_count, capacity_limit=capacity_limit,
+                                   special_cards=special_cards_tuple,
+                                   special_capacity_cost=locked_exilus_drain,
                                    target_context=search_context)
 
     def search(passives: Any, seed: Any = None, search_profile: str | None = None, **options: Any) -> Any:
@@ -4422,6 +4640,8 @@ def build_weapon_payload(
             forbidden_mod_keys=forbidden_keys,
             min_fill=min_fill,
             max_fill=max_fill,
+            special_cards=special_cards_tuple,
+            special_capacity_cost=locked_exilus_drain,
         )
         found = optimizer.optimize_for_element(
             selected_weapon,
@@ -4442,7 +4662,7 @@ def build_weapon_payload(
     def screen(cards: Any, passives_list: Any) -> list[float | None]:
         return loadout_search.screen_scores(
             selected_weapon, cards, None if fixed_cards is not None else equipped_riven, passives_list,
-            scenario=scenario, metric=search_metric, capacity_limit=capacity_limit,
+            scenario=scenario, metric=search_metric, capacity_limit=max(0, capacity_limit - locked_exilus_drain),
             slot_limit=slot_count, target_context=search_context)
 
     auto_report: dict[str, Any] = {}
@@ -4488,18 +4708,12 @@ def build_weapon_payload(
                 f"optimizer returned no usable MOD build for fire mode {selected_fire_mode} metric {metric}"
             )
         if fixed_cards is not None:
-            selected_exilus = None
-            if payload.get('exilus'):
-                special = payload['exilus']
-                meta = UTILITY_MODS_BY_PATH.get(special.get('path'))
-                if not meta:
-                    raise SimulationError('exilus is not a supported utility MOD')
-                selected_exilus = {**meta,'rank':special.get('rank',meta.get('maxRank',0))}
-                card = _utility_card_at_rank(selected_exilus,scenario,selected_exilus['rank'])
+            selected_exilus = locked_exilus
+            if selected_exilus is not None:
                 evaluation = optimizer._evaluate(selected_weapon,fixed_cards,None,scenario=scenario,
                     metric='killsPerMinute' if dual_route else objective,passives=arcane_passives,
                     slot_limit=slot_count,capacity_limit=capacity_limit,
-                    special_cards=(card,) if card else (), special_capacity_cost=int(selected_exilus.get('drain') or 0),
+                    special_cards=special_cards_tuple, special_capacity_cost=locked_exilus_drain,
                     target_context=benchmark_context if dual_route else None)
         else:
             evaluation = optimizer.refine_final_build(
@@ -4509,17 +4723,69 @@ def build_weapon_payload(
                 required_damage_type=required_damage_type, target_context=search_context,
                 profile=profile, required_mod_keys=required_keys, forbidden_mod_keys=forbidden_keys,
                 min_fill=min_fill, max_fill=max_fill,
+                special_cards=special_cards_tuple, special_capacity_cost=locked_exilus_drain,
             )
-            evaluation, selected_exilus = _auto_exilus(
-                selected_weapon,
-                catalog_weapon,
-                evaluation,
-                scenario=scenario,
-                metric="killsPerMinute" if dual_route else objective,
-                passives=arcane_passives,
-                target_context=benchmark_context if dual_route else None,
-                capacity_limit=capacity_limit,
-            )
+            # Two-pass Hunter Synergy check: if optimized Primary weapon crit/status activates Tenacious Bond, re-evaluate!
+            if (
+                build_synergy is not None
+                and str(selected_weapon.get("slot") or "") == "primary"
+                and isinstance(build_synergy.get("companion_result"), Mapping)
+                and ((build_synergy["companion_result"].get("companion") or {}).get("category") == "beast")
+            ):
+                post_mods = [{"path": str((c.record or {}).get("path") or ""), "rank": c.rank} for c in evaluation.cards if c.record]
+                post_syn = _synergy_mod.resolve_synergy(
+                    {**payload, "companionLink": {**dict(payload["companionLink"]), "primaryWeaponStats": {"critChance": evaluation.stats.crit_chance, "statusChance": evaluation.stats.status_chance}}},
+                    weapon=selected_weapon,
+                    warframe_engine=WARFRAME_ENGINE,
+                    exports=EXPORTS,
+                    external_buff_specs=EXTERNAL_BUFFS,
+                    enemy_record=target,
+                    enemy_path=enemy_path,
+                    level=level,
+                    distance=scenario.distance,
+                    eximus=bool(enemy_enhancements.get("eximus")),
+                    mods=post_mods,
+                    riven=payload.get("riven") if isinstance(payload.get("riven"), Mapping) else None,
+                    riven_effects=build_riven_fx,
+                    innate_selection=innate_selection,
+                    base_combat_state=scenario.combat_state,
+                    forced_procs=merged_forced,
+                )
+                if post_syn is not None and tuple(post_syn.get("effects") or ()) != tuple(build_synergy.get("effects") or ()):
+                    build_synergy = post_syn
+                    ext_base = _external_buff_effects(payload.get("externalBuffs"), selected_weapon)
+                    if sentinel_effects:
+                        ext_base = ModEffectList([*(ext_base or ()), *sentinel_effects])
+                    if exalted_weapons.weapon_effects(selected_weapon):
+                        ext_base = ModEffectList([*(ext_base or ()), *exalted_weapons.weapon_effects(selected_weapon)])
+                    ext_base = ModEffectList([*(ext_base or ()), *build_synergy["effects"]])
+                    external_card = replace(external_card, effects=tuple(ext_base)) if external_card is not None else optimizer._Card(
+                        key="__external__", record=None, rank=0, effects=tuple(ext_base), skipped=(), drain=0, polarity=None,
+                        external_set_mods=ext_set_tuples, combat_extras_json=ext_combat_json,
+                    )
+                    arcane_passives = compose_passives(incarnon_card, arcane_card)
+                    evaluation = optimizer.refine_final_build(
+                        selected_weapon, candidates, equipped_riven, evaluation,
+                        scenario=scenario, metric=search_metric, passives=arcane_passives,
+                        slot_count=slot_count, capacity_limit=capacity_limit,
+                        required_damage_type=required_damage_type, target_context=search_context,
+                        profile=profile, required_mod_keys=required_keys, forbidden_mod_keys=forbidden_keys,
+                        min_fill=min_fill, max_fill=max_fill,
+                        special_cards=special_cards_tuple, special_capacity_cost=locked_exilus_drain,
+                    )
+            if locked_exilus is not None:
+                selected_exilus = locked_exilus
+            else:
+                evaluation, selected_exilus = _auto_exilus(
+                    selected_weapon,
+                    catalog_weapon,
+                    evaluation,
+                    scenario=scenario,
+                    metric="killsPerMinute" if dual_route else objective,
+                    passives=arcane_passives,
+                    target_context=benchmark_context if dual_route else None,
+                    capacity_limit=capacity_limit,
+                )
         build_archetype = "hybrid"
         if not evaluation.cards and (min_fill is None or min_fill > 0):
             raise SimulationError(
@@ -4658,6 +4924,8 @@ def build_weapon_payload(
         "exalted": _exalted_result(selected_weapon, exalted_context, evaluation.stats.average_hit,
                                    payload.get("_exaltedLoadout")),
     }
+    if build_synergy is not None:
+        result["synergySummary"] = build_synergy["summary"]
     if return_engine_context:
         # 最优紫卡求解路由复用：baseline evaluation + 求解器需要的全部语境。
         engine_context = {
@@ -4784,6 +5052,8 @@ def recommend_riven_payload(payload: Any) -> dict[str, Any]:
     recommendation['basis'] = 'equipped-mod-pool' if payload.get('mods') else 'automatic-build'
     recommendation['triggerPolicy'] = 'assumed_max'
     recommendation['arcanes'] = payload.get('arcanes') or []
+    if build_result.get('synergySummary') is not None:
+        recommendation['synergySummary'] = build_result['synergySummary']
     recommendation["skipped"] = [
         f"recommend-budget: {int(budget)} 秒 anytime 预算（粗排 → beam 组合 → 精排，时间耗尽返回当前最优）",
         f"recommend-candidates: {len(positive_candidates)} 正面 / {len(negative_candidates)} 负面词条（理论满数值口径）",
@@ -4796,7 +5066,11 @@ MANUAL_ENEMIES_BY_PATH = {row["path"]: row for row in MANUAL_ENEMIES}
 _CATALOG_EXCLUDED_MODS = {m['path']: m['catalogExclusion']
                           for m in EXPORTS['mods'] if m.get('catalogExclusion')}
 
-MANUAL_MODS_BY_PATH = {row["path"]: row for row in MANUAL_MODS}
+# Weapon Exilus mods in _ALL_MANUAL_MODS (e.g. Galvanized Acceleration, Fatal
+# Acceleration, Vigilante Supplies, Sinister Reach) are also valid in normal
+# weapon slots in Warframe; include _ALL_MANUAL_MODS in MANUAL_MODS_BY_PATH
+# while keeping CATALOG["manualMods"] disjoint from CATALOG["utilityMods"].
+MANUAL_MODS_BY_PATH = {row["path"]: row for row in _ALL_MANUAL_MODS}
 for alias, canonical in MANUAL_MOD_ALIASES.items():
     if canonical in MANUAL_MODS_BY_PATH:
         MANUAL_MODS_BY_PATH.setdefault(alias, MANUAL_MODS_BY_PATH[canonical])
@@ -4804,7 +5078,6 @@ for alias, canonical in MANUAL_MOD_ALIASES.items():
 # alias-to-canonical mapping above so validation matches what the kernel sims.
 MANUAL_MODS_BY_PATH.update({
     row["path"]: row for row in MANUAL_MOD_VARIANTS
-    if row["path"] not in UTILITY_MOD_PATHS
 })
 UTILITY_MODS_BY_PATH = {row["path"]: row for row in CATALOG_UTILITY_MODS}
 # Restoration metadata is distinct from aliases: direct API inputs still reject
@@ -4916,11 +5189,11 @@ EXTERNAL_BUFFS: dict[str, dict[str, Any]] = {
                            effects=[("fire-rate", 1.0, _GUNS, "枪械射速"), ("fire-rate", 2.0 / 3.0, _MELEE, "近战攻速")],
                            detail="急速储能池：射速 +30%、近战攻速 +20%，与射速 / 攻速 Mod 相加。"),
     "fireball-frenzy": _augment("Ember", "狂热火球", "Ember/FireBallAugmentCard", "Ember/Abilities/FireBallAbility", base=1.0,
-                                effects=[("element:DT_FIRE", 1.0, None, "附加火焰")], detail="按基础伤害的百分比附加，与元素 Mod 相加并参与复合。"),
+                                effects=[("post-element:DT_FIRE", 1.0, None, "附加火焰")], detail="按基础伤害的百分比附加独立火焰伤害，不与元素 Mod 复合。"),
     "freeze-force": _augment("Frost", "寒冰之力", "Frost/IcicleAugmentCard", "Frost/Abilities/IcicleAbility", base=1.0,
-                             effects=[("element:DT_FREEZE", 1.0, None, "附加冰冻")], detail="按基础伤害的百分比附加，与元素 Mod 相加并参与复合。"),
+                             effects=[("post-element:DT_FREEZE", 1.0, None, "附加冰冻")], detail="按基础伤害的百分比附加独立冰冻伤害，不与元素 Mod 复合。"),
     "shock-trooper": _augment("Volt", "电击奇兵", "Volt/ShockAugmentCard", "Volt/Abilities/ShockAbility", base=1.0,
-                              effects=[("element:DT_ELECTRICITY", 1.0, None, "附加电击")], detail="按基础伤害的百分比附加，与元素 Mod 相加并参与复合。"),
+                              effects=[("post-element:DT_ELECTRICITY", 1.0, None, "附加电击")], detail="按基础伤害的百分比附加独立电击伤害，不与元素 Mod 复合。"),
     "smite-infusion": _augment("Oberon", "惩击洗礼", "Paladin/SmiteAugmentCard", "Paladin/Abilities/SmiteAbility", base=1.0,
                                effects=[("element:DT_RADIATION", 1.0, None, "附加辐射")], detail="按基础伤害的百分比附加辐射，与元素 Mod 相加。"),
     "venom-dose": _augment("Saryn", "猛毒附加", "Saryn/PoisonAugmentCard", "Saryn/Abilities/PoisonAbility", base=1.0,
@@ -5135,6 +5408,9 @@ def _external_buff_effects(entries: Any, weapon: Mapping[str, Any] | None = None
                 elif kind.startswith("element:"):
                     effects.append(ModEffect(upgrade_type="WEAPON_PERCENT_BASE_DAMAGE_ADDED", operation="STACKING_MULTIPLY",
                                              value=amount, damage_type=kind.split(":", 1)[1], valid_type=valid, source_path=source))
+                elif kind.startswith("post-element:"):
+                    effects.append(ModEffect(upgrade_type="WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE", operation="STACKING_MULTIPLY",
+                                             value=amount, damage_type=kind.split(":", 1)[1], valid_type=valid, source_path=source))
                 elif kind.startswith("extra-hit:"):
                     dtype = kind.split(":", 1)[1]
                     if dtype == "select":
@@ -5168,6 +5444,107 @@ def sentinel_evaluate_payload(payload: Any) -> dict[str, Any]:
     if not isinstance(payload, Mapping):
         raise SimulationError("request body must be a JSON object")
     return sentinel_body.evaluate(payload.get("sentinel", payload), reactor=payload.get("reactor", True) is not False)
+
+
+def companion_catalog_payload() -> dict[str, Any]:
+    from wfarsenal import companion_loadout
+
+    base = companion_loadout.catalog()
+    by_path: dict[str, dict[str, Any]] = {}
+    ordered_paths: list[str] = []
+    for row in (CATALOG.get("weapons") or ()):
+        if isinstance(row, Mapping) and str(row.get("slot") or "") == "companion":
+            p = str(row.get("path") or "")
+            if p:
+                by_path[p] = dict(row)
+                ordered_paths.append(p)
+    for extra in (base.get("companionWeapons") or ()):
+        if not isinstance(extra, Mapping):
+            continue
+        p = str(extra.get("path") or "")
+        if not p:
+            continue
+        if p in by_path:
+            merged = dict(by_path[p])
+            for k, v in extra.items():
+                if v is not None and (k not in merged or merged[k] is None or k in {"disposition", "legacyDisposition", "rivenType", "isVirtualMoaMelee", "portraitAsset"}):
+                    merged[k] = v
+            by_path[p] = merged
+        else:
+            by_path[p] = dict(extra)
+            ordered_paths.append(p)
+    companion_weapons = [by_path[p] for p in ordered_paths]
+    return {
+        **base,
+        "companionWeapons": companion_weapons,
+        "weapons": companion_weapons,
+    }
+
+
+def _resolve_companion_context_panels(
+    payload: Mapping[str, Any],
+) -> tuple[Mapping[str, Any] | None, Mapping[str, Any] | None]:
+    from wfarsenal import synergy as _synergy_mod
+
+    warframe_panel: Mapping[str, Any] | None = None
+    if isinstance(payload.get("warframePanel"), Mapping):
+        warframe_panel = payload["warframePanel"]
+    elif isinstance(payload.get("warframeLink"), Mapping):
+        wfl = payload["warframeLink"]
+        if wfl.get("enabled") is not False and (wfl.get("config") or wfl.get("frameId") or wfl.get("id") or wfl.get("path")):
+            wf_cfg = _synergy_mod._normalize_warframe_config(wfl)
+            wf_res = WARFRAME_ENGINE.calculate(wf_cfg)
+            warframe_panel = wf_res["weaponBridge"]["panel"]
+
+    primary_stats: Mapping[str, Any] | None = None
+    if isinstance(payload.get("primaryWeaponStats"), Mapping):
+        primary_stats = payload["primaryWeaponStats"]
+    elif isinstance(payload.get("primaryWeapon"), Mapping):
+        pw = payload["primaryWeapon"]
+        if isinstance(pw.get("weapon"), str) and pw["weapon"].strip() in CATALOG_WEAPONS_BY_PATH:
+            pw_sim = simulate_manual_payload({**dict(pw), "damageModel": "panel"})
+            mstats = pw_sim.get("moddedStats") or {}
+            primary_stats = {
+                "critChance": float(mstats.get("critChance") or mstats.get("crit_chance") or 0.0),
+                "statusChance": float(mstats.get("statusChance") or mstats.get("status_chance") or 0.0),
+            }
+    return warframe_panel, primary_stats
+
+
+def companion_evaluate_payload(payload: Any) -> dict[str, Any]:
+    from wfarsenal import companion_loadout
+    from wfarsenal import synergy as _synergy_mod
+
+    if not isinstance(payload, Mapping):
+        raise SimulationError("request body must be a JSON object")
+
+    body_cfg, weapon_cfg = _synergy_mod._normalize_companion_configs(payload)
+    warframe_panel, primary_stats = _resolve_companion_context_panels(payload)
+    target_cfg = payload.get("target") if isinstance(payload.get("target"), Mapping) else None
+
+    return companion_loadout.evaluate_companion(
+        body_cfg,
+        weapon_cfg,
+        warframe_panel=warframe_panel,
+        primary_weapon_stats=primary_stats,
+        target_config=target_cfg,
+        exports=EXPORTS,
+    )
+
+
+def companion_optimize_weapon_payload(payload: Any) -> dict[str, Any]:
+    from wfarsenal import companion_loadout
+
+    if not isinstance(payload, Mapping):
+        raise SimulationError("request body must be a JSON object")
+
+    warframe_panel, primary_stats = _resolve_companion_context_panels(payload)
+    merged: dict[str, Any] = dict(payload)
+    if warframe_panel is not None and "warframePanel" not in merged:
+        merged["warframePanel"] = warframe_panel
+    if primary_stats is not None and "primaryWeaponStats" not in merged:
+        merged["primaryWeaponStats"] = primary_stats
+    return companion_loadout.optimize_companion_weapon(merged, exports=EXPORTS)
 
 
 def _external_enemy_enhancements(entries: Any, enhancements: Mapping[str, Any]) -> dict[str, Any]:
@@ -5619,7 +5996,7 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
         slot_polarities = raw_slot_polarities
     else:
         slot_polarities = None
-    mods = _manual_normalize_mods(raw_mods, slot_count)
+    mods = _manual_normalize_mods(raw_mods, slot_count, equip_path=weapon_path.strip())
     level = _manual_int(payload.get("level", 160), "level")
     armour_strip = _manual_number(payload.get("armourStrip", 0.0), "armourStrip", low=0.0, high=1.0)
     elemental_strip = _manual_number(payload.get("elementalArmourStrip", 0.0), "elementalArmourStrip", low=0.0, high=1.0)
@@ -5678,6 +6055,15 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
             # 家族的「旋风」）。这类卡基本不影响伤害解算：按「不计入」降级
             # 处理并在诊断里注明，而不是让整个解算失败。
             exilus_incompatible = True
+        else:
+            exilus_family = _mod_exclusive_family(utility, equip_path=weapon_path.strip())
+            if exilus_family:
+                for m_entry in mods:
+                    m_meta = MANUAL_MODS_BY_PATH.get(m_entry["path"])
+                    if m_meta and _mod_exclusive_family(m_meta, equip_path=weapon_path.strip()) == exilus_family:
+                        raise SimulationError(
+                            f"exilus MOD {exilus_path} 与已装备普通槽 MOD {m_entry['path']} 属于同一 MOD 家族，一张配装只能携带一张"
+                        )
         max_rank = int(utility.get("rank") if utility.get("rank") is not None else utility.get("maxRank") or 0)
         exilus_rank = _manual_int(exilus_raw.get("rank", max_rank), "exilus.rank", high=max_rank)
         raw_drain = int(utility.get("drain") or 0) - max_rank + exilus_rank
@@ -5835,7 +6221,71 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
     if defense_snapshot is not None:
         common["enemy_override"] = defense_snapshot
 
-    def build_passives(event_stats: Mapping[str, Any] | None, skip_riven: bool = False):
+    from wfarsenal import synergy as _synergy_mod
+
+    manual_riven_fx: tuple[Any, ...] = ()
+    if isinstance(payload.get("riven"), Mapping) and isinstance(payload["riven"].get("stats"), list):
+        manual_riven_fx = tuple(optimizer.synthetic_riven_effects(payload["riven"]["stats"]))
+    syn = _synergy_mod.resolve_synergy(
+        payload,
+        weapon=selected_weapon,
+        warframe_engine=WARFRAME_ENGINE,
+        exports=EXPORTS,
+        external_buff_specs=EXTERNAL_BUFFS,
+        enemy_record=defense_snapshot or enemy,
+        enemy_path=enemy_path,
+        level=level,
+        distance=scenario.distance,
+        eximus=bool(enemy_enhancements.get("eximus")),
+        mods=kernel_mods,
+        riven=payload.get("riven") if isinstance(payload.get("riven"), Mapping) else None,
+        riven_effects=manual_riven_fx,
+        innate_selection=innate_selection,
+        base_combat_state=scenario.combat_state,
+        forced_procs=forced,
+    )
+    panel_validated_arcanes = validated_arcanes
+    replay_validated_arcanes = validated_arcanes
+    replay_enemy_enhancements = enemy_enhancements
+    combat_extras: dict[str, Any] = {}
+    if syn is not None:
+        scenario = replace(scenario, combat_state=dict(syn["combat_state"]))
+        common["scenario"] = scenario
+        armour_strip = max(armour_strip, float(syn.get("armour_strip_floor") or 0.0))
+        common["armour_strip"] = armour_strip
+        enemy_enhancements = dict(enemy_enhancements)
+        for k_enh, v_enh in (syn.get("aura_enemy_patch") or {}).items():
+            enemy_enhancements[k_enh] = min(1.0, float(enemy_enhancements.get(k_enh) or 0.0) + float(v_enh))
+        replay_enemy_enhancements = dict(enemy_enhancements)
+        if syn.get("panel_priming_stacks"):
+            enemy_enhancements = {**enemy_enhancements, "primingStacks": dict(syn["panel_priming_stacks"])}
+            if not (syn.get("combat_extras") or {}).get("companionAssister"):
+                replay_enemy_enhancements = dict(enemy_enhancements)
+        common["enemy_enhancements"] = enemy_enhancements
+        forced = dict(syn["forced_procs"])
+        common["forced_procs"] = forced
+        if syn.get("external_set_mods"):
+            common["external_set_mods"] = syn["external_set_mods"]
+        combat_extras = dict(syn.get("combat_extras") or {})
+        wf_synergy_active = bool(syn.get("warframe_result"))
+        panel_validated_arcanes = _synergy_mod.apply_companion_arcane_priming(
+            _synergy_mod.merge_warframe_arcanes(
+                validated_arcanes,
+                syn.get("panel_warframe_arcanes") or (),
+                MANUAL_ARCANES_BY_PATH,
+                warframe_link_enabled=wf_synergy_active,
+            ),
+            cold_procs_per_sec=float(syn.get("companion_cold_procs_per_sec") or 0.0),
+            heat_procs_per_sec=float(syn.get("companion_heat_procs_per_sec") or 0.0),
+        )
+        replay_validated_arcanes = _synergy_mod.merge_warframe_arcanes(
+            validated_arcanes,
+            syn.get("replay_warframe_arcanes") or (),
+            MANUAL_ARCANES_BY_PATH,
+            warframe_link_enabled=wf_synergy_active,
+        )
+
+    def build_passives(event_stats: Mapping[str, Any] | None, skip_riven: bool = False, override_synergy_effects: Any = None):
         needs = any(
             "triggerRate" not in item
             and "stacks" not in item
@@ -5843,14 +6293,14 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
             and _manual_arcane_trigger_kind(
                 optimizer.resolve_record(EXPORTS["arcanes"], item["path"], kind="arcane")
             )
-            for item in validated_arcanes
+            for item in panel_validated_arcanes
         )
         resolved_event_stats = event_stats
         if needs and resolved_event_stats is None:
             with _engine_lock():
                 resolved_event_stats = simulate(**common, hit_location="body")["moddedStats"]
         arcane_card, states, arc_unsupported, normalized = _prepare_manual_arcanes(
-            validated_arcanes,
+            panel_validated_arcanes,
             weapon_record,
             event_stats=resolved_event_stats,
             headshot_chance=headshot_chance,
@@ -5863,7 +6313,7 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
             riven_effects = optimizer.synthetic_riven_effects(riven_stats["stats"])
             passives = ModEffectList([*passives, *riven_effects], skipped=[*list(getattr(passives, "skipped", ())), *list(riven_effects.skipped)])
         buffs = payload.get("externalBuffs")
-        if isinstance(buffs, list) and any(item["path"] == _CREPUSCULAR_PATH for item in validated_arcanes):
+        if isinstance(buffs, list) and any(item["path"] == _CREPUSCULAR_PATH for item in panel_validated_arcanes):
             # Equipped in a frame slot already: the buff row would count it twice.
             buffs = [b for b in buffs if not (isinstance(b, Mapping) and b.get("id") == "arcane-crepuscular")]
         external = _external_buff_effects(buffs, weapon_record)
@@ -5872,6 +6322,9 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
             external = ModEffectList([*(external or ()), *sentinel_effects])
         if exalted_weapons.weapon_effects(weapon_record):
             external = ModEffectList([*(external or ()), *exalted_weapons.weapon_effects(weapon_record)])
+        syn_fx = override_synergy_effects if override_synergy_effects is not None else (syn.get("effects") if syn is not None else None)
+        if syn_fx:
+            external = ModEffectList([*(external or ()), *syn_fx])
         if external is not None:
             passives = ModEffectList([*passives, *external], skipped=list(getattr(passives, "skipped", ())))
         return {
@@ -5905,7 +6358,12 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
         "damage_model": damage_model,
         "metric": metric,
         "headshot_chance": headshot_chance,
-        "validated_arcanes": validated_arcanes,
+        "validated_arcanes": panel_validated_arcanes,
+        "replay_validated_arcanes": replay_validated_arcanes,
+        "replay_enemy_enhancements": replay_enemy_enhancements,
+        "combat_extras": combat_extras,
+        "synergy": syn,
+        "selected_weapon": selected_weapon,
         "build_passives": build_passives,
         "raw_mods": raw_mods,
         "slot_count": slot_count,
@@ -6091,24 +6549,27 @@ def _kill_timeline(
     }
 
 
-def _mod_exclusive_family(row: Mapping[str, Any]) -> str:
-    """互斥家族键：modFamily + 武器兼容类别。镀层/普通/Prime 同名卡共享
-    modFamily 且兼容同一武器家族（如镀层步枪才能与步枪才能），一张只能带一张；
-    跨武器类别的同名家族（膛线=步枪 / 抵近射击=霰弹枪）互不冲突。
+def _mod_exclusive_family(row: Mapping[str, Any], equip_path: str | None = None) -> str:
+    """互斥家族键：使用 Packages.bin 权威 modFamily 归一化路径（不拼接 #compatibility）。
+    镀层/普通/Prime/融合/执刑官/献祭同名家族共享同一基类路径，一张配装（含功能槽）只能带一张；
+    跨武器类别的同名卡（膛线=步枪 / 抵近射击=霰弹枪）本身就是不同的客户端路径，天然互不冲突。
     """
-    family = str(
+    return canonical_mod_family(
+        row.get("path"),
         row.get("modFamily")
         or row.get("nameTag")
         or row.get("nameEn")
-        or row.get("nameInternal")
-        or row.get("path")
-        or ""
-    ).casefold()
-    compatibility = str(row.get("compatibility") or "").casefold()
-    return f"{family}#{compatibility}"
+        or row.get("nameInternal"),
+        equip_path=equip_path,
+    )
 
 
-def _manual_normalize_mods(raw_mods: list[Any], slot_count: int) -> list[dict[str, Any]]:
+def _manual_normalize_mods(
+    raw_mods: list[Any],
+    slot_count: int,
+    *,
+    equip_path: str | None = None,
+) -> list[dict[str, Any]]:
     """Normalize raw mod entries into kernel-ready path/rank/slot dicts."""
     mods: list[dict[str, Any]] = []
     seen_families: dict[str, str] = {}
@@ -6128,7 +6589,7 @@ def _manual_normalize_mods(raw_mods: list[Any], slot_count: int) -> list[dict[st
         mod = MANUAL_MODS_BY_PATH[path.strip()]
         # 同名互斥：镀层/普通/Prime 版本共享 modFamily（如镀层步枪才能与步枪
         # 才能），同一配装只允许一张；冲突直接报错（与游戏内行为一致）。
-        family = _mod_exclusive_family(mod)
+        family = _mod_exclusive_family(mod, equip_path=equip_path)
         if family:
             previous = seen_families.get(family)
             if previous is not None and previous != str(path.strip()):
@@ -6573,7 +7034,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                 "target": _replay_enemy,
                 "level": common.get("level"),
                 "steel_path": bool(common.get("steel_path")),
-                "enemy_enhancements": common.get("enemy_enhancements"),
+                "enemy_enhancements": ctx.get("replay_enemy_enhancements", common.get("enemy_enhancements")),
             }
         else:
             _fallback = _benchmark_target_context(
@@ -6599,16 +7060,19 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                 engine = {}
                 simulate(**common, hit_location='body', passive_effects=passive_effects, engine_context_sink=engine)
                 engine['scenario'] = _with_melee_stance(engine.get('scenario'), stance)
+                if ctx.get('combat_extras'):
+                    engine['combat_extras'] = ctx['combat_extras']
                 combat = prepare_combat(
                     engine,
                     [(optimizer.resolve_record(EXPORTS['mods'], item['path'], kind='mod'),
                       int(item.get('rank') if item.get('rank') is not None else MANUAL_MODS_BY_PATH.get(item['path'], {}).get('maxRank') or 0), None)
                      for item in common['mods']],
-                    [(optimizer.resolve_record(EXPORTS['arcanes'], item['path'], kind='arcane'),item['rank'],item) for item in ctx['validated_arcanes']],
+                    [(optimizer.resolve_record(EXPORTS['arcanes'], item['path'], kind='arcane'),item['rank'],item) for item in ctx.get('replay_validated_arcanes', ctx['validated_arcanes'])],
                     cycle_enabled=common['scenario'].incarnon_cycle, assumed=_policy!='emergent',
                     incarnon_choices=result.get('incarnonChoices'),
                     affinity_target=_replay_ctx['target'], level=_replay_ctx['level'],
                     eximus=bool((_replay_ctx['enemy_enhancements'] or {}).get('eximus')),
+                    combat_extras=ctx.get('combat_extras'),
                 )
                 windowed = replay_combat(
                     replay_stats,
@@ -6670,6 +7134,8 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
     except (SimulationError, TypeError, ValueError):
         # 回放是增强数据；主解算结果不受影响。
         pass
+    if ctx.get("synergy") is not None:
+        result["synergySummary"] = ctx["synergy"]["summary"]
     _apply_grimoire_metric_layer(result, engine, common, ctx['validated_arcanes'])
     return result
 
@@ -6859,23 +7325,33 @@ def _variant_measurer(payload: Mapping[str, Any]) -> SimpleNamespace:
                 head = simulate(**arguments, hit_location='head', passive_effects=passives)
                 return body, ((1 - weight) * _mod_gains_metric_value(body, metric) + weight * _mod_gains_metric_value(head, metric)), None
         enemy = arguments.get('enemy_override') or optimizer.resolve_record(EXPORTS['enemies'], arguments['enemy'], kind='enemy')
+        if ctx.get('combat_extras'):
+            engine['combat_extras'] = ctx['combat_extras']
         records = [(optimizer.resolve_record(EXPORTS['mods'], row['path'], kind='mod'), row['rank'], None) for row in arguments['mods']]
-        selected_arcs = ctx['validated_arcanes'] if arcs is None else arcs
+        selected_arcs = ctx.get('replay_validated_arcanes', ctx['validated_arcanes']) if arcs is None else arcs
         arc_records = [(optimizer.resolve_record(EXPORTS['arcanes'], row['path'], kind='arcane'), row['rank'], row) for row in selected_arcs]
         choices = dict(ctx['incarnon_card'].incarnon_choices) if ctx.get('incarnon_card') else {}
         st = _benchmark_timeline_stats(body['moddedStats'])
+        replay_enh = ctx.get('replay_enemy_enhancements', arguments['enemy_enhancements'])
         job = (
             (engine, records, arc_records),
-            dict(cycle_enabled=arguments['scenario'].incarnon_cycle, assumed=payload.get('triggerPolicy') == 'assumed_max', incarnon_choices=choices, affinity_target=enemy, level=arguments['level'], eximus=bool(arguments['enemy_enhancements'].get('eximus'))),
+            dict(cycle_enabled=arguments['scenario'].incarnon_cycle, assumed=payload.get('triggerPolicy') == 'assumed_max', incarnon_choices=choices, affinity_target=enemy, level=arguments['level'], eximus=bool(replay_enh.get('eximus'))),
             st,
             enemy,
-            dict(attacks_per_second=st.sustained_attack_rate, window_seconds=ctx['window_seconds'], headshot_chance=weight, collect_timeline=False, level=arguments['level'], steel_path=arguments['steel_path'], enemy_enhancements=arguments['enemy_enhancements'], armour_strip=arguments['armour_strip'], elemental_armour_strip=arguments['elemental_armour_strip'], forced_procs=arguments['forced_procs'], status_rate_multiplier=arguments['status_rate_multiplier'], damage_rate_multiplier=arguments['damage_rate_multiplier']),
+            dict(attacks_per_second=st.sustained_attack_rate, window_seconds=ctx['window_seconds'], headshot_chance=weight, collect_timeline=False, level=arguments['level'], steel_path=arguments['steel_path'], enemy_enhancements=replay_enh, armour_strip=arguments['armour_strip'], elemental_armour_strip=arguments['elemental_armour_strip'], forced_procs=arguments['forced_procs'], status_rate_multiplier=arguments['status_rate_multiplier'], damage_rate_multiplier=arguments['damage_rate_multiplier']),
         )
         return body, None, job
 
     mods_list = [dict(item) for item in ctx["raw_mods"] if isinstance(item, Mapping)]
     base_riven = payload.get("riven") if isinstance(payload.get("riven"), Mapping) else None
     special_mods = [dict(item) for item in common['mods'] if item.get('slot', 0) >= ctx['slot_count']]
+    syn_data = ctx.get("synergy")
+    has_dynamic_hunter_synergy = bool(
+        syn_data is not None
+        and str((ctx.get("selected_weapon") or {}).get("slot") or "") == "primary"
+        and isinstance(syn_data.get("companion_result"), Mapping)
+        and ((syn_data["companion_result"].get("companion") or {}).get("category") == "beast")
+    )
 
     def _variant_passives(variant_mods: list[dict[str, Any]], skip_riven: bool) -> Any:
         """Passive effects for one variant, re-deriving arcane trigger rates.
@@ -6884,8 +7360,33 @@ def _variant_measurer(payload: Mapping[str, Any]) -> SimpleNamespace:
         actually equipped; otherwise the shared baseline passives are reused
         (identical numbers, zero extra cost).
         """
+        override_syn_fx = None
+        if has_dynamic_hunter_synergy:
+            from wfarsenal import synergy as _synergy_mod
+
+            v_riven_fx = () if skip_riven or not (base_riven and isinstance(base_riven.get("stats"), list)) else tuple(optimizer.synthetic_riven_effects(base_riven["stats"]))
+            v_syn = _synergy_mod.resolve_synergy(
+                payload,
+                weapon=ctx["selected_weapon"],
+                warframe_engine=WARFRAME_ENGINE,
+                exports=EXPORTS,
+                external_buff_specs=EXTERNAL_BUFFS,
+                enemy_record=common.get("enemy_override") or MANUAL_ENEMIES_BY_PATH.get(common["enemy"]),
+                enemy_path=common["enemy"],
+                level=common["level"],
+                distance=common["scenario"].distance,
+                eximus=bool(common["enemy_enhancements"].get("eximus")),
+                mods=[*variant_mods, *special_mods],
+                riven=None if skip_riven else base_riven,
+                riven_effects=v_riven_fx,
+                innate_selection=ctx.get("innate_element"),
+                base_combat_state=common["scenario"].combat_state,
+                forced_procs=common.get("forced_procs"),
+            )
+            if v_syn is not None:
+                override_syn_fx = v_syn.get("effects")
         if not has_trigger_arcanes:
-            return ctx["build_passives"](None, skip_riven=skip_riven)["passive_effects"]
+            return ctx["build_passives"](None, skip_riven=skip_riven, override_synergy_effects=override_syn_fx)["passive_effects"]
         variant_common = {**common, "mods": [*variant_mods, *special_mods]}
         # The probe pass must run WITHOUT passives (the arcane card itself is
         # what we are deriving) — plain ctx passives are fine to omit here
@@ -6893,7 +7394,7 @@ def _variant_measurer(payload: Mapping[str, Any]) -> SimpleNamespace:
         # crit chance, which the mod list alone determines.
         with _engine_lock():
             event_stats = simulate(**variant_common, hit_location="body")["moddedStats"]
-        return ctx["build_passives"](event_stats, skip_riven=skip_riven)["passive_effects"]
+        return ctx["build_passives"](event_stats, skip_riven=skip_riven, override_synergy_effects=override_syn_fx)["passive_effects"]
 
     return SimpleNamespace(ctx=ctx, common=common, metric=metric, event_metric=event_metric,
                            has_trigger_arcanes=has_trigger_arcanes, measurement=measurement,
@@ -7061,7 +7562,15 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
                 gains[path] = {"gainPercent": None, "reason": "variant-not-computable"}
                 continue
         try:
-            normalized = _manual_normalize_mods(variant_mods, ctx["slot_count"])
+            eq_p = str(ctx["selected_weapon"].get("path") or "")
+            normalized = _manual_normalize_mods(variant_mods, ctx["slot_count"], equip_path=eq_p)
+            if ctx.get("exilus") and not ctx.get("exilus_incompatible"):
+                ex_fam = _mod_exclusive_family(ctx["exilus"], equip_path=eq_p)
+                if ex_fam and any(
+                    _mod_exclusive_family(MANUAL_MODS_BY_PATH[m["path"]], equip_path=eq_p) == ex_fam
+                    for m in normalized
+                ):
+                    raise SimulationError("exilus modFamily conflict")
         except (SimulationError, TypeError, ValueError):
             gains[path] = {"gainPercent": None, "reason": "variant-not-computable"}
             continue
@@ -7210,7 +7719,7 @@ def part_values_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
         variant_mods = [dict(part["mod"]) for part in chosen if part["kind"] == "mod"]
         skip_riven = not any(part["kind"] == "riven" for part in chosen)
         passives = measurer.variant_passives(variant_mods, skip_riven=skip_riven)
-        normalized = _manual_normalize_mods(variant_mods, ctx["slot_count"])
+        normalized = _manual_normalize_mods(variant_mods, ctx["slot_count"], equip_path=str(ctx["selected_weapon"].get("path") or ""))
         _body, value, job = measurer.measurement({**common, "mods": [*normalized, *measurer.special_mods]}, passives)
         measured.append((value, job))
     jobs = [job for _value, job in measured if job is not None]
@@ -7264,10 +7773,15 @@ def part_values_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
 # the existing explicit-slot reducer. Entering its page never starts a search.
 def _arena_context(payload):
     from wfarsenal.arena import normalize_scenario
+    from wfarsenal.synergy import build_arena_contexts
     if not isinstance(payload, Mapping) or not isinstance(payload.get("loadout"), Mapping):
         raise SimulationError("arena requires a current equipped loadout")
     scenario = normalize_scenario(payload.get("scenario") or {})
     loadout = deepcopy(dict(payload["loadout"]))
+    if isinstance(payload.get("warframeLink"), Mapping) and "warframeLink" not in loadout:
+        loadout["warframeLink"] = deepcopy(dict(payload["warframeLink"]))
+    if isinstance(payload.get("companionLink"), Mapping) and "companionLink" not in loadout:
+        loadout["companionLink"] = deepcopy(dict(payload["companionLink"]))
     loadout.update(mode="manual", autoArcane=False, autoIncarnon=False,
                    damageModel="target", enemy=scenario["enemy"], level=scenario["level"],
                    headshotChance=0., distance=None, windowSeconds=30.)
@@ -7284,16 +7798,27 @@ def _arena_context(payload):
                 int(m.get("rank") if m.get("rank") is not None else MANUAL_MODS_BY_PATH[m["path"]]["maxRank"]), None)
                for m in common["mods"]]
     arcanes = [(optimizer.resolve_record(EXPORTS["arcanes"], m["path"], kind="arcane"), m["rank"], m)
-               for m in ctx["validated_arcanes"]]
+               for m in ctx.get("replay_validated_arcanes", ctx["validated_arcanes"])]
     if ctx["riven_slot_drain"] + ctx["exilus_unvalidated_drain"] > (result.get("loadoutValidation") or {}).get("remaining", 9999):
         raise SimulationError("当前紫卡或特殊槽位使配装容量不足")
+    wf_ctx, comp_ctx = build_arena_contexts(
+        payload=payload, loadout=loadout, scenario=scenario,
+        synergy_data=ctx.get("synergy"), common=common, exports=EXPORTS,
+    )
+    arena_enh = dict(ctx.get("replay_enemy_enhancements", common.get("enemy_enhancements")) or {})
+    if comp_ctx is not None:
+        arena_enh.pop("primingStacks", None)
+    enemy_visuals = {e["path"]: e.get("imageAsset") for e in MANUAL_ENEMIES if e.get("imageAsset")}
     return dict(engine=engine, mod_records=records, arcane_records=arcanes,
-                common_options={**{k:common.get(k) for k in ("level", "armour_strip", "elemental_armour_strip", "steel_path", "enemy_enhancements", "forced_procs")}, "assumed":loadout.get("triggerPolicy")=="assumed_max"},
+                common_options={**{k:common.get(k) for k in ("level", "armour_strip", "elemental_armour_strip", "steel_path", "forced_procs")}, "enemy_enhancements": arena_enh, "assumed":loadout.get("triggerPolicy")=="assumed_max"},
                 incarnon_choices=ctx["incarnon_choices"], cycle_enabled=common["scenario"].incarnon_cycle,
                 scenario=scenario, loadout=loadout,
                 weapon_name=ctx["weapon"].get("name") or ctx["weapon"].get("nameEn"),
                 validation=result.get("loadoutValidation"),
-                enemies={e["path"]:e for e in EXPORTS["enemies"]})
+                enemies={e["path"]:e for e in EXPORTS["enemies"]},
+                warframeContext=wf_ctx,
+                companionContext=comp_ctx,
+                enemyVisuals=enemy_visuals)
 
 
 def arena_catalog_payload():
@@ -7315,8 +7840,10 @@ def arena_catalog_payload():
                              {"id":"interception","name":"拦截参数 · 定额清场"},
                              {"id":"arbitration_interception","name":"仲裁拦截参数 · 定额清场与无人机"}],
             "enemies":[{"path":e["path"], "nameZh":e.get("nameZh"), "name":e.get("nameZh") or e.get("name") or e.get("nameEn"),
-            "nameEn":e.get("nameEn"), "faction":e.get("faction"), "hasHeadProxy":e.get("hasHeadProxy", False)}
+            "nameEn":e.get("nameEn"), "faction":e.get("faction"), "hasHeadProxy":e.get("hasHeadProxy", False),
+            "imageAsset":e.get("imageAsset"), "imageStatus":e.get("imageStatus")}
             for e in MANUAL_ENEMIES if e.get("complete") is not False],
+            "defaultWarframePortrait":"/assets/warframes/portraits/Excalibur.png",
             "defaults":defaults(_BENCHMARK_ENEMY_PATH), "model":MODEL,
             "coverage":["当前装备槽位独立模拟", "真实目标防御与独立状态", "几何与刷怪策略保留来源和近似标记"]}
 
@@ -7402,6 +7929,9 @@ class PortableHandler(BaseHTTPRequestHandler):
         if path == "/api/warframe/catalog":
             self._send_json(HTTPStatus.OK, WARFRAME_CATALOG, cache="no-cache")
             return
+        if path == "/api/companion/catalog":
+            self._send_json(HTTPStatus.OK, companion_catalog_payload(), cache="no-cache")
+            return
         # 分析进度轮询：?id=<progressToken>（analyze 期间前端每 500ms 查询）。
         if path == "/api/analyze/progress":
             query = parse_qs(urlsplit(self.path).query)
@@ -7456,6 +7986,8 @@ class PortableHandler(BaseHTTPRequestHandler):
             "/api/recommend-riven": recommend_riven_payload,
             "/api/warframe/calculate": warframe_calculate_payload,
             "/api/sentinel/evaluate": sentinel_evaluate_payload,
+            "/api/companion/evaluate": companion_evaluate_payload,
+            "/api/companion/optimize-weapon": companion_optimize_weapon_payload,
         }
         analyze = analyzers.get(path)
         if analyze is None:

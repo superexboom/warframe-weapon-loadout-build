@@ -15923,7 +15923,7 @@
     "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryWeapon": {
       "0": {
         "behavior": "additive_with_base_damage",
-        "baseFraction": 0.743,
+        "baseFraction": 1.0,
         "excludeFlatSources": [],
         "projectile": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile",
         "directTotal": 26.0,

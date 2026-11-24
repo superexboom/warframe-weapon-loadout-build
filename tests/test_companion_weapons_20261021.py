@@ -45,7 +45,8 @@ VITALITY = "/Lotus/Upgrades/Mods/Sentinel/SentinelHealthMaxMod"
 def test_sentinel_body_stats_and_capacity():
     panel = app.sentinel_evaluate_payload({"sentinel": {"path": DETHCUBE, "mods": [
         {"path": VITALITY, "rank": 10, "slot": 1}, {"path": ASSAULT, "rank": 5, "slot": 0}]}})
-    assert panel["stats"]["health"]["base"] == 560 * 3.5
+    # Post-Update-34: sentinels.json already stores Rank-30 stats directly (no 3.5x scale).
+    assert panel["stats"]["health"]["base"] == 560
     assert round(panel["stats"]["health"]["modded"] / panel["stats"]["health"]["base"], 3) == 3.5  # +250%
     assert panel["attackPrecept"] and panel["capacity"]["total"] == 60
 

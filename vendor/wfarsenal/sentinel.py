@@ -3,9 +3,11 @@
 Data: data/mechanics/sentinels.json (tools/import_sentinels.py). The sentinel
 body is never auto-built; its MODs are user-picked. What this module returns:
 
-* ``stats`` -- rank-30 health / shield / armour (wiki Sentinel Base/Max tables:
-  max = 3.5x base) times the body MODs (Enhanced Vitality, Calculated
-  Redirection, Metal Fiber, Accelerated Deflection ...);
+* ``stats`` -- post-Update-34 rank-30 health / shield / armour (stored directly
+  in ``sentinels.json`` from ``MaxHealthOverride`` / ``MaxShieldOverride`` /
+  ``ArmourRatingOverride``, ``MAX_RANK_SCALE = 1.0``) times the body MODs
+  (Enhanced Vitality, Calculated Redirection, Metal Fiber, Accelerated
+  Deflection ...);
 * ``weaponEffects`` -- engine ModEffects for the companion weapon from the body
   MODs that change its damage, each from its own script parameters
   (``*PerRank`` values count rank + 1 levels):
@@ -33,9 +35,10 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .damage import ModEffect, ModEffectList
+from .mod_families import authoritative_mod_family, canonical_mod_family
 from .simulator import SimulationError
 
-MAX_RANK_SCALE = 3.5
+MAX_RANK_SCALE = 1.0
 CAPACITY = 30
 REACTOR_CAPACITY = 60
 SLOT_COUNT = 10
@@ -99,6 +102,7 @@ def catalog() -> dict[str, Any]:
         "mods": [
             {**{k: m[k] for k in ("path", "nameEn", "nameZh", "kind", "exclusiveTo", "rarity", "polarity", "baseDrain",
                                   "maxRank", "art", "levelStatsEn", "levelStatsZh", "modSet")},
+             "modFamily": authoritative_mod_family(m["path"], m.get("modFamily")),
              "attack": m["path"] in ATTACK_PRECEPTS, "weaponRole": weapon_role(m["path"])}
             for m in rows["mods"].values()
         ],
@@ -139,6 +143,7 @@ def _request(request: Any) -> tuple[Mapping[str, Any], list[tuple[Mapping[str, A
     if not isinstance(raw, list) or len(raw) > SLOT_COUNT:
         raise SimulationError(f"sentinel.mods must be an array of at most {SLOT_COUNT} entries")
     mods, seen = [], set()
+    seen_families: dict[str, str] = {}
     for index, item in enumerate(raw):
         if not isinstance(item, Mapping):
             raise SimulationError(f"sentinel.mods[{index}] must be an object")
@@ -149,6 +154,13 @@ def _request(request: Any) -> tuple[Mapping[str, Any], list[tuple[Mapping[str, A
             raise SimulationError(f"{mod['nameZh']} 是其他守护的专属 MOD")
         if mod["path"] in seen:
             raise SimulationError(f"{mod['nameZh']} 不能重复装备")
+        fam = canonical_mod_family(mod["path"], mod.get("modFamily"), equip_path=sentinel["path"])
+        if fam:
+            if fam in seen_families:
+                raise SimulationError(
+                    f"conflicting sentinel modFamily ({fam}): {mod['nameZh']} 与 {seen_families[fam]} 互斥"
+                )
+            seen_families[fam] = str(mod.get("nameZh") or mod.get("nameEn") or mod["path"])
         seen.add(mod["path"])
         rank = item.get("rank", mod["maxRank"])
         if isinstance(rank, bool) or not isinstance(rank, int) or not 0 <= rank <= mod["maxRank"]:

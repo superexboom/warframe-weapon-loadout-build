@@ -38,8 +38,9 @@ pub fn ramp_index(age: f64, scale: f64) -> usize {
     raw.clamp(0, 4) as usize
 }
 
-pub fn decay_steps(level: f64) -> Vec<f64> {
-    HEAT_DECAY.iter().copied().filter(|v| *v <= level + 1e-9).collect()
+pub fn decay_steps(level: f64) -> &'static [f64] {
+    let start = HEAT_DECAY.iter().position(|v| *v <= level + 1e-9).unwrap_or(HEAT_DECAY.len());
+    &HEAT_DECAY[start..]
 }
 
 pub fn decay_index(age: f64, scale: f64, steps: &[f64]) -> usize {
@@ -58,7 +59,7 @@ struct DeadItem {
     scale: f64,
     levels: FMap,
     step: FxIndexMap<u64, usize>,
-    steps: FxIndexMap<u64, Vec<f64>>,
+    steps: FxIndexMap<u64, &'static [f64]>,
     cleared: bool,
 }
 
@@ -435,7 +436,7 @@ impl HeatChains {
             let levels: FMap = levels.into_iter().filter(|(l, w)| fval(*l) > 0.0 && *w > 0.0).collect();
             if !levels.is_empty() {
                 let step: FxIndexMap<u64, usize> = levels.keys().map(|l| (*l, 0usize)).collect();
-                let steps: FxIndexMap<u64, Vec<f64>> = levels.keys().map(|l| (*l, decay_steps(fval(*l)))).collect();
+                let steps: FxIndexMap<u64, &'static [f64]> = levels.keys().map(|l| (*l, decay_steps(fval(*l)))).collect();
                 let pairs: Vec<(u64, f64)> = levels.iter().map(|(k, w)| (*k, *w)).collect();
                 self.dead_arena.push(DeadItem { end: e.end, scale: e.scale, levels, step, steps, cleared: false });
                 let item = self.dead_arena.len() - 1;

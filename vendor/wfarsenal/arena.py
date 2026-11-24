@@ -12,6 +12,15 @@ import threading
 import time
 import uuid
 from . import parallel
+from .arena_actors import (
+    DEFAULT_EXCALIBUR_PORTRAIT,
+    CompanionArenaDirector,
+    EnemyAttackDirector,
+    WarframeArenaState,
+    build_dynamic_synergy_sources,
+    cold_slow_multiplier,
+    resolve_enemy_icon,
+)
 from .arena_scene import load_scene, distance, Edge, ROOT
 from .arena_combat import ArenaCombat, UnsupportedArenaCombat
 
@@ -136,6 +145,9 @@ def normalize_scenario(value):
         raise ValueError("等级增长需要来源防御或来源仲裁防御规则")
     if not isinstance(c["headshots"], bool):
         raise ValueError("headshots must be boolean")
+    for opt_bool in ("enemyShieldRecharge", "strictSurvival", "vipStatusCap"):
+        if opt_bool in c and not isinstance(c[opt_bool], bool):
+            raise ValueError(f"{opt_bool} must be boolean")
     return c
 
 
@@ -203,6 +215,11 @@ class Actor:
 
 
 class World:
+    wf_state = None
+    companion = None
+    enemy_attacks = None
+    next_synergy_tick = math.inf
+
     def __init__(self, context, cancelled=lambda: False, progress=lambda p: None):
         self.context = context
         self.c = context["scenario"]
@@ -214,27 +231,74 @@ class World:
         self.scene.reset_runtime()
         if self.cancelled():
             raise InterruptedError("已取消")
+        wf_ctx = context.get("warframeContext")
+        comp_ctx = context.get("companionContext")
+        self.wf_state = (
+            WarframeArenaState(wf_ctx, self.c, self.c["seed"])
+            if wf_ctx is not None
+            else None
+        )
+        self.enemy_attacks = (
+            EnemyAttackDirector(self.c["seed"]) if wf_ctx is not None else None
+        )
+        _comp_eval = (
+            (comp_ctx.get("evaluation") or comp_ctx)
+            if isinstance(comp_ctx, dict)
+            else None
+        )
+        _synergy_holder = {}
+        if self.wf_state is not None or _comp_eval is not None:
+            dyn_sources, dyn_provider = build_dynamic_synergy_sources(
+                self.wf_state,
+                _comp_eval,
+                context["arcane_records"],
+                context["engine"].get("effects"),
+                _synergy_holder,
+            )
+        else:
+            dyn_sources, dyn_provider = (), None
+        corrosive_max = 10
+        if isinstance(wf_ctx, dict):
+            wb = wf_ctx.get("weaponBridge") or {}
+            if isinstance(wb.get("corrosiveMaxStacks"), (int, float)):
+                corrosive_max = max(10, int(wb["corrosiveMaxStacks"]))
+            else:
+                bonus_corr = 0
+                for sh in wb.get("shards") or ():
+                    sp = str(sh.get("path") or "") if isinstance(sh, dict) else ""
+                    if "CorrosiveStack" in sp:
+                        bonus_corr += 3 if (sh.get("tau") or sp.endswith("Mythic")) else 2
+                corrosive_max = 10 + bonus_corr
+        combat_options = {
+            **context["common_options"],
+            "delivery_kinds": [
+                "lingering",
+                "stackable",
+                "manualDetonation",
+                "sourceOwned",
+                "finiteField",
+                "ownedEmbed",
+                "embedded",
+                "noxAvatarLifecycle",
+                "zymosChildren",
+                "quantaStrategy",
+                "grimoireStrategy",
+                "reloadProjectiles",
+            ],
+        }
+        if dyn_sources:
+            combat_options["dynamic_sources"] = dyn_sources
+        if self.c.get("enemyShieldRecharge"):
+            combat_options["enemy_shield_recharge"] = True
+        if self.c.get("vipStatusCap"):
+            combat_options["vip_status_cap"] = True
+        if corrosive_max > 10:
+            combat_options["corrosive_max_stacks"] = corrosive_max
         self.combat = ArenaCombat(
             context["engine"],
             context["mod_records"],
             context["arcane_records"],
-            {
-                **context["common_options"],
-                "delivery_kinds": [
-                    "lingering",
-                    "stackable",
-                    "manualDetonation",
-                    "sourceOwned",
-                    "finiteField",
-                    "ownedEmbed",
-                    "embedded",
-                    "noxAvatarLifecycle",
-                    "zymosChildren",
-                    "quantaStrategy",
-                    "grimoireStrategy",
-                    "reloadProjectiles",
-                ],
-            },
+            combat_options,
             context["incarnon_choices"],
             context["cycle_enabled"],
         )
@@ -261,6 +325,28 @@ class World:
             self.c["fixedPosition"] = standing
             self.player.node = standing["face"]
             self.player.pos = tuple(standing["position"])
+        self.companion = (
+            CompanionArenaDirector(
+                comp_ctx, context, self.combat, self.player.pos, self.c["seed"]
+            )
+            if comp_ctx is not None
+            else None
+        )
+        _synergy_holder["comp"] = self.companion
+        if dyn_sources and dyn_provider is not None:
+            self.combat.dynamic_state_provider = dyn_provider
+        if self.companion is not None:
+            self.combat.on_reload_callback = self.companion.on_player_reload
+        if self.wf_state is not None or self.companion is not None:
+            def _on_player_combat_kill(victim, when, weapon_source):
+                if weapon_source and self.wf_state is not None:
+                    self.wf_state.on_player_kill(when, self.combat)
+                if self.companion is not None:
+                    self.companion.on_any_kill(victim, when)
+            self.combat.on_kill_callback = _on_player_combat_kill
+        self.next_synergy_tick = 0.0
+        self.enemy_icons = {}
+        self.actor_snapshots = []
         self.actors = {}
         self.live = []
         self.events = []
@@ -390,7 +476,55 @@ class World:
         ]
         if not self.spawn_points:
             raise ValueError("场景没有可用出生点")
+        self._diag_seen = set(self.diagnostics)
         self.record(self.player, 0.0)
+
+    def _diagnose(self, msg):
+        seen = getattr(self, "_diag_seen", None)
+        if seen is None:
+            seen = set(self.diagnostics)
+            self._diag_seen = seen
+        if msg not in seen:
+            seen.add(msg)
+            self.diagnostics.append(msg)
+
+    def _record_actor_snapshot(self, t):
+        rows = []
+        for actor in self.live:
+            if actor.dead:
+                continue
+            v = self.combat.targets.get(actor.id)
+            if v is None or not v.alive:
+                continue
+            og_full, sh_full, hp_full = v.full
+            og_cur, sh_cur, hp_cur = v.pools
+            hp_r = round(max(0.0, min(1.0, hp_cur / hp_full)), 4) if hp_full > EPS else 0.0
+            sh_r = round(max(0.0, min(1.0, sh_cur / sh_full)), 4) if sh_full > EPS else 0.0
+            og_r = round(max(0.0, min(1.0, og_cur / og_full)), 4) if og_full > EPS else 0.0
+            status_cnt = 0.0
+            for p in v.presence.values():
+                log_abs = 0.0
+                certain = False
+                for exp, _, val in p.events:
+                    if exp >= t - 1e-9:
+                        if val is None:
+                            certain = True
+                            break
+                        log_abs += val
+                status_cnt += 1.0 if certain else (-math.expm1(min(log_abs, 0.0)))
+            sc_val = round(status_cnt, 2)
+            if abs(sc_val - round(sc_val)) < 1e-4:
+                sc_val = int(round(sc_val))
+            rows.append([actor.id, hp_r, sh_r, og_r, sc_val])
+        ts = round(float(t), 4)
+        snaps = getattr(self, "actor_snapshots", None)
+        if snaps is None:
+            snaps = []
+            self.actor_snapshots = snaps
+        if snaps and abs(snaps[-1][0] - ts) < 1e-5:
+            snaps[-1] = [ts, rows]
+        else:
+            snaps.append([ts, rows])
 
     def record(self, actor, t):
         row = [round(t, 6), *[round(v, 5) for v in actor.pos]]
@@ -432,6 +566,13 @@ class World:
 
     def protection(self):
         drones = [a for a in self.live if a.drone and not a.dead]
+        if not drones:
+            for actor in self.live:
+                target = self.combat.targets[actor.id]
+                target.position = actor.pos
+                target.protected = False
+            self.combat.protected_ids = frozenset()
+            return
         for actor in self.live:
             target = self.combat.targets[actor.id]
             target.position = actor.pos
@@ -534,7 +675,8 @@ class World:
             info.update(spawnProfile=self.c["spawnProfile"], **{k:v for k,v in params.items() if k!="level"},
                         formulaEnemyLevel=params["level"], targetCount=self.wave_target, fixedProgress=self.c["interceptionProgress"],
                         roundEnd="scenario-quota-cleared", directorHardCap=self.c["directorHardCap"])
-            self.diagnostics.extend(params["qualifications"])
+            for q in params["qualifications"]:
+                self._diagnose(q)
         elif self.source_spawns:
             from .arena_spawns import defense_wave_parameters, build_defense_schedule
             params = defense_wave_parameters(
@@ -565,7 +707,8 @@ class World:
                         spawnProfile=self.c["spawnProfile"],
                         schedule=schedule, targetCount=self.wave_target,
                         spawnAttemptSeconds=0.25, directorHardCap=self.c["directorHardCap"])
-            self.diagnostics.extend(schedule["qualifications"])
+            for q in schedule["qualifications"]:
+                self._diagnose(q)
         else:
             info.update(spawnProfile="custom", targetCount=self.wave_target,
                         maxAlive=self.wave_alive_cap, tier=self.c["tier"])
@@ -582,10 +725,21 @@ class World:
                              if v.get("resolvedAvatarPath") == enemy["path"]), movement)
         actor.aerial = drone or (movement.get("profile") == "hover" and movement.get("smallHoverCompatible"))
         if movement.get("profile") == "hover" and not movement.get("smallHoverCompatible"):
-            self.diagnostics.append("部分源飞行单位体积超过当前小型Hover代理，保留原地面路径；其原生飞行高度与大体积碰撞待补，不缩体积强行通过")
+            self._diagnose("部分源飞行单位体积超过当前小型Hover代理，保留原地面路径；其原生飞行高度与大体积碰撞待补，不缩体积强行通过")
         if actor.aerial and not drone:
-            self.diagnostics.append("普通飞行NPC按当前Hover源字段单独分配飞行兼容路径；仍检查静态障碍与源图，不获得仲裁生命/免疫/保护/爆炸/精华。原生高度控制与大型飞行单位体积尚未完整模拟")
-        target = self.combat.add_target(id, enemy, self.wave_level, pos)
+            self._diagnose("普通飞行NPC按当前Hover源字段单独分配飞行兼容路径；仍检查静态障碍与源图，不获得仲裁生命/免疫/保护/爆炸/精华。原生高度控制与大型飞行单位体积尚未完整模拟")
+        is_boss = bool(source and source.get("scheduledBoss", False))
+        target = self.combat.add_target(id, enemy, self.wave_level, pos, boss=is_boss)
+        epath = enemy["path"]
+        enemy_icons = getattr(self, "enemy_icons", None)
+        if enemy_icons is None:
+            enemy_icons = {}
+            self.enemy_icons = enemy_icons
+        if epath not in enemy_icons:
+            ctx = getattr(self, "context", None)
+            enemy_icons[epath] = resolve_enemy_icon(
+                epath, ctx.get("enemyVisuals") if isinstance(ctx, dict) else None
+            )
         if drone:
             # LotusGameRules P40: health STACKING_MULTIPLY +4 (5x), then
             # refill health; injury-block SET1. These are spawn-time upgrades,
@@ -614,6 +768,9 @@ class World:
         if drone:
             actor.last_seen = self.t
             actor.tape.update(healthMultiplier=5.0, statusImmune=True)
+        enemy_attacks = getattr(self, "enemy_attacks", None)
+        if enemy_attacks is not None:
+            enemy_attacks.register_actor(actor, enemy, self.wave_level, self.t)
         return actor
 
     def arbitration_drone(self, anchor):
@@ -734,7 +891,7 @@ class World:
                     if variant.get("resolvedAvatarPath") in self.enemies:
                         path = variant["resolvedAvatarPath"]
                     else:
-                        self.diagnostics.append("部分源Agent无可运行EXIMUS变体：保留普通变体，不替换为其他敌人")
+                        self._diagnose("部分源Agent无可运行EXIMUS变体：保留普通变体，不替换为其他敌人")
                 enemy = self.enemies[path]
             elif self.source_spawns:
                 row = self.wave_schedule[self.generated]
@@ -748,7 +905,7 @@ class World:
                     if variant.get("resolvedAvatarPath") in self.enemies:
                         path = variant["resolvedAvatarPath"]
                     else:
-                        self.diagnostics.append("部分源Agent无可运行EXIMUS变体：保留普通变体，不替换为其他敌人")
+                        self._diagnose("部分源Agent无可运行EXIMUS变体：保留普通变体，不替换为其他敌人")
                 enemy = self.enemies[path]
             elif not drone and self.enemy_pool:
                 available = [r for r in self.enemy_pool if not r.get("maxSimultaneous") or sum(
@@ -842,7 +999,7 @@ class World:
                 "未识别球体融合契约：" + str(stackable.get("kind"))
             )
         if any("cortege-firefield" in item for item in profile.get("unmodeled", ())):
-            self.diagnostics.append(
+            self._diagnose(
                 "Cortege来源field路由/时钟尚未闭环：仅已有直接/死亡爆炸，不生成虚构火场"
             )
         chain = record.get("chain") or {}
@@ -857,7 +1014,7 @@ class World:
             and fire.get("MultiBeam")
             and not chain.get("NumChains")
         ):
-            self.diagnostics.append(
+            self._diagnose(
                 "无扩散多束沿同一瞄准方向：束数由现有continuous伤害/多重公式计算一次，MultiBeam外观数量不重复乘伤害"
             )
         clusters = profile.get("clusters") or []
@@ -884,15 +1041,15 @@ class World:
                 clusters[0]["count"]
             ):
                 raise UnsupportedArenaCombat("集群子弹来源数量与伤害组件不一致")
-            self.diagnostics.append(
+            self._diagnose(
                 "集群分裂保留原生数量/弧角/寿命；轴向取入射水平方向，分裂相位由seed固定；重力采用显式场景clusterGravity=9.81近似，未还原原生换算"
             )
             if not fields.get("KinematicInitialSpeed"):
-                self.diagnostics.append(
+                self._diagnose(
                     "子弹缺少原生初速：使用显式场景clusterSpeedAssumption=8（原生最大速度仅作上限），不把最大速度冒充初速"
                 )
             if not projectile.get("ClusterDirection"):
-                self.diagnostics.append(
+                self._diagnose(
                     "子弹原生分裂轴向未声明：使用场景ClusterDirection=[0,0.5,1]，非射手扩散"
                 )
         from .damage import _combine, _qualifier_rejection
@@ -928,7 +1085,7 @@ class World:
         range_value = fire.get("traceDistance")
         if range_value is None:
             range_value = self.c["rangeAssumption"]
-            self.diagnostics.append(
+            self._diagnose(
                 "弹体/射线硬射程未知：使用显式场景射程上限；寿命独立限制飞行距离"
             )
         range_value = _combine(float(range_value), terms.get("WEAPON_RANGE", []))
@@ -943,7 +1100,7 @@ class World:
         life = projectile.get("MaxLife")
         lifetime = float(life) if life is not None and float(life) > 0 else math.inf
         if projectile_path and not math.isfinite(lifetime):
-            self.diagnostics.append(
+            self._diagnose(
                 "弹体寿命未知：只使用显式场景射程上限，不推定无限飞行"
             )
         result = dict(
@@ -978,11 +1135,11 @@ class World:
             manual=self.combat.combat.get("manualDetonation"),
         )
         if projectile.get("KinematicGravity"):
-            self.diagnostics.append(
+            self._diagnose(
                 "弹体重力原生换算未校准：直线首碰与有限步移动目标扫掠，保留实际飞行时间"
             )
         if puncture > 0:
-            self.diagnostics.append(
+            self._diagnose(
                 "目标穿透按几何代理厚度扣除；墙体材质厚度未闭环，静态障碍保守阻断"
             )
         self.shot_geometry[key] = result
@@ -1554,7 +1711,7 @@ class World:
     def _orb_place(self, shot, point, origin, spec, parts, geometry):
         entities = self._entities()
         self.c.setdefault("orbMergeDistance", 2.0)
-        self.diagnostics.append(
+        self._diagnose(
             "融合球按独立世界落点与视线合并；orbMergeDistance为显式场景接触近似，未把全场球视为同一点"
         )
         whole = int(max(0.0, shot.stats.multishot))
@@ -1650,7 +1807,7 @@ class World:
                 return self._orb_place(shot, point, origin, spec, parts, geometry)
             entities = self._entities()
             self.c.setdefault("stugMergeRadius", 0.5)
-            self.diagnostics.append(
+            self._diagnose(
                 "Stug同宿主/相邻静态落点融合；静态融合距离为显式场景stugMergeRadius，非已恢复原生触碰体积"
             )
             remaining = max(0.0, st.multishot) * float(spec.get("initialStack", 1.0))
@@ -1888,7 +2045,7 @@ class World:
                 == "projectile-physically-attached-to-current-selected-victim"
             )
             (
-                self.diagnostics.append(
+                self._diagnose(
                     "Torid EmbedAttack只对已证实宿主资格结算；来源半径用于实体显示/区域查询，不推定邻体同包全伤害"
                 )
                 if host_only
@@ -1989,7 +2146,7 @@ class World:
             native.get("KinematicInitialSpeed")
             or self.c.setdefault("zymosChildSpeedAssumption", 30.0)
         )
-        self.diagnostics.append(
+        self._diagnose(
             "Zymos子弹按已解析carrier/child有序暴击快照；选最近可见目标并朝其当前身体位置直线飞行，不保证原宿主存活或全部子弹命中"
         )
         for slot, (contact, blast, delay) in enumerate(packets):
@@ -2120,7 +2277,7 @@ class World:
                 "flight",
                 self.t + min(self.c["movementStep"], float(spec["childLife"])),
             )
-        self.diagnostics.append(
+        self._diagnose(
             "Stug派生弹按原生速度/脚本pitch/寿命/2次爆炸反弹/死亡2.5倍与70活跃上限；重力换算为显式场景近似，非全部脚下命中"
         )
 
@@ -2443,7 +2600,7 @@ class World:
                 child=True,
             )
         if native.get("KinematicNoise"):
-            self.diagnostics.append(
+            self._diagnose(
                 "集群子弹KinematicNoise未恢复原生运动学；固定seed弧扇和场景重力替代，未把子弹全部归到同一命中点"
             )
 
@@ -2451,7 +2608,7 @@ class World:
         if geometry.get("grimoire"):
             specs = self.radial_specs(shot)
             if not specs:
-                self.diagnostics.append(
+                self._diagnose(
                     "Grimoire未选择single-occupant资格窗口：仅发射一枚无接触球，不假设周期命中"
                 )
                 return False
@@ -2493,7 +2650,7 @@ class World:
                     ),
                 )
             self._entity_event(entity, "expire", entity["end"] + 0.000001)
-            self.diagnostics.append(
+            self._diagnose(
                 "Grimoire单球沿合法世界射线移动；single-occupant只查询原选中受害者的当前距离/视线，过期区域只生成一次"
             )
             return True
@@ -2540,7 +2697,7 @@ class World:
                 "expire",
                 self.t + max(s["delay"] for s in self.radial_specs(shot)) + 0.000001,
             )
-            self.diagnostics.append(
+            self._diagnose(
                 "Quanta shoot为显式定点cube放置/主脉冲策略；额外主脉冲付费且检查射线，爆炸仅实际半径内受害者，不复用全部目标重叠假设"
             )
             return True
@@ -2580,7 +2737,7 @@ class World:
         self.replay["shots"].append(
             [round(self.t, 6), *origin, *point, round(at - self.t, 6)]
         )
-        self.diagnostics.append(
+        self._diagnose(
             "Catabolyst换弹弹体按empty/partial快照与landsAt装填时钟；落点取投掷时瞄点并检查遮挡，接触仅实际身体代理范围，不继承主武器多重"
         )
 
@@ -2643,7 +2800,6 @@ class World:
             committed[actor.id] = committed.get(actor.id, 0.0) + self.combat.estimate(
                 shot, actor.id, component, head, scale, at
             )
-        self.committed[shot.id] = committed
         self.radial_specs(
             shot
         )  # fail explicitly before paying ammo for unsupported geometry
@@ -2652,6 +2808,7 @@ class World:
         if self._special_launch(shot, geometry, origin, aim):
             self.next_fire = max(self.t + 0.001, self.combat.next_attack_time(self.t))
             return
+        self.committed[shot.id] = committed
         if not geometry["projectile"]:
             contacts, point = self.shot_hits(origin, aim["point"], shot, geometry)
             self.replay["shots"].append([round(self.t, 6), *origin, *point, 0.0])
@@ -2673,7 +2830,7 @@ class World:
                 raise UnsupportedArenaCombat("弹体发射方向长度为零")
             direction = tuple((aim["point"][i] - origin[i]) / length for i in range(3))
             self._launch_flight(shot, origin, direction, geometry)
-            self.diagnostics.append(
+            self._diagnose(
                 "弹体移动目标碰撞采用不超过movementStep的相对线段扫掠；不在命中时重放发射射线"
             )
         self.next_fire = max(self.t + 0.001, self.combat.next_attack_time(self.t))
@@ -2830,7 +2987,7 @@ class World:
         ):
             recipients = []
             if shot.radials:
-                self.diagnostics.append(
+                self._diagnose(
                     "范围弹体寿命/场景射程到期但未首碰：未证明到期引爆策略，不生成虚构爆炸"
                 )
         else:
@@ -3662,6 +3819,14 @@ class World:
                 victim = self.combat.targets[actor.id]
                 if victim.frozen_until > start + elapsed:
                     return dt - remaining
+                cold_q = getattr(victim, "states", {}).get("DT_FREEZE")
+                if cold_q:
+                    now_t = start + elapsed
+                    cold_stacks = sum(n for end_t, n in cold_q if end_t >= now_t - 1e-9)
+                    if cold_stacks >= 1.0 - 1e-6:
+                        slow = cold_slow_multiplier(
+                            cold_stacks, getattr(victim, "overguard", 0.0)
+                        )
             speed = edge["speed"] * slow
             travel = min(length, speed * remaining)
             spent = travel / max(EPS, speed)
@@ -3716,6 +3881,8 @@ class World:
                 self.stats["enemyUnreachableSeconds"] += dt
             self.move_actor(actor, dt, self.t)
             self.combat.targets[actor.id].position = actor.pos
+        if getattr(self, "companion", None) is not None:
+            self.companion.update_position(self, dt)
         self.t = end
 
     def run(self):
@@ -3725,6 +3892,7 @@ class World:
         status = "completed"
         steps = 0
         last_progress = started
+        synergy_active = self.wf_state is not None or self.companion is not None
         while not reason:
             steps += 1
             if self.cancelled():
@@ -3760,6 +3928,18 @@ class World:
             if reason:
                 break
             at_end = self.t >= self.c["seconds"] - EPS
+            if synergy_active and not at_end and self.t >= self.next_synergy_tick - EPS:
+                if self.companion is not None and not self.wave_pending:
+                    self.companion.step(self, self.combat, self.wf_state, self.t)
+                    self.drain()
+                if self.enemy_attacks is not None and self.wf_state is not None:
+                    self.enemy_attacks.step(self, self.wf_state, self.t)
+                    self.drain()
+                    if self.wf_state.terminated:
+                        status = "limited"
+                        reason = "warframe_downed"
+                        break
+                self.next_synergy_tick = self.t + 0.1
             if not self.wave_pending and not at_end:
                 if self.next_spawn <= self.t + EPS:
                     alive_before = len(self.live)
@@ -3768,6 +3948,15 @@ class World:
                         self.protection()
                 if self.t >= self.next_plan - EPS:
                     self.plan()
+                if (
+                    synergy_active
+                    and self.companion is not None
+                    and self.live
+                    and self.companion.shots == 0
+                    and self.t <= EPS
+                ):
+                    self.companion.step(self, self.combat, self.wf_state, self.t)
+                    self.drain()
                 if self.t >= self.next_fire - EPS and self.live:
                     aim = self.choose()
                     if aim:
@@ -3786,9 +3975,14 @@ class World:
                 break
             # A durable target can take over a minute to kill. Only actual
             # applied damage advances this clock; shots/immune hits do not.
-            if self.combat.total_damage > self.damage_checkpoint + EPS:
+            combined_damage = self.combat.total_damage + (
+                self.companion.shooter.total_damage
+                if (self.companion is not None and self.companion.shooter is not None)
+                else 0.0
+            )
+            if combined_damage > self.damage_checkpoint + EPS:
                 self.last_damage = self.t
-                self.damage_checkpoint = self.combat.total_damage
+                self.damage_checkpoint = combined_damage
             progress_deadline = max(self.last_kill, self.last_damage) + self.c["noKill"]
             # Last direct/DoT kill ends a wave at its actual timestamp. World
             # fields survive the gap, but do not delay an otherwise clear wave.
@@ -3826,6 +4020,12 @@ class World:
                 self.record(self.player, self.t)
                 for actor in self.live:
                     self.record(actor, self.t)
+                self._record_actor_snapshot(self.t)
+                if self.wf_state is not None:
+                    self.wf_state.advance(self.t, self.combat)
+                    self.wf_state.record_frame(self.t)
+                if self.companion is not None:
+                    self.companion.record_frame(self.t)
                 self.next_frame = self.t + 0.5
             now = time.perf_counter()
             if now - last_progress > 0.25:
@@ -3846,6 +4046,10 @@ class World:
             ]
             if self.events:
                 clocks.append(self.events[0][0])
+            if synergy_active:
+                clocks.append(self.next_synergy_tick)
+                if self.companion is not None:
+                    clocks.append(self.companion.next_event_time())
             if self.wave_pending:
                 clocks.append(self.wait_until)
             else:
@@ -3863,6 +4067,12 @@ class World:
         self.record(self.player, self.t)
         for actor in self.live:
             self.record(actor, self.t)
+        self._record_actor_snapshot(self.t)
+        if self.wf_state is not None:
+            self.wf_state.advance(self.t, self.combat)
+            self.wf_state.record_frame(self.t)
+        if self.companion is not None:
+            self.companion.record_frame(self.t)
         elapsed = (time.perf_counter() - started) * 1000
         self.stats.update(
             seconds=round(self.t, 6),
@@ -3888,13 +4098,42 @@ class World:
             ).encode()
         ).hexdigest()[:16]
         self.stats["vitusExpected"] = round(self.stats["vitusExpected"], 4)
-        return dict(
+        warframe_visual = (
+            self.wf_state.visuals_payload()
+            if self.wf_state is not None
+            else {
+                "enabled": False,
+                "frameId": "Excalibur",
+                "nameZh": "Excalibur",
+                "nameEn": "Excalibur",
+                "portraitAsset": DEFAULT_EXCALIBUR_PORTRAIT,
+                "maxHealth": 300,
+                "maxShield": 300,
+                "maxOvershield": 1200,
+                "armor": 300,
+                "frames": [],
+            }
+        )
+        visuals = {
+            "warframe": warframe_visual,
+            "companion": (
+                self.companion.visuals_payload()
+                if self.companion is not None
+                else None
+            ),
+            "enemyIcons": self.enemy_icons,
+            "actorSnapshots": self.actor_snapshots,
+        }
+        if self.enemy_attacks is not None:
+            visuals["enemyShots"] = self.enemy_attacks.visual_shots
+        result = dict(
             schema=1,
             model=MODEL,
             status=status,
             reason=reason,
             stats=self.stats,
             replay=self.replay,
+            visuals=visuals,
             loadout=self.context["loadout"],
             scenario=self.c,
             weaponName=self.context["weapon_name"],
@@ -3911,6 +4150,20 @@ class World:
                 dict.fromkeys([*self.diagnostics, *self.combat.diagnostics])
             ),
         )
+        if synergy_active:
+            result["synergy"] = {
+                "warframeStats": (
+                    self.wf_state.stats_payload(self.t)
+                    if self.wf_state is not None
+                    else None
+                ),
+                "companionStats": (
+                    self.companion.stats_payload(self.t)
+                    if self.companion is not None
+                    else None
+                ),
+            }
+        return result
 
 
 class ArenaJobs:

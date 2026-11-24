@@ -37,6 +37,7 @@ body {
   line-height: 1.5;
 }
 button, input, select { color: inherit; font: inherit; }
+select { align-items: center; line-height: 1.35; text-overflow: ellipsis; }
 button { border: 0; }
 button:not(:disabled), select:not(:disabled), input[type="range"]:not(:disabled) { cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .42; }
@@ -145,7 +146,7 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 
 .workspace { width: 100%; max-width: 1740px; margin: 0 auto; padding: 18px 20px 24px; }
 .tab-strip { display: flex; height: 42px; align-items: stretch; border-bottom: 1px solid var(--line); }
-.tool-tab { position: relative; display: flex; align-items: center; gap: 9px; padding: 0 18px; color: var(--text); background: transparent; font-size: 12px; }
+.tool-tab { position: relative; display: flex; align-items: center; gap: 9px; padding: 0 18px; color: var(--text); background: transparent; font-size: 12px; white-space: nowrap; }
 .tool-tab:not(.is-active) { color: var(--muted); }
 .tool-tab::after { position: absolute; inset: auto 0 -1px; height: 2px; content: ""; background: var(--riven); box-shadow: 0 0 12px rgba(181,128,225,.6); opacity: 0; transform: scaleX(.35); transition: opacity .18s ease, transform .18s ease; }
 .tool-tab.is-active::after { opacity: 1; transform: scaleX(1); }
@@ -254,7 +255,7 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 .sign-toggle { display: grid; width: 30px; height: 30px; place-items: center; border: 1px solid rgba(104,212,170,.35); border-radius: 3px; color: var(--success); background: rgba(104,212,170,.07); font-size: 17px; }
 .sign-toggle.is-negative { border-color: rgba(239,113,131,.35); color: var(--danger); background: rgba(239,113,131,.07); }
 .stat-row label { min-width: 0; }
-.stat-code { width: 100%; height: 30px; min-width: 0; padding: 0 28px 0 8px; border: 1px solid var(--line); border-radius: 3px; outline: 0; background: #141922; font-size: 11px; }
+.stat-code { width: 100%; min-height: 30px; height: auto; min-width: 0; padding: 4px 26px 4px 8px; border: 1px solid var(--line); border-radius: 3px; outline: 0; background: #141922; font-size: 11px; line-height: 1.3; align-items: center; }
 .stat-number-shell { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 3px; height: 30px; padding: 0 6px 0 0; border: 1px solid var(--line); border-radius: 3px; background: #141922; }
 .stat-number-shell:focus-within { border-color: rgba(115,207,223,.5); }
 .stat-output { width: 100%; min-width: 0; padding: 0 0 0 7px; border: 0; outline: 0; overflow: hidden; color: var(--success); background: transparent; font-size: 12px; font-weight: 650; text-align: right; text-overflow: ellipsis; white-space: nowrap; appearance: textfield; -moz-appearance: textfield; }
@@ -388,9 +389,6 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 
 .build-section { padding: 0; background-color: #0b0f15; background-image: linear-gradient(rgba(115,207,223,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(115,207,223,.025) 1px,transparent 1px); background-size: 28px 28px; }
 .build-titlebar { display: flex; min-height: 66px; align-items: center; justify-content: space-between; gap: 15px; padding: 0 22px; border-bottom: 1px solid var(--line-soft); background: rgba(255,255,255,.018); }
-.segmented-control { display: flex; padding: 2px; border: 1px solid var(--line); border-radius: 4px; background: #0a0d12; }
-.segmented-control button { min-height: 28px; padding: 0 10px; color: var(--muted); background: transparent; font-size: 9px; }
-.segmented-control button.is-active { color: #fff; background: var(--riven-strong); }
 .build-identity { display: grid; grid-template-columns: minmax(0,1fr) 160px 160px; min-height: 64px; border-bottom: 1px solid var(--line-soft); }
 .build-identity > div { display: flex; min-width: 0; flex-direction: column; justify-content: center; padding: 10px 16px; }
 .build-identity > div + div { border-left: 1px solid var(--line-soft); }
@@ -708,7 +706,7 @@ body.is-mod-dragging .mod-tilt { transform: none !important; }
 .scope-hint { margin: 0; color: var(--muted-dark); font-size: 9px; line-height: 1.6; }
 .scope-empty { color: var(--muted-dark); font-size: 10px; font-style: normal; }
 /* 右键/长按的必选禁选菜单 */
-.scope-context-menu { position: fixed; z-index: 220; display: grid; min-width: 150px; padding: 4px; border: 1px solid var(--line); border-radius: 4px; background: #0d1117; box-shadow: 0 8px 24px rgba(0,0,0,.5); }
+.scope-context-menu { position: fixed; z-index: 220; display: grid; min-width: 150px; padding: 4px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel-raised); box-shadow: var(--shadow); }
 .scope-context-menu button { display: block; width: 100%; min-height: 30px; padding: 4px 10px; border: 0; border-radius: 3px; background: none; color: var(--text-soft); font-size: 11px; text-align: left; cursor: pointer; }
 .scope-context-menu button:hover { background: rgba(115,207,223,.12); }
 .manual-mod-option.is-scope-required { outline: 1px solid rgba(104,206,95,.65); outline-offset: -1px; }
@@ -850,10 +848,11 @@ i.empty-slot-polarity { font-size: 13px; font-style: normal; line-height: 16px; 
 .custom-defense-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line-soft); }
 .custom-defense-fields .field-note { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 10px; }
 .incarnon-panel { padding: 0; border-top: 1px solid var(--line-soft); }
-.incarnon-tiers { display: grid; gap: 10px; }
+#build-incarnon-panel .fold-body { display: grid; gap: 8px; }
+.incarnon-tiers { display: grid; gap: 10px; margin-top: 2px; }
 .incarnon-tier { min-width: 0; margin: 0; padding: 9px; border: 1px solid var(--line-soft); }
 /* 灵化循环口径开关（常驻 vs 真实循环）。 */
-.incarnon-cycle-toggle { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding: 8px 9px; border: 1px solid var(--line-soft); cursor: pointer; }
+.incarnon-cycle-toggle { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 0; padding: 8px 9px; border: 1px solid var(--line-soft); border-radius: 3px; cursor: pointer; }
 .incarnon-cycle-toggle input { margin: 0; }
 .incarnon-cycle-toggle span { font-weight: 600; }
 .incarnon-cycle-toggle small { color: var(--muted, rgba(200,210,225,.65)); }
@@ -1017,7 +1016,7 @@ body.is-modal-open { overflow: hidden; }
 .rabbit-dialog-head h3 { margin: 0; font-size: 15px; }
 .rabbit-export-form { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 13px; padding: 16px 18px 18px; }
 .rabbit-export-form .field select, .rabbit-dialog .field textarea { width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 3px; outline: 0; color: var(--text); background: #0d1117; }
-.rabbit-export-form .field select { height: 40px; padding: 0 10px; }
+.rabbit-export-form .field select { min-height: 40px; height: auto; padding: 8px 10px; line-height: 1.35; align-items: center; }
 .rabbit-dialog .field textarea { resize: vertical; padding: 9px 10px; line-height: 1.45; }
 .rabbit-export-form .field select:focus, .rabbit-dialog .field textarea:focus { border-color: var(--riven); box-shadow: 0 0 0 3px rgba(181,128,225,.1); }
 .rabbit-field-wide { grid-column: 1 / -1; }
@@ -1078,22 +1077,29 @@ body.is-modal-open { overflow: hidden; }
 .riven-builder-head strong { color: var(--riven-bright); font-size: 13px; }
 .riven-builder-head small { color: var(--muted); font-size: 9px; }
 .riven-builder-rows { display: grid; gap: 8px; }
-.riven-builder-row { display: grid; grid-template-columns: 30px minmax(120px,1fr) minmax(80px,1.2fr) 74px 26px; align-items: center; gap: 8px; padding: 8px 9px; border: 1px solid var(--line-soft); background: rgba(0,0,0,.18); }
+.riven-builder-row { display: grid; grid-template-columns: 30px minmax(120px,1fr) minmax(110px,1.3fr) 104px 26px; align-items: center; gap: 8px; padding: 8px 9px; border: 1px solid var(--line-soft); background: rgba(0,0,0,.18); }
 .riven-builder-row.is-negative { border-color: rgba(239,113,131,.4); }
-.riven-builder-row .sign-toggle { display: grid; width: 28px; height: 28px; place-items: center; border: 1px solid rgba(104,212,170,.4); border-radius: 3px; color: var(--success); background: rgba(104,212,170,.07); font-size: 15px; }
+.riven-builder-row .sign-toggle { display: grid; width: 28px; height: 28px; place-items: center; border: 1px solid rgba(104,212,170,.4); border-radius: 3px; color: var(--success); background: rgba(104,212,170,.07); font-size: 15px; cursor: pointer; }
 .riven-builder-row.is-negative .sign-toggle { border-color: rgba(239,113,131,.4); color: var(--danger); background: rgba(239,113,131,.07); }
-.riven-builder-row select { height: 30px; padding: 0 6px; border: 1px solid var(--line); border-radius: 3px; background: #141922; color: var(--text); font-size: 11px; }
+.riven-builder-row select { min-height: 30px; height: auto; padding: 4px 6px; border: 1px solid var(--line); border-radius: 3px; background: #141922; color: var(--text); font-size: 11px; line-height: 1.3; align-items: center; }
+.riven-builder-slider-cell { display: grid; grid-template-columns: auto minmax(60px, 1fr) auto; align-items: center; gap: 6px; min-width: 0; }
+.riven-builder-slider-cell small { color: var(--muted); font-size: 10px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .riven-builder-row input[type="range"] { width: 100%; height: 4px; accent-color: var(--riven); }
+.riven-builder-num-shell { display: inline-flex; align-items: center; gap: 3px; height: 30px; padding: 0 6px; border: 1px solid var(--line); border-radius: 3px; background: #0d1117; }
+[data-theme="light"] .riven-builder-num-shell { background: #eceff3; border-color: #c3ccd8; }
+.riven-builder-num-shell input[type="number"] { width: 64px; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--success); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+.riven-builder-row.is-negative .riven-builder-num-shell input[type="number"] { color: var(--danger); }
+.riven-builder-num-shell span { color: var(--muted); font-size: 11px; user-select: none; }
 .riven-builder-row output { color: var(--success); font-size: 11px; font-variant-numeric: tabular-nums; text-align: right; }
 .riven-builder-row.is-negative output { color: var(--danger); }
-.riven-builder-row .remove-stat { width: 26px; height: 26px; color: var(--muted); background: transparent; font-size: 15px; }
+.riven-builder-row .remove-stat { width: 26px; height: 26px; border: 0; color: var(--muted); background: transparent; font-size: 15px; cursor: pointer; }
 .riven-builder-row .remove-stat:hover { color: var(--danger); }
 .riven-builder-actions { display: flex; align-items: center; gap: 10px; }
 .riven-builder-actions .button-primary { min-height: 34px; }
 .riven-builder-hint { margin-left: auto; color: var(--muted-dark); font-size: 9px; }
 /* ── 最优紫卡求解（预算驱动 top-10）────────────────────────────────── */
 .riven-solve { display: flex; align-items: center; gap: 6px; }
-.riven-solve-budget { height: 30px; padding: 0 6px; border: 1px solid var(--line); border-radius: 3px; background: #141922; color: var(--text); font-size: 11px; }
+.riven-solve-budget { min-height: 30px; height: auto; padding: 4px 6px; border: 1px solid var(--line); border-radius: 3px; background: #141922; color: var(--text); font-size: 11px; line-height: 1.3; align-items: center; }
 [data-theme="light"] .riven-solve-budget { background: #f4f6f9; color: #24292f; border-color: #d0d7de; }
 .riven-solve-results { display: grid; gap: 8px; }
 .riven-solve-progress, .riven-solve-error { color: var(--muted); font-size: 11px; padding: 8px; border: 1px dashed var(--line-soft); }
@@ -1265,9 +1271,11 @@ body.is-modal-open { overflow: hidden; }
 .external-buff-panel .external-buff-copy small { line-height: 1.45; white-space: normal; }
 .external-buff-effects { color: var(--orokin); font-size: 10px; font-variant-numeric: tabular-nums; }
 .external-buff-tag { margin-left: 6px; padding: 0 4px; border: 1px solid var(--line); color: var(--muted); font-size: 8px; font-style: normal; font-weight: 500; vertical-align: 1px; }
+.external-buff-tag.is-synergy-overlap { border-color: color-mix(in srgb, var(--ice) 50%, var(--line)); color: var(--ice); background: color-mix(in srgb, var(--ice) 10%, transparent); }
 .external-buff-controls { display: flex; align-items: center; gap: 6px; }
 .external-buff-controls:empty { display: none; }
-.external-buff-controls select, .external-buff-number input { height: 24px; padding: 0 4px; border: 1px solid var(--line); border-radius: 3px; color: var(--text); background: #0b0f15; font-size: 10px; }
+.external-buff-controls select { min-height: 26px; height: auto; padding: 2px 6px; border: 1px solid var(--line); border-radius: 3px; color: var(--text); background: #0b0f15; font-size: 10px; line-height: 1.25; align-items: center; }
+.external-buff-number input { height: 24px; padding: 0 4px; border: 1px solid var(--line); border-radius: 3px; color: var(--text); background: #0b0f15; font-size: 10px; }
 .external-buff-number { display: inline-flex; align-items: center; gap: 3px; color: var(--muted); font-size: 9px; }
 .external-buff-number input { width: 56px; text-align: right; }
 .scenario-fields { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
@@ -1286,12 +1294,12 @@ body.is-modal-open { overflow: hidden; }
 .combat-title small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
 .combat-actions { display: flex; align-items: center; gap: 8px; }
 .combat-actions .button { min-height: 28px; padding: 0 10px; font-size: 11px; }
-.trigger-policy-select { min-height: 28px; padding: 0 8px; border: 1px solid var(--line); border-radius: 3px; background: #0d1117; color: var(--text-soft); font-size: 10px; cursor: pointer; }
+.trigger-policy-select { min-height: 28px; height: auto; padding: 4px 8px; border: 1px solid var(--line); border-radius: 3px; background: #0d1117; color: var(--text-soft); font-size: 10px; line-height: 1.3; align-items: center; cursor: pointer; }
 .trigger-policy-select:focus { border-color: var(--riven); outline: none; }
 [data-theme="light"] .trigger-policy-select { background: #f4f6f9; color: #24292f; border-color: #d0d7de; }
 .combat-kpi { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .kpi-main { display: flex; align-items: baseline; gap: 5px; }
-.kpi-main strong { color: #73cfdf; font-size: 22px; font-weight: 750; font-variant-numeric: tabular-nums; }
+.kpi-main strong { color: var(--ice); font-size: 22px; font-weight: 750; font-variant-numeric: tabular-nums; }
 .kpi-main span { color: var(--muted); font-size: 10px; }
 .kpi-sub { display: grid; gap: 1px; }
 .kpi-sub span { color: var(--muted-dark); font-size: 9px; }
@@ -1352,11 +1360,14 @@ body.is-modal-open { overflow: hidden; }
 .build-control-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; gap: 12px 14px; padding: 16px 18px 18px; }
 .build-control-fields > .incarnon-panel { grid-column: 1 / -1; }
 .build-control-fields > .field:first-child { grid-column: 1 / -1; }
-.build-control-fields .field input, .build-control-fields .field select,
-.build-setup-folds .field input, .build-setup-folds .field select {
+.build-control-fields .field input,
+.build-setup-folds .field input {
   width: 100%; height: 38px; min-width: 0; padding: 0 11px; border: 1px solid var(--line); border-radius: 3px; outline: 0; background: #0d1117;
 }
-.build-control-fields .field select, .build-setup-folds .field select { padding-right: 30px; }
+.build-control-fields .field select,
+.build-setup-folds .field select {
+  width: 100%; min-height: 38px; height: auto; min-width: 0; padding: 7px 28px 7px 11px; border: 1px solid var(--line); border-radius: 3px; outline: 0; background: #0d1117; line-height: 1.35; align-items: center;
+}
 .build-control-fields .field input:focus, .build-control-fields .field select:focus, .build-setup-folds .field input:focus, .build-setup-folds .field select:focus { border-color: var(--riven); box-shadow: 0 0 0 3px rgba(181,128,225,.1); }
 .element-select-wrap { position: relative; }
 .element-select-wrap select { padding-left: 36px !important; }
@@ -1367,10 +1378,10 @@ body.is-modal-open { overflow: hidden; }
 .analysis-element-fields { display: grid; grid-template-columns: minmax(0, 1fr) 92px; gap: 10px; padding: 10px 18px 0; }
 .analysis-element-fields[hidden] { display: none; }
 .analysis-element-fields .field select {
-  width: 100%; height: 38px; min-width: 0; padding: 0 30px 0 11px; border: 1px solid var(--line); border-radius: 3px; outline: 0;
-  background: #0d1117; color: var(--text); font-size: 12px; cursor: pointer; appearance: none; -webkit-appearance: none;
+  width: 100%; min-height: 38px; height: auto; min-width: 0; padding: 7px 30px 7px 11px; border: 1px solid var(--line); border-radius: 3px; outline: 0;
+  background-color: var(--void); color: var(--text); font-size: 12px; line-height: 1.4; align-items: center; cursor: pointer; appearance: none; -webkit-appearance: none;
   background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
-  background-position: calc(100% - 16px) 16px, calc(100% - 11px) 16px; background-size: 5px 5px; background-repeat: no-repeat;
+  background-position: calc(100% - 16px) center, calc(100% - 11px) center; background-size: 5px 5px; background-repeat: no-repeat;
 }
 .analysis-element-fields .field select:focus { border-color: var(--riven); box-shadow: 0 0 0 3px rgba(181,128,225,.1); }
 .analysis-element-fields .element-select-wrap { position: relative; }
@@ -1405,14 +1416,14 @@ body.is-modal-open { overflow: hidden; }
 .warframe-selector-trigger { display: grid; min-width: 0; grid-template-columns: 52px minmax(0,1fr) auto; align-items: center; gap: 9px; min-height: 66px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 4px; color: var(--text); background: rgba(0,0,0,.14); cursor: pointer; text-align: left; }
 .warframe-selector-trigger:hover, .warframe-selector-trigger:focus-visible { border-color: var(--ice); outline: 0; background: rgba(115,207,223,.05); }
 .warframe-selector-trigger.is-compact { min-height: 74px; grid-template-columns: 48px minmax(0,1fr) auto; grid-template-rows: auto auto auto; gap: 2px 10px; padding: 8px 10px; }
-.warframe-selector-visual { display: flex; width: 50px; height: 50px; align-items: center; justify-content: center; border-radius: 50%; color: var(--text); background: rgba(0,0,0,.32); font-size: 18px; font-weight: 600; }
+.warframe-selector-visual { display: flex; width: 50px; height: 50px; align-items: center; justify-content: center; overflow: hidden; border-radius: 50%; color: var(--text); background: rgba(0,0,0,.32); font-size: 18px; font-weight: 600; flex-shrink: 0; }
 .warframe-selector-trigger.is-compact .warframe-selector-visual { grid-row: 1 / 4; grid-column: 1; width: 46px; height: 46px; font-size: 17px; }
 .warframe-selector-trigger.is-compact .warframe-selector-copy { grid-row: 1 / 3; grid-column: 2; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .warframe-selector-trigger.is-compact .warframe-selector-copy small { font-size: 10px; color: var(--muted); }
 .warframe-selector-trigger.is-compact .warframe-selector-copy strong { font-size: 14px; color: var(--text); }
 .warframe-selector-trigger.is-compact .warframe-selector-copy em { display: block; font-size: 10px; color: var(--muted); font-style: normal; line-height: 1.3; white-space: normal; overflow: visible; text-overflow: clip; }
 .warframe-selector-trigger.is-compact > b { grid-row: 1 / 4; grid-column: 3; align-self: center; }
-.warframe-selector-icon { width: 100%; height: 100%; object-fit: contain; }
+.warframe-selector-icon, .warframe-selector-visual > img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
 .warframe-selector-copy { display: grid; min-width: 0; gap: 2px; }
 .warframe-selector-copy small { color: var(--muted); font-size: 9px; }
 .warframe-selector-copy strong { overflow: hidden; color: var(--text-soft); font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
@@ -1509,10 +1520,11 @@ body.is-modal-open { overflow: hidden; }
 .warframe-ability-diagnostic { grid-column: 1 / -1; line-height: 1.45; }
 .warframe-ability-global { display: block; margin-top: 8px; }
 .mod-picker-grid.is-warframe-image-list { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
-.warframe-image-option { display: grid; min-width: 0; min-height: 116px; grid-template-columns: 92px minmax(0,1fr); align-items: center; gap: 10px; padding: 8px; border: 1px solid var(--line-soft); border-radius: 5px; color: var(--text); background: rgba(0,0,0,.16); cursor: pointer; text-align: left; }
+.warframe-image-option { position: relative; display: grid; min-width: 0; min-height: 116px; grid-template-columns: 92px minmax(0,1fr); align-items: center; gap: 10px; padding: 8px; border: 1px solid var(--line-soft); border-radius: 5px; color: var(--text); background: rgba(0,0,0,.16); cursor: pointer; text-align: left; }
 .warframe-image-option:hover { border-color: var(--orokin); background: rgba(229,207,145,.05); }
 .warframe-image-option.is-selected { border-color: var(--success); background: rgba(95,199,95,.12); }
 .warframe-image-option.is-selected::after { position: absolute; top: 6px; right: 6px; padding: 2px 6px; border-radius: 3px; color: #fff; background: var(--success); font-size: 9px; font-weight: 600; content: "已选"; }
+.warframe-image-option.is-selected .warframe-image-option-copy strong { padding-right: 36px; }
 .warframe-image-option-visual { position: relative; display: grid; width: 92px; height: 78px; place-items: center; }
 .warframe-image-option-visual > img { position: absolute; width: 100%; height: 100%; object-fit: contain; }
 .warframe-image-option-visual .warframe-picker-icon { z-index: 2; width: 42px; height: 42px; }
@@ -1776,7 +1788,14 @@ body.is-modal-open { overflow: hidden; }
 [data-theme="light"] .special-slot-empty span { text-shadow: none; }
 [data-theme="light"] .manual-slot-actions button { background: #eef1f5; }
 [data-theme="light"] .manual-slot-actions button:hover { border-color: #85909f; }
-[data-theme="light"] .slot-polarity-chip { border-color: #707887; background: #151922; }
+[data-theme="light"] .slot-polarity-chip { border-color: #9aa7b8; background: #eef2f7; }
+[data-theme="light"] .slot-polarity-chip.is-matched { border-color: var(--success); background: #e8f7f0; box-shadow: 0 0 0 1px rgba(31,143,95,.18); }
+[data-theme="light"] .slot-polarity-chip.is-mismatch { border-color: var(--danger); background: #fdf0f2; box-shadow: 0 0 0 1px rgba(195,58,80,.18); }
+[data-theme="light"] .slot-polarity-chip img.slot-polarity-icon,
+[data-theme="light"] img.empty-slot-polarity,
+[data-theme="light"] .riven-polarity-icon,
+[data-theme="light"] .special-slot-polarity,
+[data-theme="light"] .analysis-stance-polarity { filter: brightness(0.22); }
 [data-theme="light"] .kitgun-assembly { background: rgba(233,244,247,.7); }
 [data-theme="light"] .timeline-tip { background: rgba(255,255,255,.96); box-shadow: 0 6px 18px rgba(30,40,60,.2); }
 [data-theme="light"] .submit-row { background: rgba(60,74,92,.05); }
@@ -2059,3 +2078,1067 @@ body:not(.mod-slot) :is(.button, .tool-tab, input, select, textarea) { font-size
 
 /* The arena is a separate tool panel and retains the equipped build state. */
 #arena-open:disabled { opacity: .45; cursor: not-allowed; }
+
+/* ============ 日间模式完整性对比度补丁 ============ */
+[data-theme="light"] ::-webkit-scrollbar-track { background: #e4e8ee; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { border-color: #e4e8ee; background: #aeb8c6; }
+[data-theme="light"] .analysis-element-fields .field select { background-color: #f4f6f9; color: var(--text); }
+[data-theme="light"] .weapon-issue,
+[data-theme="light"] .form-message { background: rgba(195, 58, 80, 0.08); border-color: var(--danger); }
+[data-theme="light"] .weapon-issue span,
+[data-theme="light"] .form-message { color: #b42338; }
+[data-theme="light"] .button-outline { color: #b42338; border-color: rgba(195, 58, 80, 0.45); }
+[data-theme="light"] .button-outline:not(:disabled):hover { background: rgba(195, 58, 80, 0.08); border-color: var(--danger); }
+[data-theme="light"] .manual-mod-categories .mod-preset-chip:hover { border-color: var(--orokin); color: #7a5c16; background: rgba(161, 127, 46, 0.14); }
+[data-theme="light"] .segmented-control button.is-active,
+[data-theme="light"] .kitgun-part-chip.is-active,
+[data-theme="light"] .arcane-flag-toggle.is-active,
+[data-theme="light"] .manual-mod-categories button.is-active,
+[data-theme="light"] .enemy-factions button.is-active { color: #ffffff; background: var(--ice); border-color: var(--ice); }
+[data-theme="light"] .manual-mod-categories .mod-sort-toggle.is-active { color: #ffffff; background: var(--success); border-color: var(--success); }
+[data-theme="light"] .enemy-missing-toggle.is-active { color: #ffffff; background: #a5641f; border-color: #a5641f; }
+[data-theme="light"] .build-scenario-fold .check-field input:checked::before { border-left-color: #ffffff; border-bottom-color: #ffffff; }
+[data-theme="light"] .slot-number { background: #eef2f7; border-color: #bcc6d4; color: #35404e; }
+[data-theme="light"] .warframe-shard-remove { background: #ffffff; border-color: #cbd5e1; color: var(--danger); box-shadow: 0 2px 6px rgba(30, 40, 60, 0.12); }
+[data-theme="light"] .timeline-svg { background: linear-gradient(180deg, #f7f9fc, #edf2f7); border-color: rgba(29, 127, 149, 0.22); }
+[data-theme="light"] .timeline-svg .tl-axis { fill: #526071; }
+[data-theme="light"] .timeline-svg .tl-kill-label { fill: #b42338; }
+[data-theme="light"] .stat-value::-webkit-slider-runnable-track { background: linear-gradient(90deg, var(--riven) var(--progress), #cbd5e1 var(--progress)); }
+[data-theme="light"] .stat-value::-moz-range-track { background: #cbd5e1; }
+[data-theme="light"] .slot-count-field input::-webkit-slider-runnable-track { background: linear-gradient(90deg, var(--orokin) var(--progress), #cbd5e1 var(--progress)); }
+[data-theme="light"] .damage-type-item > i { background: linear-gradient(90deg, var(--ice) var(--damage-width), #d0d8e3 var(--damage-width)); }
+[data-theme="light"] .contribution-track { background: #d5dde8; }
+[data-theme="light"] .orbit-track { stroke: #d5dde8; }
+[data-theme="light"] .profile-inline select,
+[data-theme="light"] .fill-range-row input,
+[data-theme="light"] .external-buff-number input { background: #ffffff; border-color: var(--line); color: var(--text); }
+[data-theme="light"] .scope-chip { background: #f4f6f9; }
+[data-theme="light"] .arcane-option,
+[data-theme="light"] .kitgun-part-chip:not(.is-active),
+[data-theme="light"] .arcane-flag-toggle:not(.is-active),
+[data-theme="light"] .manual-mod-categories button:not(.is-active),
+[data-theme="light"] .weapon-option:not(.is-selected),
+[data-theme="light"] .riven-builder-row,
+[data-theme="light"] .riven-solve-row,
+[data-theme="light"] .mod-picker-grid.is-list .manual-mod-option,
+[data-theme="light"] .enemy-factions button:not(.is-active),
+[data-theme="light"] .enemy-option:not(.is-selected),
+[data-theme="light"] .enemy-missing-toggle:not(.is-active) { background: #f7f9fc; }
+[data-theme="light"] .weapon-option.is-selected,
+[data-theme="light"] .enemy-option.is-selected { background: rgba(29, 127, 149, 0.12); border-color: var(--ice); }
+[data-theme="light"] .enemy-stats-panel,
+[data-theme="light"] .probability-panel,
+[data-theme="light"] .timeline-panel,
+[data-theme="light"] .combat-panel,
+[data-theme="light"] .exalted-energy,
+[data-theme="light"] .warframe-exalted-card { background: #f8fafc; }
+[data-theme="light"] .combat-chart-row,
+[data-theme="light"] .sentinel-stat,
+[data-theme="light"] .exalted-stat { background: #ffffff; }
+[data-theme="light"] .warframe-selector-trigger { background: #f7f9fc; }
+[data-theme="light"] .warframe-selector-visual { background: #e6ecf3; color: var(--text); }
+[data-theme="light"] .warframe-equipment-band { background: rgba(60, 74, 92, 0.03); }
+[data-theme="light"] .enemy-defense .enemy-defense-tag.is-weak { color: #15803d; }
+[data-theme="light"] .enemy-defense .enemy-defense-tag.is-resist { color: #b91c1c; }
+[data-theme="light"] .favorite-summary b,
+[data-theme="light"] .sentinel-stat b.is-changed,
+[data-theme="light"] .part-values-pairs .is-synergy b { color: var(--success); }
+[data-theme="light"] .part-values-pairs .is-dilution b { color: var(--danger); }
+[data-theme="light"] .enemy-missing-toggle:not(.is-active),
+[data-theme="light"] .enemy-missing-badge,
+[data-theme="light"] .weapon-option-copy em,
+[data-theme="light"] .enemy-option em,
+[data-theme="light"] .incarnon-option em,
+[data-theme="light"] #build-enemy-current-meta .enemy-headshot.is-missing { color: #9a5b13; }
+[data-theme="light"] .effect-chip.is-set { color: var(--orokin); }
+
+/* ============ 四配装架构：导航芯片、返回横幅、双卡协同中枢与同伴工作台 ============ */
+.tool-tab.is-arena-chip {
+  margin-left: 6px;
+  padding: 0 14px;
+  border: 1px solid color-mix(in srgb, var(--ice) 45%, transparent);
+  border-bottom: 0;
+  border-radius: 5px 5px 0 0;
+  color: var(--ice);
+  background: color-mix(in srgb, var(--ice) 10%, var(--panel));
+  font-weight: 600;
+}
+.tool-tab.is-arena-chip::after {
+  background: var(--ice);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--ice) 55%, transparent);
+}
+.tool-tab.is-arena-chip:hover {
+  background: color-mix(in srgb, var(--ice) 18%, var(--panel));
+}
+
+.synergy-return-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  border: 1px solid color-mix(in srgb, var(--orokin) 45%, var(--line));
+  border-left: 3px solid var(--orokin);
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--orokin) 9%, var(--panel));
+  box-shadow: var(--shadow);
+}
+.synergy-return-btn {
+  flex-shrink: 0;
+}
+.synergy-return-hint {
+  color: var(--text-soft);
+  font-size: 12px;
+}
+
+/* 武器配装页：双卡协同中枢 (#build-synergy-panel) */
+.synergy-hub {
+  display: grid;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--line-soft);
+  border-top: 2px solid color-mix(in srgb, var(--ice) 55%, var(--line));
+  border-radius: 4px;
+  background: var(--panel);
+}
+.synergy-hub-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 14px;
+}
+.synergy-hub-head > div {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.synergy-kicker {
+  color: var(--ice);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+.synergy-hub-head h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 650;
+}
+.synergy-hub-head small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.synergy-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.synergy-card {
+  display: grid;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line-soft);
+  border-radius: 5px;
+  background: var(--panel-raised);
+  transition: border-color .16s ease, background .16s ease;
+}
+.synergy-card.is-enabled {
+  border-color: color-mix(in srgb, var(--ice) 48%, var(--line));
+  background: color-mix(in srgb, var(--ice) 4%, var(--panel-raised));
+}
+.synergy-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.synergy-identity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+}
+.synergy-avatar-wrap {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--void);
+  color: var(--orokin);
+  font-size: 18px;
+}
+.synergy-card.is-enabled .synergy-avatar-wrap {
+  border-color: var(--ice);
+}
+.synergy-avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.synergy-avatar-wrap i {
+  font-style: normal;
+}
+.synergy-card-title {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+.synergy-card-title strong {
+  color: var(--text);
+  font-size: 14px;
+}
+.synergy-card-title small {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.synergy-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--void);
+  color: var(--text-soft);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+.synergy-switch:hover {
+  border-color: var(--ice);
+}
+.synergy-switch input {
+  margin: 0;
+  accent-color: var(--ice);
+}
+.synergy-card-body {
+  display: grid;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line-soft);
+}
+.synergy-controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+}
+.synergy-select-field {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+.warframe-selector-trigger.is-synergy-picker {
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  gap: 8px;
+  min-height: 44px;
+  padding: 5px 10px;
+  background: var(--void);
+  border-color: var(--line);
+}
+.warframe-selector-trigger.is-synergy-picker .warframe-selector-visual {
+  width: 34px;
+  height: 34px;
+  font-size: 14px;
+}
+.warframe-selector-trigger.is-synergy-picker .warframe-selector-copy {
+  gap: 1px;
+}
+.warframe-selector-trigger.is-synergy-picker .warframe-selector-copy strong {
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.25;
+}
+.warframe-selector-trigger.is-synergy-picker .warframe-selector-copy em {
+  display: block;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1.25;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+[data-theme="light"] .warframe-selector-trigger.is-synergy-picker {
+  background: #f4f6f9;
+}
+.synergy-slot-group {
+  display: grid;
+  gap: 5px;
+}
+.synergy-slot-group > span,
+.synergy-paired-label {
+  color: var(--text-soft);
+  font-size: 11px;
+  font-weight: 600;
+}
+.synergy-slot-tabs button {
+  min-width: 32px;
+  min-height: 38px;
+  padding: 0 9px;
+}
+.synergy-jump-btn {
+  min-height: 44px;
+  white-space: nowrap;
+  border-color: color-mix(in srgb, var(--ice) 40%, var(--line));
+  color: var(--ice);
+}
+.synergy-paired-weapon {
+  display: grid;
+  flex: 1 1 160px;
+  min-width: 0;
+  gap: 3px;
+  padding: 6px 10px;
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+  background: var(--void);
+  text-align: left;
+}
+.synergy-paired-weapon.is-interactive {
+  border-color: var(--line);
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease;
+}
+.synergy-paired-weapon.is-interactive:hover:not(:disabled) {
+  border-color: var(--ice);
+  background: color-mix(in srgb, var(--ice) 6%, var(--void));
+}
+.synergy-paired-weapon:disabled {
+  opacity: 1;
+  cursor: default;
+}
+[data-theme="light"] .synergy-paired-weapon {
+  background: #f4f6f9;
+}
+.synergy-paired-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+.synergy-paired-weapon strong {
+  overflow: hidden;
+  color: var(--orokin);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.synergy-paired-value > b {
+  flex-shrink: 0;
+  color: var(--ice);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1;
+}
+.synergy-paired-weapon:disabled .synergy-paired-value > b {
+  display: none;
+}
+.synergy-abilities-block {
+  display: grid;
+  gap: 6px;
+}
+.synergy-subhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.synergy-subhead > span {
+  color: var(--text-soft);
+  font-size: 11px;
+  font-weight: 600;
+}
+.synergy-subhead > small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.synergy-ability-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.synergy-empty-pill {
+  color: var(--muted);
+  font-size: 11px;
+}
+.synergy-ability-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--void);
+  transition: border-color .15s ease, background .15s ease;
+}
+.synergy-ability-chip.is-active {
+  border-color: var(--ice);
+  background: color-mix(in srgb, var(--ice) 15%, var(--void));
+}
+.synergy-ability-btn {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  min-height: 26px;
+  padding: 3px 10px;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: left;
+}
+.synergy-ability-btn > span {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.synergy-ability-chip.is-active .synergy-ability-btn {
+  color: var(--text);
+  font-weight: 600;
+}
+.synergy-ability-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+[data-theme="light"] .synergy-ability-icon {
+  filter: invert(0.82);
+}
+.synergy-ability-btn em {
+  color: var(--ice);
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1.35;
+}
+.synergy-ability-element {
+  min-height: 24px !important;
+  height: auto !important;
+  width: auto !important;
+  padding: 2px 20px 2px 8px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 12px !important;
+  background-color: var(--panel-raised) !important;
+  color: var(--text) !important;
+  font-size: 11px !important;
+  line-height: 1.25 !important;
+  align-items: center;
+}
+/* 战甲协同开启时屏蔽武器页两个战甲赋能槽位（避免重复计算） */
+.arcane-workbench-slot.is-synergy-shielded {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--ice) 45%, var(--line));
+  background: color-mix(in srgb, var(--ice) 4%, var(--void));
+  cursor: default;
+}
+[data-theme="light"] .arcane-workbench-slot.is-synergy-shielded {
+  background: color-mix(in srgb, var(--ice) 6%, #f4f6f9);
+}
+.arcane-workbench-slot.is-synergy-shielded:hover,
+.arcane-workbench-slot.is-synergy-shielded:focus-visible {
+  border-color: var(--ice);
+  background: color-mix(in srgb, var(--ice) 7%, var(--void));
+}
+[data-theme="light"] .arcane-workbench-slot.is-synergy-shielded:hover,
+[data-theme="light"] .arcane-workbench-slot.is-synergy-shielded:focus-visible {
+  background: color-mix(in srgb, var(--ice) 9%, #f4f6f9);
+}
+.arcane-workbench-slot.is-synergy-shielded .arcane-slot-visual {
+  opacity: .55;
+}
+.arcane-shielded-badge {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  padding: 1px 7px;
+  border: 1px solid color-mix(in srgb, var(--ice) 48%, var(--line));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ice) 12%, transparent);
+  color: var(--ice);
+  font-size: 10px;
+  font-weight: 600;
+}
+.arcane-shielded-jump {
+  grid-column: 1 / -1;
+  justify-self: end;
+  min-height: 24px;
+  padding: 0 9px;
+  border: 1px solid color-mix(in srgb, var(--ice) 42%, var(--line));
+  border-radius: 3px;
+  background: var(--panel-raised);
+  color: var(--ice);
+  font-size: 11px;
+  cursor: pointer;
+}
+.arcane-shielded-jump:hover {
+  border-color: var(--ice);
+  background: color-mix(in srgb, var(--ice) 12%, var(--panel-raised));
+}
+.synergy-status-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.synergy-status-pills:empty {
+  display: none;
+}
+.synergy-status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+  background: var(--void);
+  color: var(--text-soft);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.synergy-status-pill.is-good {
+  border-color: color-mix(in srgb, var(--success) 45%, var(--line));
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 9%, var(--void));
+}
+.synergy-status-pill.is-warn {
+  border-color: color-mix(in srgb, var(--warning) 48%, var(--line));
+  color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 10%, var(--void));
+}
+
+/* 独立「同伴配装」工作台 (#companion-tool) */
+.companion-control-fields input[type="number"] {
+  width: 100%;
+  height: 38px;
+  min-width: 0;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  outline: 0;
+  background: var(--void);
+  color: var(--text);
+}
+.companion-control-fields select {
+  width: 100%;
+  min-height: 38px;
+  height: auto;
+  min-width: 0;
+  padding: 7px 26px 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  outline: 0;
+  background: var(--void);
+  color: var(--text);
+  line-height: 1.35;
+  align-items: center;
+}
+.companion-wf-cfg-field select {
+  min-height: 44px;
+  padding: 9px 22px 9px 10px;
+}
+[data-theme="light"] .companion-control-fields select,
+[data-theme="light"] .companion-control-fields input[type="number"] {
+  background: #f4f6f9;
+}
+.companion-category-badge {
+  display: inline-block;
+  width: fit-content;
+  padding: 2px 7px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-size: 11px !important;
+  font-weight: 600;
+}
+.companion-category-badge.is-robotic {
+  border-color: color-mix(in srgb, var(--ice) 50%, var(--line));
+  color: var(--ice) !important;
+  background: color-mix(in srgb, var(--ice) 10%, transparent);
+}
+.companion-category-badge.is-beast {
+  border-color: color-mix(in srgb, var(--orokin) 50%, var(--line));
+  color: var(--orokin) !important;
+  background: color-mix(in srgb, var(--orokin) 10%, transparent);
+}
+.companion-modular-box,
+.companion-weapon-box,
+.companion-options-box {
+  display: grid;
+  gap: 10px;
+  padding: 11px 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+  background: var(--panel-raised);
+}
+.companion-box-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.companion-box-head strong {
+  color: var(--text);
+  font-size: 13px;
+}
+.companion-box-head span {
+  color: var(--muted);
+  font-size: 11px;
+}
+.companion-modular-grid {
+  display: grid;
+  gap: 8px;
+}
+.companion-wf-link-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 82px;
+  gap: 8px;
+}
+.companion-context-readout {
+  color: var(--muted);
+  line-height: 1.45;
+}
+.companion-primary-preview-row,
+.companion-inline-selects {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.companion-check-list {
+  display: grid;
+  gap: 6px;
+}
+.companion-check-list .check-field {
+  white-space: normal;
+  line-height: 1.4;
+}
+.companion-subview-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  background: color-mix(in srgb, var(--panel-raised) 70%, var(--panel));
+}
+.companion-subview-tabs button {
+  min-height: 34px;
+  padding: 0 16px;
+  font-weight: 600;
+}
+.companion-subview-hint {
+  color: var(--muted);
+  font-size: 11px;
+}
+.companion-subview-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+.companion-weapon-toolbar {
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.companion-opt-controls {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.companion-opt-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text-soft);
+  font-size: 12px;
+}
+.companion-opt-inline > span {
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+.companion-opt-inline select {
+  min-height: 32px;
+  height: auto;
+  padding: 5px 24px 5px 9px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--void);
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.3;
+  align-items: center;
+}
+[data-theme="light"] .companion-opt-inline select {
+  background: #f4f6f9;
+}
+.companion-riven-title-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.companion-riven-dispo {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border: 1px solid color-mix(in srgb, var(--orokin) 45%, var(--line));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--orokin) 10%, transparent);
+  color: var(--orokin);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.companion-riven-builder-rows {
+  display: grid;
+  gap: 8px;
+}
+.companion-riven-live-note {
+  flex: 1 1 100%;
+  color: var(--muted);
+  font-size: 11px;
+}
+.companion-composition-panel {
+  display: grid;
+  gap: 10px;
+}
+.companion-damage-type-list {
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px;
+}
+.companion-damage-type-list .damage-type-item {
+  display: grid;
+  gap: 4px;
+}
+.companion-dt-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.companion-dt-meta em {
+  color: var(--text-soft);
+  font-style: normal;
+}
+.companion-config-strip {
+  margin: -18px -16px 14px;
+}
+.companion-reactor-check {
+  padding: 4px 10px;
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+  background: var(--void);
+  color: var(--text-soft);
+}
+.companion-slots-grid {
+  display: grid;
+  justify-content: center;
+  gap: 4px 0;
+}
+.companion-slots-grid.is-body-grid {
+  grid-template-columns: repeat(5, 204px);
+}
+.companion-slots-grid.is-weapon-grid {
+  grid-template-columns: repeat(4, 204px);
+}
+.companion-slot .manual-slot-actions {
+  justify-content: center;
+}
+.companion-slot .is-bond-card .game-mod-card {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--orokin) 55%, transparent);
+  border-radius: 6px;
+}
+.companion-posture-wrap {
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed var(--line-soft);
+}
+.companion-posture-slot {
+  display: flex;
+  justify-content: center;
+}
+.companion-riven-bar {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--riven) 38%, var(--line));
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--riven) 6%, var(--panel-raised));
+}
+.companion-riven-bar-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.companion-riven-bar-head > div:first-child {
+  display: grid;
+  gap: 2px;
+}
+.companion-riven-bar-head strong {
+  color: var(--riven-bright);
+  font-size: 13px;
+}
+.companion-riven-bar-head span {
+  color: var(--muted);
+  font-size: 11px;
+}
+.companion-riven-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.companion-riven-editor {
+  display: grid;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line-soft);
+}
+.companion-riven-rows {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.companion-riven-row {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 96px;
+  align-items: center;
+  gap: 6px;
+}
+.companion-riven-row input {
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--void);
+  color: var(--text);
+}
+.companion-riven-row select,
+.companion-riven-foot select {
+  min-height: 32px;
+  height: auto;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--void);
+  color: var(--text);
+  line-height: 1.3;
+  align-items: center;
+}
+[data-theme="light"] .companion-riven-row input,
+[data-theme="light"] .companion-riven-row select,
+[data-theme="light"] .companion-riven-foot select {
+  background: #f4f6f9;
+}
+.companion-riven-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+}
+.companion-riven-foot .button-fill {
+  margin-left: auto;
+}
+.companion-dashboard {
+  display: grid;
+  gap: 18px;
+}
+.companion-stats-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.companion-stats-col {
+  min-width: 0;
+}
+.companion-panel-stat.is-better strong,
+.warframe-panel-stat.is-better strong {
+  color: var(--success);
+}
+.companion-bond-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.companion-bond-card {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 11px 12px;
+  border: 1px solid var(--line-soft);
+  border-left: 3px solid var(--line);
+  border-radius: 5px;
+  background: var(--panel-raised);
+}
+.companion-bond-card.is-active {
+  border-left-color: var(--success);
+  background: color-mix(in srgb, var(--success) 5%, var(--panel-raised));
+}
+.companion-bond-card.is-warn {
+  border-left-color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 6%, var(--panel-raised));
+}
+.companion-bond-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.companion-bond-head strong {
+  color: var(--text);
+  font-size: 13px;
+}
+.companion-bond-badge {
+  padding: 2px 7px;
+  border: 1px solid var(--line-soft);
+  border-radius: 3px;
+  color: var(--muted);
+  background: var(--void);
+  font-size: 11px;
+  font-weight: 600;
+}
+.companion-bond-card.is-active .companion-bond-badge {
+  border-color: color-mix(in srgb, var(--success) 45%, var(--line));
+  color: var(--success);
+}
+.companion-bond-card.is-warn .companion-bond-badge {
+  border-color: color-mix(in srgb, var(--warning) 45%, var(--line));
+  color: var(--warning);
+}
+.companion-bond-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.companion-warnings {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--warning) 45%, var(--line));
+  border-left: 3px solid var(--warning);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--warning) 8%, var(--panel-raised));
+  color: var(--text-soft);
+}
+.companion-warnings p {
+  margin: 0;
+  font-size: 12px;
+}
+
+/* 同伴选择器实体卡片与高亮徽标 */
+.companion-entity-option {
+  grid-template-columns: 64px minmax(0, 1fr);
+}
+.companion-entity-thumb {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  border-radius: 6px;
+  background: var(--void);
+  color: var(--orokin);
+  font-size: 22px;
+}
+.companion-entity-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.companion-entity-copy {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+.companion-entity-copy strong {
+  overflow: hidden;
+  color: var(--text);
+  font-size: 13.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.companion-entity-copy small {
+  color: var(--ice);
+  font-size: 11px;
+}
+.companion-entity-copy em {
+  color: var(--muted);
+  font-size: 11px;
+  font-style: normal;
+}
+.mod-picker-grid:not(.is-list) .manual-mod-option {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-self: center;
+}
+.manual-mod-option.is-synergy-highlight {
+  border-color: transparent;
+}
+.manual-mod-option.is-synergy-highlight .game-mod-card {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--orokin) 68%, transparent), 0 0 12px color-mix(in srgb, var(--orokin) 20%, transparent);
+  border-radius: 6px;
+}
+.companion-mod-highlight-tag {
+  display: block;
+  box-sizing: border-box;
+  width: 184px;
+  margin-top: 4px;
+  padding: 2px 6px;
+  border: 1px solid color-mix(in srgb, var(--orokin) 42%, var(--line-soft));
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--orokin) 14%, var(--panel));
+  color: var(--orokin);
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+}
+
+@media (max-width: 1320px) {
+  .companion-slots-grid.is-body-grid,
+  .companion-slots-grid.is-weapon-grid {
+    grid-template-columns: repeat(auto-fill, 204px);
+  }
+  .companion-bond-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 1020px) {
+  .synergy-card-grid,
+  .companion-stats-columns {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 680px) {
+  .companion-bond-grid,
+  .companion-riven-rows,
+  .companion-primary-preview-row,
+  .companion-inline-selects {
+    grid-template-columns: 1fr;
+  }
+  .tab-strip {
+    overflow-x: auto;
+  }
+  .tool-tab {
+    flex-shrink: 0;
+  }
+}

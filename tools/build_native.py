@@ -6,6 +6,7 @@ Needs a Rust toolchain (cargo). The engine runs without the library (pure
 Python reference); with it, hot paths run natively with identical results.
 """
 import os
+import platform
 import shutil
 import subprocess
 import sys
@@ -20,12 +21,18 @@ def main() -> int:
     profile = "debug" if "--debug" in sys.argv else "release"
     cargo = shutil.which("cargo") or str(Path.home() / ".cargo" / "bin" / "cargo")
     command = [cargo, "build"] + ([] if profile == "debug" else ["--release"])
+    env = dict(
+        os.environ,
+        CARGO_BUILD_JOBS=os.environ.get("CARGO_BUILD_JOBS", "14"),
+        PYO3_PYTHON=os.environ.get("PYO3_PYTHON", sys.executable),
+    )
+    if profile == "release" and "RUSTFLAGS" not in env and platform.machine().lower() in ("amd64", "x86_64"):
+        env["RUSTFLAGS"] = "-C target-cpu=x86-64-v3"
     # Cargo reports progress on stderr; pass it on as stdout so a caller that
     # treats native stderr as an error (build-portable.ps1 under
     # $ErrorActionPreference = "Stop" with redirected output) does not abort.
     build = subprocess.run(command, cwd=CRATE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
-                           encoding="utf-8", errors="replace",
-                           env=dict(os.environ, CARGO_BUILD_JOBS=os.environ.get("CARGO_BUILD_JOBS", "4")))
+                           encoding="utf-8", errors="replace", env=env)
     print(build.stdout, end="")
     if build.returncode:
         return build.returncode

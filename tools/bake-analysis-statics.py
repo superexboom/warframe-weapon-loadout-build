@@ -265,8 +265,18 @@ def _profiles(value: str) -> list[str]:
 
 def _task_cost(raw_weapon: dict) -> tuple:
     """Longest tasks first, so the pool does not end on one long weapon:
-    melee routes and Incarnon forms replay the most."""
-    return (raw_weapon.get("slot") != "melee", not raw_weapon.get("isIncarnon"))
+    melee routes, Incarnon forms and multi-component projectile/AoE weapons
+    replay the most."""
+    modes = [m for m in (raw_weapon.get("fireModes") or ()) if isinstance(m, dict)]
+    has_proj_events = any(bool(m.get("projectileEvents")) for m in modes)
+    has_radial = any(bool((m.get("damage") or {}).get("radial") or (m.get("damage") or {}).get("components")) for m in modes)
+    return (
+        raw_weapon.get("slot") != "melee",
+        not raw_weapon.get("isIncarnon"),
+        not has_proj_events,
+        not has_radial,
+        -len(modes),
+    )
 
 
 def main() -> int:

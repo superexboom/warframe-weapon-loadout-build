@@ -289,7 +289,13 @@ pub fn co_damage(spec: &CoSpec, co: &[(u8, f64)], el: &Elements) -> CoDamage {
             ordinary_scale + raw_co * fraction
         };
     }
-    damage_scale += spec.ordinary_scale * (spec.compression_mult - 1.0);
+    if spec.gunco_fraction.is_some() && spec.gunco_independent {
+        if spec.compression_mult != 1.0 {
+            damage_scale *= spec.compression_mult;
+        }
+    } else {
+        damage_scale += spec.ordinary_scale * (spec.compression_mult - 1.0);
+    }
     let base_bracket = damage_scale;
     let mut victim_low = 1.0;
     let (victim_damage, co_fraction) = (spec.victim_damage, spec.co_fraction);

@@ -87,6 +87,10 @@ def test_shield_gate_passes_five_percent_of_the_breaking_hit(engine):
     # A direct weakpoint hit bypasses the gate.
     head = run(st, dict(target(hp=1000), shield=100), window_seconds=.5, headshot_chance=1.0)
     assert head["totalWindowDamage"] == pytest.approx(500)
+    # WFSim M01 + M61: Toxin bypasses shield completely and is never multiplied by SHIELD_GATE_LEAK.
+    mixed = stats(damage_types={"DT_IMPACT": 600.0, "DT_POISON": 200.0}, fire_rate=1.0, status_chance=0.0, dot_base_damage=None)
+    mixed_body = run(mixed, dict(target(hp=1000), shield=100), window_seconds=.5)
+    assert mixed_body["totalWindowDamage"] == pytest.approx(100 + 200 + 500 * SHIELD_GATE_LEAK)
 
 
 # ── Demolisher faction bracket (WFSim M89) ────────────────────────────────

@@ -30,7 +30,7 @@ try:  # pragma: no cover - exercised when the native core is built
 except ImportError:  # pragma: no cover
     wfcore = None
 
-ENABLED = (wfcore is not None and hasattr(wfcore, "ModsPrep") and getattr(wfcore,"NATIVE_CRIT_FACTOR",0) and getattr(wfcore, "RELOAD_SCALED_TRANSFORMS", 0) and os.environ.get("WF_NATIVE") != "0"
+ENABLED = (wfcore is not None and hasattr(wfcore, "ModsPrep") and getattr(wfcore,"NATIVE_CRIT_FACTOR",0) and getattr(wfcore, "RELOAD_SCALED_TRANSFORMS", 0) and getattr(wfcore, "M120_FORTIFIER_AND_SHIELD_BYPASS", 0) and os.environ.get("WF_NATIVE") != "0"
            and os.environ.get("WF_NATIVE_MODS") != "0")
 SHADOW = os.environ.get("WF_NATIVE_SHADOW") == "1"
 
@@ -45,11 +45,59 @@ class Unsupported(Exception):
 
 
 class Prep:
-    __slots__ = ("weapon", "pinned", "core", "zoom", "candidates", "base_obj", "base_total_obj", "ignore_headshot_bonus")
+    __slots__ = (
+        "weapon",
+        "pinned",
+        "core",
+        "zoom",
+        "candidates",
+        "base_obj",
+        "base_total_obj",
+        "ignore_headshot_bonus",
+        "innate_terms",
+        "is_motovore",
+        "native_ammo_free",
+        "max_fire_rate",
+    )
+
+
+_CoSpec = None
+_ModdedStats = None
+_ModEffectList = None
+_motovore_wheel_effects = None
+_MOTOVORE_PATH = None
+
+
+def _load_damage_refs() -> None:
+    global _CoSpec, _ModdedStats, _ModEffectList, _motovore_wheel_effects, _MOTOVORE_PATH
+    from .damage import (
+        CoSpec,
+        ModdedStats,
+        ModEffectList,
+        _MOTOVORE_PATH as motovore_path,
+        motovore_wheel_effects,
+    )
+
+    _CoSpec = CoSpec
+    _ModdedStats = ModdedStats
+    _ModEffectList = ModEffectList
+    _motovore_wheel_effects = motovore_wheel_effects
+    _MOTOVORE_PATH = motovore_path
 
 
 def _scenario_key(scenario) -> tuple:
     state = scenario.combat_state
+    if not state:
+        return (
+            scenario.aiming,
+            scenario.heavy_attack,
+            scenario.distance,
+            scenario.incarnon_cycle,
+            False,
+            0,
+            1,
+            False,
+        )
     return (scenario.aiming, scenario.heavy_attack, scenario.distance, scenario.incarnon_cycle,
             state.get("perfectCharge", True) is False, state.get("orbPasses", 0), state.get("orbStacks", 1),
             state.get("orbSpecialShield", False))
@@ -248,6 +296,7 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
         forced=list(forced.items()),
         ammoCost=float(mode.get("ammoCost") or 1),
     )
+    from .damage import ModEffect, _MOTOVORE_PATH as motovore_path, innate_terms_for
     prep = Prep()
     prep.ignore_headshot_bonus = config['ignoreHeadshotBonus']
     prep.weapon = weapon
@@ -256,8 +305,20 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
     prep.candidates = tuple(innate_candidates)
     prep.base_obj = base
     prep.base_total_obj = sum(base.values())
+    prep.innate_terms = innate_terms_for(weapon, fire_mode)
+    prep.is_motovore = (
+        weapon.get("path") == motovore_path
+        and not scenario.heavy_attack
+        and fire_mode == 0
+        and weapon.get("__selectedFireMode__", 0) == 0
+        and not weapon.get("__innateResolved__")
+        and (not state or state.get("meleeRoute", "combo") == "combo")
+    )
+    source_mode = weapon["fireModes"][fire_mode]
+    prep.native_ammo_free = bool(source_mode.get("nativeAmmoFree"))
+    cooldown = source_mode.get("nativeFireCooldownSeconds")
+    prep.max_fire_rate = (1.0 / cooldown) if cooldown else None
     config["zoom"] = prep.zoom
-    from .damage import ModEffect
     config["effectClass"] = ModEffect
     prep.core = wfcore.ModsPrep(config)
     return prep
@@ -265,38 +326,43 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
 
 def apply(weapon, effects, fire_mode, scenario, *, need_spec=True):
     """(ModdedStats, CoSpec) like the reference, or Unsupported."""
-    from .damage import CoSpec, ModdedStats, ModEffectList, innate_terms_for, motovore_wheel_effects, with_innate
-
-    if innate_terms_for(weapon, fire_mode):
-        effects = with_innate(weapon, ModEffectList(list(effects), skipped=getattr(effects, "skipped", ())), fire_mode)
-    heavy = weapon.get("heavyAttack")
-    if scenario.heavy_attack and isinstance(heavy, Mapping) and isinstance(heavy.get("components"), list) \
-            and heavy.get("components"):
-        raise Unsupported("heavy components")
-    skipped = list(getattr(effects, "skipped", ()))
-    if SHADOW and not isinstance(effects, list):
-        from .damage import ModEffectList
-        effects = ModEffectList(list(effects), skipped=skipped)
-    native_effects = motovore_wheel_effects(weapon, effects, fire_mode, scenario)
+    if _CoSpec is None:
+        _load_damage_refs()
+    if scenario.heavy_attack:
+        heavy = weapon.get("heavyAttack")
+        if isinstance(heavy, Mapping) and isinstance(heavy.get("components"), list) and heavy.get("components"):
+            raise Unsupported("heavy components")
     prep = prep_for(weapon, fire_mode, scenario)
+    terms = prep.innate_terms
+    if terms and not any(e.source_path == terms[0].source_path for e in effects):
+        effects = _ModEffectList([*effects, *terms], skipped=getattr(effects, "skipped", ()))
+    raw_skipped = getattr(effects, "skipped", None)
+    skipped = list(raw_skipped) if raw_skipped else ()
+    if SHADOW and not isinstance(effects, list):
+        effects = _ModEffectList(list(effects), skipped=list(skipped))
+    native_effects = (
+        _motovore_wheel_effects(weapon, effects, fire_mode, scenario)
+        if prep.is_motovore
+        else effects
+    )
     fields, spec_parts = wfcore.apply_mods(prep.core, native_effects, skipped, scenario.victim_status_count, need_spec)
     fields["innate_element_candidates"] = prep.candidates
-    source_mode=weapon['fireModes'][fire_mode]
-    if source_mode.get('nativeAmmoFree'):fields['ammo_cost']=0.
-    if source_mode.get('nativeFireCooldownSeconds'):
-        fields['fire_rate']=min(fields['fire_rate'],1./source_mode['nativeFireCooldownSeconds'])
+    if prep.native_ammo_free:
+        fields["ammo_cost"] = 0.0
+    if prep.max_fire_rate is not None and fields["fire_rate"] > prep.max_fire_rate:
+        fields["fire_rate"] = prep.max_fire_rate
     if 'ignore_headshot_bonus' not in fields:  # Compatibility with an older Portable core.
         fields = {name:value for key,value in fields.items() for name,value in
                   ([(key,value),('radial_victim_crit',False),('ignore_headshot_bonus',prep.ignore_headshot_bonus)]
                    if key=='radial_only' else [(key,value)])}
     fields.setdefault("delayed_radial_hit_event", False)
-    stats = ModdedStats.__new__(ModdedStats)
-    stats.__dict__.update(fields)
+    stats = _ModdedStats.__new__(_ModdedStats)
+    stats.__dict__ = fields
     if not need_spec:
         if SHADOW:
             shadow((stats, None), weapon, effects, fire_mode, scenario)
         return stats, None
-    spec = CoSpec()
+    spec = _CoSpec()
     (spec.victim_status_count, spec.damage_scale_effects, spec.ordinary_scale, spec.compression_mult,
      spec.gunco_independent, spec.gunco_fraction, spec.victim_damage, spec.co_fraction, spec.melee,
      spec.melee_damage_effects, spec.slam_effects, base, spec.base_total, spec.elemental_base_total,

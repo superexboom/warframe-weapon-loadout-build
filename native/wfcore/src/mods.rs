@@ -68,12 +68,18 @@ impl Num {
 }
 
 /// `sum(values)`: the int 0 when empty.
+#[inline]
 fn pysum(values: impl IntoIterator<Item = f64>) -> Num {
-    let values: Vec<f64> = values.into_iter().collect();
-    if values.is_empty() {
-        Num::I(0)
+    let mut s = crate::pymath::PySum::new();
+    let mut any = false;
+    for v in values {
+        any = true;
+        s.add(v);
+    }
+    if any {
+        Num::F(s.value())
     } else {
-        Num::F(psum(values))
+        Num::I(0)
     }
 }
 
@@ -170,7 +176,7 @@ const BUCKETS: &[&str] = &[
     "WEAPON_PROJECTILE_SPEED", "WEAPON_RELOAD_SPEED", "WEAPON_RELOAD_TIME", "WEAPON_VICTIM_CRIT_CHANCE",
     "WEAPON_VICTIM_CRIT_DAMAGE", "WEAPON_VICTIM_DAMAGE_AMOUNT", "WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE",
     "RUNTIME_TYPED_PROC_TIME", "RUNTIME_TYPED_PROC_MAX_STACK", "WEAPON_REFLECTION_EXPLOSION_CHANCE",
-    "RUNTIME_THROW_DAMAGE",
+    "RUNTIME_THROW_DAMAGE", "RUNTIME_TOXIN_PROC_DAMAGE",
 ];
 const OTHER: usize = BUCKETS.len();
 
@@ -232,6 +238,7 @@ struct Row {
     runtime_chance: Option<f64>,
     runtime_threshold: Option<f64>,
     runtime_multiplier: f64,
+    valid_proc_types: Vec<String>,
 }
 
 struct Entry {
@@ -242,7 +249,7 @@ struct Entry {
     row: Row,
 }
 
-fn opt_str(o: &Bound<'_, PyAny>, attr: &str) -> PyResult<Option<String>> {
+fn opt_str<'py>(o: &Bound<'py, PyAny>, attr: &Bound<'py, PyString>) -> PyResult<Option<String>> {
     let v = o.getattr(attr)?;
     if v.is_none() {
         Ok(None)
@@ -251,7 +258,7 @@ fn opt_str(o: &Bound<'_, PyAny>, attr: &str) -> PyResult<Option<String>> {
     }
 }
 
-fn opt_f(o: &Bound<'_, PyAny>, attr: &str) -> PyResult<Option<f64>> {
+fn opt_f<'py>(o: &Bound<'py, PyAny>, attr: &Bound<'py, PyString>) -> PyResult<Option<f64>> {
     let v = o.getattr(attr)?;
     if v.is_none() {
         Ok(None)
@@ -264,28 +271,29 @@ fn nonempty(s: &Option<String>) -> Option<&str> {
     s.as_deref().filter(|x| !x.is_empty())
 }
 
-fn row_of(py: Python<'_>, o: &Bound<'_, PyAny>) -> PyResult<Row> {
-    let upgrade: String = o.getattr("upgrade_type")?.extract()?;
-    let op_name: String = o.getattr("operation")?.extract()?;
-    let damage_type = opt_str(o, "damage_type")?;
+fn row_of<'py>(py: Python<'py>, o: &Bound<'py, PyAny>) -> PyResult<Row> {
+    let upgrade: String = o.getattr(pyo3::intern!(py, "upgrade_type"))?.extract()?;
+    let op_name: String = o.getattr(pyo3::intern!(py, "operation"))?.extract()?;
+    let damage_type = opt_str(o, pyo3::intern!(py, "damage_type"))?;
     let dtype = nonempty(&damage_type).map(|d| intern(py, d));
-    let source = opt_str(o, "source_path")?;
+    let source = opt_str(o, pyo3::intern!(py, "source_path"))?;
     Ok(Row {
         bucket: bucket_of(&upgrade),
         op: co::op_code(&op_name),
         set_base: op_name == "SET_BASE",
-        value: o.getattr("value")?.extract()?,
+        value: o.getattr(pyo3::intern!(py, "value"))?.extract()?,
         dtype,
         damage_type,
-        symbol: opt_str(o, "symbol_filter")?,
+        symbol: opt_str(o, pyo3::intern!(py, "symbol_filter"))?,
         zoom: source.as_deref().unwrap_or("").starts_with("zoom:"),
         source,
         upgrade,
-        runtime_kind: opt_str(o, "runtime_kind")?,
-        runtime_damage_type: opt_str(o, "runtime_damage_type")?,
-        runtime_chance: opt_f(o, "runtime_chance")?,
-        runtime_threshold: opt_f(o, "runtime_threshold")?,
-        runtime_multiplier: o.getattr("runtime_multiplier")?.extract()?,
+        runtime_kind: opt_str(o, pyo3::intern!(py, "runtime_kind"))?,
+        runtime_damage_type: opt_str(o, pyo3::intern!(py, "runtime_damage_type"))?,
+        runtime_chance: opt_f(o, pyo3::intern!(py, "runtime_chance"))?,
+        runtime_threshold: opt_f(o, pyo3::intern!(py, "runtime_threshold"))?,
+        runtime_multiplier: o.getattr(pyo3::intern!(py, "runtime_multiplier"))?.extract()?,
+        valid_proc_types: o.getattr(pyo3::intern!(py, "valid_proc_types"))?.extract::<Vec<String>>()?,
     })
 }
 
@@ -298,8 +306,10 @@ pub struct ModsPrep {
     classify: Py<PyAny>,
     effect_class: Py<PyAny>,
     zoom: Vec<Py<PyAny>>,
+    el: co::Elements,
     melee: bool,
     base: Vec<(D, f64)>,
+    raw_base_total: f64,
     compression: Option<(f64, bool, Option<f64>, f64, bool)>,
     aiming: bool,
     gunco_present: bool,
@@ -309,6 +319,8 @@ pub struct ModsPrep {
     direct_source_stack_damage: bool,
     co_base_fraction: f64,
     innate: Vec<(String, f64)>,
+    innate_ids: Vec<(Option<D>, f64)>,
+    innate_sum: f64,
     notes: Vec<(String, String)>,
     speed_falloff: bool,
     falloff: Option<(f64, f64, f64)>,
@@ -413,14 +425,21 @@ impl ModsPrep {
             let v = get(config, "superStatus")?;
             if v.is_none() { None } else { Some(v.extract::<(f64, f64)>()?) }
         };
+        let el = elements(py);
+        let raw_base_total = psum(base.iter().map(|e| e.1));
+        let innate: Vec<(String, f64)> = get(config, "innate")?.extract()?;
+        let innate_ids: Vec<(Option<D>, f64)> = innate.iter().map(|(d, v)| (Some(intern(py, d)), *v)).collect();
+        let innate_sum = pysum(innate.iter().map(|e| e.1)).f();
         Ok(ModsPrep {
             super_crit,
             super_status,
             classify: get(config, "classify")?.unbind(),
             effect_class: get(config, "effectClass")?.unbind(),
             zoom,
+            el,
             melee: get(config, "melee")?.extract()?,
             base,
+            raw_base_total,
             compression,
             aiming: get(config, "aiming")?.extract()?,
             gunco_present: get(config, "guncoPresent")?.extract()?,
@@ -429,7 +448,9 @@ impl ModsPrep {
             gunco_independent: get(config, "guncoIndependent")?.extract()?,
             direct_source_stack_damage: get(config, "directSourceStackDamage")?.extract()?,
             co_base_fraction: get(config, "coBaseFraction")?.extract()?,
-            innate: get(config, "innate")?.extract()?,
+            innate,
+            innate_ids,
+            innate_sum,
             notes: get(config, "notes")?.extract()?,
             speed_falloff: get(config, "speedFalloff")?.extract()?,
             falloff: get(config, "falloff")?.extract()?,
@@ -473,22 +494,80 @@ const RELOAD_NEVER_SECONDS: f64 = 1e9;
 const AMMO_EFFICIENCY_CAP: f64 = 0.75;
 
 impl ModsPrep {
-    /// The cached classification and row of one effect object.
-    fn entry(&self, py: Python<'_>, effect: &Bound<'_, PyAny>) -> PyResult<Arc<Entry>> {
-        let key = effect.as_ptr() as usize;
-        if let Some(hit) = self.cache.lock().unwrap().get(&key) {
-            return Ok(hit.clone());
-        }
-        // Python runs here: no lock held.
+    /// Classify one uncached effect object (caller holds no mutex).
+    fn classify_uncached<'py>(&self, py: Python<'py>, effect: &Bound<'py, PyAny>) -> PyResult<Arc<Entry>> {
         let verdict = self.classify.bind(py).call1((effect,))?;
         let t = verdict.cast::<PyTuple>()?;
         let status: u8 = t.get_item(0)?.extract()?;
         let message: Option<String> = t.get_item(1)?.extract()?;
         let unsupported: Option<String> = t.get_item(2)?.extract()?;
         let row = row_of(py, effect)?;
-        let entry = Arc::new(Entry { effect: effect.clone().unbind(), status, message, unsupported, row });
-        self.cache.lock().unwrap().insert(key, entry.clone());
-        Ok(entry)
+        Ok(Arc::new(Entry { effect: effect.clone().unbind(), status, message, unsupported, row }))
+    }
+
+    /// Resolve a slice of effect objects with at most one lock on full cache hit.
+    fn resolve_batch<'py>(
+        &self,
+        py: Python<'py>,
+        objs: &[Bound<'py, PyAny>],
+        out: &mut Vec<Arc<Entry>>,
+    ) -> PyResult<()> {
+        let mut misses: Vec<(usize, usize)> = Vec::new();
+        {
+            let mut cache = self.cache.lock().unwrap();
+            if cache.len() >= CACHE_MAX {
+                cache.clear();
+            }
+            out.reserve(objs.len());
+            for (idx, obj) in objs.iter().enumerate() {
+                let key = obj.as_ptr() as usize;
+                if let Some(hit) = cache.get(&key) {
+                    out.push(hit.clone());
+                } else {
+                    misses.push((out.len(), idx));
+                    // Placeholder overwritten below before `out` is read.
+                    out.push(Arc::new(Entry {
+                        effect: py.None(),
+                        status: 2,
+                        message: None,
+                        unsupported: None,
+                        row: Row {
+                            bucket: OTHER,
+                            op: 0,
+                            set_base: false,
+                            value: 0.0,
+                            damage_type: None,
+                            dtype: None,
+                            symbol: None,
+                            source: None,
+                            upgrade: String::new(),
+                            zoom: false,
+                            runtime_kind: None,
+                            runtime_damage_type: None,
+                            runtime_chance: None,
+                            runtime_threshold: None,
+                            runtime_multiplier: 1.0,
+                            valid_proc_types: Vec::new(),
+                        },
+                    }));
+                }
+            }
+        }
+        if !misses.is_empty() {
+            let mut resolved: Vec<(usize, usize, Arc<Entry>)> = Vec::with_capacity(misses.len());
+            for (slot, idx) in misses {
+                let obj = &objs[idx];
+                let key = obj.as_ptr() as usize;
+                let entry = self.classify_uncached(py, obj)?;
+                resolved.push((slot, key, entry));
+            }
+            let mut cache = self.cache.lock().unwrap();
+            for (slot, key, entry) in resolved {
+                cache.insert(key, entry.clone());
+                out[slot] = entry;
+            }
+        }
+        Ok(())
     }
 }
 
@@ -497,22 +576,36 @@ impl ModsPrep {
 struct Applied<'a> {
     rows: Vec<&'a Row>,
     objects: Vec<&'a Py<PyAny>>,
-    buckets: Vec<Vec<usize>>,
+    buckets: [Vec<usize>; OTHER + 1],
 }
 
 impl<'a> Applied<'a> {
+    #[inline]
     fn idx(&self, b: usize) -> &[usize] {
         &self.buckets[b]
     }
+    #[inline]
     fn ops(&self, b: usize) -> Vec<(u8, f64)> {
         self.buckets[b].iter().map(|&i| (self.rows[i].op, self.rows[i].value)).collect()
+    }
+    #[inline]
+    fn combine_one(&self, base: f64, b: usize) -> f64 {
+        let idx = &self.buckets[b];
+        if idx.is_empty() {
+            base
+        } else {
+            let ops: Vec<(u8, f64)> = idx.iter().map(|&i| (self.rows[i].op, self.rows[i].value)).collect();
+            combine(base, &[&ops])
+        }
     }
     fn ops_where(&self, b: usize, keep: impl Fn(&Row) -> bool) -> Vec<(u8, f64)> {
         self.buckets[b].iter().filter(|&&i| keep(self.rows[i])).map(|&i| (self.rows[i].op, self.rows[i].value)).collect()
     }
-    fn values(&self, b: usize) -> Vec<f64> {
-        self.buckets[b].iter().map(|&i| self.rows[i].value).collect()
+    #[inline]
+    fn values<'b>(&'b self, b: usize) -> impl Iterator<Item = f64> + 'b {
+        self.buckets[b].iter().map(move |&i| self.rows[i].value)
     }
+    #[inline]
     fn empty(&self, b: usize) -> bool {
         self.buckets[b].is_empty()
     }
@@ -555,27 +648,25 @@ pub fn apply_mods<'py>(
     need_spec: bool,
 ) -> PyResult<(Bound<'py, PyDict>, Py<PyAny>)> {
     let vsc: f64 = victim_status_count.extract()?;
-    let el = elements(py);
-    // Bounded: resolvers build fresh scaled effects every call.
-    {
-        let mut cache = prep.cache.lock().unwrap();
-        if cache.len() >= CACHE_MAX {
-            cache.clear();
-        }
-    }
+    let el = &prep.el;
     // Classify (cached per effect object), zoom buffs appended when absent.
-    let mut entries: Vec<Arc<Entry>> = Vec::new();
+    let mut raw_objs: Vec<Bound<'py, PyAny>> = Vec::with_capacity(24);
     for e in effects.try_iter()? {
-        entries.push(prep.entry(py, &e?)?);
+        raw_objs.push(e?);
     }
-    if !entries.iter().any(|e| e.row.zoom) {
-        for obj in prep.zoom.iter() {
-            entries.push(prep.entry(py, obj.bind(py))?);
-        }
+    let mut entries: Vec<Arc<Entry>> = Vec::with_capacity(raw_objs.len() + prep.zoom.len());
+    prep.resolve_batch(py, &raw_objs, &mut entries)?;
+    if !prep.zoom.is_empty() && !entries.iter().any(|e| e.row.zoom) {
+        let zoom_objs: Vec<Bound<'py, PyAny>> = prep.zoom.iter().map(|z| z.bind(py).clone()).collect();
+        prep.resolve_batch(py, &zoom_objs, &mut entries)?;
     }
     let mut skipped = skipped;
     let mut unsupported: BTreeSet<String> = BTreeSet::new();
-    let mut ap = Applied { rows: Vec::new(), objects: Vec::new(), buckets: vec![Vec::new(); OTHER + 1] };
+    let mut ap = Applied {
+        rows: Vec::with_capacity(entries.len()),
+        objects: Vec::with_capacity(entries.len()),
+        buckets: std::array::from_fn(|_| Vec::new()),
+    };
     for entry in entries.iter() {
         match entry.status {
             0 => {
@@ -681,11 +772,22 @@ pub fn apply_mods<'py>(
     if !ap.empty(b!("RUNTIME_PRIMARY_COMPRESSION")) && prep.aiming {
         match prep.compression {
             Some((radius0, takes_mods, reads, effectiveness, adds)) => {
-                let mut radius = radius0;
-                if takes_mods {
-                    radius = combine(radius, &[&ap.ops(b!("WEAPON_EXPLOSION_RADIUS"))]);
-                }
-                let considered = reads.unwrap_or(radius * effectiveness);
+                let considered = match reads {
+                    Some(m) => {
+                        if takes_mods {
+                            combine(m, &[&ap.ops(b!("WEAPON_EXPLOSION_RADIUS"))])
+                        } else {
+                            m
+                        }
+                    }
+                    None => {
+                        let mut radius = radius0;
+                        if takes_mods {
+                            radius = combine(radius, &[&ap.ops(b!("WEAPON_EXPLOSION_RADIUS"))]);
+                        }
+                        radius * effectiveness
+                    }
+                };
                 let lost = pmax(considered, 0.0) * 0.8;
                 let bonus = pysum(ap.values(b!("RUNTIME_PRIMARY_COMPRESSION"))).f() * lost;
                 compression_ammo = pysum(ap.idx(b!("RUNTIME_PRIMARY_COMPRESSION")).iter()
@@ -709,7 +811,7 @@ pub fn apply_mods<'py>(
     // The CoSpec keeps the value from here: the pool and copy factors that
     // multiply the local later reach the CO tail as their own factors.
     let spec_compression_mult = compression_mult;
-    let raw_base_total = psum(prep.base.iter().map(|e| e.1));
+    let raw_base_total = prep.raw_base_total;
     let mut gunco_fraction = None;
     if prep.gunco_present && !co_idx.is_empty() {
         let mut fraction = prep.gunco_base_fraction.unwrap_or(0.0);
@@ -720,7 +822,7 @@ pub fn apply_mods<'py>(
         fraction *= if total != 0.0 { pmax(total - excluded, 0.0) / total } else { 0.0 };
         gunco_fraction = Some(fraction);
     }
-    let victim_damage = combine(1.0, &[&ap.ops(b!("WEAPON_VICTIM_DAMAGE_AMOUNT"))]) - 1.0;
+    let victim_damage = ap.combine_one(1.0, b!("WEAPON_VICTIM_DAMAGE_AMOUNT")) - 1.0;
     let co_fraction = prep.co_base_fraction * raw_base_total / pmax(raw_base_total + damage_flat_base, 1e-9);
     let mut base: Vec<(D, f64)> = prep.base.clone();
     let mut base_scaled = false;
@@ -732,15 +834,14 @@ pub fn apply_mods<'py>(
         base_scaled = true;
     }
     let base_total = if base_scaled { psum(base.iter().map(|e| e.1)) } else { raw_base_total };
-    let innate: Vec<(Option<D>, f64)> = prep.innate.iter().map(|(d, v)| (Some(intern(py, d)), *v)).collect();
-    let elemental_base_total = base_total * (1.0 + pysum(prep.innate.iter().map(|e| e.1)).f());
+    let elemental_base_total = base_total * (1.0 + prep.innate_sum);
     for (code, line) in prep.notes.iter() {
         unsupported.insert(code.clone());
         skipped.push(line.clone());
     }
     let pre_idx: Vec<usize> = ap.idx(b!("WEAPON_PERCENT_BASE_DAMAGE_ADDED")).to_vec();
     let post_idx: Vec<usize> = ap.idx(b!("WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE")).to_vec();
-    let speed = pmax(0.0, combine(1.0, &[&ap.ops(b!("WEAPON_PROJECTILE_SPEED"))]));
+    let speed = pmax(0.0, ap.combine_one(1.0, b!("WEAPON_PROJECTILE_SPEED")));
     let falloff_multiplier = match (prep.distance, prep.falloff) {
         (Some(distance), Some((start0, end0, minimum))) if base_total > 0.0 => {
             let (start, end) = if speed != 1.0 && prep.speed_falloff { (start0 * speed, end0 * speed) } else { (start0, end0) };
@@ -1021,14 +1122,14 @@ pub fn apply_mods<'py>(
         elemental_base_total,
         pre: pre_idx.iter().map(|&i| element_of(rows[i])).collect(),
         post: post_idx.iter().map(|&i| element_of(rows[i])).collect(),
-        innate: innate.clone(),
+        innate: prep.innate_ids.clone(),
         pool_factor,
         copy_factor,
         orb: orb.map(|(e, s, p, a)| (e, s, p as f64, a)),
         final_damage: final_spec.as_ref().map(|(f, d)| (f.f(), d.clone())),
         frozen_factor,
     };
-    let codamage = co::co_damage(&spec, &co_ops, &el);
+    let codamage = co::co_damage(&spec, &co_ops, el);
     let status_ops: Vec<(u8, f64)> = co_ops.iter().map(|&(op, v)| (op, v * vsc)).collect();
     let status_multiplier = combine(1.0, &[&status_ops]);
 
@@ -1039,128 +1140,174 @@ pub fn apply_mods<'py>(
             Some(t) if crit_chance.f() < t => low_bonus,
             _ => 0.0,
         };
-    out.set_item("damage_types", dict_py(py, &codamage.damage_types)?)?;
-    out.set_item("crit_chance", crit_chance.to_py(py))?;
-    out.set_item("crit_multiplier", crit_eff)?;
-    out.set_item("status_chance", status_chance)?;
-    out.set_item("multishot", multishot)?;
-    out.set_item("fire_rate", fire_rate.to_py(py))?;
-    out.set_item("magazine", magazine)?;
-    out.set_item("reload_time", reload_time.to_py(py))?;
-    out.set_item("spread_multiplier", combine(1.0, &[&ap.ops(b!("WEAPON_SPREAD"))]))?;
-    out.set_item("recoil_multiplier", combine(1.0, &[&ap.ops(b!("WEAPON_RECOIL"))]))?;
-    out.set_item("ammo_max_multiplier", combine(1.0, &[&ap.ops(b!("WEAPON_AMMO_MAX"))]))?;
-    out.set_item("headshot_bonus_multiplier", combine(1.0, &[&ap.ops(b!("WEAPON_HEADSHOT_MULTIPLIER"))]))?;
-    out.set_item("proc_damage_multiplier", combine(1.0, &[&ap.ops(b!("WEAPON_PROC_DAMAGE"))]))?;
-    out.set_item("proc_duration_multiplier", combine(1.0, &[&ap.ops(b!("WEAPON_PROC_TIME"))]))?;
+    out.set_item(pyo3::intern!(py, "damage_types"), dict_py(py, &codamage.damage_types)?)?;
+    out.set_item(pyo3::intern!(py, "crit_chance"), crit_chance.to_py(py))?;
+    out.set_item(pyo3::intern!(py, "crit_multiplier"), crit_eff)?;
+    out.set_item(pyo3::intern!(py, "status_chance"), status_chance)?;
+    out.set_item(pyo3::intern!(py, "multishot"), multishot)?;
+    out.set_item(pyo3::intern!(py, "fire_rate"), fire_rate.to_py(py))?;
+    out.set_item(pyo3::intern!(py, "magazine"), magazine)?;
+    out.set_item(pyo3::intern!(py, "reload_time"), reload_time.to_py(py))?;
+    out.set_item(pyo3::intern!(py, "spread_multiplier"), ap.combine_one(1.0, b!("WEAPON_SPREAD")))?;
+    out.set_item(pyo3::intern!(py, "recoil_multiplier"), ap.combine_one(1.0, b!("WEAPON_RECOIL")))?;
+    out.set_item(pyo3::intern!(py, "ammo_max_multiplier"), ap.combine_one(1.0, b!("WEAPON_AMMO_MAX")))?;
+    out.set_item(pyo3::intern!(py, "headshot_bonus_multiplier"), ap.combine_one(1.0, b!("WEAPON_HEADSHOT_MULTIPLIER")))?;
+    let mut untyped_pd: Vec<(u8, f64)> = Vec::new();
+    let mut typed_pd: Vec<(String, Vec<(u8, f64)>)> = Vec::new();
+    let push_typed_pd = |typed: &mut Vec<(String, Vec<(u8, f64)>)>, d: String, op: u8, val: f64| {
+        match typed.iter_mut().find(|x| x.0 == d) {
+            Some(x) => x.1.push((op, val)),
+            None => typed.push((d, vec![(op, val)])),
+        }
+    };
+    let pt_to_dt = |pt: &str| -> String {
+        match pt {
+            "PT_POISON" => "DT_POISON".to_string(),
+            "PT_FIRE" => "DT_FIRE".to_string(),
+            "PT_BLEEDING" => "DT_SLASH".to_string(),
+            "PT_ELECTROCUTION" => "DT_ELECTRICITY".to_string(),
+            "PT_GAS" => "DT_GAS".to_string(),
+            "PT_BLAST" => "DT_EXPLOSION".to_string(),
+            other => other.to_string(),
+        }
+    };
+    for &i in ap.idx(b!("WEAPON_PROC_DAMAGE")) {
+        let r = rows[i];
+        if let Some(d) = nonempty(&r.damage_type).filter(|&d| d != "DT_ANY") {
+            push_typed_pd(&mut typed_pd, d.to_string(), r.op, r.value);
+        } else if !r.valid_proc_types.is_empty() {
+            for pt in r.valid_proc_types.iter() {
+                push_typed_pd(&mut typed_pd, pt_to_dt(pt), r.op, r.value);
+            }
+        } else {
+            untyped_pd.push((r.op, r.value));
+        }
+    }
+    for &i in ap.idx(b!("RUNTIME_TOXIN_PROC_DAMAGE")) {
+        let r = rows[i];
+        let d = nonempty(&r.damage_type).filter(|&d| d != "DT_ANY").unwrap_or("DT_POISON");
+        push_typed_pd(&mut typed_pd, d.to_string(), r.op, r.value);
+    }
+    let proc_damage_mult = if untyped_pd.is_empty() { 1.0 } else { combine(1.0, &[&untyped_pd]) };
+    out.set_item(pyo3::intern!(py, "proc_damage_multiplier"), proc_damage_mult)?;
+    out.set_item(pyo3::intern!(py, "proc_duration_multiplier"), ap.combine_one(1.0, b!("WEAPON_PROC_TIME")))?;
     {
         // damage._typed_durations: per damage type, the shared bucket then its own rows.
-        let shared = ap.ops(b!("WEAPON_PROC_TIME"));
-        let mut typed: Vec<(String, Vec<(u8, f64)>)> = Vec::new();
-        for &i in ap.idx(b!("RUNTIME_TYPED_PROC_TIME")) {
-            if let Some(d) = rows[i].damage_type.clone().filter(|d| !d.is_empty()) {
-                match typed.iter_mut().find(|x| x.0 == d) {
-                    Some(x) => x.1.push((rows[i].op, rows[i].value)),
-                    None => typed.push((d, vec![(rows[i].op, rows[i].value)])),
-                }
-            }
-        }
         let durations = PyDict::new(py);
-        for (d, own) in typed.iter() {
-            durations.set_item(d, combine(1.0, &[&shared, own]))?;
-        }
-        out.set_item("proc_duration_types", durations)?;
-        // damage._typed_stack_caps: extra victim stacks per damage type, summed in order.
-        let mut caps: Vec<(String, f64)> = Vec::new();
-        for &i in ap.idx(b!("RUNTIME_TYPED_PROC_MAX_STACK")) {
-            if let Some(d) = rows[i].damage_type.clone().filter(|d| !d.is_empty()) {
-                match caps.iter_mut().find(|x| x.0 == d) {
-                    Some(x) => x.1 += rows[i].value,
-                    None => caps.push((d, 0.0 + rows[i].value)),
+        if !ap.empty(b!("RUNTIME_TYPED_PROC_TIME")) {
+            let shared = ap.ops(b!("WEAPON_PROC_TIME"));
+            let mut typed: Vec<(String, Vec<(u8, f64)>)> = Vec::new();
+            for &i in ap.idx(b!("RUNTIME_TYPED_PROC_TIME")) {
+                if let Some(d) = rows[i].damage_type.clone().filter(|d| !d.is_empty()) {
+                    match typed.iter_mut().find(|x| x.0 == d) {
+                        Some(x) => x.1.push((rows[i].op, rows[i].value)),
+                        None => typed.push((d, vec![(rows[i].op, rows[i].value)])),
+                    }
                 }
             }
+            for (d, own) in typed.iter() {
+                durations.set_item(d, combine(1.0, &[&shared, own]))?;
+            }
         }
+        out.set_item(pyo3::intern!(py, "proc_duration_types"), durations)?;
+        // damage._typed_stack_caps: extra victim stacks per damage type, summed in order.
         let extra = PyDict::new(py);
-        for (d, v) in caps.iter() {
-            extra.set_item(d, *v)?;
+        if !ap.empty(b!("RUNTIME_TYPED_PROC_MAX_STACK")) {
+            let mut caps: Vec<(String, f64)> = Vec::new();
+            for &i in ap.idx(b!("RUNTIME_TYPED_PROC_MAX_STACK")) {
+                if let Some(d) = rows[i].damage_type.clone().filter(|d| !d.is_empty()) {
+                    match caps.iter_mut().find(|x| x.0 == d) {
+                        Some(x) => x.1 += rows[i].value,
+                        None => caps.push((d, 0.0 + rows[i].value)),
+                    }
+                }
+            }
+            for (d, v) in caps.iter() {
+                extra.set_item(d, *v)?;
+            }
         }
-        out.set_item("proc_max_stacks", extra)?;
+        out.set_item(pyo3::intern!(py, "proc_max_stacks"), extra)?;
+        let pd_types = PyDict::new(py);
+        for (d, own) in typed_pd.iter() {
+            pd_types.set_item(d, combine(1.0, &[&untyped_pd, own]))?;
+        }
+        out.set_item(pyo3::intern!(py, "proc_damage_types"), pd_types)?;
     }
-    out.set_item("status_condition_damage_multiplier", status_multiplier)?;
-    out.set_item("initial_combo", combine(0.0, &[&ap.ops(b!("WEAPON_MELEE_COMBO_INITIAL_BONUS"))]))?;
-    out.set_item("combo_duration", combine(if prep.melee { 5.0 } else { 0.0 }, &[&ap.ops(b!("WEAPON_MELEE_COMBO_DURATION_BONUS"))]))?;
-    out.set_item("heavy_attack_efficiency", combine(0.0, &[&ap.ops(b!("WEAPON_MELEE_COMBO_USAGE_EFFICIENCY"))]))?;
-    out.set_item("combo_extra_chance", pysum(ap.values(b!("WEAPON_MELEE_COMBO_GAIN_EXTRA_CHANCE"))).to_py(py))?;
-    out.set_item("combo_miss_chance", pysum(ap.values(b!("WEAPON_MELEE_COMBO_GAIN_MISS_CHANCE"))).to_py(py))?;
-    out.set_item("heavy_charge_speed", pmax(0.05, 1.0 + pysum(ap.values(b!("WEAPON_MELEE_HEAVY_CHARGE_SPEED"))).f()))?;
-    out.set_item("slam_damage_ratio", codamage.slam_damage_ratio)?;
+    out.set_item(pyo3::intern!(py, "status_condition_damage_multiplier"), status_multiplier)?;
+    out.set_item(pyo3::intern!(py, "initial_combo"), ap.combine_one(0.0, b!("WEAPON_MELEE_COMBO_INITIAL_BONUS")))?;
+    out.set_item(pyo3::intern!(py, "combo_duration"), ap.combine_one(if prep.melee { 5.0 } else { 0.0 }, b!("WEAPON_MELEE_COMBO_DURATION_BONUS")))?;
+    out.set_item(pyo3::intern!(py, "heavy_attack_efficiency"), ap.combine_one(0.0, b!("WEAPON_MELEE_COMBO_USAGE_EFFICIENCY")))?;
+    out.set_item(pyo3::intern!(py, "combo_extra_chance"), pysum(ap.values(b!("WEAPON_MELEE_COMBO_GAIN_EXTRA_CHANCE"))).to_py(py))?;
+    out.set_item(pyo3::intern!(py, "combo_miss_chance"), pysum(ap.values(b!("WEAPON_MELEE_COMBO_GAIN_MISS_CHANCE"))).to_py(py))?;
+    out.set_item(pyo3::intern!(py, "heavy_charge_speed"), pmax(0.05, 1.0 + pysum(ap.values(b!("WEAPON_MELEE_HEAVY_CHARGE_SPEED"))).f()))?;
+    out.set_item(pyo3::intern!(py, "slam_damage_ratio"), codamage.slam_damage_ratio)?;
     let factions = PyDict::new(py);
     for (k, v) in faction.iter() {
         factions.set_item(k, *v)?;
     }
-    out.set_item("faction_damage_multipliers", factions)?;
+    out.set_item(pyo3::intern!(py, "faction_damage_multipliers"), factions)?;
     let nocrit_chance = if ap.empty(b!("WEAPON_NOCRIT_CHANCE")) {
         1.0
     } else {
-        pmin(1.0, pmax(0.0, combine(0.0, &[&ap.ops(b!("WEAPON_NOCRIT_CHANCE"))])))
+        pmin(1.0, pmax(0.0, ap.combine_one(0.0, b!("WEAPON_NOCRIT_CHANCE"))))
     };
-    out.set_item("noncrit_damage_multiplier",
-                 1.0 + pmax(0.0, combine(1.0, &[&ap.ops(b!("WEAPON_NOCRIT_DAMAGE"))]) - 1.0) * nocrit_chance)?;
-    out.set_item("unsupported", PyList::new(py, unsupported.iter())?)?;
+    out.set_item(pyo3::intern!(py, "noncrit_damage_multiplier"),
+                 1.0 + pmax(0.0, ap.combine_one(1.0, b!("WEAPON_NOCRIT_DAMAGE")) - 1.0) * nocrit_chance)?;
+    out.set_item(pyo3::intern!(py, "unsupported"), PyList::new(py, unsupported.iter())?)?;
     let mut seen = std::collections::HashSet::new();
     let unique: Vec<&String> = skipped.iter().filter(|s| seen.insert(s.as_str())).collect();
-    out.set_item("skipped", PyList::new(py, unique)?)?;
-    out.set_item("falloff_multiplier", falloff_multiplier)?;
-    out.set_item("transform_time_scale", divide(Num::F(1.0)).to_py(py))?;
-    out.set_item("area_direct", false)?;
-    out.set_item("stack_native_fraction", 1.0)?;
-    out.set_item("stackable_hit_event", false)?;
-    out.set_item("dot_base_damage", dot_basis)?;
+    out.set_item(pyo3::intern!(py, "skipped"), PyList::new(py, unique)?)?;
+    out.set_item(pyo3::intern!(py, "falloff_multiplier"), falloff_multiplier)?;
+    out.set_item(pyo3::intern!(py, "transform_time_scale"), divide(Num::F(1.0)).to_py(py))?;
+    out.set_item(pyo3::intern!(py, "area_direct"), false)?;
+    out.set_item(pyo3::intern!(py, "stack_native_fraction"), 1.0)?;
+    out.set_item(pyo3::intern!(py, "stackable_hit_event"), false)?;
+    out.set_item(pyo3::intern!(py, "dot_base_damage"), dot_basis)?;
     let dots = PyDict::new(py);
     for (k, v) in dot_elements.iter() {
-        dots.set_item(*k, *v)?;
+        dots.set_item(PyString::intern(py, k), *v)?;
     }
-    out.set_item("dot_elemental_multipliers", dots)?;
+    out.set_item(pyo3::intern!(py, "dot_elemental_multipliers"), dots)?;
     let conversions = PyDict::new(py);
     for (dtype, list) in impact.iter() {
         let rows_py = PyList::empty(py);
         for &(chance, threshold, multiplier) in list.iter() {
             let d = PyDict::new(py);
-            d.set_item("chance", chance)?;
-            d.set_item("fireRateThreshold", threshold)?;
-            d.set_item("fireRateMultiplier", multiplier)?;
+            d.set_item(pyo3::intern!(py, "chance"), chance)?;
+            d.set_item(pyo3::intern!(py, "fireRateThreshold"), threshold)?;
+            d.set_item(pyo3::intern!(py, "fireRateMultiplier"), multiplier)?;
             rows_py.append(d)?;
         }
         conversions.set_item(dtype, rows_py)?;
     }
-    out.set_item("impact_proc_conversions", conversions)?;
+    out.set_item(pyo3::intern!(py, "impact_proc_conversions"), conversions)?;
     let indep = PyDict::new(py);
     for (k, v) in independent.iter() {
         indep.set_item(k, *v)?;
     }
-    out.set_item("independent_proc_chances", indep)?;
+    out.set_item(pyo3::intern!(py, "independent_proc_chances"), indep)?;
     let innate_types = PyDict::new(py);
     for (dtype, value) in prep.innate.iter() {
         innate_types.set_item(dtype, base_total * codamage.scale * value)?;
     }
-    out.set_item("innate_damage_types", innate_types)?;
-    out.set_item("innate_element_candidates", py.None())?;
-    out.set_item("heavy_damage", py.None())?;
-    out.set_item("heavy_components", PyList::empty(py))?;
-    out.set_item("double_crit_chance", pmax(combine(1.0, &[&ap.ops(b!("WEAPON_DOUBLE_CRIT_CHANCE"))]) - 1.0, 0.0))?;
-    out.set_item("first_shot_damage_bonus", pmax(combine(1.0, &[&ap.ops(b!("WEAPON_INIT_DAMAGE_MOD"))]) - 1.0, 0.0))?;
-    out.set_item("weakpoint_damage_bonus", pmax(combine(1.0, &[&ap.ops(b!("WEAPON_DAMAGE_WEAKPOINT"))]) - 1.0, 0.0))?;
+    out.set_item(pyo3::intern!(py, "innate_damage_types"), innate_types)?;
+    out.set_item(pyo3::intern!(py, "innate_element_candidates"), py.None())?;
+    out.set_item(pyo3::intern!(py, "heavy_damage"), py.None())?;
+    out.set_item(pyo3::intern!(py, "heavy_components"), PyList::empty(py))?;
+    out.set_item(pyo3::intern!(py, "double_crit_chance"), pmax(ap.combine_one(1.0, b!("WEAPON_DOUBLE_CRIT_CHANCE")) - 1.0, 0.0))?;
+    out.set_item(pyo3::intern!(py, "first_shot_damage_bonus"), pmax(ap.combine_one(1.0, b!("WEAPON_INIT_DAMAGE_MOD")) - 1.0, 0.0))?;
+    out.set_item(pyo3::intern!(py, "weakpoint_damage_bonus"), pmax(ap.combine_one(1.0, b!("WEAPON_DAMAGE_WEAKPOINT")) - 1.0, 0.0))?;
     let wcc = b!("WEAPON_CRIT_CHANCE_WEAKPOINT");
     let body = b!("WEAPON_CRIT_CHANCE_BODY_PART");
-    out.set_item("weakpoint_crit_chance_bonus",
+    out.set_item(pyo3::intern!(py, "weakpoint_crit_chance_bonus"),
                  pysum(ap.idx(wcc).iter().filter(|&&i| rows[i].op == OP_ADD).map(|&i| rows[i].value)).to_py(py))?;
     let relative_wp = pysum(ap.idx(wcc).iter().filter(|&&i| rows[i].op == OP_SM).map(|&i| rows[i].value))
         .add(pysum(ap.idx(body).iter().filter(|&&i| rows[i].symbol.as_deref() == Some("HEAD") && rows[i].op == OP_SM)
             .map(|&i| rows[i].value)));
-    out.set_item("weakpoint_crit_chance_relative", relative_wp.to_py(py))?;
-    out.set_item("bodyshot_crit_multiplier",
+    out.set_item(pyo3::intern!(py, "weakpoint_crit_chance_relative"), relative_wp.to_py(py))?;
+    out.set_item(pyo3::intern!(py, "bodyshot_crit_multiplier"),
                  combine(1.0, &[&ap.ops_where(body, |r| r.symbol.as_deref() == Some("TORSO"))]))?;
-    out.set_item("base_crit_chance",
+    out.set_item(pyo3::intern!(py, "base_crit_chance"),
                  combine_num(critchance, &[&ap.ops_where(b!("WEAPON_CRIT_CHANCE"), |r| r.op == OP_ADD_BASE || r.set_base)]).to_py(py))?;
     // Ammo Efficiency cap (75%, damage.py AMMO_EFFICIENCY_CAP): every source,
     // Primary Compression included, keeps a quarter of the native cost.
@@ -1168,54 +1315,63 @@ pub fn apply_mods<'py>(
     let ammo_cost = pmax(0.0, combine(prep.ammo_cost, &[&ammo_ops])) * pmax(0.0, 1.0 - compression_ammo);
     // An infinite-ammo SET 0 is not efficiency and is never floored (damage.py).
     let ammo_set = ammo_ops.iter().any(|&(op, _)| op == co::SET);
-    out.set_item("ammo_cost", if ammo_set { ammo_cost } else { pmax(prep.ammo_cost * (1.0 - AMMO_EFFICIENCY_CAP), ammo_cost) })?;
-    out.set_item("co_bucket", ap.list(py, &co_idx)?)?;
-    out.set_item("co_assumed_count", vsc)?;
-    out.set_item("continuous", continuous)?;
-    out.set_item("radial_only", prep.radial_only)?;
+    out.set_item(pyo3::intern!(py, "ammo_cost"), if ammo_set { ammo_cost } else { pmax(prep.ammo_cost * (1.0 - AMMO_EFFICIENCY_CAP), ammo_cost) })?;
+    out.set_item(pyo3::intern!(py, "co_bucket"), ap.list(py, &co_idx)?)?;
+    out.set_item(pyo3::intern!(py, "co_assumed_count"), vsc)?;
+    out.set_item(pyo3::intern!(py, "continuous"), continuous)?;
+    out.set_item(pyo3::intern!(py, "radial_only"), prep.radial_only)?;
     // Older adapters insert these two fields themselves when the key is absent.
     if let Some(ignored) = prep.ignore_headshot_bonus {
-        out.set_item("radial_victim_crit", false)?;
-        out.set_item("ignore_headshot_bonus", ignored)?;
+        out.set_item(pyo3::intern!(py, "radial_victim_crit"), false)?;
+        out.set_item(pyo3::intern!(py, "ignore_headshot_bonus"), ignored)?;
     }
-    out.set_item("explosion_radius_multiplier", combine(1.0, &[&ap.ops(b!("WEAPON_EXPLOSION_RADIUS"))]))?;
+    out.set_item(pyo3::intern!(py, "explosion_radius_multiplier"), ap.combine_one(1.0, b!("WEAPON_EXPLOSION_RADIUS")))?;
     let forced_py = PyDict::new(py);
     for (k, v) in forced.iter() {
         forced_py.set_item(k, *v)?;
     }
-    out.set_item("native_forced_procs", forced_py)?;
-    out.set_item("incarnon_charge_multiplier", pmax(0.0, combine(1.0, &[&ap.ops(b!("WEAPON_ADD_CHARGE_COUNTER_MULTIPLIER"))])))?;
-    out.set_item("low_crit_threshold", low_threshold)?;
-    out.set_item("low_crit_damage_base", low_threshold.map(|_| crit_multiplier))?;
-    out.set_item("low_crit_damage_bonus", low_bonus)?;
-    out.set_item("ammo_pool_multishot_cost", pool_cost)?;
-    out.set_item("ammo_pool_damage_bonus", if pool_ops.is_empty() { 0.0 } else { pool_multiplier - 1.0 })?;
-    let mut victim_crit: Vec<(u8, f64)> = crit_ops.clone();
-    victim_crit.extend(ap.ops(b!("WEAPON_VICTIM_CRIT_CHANCE")));
-    out.set_item("victim_full_crit_chance", combine_num(critchance, &[&victim_crit]).sub(weapon_crit_chance).to_py(py))?;
+    out.set_item(pyo3::intern!(py, "native_forced_procs"), forced_py)?;
+    out.set_item(pyo3::intern!(py, "incarnon_charge_multiplier"), pmax(0.0, ap.combine_one(1.0, b!("WEAPON_ADD_CHARGE_COUNTER_MULTIPLIER"))))?;
+    out.set_item(pyo3::intern!(py, "low_crit_threshold"), low_threshold)?;
+    out.set_item(pyo3::intern!(py, "low_crit_damage_base"), low_threshold.map(|_| crit_multiplier))?;
+    out.set_item(pyo3::intern!(py, "low_crit_damage_bonus"), low_bonus)?;
+    out.set_item(pyo3::intern!(py, "ammo_pool_multishot_cost"), pool_cost)?;
+    out.set_item(pyo3::intern!(py, "ammo_pool_damage_bonus"), if pool_ops.is_empty() { 0.0 } else { pool_multiplier - 1.0 })?;
+    let vfcc_val = if ap.empty(b!("WEAPON_VICTIM_CRIT_CHANCE")) {
+        combine_num(critchance, &[&crit_ops]).sub(weapon_crit_chance)
+    } else {
+        let mut victim_crit: Vec<(u8, f64)> = crit_ops.clone();
+        victim_crit.extend(ap.ops(b!("WEAPON_VICTIM_CRIT_CHANCE")));
+        combine_num(critchance, &[&victim_crit]).sub(weapon_crit_chance)
+    };
+    out.set_item(pyo3::intern!(py, "victim_full_crit_chance"), vfcc_val.to_py(py))?;
     let victim_cd = pysum(ap.values(b!("WEAPON_VICTIM_CRIT_DAMAGE")));
-    out.set_item("victim_full_crit_damage",
-                 (combine(quantize(crit_base + victim_cd.f()), &[&relative]) - combine(quantize(crit_base), &[&relative])) * shield_crit)?;
-    out.set_item("victim_low_health_multiplier", codamage.victim_low_health_multiplier)?;
-    out.set_item("projectile_speed_multiplier", speed)?;
-    out.set_item("charge_rate_multiplier", charge_rate)?;
-    out.set_item("charge_seconds", charge_seconds)?;
-    out.set_item("bow_draw_seconds", bow_draw)?;
-    out.set_item("spread_min_deg", py.None())?;
-    out.set_item("spread_max_deg", py.None())?;
+    let vfcd_val = if !victim_cd.truthy() {
+        0.0
+    } else {
+        (combine(quantize(crit_base + victim_cd.f()), &[&relative]) - combine(quantize(crit_base), &[&relative])) * shield_crit
+    };
+    out.set_item(pyo3::intern!(py, "victim_full_crit_damage"), vfcd_val)?;
+    out.set_item(pyo3::intern!(py, "victim_low_health_multiplier"), codamage.victim_low_health_multiplier)?;
+    out.set_item(pyo3::intern!(py, "projectile_speed_multiplier"), speed)?;
+    out.set_item(pyo3::intern!(py, "charge_rate_multiplier"), charge_rate)?;
+    out.set_item(pyo3::intern!(py, "charge_seconds"), charge_seconds)?;
+    out.set_item(pyo3::intern!(py, "bow_draw_seconds"), bow_draw)?;
+    out.set_item(pyo3::intern!(py, "spread_min_deg"), py.None())?;
+    out.set_item(pyo3::intern!(py, "spread_max_deg"), py.None())?;
     let crit_procs = PyDict::new(py);
     if !ap.empty(b!("WEAPON_SLASH_PROC_ON_CRIT_CHANCE")) {
-        crit_procs.set_item("DT_SLASH", pysum(ap.values(b!("WEAPON_SLASH_PROC_ON_CRIT_CHANCE"))).to_py(py))?;
+        crit_procs.set_item(pyo3::intern!(py, "DT_SLASH"), pysum(ap.values(b!("WEAPON_SLASH_PROC_ON_CRIT_CHANCE"))).to_py(py))?;
     }
-    out.set_item("crit_proc_chances", crit_procs)?;
+    out.set_item(pyo3::intern!(py, "crit_proc_chances"), crit_procs)?;
     let hits = PyTuple::new(py, extra_hits.iter().map(|(d, v, g)| (d.as_str(), *v, *g)))?;
-    out.set_item("extra_hits", hits)?;
-    out.set_item("cold_stack_damage", if cold_forced != 0.0 { Num::F(0.0) } else { cold_rate }.to_py(py))?;
-    out.set_item("base_damage_bracket", codamage.base_bracket)?;
-    out.set_item("frozen_damage_multiplier", if frozen_forced { 1.0 } else { 1.0 + frozen_bonus.f() })?;
-    out.set_item("reflection_explosion_chance",
-                 pmin(1.0, pmax(0.0, combine(0.0, &[&ap.ops(b!("WEAPON_REFLECTION_EXPLOSION_CHANCE"))]))))?;
-    out.set_item("throw_damage_bonus", pysum(ap.values(b!("RUNTIME_THROW_DAMAGE"))).to_py(py))?;
+    out.set_item(pyo3::intern!(py, "extra_hits"), hits)?;
+    out.set_item(pyo3::intern!(py, "cold_stack_damage"), if cold_forced != 0.0 { Num::F(0.0) } else { cold_rate }.to_py(py))?;
+    out.set_item(pyo3::intern!(py, "base_damage_bracket"), codamage.base_bracket)?;
+    out.set_item(pyo3::intern!(py, "frozen_damage_multiplier"), if frozen_forced { 1.0 } else { 1.0 + frozen_bonus.f() })?;
+    out.set_item(pyo3::intern!(py, "reflection_explosion_chance"),
+                 pmin(1.0, pmax(0.0, ap.combine_one(0.0, b!("WEAPON_REFLECTION_EXPLOSION_CHANCE")))))?;
+    out.set_item(pyo3::intern!(py, "throw_damage_bonus"), pysum(ap.values(b!("RUNTIME_THROW_DAMAGE"))).to_py(py))?;
 
     if !need_spec {
         return Ok((out, py.None()));

@@ -13,7 +13,10 @@ use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
 use crate::pymath::{pmax, pmin, psum, sqrt};
-use crate::replay::{core_of, opt_attr, vector_of, Types};
+use crate::replay::{
+    core_of_dict, dict_get, dict_opt_public, opt_dict, static_type_id, vector_of, Types,
+    STATIC_TYPE_NAMES,
+};
 use crate::tables::{self, Core, Location, TargetTables, Vector};
 
 type D = u32;
@@ -31,8 +34,11 @@ pub struct SustainedTarget {
     magnetic_stacks: i64,
     shielded: bool,
     faction_deltas: Vec<(String, f64)>,
+    static_deltas: [f64; 17],
     armour_bypass: Vec<String>,
+    armour_bypass_mask: u32,
     shield_bypass: Vec<String>,
+    shield_bypass_mask: u32,
     target_faction: String,
     faction_bracket: f64,
     body: (f64, f64, bool),
@@ -48,6 +54,27 @@ impl SustainedTarget {
         let get = |k: &str| -> PyResult<Bound<'_, PyAny>> {
             config.get_item(k)?.ok_or_else(|| pyo3::exceptions::PyKeyError::new_err(k.to_string()))
         };
+        let faction_deltas: Vec<(String, f64)> = get("factionDeltas")?.extract()?;
+        let mut static_deltas = [0.0; 17];
+        for (idx, &name) in STATIC_TYPE_NAMES.iter().enumerate() {
+            if let Some((_, v)) = faction_deltas.iter().find(|x| x.0 == name) {
+                static_deltas[idx] = *v;
+            }
+        }
+        let armour_bypass: Vec<String> = get("armourBypass")?.extract()?;
+        let mut armour_bypass_mask = 0u32;
+        for name in &armour_bypass {
+            if let Some(id) = static_type_id(name) {
+                armour_bypass_mask |= 1u32 << id;
+            }
+        }
+        let shield_bypass: Vec<String> = get("shieldBypass")?.extract()?;
+        let mut shield_bypass_mask = 0u32;
+        for name in &shield_bypass {
+            if let Some(id) = static_type_id(name) {
+                shield_bypass_mask |= 1u32 << id;
+            }
+        }
         Ok(SustainedTarget {
             armour_base: get("armourBase")?.extract()?,
             armour_strip: get("armourStrip")?.extract()?,
@@ -57,9 +84,12 @@ impl SustainedTarget {
             shield: get("shield")?.extract()?,
             magnetic_stacks: get("magneticStacks")?.extract()?,
             shielded: get("shielded")?.extract()?,
-            faction_deltas: get("factionDeltas")?.extract()?,
-            armour_bypass: get("armourBypass")?.extract()?,
-            shield_bypass: get("shieldBypass")?.extract()?,
+            faction_deltas,
+            static_deltas,
+            armour_bypass,
+            armour_bypass_mask,
+            shield_bypass,
+            shield_bypass_mask,
             target_faction: get("targetFaction")?.extract()?,
             faction_bracket: match config.get_item("factionBracket")? { Some(v) => v.extract()?, None => 1.0 },
             body: get("body")?.extract()?,
@@ -110,20 +140,43 @@ impl Context<'_> {
     /// The per-type factor `damage_against` / `expected_dot_damage` apply:
     /// Overguard's, else `_target_damage_multiplier` with the shield's
     /// Magnetic factor.
+    #[inline]
+    fn is_shield_bypass(&self, d: D) -> bool {
+        if (d as usize) < 17 {
+            (self.target.shield_bypass_mask & (1u32 << d)) != 0
+        } else {
+            Self::in_set(&self.target.shield_bypass, self.types.name(d))
+        }
+    }
+
+    #[inline]
+    fn is_armour_bypass(&self, d: D) -> bool {
+        if (d as usize) < 17 {
+            (self.target.armour_bypass_mask & (1u32 << d)) != 0
+        } else {
+            Self::in_set(&self.target.armour_bypass, self.types.name(d))
+        }
+    }
+
     fn multiplier(&self, d: D, armour: f64) -> f64 {
-        let name = self.types.name(d);
         let t = self.target;
         if t.overguard > 0.0 {
-            let radiant = if name == "DT_RADIANT" || name == "DT_VOID" { 1.5 } else { 1.0 };
+            let radiant = if d == 11 || d == 12 { 1.5 } else { 1.0 };
             return radiant * magnetic_defense(t.magnetic_stacks);
         }
-        let delta = t.faction_deltas.iter().find(|x| x.0 == name).map(|x| x.1).unwrap_or(0.0);
+        let delta = if (d as usize) < 17 {
+            t.static_deltas[d as usize]
+        } else {
+            let name = self.types.name(d);
+            t.faction_deltas.iter().find(|x| x.0 == name).map(|x| x.1).unwrap_or(0.0)
+        };
         let mut value = pmax(0.0, 1.0 + delta);
-        let hits_health = !t.shielded || Self::in_set(&t.shield_bypass, name);
-        if hits_health && armour != 0.0 && !Self::in_set(&t.armour_bypass, name) {
+        let bypass_shield = self.is_shield_bypass(d);
+        let hits_health = !t.shielded || bypass_shield;
+        if hits_health && armour != 0.0 && !self.is_armour_bypass(d) {
             value *= 1.0 - armour_reduction(armour);
         }
-        if t.shield > 0.0 && !Self::in_set(&t.shield_bypass, name) {
+        if t.shield > 0.0 && !bypass_shield {
             value *= magnetic_defense(t.magnetic_stacks);
         }
         value
@@ -211,29 +264,25 @@ pub fn sustained_status(
     damage_rate_multiplier: f64,
     total: bool,
 ) -> PyResult<f64> {
+    let py = stats.py();
     let target = target.get();
     let mut types = Types::new();
-    let damage_types = vector_of(&mut types, &stats.getattr("damage_types")?)?;
-    let forced = vector_of(&mut types, &stats.getattr("native_forced_procs")?)?;
-    let independent = vector_of(&mut types, &stats.getattr("independent_proc_chances")?)?;
-    let core = core_of(stats, &mut types, &target.target_faction, target.faction_bracket, &damage_types, &forced, &independent)?;
-    let id = |types: &mut Types, n: &str| types.id(n);
-    let (viral, corrosive, magnetic, cold, puncture, heat) = (
-        id(&mut types, "DT_VIRAL"), id(&mut types, "DT_CORROSIVE"), id(&mut types, "DT_MAGNETIC"),
-        id(&mut types, "DT_FREEZE"), id(&mut types, "DT_PUNCTURE"), id(&mut types, "DT_FIRE"),
-    );
-    let interactions = [
-        id(&mut types, "DT_CINEMATIC"), id(&mut types, "DT_FIRE"), id(&mut types, "DT_POISON"),
-        id(&mut types, "DT_ELECTRICITY"), id(&mut types, "DT_GAS"), id(&mut types, "DT_EXPLOSION"),
-    ];
-    let (slash, cinematic, gas, electricity) = (id(&mut types, "DT_SLASH"), id(&mut types, "DT_CINEMATIC"), id(&mut types, "DT_GAS"), id(&mut types, "DT_ELECTRICITY"));
+    let dict = opt_dict(stats);
+    let dref = dict.as_ref();
+    let damage_types = vector_of(&mut types, &dict_get(stats, dref, pyo3::intern!(py, "damage_types"))?)?;
+    let forced = vector_of(&mut types, &dict_get(stats, dref, pyo3::intern!(py, "native_forced_procs"))?)?;
+    let independent = vector_of(&mut types, &dict_get(stats, dref, pyo3::intern!(py, "independent_proc_chances"))?)?;
+    let core = core_of_dict(stats, dref, &mut types, &target.target_faction, target.faction_bracket, &damage_types, &forced, &independent)?;
+    let (viral, corrosive, magnetic, cold, puncture, heat): (D, D, D, D, D, D) = (4, 5, 6, 1, 7, 0);
+    let interactions: [D; 6] = [10, 0, 14, 8, 2, 3];
+    let (slash, cinematic, gas, electricity): (D, D, D, D) = (9, 10, 2, 8);
     let ctx = Context { target, types: &types };
 
     let rate = pmax(attacks_per_second, 0.0);
     let proc_rate = rate * pmax(status_rate_multiplier, 0.0);
     let mut damage_rate = rate * pmax(damage_rate_multiplier, 0.0);
-    let magazine = pmax(opt_float(stats, "magazine")?, 0.0);
-    let first_shot_bonus = pmax(opt_float(stats, "first_shot_damage_bonus")?, 0.0);
+    let magazine = pmax(opt_float(stats, dref, pyo3::intern!(py, "magazine"))?, 0.0);
+    let first_shot_bonus = pmax(opt_float(stats, dref, pyo3::intern!(py, "first_shot_damage_bonus"))?, 0.0);
     if magazine > 0.0 && first_shot_bonus > 0.0 && damage_rate > 0.0 {
         damage_rate *= 1.0 + first_shot_bonus / magazine;
     }
@@ -282,7 +331,7 @@ pub fn sustained_status(
         if target.overguard > 0.0 {
             return magnetic_multiplier;
         }
-        if target.shield > 0.0 && !Context::in_set(&target.shield_bypass, types.name(d)) {
+        if target.shield > 0.0 && !ctx.is_shield_bypass(d) {
             return magnetic_multiplier;
         }
         viral_multiplier
@@ -332,8 +381,12 @@ pub fn sustained_status(
 }
 
 /// `max(float(getattr(stats, name, 0.0) or 0.0), 0.0)`'s inner value.
-fn opt_float(stats: &Bound<'_, PyAny>, name: &str) -> PyResult<f64> {
-    Ok(match opt_attr(stats, name)? {
+fn opt_float<'py>(
+    stats: &Bound<'py, PyAny>,
+    dict: Option<&Bound<'py, PyDict>>,
+    name: &Bound<'py, pyo3::types::PyString>,
+) -> PyResult<f64> {
+    Ok(match dict_opt_public(stats, dict, name)? {
         Some(v) if v.is_truthy()? => v.extract::<f64>()?,
         _ => 0.0,
     })

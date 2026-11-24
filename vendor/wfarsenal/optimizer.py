@@ -47,14 +47,19 @@ from .damage import (
 )
 from .projectile_events import evaluate_projectile_events
 from . import status_native as _status_native
+from .mod_families import canonical_mod_family
 from .simulator import (
     SimulationError,
     _buff_set_multiplier,
+    _effective_set_pieces,
     _mod_matches_weapon,
+    _norm_mod_path,
     _set_key,
     _set_shell_effects,
     _set_shells,
+    _shell_applies_to_external_weapon,
     _steady_state_scenario,
+    cached_set_shells,
     load_exports,
     record_identity,
     resolve_record,
@@ -381,6 +386,8 @@ class _Card:
     trigger_specs: tuple[Mapping[str, Any], ...] = ()
     event_arcanes: tuple[tuple[Mapping[str, Any], int, Mapping[str, Any]], ...] = ()
     incarnon_choices: tuple[tuple[str, str], ...] = ()
+    external_set_mods: tuple[tuple[str, str], ...] = ()
+    combat_extras_json: str = ""
 
 
 @dataclass
@@ -1648,11 +1655,33 @@ def _merge_passives(*cards: _Card | None) -> _Card | None:
     active = [card for card in cards if card is not None]
     if not active:
         return None
+    ext_sets: list[tuple[str, str]] = []
+    seen_ext: set[tuple[str, str]] = set()
+    merged_extras: dict[str, Any] = {}
+    for c in active:
+        for pair in c.external_set_mods:
+            if pair not in seen_ext:
+                seen_ext.add(pair)
+                ext_sets.append(pair)
+        if c.combat_extras_json:
+            try:
+                parsed = json.loads(c.combat_extras_json)
+                if isinstance(parsed, Mapping):
+                    merged_extras.update(parsed)
+            except (TypeError, ValueError):
+                pass
+    extras_json = (
+        json.dumps(merged_extras, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        if merged_extras
+        else ""
+    )
     return _Card(
         key="__passives__",
         trigger_specs=tuple(t for c in active for t in c.trigger_specs),
         event_arcanes=tuple(r for c in active for r in c.event_arcanes),
         incarnon_choices=tuple(x for c in active for x in c.incarnon_choices),
+        external_set_mods=tuple(ext_sets),
+        combat_extras_json=extras_json,
         record=None,
         rank=0,
         effects=tuple(effect for card in active for effect in card.effects),
@@ -1662,29 +1691,124 @@ def _merge_passives(*cards: _Card | None) -> _Card | None:
     )
 
 
-def _effects(cards: Sequence[_Card], scenario: Scenario) -> ModEffectList:
+_CARD_META: dict[int, tuple[_Card, tuple[str, ...], str, int, str, bool]] = {}
+
+
+def _card_meta(card: _Card) -> tuple[_Card, tuple[str, ...], str, int, str, bool]:
+    hit = _CARD_META.get(id(card))
+    if hit is not None and hit[0] is card:
+        return hit
+    elements = tuple(
+        effect.damage_type
+        for effect in card.effects
+        if getattr(effect, "damage_type", None) in BASE_ELEMENTS and effect.value > 0
+    )
+    if card.record is None:
+        family = card.key
+        set_id = ""
+        has_set_values = False
+    else:
+        family = canonical_mod_family(
+            card.record.get("path") or card.key,
+            card.record.get("modFamily")
+            or card.record.get("nameTag")
+            or card.record.get("nameEn")
+            or card.record.get("nameInternal")
+            or card.key,
+        )
+        set_id = _set_key(card.record.get("modSet"))
+        has_set_values = bool(card.record.get("modSetValues"))
+    polar_cost = (
+        math.ceil(card.drain / 2)
+        if card.polarity and card.polarity != "AP_UNIVERSAL"
+        else card.drain
+    )
+    meta = (card, elements, family, polar_cost, set_id, has_set_values)
+    if len(_CARD_META) >= 8192:
+        _CARD_META.clear()
+    _CARD_META[id(card)] = meta
+    return meta
+
+
+def _effects(
+    cards: Sequence[_Card],
+    scenario: Scenario,
+    *,
+    weapon: Mapping[str, Any] | None = None,
+) -> ModEffectList:
+    has_any_set = False
+    has_ext_sets = False
+    for card in cards:
+        if _card_meta(card)[4]:
+            has_any_set = True
+        if card.external_set_mods:
+            has_ext_sets = True
+    if not has_any_set and not has_ext_sets:
+        result = ModEffectList()
+        for card in cards:
+            result.extend(card.effects)
+            if card.skipped:
+                result.skipped.extend(card.skipped)
+        return result
     result = ModEffectList()
     set_counts: dict[str, int] = {}
     set_shells: dict[str, Mapping[str, Any]] = {}
-    for card in cards:
-        if card.record is None:
-            continue
-        set_id = _set_key(card.record.get("modSet"))
-        if set_id:
-            set_counts[set_id] = set_counts.get(set_id, 0) + 1
-            if card.set_shell is not None:
-                set_shells[set_id] = card.set_shell
+    if not has_ext_sets:
+        for card in cards:
+            set_id = _card_meta(card)[4]
+            if set_id:
+                set_counts[set_id] = set_counts.get(set_id, 0) + 1
+                if card.set_shell is not None:
+                    set_shells[set_id] = card.set_shell
+    else:
+        all_shells = cached_set_shells()
+        paths_by_set: dict[str, set[str]] = {}
+        weapon_has_set: set[str] = set()
+        for card in cards:
+            set_id = _card_meta(card)[4]
+            if set_id:
+                weapon_has_set.add(set_id)
+                mod_path = _norm_mod_path((card.record or {}).get("path") or card.key)
+                paths_by_set.setdefault(set_id, set()).add(mod_path)
+                if card.set_shell is not None:
+                    set_shells[set_id] = card.set_shell
+            for raw_path, raw_set in card.external_set_mods:
+                ext_id = _set_key(raw_set)
+                ext_path = _norm_mod_path(raw_path)
+                if ext_id and ext_path:
+                    paths_by_set.setdefault(ext_id, set()).add(ext_path)
+        for set_id, unique_paths in paths_by_set.items():
+            shell = set_shells.get(set_id) or all_shells.get(set_id)
+            if set_id not in weapon_has_set:
+                if weapon is not None and not _shell_applies_to_external_weapon(shell, weapon):
+                    continue
+                if weapon is None and (shell is None or not any(
+                    isinstance(fx, Mapping) and str(fx.get("upgradeType") or "").startswith("WEAPON_")
+                    for fx in (*(shell.get("effects") or ()), *(e for c in (shell.get("conditionalEffects") or ()) if isinstance(c, Mapping) for e in (c.get("effects") or ())))
+                )):
+                    continue
+            pieces, _ = _effective_set_pieces(
+                {"modSet": set_id},
+                selected_count=len(unique_paths),
+                shell=shell,
+            )
+            if pieces > 0:
+                set_counts[set_id] = pieces
+                if shell is not None:
+                    set_shells[set_id] = shell
     for card in cards:
         current = card.effects
-        if card.record is not None:
-            set_id = _set_key(card.record.get("modSet"))
+        meta = _card_meta(card)
+        set_id = meta[4]
+        if set_id and meta[5]:
             pieces = set_counts.get(set_id, 0)
-            if pieces and card.record.get("modSetValues"):
+            if pieces:
                 multiplier = _buff_set_multiplier(card.record, pieces)
                 if multiplier != 1.0:
                     current = (with_value(effect, effect.value * multiplier) for effect in current)
         result.extend(current)
-        result.skipped.extend(card.skipped)
+        if card.skipped:
+            result.skipped.extend(card.skipped)
     for set_id, pieces in set_counts.items():
         shell = set_shells.get(set_id)
         if shell is not None:
@@ -1697,12 +1821,7 @@ def _effects(cards: Sequence[_Card], scenario: Scenario) -> ModEffectList:
 def _capacity(cards: Sequence[_Card]) -> int:
     # The theoretical build assumes a Catalyst and enough Forma to match every
     # equipped polarity.  This is the only account-independent capacity model.
-    return sum(
-        math.ceil(card.drain / 2)
-        if card.polarity and card.polarity != "AP_UNIVERSAL"
-        else card.drain
-        for card in cards
-    )
+    return sum(_card_meta(card)[3] for card in cards)
 
 
 _UMBRA_POLARITIES = frozenset({"AP_UMBRA", "AP_ULTIMATE"})
@@ -1902,16 +2021,11 @@ def _forma_summary(
     }
 
 
-def _mod_family(card: _Card) -> str:
-    if card.record is None:
-        return card.key
-    return str(
-        card.record.get("modFamily")
-        or card.record.get("nameTag")
-        or card.record.get("nameEn")
-        or card.record.get("nameInternal")
-        or card.key
-    ).casefold()
+def _mod_family(card: _Card, equip_path: str | None = None) -> str:
+    base = _card_meta(card)[2]
+    if equip_path and card.record is not None:
+        return canonical_mod_family(card.record.get("path") or card.key, base, equip_path=equip_path)
+    return base
 
 
 def _metrics(
@@ -2044,7 +2158,14 @@ def _score(
             )
             if key in context
         }
-        if _status_native.ENABLED:
+        native_supported = (
+            _status_native.ENABLED
+            and not getattr(stats, "extra_hits", ())
+            and "DT_CORROSIVE" not in getattr(stats, "proc_max_stacks", {})
+            and not getattr(stats, "proc_damage_types", {})
+            and not ((target_kwargs.get("enemy_enhancements") or {}).get("primingStacks") if isinstance(target_kwargs.get("enemy_enhancements"), Mapping) else False)
+        )
+        if native_supported:
             try:
                 return _status_native.score(
                     stats, target, target_kwargs,
@@ -2241,6 +2362,8 @@ def proxy_seed_best(
     forbidden_mod_keys: Sequence[str] | None = None,
     min_fill: int | None = None,
     max_fill: int | None = None,
+    special_cards: Sequence[_Card] = (),
+    special_capacity_cost: int = 0,
     **_ignored: Any,
 ) -> _Evaluation:
     """``incumbent`` or a better build from the open / viral / corrosive seeds.
@@ -2256,6 +2379,12 @@ def proxy_seed_best(
     """
     if metric not in {"killsPerMinute", "windowedDps", "windowedTotalDamage"} or not target_context:
         return incumbent
+    equip_path = str(weapon.get("path") or "").strip() or None
+    special_families = {
+        _mod_family(sc, equip_path)
+        for sc in special_cards
+        if sc.record is not None and _mod_family(sc, equip_path)
+    }
     seeds: tuple[tuple[str | None, tuple[str, ...]], ...] = ((None, ()), *ELEMENT_SEEDS.items())
     if required_damage_type:
         seeds = ((required_damage_type, ELEMENT_SEEDS.get(required_damage_type, ())),)
@@ -2266,7 +2395,8 @@ def proxy_seed_best(
         for part in parts:
             options = [(sum(float(e.value) for e in c.effects if e.damage_type == part), c.key)
                        for c in candidates if any(e.damage_type == part for e in c.effects)
-                       and c.key not in forbidden and c.key not in seeded]
+                       and c.key not in forbidden and c.key not in seeded
+                       and _mod_family(c, equip_path) not in special_families]
             if options:
                 seeded.append(max(options)[1])
         try:
@@ -2274,11 +2404,13 @@ def proxy_seed_best(
                               passives=passives, beam_width=4, shortlist=24, slot_count=slot_count,
                               capacity_limit=capacity_limit, required_damage_type=element or required_damage_type,
                               target_context=target_context, profile=profile, required_mod_keys=seeded,
-                              forbidden_mod_keys=forbidden_mod_keys, min_fill=min_fill, max_fill=max_fill)
+                              forbidden_mod_keys=forbidden_mod_keys, min_fill=min_fill, max_fill=max_fill,
+                              special_cards=special_cards, special_capacity_cost=special_capacity_cost)
         except SimulationError:
             continue
         scored = _evaluate(weapon, found.cards, riven, scenario=scenario, metric=metric, passives=passives,
-                           slot_limit=slot_count, capacity_limit=capacity_limit, target_context=target_context)
+                           slot_limit=slot_count, capacity_limit=capacity_limit, target_context=target_context,
+                           special_cards=special_cards, special_capacity_cost=special_capacity_cost)
         if scored is None or scored.score <= best.score + 1e-9:
             continue
         if required_damage_type and scored.stats.damage_types.get(required_damage_type, 0.0) <= 0:
@@ -2310,6 +2442,126 @@ def _riven_seed_subsets(base_cards, riven, *, capacity_limit=60, required_mod_ke
     return []
 
 
+_USE_CTX_RIVEN = 0
+_PER_ITEM_RIVEN = 1
+_NO_PROJECTILE_PREVIEW_METRICS = frozenset(
+    {"targetSustainedDps", "statusSustainedDps", "windowedDps", "windowedTotalDamage", "killsPerMinute"}
+)
+
+
+def _score_catalog_batch_job(args: tuple) -> list:
+    """Score a micro-batch of catalog-indexed card tuples on a worker."""
+    items, shared_riven, ctx, required_type, with_eligible = args
+    catalog = ctx["catalog"]
+    weapon = ctx["weapon"]
+    scenario = ctx["scenario"]
+    metric = ctx["metric"]
+    passives = ctx["passives"]
+    slot_limit = ctx.get("slot_limit", 8)
+    capacity_limit = ctx["capacity_limit"]
+    target_context = ctx["target_context"]
+    fixed_riven_index = ctx.get("fixed_riven_index")
+    reorder_elements = ctx.get("reorder_elements", True)
+    eval_req_type = ctx.get("eval_required_damage_type")
+    ctx_riven = ctx.get("riven")
+    special_cards = ctx.get("special_cards", ())
+    special_capacity_cost = ctx.get("special_capacity_cost", 0)
+    capture_exceptions = bool(ctx.get("capture_exceptions"))
+    out: list = []
+    for entry in items:
+        if shared_riven == 1:
+            indices, riven_ref = entry
+            riven = catalog[riven_ref] if isinstance(riven_ref, int) else riven_ref
+        elif shared_riven == 0:
+            indices, riven = entry, ctx_riven
+        else:
+            indices, riven = entry, shared_riven
+        cards = tuple(catalog[i] for i in indices)
+        try:
+            evaluated = _evaluate(
+                weapon,
+                cards,
+                riven,
+                scenario=scenario,
+                metric=metric,
+                passives=passives,
+                slot_limit=slot_limit,
+                capacity_limit=capacity_limit,
+                special_cards=special_cards,
+                special_capacity_cost=special_capacity_cost,
+                target_context=target_context,
+                fixed_riven_index=fixed_riven_index,
+                reorder_elements=reorder_elements,
+                required_damage_type=eval_req_type,
+            )
+        except Exception as exc:
+            if capture_exceptions:
+                out.append(exc)
+                continue
+            raise
+        if evaluated is None:
+            out.append(None)
+        elif with_eligible:
+            ok = required_type is None or evaluated.stats.damage_types.get(required_type, 0.0) > 0.0
+            out.append((evaluated.score, ok))
+        else:
+            out.append(evaluated.score)
+    return out
+
+
+def _run_catalog_batches(
+    pool_exec,
+    items: Sequence[Any],
+    shared_riven: Any,
+    ctx: Any,
+    *,
+    required_type: str | None = None,
+    with_eligible: bool = False,
+    deadline: float = float("inf"),
+    beat: bool = True,
+    max_batch: int = 8,
+) -> list:
+    from wfarsenal import parallel as _parallel
+
+    if not items:
+        return []
+    workers = max(1, _parallel.worker_count())
+    batch_size = max(1, min(max_batch, len(items) // (workers * 3) or 1))
+    chunks = [items[i : i + batch_size] for i in range(0, len(items), batch_size)]
+    window = max(16, 3 * workers)
+    in_flight: deque = deque()
+    submitted = 0
+    stopped = False
+    out: list = []
+    try:
+        while True:
+            while not stopped and submitted < len(chunks) and len(in_flight) < window:
+                if submitted > 0 and submitted % window == 0 and expired(deadline):
+                    stopped = True
+                    break
+                chunk = chunks[submitted]
+                in_flight.append(
+                    (
+                        len(chunk),
+                        pool_exec.submit(
+                            _score_catalog_batch_job,
+                            (chunk, shared_riven, ctx, required_type, with_eligible),
+                        ),
+                    )
+                )
+                submitted += 1
+            if not in_flight:
+                break
+            n_items, future = in_flight.popleft()
+            out.extend(future.result())
+            if beat:
+                heartbeat(n_items)
+    finally:
+        for _, future in in_flight:
+            future.cancel()
+    return out
+
+
 def refine_final_build(
     weapon: Mapping[str, Any], candidates: Sequence[_Card], riven: _Card | None,
     incumbent: _Evaluation, *, scenario: Scenario, metric: str,
@@ -2320,6 +2572,8 @@ def refine_final_build(
     max_fill: int | None = None, max_evaluations: int | None = None,
     max_rounds: int | None = None, full_neighbourhood: bool = False,
     deadline_limit: float | None = None,
+    special_cards: Sequence[_Card] = (),
+    special_capacity_cost: int = 0,
 ) -> _Evaluation:
     """Refine the final event-scored build, including discarded family variants.
 
@@ -2332,13 +2586,19 @@ def refine_final_build(
     """
     if metric not in {'killsPerMinute', 'windowedDps', 'windowedTotalDamage'} or not target_context:
         return incumbent
+    equip_path = str(weapon.get("path") or "").strip() or None
+    special_families = {
+        _mod_family(sc, equip_path)
+        for sc in special_cards
+        if sc.record is not None and _mod_family(sc, equip_path)
+    }
     fast = profile in {'fast', 'ultra'} and not full_neighbourhood
     rounds = max_rounds if max_rounds is not None else (1 if fast else 4 if profile == 'deep' else 2)
     evaluations = 0
     forbidden = set(forbidden_mod_keys or ())
     required = set(required_mod_keys or ()) | {c.key for c in candidates if c.required}
-    pool = tuple(c for c in candidates if c.key not in forbidden)
-    constraints = dict(slot_count=slot_count, capacity_limit=capacity_limit,
+    pool = tuple(c for c in candidates if c.key not in forbidden and _mod_family(c, equip_path) not in special_families)
+    constraints = dict(slot_count=slot_count, capacity_limit=max(0, capacity_limit - special_capacity_cost),
                        required_mod_keys=tuple(required), forbidden_mod_keys=forbidden_mod_keys,
                        min_fill=min_fill, max_fill=max_fill)
     best = incumbent
@@ -2346,6 +2606,36 @@ def refine_final_build(
     deadline = phase_deadline()
     if deadline_limit is not None:
         deadline = min(deadline, deadline_limit)
+    from wfarsenal import parallel as _parallel
+    _pool_exec = _parallel.get_pool()
+    _refine_catalog: list[_Card] = []
+    _refine_idx: dict[int, int] = {}
+    if _pool_exec is not None:
+        for _c in (*incumbent.cards, *pool):
+            if id(_c) not in _refine_idx:
+                _refine_idx[id(_c)] = len(_refine_catalog)
+                _refine_catalog.append(_c)
+        _wire_scenario = (
+            scenario
+            if isinstance(scenario.conditional_stacks, dict)
+            else replace(scenario, conditional_stacks=dict(scenario.conditional_stacks))
+        )
+        _refine_ctx = _parallel.shared({
+            "weapon": weapon,
+            "scenario": _wire_scenario,
+            "metric": metric,
+            "passives": passives,
+            "slot_limit": slot_count,
+            "capacity_limit": capacity_limit,
+            "special_cards": tuple(special_cards),
+            "special_capacity_cost": special_capacity_cost,
+            "target_context": target_context,
+            "eval_required_damage_type": required_damage_type,
+            "catalog": tuple(_refine_catalog),
+            "riven": riven,
+        })
+    else:
+        _refine_ctx = None
     for _ in range(rounds):
         base = best
         cards = tuple(base.cards)
@@ -2356,19 +2646,19 @@ def refine_final_build(
             for index, old in enumerate(cards):
                 if old.required or old.key in required:
                     continue
-                other_families = {_mod_family(c) for i, c in enumerate(cards) if i != index}
+                other_families = {_mod_family(c, equip_path) for i, c in enumerate(cards) if i != index} | special_families
                 for new in pool:
-                    if new.key in used or _mod_family(new) in other_families:
+                    if new.key in used or _mod_family(new, equip_path) in other_families:
                         continue
-                    if fast and _mod_family(new) != _mod_family(old):
+                    if fast and _mod_family(new, equip_path) != _mod_family(old, equip_path):
                         continue
                     yield (*cards[:index], new, *cards[index + 1:])
                 if not fast:
                     yield (*cards[:index], *cards[index + 1:])
             if not fast and len(cards) + bool(riven) < slot_count:
-                families = {_mod_family(c) for c in cards}
+                families = {_mod_family(c, equip_path) for c in cards} | special_families
                 for new in pool:
-                    if new.key not in used and _mod_family(new) not in families:
+                    if new.key not in used and _mod_family(new, equip_path) not in families:
                         yield (*cards, new)
 
         proposals = neighbours()
@@ -2384,6 +2674,62 @@ def refine_final_build(
                 else:
                     bucket.append(proposal)
             proposals = (p for row in itertools.zip_longest(*buckets.values()) for p in row if p is not None)
+        if _pool_exec is not None:
+            if expired(deadline) or (max_evaluations is not None and evaluations >= max_evaluations):
+                return best
+            round_items: list[tuple[tuple[str, ...], tuple[_Card, ...]]] = []
+            queued = set(seen)
+            budget_left = None if max_evaluations is None else max(0, max_evaluations - evaluations)
+            for proposal in proposals:
+                if budget_left is not None and len(round_items) >= budget_left:
+                    break
+                signature = tuple(c.key for c in proposal)
+                if signature in queued or validate_build(proposal, riven, **constraints):
+                    continue
+                queued.add(signature)
+                round_items.append((signature, proposal))
+            if len(round_items) >= 8:
+                idx_items = [tuple(_refine_idx[id(c)] for c in prop) for _, prop in round_items]
+                outcomes = _run_catalog_batches(
+                    _pool_exec,
+                    idx_items,
+                    _USE_CTX_RIVEN,
+                    _refine_ctx,
+                    required_type=required_damage_type,
+                    with_eligible=True,
+                    deadline=deadline,
+                )
+                best_score = best.score
+                chosen_proposal: tuple[_Card, ...] | None = None
+                for (signature, proposal), outcome in zip(round_items, outcomes):
+                    seen.add(signature)
+                    evaluations += 1
+                    if profile == 'deep' and outcome is not None and len(proposal) == len(cards):
+                        changed = [i for i, (before, after) in enumerate(zip(cards, proposal)) if before.key != after.key]
+                        if len(changed) == 1:
+                            at = changed[0]
+                            alternatives.setdefault(at, []).append((outcome[0], proposal[at]))
+                    if outcome is not None and outcome[1] and outcome[0] > best_score + 1e-9:
+                        best_score = outcome[0]
+                        chosen_proposal = proposal
+                if chosen_proposal is not None:
+                    value = _evaluate(
+                        weapon, chosen_proposal, riven, scenario=scenario, metric=metric,
+                        passives=passives, slot_limit=slot_count, capacity_limit=capacity_limit,
+                        special_cards=special_cards, special_capacity_cost=special_capacity_cost,
+                        target_context=target_context, required_damage_type=required_damage_type,
+                    )
+                    if (
+                        value is not None
+                        and value.score > best.score + 1e-9
+                        and (not required_damage_type or value.stats.damage_types.get(required_damage_type, 0.) > 0.)
+                    ):
+                        best = value
+                if len(outcomes) < len(round_items) or (max_evaluations is not None and evaluations >= max_evaluations):
+                    return best
+                proposals = ()
+            else:
+                proposals = (prop for _, prop in round_items)
         for proposal in proposals:
             if expired(deadline) or (max_evaluations is not None and evaluations >= max_evaluations):
                 return best
@@ -2394,6 +2740,7 @@ def refine_final_build(
             evaluations += 1
             value = _evaluate(weapon, proposal, riven, scenario=scenario, metric=metric,
                               passives=passives, slot_limit=slot_count, capacity_limit=capacity_limit,
+                              special_cards=special_cards, special_capacity_cost=special_capacity_cost,
                               target_context=target_context, required_damage_type=required_damage_type)
             if profile == 'deep' and value is not None and len(proposal) == len(cards):
                 changed = [i for i,(before,after) in enumerate(zip(cards,proposal)) if before.key != after.key]
@@ -2410,6 +2757,7 @@ def refine_final_build(
                 # The strongest bounded pair neighbourhood spans every slot,
                 # rather than exhausting the first pair's arbitrary pool prefix.
                 pairs = []
+                queued_pairs = set(seen)
                 for left,right in itertools.combinations(sorted(alternatives),2):
                     a = sorted(alternatives[left],key=lambda row:(-row[0],row[1].key))[:4]
                     b = sorted(alternatives[right],key=lambda row:(-row[0],row[1].key))[:4]
@@ -2421,18 +2769,55 @@ def refine_final_build(
                             if validate_build(proposal,riven,**constraints):
                                 continue
                             signature=tuple(c.key for c in proposal)
-                            if signature not in seen:
+                            if signature not in queued_pairs:
+                                queued_pairs.add(signature)
                                 pairs.append((sa+sb,signature,tuple(proposal)))
                 pairs.sort(key=lambda row:(-row[0],row[1]))
-                for _,signature,proposal in pairs[:256]:
-                    if expired(deadline):return best
-                    seen.add(signature)
-                    value=_evaluate(weapon,proposal,riven,scenario=scenario,metric=metric,passives=passives,
-                                    slot_limit=slot_count,capacity_limit=capacity_limit,target_context=target_context,
-                                    required_damage_type=required_damage_type)
-                    if (value is not None and value.score>best.score+1e-9 and
-                            (not required_damage_type or value.stats.damage_types.get(required_damage_type,0.)>0.)):
-                        best=value
+                pair_slice = pairs[:256]
+                if _pool_exec is not None and len(pair_slice) >= 8:
+                    if expired(deadline):
+                        return best
+                    idx_items = [tuple(_refine_idx[id(c)] for c in prop) for _, _, prop in pair_slice]
+                    outcomes = _run_catalog_batches(
+                        _pool_exec,
+                        idx_items,
+                        _USE_CTX_RIVEN,
+                        _refine_ctx,
+                        required_type=required_damage_type,
+                        with_eligible=True,
+                        deadline=deadline,
+                    )
+                    best_score = best.score
+                    chosen_pair: tuple[_Card, ...] | None = None
+                    for (_, signature, proposal), outcome in zip(pair_slice, outcomes):
+                        seen.add(signature)
+                        if outcome is not None and outcome[1] and outcome[0] > best_score + 1e-9:
+                            best_score = outcome[0]
+                            chosen_pair = proposal
+                    if chosen_pair is not None:
+                        value = _evaluate(
+                            weapon, chosen_pair, riven, scenario=scenario, metric=metric,
+                            passives=passives, slot_limit=slot_count, capacity_limit=capacity_limit,
+                            target_context=target_context, required_damage_type=required_damage_type,
+                        )
+                        if (
+                            value is not None
+                            and value.score > best.score + 1e-9
+                            and (not required_damage_type or value.stats.damage_types.get(required_damage_type, 0.) > 0.)
+                        ):
+                            best = value
+                    if len(outcomes) < len(pair_slice):
+                        return best
+                else:
+                    for _,signature,proposal in pair_slice:
+                        if expired(deadline):return best
+                        seen.add(signature)
+                        value=_evaluate(weapon,proposal,riven,scenario=scenario,metric=metric,passives=passives,
+                                        slot_limit=slot_count,capacity_limit=capacity_limit,target_context=target_context,
+                                        required_damage_type=required_damage_type)
+                        if (value is not None and value.score>best.score+1e-9 and
+                                (not required_damage_type or value.stats.damage_types.get(required_damage_type,0.)>0.)):
+                            best=value
             if best is base:
                 break
     return best
@@ -2554,9 +2939,8 @@ def _next_calibration_level(level: Any) -> int | None:
     return min(9999, max(current + 1, int(math.ceil(current * 1.75))))
 
 
-def _card_elements(card: _Card) -> list[str]:
-    return [effect.damage_type for effect in card.effects
-            if getattr(effect, "damage_type", None) in BASE_ELEMENTS and effect.value > 0]
+def _card_elements(card: _Card) -> tuple[str, ...]:
+    return _card_meta(card)[1]
 
 
 def _element_orders(cards: Sequence[_Card], *, anchor: tuple[int, _Card] | None = None) -> list[tuple[_Card, ...]]:
@@ -2579,20 +2963,32 @@ def _element_orders(cards: Sequence[_Card], *, anchor: tuple[int, _Card] | None 
     key = pairing(original)
     if not key[1]:  # fewer than three distinct elements: one pairing only
         return [original]
+    all_elem_cards = (cards[i] for i in slots) if anchor is None else (*(cards[i] for i in slots), anchor[1])
+    distinct = {e for c in all_elem_cards for e in _card_elements(c)}
+    max_orders = 3 if len(distinct) <= 3 else 6
     orders = {key: original}
-    for permutation in itertools.permutations([cards[index] for index in slots]):
+    slot_cards = [cards[index] for index in slots]
+    for permutation in itertools.permutations(slot_cards):
         ordered = list(cards)
         for index, card in zip(slots, permutation):
             ordered[index] = card
         orders.setdefault(pairing(ordered), tuple(ordered))
+        if len(orders) >= max_orders:
+            break
     return list(orders.values())
 
 
 def _pairing_key(cards: Sequence[_Card]) -> tuple:
     sequence: list[str] = []
-    for damage_type in (t for card in cards for t in _card_elements(card)):
-        if damage_type not in sequence:
-            sequence.append(damage_type)
+    for card in cards:
+        elems = _card_meta(card)[1]
+        if not elems:
+            continue
+        for damage_type in elems:
+            if damage_type not in sequence:
+                sequence.append(damage_type)
+                if len(sequence) == 4:
+                    return (frozenset(sequence[:2]), frozenset(sequence[2:4]))
     return (frozenset(sequence[:2]), frozenset(sequence[2:4]))
 
 
@@ -2633,6 +3029,23 @@ def _evaluate(
     heartbeat(1)
     if len(cards) + (1 if riven else 0) > slot_limit:
         return None
+    equip_path = str(weapon.get("path") or "").strip() or None
+    seen_eval_families: set[str] = set()
+    for _c in cards:
+        if _c.record is not None:
+            _fam = _mod_family(_c, equip_path)
+            if _fam:
+                if _fam in seen_eval_families:
+                    return None
+                seen_eval_families.add(_fam)
+    if special_cards:
+        for _sc in special_cards:
+            if _sc.record is not None:
+                _sfam = _mod_family(_sc, equip_path)
+                if _sfam and _sfam in seen_eval_families:
+                    return None
+                if _sfam:
+                    seen_eval_families.add(_sfam)
     from . import evaluation_cache
     cache_key = evaluation_cache.key(
         weapon, cards, riven, scenario=scenario, metric=metric, passives=passives,
@@ -2662,16 +3075,21 @@ def _evaluate(
         if riven is not None and position is not None:
             ordered.insert(position, riven)
         all_cards = [*ordered, *special_cards]
-        effects = _effects([*all_cards, passives] if passives is not None else all_cards, scenario)
+        effects = _effects([*all_cards, passives] if passives is not None else all_cards, scenario, weapon=weapon)
         derived = scenario_with(scenario, victim_status_count=victim_count)
         _bind_combat_inputs(stats, weapon, all_cards, effects, derived, passives)
         return _Evaluation(score, card_order, stats, capacity, position, derived)
+    base_capacity = _capacity(cards) + (_card_meta(riven)[3] if riven is not None else 0) + special_capacity_cost
+    if base_capacity > capacity_limit:
+        if cache_key is not None:
+            evaluation_cache.put(cache_key, None)
+        return None
     positions: Iterable[int | None] = (None,)
     if riven is not None and fixed_riven_index is not None:
         positions = (fixed_riven_index,)
     elif riven is not None:
         polarity_sensitive = False  # all cards use matching Forma in this model
-        element_sensitive = any(
+        element_sensitive = bool(_card_meta(riven)[1]) or any(
             effect.damage_type in BASE_ELEMENTS for effect in riven.effects
         )
         if element_sensitive:
@@ -2681,7 +3099,7 @@ def _evaluate(
             # 第 k 张元素卡之前」（k = 0..n），位置代表取每张元素卡的
             # index + 末尾，把每评估 ~9 次重复计算压到 ~元素卡数+1 次。
             def _is_element_card(card: _Card) -> bool:
-                return any(
+                return bool(_card_meta(card)[1]) or any(
                     getattr(effect, "damage_type", None) in BASE_ELEMENTS
                     for effect in card.effects
                 )
@@ -2702,6 +3120,16 @@ def _evaluate(
                 (_element_orders(cards, anchor=(position, riven) if riven is not None else None)
                  if reorder_elements else [tuple(cards)]))
     seen_pairings = set()
+    skip_projectile_preview = metric in _NO_PROJECTILE_PREVIEW_METRICS
+    ctx_enh = (target_context or {}).get("enemy_enhancements") if isinstance(target_context, Mapping) else None
+    raw_priming = ctx_enh.get("primingStacks") if isinstance(ctx_enh, Mapping) else None
+    primed_types = (
+        tuple(str(k) for k, v in raw_priming.items() if isinstance(v, (int, float)) and not isinstance(v, bool) and v > 0)
+        if isinstance(raw_priming, Mapping) and raw_priming
+        else None
+    )
+    ctx_forced = (target_context or {}).get("forcedProcs") if isinstance(target_context, Mapping) else None
+    ctx_forced = ctx_forced if isinstance(ctx_forced, Mapping) and ctx_forced else None
     for position, card_order in variants:
         ordered = list(card_order)
         if riven is not None and position is not None:
@@ -2710,29 +3138,34 @@ def _evaluate(
         if pairing in seen_pairings:
             continue
         seen_pairings.add(pairing)
-        capacity = _capacity(ordered) + special_capacity_cost
-        if capacity > capacity_limit:
-            continue
+        capacity = base_capacity
         all_cards = [*ordered, *special_cards]
         # Passives (arcanes, Incarnon, external buffs, sentinel Fired Up) join after
         # the installed mods, as the manual simulator does: a runtime elemental
         # buff takes its combine position after the mod slots and before the
         # weapon's innate element (wiki Damage: innate elements are always last).
         effect_cards = [*all_cards, passives] if passives is not None else all_cards
-        effects = _effects(effect_cards, scenario)
+        effects = _effects(effect_cards, scenario, weapon=weapon)
         probe_scenario = scenario_with(scenario, victim_status_count=0)
         probe_stats = apply_mods(weapon, effects, scenario=probe_scenario)
-        derived_scenario = scenario_with(
-            scenario,
-            victim_status_count=expected_victim_status_count(probe_stats),
-        )
-        stats = apply_mods(weapon, effects, scenario=derived_scenario)
+        vsc = expected_victim_status_count(probe_stats, forced_procs=ctx_forced, primed_types=primed_types)
+        if vsc == 0:
+            derived_scenario = probe_scenario
+            stats = probe_stats
+        else:
+            derived_scenario = scenario_with(
+                scenario,
+                victim_status_count=vsc,
+            )
+            stats = apply_mods(weapon, effects, scenario=derived_scenario)
         # Filter each actual pairing before comparing scores. Filtering only
         # the winning layout would also discard a legal lower-scoring slot.
         if required_damage_type and stats.damage_types.get(required_damage_type, 0.0) <= 0.0:
             continue
-        projectile_events = evaluate_projectile_events(
-            weapon, effects, scenario=derived_scenario
+        projectile_events = (
+            None
+            if skip_projectile_preview
+            else evaluate_projectile_events(weapon, effects, scenario=derived_scenario)
         )
         _bind_combat_inputs(stats, weapon, all_cards, effects, derived_scenario, passives)
         current = _Evaluation(
@@ -2775,6 +3208,8 @@ def _optimize(
     max_fill: int | None = None,
     seed_cards: Sequence[_Card] | None = None,
     element_niches: int = 0,
+    special_cards: Sequence[_Card] = (),
+    special_capacity_cost: int = 0,
 ) -> _Evaluation:
     # 解算档位（用户可调，平衡深度与等待时间）：
     #   fast     — beam 12/32，不做爬山。适合快速预览；可能漏掉冷门协同组合。
@@ -2804,6 +3239,29 @@ def _optimize(
         raise SimulationError("slot_count must be an integer between 1 and 8")
     if isinstance(capacity_limit, bool) or not isinstance(capacity_limit, int) or capacity_limit < 0:
         raise SimulationError("capacity_limit must be a non-negative integer")
+    equip_path = str(weapon.get("path") or "").strip() or None
+    special_families = {
+        _mod_family(sc, equip_path)
+        for sc in special_cards
+        if sc.record is not None and _mod_family(sc, equip_path)
+    }
+    effective_cap = max(0, capacity_limit - special_capacity_cost)
+
+    def eval_cards(cards_arg: Sequence[_Card]) -> _Evaluation | None:
+        return _evaluate(
+            weapon,
+            cards_arg,
+            riven,
+            scenario=scenario,
+            metric=metric,
+            passives=passives,
+            slot_limit=slot_count,
+            capacity_limit=capacity_limit,
+            special_cards=special_cards,
+            special_capacity_cost=special_capacity_cost,
+            target_context=target_context,
+        )
+
     required_cards = tuple(card for card in candidates if card.required)
     # ── 搜索约束：必选/禁选/数量范围（在家族去重前应用）────────────────
     forbidden = {str(key) for key in (forbidden_mod_keys or ()) if str(key)}
@@ -2825,6 +3283,20 @@ def _optimize(
     if missing_required:
         raise SimulationError(
             "required mods not in candidate pool: " + ", ".join(sorted(missing_required))
+        )
+    if special_families:
+        conflicting_req = [
+            rc.key for rc in (*required_cards, *extra_required)
+            if _mod_family(rc, equip_path) in special_families
+        ]
+        if conflicting_req:
+            raise SimulationError(
+                "required MOD conflicts with equipped Exilus/special MOD family: "
+                + ", ".join(conflicting_req)
+            )
+        candidates = tuple(
+            card for card in candidates
+            if card.required or _mod_family(card, equip_path) not in special_families
         )
     if min_fill is not None or max_fill is not None:
         base_fill = len(required_cards) + len(extra_required) + (1 if riven else 0)
@@ -2865,17 +3337,7 @@ def _optimize(
     )
     if limit < 0:
         raise SimulationError("required MODs do not fit the selected slot count")
-    empty = _evaluate(
-        weapon,
-        required_cards,
-        riven,
-        scenario=scenario,
-        metric=metric,
-        passives=passives,
-        slot_limit=slot_count,
-        capacity_limit=capacity_limit,
-        target_context=target_context,
-    )
+    empty = eval_cards(required_cards)
     if empty is None:
         raise SimulationError("Riven does not fit the assumed 60-capacity build")
 
@@ -2890,6 +3352,8 @@ def _optimize(
     _rank_scores: list[float | None] = []
     from wfarsenal import parallel as _parallel
 
+    _catalog = (*required_cards, *candidates)
+    _card_idx = {id(c): i for i, c in enumerate(_catalog)}
     _wire_scenario = (
         scenario
         if isinstance(scenario.conditional_stacks, dict)
@@ -2902,38 +3366,31 @@ def _optimize(
         "passives": passives,
         "slot_limit": slot_count,
         "capacity_limit": capacity_limit,
+        "special_cards": tuple(special_cards),
+        "special_capacity_cost": special_capacity_cost,
         "target_context": target_context,
+        "catalog": _catalog,
+        "riven": riven,
     })
     _pool_exec = _parallel.get_pool()
     if _pool_exec is not None and len(_rank_jobs) >= 8:
-        _futures = [
-            _pool_exec.submit(_parallel._score_job, (cards, riven, _pool_ctx))
-            for cards in _rank_jobs
-        ]
-        _rank_scores = [fut.result() for fut in _futures]
+        _rank_idx_jobs = [tuple(_card_idx[id(c)] for c in cards) for cards in _rank_jobs]
+        _rank_scores = _run_catalog_batches(
+            _pool_exec, _rank_idx_jobs, _USE_CTX_RIVEN, _pool_ctx, beat=False
+        )
     for cards, score in zip(_rank_jobs, _rank_scores):
         if score is not None:
             ranked.append((score, cards[-1]))
     if not _rank_scores:
         for cards in _rank_jobs:
-            evaluated = _evaluate(
-                weapon,
-                cards,
-                riven,
-                scenario=scenario,
-                metric=metric,
-                passives=passives,
-                slot_limit=slot_count,
-                capacity_limit=capacity_limit,
-                target_context=target_context,
-            )
+            evaluated = eval_cards(cards)
             if evaluated is not None:
                 ranked.append((evaluated.score, cards[-1]))
     ranked.sort(key=lambda item: (-item[0], item[1].key))
     pool: list[_Card] = []
-    families: set[str] = set()
+    families: set[str] = set(special_families)
     for _, card in ranked:
-        family = _mod_family(card)
+        family = _mod_family(card, equip_path)
         if family in families:
             continue
         families.add(family)
@@ -2950,7 +3407,7 @@ def _optimize(
             for _, card in ranked:
                 if have >= element_niches:
                     break
-                family = _mod_family(card)
+                family = _mod_family(card, equip_path)
                 if family in families or element not in _card_elements(card):
                     continue
                 families.add(family)
@@ -2985,13 +3442,13 @@ def _optimize(
     # beam 剪枝漏掉的显见组合，且成本 O(limit × pool)。同时保证高档位
     # 不劣于贪心口径（S07 的实际下界）。
     greedy_cards: list[_Card] = []
-    greedy_used_families: set[str] = set()
+    greedy_used_families: set[str] = set(special_families)
     for _ in range(limit):
         greedy_pick: _Card | None = None
         for card in pool:
             if card.key in {c.key for c in greedy_cards}:
                 continue
-            if _mod_family(card) in greedy_used_families:
+            if _mod_family(card, equip_path) in greedy_used_families:
                 continue
             greedy_pick = card
             break
@@ -3002,7 +3459,7 @@ def _optimize(
             candidate_cards,
             riven,
             slot_count=slot_count,
-            capacity_limit=capacity_limit,
+            capacity_limit=effective_cap,
             required_mod_keys=required_mod_keys,
             forbidden_mod_keys=forbidden_mod_keys,
             min_fill=min_fill,
@@ -3010,19 +3467,9 @@ def _optimize(
         ) is not None:
             break
         greedy_cards.append(greedy_pick)
-        greedy_used_families.add(_mod_family(greedy_pick))
+        greedy_used_families.add(_mod_family(greedy_pick, equip_path))
     if greedy_cards:
-        greedy_eval = _evaluate(
-            weapon,
-            (*required_cards, *greedy_cards),
-            riven,
-            scenario=scenario,
-            metric=metric,
-            passives=passives,
-            slot_limit=slot_count,
-            capacity_limit=capacity_limit,
-            target_context=target_context,
-        )
+        greedy_eval = eval_cards((*required_cards, *greedy_cards))
         if greedy_eval is not None and eligible(greedy_eval) and (
             best is None or greedy_eval.score > best.score
         ):
@@ -3043,13 +3490,13 @@ def _optimize(
         for previous in seed_cards:
             card = admitted.get(previous.key)
             if card is not None and card.key not in required_seed_keys:
-                if _mod_family(card) in {_mod_family(c) for c in (*required_cards,*seed_kept)}:
+                if _mod_family(card, equip_path) in ({_mod_family(c, equip_path) for c in (*required_cards,*seed_kept)} | special_families):
                     continue
                 if validate_build(
                     (*required_cards, *seed_kept, card),
                     riven,
                     slot_count=slot_count,
-                    capacity_limit=capacity_limit,
+                    capacity_limit=effective_cap,
                     required_mod_keys=required_mod_keys,
                     forbidden_mod_keys=forbidden_mod_keys,
                     min_fill=None,  # A prefix is not the completed seed.
@@ -3058,20 +3505,10 @@ def _optimize(
                     seed_kept.append(card)
         if seed_kept and validate_build(
             (*required_cards, *seed_kept), riven, slot_count=slot_count,
-            capacity_limit=capacity_limit, required_mod_keys=required_mod_keys,
+            capacity_limit=effective_cap, required_mod_keys=required_mod_keys,
             forbidden_mod_keys=forbidden_mod_keys, min_fill=min_fill, max_fill=max_fill,
         ) is None:
-            seed_eval = _evaluate(
-                weapon,
-                (*required_cards, *seed_kept),
-                riven,
-                scenario=scenario,
-                metric=metric,
-                passives=passives,
-                slot_limit=slot_count,
-                capacity_limit=capacity_limit,
-                target_context=target_context,
-            )
+            seed_eval = eval_cards((*required_cards, *seed_kept))
             if seed_eval is not None and eligible(seed_eval) and (
                 best is None or seed_eval.score > best.score
             ):
@@ -3100,9 +3537,9 @@ def _optimize(
         layer_jobs: list[tuple[tuple[int, ...], tuple[tuple[int, ...], ...]]] = []
         for selected, _previous in beam:
             used = set(selected)
-            used_families = {_mod_family(pool[index]) for index in selected}
+            used_families = ({_mod_family(pool[index], equip_path) for index in selected} | special_families)
             for index in range(len(pool)):
-                if index in used or _mod_family(pool[index]) in used_families:
+                if index in used or _mod_family(pool[index], equip_path) in used_families:
                     continue
                 layer_jobs.append(
                     ((*selected, index), (*required_cards, *(
@@ -3116,47 +3553,21 @@ def _optimize(
                 todo.setdefault(score_key(cards), cards)
             unique = list(todo.items())
             if _pool_exec is not None and len(unique) >= 8:
-                # Keep only a bounded window in flight. A deadline must not
-                # leave thousands of queued replay jobs running after return;
-                # four jobs per worker, topped up as results come back in
-                # order, keep the pool busy (a batch-and-wait loop drained
-                # it at every batch boundary).
-                window = max(16, 4 * _parallel.worker_count())
-                in_flight: deque = deque()
-                submitted = 0
-                stopped = False
-                try:
-                    while True:
-                        while not stopped and submitted < len(unique) and len(in_flight) < window:
-                            if submitted % window == 0 and expired(deadline):
-                                stopped = True
-                                break
-                            key, cards = unique[submitted]
-                            in_flight.append((key, _pool_exec.submit(_parallel._score_job, (cards, riven, _pool_ctx))))
-                            submitted += 1
-                        if not in_flight:
-                            break
-                        key, future = in_flight.popleft()
-                        layer_scores[key] = future.result()
-                        heartbeat(1)
-                finally:
-                    for _key, future in in_flight:
-                        future.cancel()  # a cancelled request's queued jobs never start
+                _unique_idx = [tuple(_card_idx[id(c)] for c in cards) for _, cards in unique]
+                _batch_scores = _run_catalog_batches(
+                    _pool_exec,
+                    _unique_idx,
+                    _USE_CTX_RIVEN,
+                    _pool_ctx,
+                    deadline=deadline,
+                )
+                for (key, _cards), score in zip(unique, _batch_scores):
+                    layer_scores[key] = score
             else:
                 for key, cards in unique:
                     if expired(deadline):
                         break
-                    evaluated = _evaluate(
-                        weapon,
-                        cards,
-                        riven,
-                        scenario=scenario,
-                        metric=metric,
-                        passives=passives,
-                        slot_limit=slot_count,
-                        capacity_limit=capacity_limit,
-                        target_context=target_context,
-                    )
+                    evaluated = eval_cards(cards)
                     layer_scores[key] = None if evaluated is None else evaluated.score
             for _sel, cards in layer_jobs:
                 key = score_key(cards)
@@ -3180,33 +3591,13 @@ def _optimize(
             beam = [(sel, score) for sel, score in survivors_of(scored, beam_width)]
             top_sel, top_score = survivors[0]
             if best is None or top_score > best.score:
-                evaluated = _evaluate(
-                    weapon,
-                    (*required_cards, *(pool[item] for item in top_sel)),
-                    riven,
-                    scenario=scenario,
-                    metric=metric,
-                    passives=passives,
-                    slot_limit=slot_count,
-                    capacity_limit=capacity_limit,
-                    target_context=target_context,
-                )
+                evaluated = eval_cards((*required_cards, *(pool[item] for item in top_sel)))
                 if evaluated is not None:
                     best = evaluated
             continue
         # Beam 幸存者 + 全局最优候选在父进程重评估附 stats。
         for sel, _score in survivors_of(scored, beam_width + 1):
-            evaluated = _evaluate(
-                weapon,
-                (*required_cards, *(pool[item] for item in sel)),
-                riven,
-                scenario=scenario,
-                metric=metric,
-                passives=passives,
-                slot_limit=slot_count,
-                capacity_limit=capacity_limit,
-                target_context=target_context,
-            )
+            evaluated = eval_cards((*required_cards, *(pool[item] for item in sel)))
             if evaluated is not None:
                 expanded.append((sel, evaluated))
         if not expanded:
@@ -3231,22 +3622,12 @@ def _optimize(
         target_total = fill_floor + len(required_cards) + (1 if riven else 0)
         while len(best.cards) + (1 if riven else 0) < target_total:
             used_keys = {card.key for card in best.cards}
-            used_families = {_mod_family(card) for card in best.cards}
+            used_families = ({_mod_family(card, equip_path) for card in best.cards} | special_families)
             added = False
             for card in pool:
-                if card.key in used_keys or _mod_family(card) in used_families:
+                if card.key in used_keys or _mod_family(card, equip_path) in used_families:
                     continue
-                filled = _evaluate(
-                    weapon,
-                    (*best.cards, card),
-                    riven,
-                    scenario=scenario,
-                    metric=metric,
-                    passives=passives,
-                    slot_limit=slot_count,
-                    capacity_limit=capacity_limit,
-                    target_context=target_context,
-                )
+                filled = eval_cards((*best.cards, card))
                 if filled is not None and eligible(filled):
                     best = filled
                     added = True
@@ -3277,7 +3658,7 @@ def _optimize(
             candidate_cards,
             riven,
             slot_count=slot_count,
-            capacity_limit=capacity_limit,
+            capacity_limit=effective_cap,
             required_mod_keys=required_mod_keys,
             forbidden_mod_keys=forbidden_mod_keys,
             min_fill=min_fill,
@@ -3290,22 +3671,19 @@ def _optimize(
         cached = climb_seen.pop(tuple(card.key for card in cards), None)
         if cached is not None:
             return cached
-        return _evaluate(weapon, tuple(cards), riven, scenario=scenario, metric=metric, passives=passives,
-                         slot_limit=slot_count, capacity_limit=capacity_limit, target_context=target_context)
+        return eval_cards(tuple(cards))
 
     def climb_scores(candidates: Sequence[Sequence[_Card]]):
         """(score, eligible) per candidate in order, or None for an invalid build.
 
         Serially a lazy generator (a caller that stops early evaluates no
         further, and the winner's evaluation is handed back); with a pool,
-        all candidates are scored as jobs.
+        all candidates are scored as micro-batched jobs.
         """
         climb_seen.clear()
         if _pool_exec is None or len(candidates) < 8:
             for cards in candidates:
-                evaluated = _evaluate(weapon, tuple(cards), riven, scenario=scenario, metric=metric,
-                                      passives=passives, slot_limit=slot_count, capacity_limit=capacity_limit,
-                                      target_context=target_context)
+                evaluated = eval_cards(tuple(cards))
                 if evaluated is None:
                     yield None
                     continue
@@ -3313,13 +3691,22 @@ def _optimize(
                 climb_seen[tuple(card.key for card in cards)] = evaluated
                 yield evaluated.score, eligible(evaluated)
             return
-        futures = [_pool_exec.submit(_parallel._score_eligible_job, (tuple(cards), riven, _pool_ctx, required_damage_type))
-                   for cards in candidates]
+        idx_items = [tuple(_card_idx[id(c)] for c in cards) for cards in candidates]
+        workers = max(1, _parallel.worker_count())
+        batch_size = max(1, min(6, len(idx_items) // (workers * 3) or 1))
+        chunks = [idx_items[i : i + batch_size] for i in range(0, len(idx_items), batch_size)]
+        futures = [
+            _pool_exec.submit(
+                _score_catalog_batch_job,
+                (chunk, _USE_CTX_RIVEN, _pool_ctx, required_damage_type, True),
+            )
+            for chunk in chunks
+        ]
         try:
             for future in futures:
-                outcome = future.result()
-                heartbeat(1)
-                yield outcome
+                for outcome in future.result():
+                    heartbeat(1)
+                    yield outcome
         finally:
             for future in futures:
                 future.cancel()
@@ -3405,17 +3792,7 @@ def _optimize(
             if sig in seen_keys:
                 continue
             seen_keys.add(sig)
-            evaluated = _evaluate(
-                weapon,
-                tuple(candidate_cards),
-                riven,
-                scenario=scenario,
-                metric=metric,
-                passives=passives,
-                slot_limit=slot_count,
-                capacity_limit=capacity_limit,
-                target_context=target_context,
-            )
+            evaluated = eval_cards(tuple(candidate_cards))
             if evaluated is not None and eligible(evaluated) and evaluated.score > best_score + 1e-9:
                 best, best_score = evaluated, evaluated.score
                 improved = True
@@ -3425,62 +3802,66 @@ def _optimize(
         # 每轮最多 24 个最优对，预算受 climb_rounds 约束）。
         if profile == "deep" and len(base_optional) >= 2:
             pair_budget = 24
+            pair_cap = pair_budget * 8
             pair_candidates: list[tuple[float, list[_Card]]] = []
-            for first_pos in range(len(base_optional)):
-                for second_pos in range(first_pos + 1, len(base_optional)):
-                    dropped_a = base_optional[first_pos]
-                    dropped_b = base_optional[second_pos]
-                    for card_a in pool:
-                        if card_a.key in {c.key for c in base_cards}:
-                            continue
-                        for card_b in pool:
-                            if card_b.key in {c.key for c in base_cards} or card_b.key == card_a.key:
+            base_key_set = {c.key for c in base_cards}
+            pair_queued = set(seen_keys)
+
+            def _iter_pair_proposals():
+                for first_pos in range(len(base_optional)):
+                    for second_pos in range(first_pos + 1, len(base_optional)):
+                        dropped_a = base_optional[first_pos]
+                        dropped_b = base_optional[second_pos]
+                        kept = [c for c in base_cards if c.key not in {dropped_a.key, dropped_b.key}]
+                        kept_families = ({_mod_family(c, equip_path) for c in kept} | special_families)
+                        for card_a in pool:
+                            if card_a.key in base_key_set:
                                 continue
-                            if card_a.key == card_b.key:
+                            fam_a = _mod_family(card_a, equip_path)
+                            if fam_a in kept_families:
                                 continue
-                            kept = [c for c in base_cards if c.key not in {dropped_a.key, dropped_b.key}]
-                            candidate_cards = [*kept, card_a, card_b]
-                            if _constraint_violation(candidate_cards):
-                                continue
-                            sig = tuple(c.key for c in candidate_cards)
-                            if sig in seen_keys:
-                                continue
-                            seen_keys.add(sig)
-                            evaluated = _evaluate(
-                                weapon,
-                                tuple(candidate_cards),
-                                riven,
-                                scenario=scenario,
-                                metric=metric,
-                                passives=passives,
-                                slot_limit=slot_count,
-                                capacity_limit=capacity_limit,
-                                target_context=target_context,
-                            )
-                            if evaluated is not None and eligible(evaluated):
-                                pair_candidates.append((evaluated.score, candidate_cards))
-                                if len(pair_candidates) >= pair_budget * 8:
-                                    break
-                        if len(pair_candidates) >= pair_budget * 8:
-                            break
-                    if len(pair_candidates) >= pair_budget * 8:
+                            for card_b in pool:
+                                if card_b.key in base_key_set or card_b.key == card_a.key:
+                                    continue
+                                fam_b = _mod_family(card_b, equip_path)
+                                if fam_b == fam_a or fam_b in kept_families:
+                                    continue
+                                candidate_cards = [*kept, card_a, card_b]
+                                if _constraint_violation(candidate_cards):
+                                    continue
+                                sig = tuple(c.key for c in candidate_cards)
+                                if sig in pair_queued:
+                                    continue
+                                pair_queued.add(sig)
+                                yield sig, candidate_cards
+
+            if _pool_exec is not None:
+                proposal_gen = _iter_pair_proposals()
+                while len(pair_candidates) < pair_cap:
+                    need = pair_cap - len(pair_candidates)
+                    chunk = list(itertools.islice(proposal_gen, need))
+                    if not chunk:
                         break
-                if len(pair_candidates) >= pair_budget * 8:
-                    break
+                    outcomes = climb_scores([cards for _, cards in chunk])
+                    for (sig, candidate_cards), outcome in zip(chunk, outcomes):
+                        seen_keys.add(sig)
+                        if outcome is not None and outcome[1]:
+                            pair_candidates.append((outcome[0], candidate_cards))
+                            if len(pair_candidates) >= pair_cap:
+                                break
+                    outcomes.close()
+            else:
+                for sig, candidate_cards in _iter_pair_proposals():
+                    seen_keys.add(sig)
+                    evaluated = eval_cards(tuple(candidate_cards))
+                    if evaluated is not None and eligible(evaluated):
+                        pair_candidates.append((evaluated.score, candidate_cards))
+                        if len(pair_candidates) >= pair_cap:
+                            break
             pair_candidates.sort(key=lambda item: (-item[0], tuple(c.key for c in item[1])))
             for score_value, candidate_cards in pair_candidates[:pair_budget]:
                 if score_value > best_score + 1e-9:
-                    evaluated = _evaluate(
-                        weapon,
-                        tuple(candidate_cards),
-                        riven,
-                        scenario=scenario,
-                        metric=metric,
-                        passives=passives,
-                        slot_limit=slot_count,
-                        capacity_limit=capacity_limit,
-                        target_context=target_context,
-                    )
+                    evaluated = eval_cards(tuple(candidate_cards))
                     if evaluated is not None and eligible(evaluated) and evaluated.score > best_score + 1e-9:
                         best, best_score = evaluated, evaluated.score
                         improved = True
@@ -3495,22 +3876,12 @@ def _optimize(
         and len(best.cards) + (1 if riven else 0) < slot_count
     ):
         used_keys = {card.key for card in best.cards}
-        used_families = {_mod_family(card) for card in best.cards}
+        used_families = ({_mod_family(card, equip_path) for card in best.cards} | special_families)
         for card in pool:
-            family = _mod_family(card)
+            family = _mod_family(card, equip_path)
             if card.key in used_keys or family in used_families:
                 continue
-            filled = _evaluate(
-                weapon,
-                (*best.cards, card),
-                riven,
-                scenario=scenario,
-                metric=metric,
-                passives=passives,
-                slot_limit=slot_count,
-                capacity_limit=capacity_limit,
-                target_context=target_context,
-            )
+            filled = eval_cards((*best.cards, card))
             if filled is None or not eligible(filled) or filled.score < best.score:
                 continue
             best = filled
@@ -3562,6 +3933,8 @@ def _best_fixed(
         return _evaluate(weapon, cards, riven, scenario=scenario, metric=metric, passives=passives,
                          capacity_limit=capacity_limit, target_context=target_context)
 
+    fixed_catalog = (*required, *optional)
+    fixed_idx = {id(c): i for i, c in enumerate(fixed_catalog)}
     for keep in range(max_keep, -1, -1):
         subsets = [(*required, *(optional[index] for index in indexes))
                    for indexes in itertools.combinations(range(len(optional)), keep)]
@@ -3576,19 +3949,16 @@ def _best_fixed(
                 "capacity_limit": capacity_limit, "target_context": target_context,
                 "scenario": scenario if isinstance(scenario.conditional_stacks, dict)
                 else replace(scenario, conditional_stacks=dict(scenario.conditional_stacks)),
+                "catalog": fixed_catalog,
+                "riven": riven,
             })
-            futures = [pool.submit(_parallel._score_job, (cards, riven, context)) for cards in subsets]
+            idx_subsets = [tuple(fixed_idx[id(c)] for c in cards) for cards in subsets]
+            scores = _run_catalog_batches(pool, idx_subsets, _USE_CTX_RIVEN, context)
             chosen: int | None = None
             chosen_score = 0.0
-            try:
-                for index, future in enumerate(futures):
-                    score = future.result()
-                    heartbeat(1)
-                    if score is not None and (chosen is None or score > chosen_score):
-                        chosen, chosen_score = index, score
-            finally:
-                for future in futures:
-                    future.cancel()
+            for index, score in enumerate(scores):
+                if score is not None and (chosen is None or score > chosen_score):
+                    chosen, chosen_score = index, score
             evaluated = [] if chosen is None else [value for value in (evaluate(subsets[chosen]),) if value is not None]
         if evaluated:
             candidate = max(evaluated, key=lambda value: value.score)
@@ -3623,48 +3993,59 @@ def _best_fixed_scores(
             except Exception as exc:
                 results.append(exc)
         return results
+    catalog_list: list[_Card] = []
+    card_idx: dict[int, int] = {}
+    for base_cards, riven in items:
+        for c in base_cards:
+            if id(c) not in card_idx:
+                card_idx[id(c)] = len(catalog_list)
+                catalog_list.append(c)
+        if riven is not None and id(riven) not in card_idx:
+            card_idx[id(riven)] = len(catalog_list)
+            catalog_list.append(riven)
     scenario = kwargs["scenario"]
     context = _parallel.shared({
         "weapon": weapon, "metric": kwargs["metric"], "passives": kwargs.get("passives"), "slot_limit": 8,
         "capacity_limit": kwargs.get("capacity_limit", 60), "target_context": kwargs.get("target_context"),
         "scenario": scenario if isinstance(scenario.conditional_stacks, dict)
         else replace(scenario, conditional_stacks=dict(scenario.conditional_stacks)),
+        "catalog": tuple(catalog_list),
+        "capture_exceptions": True,
     })
     splits = []
-    for base_cards, _riven in items:
-        required = tuple(card for card in base_cards if card.required)
-        optional = tuple(card for card in base_cards if not card.required)
-        splits.append((required, optional, min(len(optional), 7 - len(required))))
+    for base_cards, riven in items:
+        req_idx = tuple(card_idx[id(card)] for card in base_cards if card.required)
+        opt_idx = tuple(card_idx[id(card)] for card in base_cards if not card.required)
+        riven_ref = card_idx[id(riven)] if riven is not None else None
+        splits.append((req_idx, opt_idx, min(len(opt_idx), 7 - len(req_idx)), riven_ref))
     settled: dict[int, float | Exception] = {}
     for step in itertools.count():
         level = [(index, splits[index][2] - step) for index in range(len(items))
                  if index not in settled and splits[index][2] - step >= 0]
         if not level:
             break
-        futures = []
+        flat_jobs: list[tuple[tuple[int, ...], int | None]] = []
+        spans: list[tuple[int, int, int]] = []
         for index, keep in level:
-            required, optional, _max_keep = splits[index]
-            futures.append([pool.submit(_parallel._score_job, ((*required, *(optional[i] for i in indexes)),
-                                                               items[index][1], context))
-                            for indexes in itertools.combinations(range(len(optional)), keep)])
-        try:
-            for (index, _keep), row in zip(level, futures):
-                best: float | None = None
-                try:
-                    for future in row:
-                        score = future.result()
-                        heartbeat(1)
-                        if score is not None and (best is None or score > best):
-                            best = score
-                except Exception as exc:
-                    settled[index] = exc
-                    continue
-                if best is not None:
-                    settled[index] = best
-        finally:
-            for row in futures:
-                for future in row:
-                    future.cancel()
+            req_idx, opt_idx, _max_keep, riven_ref = splits[index]
+            start_at = len(flat_jobs)
+            for indexes in itertools.combinations(range(len(opt_idx)), keep):
+                flat_jobs.append(((*req_idx, *(opt_idx[i] for i in indexes)), riven_ref))
+            spans.append((index, start_at, len(flat_jobs)))
+        flat_scores = _run_catalog_batches(pool, flat_jobs, _PER_ITEM_RIVEN, context)
+        for index, start_at, end_at in spans:
+            best: float | None = None
+            failed: Exception | None = None
+            for score in flat_scores[start_at:end_at]:
+                if isinstance(score, Exception):
+                    failed = score
+                    break
+                if score is not None and (best is None or score > best):
+                    best = score
+            if failed is not None:
+                settled[index] = failed
+            elif best is not None:
+                settled[index] = best
     return [settled.get(index, SimulationError("no capacity-valid build can equip the Riven"))
             for index in range(len(items))]
 
@@ -4606,7 +4987,7 @@ def _apply_selected(
 ) -> Any:
     return apply_mods(
         weapon,
-        _selected_effects(evaluation, riven, scenario, passives),
+        _selected_effects(evaluation, riven, scenario, passives, weapon=weapon),
         scenario=scenario,
     )
 
@@ -4616,6 +4997,8 @@ def _selected_effects(
     riven: _Card | None,
     scenario: Scenario,
     passives: _Card | None = None,
+    *,
+    weapon: Mapping[str, Any] | None = None,
 ) -> ModEffectList:
     ordered = list(evaluation.cards)
     if riven is not None:
@@ -4636,7 +5019,7 @@ def _selected_effects(
         resolved.append(card)
     if passives is not None:
         resolved.append(passives)
-    return _effects(resolved, scenario)
+    return _effects(resolved, scenario, weapon=weapon)
 
 
 def _alternate_mode_payloads(
@@ -5316,6 +5699,58 @@ def analyze_riven_request(
     else:
         skipped_hint = ""
 
+    synergy_summary: dict[str, Any] | None = None
+    synergy_extra_card: _Card | None = None
+    has_synergy_request = bool(
+        (isinstance(request.get("warframeLink"), Mapping) and request["warframeLink"].get("enabled") is True)
+        or (isinstance(request.get("companionLink"), Mapping) and request["companionLink"].get("enabled") is True)
+    )
+    synergy_resolved = request.get("_resolvedSynergy") if isinstance(request.get("_resolvedSynergy"), Mapping) else None
+    if has_synergy_request and synergy_resolved is None:
+        from . import synergy as _synergy
+        from .warframe import WarframeEngine, load_warframe_catalog
+
+        wf_cat = load_warframe_catalog(Path(export_dir).resolve().parents[1] / "warframe_build_data.json", fallback=exports)
+        wf_eng = WarframeEngine(wf_cat)
+        bm_target_rec = benchmark_context.get("target") if isinstance(benchmark_context, Mapping) else None
+        bm_enh = (benchmark_context.get("enemy_enhancements") or {}) if isinstance(benchmark_context, Mapping) else {}
+        synergy_resolved = _synergy.resolve_synergy(
+            request,
+            weapon=weapon,
+            warframe_engine=wf_eng,
+            exports=exports,
+            enemy_record=bm_target_rec if isinstance(bm_target_rec, Mapping) else None,
+            enemy_path=str((bm_target_rec or {}).get("path") or ""),
+            level=int((benchmark_context or {}).get("level") or 170),
+            distance=scenario.distance,
+            eximus=bool(bm_enh.get("eximus")),
+            riven={"stats": request.get("stats")} if isinstance(request.get("stats"), list) else None,
+            riven_effects=tuple(line.effect for line in actual_lines if line.effect is not None),
+            base_combat_state=scenario.combat_state,
+        )
+    if synergy_resolved is not None:
+        from . import synergy as _synergy
+
+        synergy_summary = synergy_resolved.get("summary")
+        scenario = replace(scenario, combat_state=dict(synergy_resolved.get("combat_state") or scenario.combat_state))
+        if benchmark_context is not None:
+            bm_enh_merged = dict(benchmark_context.get("enemy_enhancements") or {})
+            for k_enh, v_enh in (synergy_resolved.get("aura_enemy_patch") or {}).items():
+                bm_enh_merged[k_enh] = min(1.0, float(bm_enh_merged.get(k_enh) or 0.0) + float(v_enh))
+            if synergy_resolved.get("panel_priming_stacks"):
+                bm_enh_merged["primingStacks"] = dict(synergy_resolved["panel_priming_stacks"])
+            benchmark_context = {
+                **benchmark_context,
+                "enemy_enhancements": bm_enh_merged,
+                "armour_strip": max(
+                    float(benchmark_context.get("armour_strip") or 0.0),
+                    float(synergy_resolved.get("armour_strip_floor") or 0.0),
+                ),
+            }
+            if synergy_resolved.get("forced_procs"):
+                merged_fp = {**(benchmark_context.get("forcedProcs") or {}), **synergy_resolved["forced_procs"]}
+                benchmark_context["forcedProcs"] = merged_fp
+
     incarnon_card, resolved_choices, incarnon_unsupported, incarnon_policy = _incarnon_card(
         weapon,
         request.get("incarnonChoices"),
@@ -5325,14 +5760,81 @@ def analyze_riven_request(
         build_label=exports["buildLabel"],
     )
     unsupported.extend(incarnon_unsupported)
+    requested_arcanes_for_analysis = request.get("arcanes")
+    if synergy_resolved is not None:
+        from . import synergy as _synergy
+
+        base_arc_list = list(requested_arcanes_for_analysis) if isinstance(requested_arcanes_for_analysis, list) else []
+        arc_meta_map = {
+            str(a.get("path") or ""): {"slotKind": "warframe" if "PowerSuit" in str(a.get("compatibility") or "") else "weapon"}
+            for a in (exports.get("arcanes") or ())
+            if isinstance(a, Mapping)
+        }
+        wf_synergy_active = bool(synergy_resolved.get("warframe_result"))
+        merged_panel_arcs = _synergy.apply_companion_arcane_priming(
+            _synergy.merge_warframe_arcanes(
+                base_arc_list,
+                synergy_resolved.get("panel_warframe_arcanes") or (),
+                arc_meta_map,
+                warframe_link_enabled=wf_synergy_active,
+            ),
+            cold_procs_per_sec=float(synergy_resolved.get("companion_cold_procs_per_sec") or 0.0),
+            heat_procs_per_sec=float(synergy_resolved.get("companion_heat_procs_per_sec") or 0.0),
+        )
+        requested_arcanes_for_analysis = merged_panel_arcs or None
+
     arcane_card, arcane_states, arcane_unsupported = _arcane_card(
         exports.get("arcanes") or (),
-        request.get("arcanes"),
+        requested_arcanes_for_analysis,
         weapon,
         default_heavy_state=heavy_default_state,
     )
+    if synergy_resolved is not None:
+        from . import synergy as _synergy
+
+        ext_sets = tuple(
+            (str(x.get("path") or ""), str(x.get("setAlias") or x.get("setId") or ""))
+            for x in (synergy_resolved.get("external_set_mods") or ())
+            if isinstance(x, Mapping) and x.get("path") and (x.get("setAlias") or x.get("setId"))
+        )
+        c_extras = synergy_resolved.get("combat_extras") or {}
+        c_extras_json = json.dumps(c_extras, sort_keys=True) if c_extras else ""
+        # Override event_arcanes with replay_warframe_arcanes when AI Avenger or live Frostbite/Flare is active.
+        replay_wf_arcs = synergy_resolved.get("replay_warframe_arcanes") or ()
+        if arcane_card is not None and (replay_wf_arcs or c_extras.get("companionAssister")):
+            raw_user_arcs = list(request.get("arcanes") or ()) if isinstance(request.get("arcanes"), list) else []
+            arc_meta_map = {
+                str(a.get("path") or ""): {"slotKind": "warframe" if "PowerSuit" in str(a.get("compatibility") or "") else "weapon"}
+                for a in (exports.get("arcanes") or ())
+                if isinstance(a, Mapping)
+            }
+            replay_merged = _synergy.merge_warframe_arcanes(
+                raw_user_arcs,
+                replay_wf_arcs,
+                arc_meta_map,
+                warframe_link_enabled=bool(synergy_resolved.get("warframe_result")),
+            )
+            replay_ev = tuple(
+                (resolve_record(exports["arcanes"], r["path"], kind="arcane"), int(r.get("rank") or 0), dict(r))
+                for r in replay_merged
+                if _arcane_matches_weapon(resolve_record(exports["arcanes"], r["path"], kind="arcane"), weapon)
+            )
+            arcane_card = replace(arcane_card, event_arcanes=replay_ev)
+        synergy_extra_card = _Card(
+            key="__synergy__",
+            record=None,
+            rank=0,
+            effects=tuple(synergy_resolved.get("effects") or ()),
+            skipped=(),
+            drain=0,
+            polarity=None,
+            external_set_mods=ext_sets,
+            combat_extras_json=c_extras_json,
+        )
     unsupported.extend(arcane_unsupported)
     passives = _merge_passives(incarnon_card, arcane_card)
+    if synergy_extra_card is not None:
+        passives = _merge_passives(passives, synergy_extra_card)
 
     mod_pool, rejected_mods = _candidate_mods(exports, weapon, scenario)
 
@@ -5372,6 +5874,8 @@ def analyze_riven_request(
         and (default_scenario or default_companion or bool(request.get("_cacheScenario")))
         and timeline_seconds is None
         and not has_search_constraints
+        and not has_synergy_request
+        and synergy_resolved is None
     )
     _bm = dict(request.get("benchmarkTarget")) if isinstance(request.get("benchmarkTarget"), Mapping) else {}
     _bm.update(
@@ -5983,7 +6487,10 @@ def analyze_riven_request(
                 card, _choices, card_unsupported, _policy = _incarnon_card(
                     weapon, dict(route), scenario=scenario, metric=objective_metric,
                     policy=exports.get("incarnonDefaults"), build_label=exports["buildLabel"])
-                route_cards[key] = (_merge_passives(card, arcane_card), card_unsupported)
+                merged_rp = _merge_passives(card, arcane_card)
+                if synergy_extra_card is not None:
+                    merged_rp = _merge_passives(merged_rp, synergy_extra_card)
+                route_cards[key] = (merged_rp, card_unsupported)
             return route_cards[key]
 
         def _screen(route: Mapping[str, str]) -> float:
@@ -6918,6 +7425,8 @@ def analyze_riven_request(
     }
     if timeline is not None:
         result["timeline"] = timeline
+    if synergy_summary is not None:
+        result["synergySummary"] = synergy_summary
     if source_disposition is not None:
         result["projection"] = {
             "sourceDisposition": source_disposition,

@@ -45,6 +45,7 @@ SHARPSHOT = ROOT + "Offensive/LongbowDamageOnHeadshot"
 CREPUSCULAR = ROOT + "Utility/AbilityStrengthAndCritDamageWhenInvisible"
 DEMULCENT = ROOT + "Offensive/WeaponDamageOnResidualContact"
 SLIP_SHOT = ROOT + "Offensive/AmmoEfficiencyOnSliding"
+CRESCENDO = ROOT + "Offensive/PermaComboOnFinisher"
 PISTOLEER = ROOT + "Offensive/AmmoEfficiencyOnPistolHeadshot"
 EXODIA_TRIUMPH = ROOT + "Offensive/StatusChannelingDamage"
 EXODIA_VALOR = ROOT + "Offensive/CritChannelingDamage"
@@ -52,7 +53,7 @@ ARACHNE = ROOT + "Utility/GolemArcaneBonusDamageOnWallLatch"
 
 LONG_GUN = "/Lotus/Weapons/Tenno/LotusLongGun"
 PISTOL = "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
-MELEE_ONLY_TYPES = frozenset({"WEAPON_MELEE_DAMAGE"})
+MELEE_ONLY_TYPES = frozenset({"WEAPON_MELEE_DAMAGE", "WEAPON_MELEE_COMBO_INITIAL_BONUS"})
 
 # Frame-slot cards whose exported effect has no validType although the card
 # names its weapons (wiki: Arachne "does not apply to regular melee attacks").
@@ -115,10 +116,11 @@ def _shiver(record, rank, path):
         return None
     per = 0.075 * (rank + 1)
     # Joins the base-damage bracket like Condition Overload, once per Cold
-    # stack on the target (cap 10). Unforced, the replay reads the live count.
+    # stack on the target (cap 10). Unforced, the replay reads the live count
+    # (or primedColdStacks on the static panel when a companion primes Cold).
     return _spec(lambda stacks, uptime: [_effect("RUNTIME_COLD_STACK_DAMAGE", "ADD", per, path,
                                                  runtime_chance=float(stacks) * uptime)],
-                 max_stacks=10, default=("live",), force=True, label="冰冻层数",
+                 max_stacks=10, default=("live", "primedColdStacks"), force=True, label="冰冻层数",
                  note=f"目标每层冰冻异常 +{per * 100:g}% 伤害（与膛线同区相加，最多 10 层）；默认按解算中目标的实时冰冻层数。")
 
 
@@ -141,8 +143,8 @@ def _retaliation(record, rank, path):
         return None
     per, cap = 0.05 + 0.05 * rank, 4.2
     return _spec(lambda stacks, uptime: [_effect("WEAPON_MELEE_DAMAGE", "STACKING_MULTIPLY", min(stacks * per, cap) * uptime, path)],
-                 max_stacks=_capped(per, cap), default=("combat", "frameShield", 0.0, 200.0), force=True, label="每 200 护盾",
-                 note=f"当前每 200 护盾 +{per * 100:g}% 近战伤害，上限 +{cap * 100:g}%；默认按上方「战甲护盾」，过载护盾按半数计入未模拟。")
+                 max_stacks=_capped(per, cap), default=("retaliation", "frameShield", "frameOvershield", per, cap), force=True, label="每 200 护盾",
+                 note=f"当前每 200 护盾 +{per * 100:g}% 近战伤害（过载护盾按半数计入），上限 +{cap * 100:g}%；默认按上方「战甲护盾 / 过载护盾」。")
 
 
 def _bulwark(record, rank, path):
@@ -259,10 +261,23 @@ def _slip_shot(record, rank, path):
                  note=f"滑行或瞄准滑翔时双枪弹药效率 +{value * 100:g}%；默认按上方「滑行 / 瞄准滑翔」。")
 
 
+def _crescendo(record, rank, path):
+    apply = _script(record, "PermaComboUpgrade.lua") or _script(record, "PermaComboUpgrade.lua", conditional=0)
+    if (not apply or apply.get("_initialComboUpgrade") != 1
+            or apply.get("_initialComboUpgradePerFusionLevel") != 1
+            or apply.get("_doNotExceedCap") != 240):
+        return None
+    per, cap = 1.0 + float(rank), 220.0
+    return _spec(lambda stacks, uptime: [_effect("WEAPON_MELEE_COMBO_INITIAL_BONUS", "ADD", min(stacks * per, cap) * uptime, path)],
+                 max_stacks=_capped(per, cap), default=None, force=True, label="处决击杀数",
+                 note=f"每次处决击杀永久 +{per:g} 初始连击，有效上限 +220（12× 连击）；默认不计入，强制即视为叠满 220 初始连击。")
+
+
 _ADAPTERS = {
     SHIVER: _shiver, CAREEN: _careen, RETALIATION: _retaliation, BULWARK: _bulwark, OVERCHARGE: _overcharge,
     CASCADIA_OVERCHARGE: _cascadia_overcharge, KINSHIP: _kinship, OUTBURST: _outburst, EXPOSURE: _exposure,
     SHARPSHOT: _sharpshot, CREPUSCULAR: _crepuscular, DEMULCENT: _demulcent, SLIP_SHOT: _slip_shot,
+    CRESCENDO: _crescendo,
 }
 
 
@@ -270,8 +285,31 @@ def default_state(spec: Mapping[str, Any], combat_state: Mapping[str, Any], head
     """(stacks, uptime) the build page uses when the card is not forced."""
     default = spec.get("default")
     cap = spec.get("maxStacks") or 1
-    if not default or default[0] == "live":
+    if not default:
         return 0, 1.0
+    if default[0] == "live":
+        if len(default) > 1:
+            primed = combat_state.get(default[1])
+            if isinstance(primed, (int, float)) and not isinstance(primed, bool) and float(primed) > 0.0:
+                target = min(float(cap), float(primed))
+                whole = min(int(cap), max(1, int(math.ceil(target - 1e-9))))
+                return whole, min(1.0, target / whole)
+        return 0, 1.0
+    if default[0] == "retaliation":
+        _kind, shield_key, overshield_key, per, cap_val = default
+        raw_s = combat_state.get(shield_key)
+        raw_o = combat_state.get(overshield_key)
+        s_val = float(raw_s) if isinstance(raw_s, (int, float)) and not isinstance(raw_s, bool) else 0.0
+        o_val = float(raw_o) if isinstance(raw_o, (int, float)) and not isinstance(raw_o, bool) else 0.0
+        s_units = max(0, int(math.floor(s_val / 200.0 + 1e-9)))
+        o_units = max(0, int(math.floor(o_val / 200.0 + 1e-9)))
+        if o_units <= 0:
+            return min(cap, s_units), 1.0
+        eff_units = s_units + 0.5 * o_units
+        desired = min(eff_units * per, cap_val)
+        whole = min(cap, max(1, int(math.ceil(eff_units - 1e-9))))
+        denom = min(whole * per, cap_val)
+        return whole, (min(1.0, desired / denom) if denom > 0.0 else 1.0)
     if default[0] == "headshot":
         return 1, min(max(float(headshot_chance), 0.0), 1.0)
     if default[0] == "flag":
@@ -312,7 +350,7 @@ def weapon_scopes(record: Mapping[str, Any]) -> list[tuple[str, bool]]:
             if scope not in scopes:
                 scopes.append(scope)
     if not scopes and path in _ADAPTERS:
-        scopes.append(("", path in (CAREEN, RETALIATION, EXPOSURE)))
+        scopes.append(("", path in (CAREEN, RETALIATION, EXPOSURE, CRESCENDO)))
     return scopes
 
 

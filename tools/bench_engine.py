@@ -172,7 +172,15 @@ VOLATILE = {"elapsedSeconds", "budgetSeconds", "responseCache", "qualityCacheHit
 
 def _strip(value):
     if isinstance(value, dict):
-        return {k: _strip(v) for k, v in value.items() if k not in VOLATILE}
+        return {
+            k: (
+                {sk: _strip(sv) for sk, sv in v.items() if sk != "seconds"}
+                if k == "incarnonRouteScreen" and isinstance(v, dict)
+                else _strip(v)
+            )
+            for k, v in value.items()
+            if k not in VOLATILE
+        }
     if isinstance(value, list):
         return [_strip(v) for v in value]
     return value

@@ -13,6 +13,7 @@ which the native loop calls back.
 from __future__ import annotations
 
 import os
+from collections.abc import Mapping
 from copy import copy
 
 try:  # The library is optional: tools/build_native.py builds it.
@@ -27,13 +28,15 @@ SHADOW = os.environ.get("WF_NATIVE_SHADOW") == "1"
 STATS = {"native": 0, "fallback": 0}
 
 # Combat features the native loop does not cover yet (each falls back).
-_UNSUPPORTED_COMBAT = (
-
-)
+_UNSUPPORTED_COMBAT: tuple[str, ...] = ()
 
 
 def supported(stats, options) -> bool:
-    if not ENABLED or getattr(wfcore,"ELECTRIC_GAS_PROC_PILE",0) < 2 or not getattr(wfcore,"NATIVE_CRIT_FACTOR",0) or options.get("collect_timeline", True):
+    if not ENABLED or getattr(wfcore,"ELECTRIC_GAS_PROC_PILE",0) < 2 or not getattr(wfcore,"NATIVE_CRIT_FACTOR",0) or not getattr(wfcore,"M120_FORTIFIER_AND_SHIELD_BYPASS",0) or options.get("collect_timeline", True):
+        return False
+    synergy_native = getattr(wfcore, "NATIVE_SYNERGY_REPLAY", 0)
+    enh = options.get("enemy_enhancements")
+    if isinstance(enh, Mapping) and enh.get("primingStacks") and not synergy_native:
         return False
     draw = options.get("weak_draw")
     if draw is not None and not callable(getattr(draw, "native_spec", None)):
@@ -112,6 +115,12 @@ def supported(stats, options) -> bool:
         return False
     if combat.get('cycle') and combat.get('melee'):
         return False  # no melee Incarnon cycle is modelled natively
+    if not synergy_native and (
+        isinstance(combat.get("companionAssister"), Mapping)
+        or isinstance(combat.get("reinforcedBondReloads"), Mapping)
+        or combat.get("selfDamageOnKill")
+    ):
+        return False
     return not any(combat.get(key) for key in _UNSUPPORTED_COMBAT)
 
 
@@ -528,8 +537,23 @@ def trajectory(
     step = max(0.01, float(time_step))
     head = min(1.0, max(0.0, float(headshot_chance)))
     rate = max(0.0, float(attacks_per_second))
+    if isinstance(enemy_enhancements, Mapping):
+        raw_enhancements = dict(enemy_enhancements)
+        raw_priming_input = raw_enhancements.pop("primingStacks", None)
+    else:
+        raw_enhancements = enemy_enhancements
+        raw_priming_input = None
+    static_priming = (
+        {
+            str(k): float(v)
+            for k, v in raw_priming_input.items()
+            if isinstance(v, (int, float)) and not isinstance(v, bool) and float(v) > 0.0
+        }
+        if isinstance(raw_priming_input, Mapping) and not combat.get("companionAssister")
+        else {}
+    )
     defenses, full, ehp, armour_base, cache, locations, bare_def, tables = _target_setup(
-        target, level, armour_strip, steel_path, enemy_enhancements)
+        target, level, armour_strip, steel_path, raw_enhancements)
     magnetic_packet = getattr(wfcore, 'MAGNETIC_BREAK_PACKET', 0)
     tau_runtime = getattr(wfcore, 'TAU_STATUS_VULNERABILITY', 0)
     has_tau = ('DT_SENTIENT' in stats.damage_types or 'DT_SENTIENT' in (forced_procs or {})
@@ -565,13 +589,13 @@ def trajectory(
         sources.append(q)
     extra_hits = tuple(getattr(stats, 'extra_hits', ()) or ())
     extra_scale = 1.0
+    extra_head_part = 1.0
     if extra_hits:
         extra_scale = stats.faction_damage_multipliers.get('', 1.0)
         if cache['target_faction']:
             extra_scale *= stats.faction_damage_multipliers.get(cache['target_faction'], 1.0)
         extra_scale *= cache['faction_bracket']
-        head_part = float(locations['head']['hit_multiplier'] or 1.0)
-        extra_scale *= ((1 - head) + head * head_part * head_part) / ((1 - head) + head * head_part)
+        extra_head_part = float(locations['head']['hit_multiplier'] or 1.0)
     unsupported = list(combat.get("unsupported") or [])
     if (combat.get('manualDetonation') or {}).get('impactThenEmbed'):
         unsupported.extend(['alternox-host-object-retirement-spatial-policy',
@@ -583,8 +607,8 @@ def trajectory(
     state = combat.get('projectileState') or {}
     actor_events = []
     for key, kind in [('selfShieldBreak', 'on-shield-broken'), ('selfOverguardBreak', 'on-overguard-broken'),
-                      ('selfShieldHit', 'on-shield-hit'), ('equipFromPrimary', 'on-equip-from-primary'),
-                      ('abilityUse', 'on-warframe-ability')]:
+                      ('selfShieldHit', 'on-shield-hit'), ('selfDamageHit', 'on-damaged'),
+                      ('equipFromPrimary', 'on-equip-from-primary'), ('abilityUse', 'on-warframe-ability')]:
         if key + 'At' in state:
             actor_events.append((float(state[key + 'At']), float(state.get(key + 'Interval', 0.)), kind))
     floors = combat.get('beamRampFloors')
@@ -606,10 +630,59 @@ def trajectory(
                             recoveryPerSecond=float(spec.get('recoveryPerSecond') or 0.),
                             tierKeys=dict(combat.get('comboTierKeys') or {}),
                             segments=helper.melee_segments())
+    rb_reloads_cfg = combat.get("reinforcedBondReloads") if isinstance(combat.get("reinforcedBondReloads"), Mapping) else None
+    rb_reloads_needed = int(rb_reloads_cfg.get("reloadsNeeded") or 1) if rb_reloads_cfg is not None else None
+    assister = combat.get("companionAssister") if isinstance(combat.get("companionAssister"), Mapping) else None
+    companion_spec = None
+    if assister is not None:
+        from .damage import ModdedStats as _CompStats
+        comp_stats = _CompStats(
+            damage_types=dict(assister.get("damageTypes") or {}),
+            crit_chance=float(assister.get("critChance") or 0.0),
+            crit_multiplier=float(assister.get("critMultiplier") or 1.0),
+            status_chance=float(assister.get("statusChance") or 0.0),
+            multishot=float(assister.get("multishot") or 1.0),
+            fire_rate=max(0.01, float(assister.get("fireRate") or 1.0)),
+            magazine=float(assister.get("magazine") or 0.0),
+            reload_time=float(assister.get("reloadTime") or 0.0),
+            continuous=bool(assister.get("continuous")),
+            noncrit_damage_multiplier=float(assister.get("noncritDamageMultiplier") or 1.0),
+            double_crit_chance=float(assister.get("doubleCritChance") or 0.0),
+            dot_base_damage=assister.get("dotBaseDamage"),
+            proc_duration_multiplier=float(assister.get("procDurationMultiplier") or 1.0),
+            proc_damage_multiplier=float(assister.get("procDamageMultiplier") or 1.0),
+            dot_elemental_multipliers=dict(assister.get("dotElementalMultipliers") or {}),
+            faction_damage_multipliers=dict(assister.get("factionDamageMultipliers") or {}),
+        )
+        raw_comp_procs = assister.get("procsPerShot")
+        companion_spec = dict(
+            stats=comp_stats,
+            procsPerShot=dict(raw_comp_procs) if raw_comp_procs else None,
+            magazine=float(comp_stats.magazine or 0.0),
+            interval=max(0.02, float(assister.get("interval") or (1.0 / comp_stats.fire_rate))),
+            reloadTime=max(0.0, float(comp_stats.reload_time or 0.0)),
+            armorStripOnHit=max(0.0, float(assister.get("armorStripOnHit") or 0.0)),
+            allowPlayerStacks=bool(state.get("companionPlayerStacks")),
+            precepts=[
+                dict(
+                    cooldown=max(1.0, float(p.get("cooldown") or 5.0)),
+                    killCooldownReduction=float(p.get("killCooldownReduction") or 0.0),
+                    damage=float(p.get("damage") or 0.0),
+                    damageType=str(p.get("damageType") or "DT_ELECTRICITY"),
+                    procs=dict(p["procs"]) if p.get("procs") else None,
+                )
+                for p in (assister.get("manifoldPrecepts") or ())
+            ],
+        )
     config = dict(
         stats=stats, resolver=combat['resolve'], window=window, head=head, rate=rate,
         scoreOnly=bool(score_only and life_curve is None and not collect_timeline),
         punctureCap=proc_stack_cap(stats, 'DT_PUNCTURE', 5.0),
+        corrosiveCap=proc_stack_cap(stats, 'DT_CORROSIVE', 10.0),
+        staticPriming=static_priming,
+        selfDamageOnKill=float(combat.get("selfDamageOnKill") or 0.0),
+        reinforcedBondReloads=rb_reloads_needed,
+        companionSpec=companion_spec,
         statusRateMultiplier=float(status_rate_multiplier), damageRateMultiplier=float(damage_rate_multiplier),
         full=full, ehp=float(ehp), armourBase=armour_base, elementalArmourStrip=float(elemental_armour_strip),
         forcedProcs=dict(forced_procs or {}), factionDeltas=dict(cache['faction_deltas']),
@@ -617,7 +690,7 @@ def trajectory(
         magneticProxy=cache['magnetic_proxy'], magneticWeaknessBonus=combat.get('magneticWeaknessBonus'),
         magneticElectricImmune=cache['magnetic_electric_immune'],
         blocksRadiation=cache['blocks_radiation'],
-        extraHits=[(dtype, float(share)) for dtype, share, _forced in extra_hits], extraScale=float(extra_scale),
+        extraHits=[(dtype, float(share)) for dtype, share, _forced in extra_hits], extraScale=float(extra_scale), extraHeadPart=float(extra_head_part),
         weaponSlot=str(combat.get("weaponSlot") or ""), distance=combat.get("distance"),
         punchthrough=float(state.get('punchthroughTargets', 0) or 0),
         liveTypes=bool(combat.get("conditionOverload") or stats.co_bucket),
@@ -658,7 +731,10 @@ def trajectory(
         if health_targets is not None:
             targets = []
             for enhancements in health_targets:
-                _, pools, _, _, _, _, _, _ = _target_setup(target, level, armour_strip, steel_path, enhancements)
+                clean_enh = dict(enhancements) if isinstance(enhancements, Mapping) else enhancements
+                if isinstance(clean_enh, dict):
+                    clean_enh.pop("primingStacks", None)
+                _, pools, _, _, _, _, _, _ = _target_setup(target, level, armour_strip, steel_path, clean_enh)
                 if not magnetic_packet and (pools[0] or pools[1]):
                     STATS['fallback'] += 1
                     return None

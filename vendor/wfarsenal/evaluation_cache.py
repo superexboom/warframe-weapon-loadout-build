@@ -15,6 +15,7 @@ MAX_BYTES = 16 * 1024 * 1024
 MAX_ENTRIES = 8192
 _results = OrderedDict()
 _cards = OrderedDict()
+_CARD_FAST: dict = {}
 _bytes = 0
 _lock = RLock()
 STATS = dict(hits=0, misses=0, stores=0, evictions=0)
@@ -24,6 +25,9 @@ MISSING = object()
 def _card(card):
     if card is None:
         return None
+    fast = _CARD_FAST.get(id(card))
+    if fast is not None and (card.record is None or fast[1] == record_key(card.record)):
+        return fast[3]
     # A Riven's key is always __riven__; its effects and actual rolls matter.
     record = _record_digest(card.record) if card.record is not None else None
     shell = _record_digest(card.set_shell) if card.set_shell is not None else None
@@ -34,13 +38,32 @@ def _card(card):
     with _lock:
         hit = _cards.get(identity)
         if hit is not None:
-            return hit[1]
+            digest = hit[1]
+            if card.set_shell is None and not triggers and not arcanes:
+                if len(_CARD_FAST) >= 8192:
+                    _CARD_FAST.clear()
+                _CARD_FAST[id(card)] = (
+                    card,
+                    record_key(card.record) if card.record is not None else None,
+                    pin(card.record) if card.record is not None else (),
+                    digest,
+                )
+            return digest
     wire = (type(card), record, tuple((k, v) for k, v in vars(card).items() if k != "record"))
     digest = hashlib.blake2b(pickle.dumps(wire, protocol=5), digest_size=20).digest()
     with _lock:
         _cards[identity] = (pin(vars(card)), digest)
         while len(_cards) > 4096:
             _cards.popitem(last=False)
+        if card.set_shell is None and not triggers and not arcanes:
+            if len(_CARD_FAST) >= 8192:
+                _CARD_FAST.clear()
+            _CARD_FAST[id(card)] = (
+                card,
+                record_key(card.record) if card.record is not None else None,
+                pin(card.record) if card.record is not None else (),
+                digest,
+            )
     return digest
 
 
@@ -95,6 +118,7 @@ def clear():
     with _lock:
         _results.clear()
         _cards.clear()
+        _CARD_FAST.clear()
         _bytes = 0
         STATS.update(hits=0, misses=0, stores=0, evictions=0)
 

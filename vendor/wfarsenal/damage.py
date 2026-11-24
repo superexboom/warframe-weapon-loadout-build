@@ -221,12 +221,25 @@ def _enemy_enhancement_options(options: Mapping[str, Any] | None) -> dict[str, A
             "healthScale": 1.0,
             "auraArmourReduction": 0.0,
             "auraShieldReduction": 0.0,
+            "primingStacks": {},
         }
     if not isinstance(options, Mapping):
         raise TypeError("enemy_enhancements must be an object")
     for key in ("eximus", "archimedea", "empowered", "noOverguard"):
         if key in options and not isinstance(options[key], bool):
             raise TypeError(f"enemy_enhancements.{key} must be boolean")
+    raw_priming = options.get("primingStacks")
+    priming: dict[str, float] = {}
+    if raw_priming is not None:
+        if not isinstance(raw_priming, Mapping):
+            raise TypeError("enemy_enhancements.primingStacks must be a mapping")
+        for dtype, count in raw_priming.items():
+            if not isinstance(dtype, str) or not dtype:
+                raise TypeError("enemy_enhancements.primingStacks keys must be non-empty strings")
+            if isinstance(count, bool) or not isinstance(count, (int, float)) or not math.isfinite(float(count)) or float(count) < 0.0:
+                raise ValueError(f"enemy_enhancements.primingStacks[{dtype!r}] must be a non-negative finite number")
+            if float(count) > 0.0:
+                priming[dtype] = float(count)
     result = {
         "eximus": options.get("eximus", False),
         "archimedea": options.get("archimedea", False),
@@ -242,6 +255,7 @@ def _enemy_enhancement_options(options: Mapping[str, Any] | None) -> dict[str, A
         # the summed share, a multiplier on the scaled pool.
         "auraArmourReduction": options.get("auraArmourReduction", 0.0),
         "auraShieldReduction": options.get("auraShieldReduction", 0.0),
+        "primingStacks": priming,
     }
     for key in ("auraArmourReduction", "auraShieldReduction"):
         share = result[key]
@@ -260,6 +274,8 @@ def _enemy_enhancement_options(options: Mapping[str, Any] | None) -> dict[str, A
     stacks = result["magneticStacks"]
     if isinstance(stacks, bool) or not isinstance(stacks, int) or not 0 <= stacks <= 10:
         raise ValueError("enemy_enhancements.magneticStacks must be an integer from 0 to 10")
+    if priming.get("DT_MAGNETIC", 0.0) > 0.0:
+        result["magneticStacks"] = max(stacks, min(10, int(round(priming["DT_MAGNETIC"]))))
     if not result["empowered"]:
         result["playerCount"] = None
     return result
@@ -319,6 +335,7 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     "WEAPON_AMMO_MAX": "ammo_max_multiplier",
     "WEAPON_HEADSHOT_MULTIPLIER": "headshot_bonus_multiplier",
     "WEAPON_PROC_DAMAGE": "proc_damage_multiplier",
+    "RUNTIME_TOXIN_PROC_DAMAGE": "proc_damage_types",
     "WEAPON_PROC_TIME": "proc_duration_multiplier",
     # One status type's duration (Slaytra: Bleed only), keyed by damage type.
     "RUNTIME_TYPED_PROC_TIME": "proc_duration_types",
@@ -536,8 +553,9 @@ class Scenario:
             raise TypeError("conditional_stacks must be a mapping")
         if not isinstance(self.combat_state, Mapping):
             raise TypeError('combatState must be an object')
-        numeric = {'frameArmor','frameShield','energyPool','sprintMultiplier','energySpent','energySpendPerSecond','nearbyRadius','detonationWaitSeconds','stugBounceDelaySeconds','stugChildDetonateSeconds','orbAbsorbedDamage',
-                   'selfShieldBreakAt','selfShieldBreakInterval','selfOverguardBreakAt','selfOverguardBreakInterval','selfShieldHitAt','selfShieldHitInterval'}
+        numeric = {'frameHealth','frameArmor','frameShield','frameOvershield','energyPool','sprintMultiplier','energySpent','energySpendPerSecond','nearbyRadius','detonationWaitSeconds','stugBounceDelaySeconds','stugChildDetonateSeconds','orbAbsorbedDamage',
+                   'selfShieldBreakAt','selfShieldBreakInterval','selfOverguardBreakAt','selfOverguardBreakInterval','selfShieldHitAt','selfShieldHitInterval',
+                   'selfDamageHitAt','selfDamageHitInterval','selfDamageOnKill','primedColdStacks','primedHeatStacks'}
         numeric |= {'grimoireCoverageSeconds','grimoireExpiryDistance','equipFromPrimaryAt','equipFromPrimaryInterval','abilityUseAt','abilityUseInterval','meleeTargetDistance','phantasmaChildArrivalSeconds','zymosChildArrivalSeconds','zymosChildFrameSeconds'}
         binary = {'overshields','channeling','aimGliding','sliding','incarnonMeleeActive','orbSpecialShield','onosRadialHit','selfShieldBreakForced','perfectCharge','infiniteAmmo',
                   'companion','companionPlayerStacks'}
@@ -1148,6 +1166,9 @@ class ModdedStats:
     proc_duration_types: dict[str, float] = field(default_factory=dict)
     # Damage type -> extra stacks its victim debuff holds (RUNTIME_TYPED_PROC_MAX_STACK).
     proc_max_stacks: dict[str, float] = field(default_factory=dict)
+    # Damage type -> its own status-damage multiplier when a typed proc-damage
+    # bonus (Emerald Shard Toxin status damage) joins the shared bucket.
+    proc_damage_types: dict[str, float] = field(default_factory=dict)
     status_condition_damage_multiplier: float = 1.0
     initial_combo: float = 0.0
     combo_duration: float = BASE_MELEE_COMBO_DURATION
@@ -1607,8 +1628,14 @@ def _co_damage(spec: CoSpec, co_effects: list[ModEffect]) -> _CoDamage:
         ordinary_scale = spec.ordinary_scale
         raw_co = _combine(1.,status_damage_effects)-1.
         damage_scale = ordinary_scale*(1.+raw_co*fraction) if spec.gunco_independent else ordinary_scale+raw_co*fraction
-    # Multiplying Compression amplifies the ordinary bucket, not adding GunCO.
-    damage_scale += spec.ordinary_scale * (spec.compression_mult - 1.0)
+    # Multiplying Compression amplifies the ordinary bucket; independent (multiplying)
+    # GunCO multiplies that whole compressed bracket (WFSim M104), while adding GunCO
+    # stands beside it (WFSim M118).
+    if spec.gunco_fraction is not None and spec.gunco_independent:
+        if spec.compression_mult != 1.0:
+            damage_scale *= spec.compression_mult
+    else:
+        damage_scale += spec.ordinary_scale * (spec.compression_mult - 1.0)
     out = _CoDamage()
     # The replay adds live Cold stacks to this bracket (hit damage scales with it).
     out.base_bracket = damage_scale
@@ -1904,11 +1931,15 @@ def _apply_mods_spec_py(
     compression_profile = weapon.get('__compressionProfile__') or event_profile.get('compression')
     if buckets['RUNTIME_PRIMARY_COMPRESSION'] and scenario.aiming:
         if compression_profile:
-            radius = float(compression_profile['radius'])
-            if compression_profile.get('takesRadiusMods', True):
-                radius = _combine(radius, buckets['WEAPON_EXPLOSION_RADIUS'])
-            considered = compression_profile.get('reads_radius_m')
-            if considered is None:
+            reads_radius = compression_profile.get('reads_radius_m')
+            if reads_radius is not None:
+                considered = float(reads_radius)
+                if compression_profile.get('takesRadiusMods', True):
+                    considered = _combine(considered, buckets['WEAPON_EXPLOSION_RADIUS'])
+            else:
+                radius = float(compression_profile['radius'])
+                if compression_profile.get('takesRadiusMods', True):
+                    radius = _combine(radius, buckets['WEAPON_EXPLOSION_RADIUS'])
                 considered = radius * float(compression_profile.get('effectiveness', 1.))
             lost = max(float(considered), 0.) * .8
             bonus = sum(e.value for e in buckets['RUNTIME_PRIMARY_COMPRESSION']) * lost
@@ -2212,6 +2243,7 @@ def _apply_mods_spec_py(
             forced_statuses[effect.damage_type] = forced_statuses.get(effect.damage_type, 0.0) + float(effect.runtime_chance)
     co = _co_damage(spec, co_effects)
     from .event_profiles import ignores_headshot_bonus
+    proc_damage_multiplier, proc_damage_types = _typed_proc_damage(buckets)
     return ModdedStats(
         damage_types=co.damage_types,
         crit_chance=crit_chance,
@@ -2263,10 +2295,11 @@ def _apply_mods_spec_py(
         headshot_bonus_multiplier=_combine(
             1.0, buckets["WEAPON_HEADSHOT_MULTIPLIER"]
         ),
-        proc_damage_multiplier=_combine(1.0, buckets["WEAPON_PROC_DAMAGE"]),
+        proc_damage_multiplier=proc_damage_multiplier,
         proc_duration_multiplier=_combine(1.0, buckets["WEAPON_PROC_TIME"]),
         proc_duration_types=_typed_durations(buckets),
         proc_max_stacks=_typed_stack_caps(buckets),
+        proc_damage_types=proc_damage_types,
         status_condition_damage_multiplier=co.status_multiplier,
         # CO（对触发目标增伤）原始效果列表与预乘时的假定层数：窗口模型
         # （windowed_status_damage）用它把 CO 从 damage_types 中剥离，按每步
@@ -2493,7 +2526,15 @@ def _qualifier_rejection(
 
     # A per-status-type count names the types it counts, not a gate
     # (Galariak Prime lists every damaging status: the victim_status_count).
-    if effect.valid_proc_types and effect.upgrade_type != "WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE":
+    typed_proc_damage = (
+        effect.upgrade_type == "WEAPON_PROC_DAMAGE"
+        and set(effect.valid_proc_types) <= {"PT_POISON"}
+    )
+    if (
+        effect.valid_proc_types
+        and effect.upgrade_type != "WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE"
+        and not typed_proc_damage
+    ):
         return f"{source}: cannot evaluate proc type {','.join(effect.valid_proc_types)}"
     if effect.valid_postures:
         return f"{source}: cannot evaluate posture {','.join(effect.valid_postures)}"
@@ -2534,6 +2575,45 @@ def proc_stack_cap(stats: "ModdedStats", dtype: str, cap: float) -> float:
     """The victim's stack cap of ``dtype`` with the weapon's extra stacks."""
     extra = getattr(stats, "proc_max_stacks", None)
     return cap + extra[dtype] if extra and dtype in extra else cap
+
+
+_PROC_TYPE_TO_DAMAGE_TYPE: dict[str, str] = {
+    "PT_POISON": "DT_POISON",
+    "PT_FIRE": "DT_FIRE",
+    "PT_BLEEDING": "DT_SLASH",
+    "PT_ELECTROCUTION": "DT_ELECTRICITY",
+    "PT_GAS": "DT_GAS",
+    "PT_BLAST": "DT_EXPLOSION",
+}
+
+
+def _typed_proc_damage(buckets) -> tuple[float, dict[str, float]]:
+    untyped: list[ModEffect] = []
+    typed: dict[str, list[ModEffect]] = {}
+    for effect in buckets["WEAPON_PROC_DAMAGE"]:
+        if effect.damage_type and effect.damage_type != "DT_ANY":
+            typed.setdefault(effect.damage_type, []).append(effect)
+        elif effect.valid_proc_types:
+            for proc_type in effect.valid_proc_types:
+                dtype = _PROC_TYPE_TO_DAMAGE_TYPE.get(proc_type, proc_type)
+                typed.setdefault(dtype, []).append(effect)
+        else:
+            untyped.append(effect)
+    for effect in buckets["RUNTIME_TOXIN_PROC_DAMAGE"]:
+        dtype = effect.damage_type if effect.damage_type and effect.damage_type != "DT_ANY" else "DT_POISON"
+        typed.setdefault(dtype, []).append(effect)
+    base_mult = _combine(1.0, untyped)
+    if not typed:
+        return base_mult, {}
+    return base_mult, {
+        dtype: _combine(1.0, [*untyped, *rows]) for dtype, rows in typed.items()
+    }
+
+
+def proc_damage_scale(stats: "ModdedStats", dtype: str) -> float:
+    """Status damage multiplier of ``dtype`` on ``stats``."""
+    typed = getattr(stats, "proc_damage_types", None)
+    return max(float(typed[dtype] if typed and dtype in typed else stats.proc_damage_multiplier), 0.0)
 
 
 def proc_duration_scale(stats: "ModdedStats", dtype: str) -> float:
@@ -3120,7 +3200,19 @@ def enemy_defenses(
 ) -> dict[str, Any]:
     """:func:`_enemy_defenses`, memoised; every call gets its own copy."""
     try:
-        options = None if enemy_enhancements is None else tuple(sorted(enemy_enhancements.items()))
+        options = (
+            None
+            if enemy_enhancements is None
+            else tuple(
+                sorted(
+                    (
+                        k,
+                        tuple(sorted(v.items())) if isinstance(v, Mapping) else v,
+                    )
+                    for k, v in enemy_enhancements.items()
+                )
+            )
+        )
         from .record_keys import record_key
         key = (record_key(target), level, steel_path, armour_strip, elemental_armour_strip, options)
         hash(key)
@@ -3227,6 +3319,14 @@ def _enemy_defenses(
     armour = _scaled_armour(target, level, multiplier=1.0)
     armour *= 1.0 - armour_strip
     armour *= 1.0 - elemental_armour_strip
+    primed_corrosive = float((enhancements.get("primingStacks") or {}).get("DT_CORROSIVE") or 0.0)
+    if primed_corrosive > 0.0 and armour > 0.0:
+        c_strip = (
+            0.26 * primed_corrosive
+            if primed_corrosive < 1.0
+            else min(0.26 + 0.06 * (primed_corrosive - 1.0), 1.0)
+        )
+        armour *= 1.0 - c_strip
 
     overguard = target.get("overguard")
     if isinstance(overguard, (int, float)) and not isinstance(overguard, bool) and overguard:
@@ -3596,14 +3696,85 @@ def damage_against(
             damage_type: amount * _weapon_hit_damage_multiplier(stats, hit_multiplier)
             for damage_type, amount in per_type.items()
         }
-    raw = sum(per_type.values()) * _location_hit_factor(stats, hit_multiplier, hit_critical_multiplier)
+    priming = (defenses.get("enhancements") or {}).get("primingStacks") or {}
+    primed_cc_add = 0.0
+    primed_cd_add = 0.0
+    primed_viral_mult = 1.0
+    if priming:
+        p_stacks = float(priming.get("DT_PUNCTURE") or 0.0)
+        if p_stacks > 0.0:
+            primed_cc_add = 0.05 * min(proc_stack_cap(stats, "DT_PUNCTURE", 5.0), p_stacks)
+        f_stacks = float(priming.get("DT_FREEZE") or 0.0)
+        if f_stacks > 0.0:
+            primed_cd_add = (
+                1.0
+                if f_stacks >= 10.0
+                else (0.1 * f_stacks if f_stacks < 1.0 else min(0.1 + 0.05 * (f_stacks - 1.0), 0.5))
+            )
+        v_stacks = min(float(priming.get("DT_VIRAL") or 0.0), 10.0)
+        if v_stacks > 0.0:
+            primed_viral_mult = (
+                1.0 + v_stacks if v_stacks < 1.0 else min(2.0 + 0.25 * (v_stacks - 1.0), 4.25)
+            )
+    loc_factor = _location_hit_factor(
+        stats,
+        hit_multiplier,
+        hit_critical_multiplier,
+        crit_chance_add=primed_cc_add,
+        crit_multiplier_add=primed_cd_add,
+    )
+    raw_unprimed_viral = sum(per_type.values()) * loc_factor
+    if primed_viral_mult != 1.0 and overguard <= 0.0:
+        per_type = {
+            damage_type: (
+                amount * primed_viral_mult
+                if defenses["shield"] <= 0.0 or damage_type in shield_bypass
+                else amount
+            )
+            for damage_type, amount in per_type.items()
+        }
+        raw = sum(per_type.values()) * loc_factor
+    else:
+        raw = raw_unprimed_viral
+
+    extra_hit_per_hit = 0.0
+    extra_hit_by_type: dict[str, float] = {}
+    if stats.extra_hits:
+        for extra_dtype, share, _forced in stats.extra_hits:
+            if overguard > 0.0:
+                extra_mult = _overguard_damage_multiplier(extra_dtype, magnetic_stacks)
+            else:
+                extra_mult = _target_damage_multiplier(
+                    extra_dtype,
+                    target,
+                    armour=armour,
+                    faction_deltas=faction_deltas,
+                    armour_bypass=armour_bypass,
+                    shield_bypass=shield_bypass,
+                )
+                if defenses["shield"] > 0.0 and extra_dtype not in shield_bypass:
+                    extra_mult *= _magnetic_defense_multiplier(magnetic_stacks)
+                elif primed_viral_mult != 1.0:
+                    extra_mult *= primed_viral_mult
+            part_again = (
+                _weapon_hit_damage_multiplier(stats, hit_multiplier)
+                if location == "head" and extra_dtype == "DT_VOID"
+                else 1.0
+            )
+            extra_piece = raw_unprimed_viral * share * extra_mult * faction_multiplier * part_again
+            extra_hit_per_hit += extra_piece
+            extra_hit_by_type[extra_dtype] = extra_hit_by_type.get(extra_dtype, 0.0) + extra_piece
+
+    total_per_hit = raw + extra_hit_per_hit
     return {
         "perType": per_type,
-        "perHit": raw,
-        "perShot": raw * stats.multishot,
+        "perHit": total_per_hit,
+        "extraHitPerHit": extra_hit_per_hit,
+        **({"extraHitByType": extra_hit_by_type} if extra_hit_by_type else {}),
+        "perShot": total_per_hit * stats.multishot,
         # 膛室家族首发加成：弹匣第一发对目标的单发期望伤害。
-        "firstShot": raw * stats.multishot * (1.0 + stats.first_shot_damage_bonus),
-        "dps": raw * stats.multishot * stats.fire_rate,
+        "firstShot": total_per_hit * stats.multishot * (1.0 + stats.first_shot_damage_bonus),
+        "dps": total_per_hit * stats.multishot * stats.fire_rate,
         "factionMultiplier": faction_multiplier,
         "falloffMultiplier": stats.falloff_multiplier,
         "health": defenses["health"],
@@ -3874,13 +4045,17 @@ def expected_victim_status_count(
     stats: ModdedStats,
     *,
     forced_procs: Mapping[str, float] | None = None,
+    primed_types: Iterable[str] | None = None,
 ) -> int:
     """Distinct proc types a sustained build can keep applying."""
-    return sum(
-        1
-        for value in expected_status_procs(stats, forced_procs=forced_procs).values()
+    active = {
+        dtype
+        for dtype, value in expected_status_procs(stats, forced_procs=forced_procs).items()
         if value > 0.0
-    )
+    }
+    if primed_types:
+        active.update(str(dtype) for dtype in primed_types if dtype)
+    return len(active)
 
 
 def _proc_seed_merge_multiplier(stats, dtype, forced_procs=None):
@@ -4046,8 +4221,9 @@ def expected_dot_damage(
         # its own. Electric/Gas apply the own-element and target bracket
         # after the radial minimum; their initial 1 is not status damage.
         shared_group = dtype in {"DT_FIRE", "DT_ELECTRICITY", "DT_GAS"}
+        type_proc_damage = proc_damage_scale(stats, dtype)
         accumulator = 1.0 if shared_group else min(count, 10.0)
-        accumulator_multiplier = max(float(elemental), 0.0) * proc_damage
+        accumulator_multiplier = max(float(elemental), 0.0) * type_proc_damage
         part_landing = dtype in {"DT_ELECTRICITY", "DT_GAS"}
         landing_head = (part_landing and not stats.radial_only and location == "head"
                         and not any("unavailable" in str(x) or "invalid" in str(x)
@@ -4066,10 +4242,10 @@ def expected_dot_damage(
         # their share of this type's expected procs.
         unit = coefficient * seed_basis * _proc_seed_merge_multiplier(stats, dtype, forced_procs)
         if part_landing:
-            unit = (unit * proc_damage * stats.falloff_multiplier
+            unit = (unit * type_proc_damage * stats.falloff_multiplier
                     * _weapon_hit_damage_multiplier(stats, hit_multiplier) * max(float(faction_mod), 0.0))
         else:
-            unit = (unit * elemental_factor * proc_damage * stats.falloff_multiplier
+            unit = (unit * elemental_factor * type_proc_damage * stats.falloff_multiplier
                     * _weapon_hit_damage_multiplier(stats, hit_multiplier) * target_multiplier
                     * max(float(faction_mod), 0.0) ** 2)
         crit_share = 0.0
@@ -4258,7 +4434,7 @@ def expected_status_damage(
             hit_critical_multiplier,
             double_crit_chance=stats.double_crit_chance,
         )
-        proc_damage = max(float(stats.proc_damage_multiplier), 0.0)
+        proc_damage = proc_damage_scale(stats, "DT_EXPLOSION")
         faction_mod = stats.faction_damage_multipliers.get("", 1.0)
         target_faction = str(target.get("faction") or "")
         if target_faction:
@@ -4377,13 +4553,22 @@ def sustained_status_damage(
             cap,
         )
 
+    raw_priming = (enemy_enhancements or {}).get("primingStacks") if isinstance(enemy_enhancements, Mapping) else None
+    priming = dict(raw_priming) if isinstance(raw_priming, Mapping) and raw_priming else {}
+    unprimed_enhancements = (
+        {k: v for k, v in enemy_enhancements.items() if k != "primingStacks"}
+        if priming and isinstance(enemy_enhancements, Mapping)
+        else enemy_enhancements
+    )
+    corrosive_cap = proc_stack_cap(stats, "DT_CORROSIVE", 10.0)
+    puncture_cap = proc_stack_cap(stats, "DT_PUNCTURE", 5.0)
     stack_counts = {
-        "viral": stacks("DT_VIRAL", 6.0, 10.0),
-        "corrosive": stacks("DT_CORROSIVE", 8.0, 10.0),
-        "magnetic": stacks("DT_MAGNETIC", 6.0, 10.0),
-        "cold": stacks("DT_FREEZE", 6.0, 10.0),
-        "puncture": stacks("DT_PUNCTURE", 10.0, proc_stack_cap(stats, "DT_PUNCTURE", 5.0)),
-        "heat": stacks("DT_FIRE", 6.0, 1.0),
+        "viral": min(stacks("DT_VIRAL", 6.0, 10.0) + float(priming.get("DT_VIRAL") or 0.0), 10.0),
+        "corrosive": min(stacks("DT_CORROSIVE", 8.0, corrosive_cap) + float(priming.get("DT_CORROSIVE") or 0.0), corrosive_cap),
+        "magnetic": min(stacks("DT_MAGNETIC", 6.0, 10.0) + float(priming.get("DT_MAGNETIC") or 0.0), 10.0),
+        "cold": min(stacks("DT_FREEZE", 6.0, 10.0) + float(priming.get("DT_FREEZE") or 0.0), 10.0),
+        "puncture": min(stacks("DT_PUNCTURE", 10.0, puncture_cap) + float(priming.get("DT_PUNCTURE") or 0.0), puncture_cap),
+        "heat": min(stacks("DT_FIRE", 6.0, 1.0) + float(priming.get("DT_FIRE") or 0.0), 1.0),
     }
 
     def vulnerability(count: float) -> float:
@@ -4397,7 +4582,7 @@ def sustained_status_damage(
     corrosive_strip = (
         0.26 * corrosive_count
         if corrosive_count < 1.0
-        else min(0.26 + 0.06 * (corrosive_count - 1.0), 0.8)
+        else min(0.26 + 0.06 * (corrosive_count - 1.0), 1.0)
     )
     heat_strip = 0.5 * stack_counts["heat"]
     combined_elemental_strip = 1.0 - (
@@ -4408,7 +4593,10 @@ def sustained_status_damage(
     cold_count = stack_counts["cold"]
     cold_proc_rate = float(procs.get("DT_FREEZE") or 0.0) * proc_rate
     cold_freeze_uptime = 0.0
-    if cold_count >= 10.0 and cold_proc_rate > 0.0:
+    if float(priming.get("DT_FREEZE") or 0.0) >= 10.0:
+        cold_freeze_uptime = 1.0
+        cold_crit = 1.0
+    elif cold_count >= 10.0 and cold_proc_rate > 0.0:
         freeze_duration = 3.0 * proc_duration_scale(stats, "DT_FREEZE")
         rebuild_duration = 7.0 / cold_proc_rate
         cold_freeze_uptime = (
@@ -4423,7 +4611,7 @@ def sustained_status_damage(
             if cold_count < 1.0
             else min(0.1 + 0.05 * (cold_count - 1.0), 0.5)
         )
-    puncture_crit = min(0.05 * stack_counts["puncture"], 0.05 * proc_stack_cap(stats, "DT_PUNCTURE", 5.0))
+    puncture_crit = min(0.05 * stack_counts["puncture"], 0.05 * puncture_cap)
     adjusted_stats = replace(
         stats,
         crit_chance=max(float(stats.crit_chance) + puncture_crit, 0.0),
@@ -4435,7 +4623,7 @@ def sustained_status_damage(
         "elemental_armour_strip": combined_elemental_strip,
         "steel_path": steel_path,
         "hit_location": hit_location,
-        "enemy_enhancements": enemy_enhancements,
+        "enemy_enhancements": unprimed_enhancements,
     }
     direct = damage_against(adjusted_stats, target, **kwargs)
     baseline_direct = damage_against(
@@ -4446,7 +4634,7 @@ def sustained_status_damage(
         elemental_armour_strip=elemental_armour_strip,
         steel_path=steel_path,
         hit_location=hit_location,
-        enemy_enhancements=enemy_enhancements,
+        enemy_enhancements=unprimed_enhancements,
     )
     status = expected_status_damage(
         adjusted_stats, target, forced_procs=forced_procs, **kwargs
@@ -4458,7 +4646,7 @@ def sustained_status_damage(
         "shield" if defenses["shield"] > 0 else "health"
     )
     viral_multiplier = vulnerability(stack_counts["viral"])
-    existing_magnetic = int((enemy_enhancements or {}).get("magneticStacks") or 0)
+    existing_magnetic = int((unprimed_enhancements or {}).get("magneticStacks") or 0)
     combined_magnetic = min(existing_magnetic + stack_counts["magnetic"], 10.0)
     magnetic_multiplier = vulnerability(combined_magnetic) / vulnerability(float(existing_magnetic))
     vulnerability_multiplier = viral_multiplier if active_pool == "health" else magnetic_multiplier
@@ -4474,10 +4662,21 @@ def sustained_status_damage(
         return viral_multiplier
 
     per_type = direct.get("perType") or {}
-    direct_total = sum(float(value) for value in per_type.values())
-    weighted_direct = sum(
-        float(value) * pool_multiplier(str(dtype)) for dtype, value in per_type.items()
-    )
+    extra_by_type = direct.get("extraHitByType")
+    if extra_by_type:
+        direct_total = sum(float(value) for value in per_type.values()) + sum(
+            float(value) for value in extra_by_type.values()
+        )
+        weighted_direct = sum(
+            float(value) * pool_multiplier(str(dtype)) for dtype, value in per_type.items()
+        ) + sum(
+            float(value) * pool_multiplier(str(dtype)) for dtype, value in extra_by_type.items()
+        )
+    else:
+        direct_total = sum(float(value) for value in per_type.values())
+        weighted_direct = sum(
+            float(value) * pool_multiplier(str(dtype)) for dtype, value in per_type.items()
+        )
     direct_dps = (
         float(direct.get("perShot") or 0.0)
         * (weighted_direct / direct_total if direct_total > 0.0 else 1.0)

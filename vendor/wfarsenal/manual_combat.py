@@ -151,6 +151,8 @@ EVENT_CONDITION_TEXT = {
     'on-self-shield-broken': '玩家自身护盾被击破时触发。',
     'on-self-overguard-broken': '玩家自身超宏被击破时触发。',
     'on-self-shield-hit': '玩家自身护盾受到伤害时触发。',
+    'on-damaged': '受到伤害时触发。',
+    'on-reinforced-bond-ready': '装填累积过载护盾达到坚固连结阈值时激活。',
     'on-fire': '扣动扳机射击时触发。',
     'on-punchthrough': '同次射击穿透并命中后续目标时触发。',
     'on-glaive-throw': '战刃连续投掷时叠加（循环投掷时第二投起每投都是连续投掷），只加成投掷直击。',
@@ -249,6 +251,233 @@ NO_MAGAZINE_WEAPONS = frozenset({
     "/Lotus/Weapons/Tenno/Pistols/PrimeEpitaph/PrimeEpitaphSidearmWeapon",        # Epitaph Prime
 })
 
+_MAPPED_DAMAGE_TYPES = {
+    "heat": "DT_FIRE",
+    "toxin": "DT_POISON",
+    "electricity": "DT_ELECTRICITY",
+    "cold": "DT_FREEZE",
+    "impact": "DT_IMPACT",
+    "puncture": "DT_PUNCTURE",
+    "slash": "DT_SLASH",
+    "blast": "DT_EXPLOSION",
+    "gas": "DT_GAS",
+    "radiation": "DT_RADIATION",
+    "viral": "DT_VIRAL",
+    "corrosive": "DT_CORROSIVE",
+    "magnetic": "DT_MAGNETIC",
+}
+
+_INERT_RECORDS: dict = {}
+_INERT_RECORDS_MAX = 2048
+_WEAPON_STATIC_CACHE: dict = {}
+_WEAPON_STATIC_CACHE_MAX = 512
+_DEPS: dict | None = None
+
+
+def _ensure_deps() -> dict:
+    global _DEPS
+    if _DEPS is not None:
+        return _DEPS
+    from .arcane_runtime import configuration as runtime_arcane
+    from .beam_ramp import floor_for
+    from .companion import kill_condition, player_only, player_stacks, projectile_sequence, unresolved_weapon_mechanics
+    from .damage import (
+        ModEffect,
+        ModEffectList,
+        ModdedStats,
+        _combine,
+        _qualifier_rejection,
+        apply_mods,
+        apply_mods_spec,
+        co_variant,
+        innate_terms_for,
+        scenario_with,
+        with_innate,
+        with_value,
+    )
+    from .delayed_radial_events import admitted as event_admitted, components as event_components
+    from .enervate import IGNORED_ALT, PATH as ENERVATE_PATH, configuration as enervate_configuration
+    from .event_profiles import (
+        base_profile,
+        execute_below,
+        innate_conditionals,
+        kill_charge_cycle,
+        native_burst,
+        perfect_release,
+        reload_projectiles,
+        reloads_after_every_shot,
+    )
+    from .magnetic_break import weapon_weakness
+    from .melee_sequence import build_schedule
+    from .projectile_events import grimoire_strategy, quanta_strategy, quanta_strategy_cycle
+    from .projectile_lanes import lane_mode as physical_lane_mode, profile as physical_lane_profile
+    from .runtime_adapters import (
+        ammo_restore_configuration,
+        compression_configuration,
+        double_tap_configuration,
+        incarnon_actor_stacks,
+        incarnon_condition_rows,
+        latron_puncture_strip,
+        miter_charge_aoe,
+        mq_augment_multiplier,
+        onos_crits_for_hits,
+        passive_incarnon_condition,
+        reserve_ammo_refund,
+        self_break_condition,
+        self_break_forced,
+        verified_crux_condition,
+        verified_incarnon_condition,
+        verified_torid_field_duration,
+    )
+    from .sniper import combo_spec
+    from .status_arcanes import configuration as status_configuration
+    from .zymos import (
+        WEAPON as ZYMOS_WEAPON,
+        ContactPolicy,
+        SourceContext,
+        carrier_snapshot,
+        child_packets as zymos_packets,
+        fire_count_distribution,
+    )
+
+    _DEPS = locals()
+    return _DEPS
+
+
+def _weapon_static_meta(weapon, mode_index: int, incarnon_choices, deps: dict) -> dict:
+    choices_key = tuple(sorted((incarnon_choices or {}).items())) if incarnon_choices else ()
+    key = (record_key(weapon), mode_index, choices_key)
+    hit = _WEAPON_STATIC_CACHE.get(key)
+    if hit is not None:
+        return hit[1]
+    verified_incarnon_condition = deps["verified_incarnon_condition"]
+    verified_torid_field_duration = deps["verified_torid_field_duration"]
+    miter_charge_aoe = deps["miter_charge_aoe"]
+    onos_crits_for_hits = deps["onos_crits_for_hits"]
+    latron_puncture_strip = deps["latron_puncture_strip"]
+    ammo_restore_configuration = deps["ammo_restore_configuration"]
+    incarnon_condition_rows = deps["incarnon_condition_rows"]
+    projectile_sequence = deps["projectile_sequence"]
+    base_profile = deps["base_profile"]
+    physical_lane_profile = deps["physical_lane_profile"]
+    unresolved_weapon_mechanics = deps["unresolved_weapon_mechanics"]
+    innate_conditionals = deps["innate_conditionals"]
+    reload_projectiles = deps["reload_projectiles"]
+    innate_terms_for = deps["innate_terms_for"]
+    event_components = deps["event_components"]
+    event_admitted = deps["event_admitted"]
+    weapon_weakness = deps["weapon_weakness"]
+    floor_for = deps["floor_for"]
+    execute_below = deps["execute_below"]
+    native_burst = deps["native_burst"]
+    reloads_after_every_shot = deps["reloads_after_every_shot"]
+
+    branches = []
+    for tier in (weapon.get("incarnon") or {}).get("tiers") or []:
+        number = tier.get("tier")
+        wanted = (incarnon_choices or {}).get("tier" + str(number)) or (
+            incarnon_choices or {}
+        ).get(str(number))
+        branches.extend(
+            b
+            for b in tier.get("branches") or []
+            if b.get("id") == wanted
+            or (
+                number == 1
+                and any(verified_incarnon_condition(b, c) for c in b.get("conditionalEffects") or ())
+            )
+        )
+    branches = tuple(branches)
+    field_duration = next((spec for b in branches if (spec := verified_torid_field_duration(b))), None)
+    miter_aoe = next((spec for b in branches if (spec := miter_charge_aoe(b))), None)
+    onos_crit = next((q for b in branches if (q := onos_crits_for_hits(b))), None)
+    last_round_multishot = 0.0
+    for branch in branches:
+        for term in branch.get("effects") or ():
+            if (
+                term.get("upgradeType") == "WEAPON_LAST_MULTISHOT"
+                and isinstance(term.get("valuePerRank"), (int, float))
+                and not isinstance(term.get("valuePerRank"), bool)
+            ):
+                last_round_multishot += float(term["valuePerRank"])
+    frame_evo_unmodeled = any(
+        "Require" in str(c.get("runtimeScripts")) and not verified_incarnon_condition(b, c)
+        for b in branches
+        for c in b.get("conditionalEffects") or []
+    )
+    companion_sequence = projectile_sequence(weapon, mode_index)
+    selected_attack = base_profile(weapon, mode_index)
+    physical_lanes = physical_lane_profile(selected_attack)
+    unresolved_notes = tuple(unresolved_weapon_mechanics(weapon))
+    innate = tuple(innate_conditionals(weapon, mode_index))
+    modes = weapon["fireModes"]
+    base_attack = base_profile({**weapon, "isIncarnonForm": False, "__selectedFireMode__": 0}, 0)
+    if modes[0].get("trigger") == "/Lotus/Language/Menu/Loadout_TriggerSemiAutoFireOnUp":
+        base_attack = {**base_attack, "burst": {"count": 2, "delay_seconds": 1.0 / float(modes[0]["fireRate"])}}
+    ref = reference()
+    parts = tuple(part for attack in (base_attack, selected_attack) for part in event_components(attack))
+    meta = dict(
+        branches=branches,
+        field_duration=field_duration,
+        miter_aoe=miter_aoe,
+        onos_crit=onos_crit,
+        last_round_multishot=last_round_multishot,
+        frame_evo_unmodeled=frame_evo_unmodeled,
+        companion_sequence=companion_sequence,
+        selected_attack=selected_attack,
+        physical_lanes=physical_lanes,
+        unresolved_notes=unresolved_notes,
+        innate=innate,
+        base_attack=base_attack,
+        thrown_spec=reload_projectiles(weapon),
+        innate_terms_union=(*innate_terms_for(weapon, 0), *innate_terms_for(weapon, mode_index)),
+        parts_admitted=any(event_admitted(part) for part in parts),
+        parts_victim_stack=any(part.get("takes_victim_stack_damage") for part in parts),
+        parts_victim_crit=any(part.get("takes_victim_crit") for part in parts),
+        mag_weakness=weapon_weakness(weapon.get("path")),
+        beam_floors={
+            "base": floor_for(
+                base_attack
+                if base_attack.get("source")
+                else ref.get("coProfiles", {}).get(weapon.get("path"), {}).get("0", {})
+            ),
+            "selected": floor_for(
+                selected_attack
+                if selected_attack.get("source")
+                else ref.get("coProfiles", {}).get(weapon.get("path"), {}).get(str(mode_index), {})
+            ),
+        },
+        stug_ideal=any((attack.get("stackable") or {}).get("kind") == "stug" for attack in (base_attack, selected_attack)),
+        persistent_radials=any(
+            part.get("persistAfterKill")
+            for attack in (base_attack, selected_attack)
+            for part in attack.get("radials") or ()
+        ),
+        puncture_strip=next((v for b in branches if (v := latron_puncture_strip(b))), 0.0),
+        magazine_restore=next((v for b in branches if (v := ammo_restore_configuration(b))), None),
+        refill_growth=any(c.get("refillMagazineGrowth") for b in branches for c in incarnon_condition_rows(b)),
+        execute_below=execute_below(weapon, mode_index),
+        last_burst=any("Burston" in str(b.get("path")) and str(b.get("id")) == "2-1" for b in branches),
+        incarnon_burst=(selected_attack.get("burst") or native_burst(weapon, mode_index))
+        if weapon.get("isIncarnonForm")
+        else None,
+        reload_every_shot_raw=reloads_after_every_shot(weapon, mode_index),
+        shell_reload=(
+            {
+                "start": base_attack["reloadStart"],
+                "perShell": base_attack["reloadPerShell"],
+                "end": base_attack["reloadEnd"],
+                "modeSwitchLoadsShell": base_attack.get("modeSwitchLoadsShell", True),
+            }
+            if base_attack.get("reloadPerShell") is not None
+            else None
+        ),
+    )
+    if len(_WEAPON_STATIC_CACHE) >= _WEAPON_STATIC_CACHE_MAX:
+        _WEAPON_STATIC_CACHE.clear()
+    _WEAPON_STATIC_CACHE[key] = (pin(weapon), meta)
+    return meta
+
 
 def prepare(
     engine,
@@ -262,6 +491,7 @@ def prepare(
     level=1,
     eximus=False,
     resolve_cache=None,
+    combat_extras=None,
 ):
     """``resolve_cache`` shares resolved stats across prepares of one loadout.
 
@@ -269,64 +499,80 @@ def prepare(
     trigger / Incarnon options; the target, level and Eximus flag feed only
     affinity. Callers pass one cache per bound loadout (search_combat.bind).
     """
-    from .damage import (ModEffect, ModEffectList, ModdedStats, apply_mods, apply_mods_spec, co_variant, scenario_with,
-                         with_innate, with_value)
-    from .runtime_adapters import latron_puncture_strip,incarnon_condition_rows
-    from .runtime_adapters import ammo_restore_configuration
+    deps = _ensure_deps()
+    ModEffect = deps["ModEffect"]
+    ModEffectList = deps["ModEffectList"]
+    ModdedStats = deps["ModdedStats"]
+    _combine = deps["_combine"]
+    _qualifier_rejection = deps["_qualifier_rejection"]
+    apply_mods = deps["apply_mods"]
+    apply_mods_spec = deps["apply_mods_spec"]
+    co_variant = deps["co_variant"]
+    scenario_with = deps["scenario_with"]
+    with_innate = deps["with_innate"]
+    with_value = deps["with_value"]
+    latron_puncture_strip = deps["latron_puncture_strip"]
+    incarnon_condition_rows = deps["incarnon_condition_rows"]
+    ammo_restore_configuration = deps["ammo_restore_configuration"]
+    mq_augment_multiplier = deps["mq_augment_multiplier"]
+    configuration = deps["enervate_configuration"]
+    ENERVATE_PATH = deps["ENERVATE_PATH"]
+    IGNORED_ALT = deps["IGNORED_ALT"]
+    status_configuration = deps["status_configuration"]
+    verified_crux_condition = deps["verified_crux_condition"]
+    verified_incarnon_condition = deps["verified_incarnon_condition"]
+    miter_charge_aoe = deps["miter_charge_aoe"]
+    double_tap_configuration = deps["double_tap_configuration"]
+    combo_spec = deps["combo_spec"]
+    compression_configuration = deps["compression_configuration"]
+    onos_crits_for_hits = deps["onos_crits_for_hits"]
+    reserve_ammo_refund = deps["reserve_ammo_refund"]
+    passive_incarnon_condition = deps["passive_incarnon_condition"]
+    self_break_forced = deps["self_break_forced"]
+    self_break_condition = deps["self_break_condition"]
+    incarnon_actor_stacks = deps["incarnon_actor_stacks"]
+    runtime_arcane = deps["runtime_arcane"]
+    kill_condition = deps["kill_condition"]
+    player_only = deps["player_only"]
+    player_stacks = deps["player_stacks"]
+    physical_lane_mode = deps["physical_lane_mode"]
+    base_profile = deps["base_profile"]
+    perfect_release = deps["perfect_release"]
+    build_schedule = deps["build_schedule"]
+    quanta_strategy = deps["quanta_strategy"]
+    quanta_strategy_cycle = deps["quanta_strategy_cycle"]
+    grimoire_strategy = deps["grimoire_strategy"]
+    ZYMOS_WEAPON = deps["ZYMOS_WEAPON"]
+    ContactPolicy = deps["ContactPolicy"]
+    SourceContext = deps["SourceContext"]
+    carrier_snapshot = deps["carrier_snapshot"]
+    zymos_packets = deps["zymos_packets"]
+    fire_count_distribution = deps["fire_count_distribution"]
+    kill_charge_cycle = deps["kill_charge_cycle"]
+    admitted = deps["event_admitted"]
 
     weapon = engine["weapon"]
     scenario = engine["scenario"]
     mode_index = engine["fire_mode"]
-    from .runtime_adapters import mq_augment_multiplier
+    wmeta = _weapon_static_meta(weapon, mode_index, incarnon_choices, deps)
     mq_augment = next((value for row,rank,_ in mod_records
                        if (value:=mq_augment_multiplier(row,rank)) is not None),None)
     original = list(engine["effects"])
-    from .enervate import configuration, PATH as ENERVATE_PATH, IGNORED_ALT
     enervate = None
     status_arcanes = {}
-    from .status_arcanes import configuration as status_configuration
     sources = []
     dynamic = []
     form_dynamic = []
     actor_effects = []
     excluded = set()
     notes = list(weapon.get("exaltedUnsupported") or ())
-    branches = []
-    from .runtime_adapters import verified_crux_condition, verified_incarnon_condition, verified_torid_field_duration
-    for tier in (weapon.get("incarnon") or {}).get("tiers") or []:
-        number = tier.get("tier")
-        wanted = (incarnon_choices or {}).get("tier" + str(number)) or (
-            incarnon_choices or {}
-        ).get(str(number))
-        branches.extend(b for b in tier.get("branches") or [] if b.get("id") == wanted or (number==1 and any(
-            verified_incarnon_condition(b,c) for c in b.get('conditionalEffects') or ())))
-    field_duration = next((spec for b in branches if (spec := verified_torid_field_duration(b))), None)
-    from .runtime_adapters import miter_charge_aoe
-    miter_aoe=next((spec for b in branches if (spec:=miter_charge_aoe(b))),None)
-    from .runtime_adapters import double_tap_configuration
-    double_tap=next((spec for record,rank,_ in mod_records if (spec:=double_tap_configuration(record,rank))),None)
-    from .sniper import combo_spec
-    # Imported once per call, not per record: the loop below runs for every
-    # MOD, Arcane and Incarnon branch of every replayed loadout.
-    from .runtime_adapters import (compression_configuration, onos_crits_for_hits, reserve_ammo_refund,
-                                   passive_incarnon_condition, self_break_forced, self_break_condition,
-                                   incarnon_actor_stacks)
-    from .arcane_runtime import configuration as runtime_arcane
-    sniper_combo=combo_spec(weapon) if scenario.aiming else None
-    from .companion import kill_condition, player_only, player_stacks
+    branches = wmeta["branches"]
+    field_duration = wmeta["field_duration"]
+    miter_aoe = wmeta["miter_aoe"]
+    double_tap = next((spec for record,rank,_ in mod_records if (spec:=double_tap_configuration(record,rank))),None)
+    sniper_combo = combo_spec(weapon) if scenario.aiming else None
     companion = player_stacks(scenario)
-
-    # Final Fusillade / equivalent Incarnon terms are read from the base form's
-    # last magazine pull. Keep this as an event gate; never fold it into the
-    # panel's permanent multishot value. Incarnon charge-pool forms do not use
-    # the gate even when the same evolution id is shared.
-    last_round_multishot = 0.0
-    for branch in branches:
-        for term in branch.get('effects') or ():
-            if (term.get('upgradeType') == 'WEAPON_LAST_MULTISHOT'
-                    and isinstance(term.get('valuePerRank'), (int, float))
-                    and not isinstance(term.get('valuePerRank'), bool)):
-                last_round_multishot += float(term['valuePerRank'])
+    last_round_multishot = wmeta["last_round_multishot"]
 
     replaced_terms = set()
     # Body MODs arrive through external effects, not weapon MOD records. Their
@@ -359,21 +605,60 @@ def prepare(
         # The source stores the actual bonus, not a rounded integer hit count.
         dynamic.append((key, [replace(marker, value=1.0, runtime_kind=None,
                                       runtime_chance=None, runtime_threshold=None, runtime_multiplier=1.0)]))
-    from .companion import unresolved_weapon_mechanics, projectile_sequence
-    companion_sequence = projectile_sequence(weapon, mode_index)
-    from .projectile_lanes import profile as physical_lane_profile, lane_mode as physical_lane_mode
-    from .event_profiles import base_profile
-    selected_attack = base_profile(weapon, mode_index)
-    physical_lanes = physical_lane_profile(selected_attack)
+    companion_sequence = wmeta["companion_sequence"]
+    selected_attack = wmeta["selected_attack"]
+    physical_lanes = wmeta["physical_lanes"]
+    extras = {**(engine.get("combat_extras") or {}), **(combat_extras or {})}
+    has_self_damage_events = any(
+        scenario.combat_state.get(k)
+        for k in ("selfDamageHitAt", "selfDamageHitInterval", "selfDamageOnKill")
+    ) or bool(extras.get("selfDamageOnKill"))
+    rb_reloads = extras.get("reinforcedBondReloads")
+    if isinstance(rb_reloads, dict) and float(rb_reloads.get("fireRateBonus") or 0.0) > 0.0:
+        rb_bonus = float(rb_reloads["fireRateBonus"])
+        sources.append(
+            dict(
+                id="__reinforcedBond",
+                hold=True,
+                resetOn=[],
+                toggleOn=None,
+                victimProcType=None,
+                requiredCount=1,
+                requiredTime=None,
+                actorOnly=False,
+                conditionText=EVENT_CONDITION_TEXT["on-reinforced-bond-ready"],
+                simulationMode="fixed" if assumed else "events",
+                label="坚固连结 / Reinforced Bond",
+                kind="on-reinforced-bond-ready",
+                maxStacks=1.0,
+                duration=0.0,
+                perEvent=0.0 if assumed else 1.0,
+                initialStacks=1.0 if assumed else 0.0,
+                initialDuration=0.0,
+                energyThreshold=None,
+                minimumConsecutive=None,
+                decay="reset",
+                noRefresh=False,
+                freeAmmo=False,
+                durationPerTier=0.0,
+                charges=0.0,
+                consumeOn=None,
+                lockOn=None,
+                meleeRoutes=[],
+            )
+        )
+        dynamic.append((
+            "__reinforcedBond",
+            [ModEffect("WEAPON_FIRE_RATE", "STACKING_MULTIPLY", rb_bonus, source_path="companion:ReinforcedBond")],
+        ))
     periodic = selected_attack.get('periodicTriggers') or []
     if any(field.get('expiresWithSourceOwner') for field in periodic):
         notes.append('source-owned-field-same-frame-enter-update-and-replacement-order-approximated')
     if any(field.get('defaultEnabled') and field.get('refreshPolicy')=='independent-finite-fields-no-source-replacement' for field in periodic):
         notes.extend(['finite-field-target-generation-bound-centered-coverage-approximated',
             'finite-field-two-yield-coalescing-and-enter-update-frame-phase-approximated'])
-    notes.extend(unresolved_weapon_mechanics(weapon))
-    from .event_profiles import execute_below, innate_conditionals
-    innate = innate_conditionals(weapon, mode_index)
+    notes.extend(wmeta["unresolved_notes"])
+    innate = wmeta["innate"]
     for record, rank, override in [
         *mod_records,
         *arcane_records,
@@ -382,6 +667,11 @@ def prepare(
         # every apply_mods call (damage.with_innate).
         *[(r, 0, None) for r in innate],
     ]:
+        inert_key = None
+        if override is None:
+            inert_key = (record_key(record), rank, has_self_damage_events)
+            if inert_key in _INERT_RECORDS:
+                continue
         if double_tap_configuration(record,rank):
             continue
         if miter_charge_aoe(record):
@@ -409,6 +699,7 @@ def prepare(
             if assumed and 'fixedStacks' not in enervate:
                 notes.append('enervate-has-no-maximum-using-events')
             continue
+        orig_record = record
         crux = verified_crux_condition(record)
         if crux:
             record = {**record, "conditionalEffects": [crux]}
@@ -422,7 +713,14 @@ def prepare(
             continue
         if ammo_restore_configuration(record):
             continue
-        for raw_condition in incarnon_condition_rows(record):
+        raw_incarnon_rows = incarnon_condition_rows(record)
+        if not raw_incarnon_rows:
+            if inert_key is not None and not crux:
+                if len(_INERT_RECORDS) >= _INERT_RECORDS_MAX:
+                    _INERT_RECORDS.clear()
+                _INERT_RECORDS[inert_key] = pin(orig_record)
+            continue
+        for raw_condition in raw_incarnon_rows:
             raw_names = {str(x).rsplit("/", 1)[-1].casefold() for x in raw_condition.get("conditions") or ()}
             if 'evoonshieldbreakcondition' in raw_names and 'onoverguardbrokencondition' in raw_names:
                 # Either break grants the one buff; forced, it is held once.
@@ -431,6 +729,9 @@ def prepare(
                     native_kind='on-shield-broken' if gate=='EvoOnShieldBreakCondition' else 'on-overguard-broken'
                     condition_rows.append({**raw_condition,'conditions':[gate],
                                            'nativeEvent':{'kind':native_kind,'actorOnly':True,'requiredCount':1,'resetOn':[]}})
+            elif 'ondamagecondition' in raw_names and has_self_damage_events:
+                condition_rows.append({**raw_condition,
+                                       'nativeEvent':{'kind':'on-damaged','actorOnly':False,'requiredCount':1,'resetOn':[]}})
             else:
                 condition_rows.append(raw_condition)
         for ci, condition in enumerate(condition_rows):
@@ -619,7 +920,6 @@ def prepare(
     # Melee hit schedule (melee_sequence): combo-tier conditions (Blood Rush,
     # Weeping Wounds, ...) follow the replay's live combo counter instead of
     # the static scenario tier. Each cap gets its own stack key.
-    from .melee_sequence import build_schedule
     melee = None
     combo_tier_keys = {}
     if weapon.get("slot") in ("melee", "arch_melee") and mode_index == 0 and not weapon.get("isIncarnonForm"):
@@ -649,8 +949,19 @@ def prepare(
                 notes[:] = [n for n in notes if n != str(source) + ":event-condition-unmodeled"]
                 replaced_terms.update((source, e.upgrade_type, e.operation, e.damage_type) for e in terms)
     # Only conditional terms are replaced. Permanent rank unlocks remain active.
+    shiver_path = "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryExtraDamagePerFreezeStack"
+    shiver_user_forced = any(
+        record.get("path") == shiver_path and override is not None and ("stacks" in override or "uptime" in override)
+        for record, _, override in arcane_records
+    )
+    clear_primed_shiver = bool(
+        not assumed
+        and extras.get("companionAssister")
+        and scenario.combat_state.get("primedColdStacks", 0) > 0
+        and not shiver_user_forced
+    )
     static = [
-        e
+        (replace(e, runtime_chance=0.0) if clear_primed_shiver and e.upgrade_type == "RUNTIME_COLD_STACK_DAMAGE" else e)
         for e in original
         if (e.source_path, e.upgrade_type, e.operation, e.damage_type)
         not in replaced_terms and not (enervate and e.source_path == ENERVATE_PATH)
@@ -662,13 +973,7 @@ def prepare(
         dynamic.append((native_trigger['id'], [ModEffect(e['upgradeType'], e['operation'], e['value'], damage_type=e.get('damageType'), source_path=native_trigger['source']) for e in native_trigger['effects']]))
     profile = ref["incarnon"].get(weapon.get("path"))
     modes = weapon["fireModes"]
-    from .event_profiles import native_burst, reloads_after_every_shot
-    base_attack = base_profile({**weapon, 'isIncarnonForm': False, '__selectedFireMode__': 0}, 0)
-    if modes[0].get('trigger')=='/Lotus/Language/Menu/Loadout_TriggerSemiAutoFireOnUp':
-        # Press/release pairs keep the native per-shot timer. No assumed
-        # release speed or extra shots are granted by treating them as a pair.
-        base_attack={**base_attack,'burst':{'count':2,'delay_seconds':1./float(modes[0]['fireRate'])}}
-    from .projectile_events import quanta_strategy, quanta_strategy_cycle, grimoire_strategy
+    base_attack = wmeta["base_attack"]
     paid_cube = quanta_strategy(weapon, mode_index, scenario.combat_state)
     chain_orb = grimoire_strategy(weapon, mode_index, scenario.combat_state)
     if chain_orb:notes.extend(chain_orb['unsupported'])
@@ -682,7 +987,6 @@ def prepare(
         notes.append('phantasma-child-ideal-contact-and-arrival-time-assumed' if
                      scenario.combat_state.get('phantasmaChildOverlap') == 'ideal-contact' else
                      'phantasma-child-overlap-off-until-explicit-geometry-policy')
-    from .zymos import WEAPON as ZYMOS_WEAPON, ContactPolicy, SourceContext, carrier_snapshot, child_packets as zymos_packets, fire_count_distribution
     zymos_policy = (ContactPolicy.from_state(scenario.combat_state)
                     if weapon.get('path') == ZYMOS_WEAPON and selected_attack.get('childSpawnAudit') else None)
     if weapon.get('path') == ZYMOS_WEAPON and not zymos_policy:
@@ -693,8 +997,7 @@ def prepare(
         if enervate:
             notes.append('zymos-two-source-enervate-snapshots-use-marginal-probabilities')
     onos_sequence = selected_attack.get('onosCharge')
-    from .runtime_adapters import onos_crits_for_hits
-    onos_crit = next((q for b in branches if (q:=onos_crits_for_hits(b))),None)
+    onos_crit = wmeta["onos_crit"]
     if selected_attack:
         notes.extend(note for note in selected_attack.get('unmodeled') or []
                      if not (paid_cube and note in {'quanta-player-shot-detonation-unmodeled','quanta-cube-chain-unmodeled'})
@@ -710,7 +1013,6 @@ def prepare(
     )
     if cycle_enabled and weapon.get("isIncarnonForm") and not cycle:
         notes.append("incarnon-cycle-data-unavailable")
-    from .event_profiles import kill_charge_cycle
     if not cycle and (kill_cycle := kill_charge_cycle(weapon, mode_index)):
         # A kill-charged alternate cannot fire on its own: replay the primary
         # until its kills fill the gauge, then the alternate (Trumna grenade).
@@ -732,40 +1034,27 @@ def prepare(
         and not any(p.get('radial') or p.get('radials') for p in (ref.get('auditedAttacks',{}).get(weapon.get('path'),{}).get('modes',{}).values()))
     ):
         notes.append(profile["referenceId"] + ":radial-payload-unmodeled")
-    if any(
-        "Require" in str(c.get("runtimeScripts")) and not verified_incarnon_condition(b,c)
-        for b in branches
-        for c in b.get("conditionalEffects") or []
-    ):
+    if wmeta["frame_evo_unmodeled"]:
         notes.append("frame-state-conditional-evolution-unmodeled")
-    mapped = {
-        "heat": "DT_FIRE",
-        "toxin": "DT_POISON",
-        "electricity": "DT_ELECTRICITY",
-        "cold": "DT_FREEZE",
-        "impact": "DT_IMPACT",
-        "puncture": "DT_PUNCTURE",
-        "slash": "DT_SLASH",
-        "blast": "DT_EXPLOSION",
-        "gas": "DT_GAS",
-        "radiation": "DT_RADIATION",
-        "viral": "DT_VIRAL",
-        "corrosive": "DT_CORROSIVE",
-        "magnetic": "DT_MAGNETIC",
-    }
+    mapped = _MAPPED_DAMAGE_TYPES
 
     form_weapons = {}
     original_profiles = {mode_index: selected_attack}
     # Scenario-adjusted profiles preserve their existing per-mode scope.
     form_profiles = {}
+    prepared_radials = {}
+    _base_fx_0 = with_innate(weapon, ModEffectList([*static, *actor_effects]), 0)
+    _base_fx_m = (
+        _base_fx_0
+        if mode_index == 0
+        else with_innate(weapon, ModEffectList([*static, *actor_effects]), mode_index)
+    )
 
     def live_co_callback(unit, wp, source_form):
         # CO is queried on contact/tick, independently from the projectile's
         # retained damage/crit source snapshot. Reuse actual source qualifiers.
         kind='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'
-        from .damage import _qualifier_rejection, co_variant
-        base=[e for e in with_innate(weapon,ModEffectList([*static,*actor_effects]),
-              0 if source_form=='base' else mode_index) if e.upgrade_type==kind]
+        base=[e for e in (_base_fx_0 if source_form=='base' else _base_fx_m) if e.upgrade_type==kind]
         terms=[(key,e) for key,rows in dynamic for e in rows if e.upgrade_type==kind]
         types={str(p).rstrip('/') for p in (*tuple(wp.get('ancestry') or ()),wp.get('path')) if p}
         cache={}
@@ -783,8 +1072,7 @@ def prepare(
     def geometry_effects(form, stacks):
         """Spatial terms use the same source stacks and form gates as damage."""
         kinds = {'WEAPON_RANGE', 'WEAPON_PUNCTURE_DEPTH'}
-        fx = [e for e in with_innate(weapon, ModEffectList([*static, *actor_effects]),
-                                    0 if form == 'base' else mode_index)
+        fx = [e for e in (_base_fx_0 if form == 'base' else _base_fx_m)
               if e.upgrade_type in kinds]
         for key, terms in dynamic:
             n = stacks.get(key, 0.)
@@ -808,7 +1096,7 @@ def prepare(
     def resolve(form, stacks, live_types=0, last_round=False):
         # The weapon's always-on terms join here (not inside apply_mods) so a
         # fractional live status count below scales them too (Cedo, Galariak).
-        fx = with_innate(weapon, ModEffectList([*static,*actor_effects]), 0 if form == "base" else mode_index)
+        fx = ModEffectList(_base_fx_0 if form == "base" else _base_fx_m)
         partial_sets = {}
         for key, terms in dynamic:
             n = stacks.get(key, 0.0)
@@ -970,7 +1258,6 @@ def prepare(
         if physical_index is not None:
             extra={**raw_form_profile,'radials':[physical_lanes['lanes'][physical_index]['radial']]}
         if extra is None:
-            from .event_profiles import perfect_release
             extra, _ = perfect_release(raw_form_profile, modes[idx], scenario.combat_state)
             form_profiles[(form != "base", idx)] = extra
         stackable = extra.get('stackable')
@@ -1021,63 +1308,76 @@ def prepare(
                     part._fixed_radial = True
                     parts['orbRadial'] = part
             st._stackable = (stackable,parts)
-        components = () if extra.get('pureRadial') else (extra.get('radials') or [extra.get('radial') or extra.get('lingering')])
-        # Cluster bomblets (tools/import_cluster_submunitions.py): each child
-        # lands its own hit and explosion, ``count`` per shell.
-        components = [dict(c,__radialSlot=i) if isinstance(c,dict) else c for i,c in enumerate(components)]
-        components = [*components, *(dict(cluster[key], count=cluster['count'], __childGroup=('cluster', group))
-                                     for group, cluster in enumerate(extra.get('clusters') or ())
-                                     for key in ('direct', 'radial'))]
-        if extra.get('attachedTicks'):
-            components=[*components,dict(extra['attachedTicks'],__ownedEmbed=True)]
-        if chain_orb and idx==mode_index:
-            components=[dict(part,__grimoirePart=i) for i,part in enumerate(chain_orb['parts'])]
-        if extra.get('phantasmaChildren') and scenario.combat_state.get('phantasmaChildOverlap') == 'ideal-contact':
-            children = extra['phantasmaChildren']
-            arrival = float(scenario.combat_state.get('phantasmaChildArrivalSeconds', children['idealArrivalSeconds']))
-            # Selected overlap/arrival scenario; homing and lifetime do not
-            # guarantee that every child reaches the current victim.
-            components = [*components, *(dict(component, __phantasmaChild=True, __childGroup=('phantasma', kind),
-                count=lane['count'], parentMultishotPolicy=kind, impact_delay_seconds=arrival)
-                for kind in ('normal-parent', 'extra-ms-parent')
-                for lane in (children[kind],) for component in lane['packets'])]
-        nox_policy=extra.get('noxAvatarLifecycle')
-        nox_parts=[]
-        if nox_policy:
-            components=[*components,dict(nox_policy['attachedTicks'],__noxPart=0),dict(nox_policy['radial'],__noxPart=1)]
+        nox_policy = extra.get('noxAvatarLifecycle')
+        nox_parts = []
         radial_parts = []
         child_groups = {}
-        if extra.get('embedded'):
-            components = [*components, dict(extra['embedded'], __embedded=True)]
+        charged_flag = bool(stacks.get('__sourceOwnedCharged', True))
+        radial_cache_key = (form_key, charged_flag) if physical_index is None else None
+        cached_radials = prepared_radials.get(radial_cache_key) if radial_cache_key is not None else None
+        if cached_radials is None:
+            components = () if extra.get('pureRadial') else (extra.get('radials') or [extra.get('radial') or extra.get('lingering')])
+            # Cluster bomblets (tools/import_cluster_submunitions.py): each child
+            # lands its own hit and explosion, ``count`` per shell.
+            components = [dict(c,__radialSlot=i) if isinstance(c,dict) else c for i,c in enumerate(components)]
+            components = [*components, *(dict(cluster[key], count=cluster['count'], __childGroup=('cluster', group))
+                                         for group, cluster in enumerate(extra.get('clusters') or ())
+                                         for key in ('direct', 'radial'))]
+            if extra.get('attachedTicks'):
+                components=[*components,dict(extra['attachedTicks'],__ownedEmbed=True)]
+            if chain_orb and idx==mode_index:
+                components=[dict(part,__grimoirePart=i) for i,part in enumerate(chain_orb['parts'])]
+            if extra.get('phantasmaChildren') and scenario.combat_state.get('phantasmaChildOverlap') == 'ideal-contact':
+                children = extra['phantasmaChildren']
+                arrival = float(scenario.combat_state.get('phantasmaChildArrivalSeconds', children['idealArrivalSeconds']))
+                # Selected overlap/arrival scenario; homing and lifetime do not
+                # guarantee that every child reaches the current victim.
+                components = [*components, *(dict(component, __phantasmaChild=True, __childGroup=('phantasma', kind),
+                    count=lane['count'], parentMultishotPolicy=kind, impact_delay_seconds=arrival)
+                    for kind in ('normal-parent', 'extra-ms-parent')
+                    for lane in (children[kind],) for component in lane['packets'])]
+            if nox_policy:
+                components=[*components,dict(nox_policy['attachedTicks'],__noxPart=0),dict(nox_policy['radial'],__noxPart=1)]
+            if extra.get('embedded'):
+                components = [*components, dict(extra['embedded'], __embedded=True)]
+            built_radials = []
+            comp_repr = repr(extra.get('compression'))
+            for component in components:
+                if component and component.get('currentSourceCoFraction'):
+                    fractions=component['currentSourceCoFraction']
+                    fraction=fractions['charged' if charged_flag else 'normal']
+                    component={**component,'coProfile':{**component['coProfile'],'baseFraction':fraction}}
+                if component and component.get('requiresOnosRadialHit') and not scenario.combat_state.get('onosRadialHit'):
+                    component = None
+                if (component and component.get('armingDistance') is not None
+                        and scenario.distance is not None
+                        and scenario.distance < component['armingDistance']):
+                    component = None
+                if component and component.get('damage'):
+                    def radial_part(component=component):
+                        rm = deepcopy(modes[idx])
+                        rm['__radialPart__'] = True
+                        # This part detonates at the aimed target; shot flight distance is
+                        # not distance from the explosion centre.
+                        rm['falloffRange'] = [0, 0]
+                        rm['falloffMinDamage'] = 1
+                        rm['damage'] = {
+                            **rm['damage'], 'types': {mapped.get(k,k): v for k, v in component['damage'].items()},
+                            'forcedProcs': list(component.get('forcedProcs') or [])+[proc for element, proc in [('electricity', 'PT_ELECTROCUTION'), ('cold', 'PT_CHILLED')] if element in component.get('forced_procs', [])],
+                            'critChance': component.get('crit_chance', rm['damage'].get('critChance')),
+                            'critMultiplier': component.get('crit_multiplier', rm['damage'].get('critMultiplier')),
+                            'procChance': (component['status_chance'] * float(rm.get('multishot') or 1) if component.get('status_chance') is not None else rm['damage'].get('procChance')),
+                        }
+                        return {**wp, 'fireModes': [rm], '__innateResolved__': True, '__compressionProfile__': extra.get('compression'),
+                                **({'__coProfile__': component['coProfile']} if component.get('coProfile') else {})}
+                    pw = _part_record(wp, ('radial', idx, repr(component), comp_repr), radial_part)
+                    built_radials.append((component, pw, admitted(component)))
+            cached_radials = tuple(built_radials)
+            if radial_cache_key is not None:
+                prepared_radials[radial_cache_key] = cached_radials
         radial_scenario = None
-        for component in components:
-            if component and component.get('currentSourceCoFraction'):
-                fractions=component['currentSourceCoFraction']
-                fraction=fractions['charged' if stacks.get('__sourceOwnedCharged',True) else 'normal']
-                component={**component,'coProfile':{**component['coProfile'],'baseFraction':fraction}}
-            if component and component.get('requiresOnosRadialHit') and not scenario.combat_state.get('onosRadialHit'):
-                component = None
-            if (component and component.get('armingDistance') is not None
-                    and scenario.distance is not None
-                    and scenario.distance < component['armingDistance']):
-                component = None
-            if component and component.get('damage'):
-                def radial_part(component=component):
-                    rm = deepcopy(modes[idx])
-                    rm['__radialPart__'] = True
-                    # This part detonates at the aimed target; shot flight distance is
-                    # not distance from the explosion centre.
-                    rm['falloffRange'] = [0, 0]
-                    rm['falloffMinDamage'] = 1
-                    rm['damage'] = {
-                        **rm['damage'], 'types': {mapped.get(k,k): v for k, v in component['damage'].items()},
-                        'forcedProcs': list(component.get('forcedProcs') or [])+[proc for element, proc in [('electricity', 'PT_ELECTROCUTION'), ('cold', 'PT_CHILLED')] if element in component.get('forced_procs', [])],
-                        'critChance': component.get('crit_chance', rm['damage'].get('critChance')),
-                        'critMultiplier': component.get('crit_multiplier', rm['damage'].get('critMultiplier')),
-                        'procChance': (component['status_chance'] * float(rm.get('multishot') or 1) if component.get('status_chance') is not None else rm['damage'].get('procChance')),
-                    }
-                    return {**wp, 'fireModes': [rm], '__innateResolved__': True, '__compressionProfile__': extra.get('compression'),
-                            **({'__coProfile__': component['coProfile']} if component.get('coProfile') else {})}
+        for component, part_weapon_rec, comp_admitted in cached_radials:
+            if True:
                 part_fx = fx if component.get('takes_condition_overload') else ModEffectList(e for e in fx if e.upgrade_type != 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
                 shiver_fixed=None
                 if component.get('takes_victim_stack_damage'):
@@ -1101,9 +1401,7 @@ def prepare(
                                             if not (e.upgrade_type == 'WEAPON_DAMAGE_AMOUNT' and e.operation == 'ADD_BASE'))
                 if radial_scenario is None:
                     radial_scenario = scenario_with(scenario, incarnon_cycle=False, victim_status_count=count_ceiling)
-                part, part_spec = apply_mods_spec(
-                    _part_record(wp, ('radial', idx, repr(component), repr(extra.get('compression'))), radial_part),
-                    part_fx, scenario=radial_scenario)
+                part, part_spec = apply_mods_spec(part_weapon_rec, part_fx, scenario=radial_scenario)
                 if component.get('__grimoirePart') is not None:
                     part=copy(part)
                     scale=float(component.get('damageMultiplier',1.))
@@ -1114,7 +1412,6 @@ def prepare(
                     part.damage_types={k:v*scale for k,v in part.damage_types.items()}
                     if part.dot_base_damage is not None:part.dot_base_damage*=scale
                     if component.get('nativeRoute')=='player-chain-selected-avatar':
-                        from .damage import _combine, _qualifier_rejection
                         kinds={str(x).rstrip('/') for x in (*tuple(wp.get('ancestry') or ()),wp.get('path')) if x}
                         budget_fx=[e for e in fx if e.upgrade_type=='WEAPON_FIRE_ITERATIONS'
                             and (not e.valid_type or e.valid_type.rstrip('/') in kinds)
@@ -1174,8 +1471,7 @@ def prepare(
                     part._contact_shiver_fixed=shiver_fixed
                 if component.get('impact_delay_seconds') is not None:
                     part._impact_delay = float(component['impact_delay_seconds'])
-                from .delayed_radial_events import admitted
-                part.delayed_radial_hit_event = admitted(component)
+                part.delayed_radial_hit_event = comp_admitted
                 if component.get('headOnly'):
                     part._head_only = True
                 if component.get('bodyOnly'):
@@ -1298,7 +1594,6 @@ def prepare(
         if extra.get('primaryDelaySeconds') is not None:
             st._primary_delay_seconds = float(extra['primaryDelaySeconds'])
         if extra.get('chargeVolley'):
-            from .damage import _combine
             # Only the fire-iteration query receives loaded N. Keep original
             # raw iterations for status normalization and all other MOD terms.
             iterations = volley_rounds*float(extra['chargeVolley']['rawFireIterations'])
@@ -1355,7 +1650,6 @@ def prepare(
             st._charge_time = charge_seconds / max(fire_scaling * st.charge_rate_multiplier, 1e-9)
             st._charge_before_fire = True
             if not ordinary_reload:
-                from .damage import _combine, _qualifier_rejection
                 weapon_types = {str(path).rstrip('/') for path in
                                 (*tuple(wp.get('ancestry') or ()), wp.get('path')) if path}
                 def battery_terms(kind):
@@ -1475,7 +1769,6 @@ def prepare(
             st.weakpoint_crit_chance_relative=0.
             st.headshot_bonus_multiplier=1.
             st.ignore_headshot_bonus=True
-            from .delayed_radial_events import admitted
             st.delayed_radial_hit_event=admitted(physical_lanes['lanes'][physical_index]['direct'])
             if radial is not None:radial.multishot=1.
         if chain_orb and idx==mode_index:
@@ -1498,7 +1791,6 @@ def prepare(
                 if radial.dot_base_damage is not None:radial.dot_base_damage*=paid_cube['damageMultiplier']
                 radial._co_spec=None
                 radial.radial_victim_crit=False
-                from .delayed_radial_events import admitted
                 radial.delayed_radial_hit_event=admitted({**paid_cube,'nativeRoute':'shot-region',
                     'native_event_delay_seconds':paid_cube['meanDeathDelaySeconds']})
                 radial._impact_delay=timing['impactDelaySeconds']
@@ -1598,9 +1890,7 @@ def prepare(
         if base_affinity is not None
         else None
     )
-    from .beam_ramp import floor_for
-    from .event_profiles import reload_projectiles
-    thrown_spec = reload_projectiles(weapon)
+    thrown_spec = wmeta["thrown_spec"]
 
     def reload_parts(wp, fx, count_ceiling):
         """Reload grenade hits (InfBeamPistol.lua) as radial-only parts: the
@@ -1642,11 +1932,10 @@ def prepare(
         return thrown
 
     exact = resolve
-    from .damage import innate_terms_for
     # A per-status crit term moves crit chance, which co_variant does not redo.
     status_crit = any(e.upgrade_type == 'WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE'
                       for e in [*static, *actor_effects, *(e for _, terms in dynamic for e in terms),
-                                *innate_terms_for(weapon, 0), *innate_terms_for(weapon, mode_index)])
+                                *wmeta["innate_terms_union"]])
 
     def resolve(form, stacks, live_types=0, last_round=False):
         # A fractional live status count scales only the CO bucket. Resolve
@@ -1669,12 +1958,9 @@ def prepare(
         return resolve_cache[key]
 
     entry = cached if resolve_cache is not None else resolve
-    from .delayed_radial_events import admitted as event_admitted, components as event_components
-    parts = [part for attack in (base_attack, selected_attack) for part in event_components(attack)]
-    from .magnetic_break import weapon_weakness
     return dict(
         resolve=entry,
-        magneticWeaknessBonus=weapon_weakness(weapon.get('path')),
+        magneticWeaknessBonus=wmeta["mag_weakness"],
         projectileSequence=companion_sequence,
         sourceOwnedFields=any(field.get('defaultEnabled') and field.get('expiresWithSourceOwner') for field in periodic),
         finiteFields=any(field.get('defaultEnabled') and field.get('refreshPolicy')=='independent-finite-fields-no-source-replacement' for field in periodic),
@@ -1689,38 +1975,31 @@ def prepare(
         chargeVolley=any(attack.get('chargeVolley') for attack in (base_attack, selected_attack)),
         chargeBeforeFire=bool(selected_attack.get('fullClipCharge') or (selected_attack.get('charge') or {}).get('beforeFire')),
         nativeFireGate=bool(selected_attack.get('nativeFireCooldownSeconds')),
-        delayedRadialEvents=bool(paid_cube or zymos_policy or chain_orb or selected_attack.get('attachedTicks') or selected_attack.get('noxAvatarLifecycle')) or any(event_admitted(part) for part in parts),
-        victimStackParts=bool(zymos_policy) or bool(selected_attack.get('directTakesVictimStackDamage')) or any(part.get('takes_victim_stack_damage') for part in parts),
-        radialCritStatus=bool(zymos_policy or chain_orb or selected_attack.get('noxAvatarLifecycle')) or any(part.get('takes_victim_crit') for part in parts),
+        delayedRadialEvents=bool(paid_cube or zymos_policy or chain_orb or selected_attack.get('attachedTicks') or selected_attack.get('noxAvatarLifecycle')) or wmeta["parts_admitted"],
+        victimStackParts=bool(zymos_policy) or bool(selected_attack.get('directTakesVictimStackDamage')) or wmeta["parts_victim_stack"],
+        radialCritStatus=bool(zymos_policy or chain_orb or selected_attack.get('noxAvatarLifecycle')) or wmeta["parts_victim_crit"],
         melee=melee,
         comboTierKeys=combo_tier_keys,
-        beamRampFloors={
-            'base':floor_for(base_attack if base_attack.get('source') else ref.get('coProfiles',{}).get(weapon.get('path'),{}).get('0',{})),
-            'selected':floor_for(selected_attack if selected_attack.get('source') else ref.get('coProfiles',{}).get(weapon.get('path'),{}).get(str(mode_index),{}))},
+        beamRampFloors=dict(wmeta["beam_floors"]),
         enervate=enervate,
         **status_arcanes,
         cycle=cycle,
         onosCharge=onos_sequence,
         doubleTap=double_tap,
         sniperCombo=sniper_combo,
-        stugIdealDetonation=any((attack.get('stackable') or {}).get('kind')=='stug'
-                               for attack in (base_attack, selected_attack)),
-        persistentRadials=any(part.get('persistAfterKill') for attack in (base_attack,selected_attack)
-                              for part in attack.get('radials') or ()),
+        stugIdealDetonation=wmeta["stug_ideal"],
+        persistentRadials=wmeta["persistent_radials"],
         onosCrits=onos_crit,
-        punctureArmorStrip=next((v for b in branches if (v:=latron_puncture_strip(b))),0.),
-        magazineRestore=next((v for b in branches if (v:=ammo_restore_configuration(b))),None),
-        refillMagazineGrowth=any(c.get('refillMagazineGrowth') for b in branches for c in incarnon_condition_rows(b)),
+        punctureArmorStrip=wmeta["puncture_strip"],
+        magazineRestore=wmeta["magazine_restore"],
+        refillMagazineGrowth=wmeta["refill_growth"],
         syndicate=syndrome,
         affinityPerKill=affinity,
         trigger_sources=sources,
         # Enkaus: an ink-stained target dissolves below this health share.
-        executeBelow=execute_below(weapon, mode_index),
+        executeBelow=wmeta["execute_below"],
         unsupported=notes,
-        lastBurst=any(
-            "Burston" in str(b.get("path")) and str(b.get("id")) == "2-1"
-            for b in branches
-        ),
+        lastBurst=wmeta["last_burst"],
         multishotLocked=any(e.upgrade_type == "RUNTIME_LOCK_MULTISHOT" for e in static),
         conditionOverload=any(
             e.upgrade_type in {"WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE","WEAPON_CRIT_UNDER_PROC_THRESHOLD_MAX"} for e in [*original, *(term for _, terms in dynamic for term in terms)]
@@ -1728,7 +2007,7 @@ def prepare(
         baseBurst=((base_attack.get("burst") or (profile.get("burst") if profile else None)) if cycle
                    else None if weapon.get("isIncarnonForm") else (base_attack if mode_index == 0 else selected_attack).get("burst")),
         baseFireRate=modes[0 if cycle else mode_index].get("fireRate"),
-        incarnonBurst=(selected_attack.get("burst") or native_burst(weapon, mode_index)) if weapon.get("isIncarnonForm") else None,
+        incarnonBurst=wmeta["incarnon_burst"],
         incarnonFireRate=modes[mode_index].get("fireRate"),
         energySpendPerSecond=float(scenario.combat_state.get('energySpendPerSecond') or 0.),
         projectileState={**dict(scenario.combat_state),'mqAugmentEquipped':mq_augment is not None},
@@ -1754,8 +2033,9 @@ def prepare(
         infiniteAmmo=bool(scenario.combat_state.get('infiniteAmmo'))
                      or str(weapon.get('path') or '') in NO_MAGAZINE_WEAPONS,
         reloadAfterEveryShot=(not weapon.get("isIncarnonForm") and not cycle
-                              and reloads_after_every_shot(weapon, mode_index)),
-        shellReload=({'start': base_attack['reloadStart'], 'perShell': base_attack['reloadPerShell'],
-                      'end': base_attack['reloadEnd'], 'modeSwitchLoadsShell': base_attack.get('modeSwitchLoadsShell', True)}
-                     if base_attack.get('reloadPerShell') is not None else None),
+                              and wmeta["reload_every_shot_raw"]),
+        shellReload=dict(wmeta["shell_reload"]) if wmeta["shell_reload"] is not None else None,
+        companionAssister=extras.get("companionAssister"),
+        reinforcedBondReloads=extras.get("reinforcedBondReloads"),
+        selfDamageOnKill=float(extras.get("selfDamageOnKill") or scenario.combat_state.get("selfDamageOnKill") or 0.0),
     )

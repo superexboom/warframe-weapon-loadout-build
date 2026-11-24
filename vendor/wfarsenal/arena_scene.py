@@ -178,6 +178,18 @@ class TriangleBVH:
         return length if minimum <= length <= maximum else None
 
     def raycast(self, origin, direction, maxdist=math.inf, *, min_distance=1e-5):
+        if self.native is not None:
+            fn = getattr(self.native, "raycast_hit", None)
+            if fn is not None:
+                try:
+                    hit = fn(origin, direction, maxdist, min_distance)
+                except (TypeError, ValueError):
+                    o, d = _vec(origin), _vec(direction)
+                    hit = fn(o, d, float(maxdist), float(min_distance))
+                if hit is None:
+                    return None
+                length, k, point, normal = hit
+                return RayHit(length, k, tuple(point), tuple(normal))
         o, d = _vec(origin), _vec(direction)
         norm = math.sqrt(_dot(d, d))
         maximum = float(maxdist)

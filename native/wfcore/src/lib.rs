@@ -19,6 +19,8 @@ pub mod spatial;
 pub mod sustained;
 pub mod tables;
 
+pub const NATIVE_SYNERGY_REPLAY: u8 = 1;
+
 /// `HeatChains` exposed for differential tests against the Python class.
 #[pyclass(name = "HeatChains", unsendable)]
 struct PyHeatChains {
@@ -265,6 +267,8 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("PERSISTENT_RADIALS", 1)?;
     m.add("SNIPER_COMBO_STATUS", 1)?;
     m.add("RELOAD_SCALED_TRANSFORMS", 1)?;
+    m.add("M120_FORTIFIER_AND_SHIELD_BYPASS", 1)?;
+    m.add("NATIVE_SYNERGY_REPLAY", NATIVE_SYNERGY_REPLAY)?;
     m.add_class::<PyHeatChains>()?;
     m.add_class::<PyCappedPool>()?;
     m.add_function(wrap_pyfunction!(bake_pool_capture, m)?)?;

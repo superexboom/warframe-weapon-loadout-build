@@ -2,19 +2,36 @@
 
 // Apply the stored theme before first paint to avoid a dark flash.
 const THEME_STORAGE_KEY = "wf-riven-theme";
+function syncThemeMeta(theme) {
+  const isLight = theme === "light";
+  const colorScheme = document.querySelector('meta[name="color-scheme"]');
+  if (colorScheme) colorScheme.setAttribute("content", isLight ? "light" : "dark");
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  if (themeColor) themeColor.setAttribute("content", isLight ? "#eef1f5" : "#090b10");
+}
 function applyTheme(theme) {
   const next = theme === "light" ? "light" : "dark";
   document.documentElement.dataset.theme = next;
+  syncThemeMeta(next);
   const toggle = document.getElementById("theme-toggle");
   if (toggle) {
     toggle.textContent = next === "light" ? "☾" : "☀";
     toggle.setAttribute("aria-pressed", String(next === "light"));
   }
   try { localStorage.setItem(THEME_STORAGE_KEY, next); } catch (_error) { /* private mode */ }
+  if (typeof state === "object" && state) {
+    if (state.buildResult && state.buildInputMode === "manual") {
+      renderManualResultVisual(state.buildResult);
+    }
+    if (state.catalog?.enemies?.length) {
+      fillBuildEnemies();
+    }
+  }
 }
 let storedTheme = "dark";
 try { storedTheme = localStorage.getItem(THEME_STORAGE_KEY) || "dark"; } catch (_error) { /* ignore */ }
 document.documentElement.dataset.theme = storedTheme === "light" ? "light" : "dark";
+syncThemeMeta(document.documentElement.dataset.theme);
 
 const state = {
   catalog: null,
@@ -105,6 +122,60 @@ const state = {
     store: {},
     result: null,
   },
+  synergyReturnTarget: null,
+  synergyBridgeCache: {},
+  warframeLink: {
+    enabled: false,
+    frameId: null,
+    configName: "A",
+    activeAbilities: null,
+    abilityElements: {},
+    damageTriggerMode: "ai",
+  },
+  companionLink: {
+    enabled: false,
+    companionId: null,
+    configName: "A",
+    weaponConfigName: "A",
+  },
+  companionCatalog: null,
+  companionCatalogPromise: null,
+  companionPickerKind: "companion",
+  companionPickerSlot: 0,
+  companionPickerCategory: "all",
+  companionRivenRows: [],
+  companionBuild: {
+    companion: null,
+    subView: "body",
+    bodyConfig: "A",
+    weaponConfig: "A",
+    parts: {},
+    bodyReactor: true,
+    bodyMods: Array.from({ length: 10 }, () => null),
+    bodyPolarities: Array.from({ length: 10 }, () => null),
+    options: {
+      firedUp: true,
+      astralBond: false,
+      momentousElement: "",
+      catsEyeMode: "average",
+      ambushActive: false,
+    },
+    weaponPath: null,
+    weaponReactor: true,
+    weaponMods: Array.from({ length: 8 }, () => null),
+    weaponPolarities: Array.from({ length: 9 }, () => null),
+    posture: null,
+    riven: null,
+    companionPlayerStacks: true,
+    previewWfMode: "auto",
+    previewWfId: "",
+    previewWfConfig: "A",
+    primaryStatsManual: false,
+    primaryCc: 100,
+    primarySc: 100,
+    store: { bodies: {}, weapons: {} },
+    result: null,
+  },
 };
 
 const ui = Object.fromEntries([
@@ -170,6 +241,9 @@ const ui = Object.fromEntries([
   "warframe-diagnostics", "warframe-diagnostic-count", "warframe-diagnostic-list", "warframe-picker", "warframe-picker-title", "warframe-picker-sub", "warframe-picker-search", "warframe-picker-close", "warframe-picker-categories", "warframe-picker-list",
   "rabbit-dialog-scrim", "rabbit-dialog", "rabbit-dialog-title", "rabbit-dialog-close", "rabbit-export-form", "rabbit-import-panel", "rabbit-target", "rabbit-archetype", "rabbit-build-title", "rabbit-summary", "rabbit-usage", "rabbit-cautions", "rabbit-export-status", "rabbit-generate", "rabbit-code-result", "rabbit-code-count", "rabbit-code", "rabbit-copy", "rabbit-import-code", "rabbit-import-status", "rabbit-import-apply",
 ].map((id) => [id, document.getElementById(id)]));
+for (const node of document.querySelectorAll("[id]")) {
+  if (!ui[node.id]) ui[node.id] = node;
+}
 
 const TYPE_LABELS = {
   rifle: "步枪", shotgun: "霰弹枪", pistol: "手枪", kitgun: "组合枪",
@@ -233,7 +307,7 @@ const POLARITY_GLYPHS = Object.freeze({});
 // Umbra, Aura/Exilus and universal polarities belong to loadout slots, not to
 // the random polarity printed on a Riven.
 const RIVEN_CARD_POLARITIES = Object.freeze(["AP_ATTACK", "AP_DEFENSE", "AP_TACTIC"]);
-const RIVEN_FACTION_CODES = Object.freeze(["C", "G", "I"]);
+const RIVEN_FACTION_CODES = Object.freeze(["C", "G", "I", "FO", "FT", "FS"]);
 
 function finite(value) {
   if (value === null || value === undefined || value === "") return null;
@@ -308,6 +382,8 @@ function captureBuildConfig() {
     specialSlotPolarities: Object.keys(specialSlotPolaritiesPayload()).length ? specialSlotPolaritiesPayload() : undefined,
     sentinel: captureSentinelConfig(),
     exaltedLink: captureExaltedLink(),
+    warframeLink: captureSynergyWarframeLink(),
+    companionLink: captureSynergyCompanionLink(),
     riven: rivenMod ? { slot: rivenSlot, polarity: rivenFixedPolarity(rivenMod, rivenSlot), stats: rivenMod.stats.map((s) => ({ code: s.code, value: Number(s.value || 0), negative: Boolean(s.negative) })) } : null,
     enemy: get("build-enemy-select", "") || null,
     level: Number(get("build-enemy-level", 160) || 160),
@@ -553,8 +629,17 @@ function setupComputeSettings() {
   document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !ui["compute-panel"].hidden) setComputePanel(false); });
 }
 
+function isWeaponWarframeArcaneShielded() {
+  return Boolean(isExaltedWeapon() || (!isCompanionWeapon() && state.warframeLink?.enabled));
+}
+
 function syncArcaneSelections() {
-  state.arcaneSelections = [state.weaponArcane, state.weaponArcane2, ...state.frameArcanes].filter(Boolean).map((item) => ({ ...item }));
+  const includeFrameArcanes = !isWeaponWarframeArcaneShielded();
+  state.arcaneSelections = [
+    state.weaponArcane,
+    state.weaponArcane2,
+    ...(includeFrameArcanes ? state.frameArcanes : []),
+  ].filter(Boolean).map((item) => ({ ...item }));
 }
 
 function applyBuildConfig(config) {
@@ -580,7 +665,10 @@ function applyBuildConfig(config) {
     restoreSentinelConfig(null);
     renderCompanionPanel();
     restoreExaltedLink(null);
+    restoreSynergyLinks(null);
+    syncArcaneSelections();
     renderExaltedPanel();
+    renderSynergyHub();
     renderSentinelBench();
     scheduleSentinelEvaluate();
     setControlValue("build-min-fill", "");
@@ -710,16 +798,20 @@ function applyBuildConfig(config) {
     setSliderVisual(ui["build-innate-element-value"]);
   }
   updateCustomDamageControls();
+  restoreSentinelConfig(config);
+  renderCompanionPanel();
+  restoreExaltedLink(config);
+  restoreSynergyLinks(config);
+  enforceExaltedSynergySync(false);
+  syncArcaneSelections();
+  renderExaltedPanel();
+  renderSynergyHub();
   renderManualSlots();
   renderManualMods();
   renderSpecialSlots();
   renderArcaneSelections();
   renderExternalBuffs();
   renderIncarnonChoices();
-  restoreSentinelConfig(config);
-  renderCompanionPanel();
-  restoreExaltedLink(config);
-  renderExaltedPanel();
   renderSentinelBench();
   scheduleSentinelEvaluate();
 }
@@ -752,27 +844,220 @@ function copyBuildConfig() {
   if (ui["build-config-status"]) ui["build-config-status"].textContent = `已复制到配置 ${target}`;
 }
 
-function exportBuildConfig() {
-  persistActiveBuildConfig();
-  const payload = { schema: BUILD_CONFIG_SCHEMA, buildLabel: state.catalog?.buildLabel || "OFFLINE", configId: state.activeConfig, config: state.buildConfigs[state.activeConfig] || captureBuildConfig() };
+function formatExportTimestamp(date = new Date()) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}-${pad(date.getHours())}${pad(date.getMinutes())}${pad(date.getSeconds())}`;
+}
+
+function sanitizeFilenameSegment(value) {
+  return String(value || "")
+    .replace(/[\\/:*?"<>|+]+/g, "")
+    .replace(/\s+/g, "")
+    .trim() || "build";
+}
+
+function triggerJsonDownload(payload, filename) {
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = `wf-riven-build-${state.activeConfig}.json`;
+  anchor.download = filename;
+  document.body.append(anchor);
   anchor.click();
-  URL.revokeObjectURL(url);
+  anchor.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
+function exportBuildConfig() {
+  persistActiveBuildConfig();
+  if (state.warframeBuild?.frame) persistWarframeConfig();
+  if (state.companionBuild?.companion) persistCompanionConfigs();
+
+  const config = structuredClone(state.buildConfigs[state.activeConfig] || captureBuildConfig());
+  const weaponLabel = sanitizeFilenameSegment(state.buildWeapon?.nameZh || state.buildWeapon?.nameEn || "weapon");
+  const nameParts = [weaponLabel];
+
+  let bundledWarframe = undefined;
+  let bundledCompanion = undefined;
+
+  if (!isCompanionWeapon() && state.warframeLink?.enabled && state.warframeLink.frameId) {
+    const wfId = state.warframeLink.frameId;
+    const wfCfg = state.warframeLink.configName || "A";
+    const allWf = [...warframeRows("warframes"), ...warframeRows("warframeForms")];
+    const wfRec = allWf.find((r) => warframeId(r) === wfId) || null;
+    const storedWf = warframeStoredConfig(wfId, wfCfg);
+    nameParts.push(sanitizeFilenameSegment(wfRec ? warframeName(wfRec) : wfId.split("/").pop()));
+    bundledWarframe = {
+      schema: 1,
+      kind: "warframe-build",
+      buildLabel: state.warframeCatalog?.buildLabel || state.catalog?.buildLabel || "OFFLINE",
+      frameId: wfId,
+      parentFrameId: wfRec?.parentFrameId || null,
+      formId: wfRec?.parentFrameId ? wfId : "main",
+      formKind: wfRec?.formKind || "main",
+      configId: wfCfg,
+      config: storedWf.config || {},
+      ...(storedWf.parentConfig ? { parentConfig: storedWf.parentConfig } : {}),
+    };
+  } else if (isExaltedWeapon() && state.exaltedLink?.frameId) {
+    const exId = state.exaltedLink.frameId;
+    const exCfg = state.exaltedLink.configName || "A";
+    const allWf = [...warframeRows("warframes"), ...warframeRows("warframeForms")];
+    const exRec = allWf.find((r) => warframeId(r) === exId) || null;
+    const storedEx = exCfg ? warframeStoredConfig(exId, exCfg) : { saved: false, config: {} };
+    if (storedEx.saved) {
+      nameParts.push(sanitizeFilenameSegment(exRec ? warframeName(exRec) : exId.split("/").pop()));
+      bundledWarframe = {
+        schema: 1,
+        kind: "warframe-build",
+        buildLabel: state.warframeCatalog?.buildLabel || state.catalog?.buildLabel || "OFFLINE",
+        frameId: exId,
+        parentFrameId: exRec?.parentFrameId || null,
+        formId: exRec?.parentFrameId ? exId : "main",
+        formKind: exRec?.formKind || "main",
+        configId: exCfg,
+        config: storedEx.config || {},
+        ...(storedEx.parentConfig ? { parentConfig: storedEx.parentConfig } : {}),
+      };
+    }
+  }
+
+  if (!isCompanionWeapon() && state.companionLink?.enabled && state.companionLink.companionId) {
+    const compId = state.companionLink.companionId;
+    const bodyCfg = state.companionLink.configName || "A";
+    const weapCfg = state.companionLink.weaponConfigName || "A";
+    const compStore = state.companionBuild?.store?.bodies ? state.companionBuild.store : readCompanionStore();
+    const resolved = resolveStoredCompanionPair(compId, bodyCfg, weapCfg);
+    const compRec = resolved.compRec;
+    const weapRec = resolved.weapRec;
+    nameParts.push(sanitizeFilenameSegment(compRec?.nameZh || compRec?.nameEn || compId.split("/").pop()));
+    if (weapRec) {
+      nameParts.push(sanitizeFilenameSegment(weapRec.nameZh || weapRec.nameEn || resolved.weaponPath?.split("/").pop()));
+    }
+    const rawBody = compStore.bodies?.[compId]?.[bodyCfg] || {
+      ...structuredClone(resolved.bodyPayload),
+      pairedWeaponPath: resolved.weaponPath || null,
+    };
+    const rawWeapon = resolved.weaponPath
+      ? (compStore.weapons?.[resolved.weaponPath]?.[weapCfg] || structuredClone(resolved.weaponPayload))
+      : null;
+    bundledCompanion = {
+      schema: 1,
+      kind: "companion-build",
+      buildLabel: state.catalog?.buildLabel || "OFFLINE",
+      companionPath: compId,
+      companionNameZh: compRec?.nameZh || undefined,
+      companionNameEn: compRec?.nameEn || undefined,
+      bodyConfigId: bodyCfg,
+      weaponPath: resolved.weaponPath || null,
+      weaponNameZh: weapRec?.nameZh || undefined,
+      weaponNameEn: weapRec?.nameEn || undefined,
+      weaponConfigId: weapCfg,
+      body: rawBody,
+      weapon: rawWeapon,
+    };
+  }
+
+  const payload = {
+    schema: BUILD_CONFIG_SCHEMA,
+    kind: bundledWarframe || bundledCompanion ? "synergy-bundle" : "weapon-build",
+    buildLabel: state.catalog?.buildLabel || "OFFLINE",
+    exportedAt: new Date().toISOString(),
+    configId: state.activeConfig,
+    config,
+    ...(bundledWarframe ? { bundledWarframe } : {}),
+    ...(bundledCompanion ? { bundledCompanion } : {}),
+  };
+  const filename = `${nameParts.filter(Boolean).join("+")}-${state.activeConfig}-${formatExportTimestamp()}.json`;
+  triggerJsonDownload(payload, filename);
+}
+
+async function restoreBundledEntitiesFromJson(parsed) {
+  const restoredLabels = [];
+  if (parsed?.bundledWarframe && typeof parsed.bundledWarframe === "object") {
+    const bw = parsed.bundledWarframe;
+    try { await loadWarframeCatalog(); } catch (_err) { /* offline fallback */ }
+    const wfStore = state.warframeBuild?.store && Object.keys(state.warframeBuild.store).length
+      ? state.warframeBuild.store
+      : readWarframeStore();
+    const targetId = bw.frameId;
+    const cfgSlot = /^[ABC]$/.test(bw.configId || "") ? bw.configId : "A";
+    const altForm = warframeRows("warframeForms").find((f) => warframeId(f) === targetId);
+    const rootId = bw.parentFrameId || altForm?.parentFrameId || targetId;
+    if (rootId && bw.config) {
+      wfStore[rootId] ||= { A: null, B: null, C: null, forms: {} };
+      if (altForm || (bw.formId && bw.formId !== "main")) {
+        const fKey = bw.formId && bw.formId !== "main" ? bw.formId : targetId;
+        wfStore[rootId].forms ||= {};
+        wfStore[rootId].forms[fKey] ||= { A: null, B: null, C: null };
+        wfStore[rootId].forms[fKey][cfgSlot] = bw.config;
+        if (bw.parentConfig) wfStore[rootId][cfgSlot] = bw.parentConfig;
+      } else {
+        wfStore[rootId][cfgSlot] = bw.config;
+      }
+      state.warframeBuild.store = wfStore;
+      writeWarframeStore(wfStore);
+      state.synergyBridgeCache = {};
+      if (warframeId(state.warframeBuild.frame) === rootId) {
+        state.warframeBuild.formConfigs = loadWarframeFormConfigs(state.warframeBuild.frame);
+        state.warframeBuild.configs = state.warframeBuild.formConfigs[state.warframeBuild.activeForm] || { A: null, B: null, C: null };
+        applyWarframeConfig(state.warframeBuild.configs[state.warframeBuild.activeConfig] || null);
+      }
+      const wfRec = [...warframeRows("warframes"), ...warframeRows("warframeForms")].find((r) => warframeId(r) === targetId);
+      restoredLabels.push(`战甲 ${wfRec ? warframeName(wfRec) : targetId.split("/").pop()}`);
+    }
+  }
+
+  if (parsed?.bundledCompanion && typeof parsed.bundledCompanion === "object") {
+    const bc = parsed.bundledCompanion;
+    try { await loadCompanionCatalog(); } catch (_err) { /* offline fallback */ }
+    const compStore = state.companionBuild?.store?.bodies ? state.companionBuild.store : readCompanionStore();
+    compStore.bodies ||= {};
+    compStore.weapons ||= {};
+    const cPath = bc.companionPath || bc.body?.path;
+    const bCfg = /^[ABC]$/.test(bc.bodyConfigId || "") ? bc.bodyConfigId : "A";
+    const wPath = bc.weaponPath || bc.weapon?.path || bc.body?.pairedWeaponPath || null;
+    const wCfg = /^[ABC]$/.test(bc.weaponConfigId || "") ? bc.weaponConfigId : "A";
+    if (cPath && bc.body) {
+      compStore.bodies[cPath] ||= { A: null, B: null, C: null };
+      compStore.bodies[cPath][bCfg] = {
+        ...bc.body,
+        path: cPath,
+        pairedWeaponPath: wPath || bc.body.pairedWeaponPath || null,
+      };
+    }
+    if (wPath && bc.weapon) {
+      compStore.weapons[wPath] ||= { A: null, B: null, C: null };
+      compStore.weapons[wPath][wCfg] = { ...bc.weapon, path: wPath };
+    }
+    state.companionBuild.store = compStore;
+    writeCompanionStore();
+    if (state.companionCatalog && cPath && state.companionBuild.companion?.path === cPath) {
+      selectCompanion(state.companionBuild.companion, state.companionBuild.bodyConfig, state.companionBuild.weaponConfig, wPath);
+    }
+    const cRec = cPath ? companionByPath(cPath) : null;
+    const wRec = wPath ? companionWeaponRecord(wPath, cRec) : null;
+    restoredLabels.push(`同伴 ${cRec?.nameZh || bc.companionNameZh || cPath?.split("/").pop()}${wRec ? ` + ${wRec.nameZh || wRec.nameEn}` : ""}`);
+  }
+  return restoredLabels;
 }
 
 function importBuildConfig(file) {
   if (!file) return;
   const reader = new FileReader();
-  reader.addEventListener("load", () => {
+  reader.addEventListener("load", async () => {
     try {
       const parsed = JSON.parse(String(reader.result || ""));
+      if (parsed?.kind === "warframe-build") {
+        throw new Error("该文件是单独的战甲配置 JSON，请在「战甲配装」页导入");
+      }
+      if (parsed?.kind === "companion-build") {
+        throw new Error("该文件是单独的同伴配置 JSON，请在「同伴配装」页导入");
+      }
       const config = parsed.config || parsed;
       const schema = Number(parsed.schema ?? config.schema ?? BUILD_CONFIG_SCHEMA);
       if (!config || ![1, BUILD_CONFIG_SCHEMA].includes(schema)) throw new Error("配置文件格式不兼容");
+      const bundledNotes = await restoreBundledEntitiesFromJson(parsed);
       const target = config.weapon || parsed.weapon;
       if (target) {
         const weapon = state.catalog?.weapons?.find((item) => item.path === target);
@@ -781,11 +1066,15 @@ function importBuildConfig(file) {
       }
       state.buildConfigs[state.activeConfig] = config;
       applyBuildConfig(config);
+      syncBuildAfterExternalEdit();
       scheduleLiveBuild();
       persistActiveBuildConfig();
-      toast(`已导入配置 ${state.activeConfig}`, "success");
+      const extraText = bundledNotes.length ? `（已同步恢复 ${bundledNotes.join("、")}）` : "";
+      toast(`已导入配置 ${state.activeConfig}${extraText}`, "success");
     } catch (error) {
       toast(error.message || "配置导入失败", "error");
+    } finally {
+      if (ui["build-config-import-file"]) ui["build-config-import-file"].value = "";
     }
   });
   reader.readAsText(file);
@@ -1920,8 +2209,15 @@ function refreshRanges(preserveRatio = true) {
     lowLabel.textContent = faction ? `x${factionRivenMultiplier(range.low, entry.negative).toFixed(2)}` : range.low.toFixed(1);
     highLabel.textContent = faction ? `x${factionRivenMultiplier(range.high, entry.negative).toFixed(2)}` : range.high.toFixed(1);
     output.disabled = false;
-    output.min = faction ? factionRivenMultiplier(range.low, entry.negative).toFixed(2) : range.low.toFixed(3);
-    output.max = faction ? factionRivenMultiplier(range.high, entry.negative).toFixed(2) : range.high.toFixed(3);
+    if (faction) {
+      const m1 = factionRivenMultiplier(range.low, entry.negative);
+      const m2 = factionRivenMultiplier(range.high, entry.negative);
+      output.min = Math.min(m1, m2).toFixed(2);
+      output.max = Math.max(m1, m2).toFixed(2);
+    } else {
+      output.min = range.low.toFixed(3);
+      output.max = range.high.toFixed(3);
+    }
     output.step = faction ? "0.01" : definitionStep(entry.definition);
     output.value = faction ? factionRivenMultiplier(value, entry.negative).toFixed(2) : value.toFixed(1);
     output.classList.toggle("is-negative", entry.negative);
@@ -3454,16 +3750,56 @@ function renderRivenBuilder(target) {
     if (range) {
       entry.value = clamp(Number(entry.value ?? (range.low + (range.high - range.low) * 0.7)), range.low, range.high);
     }
+    const faction = isFactionRivenDefinition(def);
+    const sliderCell = create("div", "riven-builder-slider-cell");
+    const lowText = range ? (faction ? `x${factionRivenMultiplier(range.low, entry.negative).toFixed(2)}` : range.low.toFixed(1)) : "--";
+    const highText = range ? (faction ? `x${factionRivenMultiplier(range.high, entry.negative).toFixed(2)}` : range.high.toFixed(1)) : "--";
     const slider = document.createElement("input");
     slider.type = "range";
     if (range) {
       slider.min = range.low.toFixed(3);
       slider.max = range.high.toFixed(3);
-      slider.step = "0.1";
+      slider.step = definitionStep(def);
       slider.value = String(entry.value);
     }
-    slider.addEventListener("input", () => { entry.value = Number(slider.value); readout.textContent = formatStatNumber(entry.value, def, entry.negative); });
-    const readout = create("output", "riven-stat-output", formatStatNumber(entry.value, def, entry.negative));
+    const numShell = create("div", "riven-builder-num-shell");
+    const numInput = document.createElement("input");
+    numInput.type = "number";
+    if (range) {
+      if (faction) {
+        const mLow = factionRivenMultiplier(range.low, entry.negative);
+        const mHigh = factionRivenMultiplier(range.high, entry.negative);
+        numInput.min = Math.min(mLow, mHigh).toFixed(2);
+        numInput.max = Math.max(mLow, mHigh).toFixed(2);
+        numInput.step = "0.01";
+        numInput.value = factionRivenMultiplier(entry.value, entry.negative).toFixed(2);
+      } else {
+        numInput.min = range.low.toFixed(2);
+        numInput.max = range.high.toFixed(2);
+        numInput.step = definitionStep(def);
+        numInput.value = Number(entry.value || 0).toFixed(def?.unit === "flat" ? 2 : 1);
+      }
+    }
+    const unitSpan = create("span", "", faction ? "x" : (def?.unit === "percent" ? "%" : ""));
+    numShell.append(numInput, unitSpan);
+    slider.addEventListener("input", () => {
+      entry.value = Number(slider.value);
+      numInput.value = faction
+        ? factionRivenMultiplier(entry.value, entry.negative).toFixed(2)
+        : entry.value.toFixed(def?.unit === "flat" ? 2 : 1);
+    });
+    numInput.addEventListener("change", () => {
+      if (!range) return;
+      const raw = Number(numInput.value);
+      if (!Number.isFinite(raw)) return;
+      const internal = faction ? factionRivenDelta(raw) : Math.abs(raw);
+      entry.value = clamp(internal, range.low, range.high);
+      slider.value = entry.value.toFixed(3);
+      numInput.value = faction
+        ? factionRivenMultiplier(entry.value, entry.negative).toFixed(2)
+        : entry.value.toFixed(def?.unit === "flat" ? 2 : 1);
+    });
+    sliderCell.append(create("small", "", lowText), slider, create("small", "", highText));
     const remove = create("button", "remove-stat", "×");
     remove.type = "button";
     remove.title = "删除词条";
@@ -3472,7 +3808,7 @@ function renderRivenBuilder(target) {
       state.rivenBuilderStats.splice(index, 1);
       renderManualMods();
     });
-    row.append(sign, select, slider, readout, remove);
+    row.append(sign, select, sliderCell, numShell, remove);
     rowsWrap.append(row);
   });
   panel.append(rowsWrap);
@@ -3669,7 +4005,8 @@ function renderRivenRecommendation(recommendation) {
     const rank = create("span", "riven-solve-rank", String(index + 1));
     const stats = create("div", "riven-solve-stats");
     for (const stat of combo.stats) {
-      stats.append(create("em", stat.negative ? "is-negative" : "", `${stat.negative ? "−" : "+"}${stat.label} ${stat.value.toFixed(1)}${stat.unit === "percent" ? "%" : ""}`));
+      const def = rivenStatDefinitions().find((d) => d.code === stat.code) || stat;
+      stats.append(create("em", stat.negative ? "is-negative" : "", `${formatStatNumber(Number(stat.value || 0), def, Boolean(stat.negative))} ${stat.label || def.label || stat.code}`));
     }
     const score = create("span", "riven-solve-score");
     score.append(
@@ -3744,14 +4081,12 @@ function createCustomRivenSlotCard(mod, index, slotPolarity = null) {
   return card;
 }
 
-function rivenStatLabel(stat) {
-  const defs = rivenStatDefinitions();
-  const def = defs.find((d) => d.code === stat.code);
+function rivenStatLabel(stat, defsOverride = null) {
+  const defs = defsOverride || rivenStatDefinitions();
+  const def = defs.find((d) => d.code === stat.code) || { code: stat.code, unit: "percent" };
   const label = def?.label || stat.code;
   const value = Number(stat.value || 0);
-  const sign = stat.negative ? "−" : "+";
-  const unit = def?.unit === "percent" ? "%" : "";
-  return `${sign}${value.toFixed(1)}${unit} ${label}`;
+  return `${formatStatNumber(value, def, Boolean(stat.negative))} ${label}`;
 }
 
 function modConditionalText(mod) {
@@ -4053,33 +4388,64 @@ function modCategory(mod) {
   return "utility";
 }
 
-// MOD 互斥家族键：modFamily + 武器兼容类别。镀层/普通/Prime/并合同名卡共享
-// modFamily 且兼容同一武器（如镀层步枪才能与步枪才能）——一张配装只能带一张；
-// 跨武器类别的同名家族（膛线=步枪 / 抵近射击=霰弹枪）互不冲突。
-function modExclusiveFamily(mod) {
-  const family = String(mod?.modFamily || mod?.nameTag || mod?.nameEn || mod?.nameInternal || mod?.path || "").toLocaleLowerCase();
-  const compatibility = String(mod?.compatibility || "").toLocaleLowerCase();
-  return `${family}#${compatibility}`;
+// MOD 互斥家族键：统一读取客户端继承树导出的权威 modFamily（不含 #compatibility 后缀），
+// 并支持装备级 AdditionalBaseModTypes（如 Dante 显赫典籍 Noctua 允许叠装多张书页、Jade 双光环）。
+function modExclusiveFamily(mod, equipPath = null) {
+  if (!mod || mod.__riven) return "";
+  const norm = (s) => String(s || "").trim().replace(/\\/g, "/").replace(/\/$/, "").toLocaleLowerCase();
+  const rawPath = norm(mod.path || mod.id);
+  const metaFam = state.modAssets?.mods?.[mod.path]?.modFamily;
+  const rawFam = norm(mod.modFamily || mod.family || metaFam || rawPath);
+  if (!rawFam) return "";
+  if (equipPath) {
+    const eq = norm(equipPath);
+    const basesMap = state.catalog?.buildOptions?.equipmentAdditionalBases
+      || state.warframeCatalog?.equipmentAdditionalBases
+      || {};
+    for (const [baseEquip, extraBases] of Object.entries(basesMap)) {
+      if (norm(baseEquip) === eq && Array.isArray(extraBases)) {
+        if (extraBases.some((b) => norm(b) === rawFam)) {
+          return rawPath;
+        }
+      }
+    }
+  }
+  return rawFam;
 }
 
 function manualModRecords() {
   const weapon = state.buildWeapon;
+  const weaponPath = weapon?.path || null;
   if (state.modPickerKind === "sentinel") return sentinelModRecords();
   if (state.modPickerKind === "stance") {
     return stanceRecords().filter((stance) => stanceMatchesBuildWeapon(stance) && specialRecordMatchesSearch(stance));
   }
   if (state.modPickerKind === "exilus") {
-    return utilityModRecords().filter((mod) => utilityMatchesBuildWeapon(mod) && specialRecordMatchesSearch(mod));
+    const normalFams = new Set(state.manualSlots.filter(Boolean).map((item) => modExclusiveFamily(item, weaponPath)).filter(Boolean));
+    return utilityModRecords().filter((mod) => {
+      if (!utilityMatchesBuildWeapon(mod) || !specialRecordMatchesSearch(mod)) return false;
+      const fam = modExclusiveFamily(mod, weaponPath);
+      return !fam || !normalFams.has(fam) || state.exilusSelection?.path === mod.path;
+    });
   }
   const rows = state.catalog?.manualMods || weapon?.compatibleMods || state.catalog?.mods || [];
   if (!Array.isArray(rows)) return [];
   const query = String(ui["manual-mod-search"]?.value || "").trim().toLocaleLowerCase();
-  const used = new Set(state.manualSlots.filter(Boolean).map((item) => item.path));
-  // 已装备卡的互斥家族：同名（镀层/普通/Prime）卡在选择器中一并隐藏。
-  const usedFamilies = new Set(state.manualSlots.filter(Boolean).map((item) => modExclusiveFamily(item)).filter(Boolean));
+  const editingSlot = state.modPickerSlot;
+  const otherSlots = state.manualSlots.filter((item, idx) => Boolean(item) && idx !== editingSlot);
+  const used = new Set(otherSlots.map((item) => item.path));
+  if (state.exilusSelection?.path) used.add(state.exilusSelection.path);
+  // 已装备卡（含其他普通槽 + 特殊槽 Exilus）的互斥家族：同族变体一并隐藏，但当前编辑槽自身的变体允许原位替换。
+  const usedFamilies = new Set(otherSlots.map((item) => modExclusiveFamily(item, weaponPath)).filter(Boolean));
+  if (state.exilusSelection) {
+    const exFam = modExclusiveFamily(state.exilusSelection, weaponPath);
+    if (exFam) usedFamilies.add(exFam);
+  }
+  const currentEditingPath = state.manualSlots[editingSlot]?.path;
   const filtered = rows.filter((mod) => {
-    const family = modExclusiveFamily(mod);
-    if (family && usedFamilies.has(family) && !used.has(mod.path)) return false;
+    if (mod.path === currentEditingPath) return false;
+    const family = modExclusiveFamily(mod, weaponPath);
+    if (family && usedFamilies.has(family)) return false;
     const effectText = modEffectText({ ...mod, rank: mod.maxRank ?? 0 });
     const haystack = [mod.nameZh, mod.nameEn, mod.nameInternal, mod.path, effectText].filter(Boolean).join(" ").toLocaleLowerCase();
     return (!query || haystack.includes(query)) && (state.manualModCategory === "all" || modCategory(mod) === state.manualModCategory) && !used.has(mod.path) && mod.selectable !== false && modMatchesBuildWeapon(mod);
@@ -4224,6 +4590,7 @@ function presetFamilyFor(weapon) {
 }
 
 function applyPreset(preset) {
+  const weaponPath = state.buildWeapon?.path || null;
   const rows = (state.catalog?.manualMods || []).filter((mod) => modMatchesBuildWeapon(mod) && mod.selectable !== false);
   const findByName = (name) => rows.find((mod) => mod.nameEn === name || mod.nameZh === name)
     || rows.find((mod) => String(mod.nameEn || "").includes(name) || String(mod.nameZh || "").includes(name));
@@ -4235,7 +4602,10 @@ function applyPreset(preset) {
     if (!mod) { missing.push(cardName); continue; }
     while (slot < state.manualSlots.length && state.manualSlots[slot]) slot += 1;
     if (slot >= state.manualSlots.length) break;
-    if (state.manualSlots.some((m) => m && m.path === mod.path)) continue;
+    const fam = modExclusiveFamily(mod, weaponPath);
+    const conflict = state.manualSlots.some((m) => m && (m.path === mod.path || (fam && modExclusiveFamily(m, weaponPath) === fam)))
+      || (state.exilusSelection && fam && modExclusiveFamily(state.exilusSelection, weaponPath) === fam);
+    if (conflict) continue;
     state.manualSlots[slot] = { ...mod, rank: mod.maxRank ?? 0 };
     slot += 1;
     filled += 1;
@@ -4314,6 +4684,10 @@ function warframeCategoryMatches(mod, category) {
 function dedupeWarframeMods(rows) {
   const best = new Map();
   for (const row of rows) {
+    if (row?.hiddenFromPicker) continue;
+    const pathStr = String(row?.path || "");
+    if (/\/Beginner\//i.test(pathStr)) continue;
+    if (/\/Expert\//i.test(pathStr) && !/^Primed\b/i.test(String(row?.nameEn || ""))) continue;
     const key = [row.nameEn || row.nameZh || row.id, row.slotKind, (row.compatibleFrames || []).join(","), row.modSet || ""].join("|");
     const previous = best.get(key);
     if (!previous || Number(row.maxRank || 0) > Number(previous.maxRank || 0)) best.set(key, row);
@@ -5420,6 +5794,7 @@ function renderExternalBuffs() {
       const copy = create("span", "external-buff-copy");
       const head = create("strong", "", spec.label);
       if (!applies) head.append(create("em", "external-buff-tag", "当前武器不生效"));
+      else if (synergyProvidesExternalBuff(spec)) head.append(create("em", "external-buff-tag is-synergy-overlap", "战甲协同已提供"));
       copy.append(head, create("span", "external-buff-effects", summary.map((part) => part.text).join(" · ")), create("small", "", spec.detail));
       label.append(check, copy);
       row.append(label);
@@ -5624,8 +5999,59 @@ function renderSpecialSlots() {
   if (ui["special-loadout"]) ui["special-loadout"].hidden = !state.buildWeapon;
 }
 
+function linkedSynergyWarframeArcane(slotIndex) {
+  if (!state.warframeLink?.enabled || isCompanionWeapon()) return null;
+  const frameId = state.warframeLink.frameId;
+  if (!frameId) return null;
+  const cfgName = state.warframeLink.configName || "A";
+  const stored = warframeStoredConfig(frameId, cfgName);
+  const raw = stored?.config?.arcanes?.[slotIndex];
+  if (!raw) return null;
+  const wfRow = warframeResolve(warframeRows("arcanes"), raw);
+  const path = wfRow?.path || raw?.path || raw?.id || "";
+  const weaponRow = path ? arcaneRecords().find((a) => a.path === path) : null;
+  const base = wfRow || weaponRow || (typeof raw === "object" ? raw : { path });
+  if (!base?.path && !base?.nameZh && !base?.nameEn) return null;
+  const maxRank = Number(base.maxRank ?? weaponRow?.maxRank ?? 5);
+  const rank = clamp(Number(raw?.rank ?? base.rank ?? maxRank), 0, maxRank);
+  return { ...weaponRow, ...wfRow, ...base, path: path || base.path, rank, maxRank };
+}
+
 function renderArcaneSlot(kind, slotIndex, item) {
   const label = kind === "warframe" ? `战甲赋能 ${slotIndex + 1}` : "武器赋能";
+  const shieldedBySynergy = kind === "warframe" && !isExaltedWeapon() && !isCompanionWeapon() && Boolean(state.warframeLink?.enabled);
+  if (shieldedBySynergy) {
+    const linked = linkedSynergyWarframeArcane(slotIndex);
+    const stashed = item && typeof item === "object"
+      ? (arcaneRecords().find((a) => a.path === item.path) || item)
+      : null;
+    const slot = create("article", `arcane-workbench-slot is-synergy-shielded${linked ? " is-filled" : ""}`);
+    const rarity = String(linked?.rarity || "").toUpperCase();
+    slot.dataset.rarity = rarity || "EMPTY";
+    const visual = create("div", "arcane-slot-visual");
+    const frame = linked ? (ARCANE_FRAMES[rarity] || ARCANE_FRAMES.COMMON) : "/assets/arcanes/NoArcaneIcon.png";
+    visual.append(imageNode(frame, "arcane-slot-frame", "", "lazy"));
+    const iconAsset = linked ? (catalogIconAsset(linked, "arcane") || linked.iconAsset) : "";
+    if (iconAsset) visual.append(imageNode(iconAsset, "arcane-slot-icon", linked.nameZh || linked.nameEn || "赋能", "lazy"));
+    const copy = create("div", "arcane-slot-copy");
+    copy.append(create("small", "arcane-slot-label", label));
+    copy.append(create("span", "arcane-shielded-badge", "已屏蔽 · 战甲协同接管"));
+    copy.append(create("strong", "", linked ? `${linked.nameZh || linked.nameEn || linked.path} (R${linked.rank})` : "协同战甲该槽位为空"));
+    const stashNote = stashed ? `（武器页原配「${stashed.nameZh || stashed.nameEn}」已暂存，关闭战甲协同后恢复）` : "";
+    copy.append(create("p", "arcane-slot-description", `已屏蔽武器页战甲赋能槽，避免与战甲协同重复计算。${stashNote}`));
+    slot.append(visual, copy);
+    const jump = create("button", "arcane-shielded-jump", "前往战甲配装修改赋能 ↗");
+    jump.type = "button";
+    jump.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      openWarframeFromSynergyHub();
+    });
+    slot.append(jump);
+    slot.addEventListener("click", () => {
+      toast("已开启战甲协同：武器页战甲赋能槽已自动屏蔽，避免重复计算");
+    });
+    return slot;
+  }
   const source = item && typeof item === "object" ? item : null;
   const catalogRecord = source ? arcaneRecords().find((arcane) => arcane.path === source.path) : null;
   const record = source ? { ...(catalogRecord || {}), ...source, path: catalogRecord?.path || source.path } : null;
@@ -5778,8 +6204,20 @@ function renderArcaneSelections() {
   if (!isExaltedWeapon()) specs.push(["warframe", 0, state.frameArcanes[0]], ["warframe", 1, state.frameArcanes[1]]);
   // diff 复用：未变化的赋能槽不重绘（图标/框图不重载）
   const existing = Array.from(target.children);
+  const wfShielded = !isExaltedWeapon() && !isCompanionWeapon() && Boolean(state.warframeLink?.enabled);
   specs.forEach(([kind, slotIndex, item], position) => {
-    const signature = [kind, slotIndex, item?.path || "", item ? Number(item.rank ?? item.maxRank ?? 0) : "", item?.forceProc ? 1 : 0, item?.fixedStacks ?? "", state.buildInputMode, state.buildWeapon?.path || ""].join("|");
+    const linked = kind === "warframe" && wfShielded ? linkedSynergyWarframeArcane(slotIndex) : null;
+    const signature = [
+      kind,
+      slotIndex,
+      wfShielded && kind === "warframe" ? `shielded:${linked?.path || ""}:${linked?.rank ?? ""}` : "normal",
+      item?.path || "",
+      item ? Number(item.rank ?? item.maxRank ?? 0) : "",
+      item?.forceProc ? 1 : 0,
+      item?.fixedStacks ?? "",
+      state.buildInputMode,
+      state.buildWeapon?.path || "",
+    ].join("|");
     const prev = existing[position];
     if (prev && prev.dataset.signature === signature) return;
     const node = renderArcaneSlot(kind, slotIndex, item);
@@ -5843,6 +6281,17 @@ const DAMAGE_TYPE_COLORS = {
   DT_MAGNETIC: "#9797E6", DT_VIRAL: "#F093B9", DT_CORROSIVE: "#93C203",
   DT_RADIANT: "#15C8AB", DT_TRUE: "#DDA700",
 };
+const DAMAGE_TYPE_COLORS_LIGHT = {
+  DT_IMPACT: "#1d6f78", DT_PUNCTURE: "#755a3c", DT_SLASH: "#b03b48",
+  DT_FIRE: "#b8500b", DT_FREEZE: "#156896", DT_ELECTRICITY: "#6d3bb0", DT_POISON: "#147a27",
+  DT_EXPLOSION: "#a83d1e", DT_RADIATION: "#8a680c", DT_GAS: "#0f7844",
+  DT_MAGNETIC: "#4348a8", DT_VIRAL: "#a83268", DT_CORROSIVE: "#557804",
+  DT_RADIANT: "#0d7a68", DT_TRUE: "#8a6400",
+};
+function damageTypeColor(dt) {
+  const isLight = document.documentElement.dataset.theme === "light";
+  return (isLight ? DAMAGE_TYPE_COLORS_LIGHT[dt] : DAMAGE_TYPE_COLORS[dt]) || DAMAGE_TYPE_COLORS[dt] || "";
+}
 
 function setElementControlIcon(select, image) {
   if (!select || !image) return;
@@ -6108,16 +6557,38 @@ function fillSetPlaceholders(text, stats, displayValues = {}, pieces = 1) {
   return base.replace(/%%/g, "%");
 }
 
+function normalizeSetToken(value) {
+  return String(value || "").replace(/\\/g, "/").split("/").filter(Boolean).pop() || "";
+}
+
 function activeSetPieces(mod) {
-  if (!mod?.modSet) return 1;
-  // The shared card renderer is used by both workbenches.  When the Warframe
-  // tab is active, count the actual Aura/Exilus/normal loadout instead of the
-  // weapon's eight-slot buffer; otherwise Umbra and other set cards display
-  // a stale piece count even though the backend used the right set size.
-  const slots = state.activeTool === "warframe"
-    ? [state.warframeBuild?.aura, state.warframeBuild?.exilus, ...(state.warframeBuild?.normalMods || [])]
-    : [...state.manualSlots, state.exilusSelection];
-  return Math.max(1, slots.filter((item) => item?.modSet === mod.modSet).length);
+  const targetSet = normalizeSetToken(mod?.modSet || mod?.setId);
+  if (!targetSet) return 1;
+  const seenPaths = new Set();
+  const collect = (items) => {
+    for (const item of items || []) {
+      if (!item || item.__riven) continue;
+      if (normalizeSetToken(item.modSet || item.setId) === targetSet) {
+        seenPaths.add(String(item.path || item.id || ""));
+      }
+    }
+  };
+  if (state.activeTool === "warframe") {
+    collect([state.warframeBuild?.aura, state.warframeBuild?.exilus, ...(state.warframeBuild?.normalMods || [])]);
+  } else if (state.activeTool === "companion") {
+    collect([...(state.companionBuild?.bodyMods || []), state.companionBuild?.posture, ...(state.companionBuild?.weaponMods || [])]);
+  } else {
+    collect([...state.manualSlots, state.exilusSelection]);
+    const syn = state.buildResult?.synergySummary || state.buildResult?.simulation?.synergySummary;
+    if ((state.warframeLink?.enabled || state.companionLink?.enabled) && Array.isArray(syn?.externalSetMods)) {
+      for (const ext of syn.externalSetMods) {
+        if (normalizeSetToken(ext?.setId || ext?.modSet) === targetSet && ext?.path) {
+          seenPaths.add(String(ext.path));
+        }
+      }
+    }
+  }
+  return Math.max(1, seenPaths.size);
 }
 
 function modSetMultiplier(mod) {
@@ -6255,7 +6726,10 @@ function specialSlotPolaritiesPayload() {
 
 function polarityMatches(modPolarity, slotPolarity) {
   if (!modPolarity || modPolarity === "AP_UNIVERSAL" || !slotPolarity || slotPolarity === "AP_UNIVERSAL") return false;
-  return modPolarity === "AP_ANY" || slotPolarity === "AP_ANY" || modPolarity === slotPolarity;
+  if (modPolarity === slotPolarity) return true;
+  if (modPolarity === "AP_ANY") return !UMBRA_POLARITIES.has(slotPolarity);
+  if (slotPolarity === "AP_ANY") return !UMBRA_POLARITIES.has(modPolarity);
+  return false;
 }
 
 // 紫卡极性：游戏内揭示时在 Madurai / Vazarin / Naramon 三者中随机，洗卡不变。
@@ -6276,13 +6750,17 @@ function rivenFixedPolarity(mod, slotIndex = 0) {
 function modBaseDrain(mod) {
   if (mod?.__riven) return 18;
   const meta = state.modAssets?.mods?.[mod?.path] || {};
-  // Ordinary utility rows expose full max-rank drain; stances expose signed baseDrain.
+  // Ordinary utility rows expose full max-rank drain; auras/stances/postures expose negative baseDrain.
   const maxRank = finite(mod?.maxRank) ?? finite(meta.maxRank) ?? 0;
   const rank = clamp(finite(mod?.rank) ?? maxRank, 0, maxRank);
-  const fullDrain = finite(meta.drain) ?? finite(mod?.catalogDrain) ?? finite(mod?.drain);
-  if (fullDrain !== null) return fullDrain - maxRank + rank;
   const base = finite(mod?.baseDrain) ?? finite(meta.baseDrain);
-  if (base !== null) return base < 0 ? -(Math.abs(base) + rank) : base + rank;
+  if (base !== null && base < 0) return -(Math.abs(base) + rank);
+  const fullDrain = finite(meta.drain) ?? finite(mod?.catalogDrain) ?? finite(mod?.drain);
+  if (fullDrain !== null) {
+    if (fullDrain < 0) return -(Math.max(0, Math.abs(fullDrain) - maxRank) + rank);
+    return fullDrain - maxRank + rank;
+  }
+  if (base !== null) return base + rank;
   return 0;
 }
 
@@ -6303,8 +6781,10 @@ function modEffectiveDrain(mod, slotPolarity, slotIndex) {
   if (modPol && modPol !== "AP_UNIVERSAL" && slotPolarity && slotPolarity !== "AP_UNIVERSAL") {
     const matches = polarityMatches(modPol, slotPolarity);
     if (base < 0) {
-      const factor = matches ? 2 : 0.5;
-      return { drain: -Math.ceil(Math.abs(base) * factor), relation: matches ? "match" : "mismatch" };
+      if (matches) return { drain: -Math.abs(base) * 2, relation: "match" };
+      const isAuraOrPosture = String(mod?.slotKind || "").toLocaleLowerCase() === "aura" || Boolean(mod?.isPosture);
+      const grant = isAuraOrPosture ? Math.floor(Math.abs(base) * 0.8) : Math.ceil(Math.abs(base) * 0.5);
+      return { drain: -grant, relation: "mismatch" };
     }
     if (matches) return { drain: Math.ceil(base / 2), relation: "match" };
     return { drain: Math.ceil(base * 1.25), relation: "mismatch" };
@@ -6435,12 +6915,15 @@ function modHasBaseElement(mod) {
   return effects.some((effect) => BASE_ELEMENT_TYPES.has(String(effect?.damageType || "").toUpperCase()) && Number(effect?.valuePerRank ?? 1) > 0);
 }
 
-function polarizedDrain(drain, polarity, slot) {
-  if (!polarity || !slot) return drain;
-  const matched = polarity === slot || polarity === "AP_ANY" || slot === "AP_ANY";
-  const factor = drain >= 0 ? (matched ? 0.5 : 1.25) : (matched ? 2 : 0.5);
-  const adjusted = Math.ceil(Math.abs(drain) * factor);
-  return drain < 0 ? -adjusted : adjusted;
+function polarizedDrain(drain, polarity, slot, auraOrPosture = false) {
+  if (!polarity || polarity === "AP_UNIVERSAL" || !slot || slot === "AP_UNIVERSAL") return drain;
+  const matched = polarityMatches(polarity, slot);
+  if (drain < 0) {
+    if (matched) return -Math.abs(drain) * 2;
+    return auraOrPosture ? -Math.floor(Math.abs(drain) * 0.8) : -Math.ceil(Math.abs(drain) * 0.5);
+  }
+  const factor = matched ? 0.5 : 1.25;
+  return Math.ceil(Math.abs(drain) * factor);
 }
 
 // slots: polarity per slot (null = none). items: { origin, polarity, drain,
@@ -6820,6 +7303,7 @@ function startPointerModDrag(kind, index, event, slot) {
       } else {
         const build = state.warframeBuild;
         [build.normalMods[index], build.normalMods[targetIndex]] = [build.normalMods[targetIndex], build.normalMods[index]];
+        ensureWarframeCapacityFit();
         renderWarframeLoadout();
         persistWarframeConfig();
         scheduleWarframeCalculation();
@@ -7297,13 +7781,16 @@ function applyModToPickerSlot(mod) {
   if (state.modPickerKind !== "normal") return applySpecialMod(mod);
   const slot = state.modPickerSlot;
   if (state.manualLocks[slot]) return toast("当前槽位已锁定");
+  const weaponPath = state.buildWeapon?.path || null;
   const candidate = { ...mod, rank: ui["manual-level-toggle"]?.checked === false ? 0 : (mod.rank ?? mod.maxRank ?? 0) };
-  // 同名互斥：镀层/普通/Prime 同家族卡（如镀层步枪才能与步枪才能）一张配装
-  // 只能带一张——选择器已隐藏，这里兜底拦截（防止填充/导入路径绕过）。
-  const candidateFamily = modExclusiveFamily(candidate);
+  // 同族互斥：覆盖全部继承树同族变体（普通/Prime/镀层/并合/牺牲等）及普通槽 <-> 功能槽跨槽冲突。
+  const candidateFamily = modExclusiveFamily(candidate, weaponPath);
   if (candidateFamily) {
-    const conflict = state.manualSlots.some((item, index) => item && index !== slot && item.path !== candidate.path && modExclusiveFamily(item) === candidateFamily);
-    if (conflict) return toast("同名 MOD（镀层/普通/Prime）一张配装只能携带一张");
+    const conflictNormal = state.manualSlots.some((item, index) => item && index !== slot && modExclusiveFamily(item, weaponPath) === candidateFamily);
+    const conflictExilus = state.exilusSelection && modExclusiveFamily(state.exilusSelection, weaponPath) === candidateFamily;
+    if (conflictNormal || conflictExilus) {
+      return toast("同族变体 MOD 一张配装只能携带一张（含功能槽）", "error");
+    }
   }
   const previous = state.manualSlots[slot] || null;
   state.manualSlots[slot] = candidate;
@@ -7341,13 +7828,26 @@ function modPickerCard(mod, kind = state.modPickerKind) {
 }
 
 function applySpecialMod(mod) {
+  const weaponPath = state.buildWeapon?.path || null;
   if (state.modPickerKind === "stance") {
     if (state.stanceLocked) return toast("显赫武器使用天生架势，不能更换");
     state.stanceSelection = stanceSelectionWithSlot(mod, { rank: Number(mod.maxRank ?? 0) });
   } else {
+    const fam = modExclusiveFamily(mod, weaponPath);
+    if (fam && state.manualSlots.some((item) => item && modExclusiveFamily(item, weaponPath) === fam)) {
+      return toast("普通槽已装备同族变体 MOD，不能重复装备到功能槽", "error");
+    }
+    const previousExilus = state.exilusSelection;
     const maxRank = Number(mod.maxRank ?? mod.rank ?? 0);
     state.exilusSelection = { ...mod, maxRank, rank: maxRank };
+    const { fits, polarized } = ensureCapacityFit();
+    if (!fits) {
+      state.exilusSelection = previousExilus;
+      return toast("容量不足：即使极化全部槽位也装不下该功能槽 MOD", "error");
+    }
+    if (polarized) toast(`已自动极化 ${polarized} 个槽位来容纳功能槽 MOD`);
   }
+  renderManualSlots();
   renderSpecialSlots();
   persistActiveBuildConfig();
   scheduleLiveManualSimulation();
@@ -7366,15 +7866,23 @@ function showModPreview(mod, anchor, kind = state.modPickerKind) {
   const warframePicker = state.activeTool === "warframe"
     && !ui["warframe-picker"]?.hidden
     && ["normal", "aura", "exilus"].includes(kind);
-  const card = warframePicker
+  const companionPicker = state.activeTool === "companion"
+    && !ui["companion-picker"]?.hidden
+    && ["bodyMod", "posture", "clawMod", "roboticMod"].includes(kind);
+  const card = companionPicker
     ? createNormalModCard({ ...mod, rank: mod.rank ?? mod.maxRank ?? 0 }, 0, {
       compact: false,
-      compatLabel: warframeCompatLabel(mod),
-      slotMarker: warframeSlotMarker(mod),
-      slotMarkerLabel: warframeModKind(mod) === "aura" ? "光环 MOD" : "功能槽 MOD",
-      ...(kind !== "normal" ? { slotPolarity: state.warframeBuild.slotPolarities[kind] } : {}),
+      compatLabel: companionModCompatLabel(mod, kind),
     })
-    : kind === "normal"
+    : warframePicker
+      ? createNormalModCard({ ...mod, rank: mod.rank ?? mod.maxRank ?? 0 }, 0, {
+        compact: false,
+        compatLabel: warframeCompatLabel(mod),
+        slotMarker: warframeSlotMarker(mod),
+        slotMarkerLabel: warframeModKind(mod) === "aura" ? "光环 MOD" : "功能槽 MOD",
+        ...(kind !== "normal" ? { slotPolarity: state.warframeBuild.slotPolarities[kind] } : {}),
+      })
+      : kind === "normal"
       ? createNormalModCard({ ...mod, rank: mod.rank ?? mod.maxRank ?? 0 }, 0, { compact: false, compatLabel: modCompatLabel(mod, modAssetFields(mod)) })
       : kind === "sentinel"
         ? createNormalModCard({ ...mod, rank: mod.maxRank ?? 0 }, 0, { compact: false, compatLabel: mod.exclusiveTo ? "专属守则" : (mod.kind === "precept" ? "守护守则" : "守护") })
@@ -7680,13 +8188,19 @@ function drawTimelineVisual(timeline, killTimeline) {
     target.replaceChildren(create("p", "empty-copy", "没有时间线数据，只显示汇总结果"));
     return;
   }
+  const isLight = document.documentElement.dataset.theme === "light";
+  const primaryLineColor = isLight ? "#1d7f95" : "#73cfdf";
+  const baselineColor = isLight ? "#5f6b7c" : "#7b8494";
+  const arcanePalette = isLight
+    ? ["#7b3fb5", "#a86f10", "#1e7f43", "#156896"]
+    : ["#d9a6ff", "#f0c36b", "#77d58c", "#7fc8e8"];
   const W = 860, H = 280, pad = { l: 52, r: 18, t: 22, b: 32 };
   const dpsSeries = [
-    { label: "总 DPS", color: "#73cfdf", values: points.map((p) => Number(p.expectedDps ?? p.dps ?? 0)), width: 2.6, glow: true },
-    { label: "无赋能基线", color: "#7b8494", values: points.map((p) => Number(p.baselineDps || 0)), width: 1.4, dashed: true },
+    { label: "总 DPS", color: primaryLineColor, values: points.map((p) => Number(p.expectedDps ?? p.dps ?? 0)), width: 2.6, glow: !isLight },
+    { label: "无赋能基线", color: baselineColor, values: points.map((p) => Number(p.baselineDps || 0)), width: 1.4, dashed: true },
     ...state.arcaneSelections.map((arcane, i) => ({
       label: arcane.nameZh || `赋能 ${i + 1}`,
-      color: ["#d9a6ff", "#f0c36b", "#77d58c", "#7fc8e8"][i] || "#d9a6ff",
+      color: arcanePalette[i] || arcanePalette[0],
       values: points.map((p) => Number(p.arcanes?.[i]?.uptime || 0) * Math.max(...points.map((r) => Number(r.expectedDps || 0)), 1)),
       coverage: Number(points.at(-1)?.arcanes?.[i]?.uptime || 0),
       width: 1.6,
@@ -7720,7 +8234,7 @@ function drawTimelineVisual(timeline, killTimeline) {
     stop2.setAttribute("offset", "100%"); stop2.setAttribute("stop-color", color); stop2.setAttribute("stop-opacity", "0.02");
     grad.append(stop1, stop2); defs.append(grad);
   };
-  mkGradient("tl-dps-fill", "#73cfdf");
+  mkGradient("tl-dps-fill", primaryLineColor);
   svg.append(defs);
   const el = (tag, attrs = {}, text) => {
     const node = document.createElementNS(svgNS, tag);
@@ -7731,7 +8245,7 @@ function drawTimelineVisual(timeline, killTimeline) {
   // horizontal gridlines + y ticks
   for (let i = 0; i <= 4; i += 1) {
     const y = pad.t + (H - pad.t - pad.b) * (i / 4);
-    svg.append(el("line", { x1: pad.l, x2: W - pad.r, y1: y, y2: y, stroke: "rgba(148,163,184,.12)", "stroke-width": 1, "stroke-dasharray": i === 4 ? "" : "3 5" }));
+    svg.append(el("line", { x1: pad.l, x2: W - pad.r, y1: y, y2: y, stroke: isLight ? "rgba(44,62,85,.14)" : "rgba(148,163,184,.12)", "stroke-width": 1, "stroke-dasharray": i === 4 ? "" : "3 5" }));
     const v = maxDps * (1 - i / 4);
     svg.append(el("text", { x: pad.l - 8, y: y + 3.5, "text-anchor": "end", class: "tl-axis" }, formatMetric(v)));
   }
@@ -7740,7 +8254,7 @@ function drawTimelineVisual(timeline, killTimeline) {
   for (let i = 0; i <= xSteps; i += 1) {
     const t = tMax * i / xSteps;
     const x = xOf(t);
-    svg.append(el("line", { x1: x, x2: x, y1: H - pad.b, y2: H - pad.b + 5, stroke: "rgba(148,163,184,.4)", "stroke-width": 1 }));
+    svg.append(el("line", { x1: x, x2: x, y1: H - pad.b, y2: H - pad.b + 5, stroke: isLight ? "rgba(44,62,85,.35)" : "rgba(148,163,184,.4)", "stroke-width": 1 }));
     svg.append(el("text", { x, y: H - pad.b + 17, "text-anchor": "middle", class: "tl-axis" }, `${t.toFixed(timeDigits)}s`));
   }
   // kill bars (remaining HP) as rounded rects
@@ -7778,12 +8292,12 @@ function drawTimelineVisual(timeline, killTimeline) {
     }
     const d = `M${pathPts.map((p) => p.join(" ")).join(" L")}`;
     svg.append(el("path", { d, fill: "none", stroke: series.color, "stroke-width": series.width, "stroke-linecap": "round", "stroke-linejoin": "round", ...(series.dashed ? { "stroke-dasharray": "5 6" } : {}), ...(series.glow ? { style: "filter:drop-shadow(0 0 5px rgba(115,207,223,.55))" } : {}) }));
-    if (si === 0) svg.append(el("circle", { cx: pathPts.at(-1)[0], cy: pathPts.at(-1)[1], r: 3.2, fill: "#73cfdf", style: "filter:drop-shadow(0 0 4px rgba(115,207,223,.8))" }));
+    if (si === 0) svg.append(el("circle", { cx: pathPts.at(-1)[0], cy: pathPts.at(-1)[1], r: 3.2, fill: primaryLineColor, ...(isLight ? {} : { style: "filter:drop-shadow(0 0 4px rgba(115,207,223,.8))" }) }));
   });
   // hover: crosshair + tooltip + focus dot
   const hoverLayer = el("g", { style: "display:none" });
-  const crossLine = el("line", { y1: pad.t, y2: H - pad.b, stroke: "rgba(243,245,248,.55)", "stroke-width": 1, "stroke-dasharray": "2 3" });
-  const focusDot = el("circle", { r: 4, fill: "#fff", stroke: "#73cfdf", "stroke-width": 2 });
+  const crossLine = el("line", { y1: pad.t, y2: H - pad.b, stroke: isLight ? "rgba(28,35,46,.55)" : "rgba(243,245,248,.55)", "stroke-width": 1, "stroke-dasharray": "2 3" });
+  const focusDot = el("circle", { r: 4, fill: isLight ? "#1c232e" : "#fff", stroke: primaryLineColor, "stroke-width": 2 });
   hoverLayer.append(crossLine, focusDot);
   svg.append(hoverLayer);
   const wrap = create("div", "timeline-combo");
@@ -7854,6 +8368,7 @@ function renderManualResultVisual(result) {
   // 结果区两块（用户指定的分离布局）：配装解算块只放异常状态分布；
   // 战斗演算块（KPM 头条 + 逐条展开的回放图组）在下方独立呈现。
   renderExaltedEnergy(source.exalted);
+  renderSynergySummaryFromResult(result);
   renderProbabilityVisual(source.probability || source.probabilityDistribution || {});
   renderStatusBreakdown(source);
   const hasBenchmark = Array.isArray(source.benchmarkTimeline?.points) && source.benchmarkTimeline.points.length > 1;
@@ -7887,12 +8402,17 @@ const BENCH_STACK_LABELS = {
 const BENCH_STACK_COLORS = {
   viral: "#f093b9", magnetic: "#9797e6", corrosive: "#93c203", heat: "#fb9733", puncture: "#c6b098", cold: "#5bbcec",
 };
+const BENCH_STACK_COLORS_LIGHT = {
+  viral: "#a83268", magnetic: "#4348a8", corrosive: "#557804", heat: "#b8500b", puncture: "#755a3c", cold: "#156896",
+};
 
 function drawBenchmarkReplay(bench) {
   const host = document.getElementById("combat-charts");
   if (!host) return;
   const points = bench.points || [];
   if (!points.length) { host.replaceChildren(); return; }
+  const isLight = document.documentElement.dataset.theme === "light";
+  const stackColors = isLight ? BENCH_STACK_COLORS_LIGHT : BENCH_STACK_COLORS;
   const tMax = Number(points.at(-1)?.time || bench.windowSeconds || 30);
   const ehp = Number(bench.targetTotalEhp || 0) || 1;
   const ctx = bench.context || {};
@@ -7933,11 +8453,11 @@ function drawBenchmarkReplay(bench) {
       const y = (v) => pad.t + (H - pad.t - pad.b) * (1 - clamp(v / maxDps, 0, 1));
       const directArea = points.map((p, i) => `${i === 0 ? "M" : "L"}${xOf(p.time).toFixed(1)} ${y(Number(p.directDps || 0)).toFixed(1)}`).join(" ")
         + ` L${xOf(points.at(-1).time).toFixed(1)} ${H - pad.b} L${xOf(points[0].time).toFixed(1)} ${H - pad.b} Z`;
-      svg.append(el("path", { d: directArea, fill: "rgba(115,207,223,.22)" }));
+      svg.append(el("path", { d: directArea, fill: isLight ? "rgba(29,127,149,.16)" : "rgba(115,207,223,.22)" }));
       const total = points.map((p, i) => `${i === 0 ? "M" : "L"}${xOf(p.time).toFixed(1)} ${y(Number(p.directDps || 0) + Number(p.dotDps || 0)).toFixed(1)}`).join(" ");
-      svg.append(el("path", { d: total, fill: "none", stroke: "#73cfdf", "stroke-width": 2, "stroke-linecap": "round" }));
+      svg.append(el("path", { d: total, fill: "none", stroke: isLight ? "#1d7f95" : "#73cfdf", "stroke-width": 2, "stroke-linecap": "round" }));
       const dot = points.map((p, i) => `${i === 0 ? "M" : "L"}${xOf(p.time).toFixed(1)} ${y(Number(p.dotDps || 0)).toFixed(1)}`).join(" ");
-      svg.append(el("path", { d: dot, fill: "none", stroke: "#f0c36b", "stroke-width": 1.4, "stroke-dasharray": "4 4" }));
+      svg.append(el("path", { d: dot, fill: "none", stroke: isLight ? "#b57914" : "#f0c36b", "stroke-width": 1.4, "stroke-dasharray": "4 4" }));
       return { axis: [formatMetric(maxDps), "", "0"], tooltip: (p) => `直伤 ${formatMetric(Number(p.directDps || 0))}/s · DoT ${formatMetric(Number(p.dotDps || 0))}/s` };
     },
   });
@@ -7973,7 +8493,7 @@ function drawBenchmarkReplay(bench) {
         const path = points.map((p, i) => `${i ? "L" : "M"}${xOf(p.time).toFixed(1)} ${(pad.t + (H-pad.t-pad.b) * (1-clamp(Number(p[key] || 0)/ceiling,0,1))).toFixed(1)}`).join(" ");
         svg.append(el("path", { d: path, fill: "none", stroke: color, "stroke-width": 1.6 }));
       };
-      line("armour", maxArmor, "#93c203"); line("heatArmourStrip", 1, "#fb9733");
+      line("armour", maxArmor, isLight ? "#557804" : "#93c203"); line("heatArmourStrip", 1, isLight ? "#b8500b" : "#fb9733");
       return { axis: [formatMetric(maxArmor), "", "0"], tooltip: (p) => `护甲 ${formatMetric(p.armour)} · Heat 削甲 ${(Number(p.heatArmourStrip||0)*100).toFixed(0)}% · 总削甲 ${(Number(p.totalArmourStrip||0)*100).toFixed(0)}%` };
     },
   });
@@ -7982,7 +8502,7 @@ function drawBenchmarkReplay(bench) {
     render(svg) {
       const ceiling = Math.max(1, ...points.map((p) => Number(p.ammo || 0)));
       const d = points.map((p,i) => `${i ? "L" : "M"}${xOf(p.time).toFixed(1)} ${(pad.t+(H-pad.t-pad.b)*(1-clamp(Number(p.ammo||0)/ceiling,0,1))).toFixed(1)}`).join(" ");
-      svg.append(el("path",{d,fill:"none",stroke:"#c792ea","stroke-width":1.5}));
+      svg.append(el("path",{d,fill:"none",stroke:isLight ? "#7b3fb5" : "#c792ea","stroke-width":1.5}));
       return { axis:[String(ceiling),"","0"],tooltip:(p)=>`${p.form==="base"?"基础形态":"灵化形态"} · 余弹 ${Number(p.ammo||0).toFixed(1)} · 弱点充能 ${Number(p.gauge||0).toFixed(1)} · 已射击 ${p.shots}` };
     },
   });
@@ -7992,11 +8512,11 @@ function drawBenchmarkReplay(bench) {
     charts.push({
       key: `stack-${key}`,
       label: `${BENCH_STACK_LABELS[key]} 层数`,
-      color: BENCH_STACK_COLORS[key],
+      color: stackColors[key],
       render(svg) {
         const y = (v) => pad.t + (H - pad.t - pad.b) * (1 - clamp(v / maxStack, 0, 1));
         const d = points.map((p, i) => `${i === 0 ? "M" : "L"}${xOf(p.time).toFixed(1)} ${y(Number(p.stacks?.[key] || 0)).toFixed(1)}`).join(" ");
-        svg.append(el("path", { d, fill: "none", stroke: BENCH_STACK_COLORS[key], "stroke-width": 1.6, "stroke-linecap": "round" }));
+        svg.append(el("path", { d, fill: "none", stroke: stackColors[key], "stroke-width": 1.6, "stroke-linecap": "round" }));
         return { axis: [String(Math.round(maxStack)), "", "0"], tooltip: (p) => `${BENCH_STACK_LABELS[key]} ${Number(p.stacks?.[key] || 0).toFixed(1)} 层` };
       },
     });
@@ -8005,7 +8525,9 @@ function drawBenchmarkReplay(bench) {
   // 4. 触发源覆盖率折线（triggerSeries：后端 emergent 模拟的赋能/镀层/灵化
   //    on-kill 层数曲线）。每条曲线一张子图，标题带 avg/uptime 摘要。
   const triggerSeriesData = Array.isArray(bench.triggerSeries) ? bench.triggerSeries : [];
-  const TRIGGER_COLORS = ["#e6c86e", "#8fd694", "#c792ea", "#6ec5e8", "#e69b6e", "#9be86e"];
+  const TRIGGER_COLORS = isLight
+    ? ["#a86f10", "#1e7f43", "#7b3fb5", "#156896", "#b8500b", "#4e7a14"]
+    : ["#e6c86e", "#8fd694", "#c792ea", "#6ec5e8", "#e69b6e", "#9be86e"];
   triggerSeriesData.forEach((series, index) => {
     const values = series.series || [];
     if (!values.length) return;
@@ -8048,14 +8570,14 @@ function drawBenchmarkReplay(bench) {
     // 网格 + y 轴标注（3 条线：顶/中/底）
     for (let i = 0; i <= 2; i += 1) {
       const yy = pad.t + (H - pad.t - pad.b) * (i / 2);
-      svg.append(el("line", { x1: pad.l, x2: W - pad.r, y1: yy, y2: yy, stroke: "rgba(148,163,184,.10)", "stroke-width": 1, "stroke-dasharray": i === 2 ? "" : "3 5" }));
+      svg.append(el("line", { x1: pad.l, x2: W - pad.r, y1: yy, y2: yy, stroke: isLight ? "rgba(44,62,85,.14)" : "rgba(148,163,184,.10)", "stroke-width": 1, "stroke-dasharray": i === 2 ? "" : "3 5" }));
       if (axis && axis[i] !== undefined && axis[i] !== "") {
         svg.append(el("text", { x: pad.l - 8, y: yy + 3.5, "text-anchor": "end", class: "tl-axis" }, String(axis[i])));
       }
     }
     // 击杀竖线
     for (const kt of killTimes) {
-      svg.append(el("line", { x1: xOf(kt), x2: xOf(kt), y1: pad.t, y2: H - pad.b, stroke: "#ef7183", "stroke-width": 1, "stroke-dasharray": "4 4", opacity: 0.55 }));
+      svg.append(el("line", { x1: xOf(kt), x2: xOf(kt), y1: pad.t, y2: H - pad.b, stroke: isLight ? "#c33a50" : "#ef7183", "stroke-width": 1, "stroke-dasharray": "4 4", opacity: 0.55 }));
     }
     // 时间轴刻度（只在最后一行画）
     if (chart === charts.at(-1)) {
@@ -8066,7 +8588,7 @@ function drawBenchmarkReplay(bench) {
     }
     // 光标
     const hoverLayer = el("g", { style: "display:none" });
-    const crossLine = el("line", { y1: pad.t, y2: H - pad.b, stroke: "rgba(243,245,248,.6)", "stroke-width": 1, "stroke-dasharray": "2 3" });
+    const crossLine = el("line", { y1: pad.t, y2: H - pad.b, stroke: isLight ? "rgba(28,35,46,.58)" : "rgba(243,245,248,.6)", "stroke-width": 1, "stroke-dasharray": "2 3" });
     hoverLayer.append(crossLine);
     svg.append(hoverLayer);
     crossLines.push({ layer: hoverLayer, line: crossLine });
@@ -8463,6 +8985,44 @@ function readWarframeStore() {
   }
 }
 
+let isSyncingCrossTool = false;
+
+function notifyWarframeWorkbenchChanged() {
+  if (isSyncingCrossTool) return;
+  const activeRec = activeWarframeRecord();
+  const activeId = warframeId(activeRec);
+  const activeCfg = state.warframeBuild.activeConfig || "A";
+  if (!activeId) return;
+  if (state.activeTool === "warframe") {
+    let wfLinkTouched = false;
+    if (state.warframeLink?.enabled) {
+      const allowedExalted = isExaltedWeapon() ? exaltedFrames().map((f) => f.id) : null;
+      if (!allowedExalted || allowedExalted.includes(activeId)) {
+        if (state.warframeLink.frameId !== activeId) {
+          state.warframeLink.frameId = activeId;
+          state.warframeLink.activeAbilities = null;
+          state.warframeLink.abilityElements = {};
+          wfLinkTouched = true;
+        }
+        if (state.warframeLink.configName !== activeCfg) {
+          state.warframeLink.configName = activeCfg;
+          wfLinkTouched = true;
+        }
+      }
+    }
+    if (isExaltedWeapon() && exaltedFrames().some((f) => f.id === activeId)) {
+      state.exaltedLink = { frameId: activeId, configName: activeCfg };
+      wfLinkTouched = true;
+    }
+    if (wfLinkTouched) {
+      persistActiveBuildConfig();
+    }
+  }
+  if (state.companionCatalog) {
+    renderCompanionWarframeOptions();
+  }
+}
+
 function persistWarframeConfig() {
   const build = state.warframeBuild;
   const frameId = warframeId(build.frame);
@@ -8484,7 +9044,13 @@ function persistWarframeConfig() {
     entry.forms[id] = { A: configs.A || null, B: configs.B || null, C: configs.C || null };
   }
   build.store[frameId] = entry;
+  build.store.__lastSelection = {
+    frameId,
+    activeForm: build.activeForm || "main",
+    activeConfig: build.activeConfig || "A",
+  };
   try { localStorage.setItem(WARFRAME_CONFIG_STORAGE_KEY, JSON.stringify(build.store)); } catch (_error) { /* private mode */ }
+  notifyWarframeWorkbenchChanged();
 }
 
 function applyWarframeConfig(config) {
@@ -8535,6 +9101,7 @@ function applyWarframeConfig(config) {
     state.warframeBuild.helminthAbility = null;
   }
   renderWarframeWorkbench();
+  saveWarframeLastSelection();
   scheduleWarframeCalculation();
 }
 
@@ -8548,6 +9115,7 @@ function selectWarframeFrame(frame) {
   build.formConfigs = loadWarframeFormConfigs(frame);
   build.configs = build.formConfigs.main;
   applyWarframeConfig(build.configs.A);
+  notifyWarframeWorkbenchChanged();
 }
 
 function switchWarframeForm(formId) {
@@ -8563,6 +9131,7 @@ function switchWarframeForm(formId) {
   applyWarframeConfig(build.configs[build.activeConfig]);
   const label = option.alternate ? `${option.label}第二套配装` : "本体配装";
   if (ui["warframe-config-status"]) ui["warframe-config-status"].textContent = `${label} · 配置 ${build.activeConfig}`;
+  notifyWarframeWorkbenchChanged();
 }
 
 function switchWarframeConfig(name) {
@@ -8572,6 +9141,7 @@ function switchWarframeConfig(name) {
   build.activeConfig = name;
   applyWarframeConfig(build.configs[name]);
   if (ui["warframe-config-status"]) ui["warframe-config-status"].textContent = `配置 ${name}${build.configs[name] ? "已载入" : "为空"}`;
+  notifyWarframeWorkbenchChanged();
 }
 
 function copyWarframeConfig() {
@@ -8592,6 +9162,7 @@ function exportWarframeConfig() {
     schema: 1,
     kind: "warframe-build",
     buildLabel: state.warframeCatalog?.buildLabel || "OFFLINE",
+    exportedAt: new Date().toISOString(),
     frameId: warframeId(active),
     parentFrameId: isAlternateWarframeForm(active) ? warframeId(build.frame) : null,
     formId: build.activeForm,
@@ -8599,14 +9170,9 @@ function exportWarframeConfig() {
     configId: build.activeConfig,
     config: build.configs[build.activeConfig] || captureWarframeConfig(),
   };
-  const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }));
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `wf-warframe-${String(active?.nameEn || "build").replace(/[^a-z0-9_-]+/gi, "-")}-${build.activeConfig}.json`;
-  document.body.append(anchor);
-  anchor.click();
-  anchor.remove();
-  window.setTimeout(() => URL.revokeObjectURL(url), 0);
+  const frameTitle = sanitizeFilenameSegment(warframeName(active) || active?.nameEn || "warframe");
+  const filename = `${frameTitle}-${build.activeConfig}-${formatExportTimestamp()}.json`;
+  triggerJsonDownload(payload, filename);
 }
 
 function importWarframeConfig(file) {
@@ -8676,7 +9242,20 @@ function bindConfigActionMenus() {
 
 function fillWarframeCatalogControls() {
   const frames = warframeRows("warframes").slice().sort((a, b) => warframeName(a).localeCompare(warframeName(b), "zh"));
-  if (frames.length) selectWarframeFrame(frames[0]);
+  if (!frames.length) return;
+  const last = state.warframeBuild.store?.__lastSelection;
+  const savedFrame = last?.frameId ? frames.find((row) => warframeId(row) === last.frameId) : null;
+  selectWarframeFrame(savedFrame || frames[0]);
+  if (savedFrame && last) {
+    if (last.activeForm && last.activeForm !== "main") {
+      switchWarframeForm(last.activeForm);
+    }
+    if (last.activeConfig && /^[ABC]$/.test(last.activeConfig) && last.activeConfig !== state.warframeBuild.activeConfig) {
+      switchWarframeConfig(last.activeConfig);
+    }
+  }
+  renderSynergyWarframeOptions();
+  renderCompanionWarframeOptions();
 }
 
 async function loadWarframeCatalog() {
@@ -8759,7 +9338,123 @@ function warframeSlotForma(kind, index) {
   const build = state.warframeBuild;
   const current = kind === "normal" ? build.slotPolarities.normal[index] : build.slotPolarities[kind];
   const native = kind === "normal" ? frameSlotPolarities(activeWarframeRecord()).normal[index] : frameSlotPolarities(activeWarframeRecord())[kind];
-  return Boolean(current && current !== native);
+  return Boolean((current || null) !== (native || null) && (current || native));
+}
+
+function warframeComputeCapacity() {
+  const build = state.warframeBuild;
+  let limit = 60;
+  if (build.aura) {
+    const auraEff = modEffectiveDrain(build.aura, build.slotPolarities.aura);
+    limit += Math.max(0, -auraEff.drain);
+  }
+  let used = 0;
+  if (build.exilus) {
+    used += Math.max(0, modEffectiveDrain(build.exilus, build.slotPolarities.exilus).drain);
+  }
+  build.normalMods.forEach((mod, idx) => {
+    if (!mod) return;
+    used += Math.max(0, modEffectiveDrain(mod, build.slotPolarities.normal[idx], idx).drain);
+  });
+  return { used, limit, remaining: limit - used, over: used > limit };
+}
+
+function warframeFormaPlan({ fresh = false } = {}) {
+  const build = state.warframeBuild;
+  const native = frameSlotPolarities(activeWarframeRecord());
+  const slots = (fresh ? native.normal : build.slotPolarities.normal).map((p) => normalizedSpecialPolarity(p));
+  const items = [];
+  build.normalMods.forEach((mod, index) => {
+    if (!mod || index >= slots.length) return;
+    const polarity = normalizedSpecialPolarity(modPolarityOf(mod, index));
+    items.push({
+      origin: index,
+      polarity,
+      drain: Math.max(0, modBaseDrain(mod)),
+      elemental: false,
+      fixed: !fresh || Boolean(build.normalLocks[index]),
+    });
+  });
+  let limit = 60;
+  const extras = [];
+  const kinds = [];
+  if (build.aura) {
+    const auraCur = normalizedSpecialPolarity(fresh ? native.aura : build.slotPolarities.aura);
+    const auraPol = normalizedSpecialPolarity(modPolarityOf(build.aura));
+    const curGain = Math.max(0, -modEffectiveDrain(build.aura, auraCur).drain);
+    limit += curGain;
+    const matchedGain = auraPol ? Math.max(0, -modEffectiveDrain(build.aura, auraPol).drain) : curGain;
+    if (auraPol && matchedGain > curGain) {
+      extras.push([[0, 0, 0], [1, UMBRA_POLARITIES.has(auraPol) ? 1 : 0, curGain - matchedGain]]);
+      kinds.push(["aura", auraPol]);
+    }
+  }
+  if (build.exilus) {
+    const exCur = normalizedSpecialPolarity(fresh ? native.exilus : build.slotPolarities.exilus);
+    const exPol = normalizedSpecialPolarity(modPolarityOf(build.exilus));
+    const curDrain = Math.max(0, modEffectiveDrain(build.exilus, exCur).drain);
+    const matchedDrain = exPol ? Math.max(0, modEffectiveDrain(build.exilus, exPol).drain) : curDrain;
+    extras.push(matchedDrain < curDrain ? [[0, 0, curDrain], [1, UMBRA_POLARITIES.has(exPol) ? 1 : 0, matchedDrain]] : [[0, 0, curDrain]]);
+    kinds.push(["exilus", exPol]);
+  }
+  const plan = minimalFormaPlan({ slots, items, limit, extras, allowMove: fresh });
+  plan.special = kinds.map(([kind, polarity], idx) => ({ kind, polarity, formed: plan.extras[idx] === 1 }));
+  return plan;
+}
+
+function applyWarframeFormaPlan(plan, { fresh = false } = {}) {
+  const build = state.warframeBuild;
+  const native = frameSlotPolarities(activeWarframeRecord());
+  if (fresh) {
+    const before = build.normalMods.slice();
+    plan.placement.forEach((origin, slot) => {
+      build.normalMods[slot] = origin === null ? null : before[origin];
+    });
+    build.slotPolarities = {
+      aura: native.aura || null,
+      exilus: native.exilus || null,
+      normal: Array.from({ length: 8 }, (_, idx) => native.normal[idx] || null),
+    };
+  }
+  plan.forma.forEach((polarity, slot) => {
+    if (!polarity) return;
+    build.slotPolarities.normal[slot] = polarity;
+  });
+  for (const { kind, polarity, formed } of plan.special || []) {
+    if (formed && polarity) build.slotPolarities[kind] = polarity;
+  }
+  refreshWarframeStripFormaCount();
+}
+
+function refreshWarframeStripFormaCount() {
+  const build = state.warframeBuild;
+  if (!build.frame) return 0;
+  let total = 0;
+  if (warframeSlotForma("aura", 0)) total += 1;
+  if (warframeSlotForma("exilus", 0)) total += 1;
+  for (let i = 0; i < 8; i += 1) {
+    if (warframeSlotForma("normal", i)) total += 1;
+  }
+  if (ui["warframe-strip-forma-count"]) ui["warframe-strip-forma-count"].textContent = String(total);
+  if (ui["warframe-forma-readout"]) ui["warframe-forma-readout"].textContent = total ? `×${total}` : "无需";
+  return total;
+}
+
+function ensureWarframeCapacityFit() {
+  const cap = warframeComputeCapacity();
+  if (!cap.over) {
+    refreshWarframeStripFormaCount();
+    return { fits: true, formas: 0 };
+  }
+  const plan = warframeFormaPlan({ fresh: false });
+  applyWarframeFormaPlan(plan, { fresh: false });
+  return plan;
+}
+
+function applyWarframeMinimalForma() {
+  const plan = warframeFormaPlan({ fresh: true });
+  applyWarframeFormaPlan(plan, { fresh: true });
+  return plan;
 }
 
 function warframePolarityNode(value, className = "special-slot-polarity") {
@@ -8847,9 +9542,17 @@ function renderWarframeSpecialSlot(kind) {
   if (item) {
     slot.append(warframeSpecialCard(item, kind, build.slotPolarities[kind]));
     slot.append(warframeRankControls(item, (rank) => {
-      item.rank = rank; renderWarframeLoadout(); persistWarframeConfig(); scheduleWarframeCalculation();
+      item.rank = rank;
+      ensureWarframeCapacityFit();
+      renderWarframeLoadout();
+      persistWarframeConfig();
+      scheduleWarframeCalculation();
     }, () => {
-      build[kind] = null; renderWarframeLoadout(); persistWarframeConfig(); scheduleWarframeCalculation();
+      build[kind] = null;
+      ensureWarframeCapacityFit();
+      renderWarframeLoadout();
+      persistWarframeConfig();
+      scheduleWarframeCalculation();
     }, "special-slot-controls"));
   } else {
     const empty = create("div", "special-slot-empty");
@@ -8890,6 +9593,7 @@ function renderWarframeNormalSlot(index) {
     const from = dragSourceIndex("warframe", event);
     if (!Number.isInteger(from) || from === index || !build.normalMods[from] || build.normalLocks[from] || locked) return;
     [build.normalMods[from], build.normalMods[index]] = [build.normalMods[index], build.normalMods[from]];
+    ensureWarframeCapacityFit();
     renderWarframeLoadout();
     persistWarframeConfig();
     scheduleWarframeCalculation();
@@ -8934,6 +9638,7 @@ function renderWarframeNormalSlot(index) {
     [rankDown, rankUp].forEach((button) => button.addEventListener("click", (event) => {
       event.stopPropagation();
       item.rank = clamp(currentRank() + (button === rankUp ? 1 : -1), 0, maxRank);
+      ensureWarframeCapacityFit();
       renderWarframeLoadout();
       persistWarframeConfig();
       scheduleWarframeCalculation();
@@ -9095,6 +9800,7 @@ function renderWarframeLoadout() {
     signature: warframeLoadoutSignature("shard", index),
     create: () => renderWarframeShardSlot(index),
   })));
+  refreshWarframeStripFormaCount();
 }
 
 function renderWarframeFormSwitch() {
@@ -9201,6 +9907,32 @@ function renderWarframeWorkbench() {
   renderWarframeLoadout();
 }
 
+function warframeEntityListWithForms(onlyExalted = false) {
+  const roots = warframeRows("warframes").slice().sort((a, b) => warframeName(a).localeCompare(warframeName(b), "zh"));
+  const forms = warframeRows("warframeForms");
+  const out = [];
+  for (const frame of roots) {
+    const rId = warframeId(frame);
+    out.push(frame);
+    for (const form of forms.filter((f) => f.parentFrameId === rId)) {
+      out.push({ ...form, isAlternateForm: true });
+    }
+  }
+  if (!onlyExalted) return out;
+  const allowed = new Set(exaltedFrames().map((f) => f.id));
+  return out.filter((row) => allowed.has(warframeId(row)));
+}
+
+function warframeSavedConfigLabels(row) {
+  const store = exaltedWarframeStore();
+  const id = warframeId(row);
+  if (!id) return [];
+  const slots = row?.parentFrameId
+    ? store[row.parentFrameId]?.forms?.[id]
+    : store[id];
+  return ["A", "B", "C"].filter((c) => Boolean(slots?.[c]));
+}
+
 function warframePickerRowsBase() {
   const build = state.warframeBuild;
   const kind = state.warframePickerKind;
@@ -9209,16 +9941,28 @@ function warframePickerRowsBase() {
   const query = String(ui["warframe-picker-search"]?.value || "").trim().toLocaleLowerCase();
   let rows;
   if (kind === "frame") rows = warframeRows("warframes");
+  else if (kind === "synergyFrame") rows = warframeEntityListWithForms(isExaltedWeapon());
+  else if (kind === "companionFrame") rows = warframeEntityListWithForms(false);
   else if (kind === "helminth") rows = warframeRows("helminth");
   else if (kind === "helminthSlot") rows = [
     { id: "", slot: null, nameZh: "不替换", nameEn: "None", description: "保留战甲原本的四个主动技能" },
     ...(activeWarframeRecord()?.abilities || []).slice(0, 4).map((ability, slot) => ({ ...ability, id: `helminth-slot-${slot}`, slot })),
   ];
   else if (["aura", "exilus", "normal"].includes(kind)) {
+    const framePath = warframeId(activeWarframeRecord());
+    const peers = [
+      kind !== "aura" ? build.aura : null,
+      kind !== "exilus" ? build.exilus : null,
+      ...build.normalMods.filter((_m, idx) => !(kind === "normal" && idx === state.warframePickerSlot)),
+    ].filter(Boolean);
+    const peerIds = new Set(peers.map(warframeId));
+    const peerFamilies = new Set(peers.map((m) => modExclusiveFamily(m, framePath)).filter(Boolean));
     rows = dedupeWarframeMods(warframeRows("mods").filter((row) => (kind === "normal" ? warframeModKind(row) !== "aura" : warframeModKind(row) === kind) && warframeModFitsFrame(row)));
-    const current = kind === "normal" ? build.normalMods[state.warframePickerSlot] : build[kind];
-    if (current) usedMods.delete(warframeId(current));
-    rows = rows.filter((row) => !usedMods.has(warframeId(row)));
+    rows = rows.filter((row) => {
+      if (peerIds.has(warframeId(row))) return false;
+      const fam = modExclusiveFamily(row, framePath);
+      return !(fam && peerFamilies.has(fam));
+    });
   } else if (kind === "arcane") {
     rows = warframeRows("arcanes");
     if (build.arcanes[state.warframePickerSlot]) usedArcanes.delete(warframeId(build.arcanes[state.warframePickerSlot]));
@@ -9273,10 +10017,15 @@ function renderWarframePicker() {
       option.addEventListener("click", () => applyWarframePickerRow(row));
       return option;
     }
-    const isSelected = kind === "invigoration" && state.warframeBuild.invigoration.some((selected) => warframeId(selected) === warframeId(row));
-    const option = create("button", `warframe-image-option${kind === "frame" ? " is-frame-option" : ""}${["helminth", "helminthSlot"].includes(kind) ? " is-ability-option" : ""}${isSelected ? " is-selected" : ""}`);
+    const isFrameKind = ["frame", "synergyFrame", "companionFrame"].includes(kind);
+    const rowId = warframeId(row);
+    const isSelected = (kind === "invigoration" && state.warframeBuild.invigoration.some((selected) => warframeId(selected) === rowId))
+      || (kind === "frame" && warframeId(state.warframeBuild.frame) === rowId)
+      || (kind === "synergyFrame" && state.warframeLink?.frameId === rowId)
+      || (kind === "companionFrame" && state.companionBuild?.previewWfMode === "custom" && state.companionBuild?.previewWfId === rowId);
+    const option = create("button", `warframe-image-option${isFrameKind ? " is-frame-option" : ""}${["helminth", "helminthSlot"].includes(kind) ? " is-ability-option" : ""}${isSelected ? " is-selected" : ""}`);
     option.type = "button";
-    const icon = kind === "shard" ? "" : (catalogIconAsset(row, kind === "arcane" ? "arcane" : "") || row.iconAsset);
+    const icon = kind === "shard" ? "" : (catalogIconAsset(row, kind === "arcane" ? "arcane" : "") || row.portraitAsset || row.iconAsset);
     const visual = create("span", "warframe-image-option-visual");
     if (kind === "arcane") {
       const rarity = String(row.rarity || "COMMON").toUpperCase();
@@ -9290,12 +10039,67 @@ function renderWarframePicker() {
     if (icon) visual.append(imageNode(icon, "warframe-picker-icon", warframeName(row), "lazy"));
     else if (kind !== "shard" || !warframeShardAssets(row)?.base) visual.append(create("i", "", "◇"));
     const copy = create("span", "warframe-image-option-copy");
-    const sub = kind === "helminth" ? warframeSourceLabel(row) : kind === "helminthSlot" ? (row.slot === null ? "保留原技能" : `原技能 ${Number(row.slot) + 1}`) : (kind === "frame" ? "满级 30" : (row.tau ? "Tau 级" : (row.rarity || row.category || "静态效果")));
+    let sub;
+    if (kind === "helminth") sub = warframeSourceLabel(row);
+    else if (kind === "helminthSlot") sub = row.slot === null ? "保留原技能" : `原技能 ${Number(row.slot) + 1}`;
+    else if (isFrameKind) {
+      const savedSlots = warframeSavedConfigLabels(row);
+      const formTag = row.isAlternateForm || row.parentFrameId ? "第二形态 · " : "";
+      sub = `${formTag}满级 30${savedSlots.length ? ` · 已配装 ${savedSlots.join("/")}` : ""}`;
+    } else {
+      sub = row.tau ? "Tau 级" : (row.rarity || row.category || "静态效果");
+    }
     copy.append(create("strong", "", warframeName(row)), create("small", "", sub), create("p", "", warframeDescription(row) || "暂无说明"));
     option.append(visual, copy);
     option.addEventListener("click", () => applyWarframePickerRow(row));
     return option;
   });
+  if (kind === "companionFrame") {
+    const query = String(ui["warframe-picker-search"]?.value || "").trim();
+    if (!query) {
+      const autoTarget = resolveAutoCompanionWarframeTarget();
+      const autoBtn = create("button", `warframe-image-option is-frame-option${state.companionBuild.previewWfMode === "auto" ? " is-selected" : ""}`);
+      autoBtn.type = "button";
+      const autoVis = create("span", "warframe-image-option-visual");
+      const autoPortrait = autoTarget.record?.portraitAsset || autoTarget.record?.iconAsset || "/assets/warframes/portraits/Excalibur.png";
+      autoVis.append(imageNode(autoPortrait, "warframe-picker-icon", "跟随当前战甲", "lazy"));
+      const autoCopy = create("span", "warframe-image-option-copy");
+      autoCopy.append(
+        create("strong", "", "跟随当前战甲（自动同步）"),
+        create("small", "", autoTarget.record ? `当前解析：${warframeName(autoTarget.record)} · 配置 ${autoTarget.configName}` : "当前解析：默认中立战甲"),
+        create("p", "", "自动跟随「战甲协同」或「战甲配装」页当前所选战甲与配置，切换战甲无需重复手动修改。"),
+      );
+      autoBtn.append(autoVis, autoCopy);
+      autoBtn.addEventListener("click", () => {
+        state.companionBuild.previewWfMode = "auto";
+        closeWarframePicker();
+        persistCompanionConfigs();
+        renderCompanionControlPane();
+        scheduleCompanionEvaluate();
+      });
+
+      const neutralBtn = create("button", `warframe-image-option is-frame-option${state.companionBuild.previewWfMode === "neutral" ? " is-selected" : ""}`);
+      neutralBtn.type = "button";
+      const neuVis = create("span", "warframe-image-option-visual");
+      neuVis.append(imageNode("/assets/warframes/portraits/Excalibur.png", "warframe-picker-icon", "默认中立战甲", "lazy"));
+      const neuCopy = create("span", "warframe-image-option-copy");
+      neuCopy.append(
+        create("strong", "", "固定默认中立战甲"),
+        create("small", "", "生命 300 / 护盾 300 / 护甲 100"),
+        create("p", "", "固定以无战甲加成的标准中立面板计算链接生命、链接护盾与链接护甲。"),
+      );
+      neutralBtn.append(neuVis, neuCopy);
+      neutralBtn.addEventListener("click", () => {
+        state.companionBuild.previewWfMode = "neutral";
+        state.companionBuild.previewWfId = "";
+        closeWarframePicker();
+        persistCompanionConfigs();
+        renderCompanionControlPane();
+        scheduleCompanionEvaluate();
+      });
+      nodes.unshift(autoBtn, neutralBtn);
+    }
+  }
   if (kind === "invigoration" && state.warframeBuild.invigoration.length) {
     const clear = create("button", "warframe-image-option is-clear");
     clear.type = "button";
@@ -9318,6 +10122,10 @@ function renderWarframePicker() {
     // 组合源力石（翠绿/琥珀/紫红）说明：它们已在列表中，来源是 Helminth 的
     // 聚变合成——绯红+碧蓝→紫红、金黄+碧蓝→翠绿、3×绯红→琥珀。
     ui["warframe-picker-sub"].textContent = `${rows.length} 条 · 组合源力石由聚变合成：绯红+碧蓝→紫红 · 金黄+碧蓝→翠绿 · 3×绯红→琥珀`;
+  } else if (kind === "synergyFrame" && isExaltedWeapon()) {
+    ui["warframe-picker-sub"].textContent = `当前为显赫武器，仅展示其所属的 ${rows.length} 款战甲`;
+  } else if (kind === "companionFrame") {
+    ui["warframe-picker-sub"].textContent = `支持自动跟随当前战甲、固定中立战甲，或搜索指定 ${rows.length} 款战甲`;
   } else ui["warframe-picker-sub"].textContent = `${rows.length} 条可选记录`;
 }
 
@@ -9331,7 +10139,19 @@ function openWarframePicker(kind, slot = 0) {
     const message = kind === "shard" ? "源力石继承同配置槽的本体，请切换到本体后编辑" : kind === "invigoration" ? "活化继承同配置槽的本体，请切换到本体后编辑" : "幽影使用固定技能组，不能进行 Helminth 替换";
     return toast(message);
   }
-  const titles = { frame: "选择战甲", helminthSlot: "选择替换技能", helminth: "选择 Helminth 技能", aura: "选择光环 MOD", exilus: "选择战甲 MOD（功能槽）", normal: "选择战甲 MOD", arcane: "选择战甲赋能", shard: "选择执刑官源力石", invigoration: "选择活化增幅" };
+  const titles = {
+    frame: "选择战甲",
+    synergyFrame: "选择协同战甲",
+    companionFrame: "选择同伴关联战甲",
+    helminthSlot: "选择替换技能",
+    helminth: "选择 Helminth 技能",
+    aura: "选择光环 MOD",
+    exilus: "选择战甲 MOD（功能槽）",
+    normal: "选择战甲 MOD",
+    arcane: "选择战甲赋能",
+    shard: "选择执刑官源力石",
+    invigoration: "选择活化增幅",
+  };
   state.warframePickerKind = kind;
   state.warframePickerSlot = Number(slot) || 0;
   state.warframePickerCategory = "all";
@@ -9348,7 +10168,7 @@ function closeWarframePicker() {
   if (!ui["warframe-picker"] || ui["warframe-picker"].hidden) return;
   hideModPreview();
   ui["warframe-picker"].hidden = true;
-  if (ui["mod-picker"].hidden && ui["weapon-picker"].hidden && ui["arcane-picker"].hidden && ui["enemy-picker"].hidden) {
+  if (ui["mod-picker"].hidden && ui["weapon-picker"].hidden && ui["arcane-picker"].hidden && ui["enemy-picker"].hidden && (!ui["companion-picker"] || ui["companion-picker"].hidden)) {
     ui["mod-picker-scrim"].hidden = true;
     document.body.classList.remove("is-modal-open");
   }
@@ -9364,14 +10184,64 @@ function applyWarframePickerRow(row) {
     closeWarframePicker();
     return;
   }
+  if (kind === "synergyFrame") {
+    const pickedId = warframeId(row);
+    closeWarframePicker();
+    if (pickedId) {
+      applySynergyWarframeSelection(pickedId, state.warframeLink.configName || "A");
+    }
+    return;
+  }
+  if (kind === "companionFrame") {
+    const pickedId = warframeId(row);
+    closeWarframePicker();
+    if (pickedId) {
+      state.companionBuild.previewWfMode = "custom";
+      state.companionBuild.previewWfId = pickedId;
+      persistCompanionConfigs();
+      renderCompanionControlPane();
+      scheduleCompanionEvaluate();
+    }
+    return;
+  }
   if (kind === "helminthSlot") {
     build.helminthSlot = row.slot === null ? null : Number(row.slot);
     if (build.helminthSlot === null) build.helminthAbility = null;
   } else if (kind === "helminth") {
     build.helminthAbility = selected;
-  } else if (["aura", "exilus"].includes(kind)) build[kind] = selected;
-  else if (kind === "normal") build.normalMods[state.warframePickerSlot] = selected;
-  else if (kind === "arcane") build.arcanes[state.warframePickerSlot] = selected;
+  } else if (["aura", "exilus"].includes(kind)) {
+    const framePath = warframeId(activeWarframeRecord());
+    const fam = modExclusiveFamily(selected, framePath);
+    const peers = [
+      kind !== "aura" ? build.aura : null,
+      kind !== "exilus" ? build.exilus : null,
+      ...build.normalMods,
+    ].filter(Boolean);
+    if (fam && peers.some((m) => modExclusiveFamily(m, framePath) === fam)) {
+      toast("已装备同系列互斥变体 MOD，不能重复安装", "error");
+      return;
+    }
+    build[kind] = selected;
+    if (!ensureWarframeCapacityFit().fits) {
+      toast("容量不足：即使自动极化也超出容量上限，请降低 MOD 等级", "error");
+    }
+  } else if (kind === "normal") {
+    const framePath = warframeId(activeWarframeRecord());
+    const fam = modExclusiveFamily(selected, framePath);
+    const peers = [
+      build.aura,
+      build.exilus,
+      ...build.normalMods.filter((_m, idx) => idx !== state.warframePickerSlot),
+    ].filter(Boolean);
+    if (fam && peers.some((m) => modExclusiveFamily(m, framePath) === fam)) {
+      toast("已装备同系列互斥变体 MOD，不能重复安装", "error");
+      return;
+    }
+    build.normalMods[state.warframePickerSlot] = selected;
+    if (!ensureWarframeCapacityFit().fits) {
+      toast("容量不足：即使自动极化也超出容量上限，请降低 MOD 等级", "error");
+    }
+  } else if (kind === "arcane") build.arcanes[state.warframePickerSlot] = selected;
   else if (kind === "shard") build.shards[state.warframePickerSlot] = selected;
   else {
     const category = String(selected.category || "").toLocaleLowerCase();
@@ -9621,6 +10491,7 @@ function renderWarframeResult(result) {
   const formaTotal = Object.values(forma).reduce((sum, value) => sum + (Number(value) || 0), 0);
   ui["warframe-forma-readout"].textContent = formaTotal ? `×${formaTotal}` : "无需";
   ui["warframe-forma-readout"].title = `光环 ${forma.aura || 0} · 功能槽 ${forma.exilus || 0} · 普通 ${forma.normal || 0}`;
+  if (ui["warframe-strip-forma-count"]) ui["warframe-strip-forma-count"].textContent = String(formaTotal);
   ui["warframe-effect-status"].textContent = state.warframeBuild.applyConditionals ? "触发效果已按完整效果应用" : "触发效果关闭";
   const base = result.basePanel || {};
   const final = result.finalPanel || {};
@@ -9745,13 +10616,19 @@ async function openArenaFromBuild() {
     const { mountArena } = await arenaModule;
     if (!arenaView) arenaView = mountArena(ui["arena-tool"]);
     if (location.hash !== "#arena") history.pushState(null, "", "#arena");
-    arenaView.open(payload, label);
+    arenaView.open(payload, label, { weaponNameEn: state.buildWeapon.nameEn || "" });
     setActiveTool("arena");
   } catch (error) { toast("场景靶场：" + (error.message || error)); }
 }
-function setActiveTool(name) {
+function setActiveTool(name, options = {}) {
   if (!ui[`${name}-tool`]) return;
   if (name === "arena" && !arenaView?.hasLoadout) { openArenaFromBuild(); return; }
+  const previousTool = state.activeTool;
+  if (options.fromBuild && (name === "warframe" || name === "companion")) {
+    state.synergyReturnTarget = name;
+  } else if (name === "build" || name === "analysis" || (!options.preserveReturn && name !== state.synergyReturnTarget)) {
+    state.synergyReturnTarget = null;
+  }
   state.activeTool = name;
   if (name !== "arena") arenaView?.hide();
   else arenaView?.open();
@@ -9759,16 +10636,46 @@ function setActiveTool(name) {
   ui["analysis-tool"].hidden = name !== "analysis";
   ui["build-tool"].hidden = name !== "build";
   ui["warframe-tool"].hidden = name !== "warframe";
+  if (ui["companion-tool"]) ui["companion-tool"].hidden = name !== "companion";
+  if (ui["warframe-return-bar"]) ui["warframe-return-bar"].hidden = !(name === "warframe" && state.synergyReturnTarget === "warframe");
+  if (ui["companion-return-bar"]) ui["companion-return-bar"].hidden = !(name === "companion" && state.synergyReturnTarget === "companion");
+  if (ui["arena-tab-chip"]) {
+    ui["arena-tab-chip"].hidden = name !== "arena";
+    ui["arena-tab-chip"].classList.toggle("is-active", name === "arena");
+  }
   if (name === "analysis") requestAnimationFrame(fitRivenCardText);
-  ui["page-title"].textContent = name === "arena" ? "场景靶场" : name === "warframe" ? "战甲配装" : name === "build" ? "武器配装" : "紫卡分析";
+  ui["page-title"].textContent = name === "arena"
+    ? "场景靶场"
+    : name === "companion"
+      ? "同伴配装"
+      : name === "warframe"
+        ? "战甲配装"
+        : name === "build"
+          ? "武器配装"
+          : "紫卡分析";
   for (const button of document.querySelectorAll("[data-tab]")) {
-    const active = button.dataset.tab === (name === "arena" ? "build" : name);
+    const active = button.dataset.tab === name;
     button.classList.toggle("is-active", active);
     if (button.getAttribute("role") === "tab") button.setAttribute("aria-selected", String(active));
   }
   for (const button of [ui["sample-button"], ui["reset-button"], ui["export-button"]]) button.hidden = name !== "analysis";
   if (location.hash !== `#${name}`) history.replaceState(null, "", `#${name}`);
-  if (name === "warframe") loadWarframeCatalog().catch(() => {});
+  if (name === "warframe") {
+    loadWarframeCatalog().then(() => {
+      syncWarframeWorkbenchFromSynergy();
+    }).catch(() => {});
+  }
+  if (name === "companion") {
+    loadCompanionCatalog().then(() => {
+      syncCompanionWorkbenchFromSynergy();
+      syncLivePrimaryStatsIntoCompanion(false);
+      renderCompanionControlPane();
+      scheduleCompanionEvaluate();
+    }).catch(() => {});
+  }
+  if (name === "build" && (previousTool === "warframe" || previousTool === "companion")) {
+    syncBuildAfterExternalEdit();
+  }
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -9787,6 +10694,13 @@ function bindWarframeEvents() {
     if (button) switchWarframeConfig(button.dataset.warframeConfig);
   });
   ui["warframe-config-copy"]?.addEventListener("click", copyWarframeConfig);
+  ui["warframe-forma-optimize"]?.addEventListener("click", () => {
+    const plan = applyWarframeMinimalForma();
+    renderWarframeLoadout();
+    persistWarframeConfig();
+    scheduleWarframeCalculation();
+    toast(plan.formas ? `已按最少极化重排战甲槽位（共 ${plan.formas} 次极化）` : "当前战甲配装无需极化即可装下", "success");
+  });
   ui["warframe-config-export-json"]?.addEventListener("click", exportWarframeConfig);
   ui["warframe-config-export-rabbit"]?.addEventListener("click", () => openRabbitDialog("export", "warframe"));
   ui["warframe-config-import-json"]?.addEventListener("click", () => ui["warframe-config-import-file"]?.click());
@@ -10147,6 +11061,8 @@ function buildPayloadFromForm() {
     excludeFactionMods: state.excludeFactionMods || undefined,
     sentinel: sentinelPayload(),
     exaltedFrame: exaltedPayload(),
+    warframeLink: buildWarframeLinkPayload(),
+    companionLink: buildCompanionLinkPayload(),
     companionPlayerStacks: isCompanionWeapon() && state.companionPlayerStacks ? true : undefined,
     minFill: scopeFillValue("build-min-fill"),
     maxFill: scopeFillValue("build-max-fill"),
@@ -10364,6 +11280,13 @@ function renderWeaponBuild(result) {
     renderManualResultVisual(result);
   }
   renderWeaponBuildDiagnostics(result);
+  renderSynergySummaryFromResult(result);
+  syncCombatStateSynergyPlaceholders(result);
+  syncLivePrimaryStatsIntoCompanion(true);
+  if ((state.warframeLink?.enabled || state.companionLink?.enabled) && state.manualSlots.some((m) => m && (m.modSet || m.setId))) {
+    renderManualSlots();
+  }
+  renderArcaneSelections();
   updateEnemyStatsPanel(result);
   scheduleEquippedGains();
 }
@@ -10534,7 +11457,7 @@ function damageTypeChip(dt) {
     chip.append(img);
   }
   const label = create("span", "dt-chip-label", DAMAGE_TYPE_LABELS[dt] || dt);
-  label.style.color = DAMAGE_TYPE_COLORS[dt] || "";
+  label.style.color = damageTypeColor(dt);
   chip.append(label);
   return chip;
 }
@@ -11138,7 +12061,7 @@ function renderExaltedLoadout(exalted) {
 async function openExaltedFrameConfig() {
   const link = state.exaltedLink;
   if (!link?.frameId) return;
-  setActiveTool("warframe");
+  setActiveTool("warframe", { fromBuild: true });
   try {
     await loadWarframeCatalog();
   } catch (_error) {
@@ -11187,10 +12110,12 @@ function bindExaltedControls() {
   document.getElementById("build-exalted-open-frame")?.addEventListener("click", () => { openExaltedFrameConfig(); });
   document.getElementById("build-exalted-frame")?.addEventListener("change", (event) => {
     state.exaltedLink = { frameId: event.target.value, configName: state.exaltedLink?.configName ?? "A" };
+    enforceExaltedSynergySync(true);
     exaltedChanged();
   });
   document.getElementById("build-exalted-config")?.addEventListener("change", (event) => {
     state.exaltedLink = { frameId: state.exaltedLink?.frameId || exaltedFrames()[0]?.id, configName: event.target.value };
+    enforceExaltedSynergySync(true);
     exaltedChanged();
   });
 }
@@ -11230,6 +12155,7 @@ function renderWarframeExaltedCard() {
       setActiveTool("build");
       selectBuildWeapon(weapon);
       state.exaltedLink = { frameId, configName: state.warframeBuild.activeConfig };
+      enforceExaltedSynergySync(true);
       exaltedChanged();
     });
     row.append(text, button);
@@ -11517,10 +12443,20 @@ function openSentinelPicker(slotIndex) {
 
 function sentinelModRecords() {
   const query = String(ui["manual-mod-search"]?.value || "").trim().toLocaleLowerCase();
-  const used = new Set(state.sentinel.slots.filter(Boolean).map((item) => item.path));
-  const current = state.sentinel.slots[state.sentinelPickerSlot]?.path;
+  const slot = state.sentinelPickerSlot ?? 0;
+  const otherItems = state.sentinel.slots.filter((item, idx) => Boolean(item) && idx !== slot);
+  const used = new Set(otherItems.map((item) => item.path));
+  const usedFams = new Set(otherItems.map((item) => modExclusiveFamily(sentinelModRecord(item.path) || item)).filter(Boolean));
+  const current = state.sentinel.slots[slot]?.path;
   return sentinelCatalog().mods
-    .filter((mod) => sentinelModFits(mod) && (!used.has(mod.path) || mod.path === current))
+    .filter((mod) => {
+      if (!sentinelModFits(mod)) return false;
+      if (mod.path === current) return false;
+      if (used.has(mod.path)) return false;
+      const fam = modExclusiveFamily(mod);
+      if (fam && usedFams.has(fam)) return false;
+      return true;
+    })
     .filter((mod) => !query || [mod.nameZh, mod.nameEn, ...(mod.levelStatsZh || []).slice(-1)].join(" ").toLocaleLowerCase().includes(query))
     .sort((a, b) => Number(Boolean(b.weaponRole)) - Number(Boolean(a.weaponRole)) || Number(Boolean(b.exclusiveTo)) - Number(Boolean(a.exclusiveTo)) || String(a.nameZh).localeCompare(String(b.nameZh), "zh"))
     .map((mod) => ({ ...mod, rarity: String(mod.rarity || "Common").toUpperCase() }));
@@ -11528,7 +12464,13 @@ function sentinelModRecords() {
 
 function applySentinelMod(mod) {
   const slot = state.sentinelPickerSlot ?? 0;
-  state.sentinel.slots = state.sentinel.slots.map((item, index) => index !== slot && item?.path === mod.path ? null : item);
+  const targetFam = modExclusiveFamily(mod);
+  state.sentinel.slots = state.sentinel.slots.map((item, index) => {
+    if (!item || index === slot) return item;
+    if (item.path === mod.path) return null;
+    if (targetFam && modExclusiveFamily(sentinelModRecord(item.path) || item) === targetFam) return null;
+    return item;
+  });
   state.sentinel.slots[slot] = { path: mod.path, rank: mod.maxRank };
   closeModPicker();
   sentinelChanged();
@@ -12165,19 +13107,26 @@ function bindEvents() {
     renderManualMods();
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") { closeModPicker(); closeWeaponPicker(); closeArcanePicker(); closeEnemyPicker(); closeWarframePicker(); closeRabbitDialog(); }
+    if (event.key === "Escape") { closeModPicker(); closeWeaponPicker(); closeArcanePicker(); closeEnemyPicker(); closeWarframePicker(); closeCompanionPicker(); closeRabbitDialog(); }
   });
   ui["arena-open"]?.addEventListener("click", openArenaFromBuild);
+  ui["arena-tab-chip"]?.addEventListener("click", () => setActiveTool("build"));
   ui["arena-tool"]?.addEventListener("arena-back", () => { location.hash = "build"; setActiveTool("build"); });
   window.addEventListener("hashchange", () => {
     const tool = location.hash.replace("#", "");
-    if (["analysis", "build", "warframe", "arena"].includes(tool)) setActiveTool(tool);
+    if (["analysis", "build", "warframe", "companion", "arena"].includes(tool)) setActiveTool(tool, { preserveReturn: true });
   });
   ui["build-enemy-open"]?.addEventListener("click", openEnemyPicker);
   ui["enemy-picker-close"]?.addEventListener("click", closeEnemyPicker);
   // 战斗场景 / 外部加成已移出左侧表单，改由右侧面板容器自行委托持久化与实时解算。
-  ui["build-setup-folds"]?.addEventListener("input", () => { updateCustomDamageControls(); refreshEnemyTargetSummary(); persistActiveBuildConfig(); scheduleLiveManualSimulation(); });
-  ui["build-setup-folds"]?.addEventListener("change", () => { persistActiveBuildConfig(); scheduleLiveManualSimulation(); });
+  ui["build-setup-folds"]?.addEventListener("input", (event) => {
+    if (event.target.closest("#build-synergy-panel")) return;
+    updateCustomDamageControls(); refreshEnemyTargetSummary(); persistActiveBuildConfig(); scheduleLiveManualSimulation();
+  });
+  ui["build-setup-folds"]?.addEventListener("change", (event) => {
+    if (event.target.closest("#build-synergy-panel")) return;
+    persistActiveBuildConfig(); scheduleLiveManualSimulation();
+  });
   ui["build-armour-strip"].addEventListener("input", () => { refreshScenarioLabels(); scheduleLiveManualSimulation(); });
   ui["build-aiming"]?.addEventListener("change", () => { persistActiveBuildConfig(); scheduleLiveManualSimulation(); });
   ui["build-headshot-chance"].addEventListener("input", () => { refreshScenarioLabels(); scheduleLiveManualSimulation(); });
@@ -12191,6 +13140,8 @@ function bindEvents() {
   ui["arcane-picker-search"]?.addEventListener("input", renderArcanePicker);
   ui["arcane-picker-close"]?.addEventListener("click", closeArcanePicker);
   bindWarframeEvents();
+  bindCompanionWorkbenchEvents();
+  bindSynergyHubEvents();
   ui["weapon-build-form"]?.addEventListener("input", () => { updateCustomDamageControls(); persistActiveBuildConfig(); scheduleLiveManualSimulation(); });
   ui["weapon-build-form"]?.addEventListener("change", () => { refreshProjectileStrategyControls(); persistActiveBuildConfig(); scheduleLiveManualSimulation(); });
   ui["weapon-build-form"].addEventListener("submit", submitWeaponBuild);
@@ -12209,6 +13160,3913 @@ function bindEvents() {
       ui["riven-card"].style.removeProperty("--par-y");
     });
   }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 四配装架构：独立「同伴配装」工作台 + 「武器配装」双卡协同中枢 + 双向跳转同步
+// ═══════════════════════════════════════════════════════════════════════════
+
+const COMPANION_CONFIG_STORAGE_KEY = "wf-riven-portable-companion-configs-v1";
+const COMPANION_HARD_ENGAGE_PATH = "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPrecept/MoaShockwavePrecept";
+const COMPANION_MOA_MELEE_PATH = "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/MoaPetMeleeWeapon";
+const COMPANION_DECONSTRUCTOR_PATHS = new Set([
+  "/Lotus/Types/Sentinels/SentinelWeapons/SentinelDeconstructorWeapon",
+  "/Lotus/Types/Sentinels/SentinelWeapons/PrimeDeconstructorWeapon",
+]);
+const COMPANION_HOUND_MELEE_PATHS = new Set([
+  "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeaponPS",
+  "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeaponSw",
+  "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeaponSc",
+]);
+const COMPANION_FORMA_ORDER = [null, "AP_ATTACK", "AP_DEFENSE", "AP_TACTIC", "AP_PRECEPT", "AP_WARD", "AP_UMBRA", "AP_ANY"];
+const COMPANION_KIND_LABELS = {
+  sentinel: "哨兵",
+  moa: "恐鸟",
+  hound: "猎犬",
+  kavat: "库娃",
+  vulpaphyla: "狐帕菲拉",
+  kubrow: "库狛",
+  charger: "疾冲者",
+  predasite: "扑猎达赛",
+};
+const COMPANION_MODULAR_SLOT_LABELS = {
+  core: "核心 (Core)",
+  gyro: "陀螺仪 (Gyro)",
+  bracket: "脚架 (Bracket)",
+  stabilizer: "稳定器 (Stabilizer)",
+  mutagen: "突变原 (Mutagen)",
+  antigen: "抗原 (Antigen)",
+};
+const COMPANION_MODULAR_SLOTS_BY_KIND = {
+  moa: ["core", "gyro", "bracket"],
+  hound: ["core", "bracket", "stabilizer"],
+  vulpaphyla: ["mutagen", "antigen"],
+  predasite: ["mutagen", "antigen"],
+};
+const SYNERGY_SET_LABELS = {
+  vigilante: "私法",
+  gladiator: "角斗士",
+  hunter: "猎人",
+  mecha: "机甲",
+  synth: "合成",
+  tek: "技法",
+  augur: "预言",
+  saxum: "巨石",
+  jugulus: "喉骨",
+  carnis: "甲壳",
+  carniss: "甲壳",
+  strain: "菌株",
+  aero: "空飞",
+  motus: "跃动",
+  proton: "质子",
+  nira: "妮菈",
+  amar: "阿玛尔",
+  boreal: "玻瑞尔",
+};
+const COMPANION_WARNING_LABELS = {
+  "sentinel-no-attack-precept": "当前哨兵未装备攻击戒律（如突击模式 / 目标感应 / 重击者），实战与 3D 靶场中同伴武器不会主动开火。",
+  "companion-link-mod-without-warframe": "已装备生命/护盾/护甲链接 MOD，当前使用默认中立战甲（300/300/100）预览；可在左侧选择关联战甲查看真实链接面板。",
+  "companion-primary-link-without-primary-stats": "已装备猎人协力或机甲超载，请确认左侧主武器暴击/触发预览值。",
+};
+
+let companionEvaluateTimer = null;
+let companionEvaluateSeq = 0;
+let synergyBridgeSeq = 0;
+
+function saveWarframeLastSelection() {
+  const build = state.warframeBuild;
+  const frameId = warframeId(build?.frame);
+  if (!frameId || !build?.store) return;
+  build.store.__lastSelection = {
+    frameId,
+    activeForm: build.activeForm || "main",
+    activeConfig: build.activeConfig || "A",
+  };
+  try { localStorage.setItem(WARFRAME_CONFIG_STORAGE_KEY, JSON.stringify(build.store)); } catch (_error) { /* private mode */ }
+}
+
+function readCompanionStore() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(COMPANION_CONFIG_STORAGE_KEY) || "{}");
+    if (!parsed || typeof parsed !== "object") return { bodies: {}, weapons: {} };
+    return {
+      bodies: parsed.bodies && typeof parsed.bodies === "object" ? parsed.bodies : {},
+      weapons: parsed.weapons && typeof parsed.weapons === "object" ? parsed.weapons : {},
+      __lastSelection: parsed.__lastSelection && typeof parsed.__lastSelection === "object" ? parsed.__lastSelection : undefined,
+    };
+  } catch (_error) {
+    return { bodies: {}, weapons: {} };
+  }
+}
+
+function writeCompanionStore() {
+  const store = state.companionBuild.store || { bodies: {}, weapons: {} };
+  try { localStorage.setItem(COMPANION_CONFIG_STORAGE_KEY, JSON.stringify(store)); } catch (_error) { /* private mode */ }
+}
+
+function companionRows(key) {
+  return Array.isArray(state.companionCatalog?.[key]) ? state.companionCatalog[key] : [];
+}
+
+function companionByPath(path) {
+  if (!path) return null;
+  const norm = String(path).trim();
+  return companionRows("companions").find((row) => row.path === norm || row.id === norm) || null;
+}
+
+function companionBodyModByPath(path) {
+  if (!path) return null;
+  return companionRows("bodyMods").find((row) => row.path === path || row.id === path) || null;
+}
+
+function companionClawModByPath(path) {
+  if (!path) return null;
+  return companionRows("clawMods").find((row) => row.path === path || row.id === path) || null;
+}
+
+function companionClawByPath(path) {
+  if (!path) return null;
+  return companionRows("beastClaws").find((row) => row.path === path || row.id === path) || null;
+}
+
+function moaVirtualMeleeRecord(hardEngageRank = 5) {
+  const dmg = 15 * (clamp(Number(hardEngageRank ?? 5), 0, 5) + 1);
+  return {
+    path: COMPANION_MOA_MELEE_PATH,
+    id: "moa_melee_weapon",
+    nameZh: "强力接战 (恐鸟近战)",
+    nameEn: "Hard Engage (MOA Melee)",
+    slot: "companion",
+    weaponType: "companion",
+    rivenType: null,
+    isVirtualMoaMelee: true,
+    ancestry: [
+      COMPANION_MOA_MELEE_PATH,
+      "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+      "/Lotus/Types/Game/LotusMeleeWeapon",
+    ],
+    compatTags: ["SENTINEL_WEAPON"],
+    polarities: Array.from({ length: 8 }, () => "AP_UNIVERSAL"),
+    damage: dmg,
+  };
+}
+
+function companionRoboticWeaponByPath(path) {
+  if (!path) return null;
+  if (String(path).toLocaleLowerCase() === COMPANION_MOA_MELEE_PATH.toLocaleLowerCase()) {
+    const he = state.companionBuild.bodyMods.find((m) => m?.path === COMPANION_HARD_ENGAGE_PATH);
+    return moaVirtualMeleeRecord(he ? he.rank : 5);
+  }
+  return (state.companionCatalog?.companionWeapons || state.companionCatalog?.weapons || [])
+    .find((row) => row.path === path) || null;
+}
+
+function companionWeaponRecord(path, companion = state.companionBuild.companion) {
+  if (!path) return null;
+  if (companion?.category === "beast") {
+    return companionClawByPath(path) || companionRows("beastClaws").find((c) => c.breedPath === companion.path) || null;
+  }
+  return companionRoboticWeaponByPath(path);
+}
+
+function registerCompanionAssets() {
+  if (!state.modAssets || !state.companionCatalog) return;
+  state.modAssets.mods = state.modAssets.mods || {};
+  const registerOne = (mod) => {
+    if (!mod?.path) return;
+    const rawLines = Array.isArray(mod.levelStatsZh) ? mod.levelStatsZh : [];
+    const zh = rawLines.map((entry) => (Array.isArray(entry) ? entry : String(entry || "").split(/\r?\n/).filter(Boolean)));
+    const baseDrain = Number(mod.baseDrain || 0);
+    const maxRank = Number(mod.maxRank || 0);
+    const rankedAbs = Math.abs(baseDrain) + maxRank;
+    state.modAssets.mods[mod.path] = {
+      ...(state.modAssets.mods[mod.path] || {}),
+      art: mod.artAsset || mod.art || state.modAssets.mods[mod.path]?.art || "",
+      artSource: "official-rgb-alpha",
+      nameZh: mod.nameZh || mod.nameEn,
+      nameEn: mod.nameEn,
+      rarity: String(mod.rarity || "COMMON").toUpperCase(),
+      polarity: mod.polarity || null,
+      modSet: mod.modSet || mod.setId || state.modAssets.mods[mod.path]?.modSet || undefined,
+      maxRank,
+      baseDrain,
+      drain: baseDrain < 0 ? -rankedAbs : rankedAbs,
+      effectsZh: zh.length ? zh[zh.length - 1] : null,
+      effectsZhByRank: zh.length ? zh : null,
+      description: zh.length ? zh[zh.length - 1] : [],
+    };
+  };
+  companionRows("bodyMods").forEach(registerOne);
+  companionRows("clawMods").forEach(registerOne);
+}
+
+function companionModCompatLabel(mod, kind) {
+  if (kind === "posture" || mod?.isPosture) return "兽爪姿态";
+  if (kind === "clawMod") return "野兽利爪";
+  if (kind === "bodyMod") {
+    if (mod?.isBond) return "同伴连结";
+    if (mod?.isPrecept) return "同伴戒律";
+    const ck = mod?.compat?.compatKind;
+    if (ck === "robotic") return "机械同伴";
+    if (ck === "beast") return "生物同伴";
+    if (ck === "sentinel") return "哨兵";
+    if (ck === "moa") return "恐鸟";
+    if (ck === "hound") return "猎犬";
+    if (ck === "kavat") return "库娃";
+    if (ck === "kubrow") return "库狛";
+    return "同伴";
+  }
+  return modCompatLabel(mod, modAssetFields(mod));
+}
+
+function companionBodyModCompatible(companion, mod) {
+  if (!companion || !mod) return false;
+  const compat = mod.compat || {};
+  if (Array.isArray(compat.blockedKinds) && compat.blockedKinds.includes(companion.kind)) return false;
+  if (Array.isArray(compat.blockedPaths) && compat.blockedPaths.includes(companion.path)) return false;
+  if (Array.isArray(compat.ownerPaths) && compat.ownerPaths.length > 0) {
+    return compat.ownerPaths.includes(companion.path);
+  }
+  const kind = compat.compatKind || "all";
+  if (kind === "all") return true;
+  if (kind === "robotic") return companion.category === "robotic";
+  if (kind === "beast") return companion.category === "beast";
+  if (kind === "sentinel") return companion.kind === "sentinel";
+  if (kind === "moa") return companion.kind === "moa";
+  if (kind === "hound") return companion.kind === "hound";
+  if (kind === "kavat") return companion.kind === "kavat" || companion.kind === "vulpaphyla";
+  if (kind === "kubrow") return ["kubrow", "predasite", "charger"].includes(companion.kind);
+  return false;
+}
+
+function validCompanionWeapons(companion, bodyMods = []) {
+  if (!companion || !state.companionCatalog) return [];
+  if (companion.category === "beast") {
+    return companionRows("beastClaws").filter((claw) => claw.breedPath === companion.path || claw.path === companion.defaultWeaponPath);
+  }
+  const hasHardEngage = companion.kind === "moa" && bodyMods.some((item) => item && item.path === COMPANION_HARD_ENGAGE_PATH);
+  if (hasHardEngage) {
+    const he = bodyMods.find((item) => item && item.path === COMPANION_HARD_ENGAGE_PATH);
+    return [moaVirtualMeleeRecord(he ? he.rank : 5)];
+  }
+  const allRobotic = state.companionCatalog.companionWeapons || state.companionCatalog.weapons || [];
+  if (companion.kind === "hound") {
+    return allRobotic.filter((w) => COMPANION_HOUND_MELEE_PATHS.has(w.path));
+  }
+  const allowDeconstructor = Array.isArray(companion.allowedWeaponCategories) && companion.allowedWeaponCategories.includes("deconstructor");
+  const incompat = new Set(companion.incompatibleWeapons || []);
+  return allRobotic.filter((w) => {
+    if (COMPANION_HOUND_MELEE_PATHS.has(w.path)) return false;
+    if (COMPANION_DECONSTRUCTOR_PATHS.has(w.path) && !allowDeconstructor) return false;
+    const ancestry = [w.path, ...(w.ancestry || [])];
+    if (ancestry.some((p) => incompat.has(p))) return false;
+    return true;
+  });
+}
+
+function defaultModularParts(companion) {
+  const slots = COMPANION_MODULAR_SLOTS_BY_KIND[companion?.kind];
+  if (!slots) return {};
+  const defaults = companion?.defaultParts || {};
+  const modularGroup = state.companionCatalog?.modularParts?.[companion.kind] || {};
+  const out = {};
+  for (const slot of slots) {
+    const bucket = Array.isArray(modularGroup[slot]) ? modularGroup[slot] : [];
+    const defPath = defaults[slot];
+    const picked = (defPath && bucket.find((p) => p.path === defPath || p.id === defPath)) || bucket[0] || null;
+    if (picked) out[slot] = picked.path;
+  }
+  return out;
+}
+
+function defaultBodyModsForCompanion(companion, parts = {}) {
+  const slots = Array.from({ length: 10 }, () => null);
+  if (!companion) return slots;
+  const candidatePaths = [];
+  const modularSlots = COMPANION_MODULAR_SLOTS_BY_KIND[companion.kind] || [];
+  const modularGroup = state.companionCatalog?.modularParts?.[companion.kind] || {};
+  for (const slotName of modularSlots) {
+    const chosenPath = parts[slotName];
+    const partRec = (modularGroup[slotName] || []).find((p) => p.path === chosenPath || p.id === chosenPath);
+    for (const pPath of partRec?.preceptPaths || []) {
+      if (!candidatePaths.includes(pPath)) candidatePaths.push(pPath);
+    }
+  }
+  for (const pPath of companion.defaultPrecepts || []) {
+    if (companion.kind === "hound" && candidatePaths.length >= 3) continue;
+    if (!candidatePaths.includes(pPath)) candidatePaths.push(pPath);
+  }
+  const seenFamilies = new Set();
+  let moaPrecepts = 0;
+  let cursor = 0;
+  for (const pPath of candidatePaths) {
+    if (cursor >= 10) break;
+    const mod = companionBodyModByPath(pPath);
+    if (!mod || !companionBodyModCompatible(companion, mod)) continue;
+    if (mod.family && seenFamilies.has(mod.family)) continue;
+    const isMoaPrecept = mod.isPrecept && mod.compat?.compatKind === "moa";
+    if (companion.kind === "moa" && isMoaPrecept && moaPrecepts >= 2) continue;
+    if (mod.family) seenFamilies.add(mod.family);
+    if (isMoaPrecept) moaPrecepts += 1;
+    slots[cursor] = { ...mod, path: mod.path, rank: Number(mod.maxRank ?? 0) };
+    cursor += 1;
+  }
+  return slots;
+}
+
+function companionNativeBodyPolarities(companion = state.companionBuild.companion, parts = state.companionBuild.parts) {
+  if (!companion) return Array.from({ length: 10 }, () => null);
+  const raw = Array.from({ length: 10 }, (_, idx) => {
+    const p = companion.polarities?.[idx];
+    return !p || p === "AP_UNIVERSAL" ? null : p;
+  });
+  const slots = COMPANION_MODULAR_SLOTS_BY_KIND[companion.kind] || [];
+  const modularGroup = state.companionCatalog?.modularParts?.[companion.kind] || {};
+  for (const slotName of slots) {
+    const chosenPath = parts?.[slotName];
+    const partRec = (modularGroup[slotName] || []).find((p) => p.path === chosenPath || p.id === chosenPath);
+    if (partRec?.polarity && partRec.polarity !== "AP_UNIVERSAL") {
+      const emptyIdx = raw.indexOf(null);
+      if (emptyIdx >= 0) raw[emptyIdx] = partRec.polarity;
+    }
+  }
+  return raw;
+}
+
+function companionEffectiveBodyPolarity(index) {
+  const native = companionNativeBodyPolarities()[index] || null;
+  const override = state.companionBuild.bodyPolarities[index];
+  if (override === null || override === undefined) return native;
+  return override === "AP_UNIVERSAL" ? null : override;
+}
+
+function companionNativeWeaponPolarities(weaponRecord) {
+  const isClaws = state.companionBuild.companion?.category === "beast";
+  const len = isClaws ? 9 : 8;
+  return Array.from({ length: len }, (_, idx) => {
+    const p = weaponRecord?.polarities?.[idx];
+    return !p || p === "AP_UNIVERSAL" ? null : p;
+  });
+}
+
+function companionEffectiveWeaponPolarity(index, weaponRecord = companionWeaponRecord(state.companionBuild.weaponPath)) {
+  const native = companionNativeWeaponPolarities(weaponRecord)[index] || null;
+  const override = state.companionBuild.weaponPolarities[index];
+  if (override === null || override === undefined) return native;
+  return override === "AP_UNIVERSAL" ? null : override;
+}
+
+function companionBodyComputeCapacity() {
+  const cb = state.companionBuild;
+  const limit = cb.bodyReactor ? 60 : 30;
+  let used = 0;
+  for (let i = 0; i < 10; i += 1) {
+    const mod = cb.bodyMods[i];
+    if (!mod) continue;
+    used += Math.max(0, modEffectiveDrain(mod, companionEffectiveBodyPolarity(i), i).drain);
+  }
+  return { used, limit, remaining: limit - used, over: used > limit };
+}
+
+function companionBodyFormaPlan({ fresh = false } = {}) {
+  const cb = state.companionBuild;
+  const native = companionNativeBodyPolarities();
+  const slots = Array.from({ length: 10 }, (_, idx) => normalizedSpecialPolarity(fresh ? native[idx] : companionEffectiveBodyPolarity(idx)));
+  const items = [];
+  cb.bodyMods.forEach((mod, index) => {
+    if (!mod || index >= 10) return;
+    items.push({
+      origin: index,
+      polarity: normalizedSpecialPolarity(mod.polarity || modPolarityOf(mod, index)),
+      drain: Math.max(0, modBaseDrain(mod)),
+      // Keep precept priority relative order intact during fresh minimal-Forma reordering.
+      elemental: Boolean(mod.isPrecept),
+      fixed: !fresh,
+    });
+  });
+  const limit = cb.bodyReactor ? 60 : 30;
+  return minimalFormaPlan({ slots, items, limit, allowMove: fresh });
+}
+
+function applyCompanionBodyFormaPlan(plan, { fresh = false } = {}) {
+  const cb = state.companionBuild;
+  const native = companionNativeBodyPolarities();
+  if (fresh) {
+    const before = cb.bodyMods.slice();
+    plan.placement.forEach((origin, slot) => {
+      cb.bodyMods[slot] = origin === null ? null : before[origin];
+    });
+    cb.bodyPolarities = Array.from({ length: 10 }, () => null);
+  }
+  plan.forma.forEach((polarity, slot) => {
+    if (!polarity) return;
+    cb.bodyPolarities[slot] = polarity === native[slot] ? null : polarity;
+  });
+}
+
+function ensureCompanionBodyCapacityFit() {
+  const cap = companionBodyComputeCapacity();
+  if (!cap.over) return { fits: true, formas: 0 };
+  const plan = companionBodyFormaPlan({ fresh: false });
+  applyCompanionBodyFormaPlan(plan, { fresh: false });
+  return plan;
+}
+
+function applyCompanionBodyMinimalForma() {
+  const plan = companionBodyFormaPlan({ fresh: true });
+  applyCompanionBodyFormaPlan(plan, { fresh: true });
+  return plan;
+}
+
+function companionWeaponModHasElementOrder(mod, isBeast) {
+  if (!mod) return false;
+  if (mod.__riven) return modHasBaseElement(mod);
+  if (isBeast) {
+    return Boolean(
+      (mod.upgrades || []).some((u) => /BASE_DAMAGE_ADDED/i.test(String(u?.type || "")))
+      || /Conversion/i.test(String(mod.path || "")),
+    );
+  }
+  return modHasBaseElement(mod);
+}
+
+function companionWeaponComputeCapacity() {
+  const cb = state.companionBuild;
+  const isBeast = cb.companion?.category === "beast";
+  const wRec = companionWeaponRecord(cb.weaponPath);
+  let limit = cb.weaponReactor ? 60 : 30;
+  if (isBeast && cb.posture) {
+    const pEff = modEffectiveDrain(cb.posture, companionEffectiveWeaponPolarity(8, wRec), 8);
+    limit += Math.max(0, -pEff.drain);
+  }
+  let used = 0;
+  for (let i = 0; i < 8; i += 1) {
+    if (!isBeast && cb.riven && Number(cb.riven.slot) === i) {
+      const rObj = { __riven: true, rivenPolarity: cb.riven.polarity || "AP_ATTACK", stats: cb.riven.stats };
+      used += Math.max(0, modEffectiveDrain(rObj, companionEffectiveWeaponPolarity(i, wRec), i).drain);
+      continue;
+    }
+    const mod = cb.weaponMods[i];
+    if (!mod) continue;
+    used += Math.max(0, modEffectiveDrain(mod, companionEffectiveWeaponPolarity(i, wRec), i).drain);
+  }
+  return { used, limit, remaining: limit - used, over: used > limit };
+}
+
+function companionWeaponFormaPlan({ fresh = false } = {}) {
+  const cb = state.companionBuild;
+  const isBeast = cb.companion?.category === "beast";
+  const wRec = companionWeaponRecord(cb.weaponPath);
+  const native = companionNativeWeaponPolarities(wRec);
+  const slots = Array.from({ length: 8 }, (_, idx) => normalizedSpecialPolarity(fresh ? native[idx] : companionEffectiveWeaponPolarity(idx, wRec)));
+  const items = [];
+  for (let index = 0; index < 8; index += 1) {
+    if (!isBeast && cb.riven && Number(cb.riven.slot) === index) {
+      const rPol = normalizedSpecialPolarity(cb.riven.polarity || "AP_ATTACK");
+      const rObj = { __riven: true, rivenPolarity: rPol, stats: cb.riven.stats };
+      items.push({
+        origin: index,
+        polarity: rPol,
+        drain: 18,
+        elemental: modHasBaseElement(rObj),
+        fixed: !fresh,
+      });
+      continue;
+    }
+    const mod = cb.weaponMods[index];
+    if (!mod) continue;
+    items.push({
+      origin: index,
+      polarity: normalizedSpecialPolarity(mod.polarity || modPolarityOf(mod, index)),
+      drain: Math.max(0, modBaseDrain(mod)),
+      elemental: companionWeaponModHasElementOrder(mod, isBeast),
+      fixed: !fresh,
+    });
+  }
+  let limit = cb.weaponReactor ? 60 : 30;
+  const extras = [];
+  let postureTargetPol = null;
+  if (isBeast && cb.posture) {
+    const curPol = normalizedSpecialPolarity(fresh ? native[8] : companionEffectiveWeaponPolarity(8, wRec));
+    const modPol = normalizedSpecialPolarity(cb.posture.polarity || modPolarityOf(cb.posture, 8));
+    const curGain = Math.max(0, -modEffectiveDrain(cb.posture, curPol, 8).drain);
+    limit += curGain;
+    const matchedGain = modPol ? Math.max(0, -modEffectiveDrain(cb.posture, modPol, 8).drain) : curGain;
+    if (modPol && matchedGain > curGain) {
+      extras.push([[0, 0, 0], [1, UMBRA_POLARITIES.has(modPol) ? 1 : 0, curGain - matchedGain]]);
+      postureTargetPol = modPol;
+    }
+  }
+  const plan = minimalFormaPlan({ slots, items, limit, extras, allowMove: fresh });
+  plan.postureFormed = postureTargetPol && plan.extras[0] === 1 ? postureTargetPol : null;
+  return plan;
+}
+
+function applyCompanionWeaponFormaPlan(plan, { fresh = false } = {}) {
+  const cb = state.companionBuild;
+  const isBeast = cb.companion?.category === "beast";
+  const wRec = companionWeaponRecord(cb.weaponPath);
+  const native = companionNativeWeaponPolarities(wRec);
+  if (fresh) {
+    const beforeMods = cb.weaponMods.slice();
+    const beforeRiven = !isBeast && cb.riven ? { ...cb.riven, stats: cb.riven.stats.map((s) => ({ ...s })) } : null;
+    const rivenOrigin = beforeRiven ? Number(beforeRiven.slot) : -1;
+    cb.weaponMods = Array.from({ length: 8 }, () => null);
+    plan.placement.forEach((origin, slot) => {
+      if (origin === null) return;
+      if (origin === rivenOrigin && beforeRiven) {
+        cb.riven = { ...beforeRiven, slot };
+      } else {
+        cb.weaponMods[slot] = beforeMods[origin];
+      }
+    });
+    cb.weaponPolarities = Array.from({ length: isBeast ? 9 : 8 }, () => null);
+  }
+  plan.forma.forEach((polarity, slot) => {
+    if (!polarity) return;
+    cb.weaponPolarities[slot] = polarity === native[slot] ? null : polarity;
+  });
+  if (isBeast && plan.postureFormed) {
+    cb.weaponPolarities[8] = plan.postureFormed === native[8] ? null : plan.postureFormed;
+  }
+}
+
+function ensureCompanionWeaponCapacityFit() {
+  const cap = companionWeaponComputeCapacity();
+  if (!cap.over) return { fits: true, formas: 0 };
+  const plan = companionWeaponFormaPlan({ fresh: false });
+  applyCompanionWeaponFormaPlan(plan, { fresh: false });
+  return plan;
+}
+
+function applyCompanionWeaponMinimalForma() {
+  const plan = companionWeaponFormaPlan({ fresh: true });
+  applyCompanionWeaponFormaPlan(plan, { fresh: true });
+  return plan;
+}
+
+function exportCompanionConfig() {
+  const cb = state.companionBuild;
+  if (!cb.companion) {
+    toast("请先选择同伴", "error");
+    return;
+  }
+  persistCompanionConfigs();
+  const wRec = companionWeaponRecord(cb.weaponPath);
+  const compTitle = cb.companion.nameZh || cb.companion.nameEn || "companion";
+  const weapTitle = wRec ? (wRec.nameZh || wRec.nameEn || "") : "";
+  const activeSlot = cb.subView === "weapon" ? cb.weaponConfig : cb.bodyConfig;
+  const payload = {
+    schema: 1,
+    kind: "companion-build",
+    buildLabel: state.companionCatalog?.buildLabel || state.catalog?.buildLabel || "OFFLINE",
+    exportedAt: new Date().toISOString(),
+    companionPath: cb.companion.path,
+    companionName: compTitle,
+    bodyConfigId: cb.bodyConfig,
+    weaponPath: cb.weaponPath || null,
+    weaponName: weapTitle || null,
+    weaponConfigId: cb.weaponConfig,
+    body: captureCompanionBodySnapshot(),
+    weapon: captureCompanionWeaponSnapshot(),
+  };
+  const segs = [sanitizeFilenameSegment(compTitle)];
+  if (weapTitle) segs.push(sanitizeFilenameSegment(weapTitle));
+  const filename = `${segs.join("+")}-${activeSlot}-${formatExportTimestamp()}.json`;
+  triggerJsonDownload(payload, filename);
+}
+
+function importCompanionConfig(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.addEventListener("load", () => {
+    try {
+      const parsed = JSON.parse(String(reader.result || ""));
+      const bundle = parsed?.kind === "companion-build" ? parsed : parsed?.bundledCompanion;
+      if (!bundle || !bundle.body?.path) {
+        throw new Error("所选 JSON 文件不包含有效的同伴配装记录");
+      }
+      const compRec = companionByPath(bundle.companionPath || bundle.body.path);
+      if (!compRec) throw new Error("导入文件中的同伴不在当前目录中");
+      const cb = state.companionBuild;
+      cb.store ||= readCompanionStore();
+      cb.store.bodies ||= {};
+      cb.store.weapons ||= {};
+      const bodySlot = /^[ABC]$/.test(bundle.bodyConfigId || bundle.configName || "")
+        ? (bundle.bodyConfigId || bundle.configName)
+        : cb.bodyConfig;
+      const weapSlot = /^[ABC]$/.test(bundle.weaponConfigId || bundle.weaponConfigName || "")
+        ? (bundle.weaponConfigId || bundle.weaponConfigName)
+        : cb.weaponConfig;
+      cb.store.bodies[compRec.path] ||= { A: null, B: null, C: null };
+      cb.store.bodies[compRec.path][bodySlot] = bundle.body;
+      const wPath = bundle.weaponPath || bundle.weapon?.path || bundle.body?.pairedWeaponPath || null;
+      if (wPath && bundle.weapon) {
+        cb.store.weapons[wPath] ||= { A: null, B: null, C: null };
+        cb.store.weapons[wPath][weapSlot] = bundle.weapon;
+      }
+      writeCompanionStore();
+      selectCompanion(compRec, bodySlot, weapSlot, wPath);
+      toast(`已导入 ${compRec.nameZh || compRec.nameEn} 配装（本体 ${bodySlot}${wPath ? ` / 武器 ${weapSlot}` : ""}）`, "success");
+    } catch (error) {
+      toast(error.message || "同伴配置导入失败", "error");
+    } finally {
+      if (ui["companion-config-import-file"]) ui["companion-config-import-file"].value = "";
+    }
+  });
+  reader.readAsText(file);
+}
+
+function captureCompanionBodySnapshot() {
+  const cb = state.companionBuild;
+  if (!cb.companion) return null;
+  const modularSlots = COMPANION_MODULAR_SLOTS_BY_KIND[cb.companion.kind];
+  const parts = modularSlots
+    ? Object.fromEntries(modularSlots.map((s) => [s, cb.parts[s] || null]).filter(([, v]) => Boolean(v)))
+    : undefined;
+  return {
+    path: cb.companion.path,
+    ...(parts && Object.keys(parts).length ? { parts } : {}),
+    reactor: Boolean(cb.bodyReactor),
+    polarities: cb.bodyPolarities.slice(0, 10),
+    mods: cb.bodyMods.flatMap((mod, slot) => (mod ? [{ path: mod.path, rank: Number(mod.rank ?? mod.maxRank ?? 0), slot }] : [])),
+    pairedWeaponPath: cb.weaponPath || cb.companion.defaultWeaponPath || null,
+    options: {
+      firedUp: Boolean(cb.options.firedUp),
+      astralBond: Boolean(cb.options.astralBond),
+      momentousElement: cb.options.momentousElement || null,
+      catsEyeMode: cb.options.catsEyeMode || "average",
+      ambushActive: Boolean(cb.options.ambushActive),
+    },
+  };
+}
+
+function captureCompanionWeaponSnapshot() {
+  const cb = state.companionBuild;
+  if (!cb.weaponPath) return null;
+  const isClaws = cb.companion?.category === "beast";
+  if (isClaws) {
+    return {
+      kind: "beast_claws",
+      path: cb.weaponPath,
+      reactor: Boolean(cb.weaponReactor),
+      slotPolarities: cb.weaponPolarities.slice(0, 9),
+      posture: cb.posture ? { path: cb.posture.path, rank: Number(cb.posture.rank ?? cb.posture.maxRank ?? 0) } : null,
+      mods: cb.weaponMods.flatMap((mod, slot) => (mod ? [{ path: mod.path, rank: Number(mod.rank ?? mod.maxRank ?? 0), slot }] : [])),
+    };
+  }
+  return {
+    kind: "robotic_weapon",
+    path: cb.weaponPath,
+    reactor: Boolean(cb.weaponReactor),
+    slotPolarities: cb.weaponPolarities.slice(0, 8),
+    companionPlayerStacks: Boolean(cb.companionPlayerStacks),
+    riven: cb.riven && Array.isArray(cb.riven.stats) && cb.riven.stats.length
+      ? {
+        slot: clamp(Number(cb.riven.slot ?? 7), 0, 7),
+        polarity: cb.riven.polarity || "AP_ATTACK",
+        stats: cb.riven.stats.map((s) => ({ code: s.code, value: Number(s.value || 0), negative: Boolean(s.negative) })),
+      }
+      : null,
+    mods: cb.weaponMods.flatMap((mod, slot) => (mod && (!cb.riven || cb.riven.slot !== slot)
+      ? [{ path: mod.path, rank: Number(mod.rank ?? mod.maxRank ?? 0), slot }]
+      : [])),
+  };
+}
+
+function persistCompanionConfigs() {
+  const cb = state.companionBuild;
+  if (!cb.companion) return;
+  cb.store ||= readCompanionStore();
+  cb.store.bodies ||= {};
+  cb.store.weapons ||= {};
+  const cPath = cb.companion.path;
+  cb.store.bodies[cPath] ||= { A: null, B: null, C: null };
+  cb.store.bodies[cPath][cb.bodyConfig] = captureCompanionBodySnapshot();
+  if (cb.weaponPath) {
+    cb.store.weapons[cb.weaponPath] ||= { A: null, B: null, C: null };
+    cb.store.weapons[cb.weaponPath][cb.weaponConfig] = captureCompanionWeaponSnapshot();
+  }
+  cb.store.__lastSelection = {
+    companionPath: cPath,
+    bodyConfig: cb.bodyConfig,
+    weaponPath: cb.weaponPath,
+    weaponConfig: cb.weaponConfig,
+    subView: cb.subView,
+    previewWfMode: cb.previewWfMode || "auto",
+    previewWfId: cb.previewWfId || "",
+    previewWfConfig: cb.previewWfConfig || "A",
+    primaryStatsManual: Boolean(cb.primaryStatsManual),
+    primaryCc: Number(cb.primaryCc ?? 100),
+    primarySc: Number(cb.primarySc ?? 100),
+  };
+  writeCompanionStore();
+  if (!isSyncingCrossTool && state.activeTool === "companion" && state.companionLink?.enabled) {
+    let linkChanged = false;
+    if (state.companionLink.companionId !== cPath) {
+      state.companionLink.companionId = cPath;
+      linkChanged = true;
+    }
+    if (state.companionLink.configName !== cb.bodyConfig) {
+      state.companionLink.configName = cb.bodyConfig;
+      linkChanged = true;
+    }
+    if (state.companionLink.weaponConfigName !== cb.weaponConfig) {
+      state.companionLink.weaponConfigName = cb.weaponConfig;
+      linkChanged = true;
+    }
+    if (linkChanged) persistActiveBuildConfig();
+  }
+}
+
+function applyCompanionWeaponSnapshot(weaponPath, snapshot) {
+  const cb = state.companionBuild;
+  const companion = cb.companion;
+  cb.weaponPath = weaponPath;
+  const isClaws = companion?.category === "beast";
+  cb.weaponReactor = snapshot?.reactor !== undefined ? Boolean(snapshot.reactor) : true;
+  cb.weaponPolarities = Array.from({ length: isClaws ? 9 : 8 }, (_, idx) => {
+    const val = snapshot?.slotPolarities?.[idx];
+    return typeof val === "string" && val ? val : null;
+  });
+  cb.posture = null;
+  cb.riven = null;
+  cb.weaponMods = Array.from({ length: 8 }, () => null);
+  if (isClaws) {
+    if (snapshot?.posture?.path) {
+      const pMod = companionClawModByPath(snapshot.posture.path);
+      if (pMod && pMod.isPosture) {
+        cb.posture = { ...pMod, rank: clamp(Number(snapshot.posture.rank ?? pMod.maxRank ?? 0), 0, Number(pMod.maxRank ?? 0)) };
+      }
+    } else {
+      const claw = companionClawByPath(weaponPath);
+      const defaultPosture = claw?.defaultPosturePath ? companionClawModByPath(claw.defaultPosturePath) : companionRows("clawMods").find((m) => m.isPosture);
+      if (defaultPosture) cb.posture = { ...defaultPosture, rank: Number(defaultPosture.maxRank ?? 0) };
+    }
+    for (const entry of snapshot?.mods || []) {
+      const slot = Number(entry?.slot);
+      if (!Number.isInteger(slot) || slot < 0 || slot >= 8) continue;
+      const mRec = companionClawModByPath(entry.path);
+      if (mRec && !mRec.isPosture) {
+        cb.weaponMods[slot] = { ...mRec, rank: clamp(Number(entry.rank ?? mRec.maxRank ?? 0), 0, Number(mRec.maxRank ?? 0)) };
+      }
+    }
+  } else {
+    cb.companionPlayerStacks = snapshot?.companionPlayerStacks !== undefined ? Boolean(snapshot.companionPlayerStacks) : true;
+    const modPool = new Map([...(state.catalog?.manualMods || []), ...(state.catalog?.manualModVariants || [])].map((m) => [m.path, m]));
+    for (const entry of snapshot?.mods || []) {
+      const slot = Number(entry?.slot);
+      if (!Number.isInteger(slot) || slot < 0 || slot >= 8) continue;
+      const mRec = modPool.get(entry.path);
+      if (mRec) {
+        cb.weaponMods[slot] = { ...mRec, rank: clamp(Number(entry.rank ?? mRec.maxRank ?? 0), 0, Number(mRec.maxRank ?? 0)) };
+      }
+    }
+    if (snapshot?.riven && Array.isArray(snapshot.riven.stats) && snapshot.riven.stats.length) {
+      const rSlot = clamp(Number(snapshot.riven.slot ?? 7), 0, 7);
+      cb.weaponMods[rSlot] = null;
+      cb.riven = {
+        slot: rSlot,
+        polarity: snapshot.riven.polarity || "AP_ATTACK",
+        stats: snapshot.riven.stats.map((s) => ({ code: s.code, value: Number(s.value || 0), negative: Boolean(s.negative) })),
+      };
+    }
+  }
+}
+
+function applyCompanionBodySnapshot(companion, snapshot, preferredWeaponPath = null) {
+  const cb = state.companionBuild;
+  cb.companion = companion;
+  if (!companion) return;
+  const defaultParts = defaultModularParts(companion);
+  cb.parts = snapshot?.parts && typeof snapshot.parts === "object"
+    ? { ...defaultParts, ...snapshot.parts }
+    : defaultParts;
+  cb.bodyReactor = snapshot?.reactor !== undefined ? Boolean(snapshot.reactor) : true;
+  cb.bodyPolarities = Array.from({ length: 10 }, (_, idx) => {
+    const val = snapshot?.polarities?.[idx];
+    return typeof val === "string" && val ? val : null;
+  });
+  const opts = snapshot?.options || {};
+  cb.options = {
+    firedUp: opts.firedUp !== undefined ? Boolean(opts.firedUp) : true,
+    astralBond: Boolean(opts.astralBond),
+    momentousElement: opts.momentousElement || "",
+    catsEyeMode: ["average", "active", "off"].includes(opts.catsEyeMode) ? opts.catsEyeMode : "average",
+    ambushActive: Boolean(opts.ambushActive),
+  };
+  if (snapshot && Array.isArray(snapshot.mods)) {
+    cb.bodyMods = Array.from({ length: 10 }, () => null);
+    for (const entry of snapshot.mods) {
+      const slot = Number(entry?.slot);
+      if (!Number.isInteger(slot) || slot < 0 || slot >= 10) continue;
+      const mRec = companionBodyModByPath(entry.path);
+      if (mRec && companionBodyModCompatible(companion, mRec)) {
+        cb.bodyMods[slot] = { ...mRec, rank: clamp(Number(entry.rank ?? mRec.maxRank ?? 0), 0, Number(mRec.maxRank ?? 0)) };
+      }
+    }
+  } else {
+    cb.bodyMods = defaultBodyModsForCompanion(companion, cb.parts);
+  }
+  const validWeapons = validCompanionWeapons(companion, cb.bodyMods);
+  const desiredWeapon = preferredWeaponPath || snapshot?.pairedWeaponPath || companion.defaultWeaponPath || validWeapons[0]?.path || null;
+  const chosenWeapon = validWeapons.find((w) => w.path === desiredWeapon)?.path || validWeapons[0]?.path || null;
+  const savedWeaponSnap = chosenWeapon ? cb.store?.weapons?.[chosenWeapon]?.[cb.weaponConfig] || null : null;
+  applyCompanionWeaponSnapshot(chosenWeapon, savedWeaponSnap);
+}
+
+function selectCompanion(companion, bodyCfgName = "A", weaponCfgName = "A", preferredWeaponPath = null) {
+  if (!companion) return;
+  if (state.companionBuild.companion) persistCompanionConfigs();
+  const cb = state.companionBuild;
+  cb.store ||= readCompanionStore();
+  cb.bodyConfig = /^[ABC]$/.test(bodyCfgName) ? bodyCfgName : "A";
+  cb.weaponConfig = /^[ABC]$/.test(weaponCfgName) ? weaponCfgName : "A";
+  const bodySnap = cb.store.bodies?.[companion.path]?.[cb.bodyConfig] || null;
+  applyCompanionBodySnapshot(companion, bodySnap, preferredWeaponPath);
+  persistCompanionConfigs();
+  renderCompanionWorkbench();
+  scheduleCompanionEvaluate();
+}
+
+function switchCompanionSubView(subView) {
+  const next = subView === "weapon" ? "weapon" : "body";
+  state.companionBuild.subView = next;
+  persistCompanionConfigs();
+  renderCompanionSubView();
+  renderCompanionHudCapacity();
+}
+
+function switchCompanionBodyConfig(cfgName) {
+  if (!/^[ABC]$/.test(cfgName) || cfgName === state.companionBuild.bodyConfig) return;
+  persistCompanionConfigs();
+  state.companionBuild.bodyConfig = cfgName;
+  const snap = state.companionBuild.store?.bodies?.[state.companionBuild.companion?.path]?.[cfgName] || null;
+  applyCompanionBodySnapshot(state.companionBuild.companion, snap);
+  persistCompanionConfigs();
+  renderCompanionWorkbench();
+  scheduleCompanionEvaluate();
+}
+
+function switchCompanionWeaponConfig(cfgName) {
+  if (!/^[ABC]$/.test(cfgName) || cfgName === state.companionBuild.weaponConfig) return;
+  persistCompanionConfigs();
+  state.companionBuild.weaponConfig = cfgName;
+  const wPath = state.companionBuild.weaponPath;
+  const snap = wPath ? state.companionBuild.store?.weapons?.[wPath]?.[cfgName] || null : null;
+  applyCompanionWeaponSnapshot(wPath, snap);
+  persistCompanionConfigs();
+  renderCompanionWorkbench();
+  scheduleCompanionEvaluate();
+}
+
+function enforceMoaWeaponRuleAfterBodyChange() {
+  const cb = state.companionBuild;
+  if (!cb.companion || cb.companion.kind !== "moa") return;
+  const valid = validCompanionWeapons(cb.companion, cb.bodyMods);
+  if (!valid.some((w) => w.path === cb.weaponPath)) {
+    const nextPath = valid[0]?.path || null;
+    const snap = nextPath ? cb.store?.weapons?.[nextPath]?.[cb.weaponConfig] || null : null;
+    applyCompanionWeaponSnapshot(nextPath, snap);
+  }
+}
+
+async function loadCompanionCatalog() {
+  if (state.companionCatalog) return state.companionCatalog;
+  if (state.companionCatalogPromise) return state.companionCatalogPromise;
+  if (ui["companion-catalog-status"]) ui["companion-catalog-status"].textContent = "LOADING";
+  state.companionCatalogPromise = fetch("/api/companion/catalog")
+    .then(async (response) => {
+      const body = await response.json();
+      if (!response.ok) throw new Error(body?.error?.message || `同伴目录加载失败（${response.status}）`);
+      state.companionCatalog = body;
+      registerCompanionAssets();
+      state.companionBuild.store = readCompanionStore();
+      loadWarframeCatalog().then(() => {
+        renderCompanionWarframeOptions();
+        scheduleCompanionEvaluate();
+      }).catch(() => {});
+      const companions = companionRows("companions");
+      const last = state.companionBuild.store.__lastSelection;
+      if (last) {
+        if (last.subView === "weapon" || last.subView === "body") state.companionBuild.subView = last.subView;
+        if (["auto", "neutral", "custom"].includes(last.previewWfMode)) {
+          state.companionBuild.previewWfMode = last.previewWfMode;
+        } else if (last.previewWfId) {
+          state.companionBuild.previewWfMode = "custom";
+        }
+        if (typeof last.previewWfId === "string") state.companionBuild.previewWfId = last.previewWfId;
+        if (/^[ABC]$/.test(last.previewWfConfig || "")) state.companionBuild.previewWfConfig = last.previewWfConfig;
+        state.companionBuild.primaryStatsManual = Boolean(last.primaryStatsManual);
+        if (Number.isFinite(Number(last.primaryCc))) state.companionBuild.primaryCc = Number(last.primaryCc);
+        if (Number.isFinite(Number(last.primarySc))) state.companionBuild.primarySc = Number(last.primarySc);
+      }
+      syncLivePrimaryStatsIntoCompanion(false);
+      const initialComp = (last?.companionPath && companionByPath(last.companionPath))
+        || companions.find((c) => c.nameEn === "Nautilus Prime")
+        || companions.find((c) => c.nameEn === "Wyrm Prime")
+        || companions[0];
+      if (initialComp) {
+        selectCompanion(initialComp, last?.bodyConfig || "A", last?.weaponConfig || "A", last?.weaponPath || null);
+      }
+      if (ui["companion-catalog-status"]) ui["companion-catalog-status"].textContent = `${companions.length} COMPANIONS`;
+      if (ui["companion-loading"]) ui["companion-loading"].hidden = true;
+      if (ui["companion-build-content"]) ui["companion-build-content"].hidden = false;
+      renderSynergyCompanionOptions();
+      return body;
+    })
+    .catch((error) => {
+      state.companionCatalogPromise = null;
+      if (ui["companion-catalog-status"]) ui["companion-catalog-status"].textContent = "UNAVAILABLE";
+      if (ui["companion-loading"]) ui["companion-loading"].querySelector("p").textContent = error.message || "同伴目录加载失败";
+      throw error;
+    });
+  return state.companionCatalogPromise;
+}
+
+function resolveAutoCompanionWarframeTarget() {
+  const allFrames = [...warframeRows("warframes"), ...warframeRows("warframeForms")];
+  let frameId = "";
+  let configName = "A";
+  let sourceLabel = "默认中立";
+  if (!isCompanionWeapon() && state.warframeLink?.enabled && state.warframeLink.frameId) {
+    frameId = state.warframeLink.frameId;
+    configName = state.warframeLink.configName || "A";
+    sourceLabel = "战甲协同";
+  } else if (isExaltedWeapon() && state.exaltedLink?.frameId) {
+    frameId = state.exaltedLink.frameId;
+    configName = state.exaltedLink.configName || "A";
+    sourceLabel = "显赫战甲";
+  } else {
+    const activeRec = activeWarframeRecord();
+    const last = state.warframeBuild?.store?.__lastSelection || readWarframeStore().__lastSelection;
+    if (activeRec && warframeId(activeRec)) {
+      frameId = warframeId(activeRec);
+      configName = state.warframeBuild?.activeConfig || "A";
+      sourceLabel = "战甲配装";
+    } else if (last?.frameId) {
+      frameId = last.activeForm && last.activeForm !== "main" ? last.activeForm : last.frameId;
+      configName = last.activeConfig || "A";
+      sourceLabel = "战甲配装";
+    }
+  }
+  const record = frameId ? allFrames.find((f) => warframeId(f) === frameId) || null : null;
+  return { frameId: record ? frameId : "", configName: /^[ABC]$/.test(configName) ? configName : "A", record, sourceLabel };
+}
+
+function resolveEffectiveCompanionWarframe() {
+  const cb = state.companionBuild;
+  const mode = cb.previewWfMode || "auto";
+  if (mode === "neutral") {
+    return { mode: "neutral", frameId: "", configName: "A", record: null, sourceLabel: "固定中立" };
+  }
+  if (mode === "custom" && cb.previewWfId) {
+    const allFrames = [...warframeRows("warframes"), ...warframeRows("warframeForms")];
+    const record = allFrames.find((f) => warframeId(f) === cb.previewWfId) || null;
+    if (record) {
+      return { mode: "custom", frameId: cb.previewWfId, configName: cb.previewWfConfig || "A", record, sourceLabel: "手动指定" };
+    }
+  }
+  return { mode: "auto", ...resolveAutoCompanionWarframeTarget() };
+}
+
+function renderCompanionWarframeOptions() {
+  const eff = resolveEffectiveCompanionWarframe();
+  if (ui["companion-preview-wf-select"]) {
+    ui["companion-preview-wf-select"].value = eff.mode === "auto" ? "__auto__" : (eff.frameId || "");
+  }
+  const visual = ui["companion-preview-wf-visual"];
+  if (visual) {
+    visual.replaceChildren();
+    const portrait = eff.record?.portraitAsset || eff.record?.iconAsset || "/assets/warframes/portraits/Excalibur.png";
+    visual.append(imageNode(portrait, "warframe-selector-icon", eff.record ? warframeName(eff.record) : "默认中立战甲", "lazy"));
+  }
+  if (ui["companion-preview-wf-name"]) {
+    if (eff.mode === "neutral") {
+      ui["companion-preview-wf-name"].textContent = "固定中立战甲";
+    } else if (eff.mode === "auto") {
+      ui["companion-preview-wf-name"].textContent = eff.record ? `跟随：${warframeName(eff.record)}` : "跟随当前战甲";
+    } else {
+      ui["companion-preview-wf-name"].textContent = eff.record ? warframeName(eff.record) : "选择战甲";
+    }
+  }
+  if (ui["companion-preview-wf-meta"]) {
+    if (eff.mode === "neutral") {
+      ui["companion-preview-wf-meta"].textContent = "300 / 300 / 100 · 点击切换";
+    } else if (eff.mode === "auto") {
+      ui["companion-preview-wf-meta"].textContent = eff.record
+        ? `自动同步${eff.sourceLabel} · 配置 ${eff.configName}`
+        : "未选战甲时按中立基准计算";
+    } else {
+      const saved = eff.record ? warframeSavedConfigLabels(eff.record) : [];
+      ui["companion-preview-wf-meta"].textContent = `手动指定${saved.length ? ` · 已配 ${saved.join("/")}` : " · 满级默认"}`;
+    }
+  }
+  if (ui["companion-preview-wf-config"]) {
+    ui["companion-preview-wf-config"].value = eff.configName || "A";
+    ui["companion-preview-wf-config"].disabled = eff.mode !== "custom" || !eff.frameId;
+    ui["companion-preview-wf-config"].title = eff.mode === "auto"
+      ? "当前为自动跟随模式，配置槽随战甲页自动同步"
+      : (eff.mode === "neutral" ? "中立战甲无配置槽" : "选择该战甲的配置槽");
+  }
+}
+
+function renderCompanionControlPane() {
+  const cb = state.companionBuild;
+  const companion = cb.companion;
+  if (!companion) return;
+  const kindLabel = COMPANION_KIND_LABELS[companion.kind] || companion.kind;
+  const isRobotic = companion.category === "robotic";
+  if (ui["companion-select-kind"]) ui["companion-select-kind"].textContent = `${kindLabel} / ${isRobotic ? "ROBOTIC" : "BEAST"}`;
+  if (ui["companion-select-name"]) ui["companion-select-name"].textContent = companion.nameZh || companion.nameEn;
+  if (ui["companion-select-description"]) ui["companion-select-description"].textContent = `${companion.nameEn} - 点击切换同伴`;
+  const visual = ui["companion-select-visual"];
+  if (visual) {
+    visual.replaceChildren();
+    if (companion.portraitAsset) visual.append(imageNode(companion.portraitAsset, "", companion.nameZh || companion.nameEn, "lazy"));
+    else visual.append(create("i", "", "◈"));
+  }
+  const portrait = ui["companion-portrait"];
+  if (portrait) {
+    portrait.hidden = !companion.portraitAsset;
+    if (companion.portraitAsset) {
+      portrait.src = companion.portraitAsset;
+      portrait.alt = companion.nameZh || companion.nameEn;
+    }
+  }
+  const catTag = ui["companion-category-tag"];
+  if (catTag) {
+    catTag.textContent = isRobotic
+      ? "机械同伴 - 原生索敌开火"
+      : "生物同伴 - 被动连结与光环（3D靶场不主动攻击）";
+    catTag.className = `companion-category-badge ${isRobotic ? "is-robotic" : "is-beast"}`;
+  }
+  if (ui["companion-profile-name"]) ui["companion-profile-name"].textContent = `${companion.nameZh || companion.nameEn} (${companion.nameEn})`;
+  if (ui["companion-profile-description"]) {
+    const base = companion.stats || {};
+    ui["companion-profile-description"].textContent = `满级基础 生命 ${Math.round(base.health || 0)} / 护盾 ${Math.round(base.shield || 0)} / 护甲 ${Math.round(base.armor || 0)}`;
+  }
+
+  // Modular assembly
+  const modBox = ui["companion-modular-fields"];
+  const modGrid = ui["companion-modular-grid"];
+  const modularSlots = COMPANION_MODULAR_SLOTS_BY_KIND[companion.kind];
+  if (modBox && modGrid) {
+    modBox.hidden = !modularSlots;
+    if (modularSlots) {
+      const modularGroup = state.companionCatalog?.modularParts?.[companion.kind] || {};
+      modGrid.replaceChildren(...modularSlots.map((slotName) => {
+        const label = create("label", "field");
+        label.append(create("span", "", COMPANION_MODULAR_SLOT_LABELS[slotName] || slotName));
+        const sel = document.createElement("select");
+        const bucket = Array.isArray(modularGroup[slotName]) ? modularGroup[slotName] : [];
+        for (const part of bucket) {
+          const opt = document.createElement("option");
+          opt.value = part.path;
+          const bonusBits = [];
+          const bonus = part.bonus || part.baseStats || {};
+          if (bonus.health) bonusBits.push(`生命${part.modifyBase === false ? `+${Math.round(bonus.health * 100)}%` : Math.round(bonus.health)}`);
+          if (bonus.shield) bonusBits.push(`护盾${part.modifyBase === false ? `+${Math.round(bonus.shield * 100)}%` : Math.round(bonus.shield)}`);
+          if (bonus.armor) bonusBits.push(`护甲${part.modifyBase === false ? `+${Math.round(bonus.armor * 100)}%` : Math.round(bonus.armor)}`);
+          opt.textContent = `${part.nameZh || part.nameEn}${bonusBits.length ? ` (${bonusBits.join("/")})` : ""}`;
+          sel.append(opt);
+        }
+        if (cb.parts[slotName]) sel.value = cb.parts[slotName];
+        sel.addEventListener("change", () => {
+          cb.parts[slotName] = sel.value;
+          persistCompanionConfigs();
+          renderCompanionSlots();
+          scheduleCompanionEvaluate();
+        });
+        label.append(sel);
+        return label;
+      }));
+    } else {
+      modGrid.replaceChildren();
+    }
+  }
+
+  // Paired Weapon / Beast Claws selector
+  const weaponSelect = ui["companion-weapon-select"];
+  if (weaponSelect) {
+    const valid = validCompanionWeapons(companion, cb.bodyMods);
+    weaponSelect.replaceChildren(...valid.map((w) => {
+      const opt = document.createElement("option");
+      opt.value = w.path;
+      opt.textContent = `${w.nameZh || w.nameEn}${w.nameEn && w.nameZh && w.nameZh !== w.nameEn ? ` (${w.nameEn})` : ""}`;
+      return opt;
+    }));
+    if (cb.weaponPath && valid.some((w) => w.path === cb.weaponPath)) {
+      weaponSelect.value = cb.weaponPath;
+    } else if (valid[0]) {
+      cb.weaponPath = valid[0].path;
+      weaponSelect.value = cb.weaponPath;
+    }
+    weaponSelect.disabled = valid.length <= 1;
+    if (ui["companion-weapon-caption"]) {
+      if (!isRobotic) {
+        ui["companion-weapon-caption"].textContent = "生物同伴绑定本品种专属兽爪（含专用姿态槽与 8 个利爪槽）";
+      } else if (companion.kind === "moa" && cb.weaponPath === COMPANION_MOA_MELEE_PATH) {
+        ui["companion-weapon-caption"].textContent = "已装备「强力接战」戒律：武器自动切换为恐鸟近战攻击";
+      } else if (companion.kind === "hound") {
+        ui["companion-weapon-caption"].textContent = "猎犬仅可装配专属近战武器（阿卡腾 / 巴托腾 / 拉瑟腾）";
+      } else {
+        ui["companion-weapon-caption"].textContent = "切换配对武器将读取该武器独立的 A / B / C 配置";
+      }
+    }
+  }
+
+  renderCompanionWarframeOptions();
+  if (ui["companion-primary-cc"]) ui["companion-primary-cc"].value = String(cb.primaryCc ?? 100);
+  if (ui["companion-primary-sc"]) ui["companion-primary-sc"].value = String(cb.primarySc ?? 100);
+  if (ui["companion-opt-fired-up"]) ui["companion-opt-fired-up"].checked = Boolean(cb.options.firedUp);
+  if (ui["companion-opt-astral-bond"]) ui["companion-opt-astral-bond"].checked = Boolean(cb.options.astralBond);
+  if (ui["companion-opt-ambush"]) ui["companion-opt-ambush"].checked = Boolean(cb.options.ambushActive);
+  if (ui["companion-opt-player-stacks"]) ui["companion-opt-player-stacks"].checked = Boolean(cb.companionPlayerStacks);
+  if (ui["companion-opt-momentous"]) ui["companion-opt-momentous"].value = cb.options.momentousElement || "";
+  if (ui["companion-opt-catseye"]) ui["companion-opt-catseye"].value = cb.options.catsEyeMode || "average";
+}
+
+function renderCompanionSubView() {
+  const cb = state.companionBuild;
+  const isWeapon = cb.subView === "weapon";
+  if (ui["companion-body-bench"]) ui["companion-body-bench"].hidden = isWeapon;
+  if (ui["companion-weapon-bench"]) ui["companion-weapon-bench"].hidden = !isWeapon;
+  ui["companion-subview-tabs"]?.querySelectorAll("[data-comp-subview]").forEach((btn) => {
+    const active = btn.dataset.compSubview === cb.subView;
+    btn.classList.toggle("is-active", active);
+    btn.setAttribute("aria-selected", String(active));
+  });
+  const isBeast = cb.companion?.category === "beast";
+  const wRec = companionWeaponRecord(cb.weaponPath);
+  if (ui["companion-subview-weapon-btn"]) {
+    ui["companion-subview-weapon-btn"].textContent = isBeast
+      ? `兽爪配卡 (${wRec?.nameZh || "姿态 + 8 槽"})`
+      : `同伴武器配卡 (${wRec?.nameZh || "8 槽"})`;
+  }
+  if (ui["companion-weapon-strip-label"]) {
+    ui["companion-weapon-strip-label"].textContent = isBeast ? "兽爪配置槽" : "武器配置槽";
+  }
+  if (ui["companion-posture-wrap"]) ui["companion-posture-wrap"].hidden = !isBeast;
+  const allowRiven = !isBeast && wRec && !wRec.isVirtualMoaMelee;
+  if (ui["companion-riven-bar"]) ui["companion-riven-bar"].hidden = !allowRiven;
+  if (ui["companion-weapon-open-standalone"]) {
+    ui["companion-weapon-open-standalone"].hidden = Boolean(isBeast || !wRec || wRec.isVirtualMoaMelee);
+  }
+}
+
+function companionPolarityChipNode(slotLabel, polarity, isForma, relation, onClick) {
+  const chip = create("button", `slot-polarity-chip${relation === "match" ? " is-matched" : ""}${relation === "mismatch" ? " is-mismatch" : ""}${isForma ? " is-forma" : ""}`);
+  chip.type = "button";
+  if (polarity && POLARITY_IMAGES[polarity]) {
+    chip.append(imageNode(POLARITY_IMAGES[polarity], "slot-polarity-icon", "", "lazy"));
+  } else {
+    chip.append(create("span", "slot-polarity-icon", ""));
+  }
+  chip.title = `${slotLabel} 极性 - ${POLARITY_NAMES[polarity] || "无极性"}${isForma ? "（已极化）" : ""}${relation === "mismatch" ? " - 不匹配" : relation === "match" ? " - 匹配" : ""} - 点击切换极化`;
+  chip.setAttribute("aria-label", chip.title);
+  chip.addEventListener("click", (event) => {
+    event.stopPropagation();
+    onClick();
+  });
+  return chip;
+}
+
+function cycleCompanionSlotPolarity(targetKind, index) {
+  const cb = state.companionBuild;
+  if (targetKind === "body") {
+    const native = companionNativeBodyPolarities()[index] || null;
+    const current = companionEffectiveBodyPolarity(index);
+    const mod = cb.bodyMods[index];
+    const modPol = mod?.polarity || null;
+    let next;
+    if (modPol && current !== modPol) {
+      next = modPol;
+    } else {
+      const idx = COMPANION_FORMA_ORDER.indexOf(current);
+      next = COMPANION_FORMA_ORDER[(Math.max(0, idx) + 1) % COMPANION_FORMA_ORDER.length];
+    }
+    cb.bodyPolarities[index] = next === native ? null : (next || "AP_UNIVERSAL");
+  } else {
+    const wRec = companionWeaponRecord(cb.weaponPath);
+    const native = companionNativeWeaponPolarities(wRec)[index] || null;
+    const current = companionEffectiveWeaponPolarity(index, wRec);
+    const mod = index === 8 ? cb.posture : cb.weaponMods[index];
+    const modPol = index !== 8 && cb.riven?.slot === index ? (cb.riven.polarity || "AP_ATTACK") : (mod?.polarity || null);
+    let next;
+    if (modPol && current !== modPol) {
+      next = modPol;
+    } else {
+      const idx = COMPANION_FORMA_ORDER.indexOf(current);
+      next = COMPANION_FORMA_ORDER[(Math.max(0, idx) + 1) % COMPANION_FORMA_ORDER.length];
+    }
+    cb.weaponPolarities[index] = next === native ? null : (next || "AP_UNIVERSAL");
+  }
+  persistCompanionConfigs();
+  renderCompanionSlots();
+  scheduleCompanionEvaluate();
+}
+
+function renderCompanionSlots({ skipRivenEditor = false } = {}) {
+  const cb = state.companionBuild;
+  if (!cb.companion) return;
+
+  // Config tab states & reactor toggles
+  ui["companion-body-config-tabs"]?.querySelectorAll("[data-comp-body-config]").forEach((btn) => {
+    const active = btn.dataset.compBodyConfig === cb.bodyConfig;
+    btn.classList.toggle("is-active", active);
+    btn.setAttribute("aria-selected", String(active));
+  });
+  ui["companion-weapon-config-tabs"]?.querySelectorAll("[data-comp-weapon-config]").forEach((btn) => {
+    const active = btn.dataset.compWeaponConfig === cb.weaponConfig;
+    btn.classList.toggle("is-active", active);
+    btn.setAttribute("aria-selected", String(active));
+  });
+  if (ui["companion-body-reactor"]) ui["companion-body-reactor"].checked = Boolean(cb.bodyReactor);
+  if (ui["companion-weapon-reactor"]) ui["companion-weapon-reactor"].checked = Boolean(cb.weaponReactor);
+
+  // 1) Body 10 slots
+  const bodyHost = ui["companion-body-slots"];
+  if (bodyHost) {
+    const nodes = cb.bodyMods.map((mod, index) => {
+      const slotPol = companionEffectiveBodyPolarity(index);
+      const isForma = cb.bodyPolarities[index] !== null && cb.bodyPolarities[index] !== undefined;
+      const eff = mod ? modEffectiveDrain(mod, slotPol) : { relation: "" };
+      const chip = companionPolarityChipNode(`本体槽位 ${index + 1}`, slotPol, isForma, eff.relation, () => cycleCompanionSlotPolarity("body", index));
+      const slot = create("article", "manual-slot companion-slot");
+      if (!mod) {
+        const empty = create("button", "manual-slot-empty-card");
+        empty.type = "button";
+        empty.append(create("span", "manual-slot-empty-plus", "＋"), create("small", "", `槽位 ${String(index + 1).padStart(2, "0")}`));
+        if (slotPol && POLARITY_IMAGES[slotPol]) {
+          empty.append(imageNode(POLARITY_IMAGES[slotPol], "empty-slot-polarity", "", "lazy"));
+        }
+        empty.addEventListener("click", () => openCompanionPicker("bodyMod", index));
+        slot.append(empty, chip);
+        return slot;
+      }
+      const card = createNormalModCard(mod, index + 1, {
+        slotPolarity: slotPol,
+        compatLabel: companionModCompatLabel(mod, "bodyMod"),
+      });
+      card.classList.add("manual-slot-preview");
+      if (mod.isBond) card.classList.add("is-bond-card");
+      card.addEventListener("click", () => openCompanionPicker("bodyMod", index));
+      const maxRank = Number(mod.maxRank ?? 0);
+      const curRank = clamp(Number(mod.rank ?? maxRank), 0, maxRank);
+      const actions = create("div", "manual-slot-actions");
+      if (maxRank > 0) {
+        const stepper = create("div", "rank-stepper");
+        const dec = create("button", "rank-stepper-btn", "−");
+        const inc = create("button", "rank-stepper-btn", "+");
+        dec.type = inc.type = "button";
+        dec.disabled = curRank <= 0;
+        inc.disabled = curRank >= maxRank;
+        dec.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          mod.rank = Math.max(0, curRank - 1);
+          persistCompanionConfigs();
+          renderCompanionSlots();
+          scheduleCompanionEvaluate();
+        });
+        inc.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          mod.rank = Math.min(maxRank, curRank + 1);
+          ensureCompanionBodyCapacityFit();
+          persistCompanionConfigs();
+          renderCompanionSlots();
+          scheduleCompanionEvaluate();
+        });
+        stepper.append(dec, create("span", "rank-stepper-value", `${curRank}/${maxRank}`), inc);
+        actions.append(stepper);
+      }
+      const remove = create("button", "manual-slot-remove", "移除");
+      remove.type = "button";
+      remove.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        cb.bodyMods[index] = null;
+        enforceMoaWeaponRuleAfterBodyChange();
+        persistCompanionConfigs();
+        renderCompanionWorkbench();
+        scheduleCompanionEvaluate();
+      });
+      actions.append(remove);
+      slot.append(card, chip, actions);
+      return slot;
+    });
+    bodyHost.replaceChildren(...nodes);
+  }
+
+  // 2) Beast Posture slot (if Beast)
+  const isBeast = cb.companion.category === "beast";
+  const wRec = companionWeaponRecord(cb.weaponPath);
+  if (isBeast && ui["companion-posture-slot"]) {
+    const pPol = companionEffectiveWeaponPolarity(8, wRec);
+    const pForma = cb.weaponPolarities[8] !== null && cb.weaponPolarities[8] !== undefined;
+    const pMod = cb.posture;
+    const pRel = pMod && pPol ? (polarityMatches(pMod.polarity, pPol) ? "match" : "mismatch") : "";
+    const pChip = companionPolarityChipNode("姿态槽", pPol, pForma, pRel, () => cycleCompanionSlotPolarity("weapon", 8));
+    const pSlot = create("article", "manual-slot companion-slot is-posture-slot");
+    if (!pMod) {
+      const empty = create("button", "manual-slot-empty-card");
+      empty.type = "button";
+      empty.append(create("span", "manual-slot-empty-plus", "＋"), create("small", "", "选择兽爪姿态卡"));
+      empty.addEventListener("click", () => openCompanionPicker("posture", 8));
+      pSlot.append(empty, pChip);
+    } else {
+      const card = createNormalModCard(pMod, 0, {
+        slotPolarity: pPol,
+        compatLabel: "兽爪姿态",
+      });
+      card.querySelector(".slot-number")?.remove();
+      card.classList.add("manual-slot-preview");
+      card.addEventListener("click", () => openCompanionPicker("posture", 8));
+      const maxRank = Number(pMod.maxRank ?? 0);
+      const curRank = clamp(Number(pMod.rank ?? maxRank), 0, maxRank);
+      const actions = create("div", "manual-slot-actions");
+      if (maxRank > 0) {
+        const stepper = create("div", "rank-stepper");
+        const dec = create("button", "rank-stepper-btn", "−");
+        const inc = create("button", "rank-stepper-btn", "+");
+        dec.type = inc.type = "button";
+        dec.disabled = curRank <= 0;
+        inc.disabled = curRank >= maxRank;
+        dec.addEventListener("click", (ev) => { ev.stopPropagation(); pMod.rank = Math.max(0, curRank - 1); ensureCompanionWeaponCapacityFit(); persistCompanionConfigs(); renderCompanionSlots(); scheduleCompanionEvaluate(); });
+        inc.addEventListener("click", (ev) => { ev.stopPropagation(); pMod.rank = Math.min(maxRank, curRank + 1); persistCompanionConfigs(); renderCompanionSlots(); scheduleCompanionEvaluate(); });
+        stepper.append(dec, create("span", "rank-stepper-value", `${curRank}/${maxRank}`), inc);
+        actions.append(stepper);
+      }
+      const remove = create("button", "manual-slot-remove", "移除");
+      remove.type = "button";
+      remove.addEventListener("click", (ev) => { ev.stopPropagation(); cb.posture = null; ensureCompanionWeaponCapacityFit(); persistCompanionConfigs(); renderCompanionSlots(); scheduleCompanionEvaluate(); });
+      actions.append(remove);
+      pSlot.append(card, pChip, actions);
+    }
+    ui["companion-posture-slot"].replaceChildren(pSlot);
+  }
+
+  // 3) Weapon / Beast Claws 8 normal slots + Riven bar
+  if (!skipRivenEditor) renderCompanionRivenBar(wRec);
+  else refreshCompanionRivenSummaryAndFav(wRec);
+  const weaponHost = ui["companion-weapon-slots"];
+  if (weaponHost) {
+    const pickerMode = isBeast ? "clawMod" : "roboticMod";
+    const nodes = Array.from({ length: 8 }, (_, index) => {
+      const slotPol = companionEffectiveWeaponPolarity(index, wRec);
+      const isForma = cb.weaponPolarities[index] !== null && cb.weaponPolarities[index] !== undefined;
+      const isRivenHere = !isBeast && cb.riven && Number(cb.riven.slot) === index;
+      const slot = create("article", "manual-slot companion-slot");
+      if (isRivenHere) {
+        const rivenModObj = {
+          __riven: true,
+          nameZh: `${wRec?.nameZh || "同伴武器"} 紫卡`,
+          rivenPolarity: cb.riven.polarity || "AP_ATTACK",
+          stats: cb.riven.stats,
+        };
+        const rEff = modEffectiveDrain(rivenModObj, slotPol, index);
+        const chip = companionPolarityChipNode(`武器槽位 ${index + 1}`, slotPol, isForma, rEff.relation, () => cycleCompanionSlotPolarity("weapon", index));
+        const preview = createCustomRivenSlotCardForWeapon(wRec, rivenModObj, index, slotPol);
+        preview.classList.add("manual-slot-preview");
+        const openRivenEditor = () => {
+          syncCompanionRivenRowsFromEquipped(wRec);
+          renderCompanionRivenBar(wRec);
+          if (ui["companion-riven-editor"]) ui["companion-riven-editor"].hidden = false;
+        };
+        preview.addEventListener("click", openRivenEditor);
+        const actions = create("div", "manual-slot-actions");
+        const editBtn = create("button", "manual-slot-lock", "编辑词条");
+        editBtn.type = "button";
+        editBtn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          openRivenEditor();
+        });
+        const remove = create("button", "manual-slot-remove", "移除");
+        remove.type = "button";
+        remove.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          cb.riven = null;
+          persistCompanionConfigs();
+          renderCompanionSlots();
+          scheduleCompanionEvaluate();
+        });
+        actions.append(editBtn, remove);
+        slot.append(preview, chip, actions);
+        return slot;
+      }
+
+      const mod = cb.weaponMods[index];
+      const eff = mod ? modEffectiveDrain(mod, slotPol) : { relation: "" };
+      const chip = companionPolarityChipNode(`武器槽位 ${index + 1}`, slotPol, isForma, eff.relation, () => cycleCompanionSlotPolarity("weapon", index));
+      if (!mod) {
+        const empty = create("button", "manual-slot-empty-card");
+        empty.type = "button";
+        empty.append(create("span", "manual-slot-empty-plus", "＋"), create("small", "", `槽位 ${String(index + 1).padStart(2, "0")}`));
+        if (slotPol && POLARITY_IMAGES[slotPol]) {
+          empty.append(imageNode(POLARITY_IMAGES[slotPol], "empty-slot-polarity", "", "lazy"));
+        }
+        empty.addEventListener("click", () => openCompanionPicker(pickerMode, index));
+        slot.append(empty, chip);
+        return slot;
+      }
+      const card = createNormalModCard(mod, index + 1, {
+        slotPolarity: slotPol,
+        compatLabel: companionModCompatLabel(mod, pickerMode),
+      });
+      card.classList.add("manual-slot-preview");
+      card.addEventListener("click", () => openCompanionPicker(pickerMode, index));
+      const maxRank = Number(mod.maxRank ?? 0);
+      const curRank = clamp(Number(mod.rank ?? maxRank), 0, maxRank);
+      const actions = create("div", "manual-slot-actions");
+      if (maxRank > 0) {
+        const stepper = create("div", "rank-stepper");
+        const dec = create("button", "rank-stepper-btn", "−");
+        const inc = create("button", "rank-stepper-btn", "+");
+        dec.type = inc.type = "button";
+        dec.disabled = curRank <= 0;
+        inc.disabled = curRank >= maxRank;
+        dec.addEventListener("click", (ev) => { ev.stopPropagation(); mod.rank = Math.max(0, curRank - 1); persistCompanionConfigs(); renderCompanionSlots(); scheduleCompanionEvaluate(); });
+        inc.addEventListener("click", (ev) => { ev.stopPropagation(); mod.rank = Math.min(maxRank, curRank + 1); ensureCompanionWeaponCapacityFit(); persistCompanionConfigs(); renderCompanionSlots(); scheduleCompanionEvaluate(); });
+        stepper.append(dec, create("span", "rank-stepper-value", `${curRank}/${maxRank}`), inc);
+        actions.append(stepper);
+      }
+      const remove = create("button", "manual-slot-remove", "移除");
+      remove.type = "button";
+      remove.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        cb.weaponMods[index] = null;
+        persistCompanionConfigs();
+        renderCompanionSlots();
+        scheduleCompanionEvaluate();
+      });
+      actions.append(remove);
+      slot.append(card, chip, actions);
+      return slot;
+    });
+    weaponHost.replaceChildren(...nodes);
+  }
+}
+
+function companionWeaponRivenDefs(weaponRecord) {
+  const rType = weaponRecord?.rivenType || "rifle";
+  return state.catalog?.statsByType?.[rType] || state.catalog?.statsByType?.rifle || [];
+}
+
+function createCustomRivenSlotCardForWeapon(weaponRecord, mod, index, slotPolarity = null) {
+  const defs = companionWeaponRivenDefs(weaponRecord);
+  const card = create("article", "mod-slot is-riven-slot");
+  card.dataset.rarity = "RIVEN";
+  const frame = create("div", "game-mod-card riven-mod-card");
+  const frames = state.modAssets?.rarityFrames?.RIVEN || {};
+  const content = create("div", "mod-content");
+  content.append(...rivenContentLayers(frames, rivenFaceArts(mod.stats || [], defs)));
+  const description = create("div", "mod-description");
+  description.append(modNameNode(weaponRecord ? rivenCardName(weaponRecord, mod.stats || [], defs) : (mod.nameZh || "同伴紫卡")));
+  for (const stat of mod.stats || []) {
+    description.append(create("p", `mod-effect-line${stat.negative ? " is-negative" : ""}`, rivenStatLabel(stat, defs)));
+  }
+  content.append(description);
+  frame.append(content);
+  const compat = create("div", "mod-item-compat");
+  compat.append(create("p", "", "裂罅"));
+  if (frames.lowerTab) compat.style.setProperty("--lower-tab", `url("${frames.lowerTab}")`);
+  frame.append(compat);
+  frame.append(rankPips(8, 8));
+  const rivenEffective = modEffectiveDrain(mod, slotPolarity, index);
+  const rivenPol = mod.rivenPolarity || "AP_ATTACK";
+  const badge = modCostBadge(rivenEffective.drain, rivenPol, "eager", " is-riven-drain", rivenEffective.relation === "match" ? "match" : rivenEffective.relation === "mismatch" ? "mismatch" : "");
+  frame.append(badge);
+  frame.append(...modFrameLayers(frames, "eager"));
+  card.append(modTiltWrap(frame), create("span", "slot-number", String(index + 1).padStart(2, "0")));
+  return card;
+}
+
+function companionRivenWindow(def, weaponRecord, rows, negative) {
+  if (!def) return null;
+  const dispo = Number(weaponRecord?.disposition || 1);
+  const negCount = rows.filter((r) => r.negative).length;
+  const posCount = Math.max(2, rows.length - negCount);
+  return rivenStatWindow(def.baseValue, dispo, posCount, negCount, Boolean(negative));
+}
+
+function syncCompanionRivenRowsFromEquipped(weaponRecord) {
+  const cb = state.companionBuild;
+  const defs = companionWeaponRivenDefs(weaponRecord);
+  state.companionRivenWeaponPath = weaponRecord?.path || "";
+  if (cb.riven && Array.isArray(cb.riven.stats) && cb.riven.stats.length >= 2) {
+    state.companionRivenRows = cb.riven.stats.slice(0, 4).map((s) => ({
+      code: s.code,
+      value: Math.abs(Number(s.value || 0)),
+      negative: Boolean(s.negative),
+    }));
+    if (ui["companion-riven-polarity"]) ui["companion-riven-polarity"].value = cb.riven.polarity || "AP_ATTACK";
+    if (ui["companion-riven-slot"]) ui["companion-riven-slot"].value = String(cb.riven.slot ?? 7);
+    return;
+  }
+  const ccDef = defs.find((d) => d.code === "0" || d.label?.includes("暴击几率")) || defs[0];
+  const secondDef = defs.find((d) => d.code !== ccDef?.code && (d.code === "8" || d.code === "K" || d.code === "J" || d.label?.includes("多重") || d.label?.includes("伤害"))) || defs[1] || defs[0];
+  const seedRows = [
+    { code: ccDef?.code || "", value: null, negative: false },
+    { code: secondDef?.code || "", value: null, negative: false },
+  ].filter((r) => Boolean(r.code));
+  seedRows.forEach((r) => {
+    const def = defs.find((d) => d.code === r.code);
+    const win = companionRivenWindow(def, weaponRecord, seedRows, false);
+    r.value = win ? Number((win.low + (win.high - win.low) * 0.7).toFixed(3)) : 50;
+  });
+  state.companionRivenRows = seedRows;
+  const emptyIdx = cb.weaponMods.findIndex((m) => !m);
+  if (ui["companion-riven-slot"]) ui["companion-riven-slot"].value = String(emptyIdx >= 0 ? emptyIdx : 7);
+}
+
+function companionBuilderValidStats(weaponRecord) {
+  const defs = companionWeaponRivenDefs(weaponRecord);
+  const rows = state.companionRivenRows.filter((r) => r.code && defs.some((d) => d.code === r.code));
+  return rows.map((r) => {
+    const def = defs.find((d) => d.code === r.code);
+    const win = companionRivenWindow(def, weaponRecord, rows, r.negative);
+    const val = win
+      ? clamp(Math.abs(Number(r.value ?? (win.low + (win.high - win.low) * 0.7))), win.low, win.high)
+      : Math.abs(Number(r.value || 0));
+    r.value = val;
+    return { code: r.code, value: Number(val.toFixed(3)), negative: Boolean(r.negative) };
+  });
+}
+
+function refreshCompanionRivenSummaryAndFav(weaponRecord) {
+  const cb = state.companionBuild;
+  const defs = companionWeaponRivenDefs(weaponRecord);
+  const hasRiven = Boolean(cb.riven && Array.isArray(cb.riven.stats) && cb.riven.stats.length);
+  if (ui["companion-riven-remove"]) ui["companion-riven-remove"].hidden = !hasRiven;
+  if (ui["companion-riven-apply"]) {
+    ui["companion-riven-apply"].textContent = hasRiven ? "更新紫卡" : "放入槽位";
+  }
+  if (ui["companion-riven-dispo"]) {
+    const dispo = Number(weaponRecord?.disposition || 1);
+    ui["companion-riven-dispo"].textContent = `倾向 ${formatDisposition(dispo)} ${dispositionDots(dispo)}`;
+  }
+  if (ui["companion-riven-summary"]) {
+    if (hasRiven) {
+      const text = cb.riven.stats.map((s) => rivenStatLabel(s, defs)).join(" / ");
+      ui["companion-riven-summary"].textContent = `槽位 0${Number(cb.riven.slot ?? 7) + 1}: ${text}`;
+    } else {
+      ui["companion-riven-summary"].textContent = "未装备紫卡（支持 2-3 正 0-1 负滑块调参，歧视词条按倍率 x1.XX 校验）";
+    }
+  }
+  const favBtn = ui["companion-riven-fav"];
+  if (favBtn && weaponRecord) {
+    const stats = state.companionRivenRows.filter((r) => r.code).map((r) => ({ code: r.code, value: Number(r.value || 0), negative: Boolean(r.negative) }));
+    const saved = Boolean(stats.length >= 2 && findFavorite(weaponRecord.path, stats));
+    favBtn.textContent = saved ? "★ 已收藏" : "☆ 收藏";
+    favBtn.classList.toggle("is-active", saved);
+  }
+}
+
+function commitCompanionRivenIfEquipped(weaponRecord = companionWeaponRecord(state.companionBuild.weaponPath), { rerenderEditor = false } = {}) {
+  const cb = state.companionBuild;
+  if (!cb.riven || !weaponRecord) {
+    refreshCompanionRivenSummaryAndFav(weaponRecord);
+    return false;
+  }
+  const stats = companionBuilderValidStats(weaponRecord);
+  const negCount = stats.filter((s) => s.negative).length;
+  const posCount = stats.length - negCount;
+  if (posCount < 2 || posCount > 3 || negCount > 1 || new Set(stats.map((s) => s.code)).size !== stats.length) {
+    refreshCompanionRivenSummaryAndFav(weaponRecord);
+    return false;
+  }
+  const prevSlot = clamp(Number(cb.riven.slot ?? 7), 0, 7);
+  const nextSlot = clamp(Number(ui["companion-riven-slot"]?.value ?? prevSlot), 0, 7);
+  const polarity = ui["companion-riven-polarity"]?.value || cb.riven.polarity || "AP_ATTACK";
+  if (nextSlot !== prevSlot && cb.weaponMods[nextSlot]) {
+    cb.weaponMods[prevSlot] = cb.weaponMods[nextSlot];
+    cb.weaponMods[nextSlot] = null;
+  }
+  cb.riven = { slot: nextSlot, polarity, stats };
+  ensureCompanionWeaponCapacityFit();
+  if (ui["companion-riven-slot"]) ui["companion-riven-slot"].value = String(cb.riven.slot);
+  persistCompanionConfigs();
+  renderCompanionSlots({ skipRivenEditor: !rerenderEditor });
+  scheduleCompanionEvaluate();
+  return true;
+}
+
+function renderCompanionRivenBar(weaponRecord) {
+  const cb = state.companionBuild;
+  const bar = ui["companion-riven-bar"];
+  if (!bar || bar.hidden) return;
+  const defs = companionWeaponRivenDefs(weaponRecord);
+  const hasRiven = Boolean(cb.riven && Array.isArray(cb.riven.stats) && cb.riven.stats.length);
+  if (
+    state.companionRivenWeaponPath !== (weaponRecord?.path || "")
+    || !state.companionRivenRows.length
+    || state.companionRivenRows.some((r) => !r.code || !defs.some((d) => d.code === r.code))
+  ) {
+    syncCompanionRivenRowsFromEquipped(weaponRecord);
+  }
+  if (hasRiven) {
+    if (ui["companion-riven-polarity"]) ui["companion-riven-polarity"].value = cb.riven.polarity || "AP_ATTACK";
+    if (ui["companion-riven-slot"]) ui["companion-riven-slot"].value = String(cb.riven.slot ?? 7);
+  }
+  refreshCompanionRivenSummaryAndFav(weaponRecord);
+
+  const rowsHost = ui["companion-riven-rows"];
+  if (!rowsHost || !defs.length) return;
+
+  const negCount = state.companionRivenRows.filter((r) => r.negative).length;
+  const posCount = state.companionRivenRows.length - negCount;
+
+  rowsHost.replaceChildren(...state.companionRivenRows.map((entry, idx) => {
+    const def = defs.find((d) => d.code === entry.code) || null;
+    const row = create("div", `riven-builder-row${entry.negative ? " is-negative" : ""}`);
+    const sign = create("button", `sign-toggle ${entry.negative ? "is-negative" : "is-positive"}`, entry.negative ? "−" : "+");
+    sign.type = "button";
+    sign.title = "切换正负面";
+    sign.addEventListener("click", () => {
+      const curNeg = state.companionRivenRows.filter((s) => s.negative).length;
+      const curPos = state.companionRivenRows.length - curNeg;
+      if (!entry.negative && def?.isFusion) return toast("融合词条仅可作为正面词条");
+      if (!entry.negative && !def?.canNegative) return toast(`${def?.label || "该词条"} 不能作为负面词条`);
+      if (!entry.negative && (curNeg >= 1 || curPos <= 2)) return toast("负面最多 1 条，且至少保留 2 条正面词条");
+      if (entry.negative && curPos >= 3) return toast("正面词条最多 3 条");
+      entry.negative = !entry.negative;
+      const nextWin = companionRivenWindow(def, weaponRecord, state.companionRivenRows, entry.negative);
+      if (nextWin) entry.value = clamp(Number(entry.value ?? nextWin.low), nextWin.low, nextWin.high);
+      if (!commitCompanionRivenIfEquipped(weaponRecord, { rerenderEditor: true })) {
+        renderCompanionRivenBar(weaponRecord);
+      }
+    });
+
+    const select = document.createElement("select");
+    select.className = "riven-stat-code";
+    const usedCodes = new Set(state.companionRivenRows.filter((_s, i) => i !== idx).map((s) => s.code));
+    const fusionUsedElsewhere = state.companionRivenRows.some((_s, i) => i !== idx && defs.find((d) => d.code === _s.code)?.isFusion);
+    for (const d of defs) {
+      const option = document.createElement("option");
+      option.value = d.code;
+      option.textContent = d.isFusion ? `★${d.label || d.code}` : (d.label || d.code);
+      option.selected = d.code === entry.code;
+      const positiveOnly = entry.negative && !d.canNegative;
+      option.disabled = usedCodes.has(d.code) || (d.isFusion && fusionUsedElsewhere && d.code !== entry.code) || positiveOnly;
+      select.append(option);
+    }
+    select.value = entry.code;
+    select.addEventListener("change", () => {
+      if (usedCodes.has(select.value)) return toast("同一词条不能重复录入");
+      const chosen = defs.find((d) => d.code === select.value);
+      if (entry.negative && !chosen?.canNegative) {
+        select.value = entry.code;
+        return toast(`${chosen?.label || "该词条"} 不能作为负面词条`);
+      }
+      entry.code = select.value;
+      const win = companionRivenWindow(chosen, weaponRecord, state.companionRivenRows, entry.negative);
+      entry.value = win ? Number((win.low + (win.high - win.low) * 0.7).toFixed(3)) : 50;
+      if (!commitCompanionRivenIfEquipped(weaponRecord, { rerenderEditor: true })) {
+        renderCompanionRivenBar(weaponRecord);
+      }
+    });
+
+    const range = def ? rivenStatWindow(def.baseValue, Number(weaponRecord?.disposition || 1), posCount, negCount, entry.negative) : null;
+    if (range) {
+      entry.value = clamp(Number(entry.value ?? (range.low + (range.high - range.low) * 0.7)), range.low, range.high);
+    }
+    const faction = isFactionRivenDefinition(def);
+    const sliderCell = create("div", "riven-builder-slider-cell");
+    const lowText = range ? (faction ? `x${factionRivenMultiplier(range.low, entry.negative).toFixed(2)}` : range.low.toFixed(1)) : "--";
+    const highText = range ? (faction ? `x${factionRivenMultiplier(range.high, entry.negative).toFixed(2)}` : range.high.toFixed(1)) : "--";
+    const slider = document.createElement("input");
+    slider.type = "range";
+    if (range) {
+      slider.min = range.low.toFixed(3);
+      slider.max = range.high.toFixed(3);
+      slider.step = definitionStep(def);
+      slider.value = Number(entry.value || range.low).toFixed(3);
+    }
+    const numShell = create("div", "riven-builder-num-shell");
+    const numInput = document.createElement("input");
+    numInput.type = "number";
+    if (range) {
+      if (faction) {
+        const mLow = factionRivenMultiplier(range.low, entry.negative);
+        const mHigh = factionRivenMultiplier(range.high, entry.negative);
+        numInput.min = Math.min(mLow, mHigh).toFixed(2);
+        numInput.max = Math.max(mLow, mHigh).toFixed(2);
+        numInput.step = "0.01";
+        numInput.value = factionRivenMultiplier(entry.value, entry.negative).toFixed(2);
+      } else {
+        numInput.min = range.low.toFixed(2);
+        numInput.max = range.high.toFixed(2);
+        numInput.step = definitionStep(def);
+        numInput.value = Number(entry.value || 0).toFixed(def?.unit === "flat" ? 2 : 1);
+      }
+    }
+    const unitSpan = create("span", "", faction ? "x" : (def?.unit === "percent" ? "%" : ""));
+    numShell.append(numInput, unitSpan);
+
+    slider.addEventListener("input", () => {
+      entry.value = Number(slider.value);
+      numInput.value = faction
+        ? factionRivenMultiplier(entry.value, entry.negative).toFixed(2)
+        : entry.value.toFixed(def?.unit === "flat" ? 2 : 1);
+      commitCompanionRivenIfEquipped(weaponRecord, { rerenderEditor: false });
+    });
+    numInput.addEventListener("change", () => {
+      if (!range) return;
+      const raw = Number(numInput.value);
+      if (!Number.isFinite(raw)) return;
+      const internal = faction ? factionRivenDelta(raw) : Math.abs(raw);
+      entry.value = clamp(internal, range.low, range.high);
+      slider.value = entry.value.toFixed(3);
+      numInput.value = faction
+        ? factionRivenMultiplier(entry.value, entry.negative).toFixed(2)
+        : entry.value.toFixed(def?.unit === "flat" ? 2 : 1);
+      commitCompanionRivenIfEquipped(weaponRecord, { rerenderEditor: false });
+    });
+    sliderCell.append(create("small", "", lowText), slider, create("small", "", highText));
+
+    const remove = create("button", "remove-stat", "×");
+    remove.type = "button";
+    remove.title = "删除词条";
+    remove.addEventListener("click", () => {
+      if (state.companionRivenRows.length <= 2) return toast("紫卡至少需要 2 条词条");
+      const curNeg = state.companionRivenRows.filter((s) => s.negative).length;
+      const curPos = state.companionRivenRows.length - curNeg;
+      if (!entry.negative && curPos <= 2) return toast("紫卡至少需要保留 2 条正面词条");
+      state.companionRivenRows.splice(idx, 1);
+      if (!commitCompanionRivenIfEquipped(weaponRecord, { rerenderEditor: true })) {
+        renderCompanionRivenBar(weaponRecord);
+      }
+    });
+
+    row.append(sign, select, sliderCell, numShell, remove);
+    return row;
+  }));
+}
+
+function renderCompanionWorkbench() {
+  renderCompanionControlPane();
+  renderCompanionSubView();
+  renderCompanionSlots();
+  renderCompanionHudCapacity();
+  renderCompanionEvaluation(state.companionBuild.result);
+}
+
+function renderCompanionHudCapacity() {
+  const cb = state.companionBuild;
+  const res = cb.result;
+  const companion = cb.companion;
+  if (ui["companion-result-name"]) {
+    const wRec = companionWeaponRecord(cb.weaponPath);
+    ui["companion-result-name"].textContent = companion
+      ? `${companion.nameZh || companion.nameEn}${wRec ? ` + ${wRec.nameZh || wRec.nameEn}` : ""}`
+      : "--";
+  }
+  const isWeaponView = cb.subView === "weapon";
+  if (ui["companion-capacity-label"]) ui["companion-capacity-label"].textContent = isWeaponView ? "武器容量" : "本体容量";
+  const capObj = isWeaponView ? res?.weapon?.capacity : res?.capacity;
+  const used = Number(capObj?.used ?? 0);
+  const total = Number(capObj?.total ?? 60);
+  const rem = capObj ? Number(capObj.remaining ?? (total - used)) : null;
+  if (ui["companion-capacity-readout"]) {
+    ui["companion-capacity-readout"].textContent = rem !== null ? `${rem} / ${total}` : `-- / ${total}`;
+  }
+  if (ui["companion-capacity-bar"]) {
+    ui["companion-capacity-bar"].style.width = `${clamp(used / Math.max(1, total) * 100, 0, 100)}%`;
+    ui["companion-capacity-bar"].classList.toggle("is-over", capObj?.valid === false);
+  }
+  const bodyForma = Number(res?.formaCount ?? cb.bodyPolarities.filter(Boolean).length);
+  const weapForma = Number(res?.weapon?.formaCount ?? cb.weaponPolarities.filter(Boolean).length);
+  if (ui["companion-body-forma-badge"]) ui["companion-body-forma-badge"].textContent = String(bodyForma);
+  if (ui["companion-weapon-forma-badge"]) ui["companion-weapon-forma-badge"].textContent = String(weapForma);
+  if (ui["companion-forma-readout"]) {
+    ui["companion-forma-readout"].textContent = isWeaponView
+      ? (weapForma ? `×${weapForma}` : "无需")
+      : (bodyForma ? `×${bodyForma}` : "无需");
+  }
+}
+
+function buildCompanionEvaluateRequest() {
+  const cb = state.companionBuild;
+  if (!cb.companion) return null;
+  const bodySnap = captureCompanionBodySnapshot();
+  const weaponSnap = captureCompanionWeaponSnapshot();
+  let wfLink = undefined;
+  const effWf = resolveEffectiveCompanionWarframe();
+  if (effWf.frameId) {
+    const stored = warframeStoredConfig(effWf.frameId, effWf.configName || "A");
+    wfLink = {
+      enabled: true,
+      frameId: effWf.frameId,
+      configName: effWf.configName || "A",
+      config: stored.config || {},
+      ...(stored.parentConfig ? { parentConfig: stored.parentConfig } : {}),
+    };
+  }
+  const enemyPath = ui["build-enemy-select"]?.value || "";
+  const enemyLevel = Number(ui["build-enemy-level"]?.value || 170);
+  const steelPath = ui["build-steel-path"] ? Boolean(ui["build-steel-path"].checked) : true;
+  return {
+    companion: {
+      path: bodySnap.path,
+      ...(bodySnap.parts ? { parts: bodySnap.parts } : {}),
+      reactor: bodySnap.reactor,
+      polarities: bodySnap.polarities,
+      mods: bodySnap.mods,
+      options: bodySnap.options,
+    },
+    weapon: weaponSnap
+      ? {
+        path: weaponSnap.path,
+        reactor: weaponSnap.reactor,
+        slotPolarities: weaponSnap.slotPolarities,
+        mods: weaponSnap.mods,
+        ...(weaponSnap.kind === "beast_claws"
+          ? { posture: weaponSnap.posture }
+          : { riven: weaponSnap.riven, companionPlayerStacks: weaponSnap.companionPlayerStacks }),
+      }
+      : null,
+    target: {
+      ...(enemyPath ? { enemy: enemyPath } : {}),
+      level: Number.isFinite(enemyLevel) && enemyLevel > 0 ? Math.round(enemyLevel) : 170,
+      steelPath,
+    },
+    ...(wfLink ? { warframeLink: wfLink } : {}),
+    primaryWeaponStats: {
+      critChance: Math.max(0, Number(cb.primaryCc ?? 100) / 100),
+      statusChance: Math.max(0, Number(cb.primarySc ?? 100) / 100),
+    },
+  };
+}
+
+function scheduleCompanionEvaluate() {
+  window.clearTimeout(companionEvaluateTimer);
+  const reqBody = buildCompanionEvaluateRequest();
+  if (!reqBody) return;
+  companionEvaluateTimer = window.setTimeout(async () => {
+    const seq = ++companionEvaluateSeq;
+    try {
+      const response = await fetch("/api/companion/evaluate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reqBody),
+      });
+      const body = await response.json();
+      if (seq !== companionEvaluateSeq) return;
+      if (!response.ok) throw new Error(body?.error?.message || `同伴属性解算失败（${response.status}）`);
+      state.companionBuild.result = body;
+      if (ui["companion-message"]) ui["companion-message"].hidden = true;
+      renderCompanionHudCapacity();
+      renderCompanionEvaluation(body);
+    } catch (error) {
+      if (seq !== companionEvaluateSeq) return;
+      if (ui["companion-message"]) {
+        ui["companion-message"].hidden = false;
+        ui["companion-message"].textContent = error.message || "同伴属性解算失败";
+      }
+    }
+  }, 140);
+}
+
+function companionStatCell(label, moddedText, subText = "", delta = "") {
+  const cell = create("div", `warframe-panel-stat${delta ? ` is-${delta}` : ""}`);
+  cell.append(create("span", "", label), create("strong", "", moddedText));
+  if (subText) cell.append(create("small", "", subText));
+  return cell;
+}
+
+function renderCompanionEvaluation(result) {
+  const bodyGrid = ui["companion-body-stat-grid"];
+  const weapGrid = ui["companion-weapon-stat-grid"];
+  const bondGrid = ui["companion-bond-grid"];
+  const warnBox = ui["companion-warnings"];
+  if (!bodyGrid || !weapGrid || !bondGrid) return;
+  if (!result) {
+    bodyGrid.replaceChildren(create("p", "empty-copy", "正在计算同伴本体面板..."));
+    weapGrid.replaceChildren(create("p", "empty-copy", "正在计算配对武器面板..."));
+    bondGrid.replaceChildren();
+    if (warnBox) warnBox.hidden = true;
+    return;
+  }
+
+  // Update preview Warframe readout
+  if (ui["companion-preview-wf-readout"]) {
+    const effWf = resolveEffectiveCompanionWarframe();
+    if (effWf.frameId && effWf.record) {
+      const prefix = effWf.mode === "auto" ? `自动同步（${effWf.sourceLabel}）` : "手动指定";
+      ui["companion-preview-wf-readout"].textContent = `${prefix}：已按 ${warframeName(effWf.record)} 配置 ${effWf.configName || "A"} 的实时生命 / 护盾 / 护甲计算链接卡`;
+    } else {
+      ui["companion-preview-wf-readout"].textContent = "默认中立战甲（生命 300 / 护盾 300 / 护甲 100）";
+    }
+  }
+
+  // 1) Body stats
+  const st = result.stats || {};
+  const atk = result.attackProfile || {};
+  if (ui["companion-attack-mode-note"]) {
+    ui["companion-attack-mode-note"].textContent = atk.category === "beast"
+      ? "生物同伴（被动连结与光环）"
+      : (atk.canAttack ? `${atk.attackMode === "melee" ? "近战接战" : "远程索敌"} - 有效射程 ${Number(atk.effectiveMaxRange || 0).toFixed(1)}m` : "无攻击戒律（不开火）");
+  }
+  const fmtInt = (n) => Math.round(Number(n || 0)).toLocaleString("zh-CN");
+  const bodyCells = [
+    companionStatCell(
+      "生命值",
+      fmtInt(st.health?.modded),
+      st.health?.linkBonus > 0 ? `基础 ${fmtInt(st.health.base)} + 链接 ${fmtInt(st.health.linkBonus)}` : `基础 ${fmtInt(st.health?.base)}`,
+      Number(st.health?.modded) > Number(st.health?.base) ? "better" : "",
+    ),
+    companionStatCell(
+      "护盾",
+      fmtInt(st.shield?.modded),
+      st.shield?.linkBonus > 0 ? `基础 ${fmtInt(st.shield.base)} + 链接 ${fmtInt(st.shield.linkBonus)}` : `基础 ${fmtInt(st.shield?.base)}${Number(st.shield?.modded) >= 1200 ? " (达标强固连结)" : ""}`,
+      Number(st.shield?.modded) >= 1200 ? "better" : (Number(st.shield?.modded) > Number(st.shield?.base) ? "better" : ""),
+    ),
+    companionStatCell(
+      "护甲",
+      fmtInt(st.armor?.modded),
+      st.armor?.linkBonus > 0 ? `基础 ${fmtInt(st.armor.base)} + 链接 ${fmtInt(st.armor.linkBonus)}` : `基础 ${fmtInt(st.armor?.base)}`,
+      Number(st.armor?.modded) > Number(st.armor?.base) ? "better" : "",
+    ),
+    companionStatCell("护盾充能", `${Number(st.shieldRecharge?.modded || 0).toFixed(1)}/s`, `基础 ${Number(st.shieldRecharge?.base || 0).toFixed(1)}/s`),
+    companionStatCell("充能延迟", `${Number(st.shieldDelay?.modded || 0).toFixed(2)}s`, `过载上限 ${fmtInt(st.overshieldCap)}`),
+    companionStatCell("有效索敌距离", atk.canAttack ? `${Number(atk.effectiveMaxRange || 0).toFixed(1)}m` : "被动跟随", atk.cloneMultiplier > 1 ? `双子分身 x${atk.cloneMultiplier}` : (atk.category === "beast" ? "不参与靶场索敌" : "AI 躯干瞄准")),
+  ];
+  bodyGrid.replaceChildren(...bodyCells);
+
+  // 2) Weapon / Beast Claws stats + Damage & Element Composition
+  const wp = result.weapon;
+  const compPanel = ui["companion-weapon-composition-panel"];
+  const compHost = ui["companion-weapon-composition"];
+  const compTargetNote = ui["companion-weapon-target-note"];
+  if (!wp) {
+    weapGrid.replaceChildren(create("p", "empty-copy", "当前未装配同伴武器"));
+    if (compPanel) compPanel.hidden = true;
+  } else {
+    if (compPanel) compPanel.hidden = false;
+    if (ui["companion-weapon-panel-title"]) ui["companion-weapon-panel-title"].textContent = wp.nameZh || wp.nameEn || "配对武器面板";
+    const dtText = Object.entries(wp.damageTypes || {})
+      .sort((a, b) => Number(b[1]) - Number(a[1]))
+      .slice(0, 3)
+      .map(([dt, val]) => `${DAMAGE_TYPE_LABELS[dt] || dt} ${Number(val).toFixed(1)}`)
+      .join(" / ");
+    if (ui["companion-weapon-damage-note"]) ui["companion-weapon-damage-note"].textContent = dtText || "--";
+    const ccPct = Math.max(0, Number(wp.critChance || 0) * 100);
+    const isClaws = wp.kind === "beast_claws";
+    const totalProcsPerShot = Object.values(wp.expectedProcsPerShot || {}).reduce((acc, v) => acc + Number(v || 0), 0);
+    const facEntries = Object.entries(wp.factionMultipliers || {}).filter(([, m]) => Math.abs(Number(m) - 1) > 1e-4);
+    const te = wp.targetEvaluation || null;
+    const facNames = { Grineer: "G系", Corpus: "C系", Infested: "I系", Orokin: "O系", Sentient: "S系", Murmur: "低语" };
+    const weapCells = [
+      companionStatCell(
+        "面板总伤",
+        formatMetric(Number(wp.totalDamage || 0)),
+        Number(wp.radialDamageTypes ? Object.values(wp.radialDamageTypes).reduce((a, b) => a + Number(b || 0), 0) : 0) > 0
+          ? `直击 ${formatMetric(Number(wp.directTotalDamage || 0))} + 范围爆炸`
+          : (!isClaws && Number(wp.multishot || 1) > 1.001 && Number(wp.perProjectileDamage || 0) > 0
+            ? `单弹片 ${formatMetric(Number(wp.perProjectileDamage))} × 多重 ${Number(wp.multishot).toFixed(2)}`
+            : (isClaws && wp.posture ? `姿态: ${wp.posture.nameZh || wp.posture.nameEn}` : "含本体联动加成")),
+      ),
+      companionStatCell("平均单发", formatMetric(Number(wp.averageHit ?? wp.totalDamage ?? 0)), "计入暴击期望与多重"),
+      companionStatCell("爆发 DPS", formatMetric(Number(wp.burstDps || 0)), "峰值开火 / 挥击速率"),
+      companionStatCell("持续直伤 DPS", formatMetric(Number(wp.sustainedDps || 0)), isClaws ? "持续近战期望" : "计入弹匣与装填循环"),
+      companionStatCell("持续异常 DoT", formatMetric(Number(wp.dotDps || 0)), `状态伤倍率 x${Number(wp.statusDamageMultiplier || 1).toFixed(2)}`),
+      companionStatCell(
+        "综合总 DPS",
+        formatMetric(Number(wp.totalSustainedDps ?? (Number(wp.sustainedDps || 0) + Number(wp.dotDps || 0)))),
+        te ? `对靶实伤 ${formatMetric(Number(te.totalTargetDps || 0))}/s` : "持续直伤 + 异常 DoT",
+        "better",
+      ),
+      companionStatCell("暴击几率", `${ccPct.toFixed(1)}%`, ccPct > 50 ? "已超过 50% (可激活坚韧连结)" : "未满 50% 坚韧连结阈值", ccPct > 50 ? "better" : ""),
+      companionStatCell("暴击倍率", `${Number(wp.critMultiplier || 1).toFixed(2)}x`, isClaws && wp.hunterSynergyBonus > 0 ? `猎人协力 +${(wp.hunterSynergyBonus * 100).toFixed(1)}% 暴率` : ""),
+      companionStatCell("触发几率", `${Math.max(0, Number(wp.statusChance || 0) * 100).toFixed(1)}%`, isClaws && wp.mechaOverdriveBonus > 0 ? `机甲超载 +${(wp.mechaOverdriveBonus * 100).toFixed(1)}% 触发` : `每发期望 ${totalProcsPerShot.toFixed(2)} 层`),
+      companionStatCell(
+        isClaws ? "攻击速度" : "多重 / 射速",
+        isClaws ? Number(wp.attackSpeed || wp.fireRate || 0).toFixed(2) : `${Number(wp.multishot || 1).toFixed(2)}x / ${Number(wp.fireRate || 0).toFixed(2)}`,
+        wp.sustainedShotsPerSecond ? `实战持续 ${Number(wp.sustainedShotsPerSecond).toFixed(2)}/s` : "",
+      ),
+      companionStatCell(
+        isClaws ? "攻击范围" : "弹匣 / 装填",
+        isClaws ? `${Number(wp.meleeRadius || 0).toFixed(2)}m` : (wp.magazine ? `${Math.round(wp.magazine)} / ${Number(wp.reloadTime || 0) >= 1e8 ? "无法完成" : `${Number(wp.reloadTime || 0).toFixed(2)}s`}` : "无限弹药"),
+        wp.armorStripOnHit > 0 ? `命中削甲 ${(wp.armorStripOnHit * 100).toFixed(0)}%` : (wp.rangeLimit ? `AI 射程上限 ${Number(wp.rangeLimit).toFixed(1)}m` : ""),
+      ),
+      facEntries.length
+        ? companionStatCell(
+          "派系伤害倍率",
+          facEntries.map(([f, m]) => `x${Number(m).toFixed(2)} ${facNames[f] || f}`).join(" / "),
+          "独立乘区 (DoT 二次结算)",
+        )
+        : companionStatCell(
+          "对靶实伤 DPS",
+          te ? `${formatMetric(Number(te.totalTargetDps || 0))}/s` : "--",
+          te ? `Lv${te.level}${te.steelPath ? " 钢铁 " : " "}${te.enemyNameZh || te.enemyNameEn || ""}` : "基于当前目标防御折算",
+        ),
+    ];
+    weapGrid.replaceChildren(...weapCells);
+
+    if (compTargetNote) {
+      if (te) {
+        compTargetNote.textContent = `对 Lv${te.level}${te.steelPath ? " 钢铁" : ""} ${te.enemyNameZh || te.enemyNameEn || "目标"}：直伤 ${formatMetric(Number(te.sustainedDirectDps || 0))}/s + 异常 DoT ${formatMetric(Number(te.sustainedDotDps || 0))}/s = 实伤 ${formatMetric(Number(te.totalTargetDps || 0))}/s`;
+      } else {
+        compTargetNote.textContent = "展示直击与范围各伤害类型的面板数值、元素占比、触发权重与实战每秒触发层数";
+      }
+    }
+    if (compHost) {
+      const compRows = Array.isArray(wp.damageComposition) ? wp.damageComposition : [];
+      const radialRows = Array.isArray(wp.radialComposition) ? wp.radialComposition : [];
+      const dtNodes = [];
+      for (const row of compRows) {
+        const item = create("article", "damage-type-item");
+        const head = create("div");
+        const sharePct = Math.max(0, Number(row.share || 0) * 100);
+        head.append(
+          create("strong", "", DAMAGE_TYPE_LABELS[row.damageType] || row.damageType),
+          create("span", "", `${sharePct.toFixed(1)}%`),
+        );
+        const track = create("i");
+        track.style.setProperty("--damage-width", `${clamp(sharePct, 0, 100).toFixed(2)}%`);
+        const meta = create("div", "companion-dt-meta");
+        meta.append(
+          create("em", "", `${Number(row.damage || 0).toFixed(1)} 伤害`),
+          create("span", "", `权重 ${(Number(row.procWeight || 0) * 100).toFixed(1)}% | ${Number(row.procsPerSecond || 0).toFixed(2)} 层/s`),
+        );
+        item.append(head, track, meta);
+        dtNodes.push(item);
+      }
+      for (const rRow of radialRows) {
+        const item = create("article", "damage-type-item");
+        const head = create("div");
+        const sharePct = Math.max(0, Number(rRow.share || 0) * 100);
+        head.append(
+          create("strong", "", `${DAMAGE_TYPE_LABELS[rRow.damageType] || rRow.damageType} (范围)`),
+          create("span", "", `${sharePct.toFixed(1)}%`),
+        );
+        const track = create("i");
+        track.style.setProperty("--damage-width", `${clamp(sharePct, 0, 100).toFixed(2)}%`);
+        const meta = create("div", "companion-dt-meta");
+        meta.append(
+          create("em", "", `${Number(rRow.damage || 0).toFixed(1)} 爆炸伤`),
+          create("span", "", "范围溅射段"),
+        );
+        item.append(head, track, meta);
+        dtNodes.push(item);
+      }
+      compHost.replaceChildren(...(dtNodes.length ? dtNodes : [create("p", "empty-copy", "当前武器无有效伤害组成")]));
+    }
+  }
+
+  // 3) Bond & Cross-Entity Synergy Dashboard
+  const pb = result.playerBridge || {};
+  const priming = result.primingSummary || {};
+  const cards = [];
+  const pushBondCard = (title, stateTag, stateKind, detail) => {
+    const card = create("article", `companion-bond-card is-${stateKind}`);
+    const head = create("div", "companion-bond-head");
+    head.append(create("strong", "", title), create("span", "companion-bond-badge", stateTag));
+    card.append(head, create("p", "", detail));
+    cards.push(card);
+  };
+
+  const tb = pb.tenaciousBond || {};
+  const tbActive = Boolean(tb.active ?? tb.staticActive);
+  pushBondCard(
+    "坚韧连结 (Tenacious Bond)",
+    tbActive ? "已激活 +1.2x 终暴伤" : (tb.equipped ? "未达阈值 (>50% 暴率)" : "未装备"),
+    tbActive ? "active" : (tb.equipped ? "warn" : "idle"),
+    tb.equipped
+      ? `配对武器暴击率 ${(Number(tb.weaponCritChance ?? wp?.critChance ?? 0) * 100).toFixed(1)}%${tbActive ? " > 50%，玩家武器获得 +1.2x 最终暴击伤害加成" : "，需提升配对武器/兽爪暴击率至 50% 以上"}`
+      : "本体装备坚韧连结且配对武器/兽爪暴击率 > 50% 时，玩家武器常驻 +1.2x 最终暴击伤害。",
+  );
+
+  const rb = pb.reinforcedBond || {};
+  const rbActive = Boolean(rb.staticActive);
+  const rbReloads = rb.reloadsNeededForThreshold;
+  pushBondCard(
+    "强固连结 (Reinforced Bond)",
+    rbActive ? "常驻激活 +60% 射速" : (rb.equipped && rbReloads ? `装填 ${rbReloads} 次激活` : (rb.equipped ? "护盾未满 1200" : "未装备")),
+    rbActive ? "active" : (rb.equipped ? "warn" : "idle"),
+    rb.equipped
+      ? `当前最大护盾 ${fmtInt(rb.maxShield ?? st.shield?.modded)}${rbActive ? " >= 1200，玩家武器常驻 +60% 射速" : (rbReloads ? `，实战每次装填获过载护盾，约 ${rbReloads} 次装填后维持 +60% 射速` : "，护盾为 0 无法获得过载护盾")}`
+      : "本体装备强固连结且同伴最大护盾（或过载护盾）达到 1200 时，玩家武器 +60% 射速。",
+  );
+
+  const mb = pb.manifoldBond || {};
+  pushBondCard(
+    "流形连结 (Manifold Bond)",
+    mb.equipped ? `已装备 (-${Number(mb.cooldownReduction || 0).toFixed(0)}s 冷却)` : "未装备",
+    mb.equipped ? "active" : "idle",
+    mb.equipped
+      ? `攻击戒律附带同伴武器的 ${(mb.preceptStatusTypes || []).map((dt) => DAMAGE_TYPE_LABELS[dt] || dt).join("/") || "基础"} 异常状态；击杀带 3 种以上异常目标缩减冷却。`
+      : "使同伴攻击戒律附加配对武器的伤害异常，并在击杀多异常敌人时加快戒律循环。",
+  );
+
+  const cbond = pb.contagiousBond || {};
+  const vbond = pb.viciousBond || {};
+  const extraBonds = [];
+  if (cbond.equipped) extraBonds.push(`传染连结 ${(Number(cbond.spreadRatio || 0) * 100).toFixed(0)}% 扩散 (${Number(cbond.spreadRadius || 0).toFixed(0)}m)`);
+  if (vbond.equipped) extraBonds.push(`凶恶连结 ${(Number(vbond.armorStrip || 0) * 100).toFixed(0)}% 近战削甲`);
+  if (pb.duplexBond?.equipped) extraBonds.push(`双子连结 (分身上限 ${pb.duplexBond.maxClones})`);
+  if (pb.momentousBond?.equipped) extraBonds.push(`重大连结${pb.momentousBond.activeElement ? ` (${DAMAGE_TYPE_LABELS[pb.momentousBond.activeElement]})` : ""}`);
+  if (pb.astralBond?.equipped) extraBonds.push(`星界连结${pb.astralBond.active ? " (激活)" : ""}`);
+  if (pb.tandemBond?.equipped) extraBonds.push("串联连结");
+  pushBondCard(
+    "战术连结与增益守则",
+    extraBonds.length ? `${extraBonds.length} 项生效` : "未装备其他连结",
+    extraBonds.length ? "active" : "idle",
+    extraBonds.length ? extraBonds.join(" / ") : "可选传染连结、凶恶连结、双子连结、猫眼或幽灵伏击进一步放大实战清场与增伤。",
+  );
+
+  const setEntries = Object.entries(pb.setPieceCounts || {}).filter(([, count]) => Number(count) > 0);
+  const totalSetPieces = setEntries.reduce((acc, [, c]) => acc + Number(c), 0);
+  pushBondCard(
+    "跨实体套装贡献",
+    totalSetPieces > 0 ? `+${totalSetPieces} 件套装卡` : "0 件套装卡",
+    totalSetPieces > 0 ? "active" : "idle",
+    setEntries.length
+      ? `计入玩家武器套装件数: ${setEntries.map(([k, c]) => `${SYNERGY_SET_LABELS[k] || k} x${c}`).join(" / ")}（同名 MOD 自动去重）`
+      : "同伴本体与配对武器上的私法、猎人、机甲、合成、技法、角斗士套装件数会自动汇入玩家武器。",
+  );
+
+  const steadyEntries = Object.entries(priming.steadyPrimingStacks || {}).filter(([, v]) => Number(v) > 0.05);
+  pushBondCard(
+    "稳态异常铺垫 (异况 / 冰封 / 耀炎)",
+    atk.category === "beast" ? "生物同伴不铺垫" : (steadyEntries.length ? `${steadyEntries.length} 种稳态异常` : "无主动异常铺垫"),
+    steadyEntries.length ? "active" : "idle",
+    atk.category === "beast"
+      ? "生物同伴在单目标回放与 3D 靶场中仅提供被动连结、套装与猫眼类增益，不主动索敌攻击。"
+      : (steadyEntries.length
+        ? `${steadyEntries.map(([dt, cnt]) => `${DAMAGE_TYPE_LABELS[dt] || dt} ${Number(cnt).toFixed(1)}层`).join(" / ")}${priming.coldProcsPerSecond > 0 ? ` | 冰触发 ${Number(priming.coldProcsPerSecond).toFixed(2)}/s` : ""}${priming.heatProcsPerSecond > 0 ? ` | 热触发 ${Number(priming.heatProcsPerSecond).toFixed(2)}/s` : ""}`
+        : "装备攻击戒律并为机械武器配置高触发元素后，可为玩家异况超量、主武冰封与次要耀炎提供实时铺垫。"),
+  );
+
+  bondGrid.replaceChildren(...cards);
+
+  if (warnBox) {
+    const warnings = Array.isArray(result.warnings) ? result.warnings : [];
+    warnBox.hidden = !warnings.length;
+    warnBox.replaceChildren(...warnings.map((w) => {
+      const prefix = String(w).split(":")[0].trim();
+      return create("p", "", COMPANION_WARNING_LABELS[prefix] || String(w));
+    }));
+  }
+}
+
+// ── 同伴与配卡弹窗选择器 (#companion-picker) ────────────────────────────
+const COMPANION_PICKER_CATEGORIES = {
+  companion: [
+    ["all", "全部"],
+    ["sentinel", "哨兵"],
+    ["moa", "恐鸟"],
+    ["hound", "猎犬"],
+    ["kavat", "库娃"],
+    ["vulpaphyla", "狐帕菲拉"],
+    ["kubrow", "库狛"],
+    ["predasite", "扑猎达赛"],
+  ],
+  synergyCompanion: [
+    ["all", "全部"],
+    ["sentinel", "哨兵"],
+    ["moa", "恐鸟"],
+    ["hound", "猎犬"],
+    ["kavat", "库娃"],
+    ["vulpaphyla", "狐帕菲拉"],
+    ["kubrow", "库狛"],
+    ["predasite", "扑猎达赛"],
+  ],
+  synergyCompanionWeapon: [
+    ["all", "全部兼容武器"],
+  ],
+  bodyMod: [
+    ["all", "全部"],
+    ["precept", "戒律"],
+    ["bond", "连结(Bond)"],
+    ["survival", "生存与链接"],
+    ["set", "套装"],
+    ["other", "其他"],
+  ],
+  clawMod: [
+    ["all", "全部"],
+    ["synergy", "暴率/触发核心 (咬碎/猎人协力)"],
+    ["element", "元素与转换"],
+    ["damage", "伤害与暴伤"],
+    ["set", "套装与其它"],
+  ],
+  posture: [
+    ["all", "全部姿态"],
+  ],
+  roboticMod: [
+    ["all", "全部"],
+    ["critical", "暴击"],
+    ["status", "触发"],
+    ["damage", "伤害"],
+    ["multishot", "多重"],
+    ["element", "元素"],
+    ["speed", "射速 / 攻速"],
+    ["set", "套装"],
+    ["utility", "其他"],
+  ],
+  favoriteRiven: [
+    ["all", "匹配当前武器或同类紫卡"],
+  ],
+};
+
+function openCompanionPicker(kind, slotIndex = 0) {
+  if (!ui["companion-picker"] || !state.companionCatalog) return;
+  state.companionPickerKind = kind;
+  state.companionPickerSlot = slotIndex;
+  state.companionPickerCategory = "all";
+  if (ui["companion-picker-search"]) ui["companion-picker-search"].value = "";
+  const titles = {
+    companion: ["选择同伴", "支持 41 种机械与生物同伴，切换不丢失各自 A/B/C 配装"],
+    synergyCompanion: ["选择协同同伴", "搜索或按分类筛选 41 种机械与生物同伴，同步参与武器配装与 3D 靶场"],
+    synergyCompanionWeapon: ["选择协同配对武器", "切换当前同伴本体配置绑定的配对机械武器"],
+    bodyMod: ["选择同伴本体 MOD", `${state.companionBuild.companion?.nameZh || "同伴"} - 槽位 ${slotIndex + 1}`],
+    posture: ["选择兽爪姿态 MOD", "姿态卡计入额外容量上限"],
+    clawMod: ["选择野兽利爪 MOD", `重点推荐「咬碎」与「猎人协力」突破 50% 暴率激活坚韧连结 - 槽位 ${slotIndex + 1}`],
+    roboticMod: ["选择同伴武器 MOD", `${companionWeaponRecord(state.companionBuild.weaponPath)?.nameZh || "同伴武器"} - 槽位 ${slotIndex + 1}`],
+    favoriteRiven: ["从收藏夹载入紫卡", "选择一张收藏紫卡填入当前同伴武器"],
+  };
+  const [title, sub] = titles[kind] || ["选择", ""];
+  if (ui["companion-picker-title"]) ui["companion-picker-title"].textContent = title;
+  if (ui["companion-picker-sub"]) ui["companion-picker-sub"].textContent = sub;
+  ui["companion-picker"].hidden = false;
+  ui["mod-picker-scrim"].hidden = false;
+  document.body.classList.add("is-modal-open");
+  renderCompanionPicker();
+  ui["companion-picker-search"]?.focus();
+}
+
+function closeCompanionPicker() {
+  if (!ui["companion-picker"] || ui["companion-picker"].hidden) return;
+  hideModPreview();
+  ui["companion-picker"].hidden = true;
+  if (ui["mod-picker"]?.hidden && ui["weapon-picker"]?.hidden && ui["enemy-picker"]?.hidden && ui["warframe-picker"]?.hidden) {
+    ui["mod-picker-scrim"].hidden = true;
+    document.body.classList.remove("is-modal-open");
+  }
+}
+
+function bodyModCategoryKey(mod) {
+  if (mod.isBond) return "bond";
+  if (mod.isPrecept) return "precept";
+  if (mod.setId) return "set";
+  const upgTypes = (mod.upgrades || []).map((u) => String(u.type || ""));
+  if (upgTypes.some((t) => /HEALTH|SHIELD|ARMOR|LINK|OVERSHIELD/i.test(t))) return "survival";
+  return "other";
+}
+
+function clawModCategoryKey(mod) {
+  const isKeySynergy = mod.id === "bite" || mod.id === "hunter_synergy" || mod.id === "mecha_overdrive"
+    || /CritMod|HunterSynergy|MechaOverdrive/i.test(mod.path);
+  if (isKeySynergy) return "synergy";
+  if (mod.setId) return "set";
+  const upgTypes = (mod.upgrades || []).map((u) => String(u.type || ""));
+  if (upgTypes.some((t) => /BASE_DAMAGE_ADDED/i.test(t)) || /Conversion/i.test(mod.path)) return "element";
+  if (upgTypes.some((t) => /DAMAGE|CRIT/i.test(t))) return "damage";
+  return "set";
+}
+
+function modMatchesCompanionRoboticWeapon(mod, weaponRecord) {
+  if (!mod || !weaponRecord || mod.selectable === false) return false;
+  const normalize = (v) => String(v || "").replace(/\\/g, "/").replace(/\/$/, "").toLocaleLowerCase();
+  const compat = normalize(mod.compatibility);
+  const ancestry = new Set([...(weaponRecord.ancestry || []), weaponRecord.path].map(normalize).filter(Boolean));
+  if (compat && !ancestry.has(compat)) return false;
+  if ((COMPANION_DECONSTRUCTOR_PATHS.has(weaponRecord.path) || COMPANION_HOUND_MELEE_PATHS.has(weaponRecord.path)) && mod.modSet === "GladiatorSetMod") {
+    return false;
+  }
+  const tags = new Set((weaponRecord.compatTags || []).map((t) => String(t).toLocaleLowerCase()));
+  const required = (mod.compatibilityTags || []).map((t) => String(t).toLocaleLowerCase()).filter(Boolean);
+  const blocked = new Set((mod.incompatibilityTags || []).map((t) => String(t).toLocaleLowerCase()).filter(Boolean));
+  return (!required.length || required.some((t) => tags.has(t))) && ![...blocked].some((t) => tags.has(t));
+}
+
+function renderCompanionPicker() {
+  const kind = state.companionPickerKind;
+  const cats = COMPANION_PICKER_CATEGORIES[kind] || [["all", "全部"]];
+  const catHost = ui["companion-picker-categories"];
+  if (catHost) {
+    catHost.hidden = cats.length <= 1;
+    catHost.replaceChildren(...cats.map(([key, label]) => {
+      const btn = create("button", key === state.companionPickerCategory ? "is-active" : "", label);
+      btn.type = "button";
+      btn.addEventListener("click", () => {
+        state.companionPickerCategory = key;
+        renderCompanionPicker();
+      });
+      return btn;
+    }));
+  }
+  const listHost = ui["companion-picker-list"];
+  if (!listHost) return;
+  const query = String(ui["companion-picker-search"]?.value || "").trim().toLocaleLowerCase();
+  const cb = state.companionBuild;
+
+  if (kind === "companion" || kind === "synergyCompanion") {
+    const isSynergy = kind === "synergyCompanion";
+    const store = state.companionBuild?.store?.bodies ? state.companionBuild.store : readCompanionStore();
+    listHost.className = "mod-picker-grid is-weapon-list companion-entity-grid";
+    const rows = companionRows("companions").filter((comp) => {
+      const kindMatch = state.companionPickerCategory === "all"
+        || comp.kind === state.companionPickerCategory
+        || (state.companionPickerCategory === "kubrow" && comp.kind === "charger");
+      const hay = [comp.nameZh, comp.nameEn, comp.id, COMPANION_KIND_LABELS[comp.kind]].filter(Boolean).join(" ").toLocaleLowerCase();
+      return kindMatch && (!query || hay.includes(query));
+    });
+    listHost.replaceChildren(...(rows.length ? rows.map((comp) => {
+      const active = isSynergy ? state.companionLink?.companionId === comp.path : cb.companion?.path === comp.path;
+      const savedCfgs = ["A", "B", "C"].filter((cfg) => Boolean(store.bodies?.[comp.path]?.[cfg]));
+      const btn = create("button", `weapon-option companion-entity-option${active ? " is-selected" : ""}`);
+      btn.type = "button";
+      const thumb = create("span", "companion-entity-thumb");
+      if (comp.portraitAsset) thumb.append(imageNode(comp.portraitAsset, "", comp.nameZh || comp.nameEn, "lazy"));
+      else thumb.append(create("i", "", "◈"));
+      const copy = create("span", "companion-entity-copy");
+      const catLabel = comp.category === "robotic" ? "机械索敌" : "生物连结";
+      copy.append(
+        create("strong", "", comp.nameZh || comp.nameEn),
+        create("small", "", `${COMPANION_KIND_LABELS[comp.kind] || comp.kind} / ${catLabel}${savedCfgs.length ? ` · 已配装 ${savedCfgs.join("/")}` : ""}`),
+        create("em", "", `生命 ${Math.round(comp.stats?.health || 0)} / 护盾 ${Math.round(comp.stats?.shield || 0)} / 护甲 ${Math.round(comp.stats?.armor || 0)}`),
+      );
+      btn.append(thumb, copy);
+      btn.addEventListener("click", () => {
+        if (isSynergy) {
+          state.companionLink.companionId = comp.path;
+          syncCompanionWorkbenchFromSynergy();
+          renderSynergyHub();
+          persistActiveBuildConfig();
+          scheduleLiveBuild();
+        } else {
+          selectCompanion(comp, "A", "A");
+        }
+        closeCompanionPicker();
+      });
+      return btn;
+    }) : [create("p", "empty-copy", "没有匹配的同伴")]));
+    return;
+  }
+
+  if (kind === "synergyCompanionWeapon") {
+    listHost.className = "mod-picker-grid is-weapon-list companion-entity-grid";
+    const compId = state.companionLink?.companionId;
+    const bodyCfg = state.companionLink?.configName || "A";
+    const weapCfg = state.companionLink?.weaponConfigName || "A";
+    const resolved = compId ? resolveStoredCompanionPair(compId, bodyCfg, weapCfg) : null;
+    const compRec = resolved?.compRec;
+    const equippedBodyMods = (resolved?.bodyPayload?.mods || []).map((m) => companionBodyModByPath(m.path)).filter(Boolean);
+    const validList = compRec ? validCompanionWeapons(compRec, equippedBodyMods) : [];
+    const store = state.companionBuild?.store?.bodies ? state.companionBuild.store : readCompanionStore();
+    const filtered = validList.filter((w) => {
+      const hay = [w.nameZh, w.nameEn, w.path].filter(Boolean).join(" ").toLocaleLowerCase();
+      return !query || hay.includes(query);
+    });
+    listHost.replaceChildren(...(filtered.length ? filtered.map((w) => {
+      const active = resolved?.weaponPath === w.path;
+      const savedWeapCfgs = ["A", "B", "C"].filter((cfg) => Boolean(store.weapons?.[w.path]?.[cfg]));
+      const btn = create("button", `weapon-option companion-entity-option${active ? " is-selected" : ""}`);
+      btn.type = "button";
+      const thumb = create("div", "weapon-thumb");
+      const iconCands = weaponIconCandidates(w);
+      if (iconCands.length) {
+        const img = create("img", "");
+        img.alt = "";
+        img.loading = "lazy";
+        let idx = 0;
+        const tryNext = () => {
+          if (idx >= iconCands.length) {
+            img.remove();
+            thumb.append(create("i", "", "◈"));
+            return;
+          }
+          img.src = `/assets/weapons/${iconCands[idx++]}`;
+        };
+        img.addEventListener("error", tryNext);
+        tryNext();
+        thumb.append(img);
+      } else {
+        thumb.append(create("i", "", "◈"));
+      }
+      const copy = create("span", "companion-entity-copy");
+      const mode0 = Array.isArray(w.fireModes) ? w.fireModes[0] : null;
+      const ccPct = Number(mode0?.critChance ?? w.critChance ?? 0) * 100;
+      const scPct = Number(mode0?.procChance ?? mode0?.statusChance ?? w.statusChance ?? 0) * 100;
+      copy.append(
+        create("strong", "", w.nameZh || w.nameEn),
+        create("small", "", `${w.nameEn || ""}${savedWeapCfgs.length ? ` · 已配装 ${savedWeapCfgs.join("/")}` : ""}`),
+        create("em", "", `基础暴击 ${ccPct.toFixed(1)}% / 触发 ${scPct.toFixed(1)}%`),
+      );
+      btn.append(thumb, copy);
+      btn.addEventListener("click", () => {
+        cb.store ||= readCompanionStore();
+        cb.store.bodies ||= {};
+        cb.store.bodies[compId] ||= { A: null, B: null, C: null };
+        const existingBody = cb.store.bodies[compId][bodyCfg];
+        if (existingBody) {
+          existingBody.pairedWeaponPath = w.path;
+        } else if (resolved?.bodyPayload) {
+          cb.store.bodies[compId][bodyCfg] = {
+            ...structuredClone(resolved.bodyPayload),
+            pairedWeaponPath: w.path,
+          };
+        }
+        writeCompanionStore();
+        syncCompanionWorkbenchFromSynergy();
+        renderSynergyHub();
+        persistActiveBuildConfig();
+        scheduleLiveBuild();
+        closeCompanionPicker();
+      });
+      return btn;
+    }) : [create("p", "empty-copy", "没有匹配的配对武器")]));
+    return;
+  }
+
+  if (kind === "favoriteRiven") {
+    listHost.className = "mod-picker-grid is-weapon-list";
+    const wRec = companionWeaponRecord(cb.weaponPath);
+    const favs = readFavorites().filter((item) => {
+      const favWeapon = state.catalog?.weapons?.find((w) => w.path === item.weaponPath);
+      return item.weaponPath === cb.weaponPath || (wRec?.rivenType && favWeapon?.rivenType === wRec.rivenType);
+    });
+    listHost.replaceChildren(...(favs.length ? favs.map((item) => {
+      const favWeapon = state.catalog?.weapons?.find((w) => w.path === item.weaponPath);
+      const defs = companionWeaponRivenDefs(wRec);
+      const btn = create("button", "weapon-option");
+      btn.type = "button";
+      const desc = item.stats.map((s) => rivenStatLabel(s, defs)).join(" / ");
+      const copy = create("div", "companion-entity-copy");
+      copy.append(
+        create("strong", "", `${favWeapon?.nameZh || "收藏紫卡"}${item.note ? ` (${item.note})` : ""}`),
+        create("small", "", desc),
+      );
+      btn.append(copy);
+      btn.addEventListener("click", () => {
+        const existingSlot = cb.riven ? Number(cb.riven.slot) : -1;
+        const emptySlot = cb.weaponMods.findIndex((m) => !m);
+        const slot = existingSlot >= 0 ? existingSlot : (emptySlot >= 0 ? emptySlot : 7);
+        cb.weaponMods[slot] = null;
+        cb.riven = {
+          slot,
+          polarity: item.polarity || "AP_ATTACK",
+          stats: item.stats.map((s) => ({ code: s.code, value: Number(s.value || 0), negative: Boolean(s.negative) })),
+        };
+        syncCompanionRivenRowsFromEquipped(wRec);
+        ensureCompanionWeaponCapacityFit();
+        persistCompanionConfigs();
+        renderCompanionSlots();
+        scheduleCompanionEvaluate();
+        closeCompanionPicker();
+      });
+      return btn;
+    }) : [create("p", "empty-copy", "收藏夹中暂无兼容当前同伴武器的紫卡，可直接在面板录入词条")]));
+    return;
+  }
+
+  listHost.className = "mod-picker-grid";
+  let candidates = [];
+  const slotIdx = state.companionPickerSlot;
+
+  if (kind === "bodyMod") {
+    const usedPaths = new Set(cb.bodyMods.flatMap((m, i) => (m && i !== slotIdx ? [m.path] : [])));
+    const usedFamilies = new Set(cb.bodyMods.flatMap((m, i) => {
+      if (!m || i === slotIdx) return [];
+      const fam = modExclusiveFamily(m);
+      return fam ? [fam] : [];
+    }));
+    candidates = companionRows("bodyMods").filter((mod) => {
+      if (!companionBodyModCompatible(cb.companion, mod)) return false;
+      if (usedPaths.has(mod.path)) return false;
+      const fam = modExclusiveFamily(mod);
+      if (fam && usedFamilies.has(fam)) return false;
+      if (state.companionPickerCategory !== "all" && bodyModCategoryKey(mod) !== state.companionPickerCategory) return false;
+      const text = [mod.nameZh, mod.nameEn, ...((mod.levelStatsZh || []).flat())].filter(Boolean).join(" ").toLocaleLowerCase();
+      return !query || text.includes(query);
+    }).sort((a, b) => Number(Boolean(b.isBond)) - Number(Boolean(a.isBond)) || Number(Boolean(b.isPrecept)) - Number(Boolean(a.isPrecept)) || String(a.nameZh || "").localeCompare(String(b.nameZh || ""), "zh"));
+  } else if (kind === "posture") {
+    const clawPath = cb.weaponPath;
+    candidates = companionRows("clawMods").filter((mod) => {
+      if (!mod.isPosture) return false;
+      const allowed = mod.compat?.weaponPaths;
+      if (Array.isArray(allowed) && allowed.length && !allowed.includes(clawPath)) return false;
+      const text = [mod.nameZh, mod.nameEn, ...((mod.levelStatsZh || []).flat())].filter(Boolean).join(" ").toLocaleLowerCase();
+      return !query || text.includes(query);
+    });
+  } else if (kind === "clawMod") {
+    const clawPath = cb.weaponPath;
+    const usedPaths = new Set(cb.weaponMods.flatMap((m, i) => (m && i !== slotIdx ? [m.path] : [])));
+    const usedFamilies = new Set(cb.weaponMods.flatMap((m, i) => {
+      if (!m || i === slotIdx) return [];
+      const fam = modExclusiveFamily(m);
+      return fam ? [fam] : [];
+    }));
+    candidates = companionRows("clawMods").filter((mod) => {
+      if (mod.isPosture) return false;
+      const allowed = mod.compat?.weaponPaths;
+      if (Array.isArray(allowed) && allowed.length && !allowed.includes(clawPath)) return false;
+      if (usedPaths.has(mod.path)) return false;
+      const fam = modExclusiveFamily(mod);
+      if (fam && usedFamilies.has(fam)) return false;
+      if (state.companionPickerCategory !== "all" && clawModCategoryKey(mod) !== state.companionPickerCategory) return false;
+      const text = [mod.nameZh, mod.nameEn, ...((mod.levelStatsZh || []).flat())].filter(Boolean).join(" ").toLocaleLowerCase();
+      return !query || text.includes(query);
+    }).sort((a, b) => Number(clawModCategoryKey(b) === "synergy") - Number(clawModCategoryKey(a) === "synergy") || String(a.nameZh || "").localeCompare(String(b.nameZh || ""), "zh"));
+  } else if (kind === "roboticMod") {
+    const wRec = companionWeaponRecord(cb.weaponPath);
+    const usedPaths = new Set(cb.weaponMods.flatMap((m, i) => (m && i !== slotIdx ? [m.path] : [])));
+    const usedFamilies = new Set(cb.weaponMods.flatMap((m, i) => {
+      if (!m || i === slotIdx) return [];
+      const fam = modExclusiveFamily(m);
+      return fam ? [fam] : [];
+    }));
+    candidates = (state.catalog?.manualMods || []).filter((mod) => {
+      if (!modMatchesCompanionRoboticWeapon(mod, wRec)) return false;
+      if (usedPaths.has(mod.path)) return false;
+      const fam = modExclusiveFamily(mod);
+      if (fam && usedFamilies.has(fam)) return false;
+      if (state.companionPickerCategory !== "all" && modCategory(mod) !== state.companionPickerCategory) return false;
+      const effectText = modEffectText({ ...mod, rank: mod.maxRank ?? 0 });
+      const hay = [mod.nameZh, mod.nameEn, mod.path, effectText].filter(Boolean).join(" ").toLocaleLowerCase();
+      return !query || hay.includes(query);
+    }).slice(0, 160);
+  }
+
+  listHost.replaceChildren(...(candidates.length ? candidates.map((mod) => {
+    const option = create("button", "manual-mod-option");
+    option.type = "button";
+    const isHighlight = (kind === "clawMod" && clawModCategoryKey(mod) === "synergy")
+      || (kind === "bodyMod" && (mod.id === "tenacious_bond" || mod.id === "reinforced_bond" || /Tenacious|Reinforced/i.test(mod.nameEn || "")));
+    if (isHighlight) option.classList.add("is-synergy-highlight");
+    const card = createNormalModCard({ ...mod, rank: mod.maxRank ?? 0 }, 0, {
+      compact: true,
+      compatLabel: companionModCompatLabel(mod, kind),
+    });
+    card.classList.add("manual-option-card");
+    card.querySelector(".slot-number")?.remove();
+    option.append(card);
+    if (isHighlight) {
+      option.append(create("span", "companion-mod-highlight-tag", kind === "clawMod" ? "暴率/触发核心联动" : "核心连结增益"));
+    }
+    bindModPreview(option, mod, kind);
+    option.addEventListener("click", () => {
+      applyCompanionPickerSelection(kind, slotIdx, mod);
+    });
+    return option;
+  }) : [create("p", "empty-copy", "没有符合筛选条件的 MOD")]));
+}
+
+function applyCompanionPickerSelection(kind, slotIdx, mod) {
+  const cb = state.companionBuild;
+  if (kind === "bodyMod") {
+    const isMoaPrecept = cb.companion?.kind === "moa" && mod.isPrecept && mod.compat?.compatKind === "moa";
+    if (isMoaPrecept) {
+      const otherMoaCount = cb.bodyMods.filter((m, idx) => m && idx !== slotIdx && m.isPrecept && m.compat?.compatKind === "moa").length;
+      if (otherMoaCount >= 2) {
+        toast("恐鸟最多同时装备 2 张专属行为戒律卡", "error");
+        return;
+      }
+    }
+    cb.bodyMods[slotIdx] = { ...mod, rank: Number(mod.maxRank ?? 0) };
+    enforceMoaWeaponRuleAfterBodyChange();
+    if (!ensureCompanionBodyCapacityFit().fits) {
+      toast("本体容量不足：即使自动极化也超出容量上限，请降低部分 MOD 等级", "error");
+    }
+  } else if (kind === "posture") {
+    cb.posture = { ...mod, rank: Number(mod.maxRank ?? 0) };
+    ensureCompanionWeaponCapacityFit();
+  } else if (kind === "clawMod" || kind === "roboticMod") {
+    if (!cb.companion || cb.companion.category !== "beast") {
+      if (cb.riven && Number(cb.riven.slot) === slotIdx) cb.riven = null;
+    }
+    cb.weaponMods[slotIdx] = { ...mod, rank: Number(mod.maxRank ?? 0) };
+    if (!ensureCompanionWeaponCapacityFit().fits) {
+      toast("武器容量不足：即使自动极化也超出容量上限，请降低部分 MOD 等级", "error");
+    }
+  }
+  hideModPreview();
+  closeCompanionPicker();
+  persistCompanionConfigs();
+  renderCompanionWorkbench();
+  scheduleCompanionEvaluate();
+}
+
+async function fillOptimalCompanionWeapon() {
+  const cb = state.companionBuild;
+  if (!cb.companion || !cb.weaponPath) return;
+  const reqBody = buildCompanionEvaluateRequest();
+  if (!reqBody) return;
+  reqBody.goal = ui["companion-weapon-opt-goal"]?.value || "dps";
+  const elemTarget = ui["companion-weapon-opt-element"]?.value || "";
+  if (elemTarget) reqBody.elementTarget = elemTarget;
+  const btn = ui["companion-weapon-fill-optimal"];
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "解算中...";
+  }
+  try {
+    const response = await fetch("/api/companion/optimize-weapon", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reqBody),
+    });
+    const body = await response.json();
+    if (!response.ok) throw new Error(body?.error?.message || `同伴武器最优解算失败（${response.status}）`);
+    const isBeast = cb.companion.category === "beast";
+    const wRec = companionWeaponRecord(cb.weaponPath);
+    const native = companionNativeWeaponPolarities(wRec);
+    cb.weaponMods = Array.from({ length: 8 }, () => null);
+    if (isBeast) {
+      if (body.posture?.path) {
+        const pRec = companionClawModByPath(body.posture.path);
+        if (pRec) cb.posture = { ...pRec, rank: clamp(Number(body.posture.rank ?? pRec.maxRank ?? 0), 0, Number(pRec.maxRank ?? 0)) };
+      }
+      for (const m of body.mods || []) {
+        const slot = Number(m.slot);
+        const mRec = companionClawModByPath(m.path);
+        if (mRec && Number.isInteger(slot) && slot >= 0 && slot < 8) {
+          cb.weaponMods[slot] = { ...mRec, rank: clamp(Number(m.rank ?? mRec.maxRank ?? 0), 0, Number(mRec.maxRank ?? 0)) };
+        }
+      }
+    } else {
+      const modPool = new Map([...(state.catalog?.manualMods || []), ...(state.catalog?.manualModVariants || [])].map((m) => [m.path, m]));
+      for (const m of body.mods || []) {
+        const slot = Number(m.slot);
+        const mRec = modPool.get(m.path);
+        if (mRec && Number.isInteger(slot) && slot >= 0 && slot < 8) {
+          cb.weaponMods[slot] = { ...mRec, rank: clamp(Number(m.rank ?? mRec.maxRank ?? 0), 0, Number(mRec.maxRank ?? 0)) };
+        }
+      }
+      if (body.riven && Array.isArray(body.riven.stats) && body.riven.stats.length) {
+        const rSlot = clamp(Number(body.riven.slot ?? 7), 0, 7);
+        cb.weaponMods[rSlot] = null;
+        cb.riven = {
+          slot: rSlot,
+          polarity: body.riven.polarity || cb.riven?.polarity || "AP_ATTACK",
+          stats: body.riven.stats.map((s) => ({ code: s.code, value: Number(s.value || 0), negative: Boolean(s.negative) })),
+        };
+      }
+    }
+    const polList = Array.isArray(body.slotPolarities) ? body.slotPolarities : [];
+    cb.weaponPolarities = Array.from({ length: isBeast ? 9 : 8 }, (_, idx) => {
+      const p = normalizedSpecialPolarity(polList[idx]);
+      const nat = normalizedSpecialPolarity(native[idx]);
+      if (p === nat) return null;
+      return p || "AP_UNIVERSAL";
+    });
+    persistCompanionConfigs();
+    if (body.evaluation) {
+      state.companionBuild.result = body.evaluation;
+    }
+    renderCompanionWorkbench();
+    if (!body.evaluation) scheduleCompanionEvaluate();
+    const formaCount = Number(body.formaCount ?? 0);
+    toast(`已填充最优配卡${formaCount ? `（最少极化 ×${formaCount}）` : "（无需额外极化）"}`, "success");
+  } catch (error) {
+    toast(error.message || "同伴武器自动配装失败", "error");
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "⚡ 填充最优";
+    }
+  }
+}
+
+function openCompanionWeaponInStandaloneBuild() {
+  const cb = state.companionBuild;
+  if (!cb.weaponPath || cb.companion?.category === "beast") return;
+  const targetWeapon = (state.catalog?.weapons || []).find((w) => w.path === cb.weaponPath);
+  if (!targetWeapon) {
+    toast("该武器不支持独立武器配装工作台", "error");
+    return;
+  }
+  persistCompanionConfigs();
+  setActiveTool("build");
+  selectBuildWeapon(targetWeapon);
+  if (state.buildInputMode !== "manual") {
+    state.buildInputMode = "manual";
+    document.querySelectorAll("[data-build-mode]").forEach((btn) => {
+      const active = btn.dataset.buildMode === "manual";
+      btn.classList.toggle("is-active", active);
+      btn.setAttribute("aria-selected", String(active));
+    });
+  }
+  state.manualSlots = Array.from({ length: 8 }, (_, idx) => (cb.weaponMods[idx] ? { ...cb.weaponMods[idx] } : null));
+  if (cb.riven && Array.isArray(cb.riven.stats) && cb.riven.stats.length) {
+    const rSlot = clamp(Number(cb.riven.slot ?? 7), 0, 7);
+    state.manualSlots[rSlot] = {
+      __riven: true,
+      path: "__riven__",
+      nameZh: `${targetWeapon.nameZh || "同伴武器"} (自定义)`,
+      nameEn: "Custom Riven",
+      maxRank: 8,
+      rank: 8,
+      rivenPolarity: cb.riven.polarity || "AP_ATTACK",
+      stats: cb.riven.stats.map((s) => ({ ...s })),
+    };
+  }
+  state.formaSlots = {};
+  const native = nativeSlotPolarities();
+  cb.weaponPolarities.slice(0, 8).forEach((pol, idx) => {
+    if (!pol) return;
+    if (pol !== native[idx]) state.formaSlots[idx] = pol;
+  });
+  ensureCapacityFit();
+  refreshFormaCount();
+  renderManualSlots();
+  persistActiveBuildConfig();
+  scheduleLiveManualSimulation();
+  toast(`已将 ${targetWeapon.nameZh || targetWeapon.nameEn} 当前配卡同步到「武器配装」`, "success");
+}
+
+function bindCompanionWorkbenchEvents() {
+  ui["warframe-return-build"]?.addEventListener("click", () => setActiveTool("build"));
+  ui["companion-return-build"]?.addEventListener("click", () => setActiveTool("build"));
+  ui["companion-select-open"]?.addEventListener("click", () => openCompanionPicker("companion"));
+  ui["companion-picker-close"]?.addEventListener("click", closeCompanionPicker);
+  ui["companion-picker-search"]?.addEventListener("input", renderCompanionPicker);
+  ui["mod-picker-scrim"]?.addEventListener("click", closeCompanionPicker);
+
+  ui["companion-config-export-json"]?.addEventListener("click", exportCompanionConfig);
+  ui["companion-config-import-json"]?.addEventListener("click", () => ui["companion-config-import-file"]?.click());
+  ui["companion-config-import-file"]?.addEventListener("change", () => importCompanionConfig(ui["companion-config-import-file"]?.files?.[0]));
+
+  ui["companion-body-forma-optimize"]?.addEventListener("click", () => {
+    const plan = applyCompanionBodyMinimalForma();
+    persistCompanionConfigs();
+    renderCompanionSlots();
+    scheduleCompanionEvaluate();
+    toast(plan.formas ? `已按最少极化重排同伴本体（共 ${plan.formas} 次极化）` : "当前同伴本体配装无需极化即可装下", "success");
+  });
+  ui["companion-weapon-forma-optimize"]?.addEventListener("click", () => {
+    const plan = applyCompanionWeaponMinimalForma();
+    persistCompanionConfigs();
+    renderCompanionSlots();
+    scheduleCompanionEvaluate();
+    toast(plan.formas ? `已按最少极化重排配对武器（共 ${plan.formas} 次极化）` : "当前配对武器配装无需极化即可装下", "success");
+  });
+  ui["companion-weapon-fill-optimal"]?.addEventListener("click", fillOptimalCompanionWeapon);
+  ui["companion-weapon-open-standalone"]?.addEventListener("click", openCompanionWeaponInStandaloneBuild);
+
+  ui["companion-subview-tabs"]?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-comp-subview]");
+    if (btn) switchCompanionSubView(btn.dataset.compSubview);
+  });
+  ui["companion-body-config-tabs"]?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-comp-body-config]");
+    if (btn) switchCompanionBodyConfig(btn.dataset.compBodyConfig);
+  });
+  ui["companion-weapon-config-tabs"]?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-comp-weapon-config]");
+    if (btn) switchCompanionWeaponConfig(btn.dataset.compWeaponConfig);
+  });
+
+  ui["companion-weapon-select"]?.addEventListener("change", () => {
+    persistCompanionConfigs();
+    const nextPath = ui["companion-weapon-select"].value;
+    const snap = state.companionBuild.store?.weapons?.[nextPath]?.[state.companionBuild.weaponConfig] || null;
+    applyCompanionWeaponSnapshot(nextPath, snap);
+    persistCompanionConfigs();
+    renderCompanionWorkbench();
+    scheduleCompanionEvaluate();
+  });
+
+  ui["companion-body-reactor"]?.addEventListener("change", () => {
+    state.companionBuild.bodyReactor = Boolean(ui["companion-body-reactor"].checked);
+    ensureCompanionBodyCapacityFit();
+    persistCompanionConfigs();
+    renderCompanionSlots();
+    scheduleCompanionEvaluate();
+  });
+  ui["companion-weapon-reactor"]?.addEventListener("change", () => {
+    state.companionBuild.weaponReactor = Boolean(ui["companion-weapon-reactor"].checked);
+    ensureCompanionWeaponCapacityFit();
+    persistCompanionConfigs();
+    renderCompanionSlots();
+    scheduleCompanionEvaluate();
+  });
+
+  ui["companion-body-copy"]?.addEventListener("click", () => {
+    const cb = state.companionBuild;
+    if (!cb.companion) return;
+    persistCompanionConfigs();
+    const order = ["A", "B", "C"];
+    const next = order[(order.indexOf(cb.bodyConfig) + 1) % order.length];
+    cb.store.bodies[cb.companion.path][next] = structuredClone(captureCompanionBodySnapshot());
+    writeCompanionStore();
+    toast(`本体配装已复制到配置 ${next}`, "success");
+  });
+  ui["companion-body-clear"]?.addEventListener("click", () => {
+    const cb = state.companionBuild;
+    if (!cb.companion) return;
+    cb.bodyMods = Array.from({ length: 10 }, () => null);
+    cb.bodyPolarities = Array.from({ length: 10 }, () => null);
+    enforceMoaWeaponRuleAfterBodyChange();
+    persistCompanionConfigs();
+    renderCompanionWorkbench();
+    scheduleCompanionEvaluate();
+    toast("已清空同伴本体槽位");
+  });
+
+  ui["companion-weapon-copy"]?.addEventListener("click", () => {
+    const cb = state.companionBuild;
+    if (!cb.weaponPath) return;
+    persistCompanionConfigs();
+    const order = ["A", "B", "C"];
+    const next = order[(order.indexOf(cb.weaponConfig) + 1) % order.length];
+    cb.store.weapons[cb.weaponPath] ||= { A: null, B: null, C: null };
+    cb.store.weapons[cb.weaponPath][next] = structuredClone(captureCompanionWeaponSnapshot());
+    writeCompanionStore();
+    toast(`配对武器配装已复制到配置 ${next}`, "success");
+  });
+  ui["companion-weapon-clear"]?.addEventListener("click", () => {
+    const cb = state.companionBuild;
+    cb.weaponMods = Array.from({ length: 8 }, () => null);
+    cb.weaponPolarities = Array.from({ length: cb.companion?.category === "beast" ? 9 : 8 }, () => null);
+    cb.riven = null;
+    persistCompanionConfigs();
+    renderCompanionSlots();
+    scheduleCompanionEvaluate();
+    toast("已清空配对武器槽位");
+  });
+
+  ui["companion-preview-wf-open"]?.addEventListener("click", () => {
+    loadWarframeCatalog().then(() => openWarframePicker("companionFrame")).catch(() => {});
+  });
+  ui["companion-preview-wf-config"]?.addEventListener("change", () => {
+    state.companionBuild.previewWfConfig = ui["companion-preview-wf-config"].value || "A";
+    persistCompanionConfigs();
+    renderCompanionControlPane();
+    scheduleCompanionEvaluate();
+  });
+  ui["companion-sync-context"]?.addEventListener("click", () => {
+    const cb = state.companionBuild;
+    cb.previewWfMode = "auto";
+    cb.primaryStatsManual = false;
+    syncLivePrimaryStatsIntoCompanion(false);
+    persistCompanionConfigs();
+    renderCompanionControlPane();
+    scheduleCompanionEvaluate();
+    toast("已切回自动跟随当前战甲并同步主武器暴击/触发数值", "success");
+  });
+
+  for (const id of ["companion-primary-cc", "companion-primary-sc"]) {
+    ui[id]?.addEventListener("input", () => {
+      state.companionBuild.primaryStatsManual = true;
+      state.companionBuild.primaryCc = Math.max(0, Number(ui["companion-primary-cc"]?.value || 0));
+      state.companionBuild.primarySc = Math.max(0, Number(ui["companion-primary-sc"]?.value || 0));
+      persistCompanionConfigs();
+      scheduleCompanionEvaluate();
+    });
+  }
+  const syncOpts = () => {
+    const cb = state.companionBuild;
+    cb.options.firedUp = Boolean(ui["companion-opt-fired-up"]?.checked);
+    cb.options.astralBond = Boolean(ui["companion-opt-astral-bond"]?.checked);
+    cb.options.ambushActive = Boolean(ui["companion-opt-ambush"]?.checked);
+    cb.companionPlayerStacks = Boolean(ui["companion-opt-player-stacks"]?.checked);
+    cb.options.momentousElement = ui["companion-opt-momentous"]?.value || "";
+    cb.options.catsEyeMode = ui["companion-opt-catseye"]?.value || "average";
+    persistCompanionConfigs();
+    scheduleCompanionEvaluate();
+  };
+  for (const id of ["companion-opt-fired-up", "companion-opt-astral-bond", "companion-opt-ambush", "companion-opt-player-stacks", "companion-opt-momentous", "companion-opt-catseye"]) {
+    ui[id]?.addEventListener("change", syncOpts);
+  }
+
+  ui["companion-riven-toggle"]?.addEventListener("click", () => {
+    if (!ui["companion-riven-editor"]) return;
+    const willOpen = ui["companion-riven-editor"].hidden;
+    if (willOpen) {
+      const wRec = companionWeaponRecord(state.companionBuild.weaponPath);
+      syncCompanionRivenRowsFromEquipped(wRec);
+      renderCompanionRivenBar(wRec);
+    }
+    ui["companion-riven-editor"].hidden = !willOpen;
+  });
+  ui["companion-riven-add-stat"]?.addEventListener("click", () => {
+    const wRec = companionWeaponRecord(state.companionBuild.weaponPath);
+    const defs = companionWeaponRivenDefs(wRec);
+    if (state.companionRivenRows.length >= 4) return toast("紫卡最多 4 条词条");
+    const used = new Set(state.companionRivenRows.map((s) => s.code));
+    const negative = state.companionRivenRows.length >= 3 && state.companionRivenRows.every((s) => !s.negative);
+    const next = defs.find((d) => !used.has(d.code) && (!negative || d.canNegative));
+    if (!next) return toast("没有更多可用词条");
+    state.companionRivenRows.push({ code: next.code, value: null, negative });
+    const win = companionRivenWindow(next, wRec, state.companionRivenRows, negative);
+    state.companionRivenRows.at(-1).value = win ? Number((win.low + (win.high - win.low) * 0.7).toFixed(3)) : 50;
+    if (!commitCompanionRivenIfEquipped(wRec, { rerenderEditor: true })) {
+      renderCompanionRivenBar(wRec);
+    }
+  });
+  ui["companion-riven-fav"]?.addEventListener("click", () => {
+    const wRec = companionWeaponRecord(state.companionBuild.weaponPath);
+    if (!wRec) return;
+    const stats = companionBuilderValidStats(wRec);
+    if (stats.length < 2) return toast("至少录入 2 条词条后再收藏");
+    const polarity = ui["companion-riven-polarity"]?.value || state.companionBuild.riven?.polarity || "AP_ATTACK";
+    toggleFavorite(wRec, stats, { polarity });
+    refreshCompanionRivenSummaryAndFav(wRec);
+  });
+  ui["companion-riven-polarity"]?.addEventListener("change", () => {
+    const wRec = companionWeaponRecord(state.companionBuild.weaponPath);
+    commitCompanionRivenIfEquipped(wRec, { rerenderEditor: false });
+  });
+  ui["companion-riven-slot"]?.addEventListener("change", () => {
+    const wRec = companionWeaponRecord(state.companionBuild.weaponPath);
+    commitCompanionRivenIfEquipped(wRec, { rerenderEditor: false });
+  });
+  ui["companion-riven-from-fav"]?.addEventListener("click", () => openCompanionPicker("favoriteRiven", 7));
+  ui["companion-riven-remove"]?.addEventListener("click", () => {
+    state.companionBuild.riven = null;
+    persistCompanionConfigs();
+    renderCompanionSlots();
+    scheduleCompanionEvaluate();
+    toast("已移除同伴武器紫卡");
+  });
+  ui["companion-riven-apply"]?.addEventListener("click", () => {
+    const cb = state.companionBuild;
+    const wRec = companionWeaponRecord(cb.weaponPath);
+    if (!wRec) return;
+    const validStats = companionBuilderValidStats(wRec);
+    if (new Set(validStats.map((s) => s.code)).size !== validStats.length) {
+      toast("同一词条不能重复录入", "error");
+      return;
+    }
+    const positives = validStats.filter((s) => !s.negative).length;
+    const negatives = validStats.filter((s) => s.negative).length;
+    if (positives < 2 || positives > 3 || negatives > 1) {
+      toast("紫卡需要 2-3 条正面词条与最多 1 条负面词条", "error");
+      return;
+    }
+    const prevSlot = cb.riven ? clamp(Number(cb.riven.slot ?? 7), 0, 7) : -1;
+    const chosenSlot = clamp(Number(ui["companion-riven-slot"]?.value ?? 7), 0, 7);
+    const polarity = ui["companion-riven-polarity"]?.value || "AP_ATTACK";
+    if (prevSlot >= 0 && prevSlot !== chosenSlot && cb.weaponMods[chosenSlot]) {
+      cb.weaponMods[prevSlot] = cb.weaponMods[chosenSlot];
+      cb.weaponMods[chosenSlot] = null;
+    } else if (prevSlot < 0 && cb.weaponMods[chosenSlot]) {
+      const emptyIdx = cb.weaponMods.findIndex((m) => !m);
+      if (emptyIdx >= 0) {
+        cb.weaponMods[emptyIdx] = cb.weaponMods[chosenSlot];
+      }
+      cb.weaponMods[chosenSlot] = null;
+    }
+    cb.riven = { slot: chosenSlot, polarity, stats: validStats };
+    if (!ensureCompanionWeaponCapacityFit().fits) {
+      toast("武器容量不足：即使自动极化也超出容量上限，请调整 MOD 等级", "error");
+    }
+    if (ui["companion-riven-slot"]) ui["companion-riven-slot"].value = String(cb.riven.slot);
+    if (ui["companion-riven-editor"]) ui["companion-riven-editor"].hidden = true;
+    persistCompanionConfigs();
+    renderCompanionSlots();
+    scheduleCompanionEvaluate();
+    toast("已应用同伴武器紫卡", "success");
+  });
+}
+
+// ── 武器配装页：双卡「协同配装中枢」 (#build-synergy-panel) ───────────────
+function captureSynergyWarframeLink() {
+  const link = state.warframeLink || {};
+  return {
+    enabled: Boolean(link.enabled),
+    frameId: link.frameId || null,
+    configName: /^[ABC]$/.test(link.configName || "") ? link.configName : "A",
+    activeAbilities: Array.isArray(link.activeAbilities) ? [...link.activeAbilities] : null,
+    abilityElements: { ...(link.abilityElements || {}) },
+    damageTriggerMode: ["ai", "assumed", "off"].includes(link.damageTriggerMode) ? link.damageTriggerMode : "ai",
+  };
+}
+
+function captureSynergyCompanionLink() {
+  const link = state.companionLink || {};
+  return {
+    enabled: Boolean(link.enabled),
+    companionId: link.companionId || null,
+    configName: /^[ABC]$/.test(link.configName || "") ? link.configName : "A",
+    weaponConfigName: /^[ABC]$/.test(link.weaponConfigName || "") ? link.weaponConfigName : "A",
+  };
+}
+
+function restoreSynergyLinks(config) {
+  const savedWf = config?.warframeLink;
+  state.warframeLink = {
+    enabled: Boolean(savedWf?.enabled === true),
+    frameId: savedWf?.frameId || null,
+    configName: /^[ABC]$/.test(savedWf?.configName || "") ? savedWf.configName : "A",
+    activeAbilities: Array.isArray(savedWf?.activeAbilities) ? [...savedWf.activeAbilities] : null,
+    abilityElements: savedWf?.abilityElements && typeof savedWf.abilityElements === "object" ? { ...savedWf.abilityElements } : {},
+    damageTriggerMode: ["ai", "assumed", "off"].includes(savedWf?.damageTriggerMode) ? savedWf.damageTriggerMode : "ai",
+  };
+  const savedComp = config?.companionLink;
+  state.companionLink = {
+    enabled: Boolean(savedComp?.enabled === true),
+    companionId: savedComp?.companionId || null,
+    configName: /^[ABC]$/.test(savedComp?.configName || "") ? savedComp.configName : "A",
+    weaponConfigName: /^[ABC]$/.test(savedComp?.weaponConfigName || "") ? savedComp.weaponConfigName : "A",
+  };
+  if (state.warframeLink.enabled) {
+    loadWarframeCatalog().then(() => {
+      ensureDefaultSynergyWarframeSelection();
+      if (enforceExaltedSynergySync(false)) renderExaltedPanel();
+      syncArcaneSelections();
+      renderArcaneSelections();
+      renderSynergyHub();
+      ensureSynergyWarframeBridge(true);
+    }).catch(() => {});
+  } else {
+    syncCombatStateSynergyPlaceholders(null);
+  }
+  if (state.companionLink.enabled) {
+    loadCompanionCatalog().then(() => {
+      ensureDefaultSynergyCompanionSelection();
+      renderSynergyHub();
+      scheduleLiveBuild();
+    }).catch(() => {});
+  }
+}
+
+function ensureDefaultSynergyWarframeSelection() {
+  if (state.warframeLink.frameId) return;
+  const store = exaltedWarframeStore();
+  const lastId = store?.__lastSelection?.frameId || warframeId(activeWarframeRecord());
+  const all = [...warframeRows("warframes"), ...warframeRows("warframeForms")];
+  const chosen = (lastId && all.find((r) => warframeId(r) === lastId))
+    || all.find((r) => r.nameEn === "Rhino Prime")
+    || all[0];
+  if (chosen) {
+    state.warframeLink.frameId = warframeId(chosen);
+    state.warframeLink.configName = store?.__lastSelection?.activeConfig || "A";
+  }
+}
+
+function ensureDefaultSynergyCompanionSelection() {
+  if (state.companionLink.companionId) return;
+  const store = readCompanionStore();
+  const lastPath = store?.__lastSelection?.companionPath || state.companionBuild.companion?.path;
+  const companions = companionRows("companions");
+  const chosen = (lastPath && companionByPath(lastPath))
+    || companions.find((c) => c.nameEn === "Nautilus Prime")
+    || companions.find((c) => c.nameEn === "Wyrm Prime")
+    || companions[0];
+  if (chosen) {
+    state.companionLink.companionId = chosen.path;
+    state.companionLink.configName = store?.__lastSelection?.bodyConfig || "A";
+    state.companionLink.weaponConfigName = store?.__lastSelection?.weaponConfig || "A";
+  }
+}
+
+function resolveStoredCompanionPair(companionId, bodyCfgName = "A", weaponCfgName = "A") {
+  const store = state.companionBuild?.store?.bodies ? state.companionBuild.store : readCompanionStore();
+  const compRec = companionByPath(companionId);
+  const savedBody = store.bodies?.[companionId]?.[bodyCfgName] || null;
+  let bodyPayload;
+  let weaponPath;
+  if (savedBody) {
+    bodyPayload = {
+      path: savedBody.path || companionId,
+      ...(savedBody.parts ? { parts: savedBody.parts } : {}),
+      reactor: savedBody.reactor !== false,
+      polarities: Array.isArray(savedBody.polarities) ? savedBody.polarities : Array.from({ length: 10 }, () => null),
+      mods: Array.isArray(savedBody.mods) ? savedBody.mods : [],
+      options: savedBody.options || { firedUp: true, astralBond: false, momentousElement: null, catsEyeMode: "average", ambushActive: false },
+    };
+    weaponPath = savedBody.pairedWeaponPath || compRec?.defaultWeaponPath || null;
+  } else if (compRec) {
+    const parts = defaultModularParts(compRec);
+    const defMods = defaultBodyModsForCompanion(compRec, parts);
+    bodyPayload = {
+      path: compRec.path,
+      ...(Object.keys(parts).length ? { parts } : {}),
+      reactor: true,
+      polarities: Array.from({ length: 10 }, () => null),
+      mods: defMods.flatMap((m, slot) => (m ? [{ path: m.path, rank: Number(m.rank ?? m.maxRank ?? 0), slot }] : [])),
+      options: { firedUp: true, astralBond: false, momentousElement: null, catsEyeMode: "average", ambushActive: false },
+    };
+    const validWeaps = validCompanionWeapons(compRec, defMods);
+    weaponPath = validWeaps.find((w) => w.path === compRec.defaultWeaponPath)?.path || validWeaps[0]?.path || null;
+  } else {
+    bodyPayload = { path: companionId, reactor: true, mods: [] };
+    weaponPath = null;
+  }
+
+  if (compRec) {
+    const equippedBodyMods = (bodyPayload.mods || []).map((m) => companionBodyModByPath(m.path)).filter(Boolean);
+    const validWeaps = validCompanionWeapons(compRec, equippedBodyMods);
+    if (validWeaps.length && !validWeaps.some((w) => w.path === weaponPath)) {
+      weaponPath = validWeaps[0].path;
+    }
+  }
+
+  const savedWeap = weaponPath ? store.weapons?.[weaponPath]?.[weaponCfgName] || null : null;
+  const weapRec = weaponPath ? companionWeaponRecord(weaponPath, compRec) : null;
+  let weaponPayload = null;
+  if (weaponPath) {
+    if (savedWeap) {
+      weaponPayload = {
+        path: weaponPath,
+        reactor: savedWeap.reactor !== false,
+        slotPolarities: savedWeap.slotPolarities,
+        mods: Array.isArray(savedWeap.mods) ? savedWeap.mods : [],
+        ...(compRec?.category === "beast"
+          ? { posture: savedWeap.posture || null }
+          : { riven: savedWeap.riven || null, companionPlayerStacks: savedWeap.companionPlayerStacks !== false }),
+      };
+    } else if (compRec?.category === "beast") {
+      const defPosture = weapRec?.defaultPosturePath ? companionClawModByPath(weapRec.defaultPosturePath) : companionRows("clawMods").find((m) => m.isPosture);
+      weaponPayload = {
+        path: weaponPath,
+        reactor: true,
+        mods: [],
+        posture: defPosture ? { path: defPosture.path, rank: Number(defPosture.maxRank ?? 0) } : null,
+      };
+    } else {
+      weaponPayload = {
+        path: weaponPath,
+        reactor: true,
+        mods: [],
+        companionPlayerStacks: true,
+      };
+    }
+  }
+  return { compRec, weapRec, weaponPath, bodyPayload, weaponPayload };
+}
+
+const SYNERGY_ABILITY_FAMILIES = {
+  "roar": "roar",
+  "roar-helminth": "roar",
+  "eclipse": "eclipse",
+  "eclipse-helminth": "eclipse",
+  "nourish": "nourish",
+  "nourish-helminth": "nourish",
+  "warcry": "warcry",
+  "warcry-helminth": "warcry",
+  "wrathful-advance": "wrathful",
+  "wrathful-advance-helminth": "wrathful",
+  "sentient-wrath": "sentient-wrath",
+  "sentient-wrath-helminth": "sentient-wrath",
+  "webbed-embrace": "webbed-embrace",
+  "webbed-embrace-helminth": "webbed-embrace",
+};
+
+function synergyProvidesExternalBuff(spec) {
+  if (!spec?.id || isCompanionWeapon() || !state.warframeLink?.enabled || !state.warframeLink.frameId) return false;
+  const cacheKey = synergyWarframeCacheKey(state.warframeLink.frameId, state.warframeLink.configName || "A");
+  const bridge = state.synergyBridgeCache?.[cacheKey]?.weaponBridge;
+  if (!bridge) return false;
+  if (bridge.aura?.buffId && bridge.aura.buffId === spec.id) return true;
+  if (spec.id === "coaction-drift" && bridge.aura?.hasCoactionDrift) return true;
+  const activeSet = new Set(state.warframeLink.activeAbilities || []);
+  const specBase = String(spec.id).replace(/-helminth$/, "");
+  const specFam = spec.family || SYNERGY_ABILITY_FAMILIES[spec.id] || "";
+  for (const ab of bridge.availableAbilities || []) {
+    if (!activeSet.has(ab.id)) continue;
+    if (ab.id === spec.id || String(ab.id).replace(/-helminth$/, "") === specBase) return true;
+    const abFam = SYNERGY_ABILITY_FAMILIES[ab.id] || "";
+    if (specFam && abFam && specFam === abFam) return true;
+  }
+  return false;
+}
+
+function enforceExaltedSynergySync(preferExalted = true) {
+  if (!isExaltedWeapon() || !state.warframeLink?.enabled) return false;
+  const validFrames = exaltedFrames();
+  if (!validFrames.length) return false;
+  const validIds = new Set(validFrames.map((f) => f.id));
+  if (!state.exaltedLink) restoreExaltedLink(null);
+  let changed = false;
+  if (preferExalted) {
+    const targetFrameId = validIds.has(state.exaltedLink?.frameId) ? state.exaltedLink.frameId : validFrames[0].id;
+    const targetCfg = /^[ABC]$/.test(state.exaltedLink?.configName || "") ? state.exaltedLink.configName : "A";
+    if (state.warframeLink.frameId !== targetFrameId) {
+      state.warframeLink.frameId = targetFrameId;
+      state.warframeLink.activeAbilities = null;
+      state.warframeLink.abilityElements = {};
+      changed = true;
+    }
+    if (state.warframeLink.configName !== targetCfg) {
+      state.warframeLink.configName = targetCfg;
+      state.warframeLink.activeAbilities = null;
+      changed = true;
+    }
+  } else {
+    const targetFrameId = validIds.has(state.warframeLink.frameId) ? state.warframeLink.frameId : (state.exaltedLink?.frameId || validFrames[0].id);
+    const targetCfg = /^[ABC]$/.test(state.warframeLink.configName || "") ? state.warframeLink.configName : "A";
+    if (state.warframeLink.frameId !== targetFrameId) {
+      state.warframeLink.frameId = targetFrameId;
+      state.warframeLink.activeAbilities = null;
+      changed = true;
+    }
+    if (!state.exaltedLink || state.exaltedLink.frameId !== targetFrameId || state.exaltedLink.configName !== targetCfg) {
+      state.exaltedLink = { frameId: targetFrameId, configName: targetCfg };
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+function syncWarframeWorkbenchFromSynergy() {
+  if (!state.warframeCatalog) return;
+  let targetId = "";
+  let cfgName = "A";
+  if (!isCompanionWeapon() && state.warframeLink?.enabled && state.warframeLink.frameId) {
+    targetId = state.warframeLink.frameId;
+    cfgName = state.warframeLink.configName || "A";
+  } else if (isExaltedWeapon() && state.exaltedLink?.frameId) {
+    targetId = state.exaltedLink.frameId;
+    cfgName = /^[ABC]$/.test(state.exaltedLink.configName || "") ? state.exaltedLink.configName : "A";
+  }
+  if (!targetId) return;
+  const altForm = warframeRows("warframeForms").find((f) => warframeId(f) === targetId);
+  const rootId = altForm?.parentFrameId || targetId;
+  const rootFrame = warframeRows("warframes").find((f) => warframeId(f) === rootId);
+  if (!rootFrame) return;
+  const wantForm = altForm ? warframeId(altForm) : "main";
+  const wantCfg = /^[ABC]$/.test(cfgName) ? cfgName : "A";
+  if (
+    warframeId(state.warframeBuild.frame) === rootId
+    && (state.warframeBuild.activeForm || "main") === wantForm
+    && state.warframeBuild.activeConfig === wantCfg
+  ) {
+    return;
+  }
+  isSyncingCrossTool = true;
+  try {
+    if (warframeId(state.warframeBuild.frame) !== rootId) {
+      selectWarframeFrame(rootFrame);
+    }
+    if ((state.warframeBuild.activeForm || "main") !== wantForm) {
+      switchWarframeForm(wantForm);
+    }
+    if (state.warframeBuild.activeConfig !== wantCfg) {
+      switchWarframeConfig(wantCfg);
+    }
+  } finally {
+    isSyncingCrossTool = false;
+  }
+}
+
+function syncCompanionWorkbenchFromSynergy() {
+  if (!state.companionCatalog || isCompanionWeapon() || !state.companionLink?.enabled) return;
+  ensureDefaultSynergyCompanionSelection();
+  const comp = companionByPath(state.companionLink.companionId);
+  if (!comp) return;
+  const wantBody = /^[ABC]$/.test(state.companionLink.configName || "") ? state.companionLink.configName : "A";
+  const wantWeap = /^[ABC]$/.test(state.companionLink.weaponConfigName || "") ? state.companionLink.weaponConfigName : "A";
+  const resolved = resolveStoredCompanionPair(comp.path, wantBody, wantWeap);
+  const cb = state.companionBuild;
+  if (
+    cb.companion?.path === comp.path
+    && cb.bodyConfig === wantBody
+    && cb.weaponConfig === wantWeap
+    && (!resolved.weaponPath || cb.weaponPath === resolved.weaponPath)
+  ) {
+    return;
+  }
+  isSyncingCrossTool = true;
+  try {
+    selectCompanion(comp, wantBody, wantWeap, resolved.weaponPath || null);
+  } finally {
+    isSyncingCrossTool = false;
+  }
+}
+
+function syncLivePrimaryStatsIntoCompanion(fromWeaponSim = false) {
+  const cb = state.companionBuild;
+  if (!cb || cb.primaryStatsManual) return;
+  if (state.buildWeapon?.slot !== "primary") return;
+  const stats = (state.buildResult?.simulation || state.buildResult)?.moddedStats;
+  if (!stats) return;
+  const cc = Number(stats.critChance ?? stats.crit_chance);
+  const sc = Number(stats.statusChance ?? stats.status_chance);
+  let changed = false;
+  if (Number.isFinite(cc)) {
+    const nextCc = Number((cc * 100).toFixed(1));
+    if (cb.primaryCc !== nextCc) { cb.primaryCc = nextCc; changed = true; }
+  }
+  if (Number.isFinite(sc)) {
+    const nextSc = Number((sc * 100).toFixed(1));
+    if (cb.primarySc !== nextSc) { cb.primarySc = nextSc; changed = true; }
+  }
+  if (changed && ui["companion-primary-cc"]) ui["companion-primary-cc"].value = String(cb.primaryCc);
+  if (changed && ui["companion-primary-sc"]) ui["companion-primary-sc"].value = String(cb.primarySc);
+  if (changed && fromWeaponSim && state.activeTool === "companion" && state.companionCatalog) {
+    scheduleCompanionEvaluate();
+  }
+}
+
+function syncCombatStateSynergyPlaceholders(result) {
+  const synWf = (result?.synergySummary || result?.simulation?.synergySummary)?.warframe;
+  const active = !isCompanionWeapon() && Boolean(state.warframeLink?.enabled);
+  let panel = synWf?.panel || null;
+  if (!panel && active && state.warframeLink.frameId) {
+    const cacheKey = synergyWarframeCacheKey(state.warframeLink.frameId, state.warframeLink.configName || "A");
+    panel = state.synergyBridgeCache?.[cacheKey]?.weaponBridge?.panel || null;
+  }
+  const map = [
+    ["frameArmor", panel ? `战甲协同: ${Math.round(Number(panel.armor || 0))}` : "未设置"],
+    ["frameShield", panel ? `战甲协同: ${Math.round(Number(panel.shield || 0))}` : "未设置"],
+    ["energyPool", panel ? `战甲协同: ${Math.round(Number(panel.energy || 0))}` : "未设置"],
+    ["sprintMultiplier", panel ? `战甲协同: ${Number(panel.sprint || 1).toFixed(2)}` : "1.0"],
+  ];
+  for (const [key, placeholder] of map) {
+    const el = document.querySelector(`[data-combat-state="${key}"]`);
+    if (!el) continue;
+    el.placeholder = active && panel ? placeholder : (key === "sprintMultiplier" ? "1.0" : "未设置");
+    el.title = active && panel ? "留空时自动代入战甲协同实时面板；填写数值则优先使用手动覆盖值" : "";
+  }
+}
+
+async function applySynergyWarframeSelection(frameId, configName = state.warframeLink.configName || "A") {
+  if (!frameId) return;
+  const changedFrame = state.warframeLink.frameId !== frameId;
+  state.warframeLink.frameId = frameId;
+  state.warframeLink.configName = /^[ABC]$/.test(configName) ? configName : "A";
+  if (changedFrame) {
+    state.warframeLink.activeAbilities = null;
+    state.warframeLink.abilityElements = {};
+  }
+  if (enforceExaltedSynergySync(false)) {
+    renderExaltedPanel();
+  }
+  syncWarframeWorkbenchFromSynergy();
+  if (state.companionCatalog && state.companionBuild.previewWfMode === "auto") {
+    renderCompanionWarframeOptions();
+  }
+  await ensureSynergyWarframeBridge(false);
+  syncArcaneSelections();
+  renderArcaneSelections();
+  renderExternalBuffs();
+  syncCombatStateSynergyPlaceholders(null);
+  renderSynergyHub();
+  persistActiveBuildConfig();
+  scheduleLiveBuild();
+}
+
+function buildWarframeLinkPayload() {
+  if (isCompanionWeapon() || !state.warframeLink?.enabled) return undefined;
+  ensureDefaultSynergyWarframeSelection();
+  const frameId = state.warframeLink.frameId;
+  if (!frameId) return undefined;
+  const configName = state.warframeLink.configName || "A";
+  const stored = warframeStoredConfig(frameId, configName);
+  const allRecords = [...warframeRows("warframes"), ...warframeRows("warframeForms")];
+  const rec = allRecords.find((r) => warframeId(r) === frameId) || null;
+  return {
+    enabled: true,
+    frameId,
+    configName,
+    config: stored.config || {},
+    ...(stored.parentConfig ? { parentConfig: stored.parentConfig } : {}),
+    ...(Array.isArray(state.warframeLink.activeAbilities) ? { activeAbilities: [...state.warframeLink.activeAbilities] } : {}),
+    abilityElements: { ...(state.warframeLink.abilityElements || {}) },
+    damageTriggerMode: state.warframeLink.damageTriggerMode || "ai",
+    nameZh: rec?.nameZh || undefined,
+    nameEn: rec?.nameEn || undefined,
+    portraitAsset: rec?.portraitAsset || rec?.iconAsset || "/assets/warframes/portraits/Excalibur.png",
+  };
+}
+
+function buildCompanionLinkPayload() {
+  if (isCompanionWeapon() || !state.companionLink?.enabled) return undefined;
+  ensureDefaultSynergyCompanionSelection();
+  const companionId = state.companionLink.companionId;
+  if (!companionId) return undefined;
+  const configName = state.companionLink.configName || "A";
+  const weaponConfigName = state.companionLink.weaponConfigName || "A";
+  const { compRec, weapRec, bodyPayload, weaponPayload } = resolveStoredCompanionPair(companionId, configName, weaponConfigName);
+  return {
+    enabled: true,
+    companionId,
+    configName,
+    weaponConfigName,
+    config: {
+      companion: bodyPayload,
+      weapon: weaponPayload,
+    },
+    nameZh: compRec?.nameZh || undefined,
+    nameEn: compRec?.nameEn || undefined,
+    weaponNameZh: weapRec?.nameZh || undefined,
+    weaponNameEn: weapRec?.nameEn || undefined,
+    portraitAsset: compRec?.portraitAsset || undefined,
+    category: compRec?.category || undefined,
+  };
+}
+
+function renderSynergyWarframeOptions() {
+  const wfLink = state.warframeLink;
+  if (ui["synergy-wf-frame"]) {
+    ui["synergy-wf-frame"].value = wfLink.frameId || "";
+  }
+  const allWf = [...warframeRows("warframes"), ...warframeRows("warframeForms")];
+  const rec = allWf.find((r) => warframeId(r) === wfLink.frameId) || null;
+  const visual = ui["synergy-wf-picker-visual"];
+  if (visual) {
+    visual.replaceChildren();
+    const portrait = rec?.portraitAsset || rec?.iconAsset || "/assets/warframes/portraits/Excalibur.png";
+    visual.append(imageNode(portrait, "warframe-selector-icon", rec ? warframeName(rec) : "战甲", "lazy"));
+  }
+  if (ui["synergy-wf-picker-name"]) {
+    ui["synergy-wf-picker-name"].textContent = rec ? warframeName(rec) : "点击搜索选择战甲";
+  }
+  if (ui["synergy-wf-picker-meta"]) {
+    const savedCfgs = rec ? warframeSavedConfigLabels(rec) : [];
+    const formNote = rec?.parentFrameId ? "第二形态 · " : "";
+    ui["synergy-wf-picker-meta"].textContent = rec
+      ? `${formNote}${savedCfgs.length ? `已配装 ${savedCfgs.join("/")}` : "满级默认"} · 点击搜索切换`
+      : "正在加载战甲列表...";
+  }
+}
+
+function renderSynergyCompanionOptions() {
+  const compLink = state.companionLink;
+  if (ui["synergy-comp-select"]) {
+    ui["synergy-comp-select"].value = compLink.companionId || "";
+  }
+  const store = state.companionBuild?.store?.bodies ? state.companionBuild.store : readCompanionStore();
+  const comp = compLink.companionId ? companionByPath(compLink.companionId) : null;
+  const visual = ui["synergy-comp-picker-visual"];
+  if (visual) {
+    visual.replaceChildren();
+    if (comp?.portraitAsset) {
+      visual.append(imageNode(comp.portraitAsset, "warframe-selector-icon", comp.nameZh || comp.nameEn, "lazy"));
+    } else {
+      visual.append(create("i", "", "◈"));
+    }
+  }
+  if (ui["synergy-comp-picker-name"]) {
+    ui["synergy-comp-picker-name"].textContent = comp ? (comp.nameZh || comp.nameEn) : "点击搜索选择同伴";
+  }
+  if (ui["synergy-comp-picker-meta"]) {
+    const savedCfgs = comp ? ["A", "B", "C"].filter((c) => Boolean(store.bodies?.[comp.path]?.[c])) : [];
+    const kindLabel = comp ? (COMPANION_KIND_LABELS[comp.kind] || comp.kind) : "";
+    ui["synergy-comp-picker-meta"].textContent = comp
+      ? `${kindLabel} · ${comp.category === "robotic" ? "机械索敌" : "生物连结"}${savedCfgs.length ? ` · 已配 ${savedCfgs.join("/")}` : ""} · 点击切换`
+      : "正在加载同伴列表...";
+  }
+}
+
+function synergyWarframeCacheKey(frameId, configName) {
+  const stored = warframeStoredConfig(frameId, configName);
+  return `${frameId}|${configName}|${JSON.stringify(stored.config || null)}|${JSON.stringify(stored.parentConfig || null)}`;
+}
+
+async function ensureSynergyWarframeBridge(triggerSimAfter = false) {
+  if (!state.warframeLink.enabled) return null;
+  if (!state.warframeCatalog) {
+    try { await loadWarframeCatalog(); } catch (_err) { return null; }
+  }
+  ensureDefaultSynergyWarframeSelection();
+  const frameId = state.warframeLink.frameId;
+  const configName = state.warframeLink.configName || "A";
+  if (!frameId) return null;
+  const cacheKey = synergyWarframeCacheKey(frameId, configName);
+  if (state.synergyBridgeCache[cacheKey]) {
+    syncSynergyAbilitiesWithBridge(state.synergyBridgeCache[cacheKey]);
+    renderSynergyWarframeAbilities(state.synergyBridgeCache[cacheKey]);
+    renderArcaneSelections();
+    renderExternalBuffs();
+    syncCombatStateSynergyPlaceholders(state.buildResult);
+    if (triggerSimAfter) scheduleLiveBuild();
+    return state.synergyBridgeCache[cacheKey];
+  }
+  const seq = ++synergyBridgeSeq;
+  const stored = warframeStoredConfig(frameId, configName);
+  try {
+    const response = await fetch("/api/warframe/calculate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        frameId,
+        ...(stored.config || {}),
+        ...(stored.parentConfig ? { parentConfig: stored.parentConfig } : {}),
+      }),
+    });
+    const body = await response.json();
+    if (!response.ok || seq !== synergyBridgeSeq) return null;
+    state.synergyBridgeCache[cacheKey] = body;
+    syncSynergyAbilitiesWithBridge(body);
+    renderSynergyWarframeAbilities(body);
+    renderArcaneSelections();
+    renderExternalBuffs();
+    syncCombatStateSynergyPlaceholders(state.buildResult);
+    persistActiveBuildConfig();
+    if (triggerSimAfter) scheduleLiveBuild();
+    return body;
+  } catch (_error) {
+    return null;
+  }
+}
+
+function syncSynergyAbilitiesWithBridge(calcResult) {
+  const abilities = calcResult?.weaponBridge?.availableAbilities || [];
+  const validIds = new Set(abilities.map((a) => a.id));
+  if (!Array.isArray(state.warframeLink.activeAbilities)) {
+    state.warframeLink.activeAbilities = abilities.filter((a) => a.defaultActive !== false).map((a) => a.id);
+  } else {
+    state.warframeLink.activeAbilities = state.warframeLink.activeAbilities.filter((id) => validIds.has(id));
+  }
+  for (const ab of abilities) {
+    if (ab.requiresElementChoice && !state.warframeLink.abilityElements[ab.id]) {
+      const opts = Array.isArray(ab.elementOptions) && ab.elementOptions.length ? ab.elementOptions : ["DT_FIRE", "DT_FREEZE", "DT_ELECTRICITY", "DT_POISON"];
+      state.warframeLink.abilityElements[ab.id] = ab.defaultElement || opts[0];
+    }
+  }
+}
+
+function renderSynergyWarframeAbilities(calcResult) {
+  const host = ui["synergy-wf-abilities"];
+  const note = ui["synergy-wf-abilities-note"];
+  if (!host) return;
+  const abilities = calcResult?.weaponBridge?.availableAbilities || [];
+  if (!abilities.length) {
+    if (note) note.textContent = "当前战甲配置无直接作用于武器的主动增益或强化卡";
+    host.replaceChildren(create("span", "synergy-empty-pill", "无武器增益技能（面板/光环/源力石/赋能仍正常参与协同）"));
+    return;
+  }
+  const activeSet = new Set(state.warframeLink.activeAbilities || []);
+  if (note) note.textContent = `已启用 ${activeSet.size} / ${abilities.length} 项技能增益`;
+  host.replaceChildren(...abilities.map((ab) => {
+    const isOn = activeSet.has(ab.id);
+    const group = create("div", `synergy-ability-chip${isOn ? " is-active" : ""}`);
+    const toggle = create("button", "synergy-ability-btn");
+    toggle.type = "button";
+    toggle.setAttribute("aria-pressed", String(isOn));
+    toggle.title = [ab.nameZh || ab.nameEn, ab.isHelminth ? "Helminth 注入" : "", ab.isAugment ? "技能强化 MOD" : "", ab.summaryZh || ""].filter(Boolean).join(" - ");
+    if (ab.iconAsset) {
+      toggle.append(imageNode(ab.iconAsset, "synergy-ability-icon", "", "lazy"));
+    }
+    toggle.append(create("span", "", `${ab.nameZh || ab.nameEn}${ab.isAugment ? " [强化]" : ab.isHelminth ? " [注入]" : ""}`));
+    if (ab.summaryZh) {
+      toggle.append(create("em", "", ab.summaryZh));
+    }
+    toggle.addEventListener("click", () => {
+      const current = new Set(state.warframeLink.activeAbilities || []);
+      if (current.has(ab.id)) current.delete(ab.id);
+      else current.add(ab.id);
+      state.warframeLink.activeAbilities = [...current];
+      renderSynergyWarframeAbilities(calcResult);
+      renderExternalBuffs();
+      persistActiveBuildConfig();
+      scheduleLiveBuild();
+    });
+    group.append(toggle);
+    if (ab.requiresElementChoice && isOn) {
+      const elSelect = document.createElement("select");
+      elSelect.className = "synergy-ability-element";
+      elSelect.setAttribute("aria-label", `${ab.nameZh || ab.nameEn} 元素类型`);
+      const opts = Array.isArray(ab.elementOptions) && ab.elementOptions.length
+        ? ab.elementOptions
+        : ["DT_FIRE", "DT_FREEZE", "DT_ELECTRICITY", "DT_POISON"];
+      for (const dt of opts) {
+        const opt = document.createElement("option");
+        opt.value = dt;
+        opt.textContent = DAMAGE_TYPE_LABELS[dt] || dt;
+        elSelect.append(opt);
+      }
+      elSelect.value = state.warframeLink.abilityElements[ab.id] || opts[0];
+      elSelect.addEventListener("click", (ev) => ev.stopPropagation());
+      elSelect.addEventListener("change", (ev) => {
+        ev.stopPropagation();
+        state.warframeLink.abilityElements[ab.id] = elSelect.value;
+        persistActiveBuildConfig();
+        scheduleLiveBuild();
+      });
+      group.append(elSelect);
+    }
+    return group;
+  }));
+}
+
+function renderSynergyHub() {
+  const panel = ui["build-synergy-panel"];
+  if (!panel) return;
+  const companionMainWeapon = isCompanionWeapon();
+  panel.hidden = companionMainWeapon;
+  if (companionMainWeapon) return;
+  const wfLink = state.warframeLink;
+  const compLink = state.companionLink;
+
+  // Card 1: Warframe
+  if (ui["synergy-wf-enabled"]) ui["synergy-wf-enabled"].checked = Boolean(wfLink.enabled);
+  if (ui["synergy-wf-body"]) ui["synergy-wf-body"].hidden = !wfLink.enabled;
+  ui["synergy-wf-card"]?.classList.toggle("is-enabled", Boolean(wfLink.enabled));
+  if (!wfLink.enabled) {
+    if (ui["synergy-wf-avatar"]) ui["synergy-wf-avatar"].src = "/assets/warframes/portraits/Excalibur.png";
+    if (ui["synergy-wf-subtitle"]) ui["synergy-wf-subtitle"].textContent = "默认中立战甲（未参与计算）";
+  } else {
+    renderSynergyWarframeOptions();
+    const allWf = [...warframeRows("warframes"), ...warframeRows("warframeForms")];
+    const rec = allWf.find((r) => warframeId(r) === wfLink.frameId) || null;
+    if (ui["synergy-wf-avatar"]) {
+      ui["synergy-wf-avatar"].src = rec?.portraitAsset || rec?.iconAsset || "/assets/warframes/portraits/Excalibur.png";
+    }
+    const saved = wfLink.frameId ? warframeStoredConfig(wfLink.frameId, wfLink.configName).saved : false;
+    if (ui["synergy-wf-subtitle"]) {
+      ui["synergy-wf-subtitle"].textContent = rec
+        ? `${warframeName(rec)} - 配置 ${wfLink.configName}${saved ? "" : " (满级默认)"}`
+        : "正在读取战甲目录...";
+    }
+    ui["synergy-wf-config-tabs"]?.querySelectorAll("[data-synergy-wf-config]").forEach((btn) => {
+      btn.classList.toggle("is-active", btn.dataset.synergyWfConfig === wfLink.configName);
+    });
+    if (ui["synergy-wf-trigger-mode"]) ui["synergy-wf-trigger-mode"].value = wfLink.damageTriggerMode || "ai";
+    if (wfLink.frameId) {
+      const cacheKey = synergyWarframeCacheKey(wfLink.frameId, wfLink.configName);
+      if (state.synergyBridgeCache[cacheKey]) {
+        renderSynergyWarframeAbilities(state.synergyBridgeCache[cacheKey]);
+      } else {
+        ensureSynergyWarframeBridge(false);
+      }
+    }
+  }
+
+  // Card 2: Companion
+  if (ui["synergy-comp-enabled"]) ui["synergy-comp-enabled"].checked = Boolean(compLink.enabled);
+  if (ui["synergy-comp-body"]) ui["synergy-comp-body"].hidden = !compLink.enabled;
+  ui["synergy-comp-card"]?.classList.toggle("is-enabled", Boolean(compLink.enabled));
+  if (!compLink.enabled) {
+    if (ui["synergy-comp-avatar"]) ui["synergy-comp-avatar"].hidden = true;
+    if (ui["synergy-comp-avatar-fallback"]) ui["synergy-comp-avatar-fallback"].hidden = false;
+    if (ui["synergy-comp-subtitle"]) ui["synergy-comp-subtitle"].textContent = "未携带同伴";
+  } else {
+    renderSynergyCompanionOptions();
+    const resolved = compLink.companionId
+      ? resolveStoredCompanionPair(compLink.companionId, compLink.configName, compLink.weaponConfigName)
+      : { compRec: null, weapRec: null, bodyPayload: null };
+    const { compRec, weapRec, bodyPayload } = resolved;
+    if (ui["synergy-comp-avatar"] && ui["synergy-comp-avatar-fallback"]) {
+      const hasPortrait = Boolean(compRec?.portraitAsset);
+      ui["synergy-comp-avatar"].hidden = !hasPortrait;
+      ui["synergy-comp-avatar-fallback"].hidden = hasPortrait;
+      if (hasPortrait) ui["synergy-comp-avatar"].src = compRec.portraitAsset;
+    }
+    if (ui["synergy-comp-subtitle"]) {
+      ui["synergy-comp-subtitle"].textContent = compRec
+        ? `${compRec.nameZh || compRec.nameEn} (${compRec.category === "robotic" ? "机械同伴" : "生物同伴"}) - 本体 ${compLink.configName}`
+        : "正在读取同伴目录...";
+    }
+    const equippedBodyMods = (bodyPayload?.mods || []).map((m) => companionBodyModByPath(m.path)).filter(Boolean);
+    const validWeapCount = compRec ? validCompanionWeapons(compRec, equippedBodyMods).length : 0;
+    const canPickWeap = validWeapCount > 1;
+    if (ui["synergy-comp-weapon-name"]) {
+      ui["synergy-comp-weapon-name"].textContent = weapRec ? (weapRec.nameZh || weapRec.nameEn) : "无配对武器";
+    }
+    if (ui["synergy-comp-weapon-open"]) {
+      ui["synergy-comp-weapon-open"].disabled = !canPickWeap;
+      ui["synergy-comp-weapon-open"].classList.toggle("is-interactive", canPickWeap);
+      ui["synergy-comp-weapon-open"].title = canPickWeap
+        ? "点击切换配对机械武器"
+        : (compRec?.category === "beast" ? "生物同伴绑定本品种专属兽爪" : "当前戒律固定使用该近战武器");
+    }
+    if (ui["synergy-comp-weapon-chevron"]) {
+      ui["synergy-comp-weapon-chevron"].hidden = !canPickWeap;
+    }
+    ui["synergy-comp-body-tabs"]?.querySelectorAll("[data-synergy-comp-body]").forEach((btn) => {
+      btn.classList.toggle("is-active", btn.dataset.synergyCompBody === compLink.configName);
+    });
+    ui["synergy-comp-weapon-tabs"]?.querySelectorAll("[data-synergy-comp-weapon]").forEach((btn) => {
+      btn.classList.toggle("is-active", btn.dataset.synergyCompWeapon === compLink.weaponConfigName);
+    });
+  }
+
+  renderSynergySummaryFromResult(state.buildResult);
+}
+
+function synergyPill(text, tone = "neutral", title = "") {
+  const span = create("span", `synergy-status-pill is-${tone}`, text);
+  if (title) span.title = title;
+  return span;
+}
+
+function renderSynergySummaryFromResult(result) {
+  const syn = result?.synergySummary || result?.simulation?.synergySummary || null;
+  const wfHost = ui["synergy-wf-summary"];
+  const compHost = ui["synergy-comp-summary"];
+
+  if (wfHost) {
+    if (!state.warframeLink.enabled) {
+      wfHost.replaceChildren();
+    } else if (!syn?.warframe) {
+      wfHost.replaceChildren(synergyPill("等待实时解算返回战甲协同摘要...", "neutral"));
+    } else {
+      const wf = syn.warframe;
+      const p = wf.panel || {};
+      const pills = [];
+      const strengthPct = Math.round(Number(p.abilityStrength || 1) * 100);
+      pills.push(synergyPill(
+        `强度 ${strengthPct}% / 护盾 ${Math.round(p.shield || 0)} / 护甲 ${Math.round(p.armor || 0)} / 能量 ${Math.round(p.energy || 0)}`,
+        strengthPct > 100 ? "good" : "neutral",
+      ));
+      if (wf.aura?.nameZh || wf.aura?.nameEn) {
+        pills.push(synergyPill(`光环: ${wf.aura.nameZh || wf.aura.nameEn}${wf.aura.hasCoactionDrift ? " (+协力窜升)" : ""}`, wf.aura.buffId ? "good" : "neutral"));
+      }
+      if (Array.isArray(wf.shards) && wf.shards.length) {
+        pills.push(synergyPill(`源力石 ${wf.shards.length} 项`, "good", wf.shards.join(" | ")));
+      }
+      if (Array.isArray(wf.invigorations) && wf.invigorations.length) {
+        pills.push(synergyPill(`活化: ${wf.invigorations.join(" / ")}`, "good"));
+      }
+      const arcs = Array.isArray(wf.arcanes) ? wf.arcanes : [];
+      if (arcs.length) {
+        const avUptime = wf.survivability?.avengerUptime;
+        const arcText = arcs.map((a) => {
+          const isAvenger = a.path === "/Lotus/Upgrades/CosmeticEnhancers/Defensive/CritChanceOnDamage";
+          if (isAvenger && Number.isFinite(Number(avUptime))) {
+            return `${a.nameZh || a.nameEn} (覆盖 ${(Number(avUptime) * 100).toFixed(0)}%)`;
+          }
+          return a.nameZh || a.nameEn;
+        }).join(" / ");
+        pills.push(synergyPill(`赋能: ${arcText}`, "good"));
+      }
+      wfHost.replaceChildren(...pills);
+    }
+  }
+
+  if (compHost) {
+    if (!state.companionLink.enabled) {
+      compHost.replaceChildren();
+    } else if (!syn?.companion) {
+      compHost.replaceChildren(synergyPill("等待实时解算返回同伴协同摘要...", "neutral"));
+    } else {
+      const cp = syn.companion;
+      const pills = [];
+      const tb = cp.tenaciousBond || {};
+      const tbOn = Boolean(tb.active ?? tb.staticActive);
+      if (tb.equipped) {
+        pills.push(synergyPill(tbOn ? "坚韧连结 ✓ (+1.2x 终暴伤)" : "坚韧连结 ✗ (暴率未满50%)", tbOn ? "good" : "warn"));
+      } else {
+        pills.push(synergyPill("坚韧连结 未装备", "neutral"));
+      }
+      const rb = cp.reinforcedBond || {};
+      if (rb.equipped) {
+        if (rb.staticActive) pills.push(synergyPill("强固连结 ✓ (+60% 射速)", "good"));
+        else if (rb.reloadsNeededForThreshold) pills.push(synergyPill(`强固连结 装填 ${rb.reloadsNeededForThreshold} 次激活`, "warn"));
+        else pills.push(synergyPill("强固连结 ✗ (护盾未满1200)", "warn"));
+      } else {
+        pills.push(synergyPill("强固连结 未装备", "neutral"));
+      }
+      if (cp.manifoldBond?.equipped) {
+        pills.push(synergyPill("流形连结 ✓", "good"));
+      }
+      const setEntries = Object.entries(syn.externalSetPieceCounts || {}).filter(([, c]) => Number(c) > 0);
+      const setTotal = setEntries.reduce((s, [, c]) => s + Number(c), 0);
+      if (setTotal > 0) {
+        pills.push(synergyPill(
+          `跨实体套装 +${setTotal} 件 (${setEntries.map(([k, c]) => `${SYNERGY_SET_LABELS[k] || k}${c}`).join("/")})`,
+          "good",
+        ));
+      }
+      const isBeast = cp.attackProfile?.category === "beast";
+      if (isBeast) {
+        pills.push(synergyPill("生物同伴被动连结", "neutral"));
+      } else {
+        const pEntries = Object.entries(cp.primingStacks || {}).filter(([, v]) => Number(v) > 0.05);
+        if (pEntries.length) {
+          pills.push(synergyPill(
+            `机械异常铺垫: ${pEntries.slice(0, 3).map(([dt, v]) => `${DAMAGE_TYPE_LABELS[dt] || dt}${Number(v).toFixed(1)}`).join("/")}`,
+            "good",
+          ));
+        } else {
+          pills.push(synergyPill(cp.attackProfile?.canAttack ? "机械索敌直伤" : "无攻击戒律", cp.attackProfile?.canAttack ? "neutral" : "warn"));
+        }
+      }
+      compHost.replaceChildren(...pills);
+    }
+  }
+}
+
+function syncBuildAfterExternalEdit() {
+  enforceExaltedSynergySync(false);
+  syncArcaneSelections();
+  if (isExaltedWeapon()) {
+    renderExaltedPanel();
+  }
+  if (state.warframeLink.enabled) {
+    renderSynergyWarframeOptions();
+    ensureSynergyWarframeBridge(true);
+  }
+  if (state.companionLink.enabled) {
+    renderSynergyCompanionOptions();
+  }
+  renderArcaneSelections();
+  renderExternalBuffs();
+  syncCombatStateSynergyPlaceholders(state.buildResult);
+  renderSynergyHub();
+  if (state.warframeLink.enabled || state.companionLink.enabled || isExaltedWeapon()) {
+    scheduleLiveBuild();
+  }
+}
+
+async function openWarframeFromSynergyHub() {
+  setActiveTool("warframe", { fromBuild: true });
+  try { await loadWarframeCatalog(); } catch (_err) { return; }
+  ensureDefaultSynergyWarframeSelection();
+  syncWarframeWorkbenchFromSynergy();
+}
+
+async function openCompanionFromSynergyHub() {
+  setActiveTool("companion", { fromBuild: true });
+  try { await loadCompanionCatalog(); } catch (_err) { return; }
+  ensureDefaultSynergyCompanionSelection();
+  syncCompanionWorkbenchFromSynergy();
+}
+
+function bindSynergyHubEvents() {
+  ui["synergy-wf-enabled"]?.addEventListener("change", async () => {
+    state.warframeLink.enabled = Boolean(ui["synergy-wf-enabled"].checked);
+    if (state.warframeLink.enabled) {
+      try { await loadWarframeCatalog(); } catch (_err) { /* handled */ }
+      ensureDefaultSynergyWarframeSelection();
+      if (enforceExaltedSynergySync(true)) {
+        renderExaltedPanel();
+      }
+      syncWarframeWorkbenchFromSynergy();
+      await ensureSynergyWarframeBridge(false);
+    }
+    syncArcaneSelections();
+    renderArcaneSelections();
+    renderExternalBuffs();
+    syncCombatStateSynergyPlaceholders(state.buildResult);
+    if (state.companionCatalog && state.companionBuild.previewWfMode === "auto") {
+      renderCompanionWarframeOptions();
+    }
+    renderSynergyHub();
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+
+  const openSynergyWfModal = () => {
+    if (!state.warframeLink?.enabled) return;
+    loadWarframeCatalog().then(() => openWarframePicker("synergyFrame")).catch(() => {});
+  };
+  ui["synergy-wf-frame-open"]?.addEventListener("click", openSynergyWfModal);
+  ui["synergy-wf-avatar"]?.addEventListener("click", openSynergyWfModal);
+
+  ui["synergy-wf-config-tabs"]?.addEventListener("click", async (event) => {
+    const btn = event.target.closest("[data-synergy-wf-config]");
+    if (!btn) return;
+    const cfg = btn.dataset.synergyWfConfig;
+    if (!/^[ABC]$/.test(cfg) || cfg === state.warframeLink.configName) return;
+    await applySynergyWarframeSelection(state.warframeLink.frameId, cfg);
+  });
+
+  ui["synergy-wf-trigger-mode"]?.addEventListener("change", () => {
+    state.warframeLink.damageTriggerMode = ui["synergy-wf-trigger-mode"].value || "ai";
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+
+  ui["synergy-wf-edit"]?.addEventListener("click", () => {
+    openWarframeFromSynergyHub();
+  });
+
+  ui["synergy-comp-enabled"]?.addEventListener("change", async () => {
+    state.companionLink.enabled = Boolean(ui["synergy-comp-enabled"].checked);
+    if (state.companionLink.enabled) {
+      try { await loadCompanionCatalog(); } catch (_err) { /* handled */ }
+      ensureDefaultSynergyCompanionSelection();
+      syncCompanionWorkbenchFromSynergy();
+    }
+    renderSynergyHub();
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+
+  const openSynergyCompModal = () => {
+    if (!state.companionLink?.enabled) return;
+    loadCompanionCatalog().then(() => openCompanionPicker("synergyCompanion")).catch(() => {});
+  };
+  ui["synergy-comp-open"]?.addEventListener("click", openSynergyCompModal);
+  ui["synergy-comp-avatar-wrap"]?.addEventListener("click", openSynergyCompModal);
+  ui["synergy-comp-weapon-open"]?.addEventListener("click", () => {
+    if (!state.companionLink?.enabled || ui["synergy-comp-weapon-open"].disabled) return;
+    loadCompanionCatalog().then(() => openCompanionPicker("synergyCompanionWeapon")).catch(() => {});
+  });
+
+  ui["synergy-comp-body-tabs"]?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-synergy-comp-body]");
+    if (!btn) return;
+    const cfg = btn.dataset.synergyCompBody;
+    if (!/^[ABC]$/.test(cfg) || cfg === state.companionLink.configName) return;
+    state.companionLink.configName = cfg;
+    syncCompanionWorkbenchFromSynergy();
+    renderSynergyHub();
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+
+  ui["synergy-comp-weapon-tabs"]?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-synergy-comp-weapon]");
+    if (!btn) return;
+    const cfg = btn.dataset.synergyCompWeapon;
+    if (!/^[ABC]$/.test(cfg) || cfg === state.companionLink.weaponConfigName) return;
+    state.companionLink.weaponConfigName = cfg;
+    syncCompanionWorkbenchFromSynergy();
+    renderSynergyHub();
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+
+  ui["synergy-comp-edit"]?.addEventListener("click", () => {
+    openCompanionFromSynergyHub();
+  });
 }
 
 async function bootstrap() {
@@ -12256,7 +17114,7 @@ async function bootstrap() {
     window.setTimeout(() => { ui["boot-screen"].hidden = true; }, 280);
     if (!state.modAssets) toast("MOD 素材索引加载失败，配装仍可计算");
     const hashTool = location.hash.replace("#", "");
-    if (["build", "analysis", "warframe", "arena"].includes(hashTool)) setActiveTool(hashTool);
+    if (["build", "analysis", "warframe", "companion", "arena"].includes(hashTool)) setActiveTool(hashTool);
   } catch (error) {
     ui["boot-screen"].querySelector("p").textContent = error.message || "本地数据加载失败";
     ui["boot-screen"].classList.add("has-error");

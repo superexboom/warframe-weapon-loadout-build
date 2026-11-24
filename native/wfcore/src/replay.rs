@@ -20,7 +20,7 @@ use std::cell::OnceCell;
 use crate::fx::{FxHashMap, FxIndexMap};
 use pyo3::exceptions::{PyIndexError, PyValueError, PyZeroDivisionError};
 use pyo3::prelude::*;
-use pyo3::types::{PyDict, PyList, PyTuple};
+use pyo3::types::{PyDict, PyList, PyString, PyTuple};
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, VecDeque};
 
@@ -35,89 +35,199 @@ pub(crate) fn vector_of(types: &mut Types, obj: &Bound<'_, PyAny>) -> PyResult<V
     let d = obj.downcast::<PyDict>()?;
     let mut out = Vec::with_capacity(d.len());
     for (k, v) in d.iter() {
-        let name: String = k.extract()?;
-        out.push((types.id(&name), v.extract::<f64>()?));
+        let id = if let Ok(s) = k.cast::<PyString>() {
+            types.id(s.to_str()?)
+        } else {
+            let name: String = k.extract()?;
+            types.id(&name)
+        };
+        out.push((id, v.extract::<f64>()?));
     }
     Ok(out)
+}
+
+#[inline]
+pub(crate) fn opt_dict<'py>(obj: &Bound<'py, PyAny>) -> Option<Bound<'py, PyDict>> {
+    match obj.getattr(pyo3::intern!(obj.py(), "__dict__")) {
+        Ok(v) => v.cast::<PyDict>().ok().cloned(),
+        Err(_) => None,
+    }
+}
+
+#[inline]
+pub(crate) fn dict_get<'py>(
+    obj: &Bound<'py, PyAny>,
+    dict: Option<&Bound<'py, PyDict>>,
+    name: &Bound<'py, PyString>,
+) -> PyResult<Bound<'py, PyAny>> {
+    if let Some(d) = dict {
+        if let Some(v) = d.get_item(name)? {
+            return Ok(v);
+        }
+    }
+    obj.getattr(name)
+}
+
+#[inline]
+pub(crate) fn dict_opt_private<'py>(
+    obj: &Bound<'py, PyAny>,
+    dict: Option<&Bound<'py, PyDict>>,
+    name: &Bound<'py, PyString>,
+) -> PyResult<Option<Bound<'py, PyAny>>> {
+    if let Some(d) = dict {
+        return d.get_item(name);
+    }
+    opt_attr_intern(obj, name)
+}
+
+#[inline]
+pub(crate) fn dict_opt_public<'py>(
+    obj: &Bound<'py, PyAny>,
+    dict: Option<&Bound<'py, PyDict>>,
+    name: &Bound<'py, PyString>,
+) -> PyResult<Option<Bound<'py, PyAny>>> {
+    if let Some(d) = dict {
+        if let Some(v) = d.get_item(name)? {
+            return Ok(Some(v));
+        }
+    }
+    opt_attr_intern(obj, name)
+}
+
+#[inline]
+fn df<'py>(
+    obj: &Bound<'py, PyAny>,
+    dict: Option<&Bound<'py, PyDict>>,
+    name: &Bound<'py, PyString>,
+) -> PyResult<f64> {
+    dict_get(obj, dict, name)?.extract::<f64>()
+}
+
+#[inline]
+fn db<'py>(
+    obj: &Bound<'py, PyAny>,
+    dict: Option<&Bound<'py, PyDict>>,
+    name: &Bound<'py, PyString>,
+) -> PyResult<bool> {
+    dict_get(obj, dict, name)?.is_truthy()
 }
 
 /// The tables' view of a Python ``ModdedStats`` (``target_faction`` picks the
 /// faction row); the vectors are read by the caller, which keeps them too.
 pub(crate) fn core_of(obj: &Bound<'_, PyAny>, types: &mut Types, target_faction: &str, faction_bracket: f64, damage_types: &Vector,
                   native_forced_procs: &Vector, independent_proc_chances: &Vector) -> PyResult<Core> {
-    let factions = obj.getattr("faction_damage_multipliers")?;
+    let dict = opt_dict(obj);
+    core_of_dict(obj, dict.as_ref(), types, target_faction, faction_bracket, damage_types, native_forced_procs, independent_proc_chances)
+}
+
+pub(crate) fn core_of_dict<'py>(
+    obj: &Bound<'py, PyAny>,
+    dict: Option<&Bound<'py, PyDict>>,
+    types: &mut Types,
+    target_faction: &str,
+    faction_bracket: f64,
+    damage_types: &Vector,
+    native_forced_procs: &Vector,
+    independent_proc_chances: &Vector,
+) -> PyResult<Core> {
+    let py = obj.py();
+    let factions = dict_get(obj, dict, pyo3::intern!(py, "faction_damage_multipliers"))?;
     let factions = factions.cast::<PyDict>()?;
-    let faction_all = match factions.get_item("")? { Some(v) => v.extract::<f64>()?, None => 1.0 };
-    let faction_target = if target_faction.is_empty() {
+    let faction_all = if factions.is_empty() {
+        1.0
+    } else {
+        match factions.get_item(pyo3::intern!(py, ""))? { Some(v) => v.extract::<f64>()?, None => 1.0 }
+    };
+    let faction_target = if target_faction.is_empty() || factions.is_empty() {
         1.0
     } else {
         match factions.get_item(target_faction)? { Some(v) => v.extract::<f64>()?, None => 1.0 }
     };
-    let dot = obj.getattr("dot_base_damage")?;
+    let dot = dict_get(obj, dict, pyo3::intern!(py, "dot_base_damage"))?;
     let mut conversions = Vec::new();
-    for (k, adapters) in obj.getattr("impact_proc_conversions")?.cast::<PyDict>()?.iter() {
-        let d = types.id(&k.extract::<String>()?);
-        let mut rows = Vec::new();
-        for adapter in adapters.try_iter()? {
-            let adapter = adapter?;
-            let a = adapter.cast::<PyDict>()?;
-            rows.push((get_f(a, "chance", 0.0)?, get_f(a, "fireRateThreshold", f64::INFINITY)?,
-                       get_f(a, "fireRateMultiplier", 1.0)?));
+    let conv_dict = dict_get(obj, dict, pyo3::intern!(py, "impact_proc_conversions"))?;
+    let conv_dict = conv_dict.cast::<PyDict>()?;
+    if !conv_dict.is_empty() {
+        for (k, adapters) in conv_dict.iter() {
+            let d = if let Ok(s) = k.cast::<PyString>() { types.id(s.to_str()?) } else { types.id(&k.extract::<String>()?) };
+            let mut rows = Vec::new();
+            for adapter in adapters.try_iter()? {
+                let adapter = adapter?;
+                let a = adapter.cast::<PyDict>()?;
+                rows.push((get_f_intern(a, pyo3::intern!(py, "chance"), 0.0)?,
+                           get_f_intern(a, pyo3::intern!(py, "fireRateThreshold"), f64::INFINITY)?,
+                           get_f_intern(a, pyo3::intern!(py, "fireRateMultiplier"), 1.0)?));
+            }
+            conversions.push((d, rows));
         }
-        conversions.push((d, rows));
     }
     let mut extra_hits = Vec::new();
-    for e in obj.getattr("extra_hits")?.try_iter()? {
-        let e = e?;
-        let t = e.cast::<PyTuple>()?;
-        extra_hits.push((types.id(&t.get_item(0)?.extract::<String>()?), t.get_item(1)?.extract::<f64>()?,
-                         t.get_item(2)?.is_truthy()?));
+    let eh_any = dict_get(obj, dict, pyo3::intern!(py, "extra_hits"))?;
+    if let Ok(eh_tuple) = eh_any.cast::<PyTuple>() {
+        if !eh_tuple.is_empty() {
+            for e in eh_tuple.iter() {
+                let t = e.cast::<PyTuple>()?;
+                let s0 = t.get_item(0)?;
+                let id0 = if let Ok(s) = s0.cast::<PyString>() { types.id(s.to_str()?) } else { types.id(&s0.extract::<String>()?) };
+                extra_hits.push((id0, t.get_item(1)?.extract::<f64>()?, t.get_item(2)?.is_truthy()?));
+            }
+        }
+    } else {
+        for e in eh_any.try_iter()? {
+            let e = e?;
+            let t = e.cast::<PyTuple>()?;
+            extra_hits.push((types.id(&t.get_item(0)?.extract::<String>()?), t.get_item(1)?.extract::<f64>()?,
+                             t.get_item(2)?.is_truthy()?));
+        }
     }
-    let low_threshold = obj.getattr("low_crit_threshold")?;
-    let low_base = obj.getattr("low_crit_damage_base")?;
+    let low_threshold = dict_get(obj, dict, pyo3::intern!(py, "low_crit_threshold"))?;
+    let low_base = dict_get(obj, dict, pyo3::intern!(py, "low_crit_damage_base"))?;
     Ok(Core {
         damage_types: damage_types.clone(),
         dot_base_damage: if dot.is_none() { None } else { Some(dot.extract::<f64>()?) },
-        crit_chance: f(obj, "crit_chance")?,
-        crit_multiplier: f(obj, "crit_multiplier")?,
-        noncrit_damage_multiplier: f(obj, "noncrit_damage_multiplier")?,
-        double_crit_chance: f(obj, "double_crit_chance")?,
-        falloff_multiplier: f(obj, "falloff_multiplier")?,
+        crit_chance: df(obj, dict, pyo3::intern!(py, "crit_chance"))?,
+        crit_multiplier: df(obj, dict, pyo3::intern!(py, "crit_multiplier"))?,
+        noncrit_damage_multiplier: df(obj, dict, pyo3::intern!(py, "noncrit_damage_multiplier"))?,
+        double_crit_chance: df(obj, dict, pyo3::intern!(py, "double_crit_chance"))?,
+        falloff_multiplier: df(obj, dict, pyo3::intern!(py, "falloff_multiplier"))?,
         faction_all,
         faction_target,
         faction_bracket,
-        multishot: f(obj, "multishot")?,
-        continuous: b(obj, "continuous")?,
-        radial_only: b(obj, "radial_only")?,
-        ignore_headshot_bonus: b(obj, "ignore_headshot_bonus")?,
-        area_direct: b(obj, "area_direct")?,
-        bodyshot_crit_multiplier: f(obj, "bodyshot_crit_multiplier")?,
-        weakpoint_crit_chance_bonus: f(obj, "weakpoint_crit_chance_bonus")?,
-        base_crit_chance: f(obj, "base_crit_chance")?,
-        weakpoint_crit_chance_relative: f(obj, "weakpoint_crit_chance_relative")?,
-        headshot_bonus_multiplier: f(obj, "headshot_bonus_multiplier")?,
-        weakpoint_damage_bonus: match opt_attr(obj, "weakpoint_damage_bonus")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
-        status_chance: f(obj, "status_chance")?,
-        proc_duration_multiplier: f(obj, "proc_duration_multiplier")?,
-        proc_duration_types: match opt_attr(obj, "proc_duration_types")? {
+        multishot: df(obj, dict, pyo3::intern!(py, "multishot"))?,
+        continuous: db(obj, dict, pyo3::intern!(py, "continuous"))?,
+        radial_only: db(obj, dict, pyo3::intern!(py, "radial_only"))?,
+        ignore_headshot_bonus: db(obj, dict, pyo3::intern!(py, "ignore_headshot_bonus"))?,
+        area_direct: db(obj, dict, pyo3::intern!(py, "area_direct"))?,
+        bodyshot_crit_multiplier: df(obj, dict, pyo3::intern!(py, "bodyshot_crit_multiplier"))?,
+        weakpoint_crit_chance_bonus: df(obj, dict, pyo3::intern!(py, "weakpoint_crit_chance_bonus"))?,
+        base_crit_chance: df(obj, dict, pyo3::intern!(py, "base_crit_chance"))?,
+        weakpoint_crit_chance_relative: df(obj, dict, pyo3::intern!(py, "weakpoint_crit_chance_relative"))?,
+        headshot_bonus_multiplier: df(obj, dict, pyo3::intern!(py, "headshot_bonus_multiplier"))?,
+        weakpoint_damage_bonus: match dict_opt_public(obj, dict, pyo3::intern!(py, "weakpoint_damage_bonus"))? {
+            Some(v) => v.extract::<f64>()?,
+            None => 0.0,
+        },
+        status_chance: df(obj, dict, pyo3::intern!(py, "status_chance"))?,
+        proc_duration_multiplier: df(obj, dict, pyo3::intern!(py, "proc_duration_multiplier"))?,
+        proc_duration_types: match dict_opt_public(obj, dict, pyo3::intern!(py, "proc_duration_types"))? {
             Some(v) => vector_of(types, &v)?,
             None => Vec::new(),
         },
-        proc_max_stacks: match opt_attr(obj, "proc_max_stacks")? {
+        proc_max_stacks: match dict_opt_public(obj, dict, pyo3::intern!(py, "proc_max_stacks"))? {
             Some(v) => vector_of(types, &v)?,
             None => Vec::new(),
         },
-        proc_damage_multiplier: f(obj, "proc_damage_multiplier")?,
+        proc_damage_multiplier: df(obj, dict, pyo3::intern!(py, "proc_damage_multiplier"))?,
         native_forced_procs: native_forced_procs.clone(),
         independent_proc_chances: independent_proc_chances.clone(),
-        crit_proc_chances: vector_of(types, &obj.getattr("crit_proc_chances")?)?,
+        crit_proc_chances: vector_of(types, &dict_get(obj, dict, pyo3::intern!(py, "crit_proc_chances"))?)?,
         impact_proc_conversions: conversions,
-        fire_rate: f(obj, "fire_rate")?,
-        dot_elemental_multipliers: vector_of(types, &obj.getattr("dot_elemental_multipliers")?)?,
+        fire_rate: df(obj, dict, pyo3::intern!(py, "fire_rate"))?,
+        dot_elemental_multipliers: vector_of(types, &dict_get(obj, dict, pyo3::intern!(py, "dot_elemental_multipliers"))?)?,
         extra_hits,
         low_crit_threshold: if low_threshold.is_none() { None } else { Some(low_threshold.extract::<f64>()?) },
         low_crit_damage_base: if low_base.is_none() { None } else { Some(low_base.extract::<f64>()?) },
-        low_crit_damage_bonus: f(obj, "low_crit_damage_bonus")?,
+        low_crit_damage_bonus: df(obj, dict, pyo3::intern!(py, "low_crit_damage_bonus"))?,
     })
 }
 
@@ -125,34 +235,67 @@ pub(crate) fn core_of(obj: &Bound<'_, PyAny>, types: &mut Types, target_faction:
 
 type D = u32;
 
-#[derive(Clone)]
+pub(crate) const STATIC_TYPE_NAMES: [&str; 17] = [
+    "DT_FIRE", "DT_FREEZE", "DT_GAS", "DT_EXPLOSION", "DT_VIRAL", "DT_CORROSIVE", "DT_MAGNETIC",
+    "DT_PUNCTURE", "DT_ELECTRICITY", "DT_SLASH", "DT_CINEMATIC", "DT_VOID", "DT_RADIANT",
+    "DT_IMPACT", "DT_POISON", "DT_SENTIENT", "DT_RADIATION",
+];
+
+#[inline]
+pub(crate) fn static_type_id(name: &str) -> Option<D> {
+    match name {
+        "DT_FIRE" => Some(0),
+        "DT_FREEZE" => Some(1),
+        "DT_GAS" => Some(2),
+        "DT_EXPLOSION" => Some(3),
+        "DT_VIRAL" => Some(4),
+        "DT_CORROSIVE" => Some(5),
+        "DT_MAGNETIC" => Some(6),
+        "DT_PUNCTURE" => Some(7),
+        "DT_ELECTRICITY" => Some(8),
+        "DT_SLASH" => Some(9),
+        "DT_CINEMATIC" => Some(10),
+        "DT_VOID" => Some(11),
+        "DT_RADIANT" => Some(12),
+        "DT_IMPACT" => Some(13),
+        "DT_POISON" => Some(14),
+        "DT_SENTIENT" => Some(15),
+        "DT_RADIATION" => Some(16),
+        _ => None,
+    }
+}
+
+#[derive(Clone, Default)]
 pub(crate) struct Types {
-    names: Vec<String>,
-    index: FxHashMap<String, D>,
+    extra_names: Vec<String>,
+    extra_index: FxHashMap<String, D>,
 }
 impl Types {
+    #[inline]
     pub(crate) fn new() -> Self {
-        let mut t = Types { names: Vec::new(), index: FxHashMap::default() };
-        for name in [
-            "DT_FIRE", "DT_FREEZE", "DT_GAS", "DT_EXPLOSION", "DT_VIRAL", "DT_CORROSIVE", "DT_MAGNETIC",
-            "DT_PUNCTURE", "DT_ELECTRICITY", "DT_SLASH", "DT_CINEMATIC", "DT_VOID", "DT_RADIANT",
-            "DT_IMPACT", "DT_POISON", "DT_SENTIENT", "DT_RADIATION",
-        ] {
-            t.id(name);
-        }
-        t
+        Types { extra_names: Vec::new(), extra_index: FxHashMap::default() }
     }
+    #[inline]
     pub(crate) fn id(&mut self, name: &str) -> D {
-        if let Some(&i) = self.index.get(name) {
+        if let Some(i) = static_type_id(name) {
             return i;
         }
-        let i = self.names.len() as D;
-        self.names.push(name.to_string());
-        self.index.insert(name.to_string(), i);
+        if let Some(&i) = self.extra_index.get(name) {
+            return i;
+        }
+        let i = (STATIC_TYPE_NAMES.len() + self.extra_names.len()) as D;
+        self.extra_names.push(name.to_string());
+        self.extra_index.insert(name.to_string(), i);
         i
     }
+    #[inline]
     pub(crate) fn name(&self, d: D) -> &str {
-        &self.names[d as usize]
+        let idx = d as usize;
+        if idx < STATIC_TYPE_NAMES.len() {
+            STATIC_TYPE_NAMES[idx]
+        } else {
+            &self.extra_names[idx - STATIC_TYPE_NAMES.len()]
+        }
     }
 }
 const FIRE: D = 0;
@@ -230,6 +373,7 @@ struct Stats {
     status_chance: f64,
     proc_duration_multiplier: f64,
     proc_damage_multiplier: f64,
+    proc_damage_types: Vector,
     damage_types: Vector,
     native_forced_procs: Vector,
     independent_proc_chances: Vector,
@@ -358,6 +502,7 @@ impl Stats {
             status_chance: self.status_chance,
             proc_duration_multiplier: self.proc_duration_multiplier,
             proc_damage_multiplier: self.proc_damage_multiplier,
+            proc_damage_types: self.proc_damage_types.clone(),
             damage_types: self.damage_types.clone(),
             native_forced_procs: self.native_forced_procs.clone(),
             independent_proc_chances: self.independent_proc_chances.clone(),
@@ -427,10 +572,19 @@ const SHIELD_GATE_LEAK: f64 = 0.05;
 
 /// A list of ModEffect as (operation code, value).
 fn effect_ops(list: &Bound<'_, PyAny>) -> PyResult<Vec<(u8, f64)>> {
+    let py = list.py();
+    let op_attr = pyo3::intern!(py, "operation");
+    let val_attr = pyo3::intern!(py, "value");
     let mut out = Vec::new();
     for e in list.try_iter()? {
         let e = e?;
-        out.push((co::op_code(&e.getattr("operation")?.extract::<String>()?), f(&e, "value")?));
+        let op_obj = e.getattr(op_attr)?;
+        let op = if let Ok(s) = op_obj.cast::<PyString>() {
+            co::op_code(s.to_str()?)
+        } else {
+            co::op_code(&op_obj.extract::<String>()?)
+        };
+        out.push((op, e.getattr(val_attr)?.extract::<f64>()?));
     }
     Ok(out)
 }
@@ -440,6 +594,14 @@ pub(crate) fn f(o: &Bound<'_, PyAny>, name: &str) -> PyResult<f64> {
 }
 pub(crate) fn b(o: &Bound<'_, PyAny>, name: &str) -> PyResult<bool> {
     o.getattr(name)?.is_truthy()
+}
+#[inline]
+pub(crate) fn opt_attr_intern<'py>(o: &Bound<'py, PyAny>, name: &Bound<'py, PyString>) -> PyResult<Option<Bound<'py, PyAny>>> {
+    match o.getattr(name) {
+        Ok(v) => Ok(Some(v)),
+        Err(e) if e.is_instance_of::<pyo3::exceptions::PyAttributeError>(o.py()) => Ok(None),
+        Err(e) => Err(e),
+    }
 }
 pub(crate) fn opt_attr<'py>(o: &Bound<'py, PyAny>, name: &str) -> PyResult<Option<Bound<'py, PyAny>>> {
     match o.getattr(name) {
@@ -488,6 +650,8 @@ enum Kind {
     StackLife(usize, i64, u8),
     /// 'stackable-child': (group, multiplier, hits)
     StackChild(usize, f64, f64),
+    CompanionAttack,
+    CompanionPrecept(usize),
 }
 
 #[derive(Clone)]
@@ -528,6 +692,21 @@ impl Ord for Event {
 
 // ── trigger sources ──────────────────────────────────────────────────────
 
+const DECAY_RESET: u8 = 0;
+const DECAY_LOSE_ONE: u8 = 1;
+const DECAY_PER_STACK: u8 = 2;
+const DECAY_UNION: u8 = 3;
+
+#[inline]
+fn decay_code(s: &str) -> u8 {
+    match s {
+        "lose_one_and_reset" => DECAY_LOSE_ONE,
+        "per-stack" => DECAY_PER_STACK,
+        "union" => DECAY_UNION,
+        _ => DECAY_RESET,
+    }
+}
+
 /// `combat_replay._settle`: a branch's verdict on a free-ammo buff at an empty magazine.
 fn settle(q: &mut Source, on: bool) {
     if on {
@@ -540,7 +719,7 @@ fn settle(q: &mut Source, on: bool) {
             }
         }
         q.stacks = q.max_stacks;
-        if q.decay == "per-stack" || q.decay == "union" {
+        if q.decay == DECAY_PER_STACK || q.decay == DECAY_UNION {
             q.expiries = vec![(end, q.max_stacks)];
         }
     } else {
@@ -567,7 +746,7 @@ struct Source {
     max_stacks: f64,
     duration: f64,
     per_event: f64,
-    decay: String,
+    decay: u8,
     no_refresh: bool,
     free_ammo: bool,
     // Melee passives (combat_replay): Pennant's duration per combo tier,
@@ -642,6 +821,29 @@ struct EmbeddedEntity {
     alive: bool,
 }
 
+#[derive(Clone)]
+struct CompanionPrecept {
+    cooldown: f64,
+    kill_cooldown_reduction: f64,
+    damage: f64,
+    damage_type: D,
+    procs_packet: Option<Rc<Packet>>,
+}
+
+#[derive(Clone)]
+struct CompanionState {
+    view: usize,
+    magazine: f64,
+    ammo: f64,
+    interval: f64,
+    reload_time: f64,
+    strip_on_hit: f64,
+    allow_player_stacks: bool,
+    attack_packet: Rc<Packet>,
+    precepts: Vec<CompanionPrecept>,
+    precept_ready: Vec<f64>,
+}
+
 pub struct Replay<'py> {
     py: Python<'py>,
     helper: Bound<'py, PyAny>,
@@ -663,6 +865,7 @@ pub struct Replay<'py> {
     shield_bypass: Vec<D>,
     extra_hits: Vec<(D, f64)>,
     extra_scale: f64,
+    extra_head_part: f64,
     weapon_slot: String,
     distance: Option<f64>,
     punchthrough: f64,
@@ -746,7 +949,16 @@ pub struct Replay<'py> {
     heat_source_acc: [f64; 2],
     attribution: KillAttribution,
     track_weak_kills: bool,
+    corrosive_cap: f64,
+    puncture_cap: f64,
+    static_priming: Vector,
     puncture_strip: f64,
+    vicious_strip_live: f64,
+    self_damage_on_kill: f64,
+    rb_reloads_needed: Option<i64>,
+    rb_activated: bool,
+    rb_completed_reloads: i64,
+    companion: Option<CompanionState>,
     frozen_until: f64,
     frozen_scale: f64,
     heap: BinaryHeap<Event>,
@@ -897,11 +1109,57 @@ impl Source {
 }
 
 impl<'py> Replay<'py> {
-    fn fork_initial(&self) -> Self {
+    fn swap_caches(&mut self, other: &mut Self) {
+        std::mem::swap(&mut self.types, &mut other.types);
+        std::mem::swap(&mut self.derived, &mut other.derived);
+        std::mem::swap(&mut self.stack_profiles, &mut other.stack_profiles);
+        std::mem::swap(&mut self.enervate_views, &mut other.enervate_views);
+        std::mem::swap(&mut self.enervate_weights, &mut other.enervate_weights);
+        std::mem::swap(&mut self.stats, &mut other.stats);
+        std::mem::swap(&mut self.stats_by_ptr, &mut other.stats_by_ptr);
+        std::mem::swap(&mut self.model_cache, &mut other.model_cache);
+        std::mem::swap(&mut self.model_key, &mut other.model_key);
+        std::mem::swap(&mut self.co_specs, &mut other.co_specs);
+        std::mem::swap(&mut self.varied, &mut other.varied);
+        std::mem::swap(&mut self.elements, &mut other.elements);
+        std::mem::swap(&mut self.hit_specs, &mut other.hit_specs);
+        std::mem::swap(&mut self.applied, &mut other.applied);
+        std::mem::swap(&mut self.packets, &mut other.packets);
+        std::mem::swap(&mut self.spreads, &mut other.spreads);
+        std::mem::swap(&mut self.first_shot, &mut other.first_shot);
+        std::mem::swap(&mut self.no_status, &mut other.no_status);
+        std::mem::swap(&mut self.proc_names, &mut other.proc_names);
+    }
+
+    fn fork_with_caches(&mut self) -> Self {
         macro_rules! copied {
             ($($field:ident),* $(,)?) => {
                 Self {
-                    stats: self.stats.iter().map(|s| s.clone_with(self.py)).collect(),
+                    types: Types::default(),
+                    derived: FxHashMap::default(),
+                    stack_profiles: FxHashMap::default(),
+                    enervate_views: FxHashMap::default(),
+                    enervate_weights: FxHashMap::default(),
+                    stats: Vec::new(),
+                    stats_by_ptr: FxHashMap::default(),
+                    model_cache: FxHashMap::default(),
+                    model_key: Vec::new(),
+                    co_specs: FxHashMap::default(),
+                    varied: FxHashMap::default(),
+                    elements: co::Elements {
+                        physical: [0; 3],
+                        base: [0; 4],
+                        combos: Vec::new(),
+                        electricity: 0,
+                        radiation: 0,
+                    },
+                    hit_specs: Vec::new(),
+                    applied: FxHashMap::default(),
+                    packets: FxHashMap::default(),
+                    spreads: FxHashMap::default(),
+                    first_shot: FxHashMap::default(),
+                    no_status: FxHashMap::default(),
+                    proc_names: Vec::new(),
                     sources: self.sources.iter().map(|s| s.fork_initial(self.py)).collect(),
                     melee: self.melee.as_ref().map(|m| MeleeSpec {
                         base_hits: m.base_hits, tier_step: m.tier_step, cap: m.cap,
@@ -914,37 +1172,39 @@ impl<'py> Replay<'py> {
                 }
             };
         }
-        copied!(
-            py, helper, resolver, types, window, head,
+        let mut child = copied!(
+            py, helper, resolver, window, head,
             rate, status_rate_multiplier, damage_rate_multiplier, full, ehp, armour_base,
             elemental_armour_strip, forced_procs, faction_deltas, armour_bypass, shield_bypass, extra_hits,
-            extra_scale, weapon_slot, distance, punchthrough, live_types_enabled, beam_floor,
+            extra_scale, extra_head_part, weapon_slot, distance, punchthrough, live_types_enabled, beam_floor,
             burst, burst_rate, infinite_ammo, victim_before, syndicate, target_faction,
             faction_bracket, tables, battery, spool, rate_spool, shell,
             shot_combo, reload_after_every_shot, refill_growth, restore, pending_restore, recharges,
-            delayed_attacks, reload_shell_events, derived, selected_incarnon, projectile_sequence_length, projectile_sequence_index, source_field_token, source_field_packets, source_field_activations, finite_field_packets, finite_field_activations, physical_lane_length, physical_lane_phase, physical_lane_selected, lane_stratum, volley_rounds, volley_shot_resume, melee_count, melee_heavy_multiplier,
+            delayed_attacks, reload_shell_events, selected_incarnon, projectile_sequence_length, projectile_sequence_index, source_field_token, source_field_packets, source_field_activations, finite_field_packets, finite_field_activations, physical_lane_length, physical_lane_phase, physical_lane_selected, lane_stratum, volley_rounds, volley_shot_resume, melee_count, melee_heavy_multiplier,
             melee_last_hit, melee_combo_at, melee_recovery_token, melee_recovery_initial, melee_buff_boundary, melee_pending, melee_index, heavy_flag, no_co_flag, melee_heavy_now,
             affinity_per_kill, affinity, syndicate_ready, syndicate_events, pools, states,
             pooled, tau, presence, proc_piles, dots, dot_modes, dot_sources, proc_source, heat_proc_source, heat_mode_sources, damage_origin, blasts, blast_procs,
-            heat_acc, heat_token, heat_chains, heat_sources, heat_source_acc, attribution, track_weak_kills, puncture_strip, frozen_until,
+            heat_acc, heat_token, heat_chains, heat_sources, heat_source_acc, attribution, track_weak_kills,
+            corrosive_cap, puncture_cap, static_priming, puncture_strip, vicious_strip_live, self_damage_on_kill,
+            rb_reloads_needed, rb_activated, rb_completed_reloads, companion, frozen_until,
             frozen_scale, heap, seq, gen, kills, weak_kill_events,
             weak_draw, weak_index, weak_uncertainty, attacks, stale, first_kill,
             last_kill, min_interval, totals, fortifier, fortifier_damage, fortifier_stolen,
             self_overguard, empowered, status_pool, empowered_count, empowered_by_type, cryogenic,
             cryogenic_expected, puncture_armor_strip, encumber, encumber_time, encumber_remaining, encumber_expected,
             enervate, life_curve, onos, onos_crits, onos_ticks, onos_hits,
-            onos_start, onos_condition_hits, projectiles, projectile_state, stack_profiles, mines, impact_embed, embedded_timing, embedded_entities,
+            onos_start, onos_condition_hits, projectiles, projectile_state, mines, impact_embed, embedded_timing, embedded_entities,
             pending_mines, pending_throws, waiting_mines, detonations, mine_overflows, form,
             cycle, gauge, base_ammo_saved, transforms, shells_owed, shell_mode_switch,
             burst_base, burst_rate_base, burst_incarnon, burst_rate_incarnon, beam_floor_base, last_burst,
             tap_other, tap, tap_hits, tap_expires, field_duration, field_duration_ready,
-            field_duration_used, enervate_views, enervate_weights, proc_counts, dot_by_type, magnetic_breaks,
+            field_duration_used, proc_counts, dot_by_type, magnetic_breaks,
             magnetic_proxy, magnetic_weakness, magnetic_electric_immune, blocks_radiation,
             ammo, shot_in_progress, reloads, last_round, current_time, beam_progress,
-            beam_last, actor_signal, actor_signal_used, armour_view, stats_by_ptr, model_cache,
-            model_key, tick_chains, co_specs, varied, elements, hit_specs,
-            applied, packets, spreads, first_shot, no_status, proc_names
-        )
+            beam_last, actor_signal, actor_signal_used, armour_view, tick_chains
+        );
+        self.swap_caches(&mut child);
+        child
     }
 }
 
@@ -974,6 +1234,13 @@ struct CycleSpec {
 
 type BurstSpec = (bool, i64, f64, bool);
 
+#[inline]
+fn get_f_intern<'py>(d: &Bound<'py, PyDict>, key: &Bound<'py, PyString>, default: f64) -> PyResult<f64> {
+    match d.get_item(key)? {
+        Some(v) if !v.is_none() => v.extract::<f64>(),
+        _ => Ok(default),
+    }
+}
 fn get_f(d: &Bound<'_, PyDict>, key: &str, default: f64) -> PyResult<f64> {
     match d.get_item(key)? {
         Some(v) if !v.is_none() => v.extract::<f64>(),
@@ -997,17 +1264,25 @@ impl<'py> Replay<'py> {
     }
 
     fn elements_from(&mut self, obj: &Bound<'py, PyAny>) -> PyResult<Vec<co::Element>> {
+        let py = obj.py();
+        let dt_attr = pyo3::intern!(py, "damage_type");
+        let val_attr = pyo3::intern!(py, "value");
         let mut out = Vec::new();
         for e in obj.try_iter()? {
             let e = e?;
-            let dtype = e.getattr("damage_type")?;
+            let dtype = e.getattr(dt_attr)?;
             let dtype = if dtype.is_truthy()? {
-                let name: String = dtype.extract()?;
-                if name == "DT_ANY" { None } else { Some(self.types.id(&name)) }
+                if let Ok(s) = dtype.cast::<PyString>() {
+                    let name = s.to_str()?;
+                    if name == "DT_ANY" { None } else { Some(self.types.id(name)) }
+                } else {
+                    let name: String = dtype.extract()?;
+                    if name == "DT_ANY" { None } else { Some(self.types.id(&name)) }
+                }
             } else {
                 None
             };
-            out.push((dtype, f(&e, "value")?));
+            out.push((dtype, e.getattr(val_attr)?.extract::<f64>()?));
         }
         Ok(out)
     }
@@ -1018,22 +1293,29 @@ impl<'py> Replay<'py> {
         if let Some(hit) = self.co_specs.get(&ptr) {
             return Ok(hit.clone());
         }
-        let melee = b(spec, "melee")?;
+        let py = spec.py();
+        let melee = spec.getattr(pyo3::intern!(py, "melee"))?.is_truthy()?;
         let out = {
-            let opt = |name: &str| -> PyResult<Option<f64>> {
+            let opt = |name: &Bound<'py, PyString>| -> PyResult<Option<f64>> {
                 let v = spec.getattr(name)?;
                 Ok(if v.is_none() { None } else { Some(v.extract::<f64>()?) })
             };
-            let base = co::Dict(self.vector_from(&spec.getattr("base")?)?);
+            let base = co::Dict(self.vector_from(&spec.getattr(pyo3::intern!(py, "base"))?)?);
             let mut innate = Vec::new();
-            for e in spec.getattr("innate_entries")?.try_iter()? {
+            for e in spec.getattr(pyo3::intern!(py, "innate_entries"))?.try_iter()? {
                 let e = e?;
                 let t = e.cast::<PyTuple>()?;
-                let name: String = t.get_item(0)?.extract()?;
-                let dtype = if name.is_empty() { None } else { Some(self.types.id(&name)) };
+                let s0 = t.get_item(0)?;
+                let dtype = if let Ok(s) = s0.cast::<PyString>() {
+                    let name = s.to_str()?;
+                    if name.is_empty() { None } else { Some(self.types.id(name)) }
+                } else {
+                    let name: String = s0.extract()?;
+                    if name.is_empty() { None } else { Some(self.types.id(&name)) }
+                };
                 innate.push((dtype, t.get_item(1)?.extract::<f64>()?));
             }
-            let orb = spec.getattr("orb")?;
+            let orb = spec.getattr(pyo3::intern!(py, "orb"))?;
             let orb = if orb.is_none() {
                 None
             } else {
@@ -1041,7 +1323,7 @@ impl<'py> Replay<'py> {
                 Some((t.get_item(0)?.extract::<f64>()?, t.get_item(1)?.is_truthy()?,
                       t.get_item(2)?.extract::<f64>()?, t.get_item(3)?.extract::<f64>()?))
             };
-            let fin = spec.getattr("final")?;
+            let fin = spec.getattr(pyo3::intern!(py, "final"))?;
             let final_damage = if fin.is_none() {
                 None
             } else {
@@ -1049,28 +1331,28 @@ impl<'py> Replay<'py> {
                 Some((t.get_item(0)?.extract::<f64>()?, co::Dict(self.vector_from(&t.get_item(1)?)?)))
             };
             Some(Rc::new(co::CoSpec {
-                victim_status_count: f(spec, "victim_status_count")?,
-                damage_scale_effects: effect_ops(&spec.getattr("damage_scale_effects")?)?,
-                ordinary_scale: f(spec, "ordinary_scale")?,
-                compression_mult: f(spec, "compression_mult")?,
-                gunco_independent: b(spec, "gunco_independent")?,
-                gunco_fraction: opt("gunco_fraction")?,
-                victim_damage: f(spec, "victim_damage")?,
-                co_fraction: f(spec, "co_fraction")?,
+                victim_status_count: spec.getattr(pyo3::intern!(py, "victim_status_count"))?.extract::<f64>()?,
+                damage_scale_effects: effect_ops(&spec.getattr(pyo3::intern!(py, "damage_scale_effects"))?)?,
+                ordinary_scale: spec.getattr(pyo3::intern!(py, "ordinary_scale"))?.extract::<f64>()?,
+                compression_mult: spec.getattr(pyo3::intern!(py, "compression_mult"))?.extract::<f64>()?,
+                gunco_independent: spec.getattr(pyo3::intern!(py, "gunco_independent"))?.is_truthy()?,
+                gunco_fraction: opt(pyo3::intern!(py, "gunco_fraction"))?,
+                victim_damage: spec.getattr(pyo3::intern!(py, "victim_damage"))?.extract::<f64>()?,
+                co_fraction: spec.getattr(pyo3::intern!(py, "co_fraction"))?.extract::<f64>()?,
                 melee,
-                melee_damage_effects: effect_ops(&spec.getattr("melee_damage_effects")?)?,
-                slam_effects: effect_ops(&spec.getattr("slam_effects")?)?,
+                melee_damage_effects: effect_ops(&spec.getattr(pyo3::intern!(py, "melee_damage_effects"))?)?,
+                slam_effects: effect_ops(&spec.getattr(pyo3::intern!(py, "slam_effects"))?)?,
                 base,
-                base_total: f(spec, "base_total")?,
-                elemental_base_total: f(spec, "elemental_base_total")?,
-                pre: self.elements_from(&spec.getattr("pre")?)?,
-                post: self.elements_from(&spec.getattr("post")?)?,
+                base_total: spec.getattr(pyo3::intern!(py, "base_total"))?.extract::<f64>()?,
+                elemental_base_total: spec.getattr(pyo3::intern!(py, "elemental_base_total"))?.extract::<f64>()?,
+                pre: self.elements_from(&spec.getattr(pyo3::intern!(py, "pre"))?)?,
+                post: self.elements_from(&spec.getattr(pyo3::intern!(py, "post"))?)?,
                 innate,
-                pool_factor: opt("pool_factor")?,
-                copy_factor: opt("copy_factor")?,
+                pool_factor: opt(pyo3::intern!(py, "pool_factor"))?,
+                copy_factor: opt(pyo3::intern!(py, "copy_factor"))?,
                 orb,
                 final_damage,
-                frozen_factor: opt("frozen_factor")?,
+                frozen_factor: opt(pyo3::intern!(py, "frozen_factor"))?,
             }))
         };
         self.co_specs.insert(ptr, out.clone());
@@ -1156,9 +1438,9 @@ impl<'py> Replay<'py> {
         self.stats.len() - 1
     }
 
-    fn core_from(&mut self, obj: &Bound<'py, PyAny>, damage_types: &Vector, native_forced_procs: &Vector,
+    fn core_from(&mut self, obj: &Bound<'py, PyAny>, dict: Option<&Bound<'py, PyDict>>, damage_types: &Vector, native_forced_procs: &Vector,
                  independent_proc_chances: &Vector) -> PyResult<Core> {
-        core_of(obj, &mut self.types, &self.target_faction, self.faction_bracket, damage_types, native_forced_procs, independent_proc_chances)
+        core_of_dict(obj, dict, &mut self.types, &self.target_faction, self.faction_bracket, damage_types, native_forced_procs, independent_proc_chances)
     }
 
     fn view(&mut self, obj: &Bound<'py, PyAny>) -> PyResult<usize> {
@@ -1166,135 +1448,146 @@ impl<'py> Replay<'py> {
         if let Some(&i) = self.stats_by_ptr.get(&ptr) {
             return Ok(i);
         }
-        for attr in UNSUPPORTED_ATTRS {
-            if let Some(v) = opt_attr(obj, attr)? {
-                if v.is_truthy()? {
-                    return Err(Self::unsupported(attr));
-                }
+        let py = self.py;
+        let dict = opt_dict(obj);
+        let dref = dict.as_ref();
+        if let Some(v) = dict_opt_private(obj, dref, pyo3::intern!(py, "_mine_extra"))? {
+            if v.is_truthy()? {
+                return Err(Self::unsupported("_mine_extra"));
             }
         }
-        let damage_types = self.vector_from(&obj.getattr("damage_types")?)?;
-        let native_forced_procs = self.vector_from(&obj.getattr("native_forced_procs")?)?;
-        let independent_proc_chances = self.vector_from(&obj.getattr("independent_proc_chances")?)?;
-        let bow_draw = match opt_attr(obj, "_bow_draw")? {
+        let damage_types = self.vector_from(&dict_get(obj, dref, pyo3::intern!(py, "damage_types"))?)?;
+        let native_forced_procs = self.vector_from(&dict_get(obj, dref, pyo3::intern!(py, "native_forced_procs"))?)?;
+        let independent_proc_chances = self.vector_from(&dict_get(obj, dref, pyo3::intern!(py, "independent_proc_chances"))?)?;
+        let proc_damage_types = match dict_opt_public(obj, dref, pyo3::intern!(py, "proc_damage_types"))? {
+            Some(v) => self.vector_from(&v)?,
+            None => Vec::new(),
+        };
+        let bow_draw = match dict_opt_private(obj, dref, pyo3::intern!(py, "_bow_draw"))? {
             Some(v) => Some(v.extract::<f64>()?),
             None => None,
         };
-        let charge_time = match opt_attr(obj, "_charge_time")? {
+        let charge_time = match dict_opt_private(obj, dref, pyo3::intern!(py, "_charge_time"))? {
             Some(v) => v.extract::<f64>()?,
             None => 0.0,
         };
-        let requires_full_ammo = match opt_attr(obj, "_requires_full_ammo")? {
+        let requires_full_ammo = match dict_opt_private(obj, dref, pyo3::intern!(py, "_requires_full_ammo"))? {
             Some(v) => v.is_truthy()?,
             None => false,
         };
-        let quanta = match opt_attr(obj, "_quanta_strategy")? {
+        let quanta = match dict_opt_private(obj, dref, pyo3::intern!(py, "_quanta_strategy"))? {
             Some(v) => {
                 let d = v.cast::<PyDict>()?;
-                Some((get_f(d, "primaryAmmoCost", 0.0)?, get_f(d, "primaryFireSeconds", 0.25)?,
-                      get_f(d, "cycleSeconds", 0.0)?))
+                Some((get_f_intern(d, pyo3::intern!(py, "primaryAmmoCost"), 0.0)?,
+                      get_f_intern(d, pyo3::intern!(py, "primaryFireSeconds"), 0.25)?,
+                      get_f_intern(d, pyo3::intern!(py, "cycleSeconds"), 0.0)?))
             },
             None => None,
         };
-        let core = self.core_from(obj, &damage_types, &native_forced_procs, &independent_proc_chances)?;
+        let core = self.core_from(obj, dref, &damage_types, &native_forced_procs, &independent_proc_chances)?;
         let s = Stats {
             obj: obj.clone().unbind(),
             core,
-            magazine: f(obj, "magazine")?,
-            ammo_cost: f(obj, "ammo_cost")?,
-            fire_rate: f(obj, "fire_rate")?,
-            reload_time: f(obj, "reload_time")?,
-            transform_time_scale: f(obj, "transform_time_scale")?,
-            stack_native_fraction: f(obj, "stack_native_fraction")?,
-            stackable_hit_event: b(obj, "stackable_hit_event")?,
-            delayed_radial_hit_event: b(obj, "delayed_radial_hit_event")?,
-            multishot: f(obj, "multishot")?,
-            continuous: b(obj, "continuous")?,
-            radial_only: b(obj, "radial_only")?,
-            radial_victim_crit: b(obj, "radial_victim_crit")?,
-            crit_chance: f(obj, "crit_chance")?,
-            crit_multiplier: f(obj, "crit_multiplier")?,
-            bodyshot_crit_multiplier: f(obj, "bodyshot_crit_multiplier")?,
-            weakpoint_crit_chance_bonus: f(obj, "weakpoint_crit_chance_bonus")?,
-            base_crit_chance: f(obj, "base_crit_chance")?,
-            weakpoint_crit_chance_relative: f(obj, "weakpoint_crit_chance_relative")?,
-            status_chance: f(obj, "status_chance")?,
-            proc_duration_multiplier: f(obj, "proc_duration_multiplier")?,
-            proc_damage_multiplier: f(obj, "proc_damage_multiplier")?,
+            magazine: df(obj, dref, pyo3::intern!(py, "magazine"))?,
+            ammo_cost: df(obj, dref, pyo3::intern!(py, "ammo_cost"))?,
+            fire_rate: df(obj, dref, pyo3::intern!(py, "fire_rate"))?,
+            reload_time: df(obj, dref, pyo3::intern!(py, "reload_time"))?,
+            transform_time_scale: df(obj, dref, pyo3::intern!(py, "transform_time_scale"))?,
+            stack_native_fraction: df(obj, dref, pyo3::intern!(py, "stack_native_fraction"))?,
+            stackable_hit_event: db(obj, dref, pyo3::intern!(py, "stackable_hit_event"))?,
+            delayed_radial_hit_event: match dict_opt_public(obj, dref, pyo3::intern!(py, "delayed_radial_hit_event"))? {
+                Some(v) => v.is_truthy()?,
+                None => false,
+            },
+            multishot: df(obj, dref, pyo3::intern!(py, "multishot"))?,
+            continuous: db(obj, dref, pyo3::intern!(py, "continuous"))?,
+            radial_only: db(obj, dref, pyo3::intern!(py, "radial_only"))?,
+            radial_victim_crit: db(obj, dref, pyo3::intern!(py, "radial_victim_crit"))?,
+            crit_chance: df(obj, dref, pyo3::intern!(py, "crit_chance"))?,
+            crit_multiplier: df(obj, dref, pyo3::intern!(py, "crit_multiplier"))?,
+            bodyshot_crit_multiplier: df(obj, dref, pyo3::intern!(py, "bodyshot_crit_multiplier"))?,
+            weakpoint_crit_chance_bonus: df(obj, dref, pyo3::intern!(py, "weakpoint_crit_chance_bonus"))?,
+            base_crit_chance: df(obj, dref, pyo3::intern!(py, "base_crit_chance"))?,
+            weakpoint_crit_chance_relative: df(obj, dref, pyo3::intern!(py, "weakpoint_crit_chance_relative"))?,
+            status_chance: df(obj, dref, pyo3::intern!(py, "status_chance"))?,
+            proc_duration_multiplier: df(obj, dref, pyo3::intern!(py, "proc_duration_multiplier"))?,
+            proc_damage_multiplier: df(obj, dref, pyo3::intern!(py, "proc_damage_multiplier"))?,
+            proc_damage_types,
             damage_types,
             native_forced_procs,
             independent_proc_chances,
-            has_crit_procs: b(obj, "crit_proc_chances")?,
-            first_shot_damage_bonus: f(obj, "first_shot_damage_bonus")?,
-            cold_stack_damage: f(obj, "cold_stack_damage")?,
-            base_damage_bracket: f(obj, "base_damage_bracket")?,
-            frozen_damage_multiplier: f(obj, "frozen_damage_multiplier")?,
+            has_crit_procs: db(obj, dref, pyo3::intern!(py, "crit_proc_chances"))?,
+            first_shot_damage_bonus: df(obj, dref, pyo3::intern!(py, "first_shot_damage_bonus"))?,
+            cold_stack_damage: df(obj, dref, pyo3::intern!(py, "cold_stack_damage"))?,
+            base_damage_bracket: df(obj, dref, pyo3::intern!(py, "base_damage_bracket"))?,
+            frozen_damage_multiplier: df(obj, dref, pyo3::intern!(py, "frozen_damage_multiplier"))?,
             requires_full_ammo,
             quanta,
-            contact_shiver_scale: match opt_attr(obj, "_contact_shiver_scale")? {Some(v)=>v.extract()?,None=>1.0},
-            contact_shiver_fixed: opt_attr(obj,"_contact_shiver_fixed")?.filter(|v|!v.is_none()).map(|v|v.extract::<f64>()).transpose()?,
-            no_enemy_contact:match opt_attr(obj,"_no_enemy_contact")? {Some(v)=>v.is_truthy()?,None=>false},
-            contact_shiver: match opt_attr(obj, "_contact_shiver")? { Some(v) => v.is_truthy()?, None => false },
-            snapshot_enervate: match opt_attr(obj, "_snapshot_enervate")? { Some(v) => v.is_truthy()?, None => false },
-            zymos: match opt_attr(obj, "_zymos_policy")? {
+            contact_shiver_scale: match dict_opt_private(obj, dref, pyo3::intern!(py, "_contact_shiver_scale"))? {Some(v)=>v.extract()?,None=>1.0},
+            contact_shiver_fixed: dict_opt_private(obj, dref, pyo3::intern!(py, "_contact_shiver_fixed"))?.filter(|v|!v.is_none()).map(|v|v.extract::<f64>()).transpose()?,
+            no_enemy_contact:match dict_opt_private(obj, dref, pyo3::intern!(py, "_no_enemy_contact"))? {Some(v)=>v.is_truthy()?,None=>false},
+            contact_shiver: match dict_opt_private(obj, dref, pyo3::intern!(py, "_contact_shiver"))? { Some(v) => v.is_truthy()?, None => false },
+            snapshot_enervate: match dict_opt_private(obj, dref, pyo3::intern!(py, "_snapshot_enervate"))? { Some(v) => v.is_truthy()?, None => false },
+            zymos: match dict_opt_private(obj, dref, pyo3::intern!(py, "_zymos_policy"))? {
                 Some(v) => {
                     let d = v.cast::<PyDict>()?;
-                    Some((get_f(d, "embedDelaySeconds", 1.1)?, get_f(d, "frameSeconds", 1.0/60.0)?))
+                    Some((get_f_intern(d, pyo3::intern!(py, "embedDelaySeconds"), 1.1)?,
+                          get_f_intern(d, pyo3::intern!(py, "frameSeconds"), 1.0/60.0)?))
                 },
                 None => None,
             },
             bow_draw,
             charge_time,
-            charge_before_fire: match opt_attr(obj,"_charge_before_fire")? { Some(v) => v.is_truthy()?, None => false },
-            full_clip_charge: match opt_attr(obj,"_full_clip_charge")? { Some(v) => v.is_truthy()?, None => false },
-            native_fire_cooldown: match opt_attr(obj,"_native_fire_cooldown_seconds")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
-            charge_volley: match opt_attr(obj,"_charge_volley")? { Some(v) => v.is_truthy()?, None => false },
+            charge_before_fire: match dict_opt_private(obj, dref, pyo3::intern!(py, "_charge_before_fire"))? { Some(v) => v.is_truthy()?, None => false },
+            full_clip_charge: match dict_opt_private(obj, dref, pyo3::intern!(py, "_full_clip_charge"))? { Some(v) => v.is_truthy()?, None => false },
+            native_fire_cooldown: match dict_opt_private(obj, dref, pyo3::intern!(py, "_native_fire_cooldown_seconds"))? { Some(v) => v.extract::<f64>()?, None => 0.0 },
+            charge_volley: match dict_opt_private(obj, dref, pyo3::intern!(py, "_charge_volley"))? { Some(v) => v.is_truthy()?, None => false },
             initial_combo: {
-                let v = obj.getattr("initial_combo")?;
+                let v = dict_get(obj, dref, pyo3::intern!(py, "initial_combo"))?;
                 if v.is_truthy()? { v.extract::<f64>()? } else { 0.0 }
             },
-            heavy_charge_speed: f(obj, "heavy_charge_speed")?,
-            projectile_speed_multiplier: match opt_attr(obj, "projectile_speed_multiplier")? {
+            heavy_charge_speed: df(obj, dref, pyo3::intern!(py, "heavy_charge_speed"))?,
+            projectile_speed_multiplier: match dict_opt_public(obj, dref, pyo3::intern!(py, "projectile_speed_multiplier"))? {
                 Some(v) => v.extract::<f64>()?,
                 None => 1.0,
             },
-            reflection_explosion_chance: match opt_attr(obj, "reflection_explosion_chance")? {
+            reflection_explosion_chance: match dict_opt_public(obj, dref, pyo3::intern!(py, "reflection_explosion_chance"))? {
                 Some(v) => v.extract::<f64>()?,
                 None => 0.0,
             },
-            throw_damage_bonus: match opt_attr(obj, "throw_damage_bonus")? {
+            throw_damage_bonus: match dict_opt_public(obj, dref, pyo3::intern!(py, "throw_damage_bonus"))? {
                 Some(v) => v.extract::<f64>()?,
                 None => 0.0,
             },
-            combo_duration: f(obj, "combo_duration")?,
-            combo_extra_chance: f(obj, "combo_extra_chance")?,
-            combo_miss_chance: f(obj, "combo_miss_chance")?,
-            heavy_attack_efficiency: f(obj, "heavy_attack_efficiency")?,
+            combo_duration: df(obj, dref, pyo3::intern!(py, "combo_duration"))?,
+            combo_extra_chance: df(obj, dref, pyo3::intern!(py, "combo_extra_chance"))?,
+            combo_miss_chance: df(obj, dref, pyo3::intern!(py, "combo_miss_chance"))?,
+            heavy_attack_efficiency: df(obj, dref, pyo3::intern!(py, "heavy_attack_efficiency"))?,
             additional: Vec::new(),
-            head_only: match opt_attr(obj, "_head_only")? { Some(v) => v.is_truthy()?, None => false },
-            body_only: match opt_attr(obj, "_body_only")? { Some(v) => v.is_truthy()?, None => false },
-            impact_delay: match opt_attr(obj, "_impact_delay")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
-            persist_after_kill: match opt_attr(obj, "_persist_after_kill")? { Some(v) => v.is_truthy()?, None => false },
+            head_only: match dict_opt_private(obj, dref, pyo3::intern!(py, "_head_only"))? { Some(v) => v.is_truthy()?, None => false },
+            body_only: match dict_opt_private(obj, dref, pyo3::intern!(py, "_body_only"))? { Some(v) => v.is_truthy()?, None => false },
+            impact_delay: match dict_opt_private(obj, dref, pyo3::intern!(py, "_impact_delay"))? { Some(v) => v.extract::<f64>()?, None => 0.0 },
+            persist_after_kill: match dict_opt_private(obj, dref, pyo3::intern!(py, "_persist_after_kill"))? { Some(v) => v.is_truthy()?, None => false },
             lingering: None,owned_embed:None,nox_projectile:None,live_co_unit:None,source_fields:Vec::new(),finite_fields:Vec::new(),
             embedded: None,
-            primary_delay: match opt_attr(obj, "_primary_delay_seconds")? {
+            primary_delay: match dict_opt_private(obj, dref, pyo3::intern!(py, "_primary_delay_seconds"))? {
                 Some(v) if v.is_truthy()? => v.extract::<f64>()?,
                 _ => 0.0,
             },
-            fixed_radial: match opt_attr(obj, "_fixed_radial")? { Some(v) => v.is_truthy()?, None => false },
-            victim_full_crit_chance: f(obj, "victim_full_crit_chance")?,
-            victim_full_crit_damage: f(obj, "victim_full_crit_damage")?,
-            victim_low_health_multiplier: f(obj, "victim_low_health_multiplier")?,
-            ammo_pool_multishot_cost: f(obj, "ammo_pool_multishot_cost")?,
-            ammo_pool_damage_bonus: f(obj, "ammo_pool_damage_bonus")?,
-            charge_pool_cost: match opt_attr(obj, "_charge_pool_cost")? { Some(v) => v.extract::<f64>()?, None => 1.0 },
-            co_bucket: effect_ops(&obj.getattr("co_bucket")?)?,
-            co_spec: match opt_attr(obj, "_co_spec")? {
+            fixed_radial: match dict_opt_private(obj, dref, pyo3::intern!(py, "_fixed_radial"))? { Some(v) => v.is_truthy()?, None => false },
+            victim_full_crit_chance: df(obj, dref, pyo3::intern!(py, "victim_full_crit_chance"))?,
+            victim_full_crit_damage: df(obj, dref, pyo3::intern!(py, "victim_full_crit_damage"))?,
+            victim_low_health_multiplier: df(obj, dref, pyo3::intern!(py, "victim_low_health_multiplier"))?,
+            ammo_pool_multishot_cost: df(obj, dref, pyo3::intern!(py, "ammo_pool_multishot_cost"))?,
+            ammo_pool_damage_bonus: df(obj, dref, pyo3::intern!(py, "ammo_pool_damage_bonus"))?,
+            charge_pool_cost: match dict_opt_private(obj, dref, pyo3::intern!(py, "_charge_pool_cost"))? { Some(v) => v.extract::<f64>()?, None => 1.0 },
+            co_bucket: effect_ops(&dict_get(obj, dref, pyo3::intern!(py, "co_bucket"))?)?,
+            co_spec: match dict_opt_private(obj, dref, pyo3::intern!(py, "_co_spec"))? {
                 Some(spec) if !spec.is_none() => self.co_spec_from(&spec)?,
                 _ => None,
             },
-            slam_damage_ratio: f(obj, "slam_damage_ratio")?,
-            incarnon_charge_multiplier: f(obj, "incarnon_charge_multiplier")?,
+            slam_damage_ratio: df(obj, dref, pyo3::intern!(py, "slam_damage_ratio"))?,
+            incarnon_charge_multiplier: df(obj, dref, pyo3::intern!(py, "incarnon_charge_multiplier"))?,
             stackable: None,
             reload_empty: Vec::new(),
             reload_partial: Vec::new(),
@@ -1303,22 +1596,22 @@ impl<'py> Replay<'py> {
         self.stats.push(s);
         let i = self.stats.len() - 1;
         self.stats_by_ptr.insert(ptr, i);
-        if let Some(unit)=opt_attr(obj, "_live_co_unit")? {
+        if let Some(unit)=dict_opt_private(obj, dref, pyo3::intern!(py, "_live_co_unit"))? {
             self.stats[i].live_co_unit=Some(self.view(&unit)?);
         }
         // Parts that ride on this view (radial bomblets, a lingering field).
-        if let Some(parts) = opt_attr(obj, "_additional_radials")? {
+        if let Some(parts) = dict_opt_private(obj, dref, pyo3::intern!(py, "_additional_radials"))? {
             let mut out = Vec::new();
             for part in parts.try_iter()? {
                 out.push(self.view(&part?)?);
             }
             self.stats[i].additional = out;
         }
-        if let Some(thrown) = opt_attr(obj, "_reload_projectiles")? {
+        if let Some(thrown) = dict_opt_private(obj, dref, pyo3::intern!(py, "_reload_projectiles"))? {
             if thrown.is_truthy()? {
                 let d = thrown.cast::<PyDict>()?.clone();
-                self.stats[i].reload_lands_at = get_f(&d, "landsAt", 0.0)?;
-                for (key, empty) in [("empty", true), ("partial", false)] {
+                self.stats[i].reload_lands_at = get_f_intern(&d, pyo3::intern!(py, "landsAt"), 0.0)?;
+                for (key, empty) in [(pyo3::intern!(py, "empty"), true), (pyo3::intern!(py, "partial"), false)] {
                     if let Some(parts) = d.get_item(key)? {
                         let mut out = Vec::new();
                         for part in parts.try_iter()? {
@@ -1333,7 +1626,7 @@ impl<'py> Replay<'py> {
                 }
             }
         }
-        if let Some(spec) = opt_attr(obj, "_stackable")? {
+        if let Some(spec) = dict_opt_private(obj, dref, pyo3::intern!(py, "_stackable"))? {
             if spec.is_truthy()? {
                 let t = spec.cast::<PyTuple>()?;
                 let profile = self.stackable_profile(&t.get_item(0)?)?;
@@ -1353,32 +1646,32 @@ impl<'py> Replay<'py> {
                 self.stats[i].stackable = Some((profile, parts));
             }
         }
-        if let Some(fields)=opt_attr(obj,"_finite_fields")? {
+        if let Some(fields)=dict_opt_private(obj, dref, pyo3::intern!(py, "_finite_fields"))? {
             for field in fields.try_iter()? {
                 let field=field?;let row=field.cast::<PyTuple>()?;
                 let part=self.view(&row.get_item(0)?)?;
                 self.stats[i].finite_fields.push((part,row.get_item(1)?.extract()?,row.get_item(2)?.extract()?,row.get_item(3)?.extract()?));
             }
         }
-        if let Some(fields)=opt_attr(obj,"_source_owned_fields")? {
+        if let Some(fields)=dict_opt_private(obj, dref, pyo3::intern!(py, "_source_owned_fields"))? {
             for field in fields.try_iter()? {
                 let field=field?;let row=field.cast::<PyTuple>()?;
                 let part=self.view(&row.get_item(0)?)?;
                 self.stats[i].source_fields.push((part,row.get_item(1)?.extract()?,row.get_item(2)?.extract()?,row.get_item(3)?.extract()?));
             }
         }
-        if let Some(parts)=opt_attr(obj,"_nox_projectile")? {
+        if let Some(parts)=dict_opt_private(obj, dref, pyo3::intern!(py, "_nox_projectile"))? {
             let row=parts.cast::<PyTuple>()?;
             let tick=self.view(&row.get_item(0)?)?;
             let blast=self.view(&row.get_item(1)?)?;
             self.stats[i].nox_projectile=Some((tick,blast));
         }
-        if let Some(field)=opt_attr(obj,"_owned_embed")? {
+        if let Some(field)=dict_opt_private(obj, dref, pyo3::intern!(py, "_owned_embed"))? {
             let tuple=field.cast::<PyTuple>()?;
             let part=self.view(&tuple.get_item(0)?)?;
             self.stats[i].owned_embed=Some((part,tuple.get_item(1)?.extract()?,tuple.get_item(2)?.extract()?));
         }
-        if let Some(field) = opt_attr(obj, "_lingering")? {
+        if let Some(field) = dict_opt_private(obj, dref, pyo3::intern!(py, "_lingering"))? {
             if field.is_truthy()? {
                 let t = field.cast::<PyTuple>()?;
                 let part = self.view(&t.get_item(0)?)?;
@@ -1387,7 +1680,7 @@ impl<'py> Replay<'py> {
                 self.stats[i].lingering = Some((part, rate, duration));
             }
         }
-        if let Some(field) = opt_attr(obj, "_embedded")? {
+        if let Some(field) = dict_opt_private(obj, dref, pyo3::intern!(py, "_embedded"))? {
             if field.is_truthy()? {
                 let t = field.cast::<PyTuple>()?;
                 let part = self.view(&t.get_item(0)?)?;
@@ -1466,12 +1759,14 @@ impl<'py> Replay<'py> {
             self.presence.entry(FREEZE).or_default().add(end, 0.0);
             self.frozen_until = -1.0;
         }
-        for rows in self.states.values_mut() {
-            while let Some(&(end, _)) = rows.front() {
-                if end < t - 1e-9 {
-                    rows.pop_front();
-                } else {
-                    break;
+        if !self.states.is_empty() {
+            for rows in self.states.values_mut() {
+                while let Some(&(end, _)) = rows.front() {
+                    if end < t - 1e-9 {
+                        rows.pop_front();
+                    } else {
+                        break;
+                    }
                 }
             }
         }
@@ -1491,18 +1786,18 @@ impl<'py> Replay<'py> {
         }
         for q in self.sources.iter_mut() {
             if q.duration != 0.0 && q.stacks != 0.0 && t >= q.expires {
-                if q.decay == "lose_one_and_reset" {
+                if q.decay == DECAY_LOSE_ONE {
                     let missed = 1 + trunc_i((t - q.expires) / q.duration);
                     q.stacks = pmax(0.0, q.stacks - missed as f64);
                     q.expires += missed as f64 * q.duration;
-                } else if q.decay != "per-stack" && q.decay != "union" {
+                } else if q.decay != DECAY_PER_STACK && q.decay != DECAY_UNION {
                     q.stacks = 0.0;
                 }
             }
-            if q.decay == "per-stack" {
+            if q.decay == DECAY_PER_STACK {
                 q.expiries.retain(|x| x.0 > t);
                 q.stacks = psum(q.expiries.iter().map(|x| x.1));
-            } else if q.decay == "union" {
+            } else if q.decay == DECAY_UNION {
                 q.expiries.retain(|x| x.0 > t);
                 q.stacks = union_of(&q.expiries);
             }
@@ -1513,13 +1808,53 @@ impl<'py> Replay<'py> {
         self.frozen_scale
     }
 
+    fn seed_static_priming(&mut self) {
+        if self.static_priming.is_empty() {
+            return;
+        }
+        for i in 0..self.static_priming.len() {
+            let (d, amount) = self.static_priming[i];
+            let cap_val = if d == PUNCTURE {
+                self.puncture_cap
+            } else if d == CORROSIVE {
+                self.corrosive_cap
+            } else {
+                10.0
+            };
+            let clamped = pmin(amount, cap_val);
+            if clamped <= 0.0 {
+                continue;
+            }
+            let absence = pmax(0.0, 1.0 - pmin(clamped, 1.0));
+            self.presence.entry(d).or_default().add(f64::INFINITY, absence);
+            if let Some(p) = pooled_index(d) {
+                self.pooled[p].add(f64::INFINITY, absence, clamped);
+            } else if d == TAU && self.tau.is_some() {
+                self.tau.as_mut().unwrap().add(f64::INFINITY, absence, clamped);
+            } else if d == FREEZE {
+                let eff_cold = pmin(clamped, if self.pools[0] > 0.0 { 4.0 } else { 10.0 });
+                let mut rows = VecDeque::new();
+                rows.push_back((f64::INFINITY, eff_cold));
+                self.states.insert(FREEZE, rows);
+                if eff_cold >= 10.0 - 1e-9 && self.pools[0] <= 0.0 {
+                    self.frozen_until = f64::INFINITY;
+                    self.frozen_scale = 1.0;
+                }
+            } else {
+                let mut rows = VecDeque::new();
+                rows.push_back((f64::INFINITY, clamped));
+                self.states.insert(d, rows);
+            }
+        }
+    }
+
     fn heat_strip(&mut self, t: f64) -> f64 {
         self.heat_chains.strip(t)
     }
 
     fn armour_factor(&mut self, t: f64) -> f64 {
         let rest = self.armour_base * (1.0 - self.elemental_armour_strip) * (1.0 - self.heat_strip(t))
-            * (1.0 - self.puncture_strip);
+            * (1.0 - self.puncture_strip) * (1.0 - self.vicious_strip_live);
         let version = self.pooled[1].version;
         if let Some((v, r, value)) = self.armour_view {
             if v == version && r == rest.to_bits() {
@@ -1530,7 +1865,7 @@ impl<'py> Replay<'py> {
         let mut s = PySum::new();
         for (k, w) in dist.iter().enumerate() {
             if *w > 0.0 {
-                let strip = if k == 0 { 0.0 } else { pmin(0.26 + 0.06 * (k as f64 - 1.0), 0.8) };
+                let strip = if k == 0 { 0.0 } else { pmin(0.26 + 0.06 * (k as f64 - 1.0), 1.0) };
                 s.add(*w * (1.0 - armour_reduction(rest * (1.0 - strip))));
             }
         }
@@ -1643,7 +1978,7 @@ impl<'py> Replay<'py> {
                     life += q.duration_per_tier * spec.tier(self.melee_count) as f64;
                 }
             }
-            if q.decay == "union" {
+            if q.decay == DECAY_UNION {
                 // A share of one event rolls once (weight x p); several events
                 // roll each, 1 - (1 - p)^weight, not weight x p.
                 let roll = if required > 1.0 || weight <= 1.0 {
@@ -1656,7 +1991,7 @@ impl<'py> Replay<'py> {
                 q.expires = t + life;
                 continue;
             }
-            if q.decay == "per-stack" {
+            if q.decay == DECAY_PER_STACK {
                 q.expiries.push((t + life, delta));
                 let mut excess = psum(q.expiries.iter().map(|x| x.1)) - q.max_stacks;
                 while excess > 1e-9 && !q.expiries.is_empty() {
@@ -1794,20 +2129,20 @@ impl<'py> Replay<'py> {
             stacks_dict.set_item(q.id.bind(py), q.stacks)?;
         }
         let (power, hits, beam) = self.onos_values(self.current_time);
-        stacks_dict.set_item("__onosPower", power)?;
-        stacks_dict.set_item("__onosHits", hits)?;
-        stacks_dict.set_item("__onosBeamSeconds", beam)?;
-        stacks_dict.set_item("__chargeVolleyRounds",self.volley_rounds)?;
-        if let Some(index)=self.physical_lane_selected {stacks_dict.set_item("__physicalProjectileIndex",index)?;}
-        if self.projectile_sequence_length > 0 { stacks_dict.set_item("__projectileSequenceIndex",self.projectile_sequence_index)?; }
+        stacks_dict.set_item(pyo3::intern!(py, "__onosPower"), power)?;
+        stacks_dict.set_item(pyo3::intern!(py, "__onosHits"), hits)?;
+        stacks_dict.set_item(pyo3::intern!(py, "__onosBeamSeconds"), beam)?;
+        stacks_dict.set_item(pyo3::intern!(py, "__chargeVolleyRounds"),self.volley_rounds)?;
+        if let Some(index)=self.physical_lane_selected {stacks_dict.set_item(pyo3::intern!(py, "__physicalProjectileIndex"),index)?;}
+        if self.projectile_sequence_length > 0 { stacks_dict.set_item(pyo3::intern!(py, "__projectileSequenceIndex"),self.projectile_sequence_index)?; }
         for (_, value, obj) in &extra {
             stacks_dict.set_item(obj.bind(py), *value)?;
         }
         if self.heavy_flag {
-            stacks_dict.set_item("__heavy", true)?;
+            stacks_dict.set_item(pyo3::intern!(py, "__heavy"), true)?;
         }
         if self.no_co_flag {
-            stacks_dict.set_item("__noCO", true)?;
+            stacks_dict.set_item(pyo3::intern!(py, "__noCO"), true)?;
         }
         let live: PyObject = if self.live_types_enabled {
             live_types.into_pyobject(py)?.into_any().unbind()
@@ -1815,7 +2150,7 @@ impl<'py> Replay<'py> {
             0i64.into_pyobject(py)?.into_any().unbind()
         };
         let started = std::time::Instant::now();
-        let form = match self.form { BASE => "base", INCARNON => "incarnon", _ => "selected" };
+        let form = match self.form { BASE => pyo3::intern!(py, "base"), INCARNON => pyo3::intern!(py, "incarnon"), _ => pyo3::intern!(py, "selected") };
         let result = self.resolver.call1((form, stacks_dict, live, self.last_round))?;
         let resolved = std::time::Instant::now();
         crate::counters::add(crate::counters::RESOLVE, (resolved - started).as_nanos() as u64);
@@ -1886,11 +2221,22 @@ impl<'py> Replay<'py> {
         };
         if !self.packets.contains_key(&key) {
             let core = &self.stats[st].core;
-            let (vector, procs, rows, non) = if fast {
+            let (vector, procs, mut rows, mut non) = if fast {
                 tables::attack_data(core, aim, &self.tables)
             } else {
                 tables::crit_view_packet(core, aim, puncture, cold, shiver, frozen, &self.tables)
             };
+            if !self.stats[st].proc_damage_types.is_empty() {
+                Self::apply_typed_proc_damage(
+                    core,
+                    &self.stats[st].proc_damage_types,
+                    aim,
+                    &self.tables,
+                    if fast { None } else { Some((puncture, cold, shiver, frozen)) },
+                    &mut rows,
+                    &mut non,
+                );
+            }
             let packet = Packet {
                 vector,
                 procs,
@@ -1903,6 +2249,37 @@ impl<'py> Replay<'py> {
             self.packets.insert(key, Rc::new(packet));
         }
         Ok(key)
+    }
+
+    fn apply_typed_proc_damage(
+        core: &Core,
+        typed: &Vector,
+        aim: f64,
+        tables: &TargetTables,
+        crit: Option<(f64, f64, f64, f64)>,
+        rows: &mut Vec<(D, tables::Row)>,
+        non: &mut Vec<(D, f64)>,
+    ) {
+        for &(d, pd) in typed {
+            let mut custom = core.clone();
+            custom.proc_damage_multiplier = pd;
+            let (_, _, r_d, n_d) = match crit {
+                None => tables::attack_data(&custom, aim, tables),
+                Some((puncture, cold, shiver, frozen)) => {
+                    tables::crit_view_packet(&custom, aim, puncture, cold, shiver, frozen, tables)
+                }
+            };
+            if let Some((_, replacement)) = r_d.into_iter().find(|(k, _)| *k == d) {
+                if let Some(slot) = rows.iter_mut().find(|(k, _)| *k == d) {
+                    slot.1 = replacement;
+                }
+            }
+            if let Some((_, replacement)) = n_d.into_iter().find(|(k, _)| *k == d) {
+                if let Some(slot) = non.iter_mut().find(|(k, _)| *k == d) {
+                    slot.1 = replacement;
+                }
+            }
+        }
     }
 
     /// combat_replay.packet under Enervate: the crit views of every stack
@@ -1929,7 +2306,18 @@ impl<'py> Replay<'py> {
                 Some(v) => v.clone(),
                 None => {
                     let core = tables::crit_view(&self.stats[st].core, stacks as f64 * 0.1, puncture, cold, shiver, frozen);
-                    let (v, p, r, n) = tables::attack_data(&core, aim, &self.tables);
+                    let (v, p, mut r, mut n) = tables::attack_data(&core, aim, &self.tables);
+                    if !self.stats[st].proc_damage_types.is_empty() {
+                        Self::apply_typed_proc_damage(
+                            &core,
+                            &self.stats[st].proc_damage_types,
+                            aim,
+                            &self.tables,
+                            None,
+                            &mut r,
+                            &mut n,
+                        );
+                    }
                     let packet = Rc::new(Packet {
                         vector: v,
                         procs: p,
@@ -2015,7 +2403,18 @@ impl<'py> Replay<'py> {
         let st = self.tau_view(st);
         let key = (st, aim.to_bits(), 0, 0, 0, 1, 0);
         if !self.packets.contains_key(&key) {
-            let (vector, procs, rows, non) = tables::attack_data(&self.stats[st].core, aim, &self.tables);
+            let (vector, procs, mut rows, mut non) = tables::attack_data(&self.stats[st].core, aim, &self.tables);
+            if !self.stats[st].proc_damage_types.is_empty() {
+                Self::apply_typed_proc_damage(
+                    &self.stats[st].core,
+                    &self.stats[st].proc_damage_types,
+                    aim,
+                    &self.tables,
+                    None,
+                    &mut rows,
+                    &mut non,
+                );
+            }
             let packet = Packet {
                 vector,
                 procs,
@@ -2260,7 +2659,7 @@ impl<'py> Replay<'py> {
         let mut boundary=f64::INFINITY;
         for q in &self.sources {
             if q.stacks==0.0 { continue; }
-            if q.decay=="per-stack" || q.decay=="union" {
+            if q.decay == DECAY_PER_STACK || q.decay == DECAY_UNION {
                 for &(when,_) in &q.expiries {
                     if when>t+1e-9 { boundary=pmin(boundary,when); }
                 }
@@ -2437,7 +2836,7 @@ impl<'py> Replay<'py> {
         }
         let per_tick=child/probability*landing;
         self.magnetic_breaks.push((t,pool_index,stacks,per_tick,self.gen));
-        if direct > 0.0 && self.settle_damage(&vec![(ELECTRICITY,direct*faction)],t,DIRECT,WeakKill::Flag(false),0.0,true,None,weapon_source,true)? {
+        if direct > 0.0 && self.settle_damage(&[(ELECTRICITY,direct*faction)],t,DIRECT,WeakKill::Flag(false),0.0,true,None,weapon_source,true)? {
             return Ok(true);
         }
         if scale <= 0.0 || self.magnetic_electric_immune { return Ok(false); }
@@ -2452,19 +2851,19 @@ impl<'py> Replay<'py> {
     }
 
     #[allow(clippy::too_many_arguments)]
-    fn take(&mut self, vector: &Vector, t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool) -> PyResult<bool> {
+    fn take(&mut self, vector: &[(D, f64)], t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool) -> PyResult<bool> {
         self.take_with_event(vector, t, source, weak_kill, cv2, extra, None)
     }
 
-    fn take_with_event(&mut self, vector: &Vector, t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool, damage_event: Option<(f64, f64)>) -> PyResult<bool> {
+    fn take_with_event(&mut self, vector: &[(D, f64)], t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool, damage_event: Option<(f64, f64)>) -> PyResult<bool> {
         self.take_with_source_credit(vector,t,source,weak_kill,cv2,extra,damage_event,true)
     }
 
-    fn take_with_source_credit(&mut self, vector: &Vector, t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool, damage_event: Option<(f64,f64)>, weapon_source: bool) -> PyResult<bool> {
+    fn take_with_source_credit(&mut self, vector: &[(D, f64)], t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool, damage_event: Option<(f64,f64)>, weapon_source: bool) -> PyResult<bool> {
         self.settle_damage(vector,t,source,weak_kill,cv2,extra,damage_event,weapon_source,false)
     }
 
-    fn settle_damage(&mut self, vector: &Vector, t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool, damage_event: Option<(f64,f64)>, weapon_source: bool, magnetic_packet: bool) -> PyResult<bool> {
+    fn settle_damage(&mut self, vector: &[(D, f64)], t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool, damage_event: Option<(f64,f64)>, weapon_source: bool, magnetic_packet: bool) -> PyResult<bool> {
         let _timer = crate::counters::Timer::start(crate::counters::TAKE);
         if let Some((alignment, _, _)) = self.onos {
             if self.onos_crits && self.form != BASE && (self.onos_ticks as f64) < alignment
@@ -2481,17 +2880,26 @@ impl<'py> Replay<'py> {
         let mut overguard_broke = false;
         let mut shield_broke = false;
         if self.pools[0] > 0.0 {
-            let mut value = psum(vector.iter().map(|(k, raw)| raw * if *k == VOID || *k == RADIANT { 1.5 } else { 1.0 }))
+            let plain = psum(vector.iter().map(|(k, raw)| raw * if *k == VOID || *k == RADIANT { 1.5 } else { 1.0 }))
                 * self.vulnerability(MAGNETIC);
-            let fortifier = if weapon_source && source != SYNDICATE { self.fortifier } else { None };
-            if let Some((multiplier, _, _, uptime)) = fortifier {
-                value *= 1.0 + (multiplier - 1.0) * uptime;
-            }
-            if value <= 0.0 {
+            if plain <= 0.0 {
                 return Ok(false);
             }
-            let fraction = pmin(left, self.pools[0] / value);
-            let drain = value * fraction;
+            let fortifier = if weapon_source && source != SYNDICATE { self.fortifier } else { None };
+            let eff_mult = match fortifier {
+                Some((multiplier, _, _, uptime)) => 1.0 + (multiplier - 1.0) * uptime,
+                None => 1.0,
+            };
+            let drain = if eff_mult > 1.0 && plain * left < self.pools[0] {
+                let d = pmin(self.pools[0], plain * left * eff_mult);
+                left = 0.0;
+                d
+            } else {
+                let fraction = pmin(left, self.pools[0] / plain);
+                let d = plain * fraction;
+                left -= fraction;
+                d
+            };
             self.pools[0] = pmax(0.0, self.pools[0] - drain);
             earlier_hit += drain;
             if let Some((_, steal, cap, uptime)) = fortifier {
@@ -2501,7 +2909,6 @@ impl<'py> Replay<'py> {
                 self.self_overguard = pmin(cap, self.self_overguard + stolen);
             }
             applied += drain;
-            left -= fraction;
             if self.pools[0] <= 1e-9 {
                 self.pools[0] = 0.0;
                 overguard_broke = true;
@@ -2521,41 +2928,49 @@ impl<'py> Replay<'py> {
                 }
             }
             let bypass = s.value();
-            let fraction = pmin(
-                pmin(left, if shield > 0.0 { self.pools[1] / shield } else { f64::INFINITY }),
-                if bypass > 0.0 { self.pools[2] / bypass } else { f64::INFINITY },
-            );
-            let a = pmin(self.pools[1], shield * fraction);
-            let bb = pmin(self.pools[2], bypass * fraction);
+            let sh_fraction = pmin(left, if shield > 0.0 { self.pools[1] / shield } else { f64::INFINITY });
+            let a = pmin(self.pools[1], shield * sh_fraction);
             self.pools[1] -= a;
-            self.pools[2] -= bb;
-            applied += a + bb;
+            applied += a;
             earlier_hit += a;
-            health_hit += bypass * fraction;
-            remaining += bb;
-            left -= fraction;
             if self.pools[1] <= 1e-9 {
                 self.pools[1] = 0.0;
                 shield_broke = true;
             }
-        }
-        if left > 0.0 && self.pools[1] <= 1e-9 && self.pools[2] > 0.0 {
+            let left_non = left - sh_fraction;
+            let mut amount = bypass * left;
+            if left_non > 0.0 && self.pools[1] <= 1e-9 {
+                let mut ns = PySum::new();
+                for (k, raw) in vector.iter() {
+                    if !self.shield_bypass.contains(k) {
+                        ns.add(self.health_value(*k, *raw, t));
+                    }
+                }
+                let mut non_amount = ns.value() * left_non;
+                if shield_broke {
+                    let weak = match weak_kill {
+                        WeakKill::Flag(true) => self.head,
+                        WeakKill::Flag(false) => 0.0,
+                        WeakKill::Value(v) => v,
+                    };
+                    non_amount *= weak + (1.0 - weak) * SHIELD_GATE_LEAK;
+                }
+                amount += non_amount;
+            }
+            if amount > 0.0 && self.pools[2] > 0.0 {
+                let drain = pmin(self.pools[2], amount);
+                self.pools[2] -= drain;
+                applied += drain;
+                health_hit += amount;
+                remaining += drain;
+            }
+        } else if left > 0.0 && self.pools[1] <= 1e-9 && self.pools[2] > 0.0 {
             let mut s = PySum::new();
             for (k, raw) in vector.iter() {
                 s.add(self.health_value(*k, *raw, t));
             }
             let value = s.value();
-            let mut amount = value * left;
-            if shield_broke {
-                // WFSim M61: the shield-breaking hit passes 5% of its excess;
-                // a direct weakpoint hit bypasses the gate (Python reference).
-                let weak = match weak_kill {
-                    WeakKill::Flag(true) => self.head,
-                    WeakKill::Flag(false) => 0.0,
-                    WeakKill::Value(v) => v,
-                };
-                amount *= weak + (1.0 - weak) * SHIELD_GATE_LEAK;
-            }
+            let amount = value * left;
             let drain = pmin(self.pools[2], amount);
             self.pools[2] -= drain;
             applied += drain;
@@ -2614,7 +3029,13 @@ impl<'py> Replay<'py> {
             for i in 0..self.extra_hits.len() {
                 let (d, share) = self.extra_hits[i];
                 if trigger > 0.0 {
-                    let v = vec![(d, trigger * share * self.extra_scale)];
+                    let part_again = if d == VOID && weak > 0.0 {
+                        let hp = self.extra_head_part;
+                        ((1.0 - weak) + weak * hp * hp) / ((1.0 - weak) + weak * hp)
+                    } else {
+                        1.0
+                    };
+                    let v = [(d, trigger * share * self.extra_scale * part_again)];
                     if self.take(&v, t, source, weak_kill, cv2, true)? {
                         return Ok(true);
                     }
@@ -2625,6 +3046,8 @@ impl<'py> Replay<'py> {
     }
 
     fn die(&mut self, t: f64, weak_kill: f64, weapon_kill: bool, allow_kill_triggers: bool) -> PyResult<()> {
+        let has_precepts = self.companion.as_ref().is_some_and(|c| !c.precepts.is_empty());
+        let unique_procs_before_death = if has_precepts { self.live_proc_types(t) } else { 0.0 };
         if let Some(c) = self.cycle {
             if c.charge_on == 2 && (if c.source_mode_charge { self.damage_origin.unwrap_or(self.form) } else { self.form }) == BASE && weapon_kill {
                 self.gauge = pmin(c.hits, self.gauge + 1.0); // native AddChargeConditions PRIMARY_KILL
@@ -2658,7 +3081,9 @@ impl<'py> Replay<'py> {
         for pool in self.pooled.iter_mut() {
             pool.reset();
         }
-        self.tau = None;
+        if let Some(pool) = &mut self.tau {
+            pool.reset();
+        }
         self.presence.clear();
         self.attribution.reset();
         self.frozen_until = -1.0;
@@ -2670,8 +3095,28 @@ impl<'py> Replay<'py> {
         self.heat_mode_sources = [None; 2];
         for chain in self.heat_sources.iter_mut() { chain.reset(); }
         self.puncture_strip = 0.0;
+        self.vicious_strip_live = 0.0;
+        self.seed_static_priming();
+        if has_precepts && unique_procs_before_death >= 2.5 {
+            let mut pushes: Vec<(f64, usize)> = Vec::new();
+            if let Some(comp) = self.companion.as_mut() {
+                for (idx, p) in comp.precepts.iter().enumerate() {
+                    let red = p.kill_cooldown_reduction;
+                    if red > 0.0 && comp.precept_ready[idx] > t + 1e-6 {
+                        comp.precept_ready[idx] = pmax(t + 0.01, comp.precept_ready[idx] - red);
+                        pushes.push((comp.precept_ready[idx], idx));
+                    }
+                }
+            }
+            for (ready_t, idx) in pushes {
+                self.push(ready_t, Kind::CompanionPrecept(idx), None);
+            }
+        }
         if !allow_kill_triggers { return Ok(()); }
         self.signal("on-kill", t, 1.0);
+        if self.self_damage_on_kill > 0.0 && self.self_overguard <= 1e-9 {
+            self.signal("on-damaged", t, 1.0);
+        }
         let slot = self.weapon_slot.to_lowercase();
         if slot.contains("longgun") || slot == "primary" || slot == "rifle" {
             self.signal("on-primary-kill", t, 1.0);
@@ -2733,7 +3178,7 @@ impl<'py> Replay<'py> {
         let _timer = crate::counters::Timer::start(crate::counters::ADD_PROCS);
         let data = self.packets[&key].clone();
         if scale == 1.0 {
-            return self.add_procs_data(st, aim, t, &data, true);
+            return self.add_procs_data(st, aim, t, &data, true, false);
         }
         let mut scaled = Packet { vector: Vec::new(), procs: data.procs.clone(),
                                   rows: data.rows.clone(), non: data.non.clone() };
@@ -2746,7 +3191,7 @@ impl<'py> Replay<'py> {
             }
         }
         for value in scaled.non.values_mut() { *value *= scale; }
-        self.add_procs_data(st, aim, t, &scaled, true)
+        self.add_procs_data(st, aim, t, &scaled, true, false)
     }
 
     /// `status_arcanes.encumber_roll`: the chance a shot spawns an extra
@@ -2961,7 +3406,7 @@ impl<'py> Replay<'py> {
         let before = self.totals[ARCANE];
         let previous_source = self.proc_source;
         self.proc_source = Some(st);
-        let died = self.take(&vec![(d, n * damage * faction)], t, ARCANE, WeakKill::Flag(false), 0.0, false)?;
+        let died = self.take(&[(d, n * damage * faction)], t, ARCANE, WeakKill::Flag(false), 0.0, false)?;
         self.proc_source = previous_source;
         // The reference's `get(d, 0.0) + totals['arcane'] - before`, left to right.
         let prev = *self.empowered_by_type.get(&d).unwrap_or(&0.0);
@@ -3023,9 +3468,9 @@ impl<'py> Replay<'py> {
 
     /// `add_procs` for one packet's statuses; `weapon` is false for derived
     /// statuses (Cryogenic's cold), which never re-trigger weapon hooks.
-    fn add_procs_data(&mut self, st: usize, aim: f64, t: f64, data: &Packet, weapon: bool) -> PyResult<()> {
+    fn add_procs_data(&mut self, st: usize, aim: f64, t: f64, data: &Packet, weapon: bool, companion_source: bool) -> PyResult<()> {
         let generation = self.gen;
-        if self.puncture_armor_strip != 0.0 && !self.stats[st].radial_only && weapon {
+        if self.puncture_armor_strip != 0.0 && !self.stats[st].radial_only && weapon && !companion_source {
             let s = &self.stats[st];
             let forced = s.native_forced_procs.iter().find(|x| x.0 == PUNCTURE).map(|x| x.1).unwrap_or(0.0)
                 + self.forced_procs.iter().find(|x| x.0 == PUNCTURE).map(|x| x.1).unwrap_or(0.0);
@@ -3083,7 +3528,7 @@ impl<'py> Replay<'py> {
                     }
                     let share = weight / pool.len() as f64;
                     let derived = Packet { vector: Vec::new(), procs: pool.iter().map(|&d| (d, share)).collect(), rows, non };
-                    self.add_procs_data(st, aim, t, &derived, false)?;
+                    self.add_procs_data(st, aim, t, &derived, false, false)?;
                 }
             }
         }
@@ -3110,11 +3555,18 @@ impl<'py> Replay<'py> {
             }
             let prev = *self.proc_counts.get(&d).unwrap_or(&0.0);
             self.proc_counts.insert(d, prev + n);
-            let name = self.proc_signal(d);
-            self.signal(&name, t, n);
-            self.signal("on-proc", t, n);
+            if companion_source {
+                if d == FREEZE || d == FIRE {
+                    let name = self.proc_signal(d);
+                    self.signal(&name, t, n);
+                }
+            } else {
+                let name = self.proc_signal(d);
+                self.signal(&name, t, n);
+                self.signal("on-proc", t, n);
+            }
             if scale <= 0.0 {
-                if self.empowered_hit(st, d, n, t, weapon)? {
+                if !companion_source && self.empowered_hit(st, d, n, t, weapon)? {
                     return Ok(());
                 }
                 continue;
@@ -3125,7 +3577,7 @@ impl<'py> Replay<'py> {
                 None => duration_of(d).unwrap_or(6.0) * scale,
             };
             if duration <= 0.0 {
-                if self.empowered_hit(st, d, n, t, weapon)? {
+                if !companion_source && self.empowered_hit(st, d, n, t, weapon)? {
                     return Ok(());
                 }
                 continue;
@@ -3245,21 +3697,23 @@ impl<'py> Replay<'py> {
                     }
                 }
             }
-            if self.empowered_hit(st, d, n, t, weapon)? {
+            if !companion_source && self.empowered_hit(st, d, n, t, weapon)? {
                 return Ok(());
             }
         }
         // Secondary Cryogenic: Cold applications per Puncture status, through
         // the ordinary status path; they cannot trigger themselves.
-        if let Some((cold_stacks, uptime)) = self.cryogenic {
-            let puncture = data.procs.iter().find(|x| x.0 == PUNCTURE).map(|x| x.1).unwrap_or(0.0);
-            let extra_cold = pmax(puncture, 0.0) * cold_stacks * uptime;
-            if extra_cold > 0.0 {
-                let before = *self.proc_counts.get(&FREEZE).unwrap_or(&0.0);
-                let derived = Packet { vector: Vec::new(), procs: vec![(FREEZE, extra_cold)],
-                                       rows: FxIndexMap::default(), non: FxIndexMap::default() };
-                self.add_procs_data(st, aim, t, &derived, false)?;
-                self.cryogenic_expected += *self.proc_counts.get(&FREEZE).unwrap_or(&0.0) - before;
+        if !companion_source {
+            if let Some((cold_stacks, uptime)) = self.cryogenic {
+                let puncture = data.procs.iter().find(|x| x.0 == PUNCTURE).map(|x| x.1).unwrap_or(0.0);
+                let extra_cold = pmax(puncture, 0.0) * cold_stacks * uptime;
+                if extra_cold > 0.0 {
+                    let before = *self.proc_counts.get(&FREEZE).unwrap_or(&0.0);
+                    let derived = Packet { vector: Vec::new(), procs: vec![(FREEZE, extra_cold)],
+                                           rows: FxIndexMap::default(), non: FxIndexMap::default() };
+                    self.add_procs_data(st, aim, t, &derived, false, false)?;
+                    self.cryogenic_expected += *self.proc_counts.get(&FREEZE).unwrap_or(&0.0) - before;
+                }
             }
         }
         Ok(())
@@ -3735,14 +4189,14 @@ impl<'py> Replay<'py> {
                                     self.damage_origin=Some(if i==0 {BASE} else {INCARNON});
                                     let variance=1.0/pmax(self.heat_sources[i].count(),1e-9);
                                     self.proc_source = self.heat_mode_sources[i];
-                                    self.take(&vec![(FIRE,amount)],t,DOT,WeakKill::Flag(false),variance,false)?;
+                                    self.take(&[(FIRE,amount)],t,DOT,WeakKill::Flag(false),variance,false)?;
                                     self.damage_origin=None;
                                 }
                                 if self.gen!=generation {break;}
                             }
                         } else {
                             self.proc_source = self.heat_proc_source;
-                            self.take(&vec![(FIRE, value)], t, DOT, WeakKill::Flag(false), cv2, false)?;
+                            self.take(&[(FIRE, value)], t, DOT, WeakKill::Flag(false), cv2, false)?;
                         }
                         if self.gen == generation {
                             self.push(t + 1.0, Kind::Heat(token), Some(self.gen));
@@ -3773,7 +4227,7 @@ impl<'py> Replay<'py> {
                     if value != 0.0 {
                         self.damage_origin=origin;
                         self.proc_source = affected.last().map(|&i| self.blasts[i].proc_source);
-                        self.take(&vec![(EXPLOSION, value)], t, NONDOT, WeakKill::Flag(false), 1.0 / procs, false)?;
+                        self.take(&[(EXPLOSION, value)], t, NONDOT, WeakKill::Flag(false), 1.0 / procs, false)?;
                         self.damage_origin=None;
                         // Only natural expiration is an Enervate hit, not the 10-stack detonation.
                         if let Kind::Blast(i) = event.kind {
@@ -3790,7 +4244,7 @@ impl<'py> Replay<'py> {
                         if tick.damage > 0.0 {
                             self.damage_origin=tick.origin;
                             self.proc_source=tick.source;
-                            self.take(&vec![(d,tick.damage)],t,DOT,WeakKill::Value(tick.weak_damage/tick.damage),1.0/pmax(tick.count,1e-9),false)?;
+                            self.take(&[(d,tick.damage)],t,DOT,WeakKill::Value(tick.weak_damage/tick.damage),1.0/pmax(tick.count,1e-9),false)?;
                             self.damage_origin=None;
                             self.proc_source=None;
                         }
@@ -3806,7 +4260,7 @@ impl<'py> Replay<'py> {
                         let dtype = if d == SLASH { CINEMATIC } else { d };
                         self.damage_origin=Some(self.dot_modes[i]);
                         self.proc_source = Some(self.dot_sources[i]);
-                        self.take(&vec![(dtype, count * alive * per)], t, DOT, WeakKill::Flag(false), 1.0 / count, false)?;
+                        self.take(&[(dtype, count * alive * per)], t, DOT, WeakKill::Flag(false), 1.0 / count, false)?;
                         self.damage_origin=None;
                     }
                 }
@@ -3814,7 +4268,7 @@ impl<'py> Replay<'py> {
                     if t <= end + 1e-9 {
                         let dtype = if d == SLASH { CINEMATIC } else { d };
                         self.damage_origin=Some(origin);
-                        self.take(&vec![(dtype, value)], t, DOT, WeakKill::Flag(false), 0.0, false)?;
+                        self.take(&[(dtype, value)], t, DOT, WeakKill::Flag(false), 0.0, false)?;
                         self.damage_origin=None;
                     }
                 }
@@ -3824,6 +4278,92 @@ impl<'py> Replay<'py> {
                     let kind = kind.clone();
                     self.signal(&kind, t, 1.0);
                     self.actor_signal = false;
+                }
+                Kind::CompanionAttack => {
+                    let Some((comp_view, reload_time, interval, strip_on_hit, allow_player_stacks, attack_packet, do_reload)) = ({
+                        match self.companion.as_mut() {
+                            Some(comp) if t < self.window - 1e-9 => {
+                                if comp.magazine > 0.0 && comp.ammo <= 1e-9 && comp.reload_time > 0.0 {
+                                    comp.ammo = comp.magazine;
+                                    Some((comp.view, comp.reload_time, comp.interval, comp.strip_on_hit, comp.allow_player_stacks, comp.attack_packet.clone(), true))
+                                } else {
+                                    if comp.magazine > 0.0 {
+                                        comp.ammo -= 1.0;
+                                    }
+                                    Some((comp.view, comp.reload_time, comp.interval, comp.strip_on_hit, comp.allow_player_stacks, comp.attack_packet.clone(), false))
+                                }
+                            }
+                            _ => None,
+                        }
+                    }) else {
+                        continue;
+                    };
+                    if do_reload {
+                        self.push(t + reload_time, Kind::CompanionAttack, None);
+                        continue;
+                    }
+                    if strip_on_hit > 0.0 {
+                        self.vicious_strip_live = pmin(1.0, self.vicious_strip_live + strip_on_hit);
+                    }
+                    let died = if !attack_packet.vector.is_empty() {
+                        self.proc_source = Some(comp_view);
+                        self.take_with_source_credit(
+                            &attack_packet.vector,
+                            t,
+                            DIRECT,
+                            WeakKill::Flag(false),
+                            0.0,
+                            false,
+                            None,
+                            allow_player_stacks,
+                        )?
+                    } else {
+                        false
+                    };
+                    if !died {
+                        self.add_procs_data(comp_view, 0.0, t, &attack_packet, false, true)?;
+                    }
+                    self.push(t + interval, Kind::CompanionAttack, None);
+                }
+                Kind::CompanionPrecept(idx) => {
+                    let Some((comp_view, next_ready, p_dmg, p_dtype, procs_packet)) = ({
+                        match self.companion.as_mut() {
+                            Some(comp) if idx < comp.precepts.len() && t < self.window - 1e-9 => {
+                                if t < comp.precept_ready[idx] - 1e-6 {
+                                    None
+                                } else {
+                                    let p = &comp.precepts[idx];
+                                    let next_ready = t + p.cooldown;
+                                    comp.precept_ready[idx] = next_ready;
+                                    Some((comp.view, next_ready, p.damage, p.damage_type, p.procs_packet.clone()))
+                                }
+                            }
+                            _ => None,
+                        }
+                    }) else {
+                        continue;
+                    };
+                    self.push(next_ready, Kind::CompanionPrecept(idx), None);
+                    let died = if p_dmg > 0.0 {
+                        self.proc_source = Some(comp_view);
+                        self.take_with_source_credit(
+                            &[(p_dtype, p_dmg)],
+                            t,
+                            DIRECT,
+                            WeakKill::Flag(false),
+                            0.0,
+                            false,
+                            None,
+                            false,
+                        )?
+                    } else {
+                        false
+                    };
+                    if !died {
+                        if let Some(pkt) = procs_packet {
+                            self.add_procs_data(comp_view, 0.0, t, &pkt, false, true)?;
+                        }
+                    }
                 }
                 Kind::Syndicate => {
                     let (id, d, fill) = match &self.syndicate {
@@ -3836,7 +4376,7 @@ impl<'py> Replay<'py> {
                     self.affinity = 0.0;
                     self.syndicate_ready = t + 30.0;
                     let before = self.totals[SYNDICATE];
-                    let died = self.take(&vec![(d, 1000.0)], t, SYNDICATE, WeakKill::Flag(false), 0.0, false)?;
+                    let died = self.take(&[(d, 1000.0)], t, SYNDICATE, WeakKill::Flag(false), 0.0, false)?;
                     self.syndicate_events.push((t, self.totals[SYNDICATE] - before));
                     if !died && id != "justice" && !(self.blocks_radiation && d == RADIATION) {
                         let name = self.types.name(d).to_string();
@@ -3954,7 +4494,7 @@ impl<'py> Replay<'py> {
                     self.proc_source = Some(part);
                     if !self.take_with_source_credit(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false,None,false)? {
                         let statuses=self.packets[&raw].clone();
-                        self.add_procs_data(part,0.0,t,&statuses,false)?;
+                        self.add_procs_data(part,0.0,t,&statuses,false,false)?;
                     }
                 }
                 Kind::SourceField(token,slot,part,initial)=> {
@@ -4100,6 +4640,13 @@ impl<'py> Replay<'py> {
                         self.field_duration_ready = true;
                     }
                     let old_magazine = if self.refill_growth { { let i = self.model(t)?.0; self.stats[i].magazine } } else { 0.0 };
+                    self.rb_completed_reloads += 1;
+                    if let Some(needed) = self.rb_reloads_needed {
+                        if !self.rb_activated && self.rb_completed_reloads >= needed {
+                            self.rb_activated = true;
+                            self.signal("on-reinforced-bond-ready", t, 1.0);
+                        }
+                    }
                     self.signal("on-reload-complete", t, 1.0);
                     if was_empty {
                         self.signal("on-reload-empty-complete", t, 1.0);
@@ -4116,12 +4663,15 @@ impl<'py> Replay<'py> {
                     if t >= self.window - 1e-9 || self.rate <= 0.0 {
                         continue;
                     }
-                    let (active, _) = self.model(t)?;
+                    let (mut active, mut radial) = self.model(t)?;
                     let a = &self.stats[active];
                     let magazine_form = self.magazine_form();
-                    self.last_round = magazine_form
+                    let new_last_round = magazine_form
                         && a.magazine > 0.0 && self.ammo > 0.0 && self.ammo <= pmax(a.ammo_cost, 1.0) + 1e-9;
-                    let (mut active, radial) = self.model(t)?;
+                    if new_last_round != self.last_round {
+                        self.last_round = new_last_round;
+                        (active, radial) = self.model(t)?;
+                    }
                     if self.projectile_sequence_length > 0 && self.stats[active].multishot != 1.0 {
                         return Err(Self::unsupported("companion-projectile-sequence-multishot-unmodeled"));
                     }
@@ -4473,12 +5023,19 @@ impl<'py> Replay<'py> {
                     let owned_embed=self.stats[active].owned_embed;
                     let nox_projectile=self.stats[active].nox_projectile;
                     if !source_owned_fields.is_empty() || owned_embed.is_some() {self.source_field_token+=1;}
-                    if self.last_burst && self.form == BASE && self.ammo <= 3.0 {
-                        active = self.derive(active, 10, 0.0, |v| {
-                            v.multishot *= 6.0;
-                            v.core.multishot = v.multishot;
-                            v.drop_private();
-                        });
+                    if self.last_burst && self.form == BASE {
+                        let burst_rounds_left = if self.form_burst().0.is_some() {
+                            (burst_size - burst_round).max(1) as f64
+                        } else {
+                            3.0
+                        };
+                        if self.ammo <= burst_rounds_left * pmax(self.stats[active].ammo_cost, 0.0) + 1e-9 {
+                            active = self.derive(active, 10, 0.0, |v| {
+                                v.multishot *= 6.0;
+                                v.core.multishot = v.multishot;
+                                v.drop_private();
+                            });
+                        }
                     }
                     let physical_first_round = first_round;
                     let refreshed_contact_first_factor=if first_round && opt_attr(self.stats[active].obj.bind(self.py),"_live_hit_refresh")?.is_some() {1.0+self.stats[active].first_shot_damage_bonus}else{1.0};
@@ -5034,18 +5591,30 @@ fn health_batch_inner<'py>(
         || pools.iter().any(|v| !v.is_finite() || *v < 0.0)) {
         return Err(PyValueError::new_err("health batch requires finite nonnegative pools"));
     }
-    let prepared = prepare_replay(py, config, helper)?;
+    let mut prepared = prepare_replay(py, config, helper)?;
     if prepared.weak_draw.is_some() || prepared.life_curve.is_some() {
         return Err(NativeUnsupported::new_err("health batch needs an ordinary score replay"));
     }
     let mut result = Vec::with_capacity(targets.len());
     for (full, ehp) in targets {
         py.check_signals()?;
-        let mut replay = prepared.fork_initial();
+        let mut replay = prepared.fork_with_caches();
+        let overguard_changed = (full[0] > 0.0) != (replay.full[0] > 0.0);
         replay.full = full;
         replay.pools = full;
         replay.ehp = ehp;
+        if overguard_changed && !replay.static_priming.is_empty() {
+            replay.states.clear();
+            for pool in replay.pooled.iter_mut() {
+                pool.reset();
+            }
+            replay.presence.clear();
+            replay.frozen_until = -1.0;
+            replay.frozen_scale = 1.0;
+            replay.seed_static_priming();
+        }
         replay.run()?;
+        prepared.swap_caches(&mut replay);
         if replay.proc_piles.values().any(|p| p.radial_floor_limited) {
             return Err(NativeUnsupported::new_err("electric-gas-radial-floor-state-limit"));
         }
@@ -5090,6 +5659,20 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         Ok(out)
     };
     let full = list_f(&item("full")?)?;
+    let corrosive_cap: f64 = match config.get_item("corrosiveCap")? {
+        Some(v) if !v.is_none() => v.extract()?,
+        _ => 10.0,
+    };
+    let puncture_cap: f64 = item("punctureCap")?.extract()?;
+    let static_priming = match config.get_item("staticPriming")? {
+        Some(v) if !v.is_none() => vec_of(&v, &mut types)?,
+        _ => Vec::new(),
+    };
+    let self_damage_on_kill = get_f(config, "selfDamageOnKill", 0.0)?;
+    let rb_reloads_needed = match config.get_item("reinforcedBondReloads")? {
+        Some(v) if !v.is_none() => Some(v.extract::<i64>()?),
+        _ => None,
+    };
     let forced_procs = vec_of(&item("forcedProcs")?, &mut types)?;
     let faction_deltas = vec_of(&item("factionDeltas")?, &mut types)?;
     let armour_bypass = names_of(&item("armourBypass")?, &mut types)?;
@@ -5353,8 +5936,14 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
             duration: get_f(&d, "duration", 0.0)?,
             per_event: get_f(&d, "perEvent", 1.0)?,
             decay: match d.get_item("decay")? {
-                Some(v) if !v.is_none() => v.extract::<String>()?,
-                _ => "reset".to_string(),
+                Some(v) if !v.is_none() => {
+                    if let Ok(s) = v.cast::<PyString>() {
+                        decay_code(s.to_str()?)
+                    } else {
+                        decay_code(&v.extract::<String>()?)
+                    }
+                }
+                _ => DECAY_RESET,
             },
             no_refresh: truthy(&d, "noRefresh")?,
             free_ammo: truthy(&d, "freeAmmo")?,
@@ -5484,6 +6073,7 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         shield_bypass,
         extra_hits,
         extra_scale: item("extraScale")?.extract()?,
+        extra_head_part: config.get_item("extraHeadPart")?.map(|v| v.extract()).transpose()?.unwrap_or(1.0),
         weapon_slot: item("weaponSlot")?.extract()?,
         distance,
         punchthrough: item("punchthrough")?.extract()?,
@@ -5541,9 +6131,13 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         syndicate_events: Vec::new(),
         pools: [full[0], full[1], full[2]],
         states: FxIndexMap::default(),
-        // combat_replay: a weapon's extra Puncture stacks (Evensong) raise the cap.
-        pooled: [CappedPool::new(10.0), CappedPool::new(10.0), CappedPool::new(10.0),
-                 CappedPool::new(item("punctureCap")?.extract()?)],
+        // combat_replay: extra Puncture / Corrosive stacks raise the victim pool cap.
+        pooled: [
+            CappedPool::new(10.0),
+            CappedPool::new(corrosive_cap),
+            CappedPool::new(10.0),
+            CappedPool::new(puncture_cap),
+        ],
         tau: None,
         presence: FxIndexMap::default(),
         proc_piles: FxIndexMap::default(),
@@ -5566,7 +6160,16 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
             if rate > 0.0 { Some(1.0 / rate) } else { None },
         ),
         track_weak_kills: true,
+        corrosive_cap,
+        puncture_cap,
+        static_priming,
         puncture_strip: 0.0,
+        vicious_strip_live: 0.0,
+        self_damage_on_kill,
+        rb_reloads_needed,
+        rb_activated: false,
+        rb_completed_reloads: 0,
+        companion: None,
         frozen_until: -1.0,
         heap: BinaryHeap::new(),
         seq: 0,
@@ -5707,12 +6310,92 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
                 || s.consume_on.as_deref() == Some(signal) || s.lock_on.as_deref() == Some(signal)
                 || s.toggle_on.as_deref() == Some(signal) || s.reset_on.iter().any(|r| r == signal));
     }
+    // Seed static priming and companion assister before initial model(0.0) and heap pushes.
+    replay.seed_static_priming();
+    if let Some(comp_any) = config.get_item("companionSpec")? {
+        if !comp_any.is_none() {
+            let cd = comp_any.cast::<PyDict>()?;
+            let comp_stats_obj = cd
+                .get_item("stats")?
+                .ok_or_else(|| PyValueError::new_err("companionSpec.stats missing"))?;
+            let comp_view = replay.view(&comp_stats_obj)?;
+            let comp_raw_key = replay.raw_packet(comp_view, 0.0);
+            let base_packet = replay.packets[&comp_raw_key].clone();
+            let comp_procs = match cd.get_item("procsPerShot")? {
+                Some(v) if !v.is_none() => replay.vector_from(&v)?,
+                _ => base_packet.procs.clone(),
+            };
+            let attack_packet = Rc::new(Packet {
+                vector: base_packet.vector.clone(),
+                procs: comp_procs,
+                rows: base_packet.rows.clone(),
+                non: base_packet.non.clone(),
+            });
+            let mut precepts = Vec::new();
+            if let Some(raw_precepts) = cd.get_item("precepts")? {
+                for entry in raw_precepts.try_iter()? {
+                    let entry = entry?;
+                    let pd = entry.cast::<PyDict>()?;
+                    let dt_name: String = pd
+                        .get_item("damageType")?
+                        .map(|x| x.extract::<String>())
+                        .transpose()?
+                        .unwrap_or_else(|| "DT_ELECTRICITY".to_string());
+                    let damage_type = replay.types.id(&dt_name);
+                    let procs_packet = match pd.get_item("procs")? {
+                        Some(v) if !v.is_none() => {
+                            let p_vec = replay.vector_from(&v)?;
+                            if p_vec.is_empty() {
+                                None
+                            } else {
+                                Some(Rc::new(Packet {
+                                    vector: Vec::new(),
+                                    procs: p_vec,
+                                    rows: base_packet.rows.clone(),
+                                    non: base_packet.non.clone(),
+                                }))
+                            }
+                        }
+                        _ => None,
+                    };
+                    precepts.push(CompanionPrecept {
+                        cooldown: pmax(1.0, get_f(pd, "cooldown", 5.0)?),
+                        kill_cooldown_reduction: get_f(pd, "killCooldownReduction", 0.0)?,
+                        damage: get_f(pd, "damage", 0.0)?,
+                        damage_type,
+                        procs_packet,
+                    });
+                }
+            }
+            let precept_ready = vec![0.1; precepts.len()];
+            let magazine = get_f(cd, "magazine", 0.0)?;
+            replay.companion = Some(CompanionState {
+                view: comp_view,
+                magazine,
+                ammo: magazine,
+                interval: pmax(0.02, get_f(cd, "interval", 0.5)?),
+                reload_time: pmax(0.0, get_f(cd, "reloadTime", 0.0)?),
+                strip_on_hit: pmax(0.0, get_f(cd, "armorStripOnHit", 0.0)?),
+                allow_player_stacks: truthy(cd, "allowPlayerStacks")?,
+                attack_packet,
+                precepts,
+                precept_ready,
+            });
+        }
+    }
     // Initial stats and ammo, then the reference's pushes in order.
     let initial = item("stats")?;
     replay.view(&initial)?;
     let (active, _) = replay.model(0.0)?;
     replay.ammo = replay.stats[active].magazine;
     replay.push(0.0, Kind::Fire, None);
+    if let Some(comp) = replay.companion.as_ref() {
+        let ready = comp.precept_ready.clone();
+        replay.push(0.05, Kind::CompanionAttack, None);
+        for (idx, &r) in ready.iter().enumerate() {
+            replay.push(r, Kind::CompanionPrecept(idx), None);
+        }
+    }
     for actor in item("actorEvents")?.try_iter()? {
         let actor = actor?;
         let t = actor.downcast::<PyTuple>()?;
@@ -5873,7 +6556,9 @@ pub fn direct_bake_stream<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, hel
         || replay.projectiles.is_some() || replay.fortifier.is_some() || replay.weak_draw.is_some()
         || replay.live_types_enabled || !replay.extra_hits.is_empty() || !replay.forced_procs.is_empty()
         || replay.life_curve.is_some() || replay.puncture_armor_strip != 0.0
-        || !replay.victim_before.is_empty() || replay.field_duration.is_some() {
+        || !replay.victim_before.is_empty() || replay.field_duration.is_some()
+        || !replay.static_priming.is_empty() || replay.companion.is_some()
+        || replay.rb_reloads_needed.is_some() || replay.self_damage_on_kill > 0.0 {
         return Err(NativeUnsupported::new_err("GPU stream requires independent fixed-state direct hits"));
     }
     let (active, radial) = replay.model(0.0)?;

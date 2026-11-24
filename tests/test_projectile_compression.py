@@ -207,3 +207,19 @@ def test_pure_radial_compression_has_no_duplicate_blast_or_head_trigger(name,rad
     assert st.ammo_cost==pytest.approx(1-.055*.8*radius)
     assert 'orb-merging-and-singularity-unmodeled' not in combat['unsupported']
     assert 'primary-compression-weapon-profile-unverified' not in st.unsupported
+
+
+def test_multiplying_compression_multiplies_independent_gunco_and_mods_reads_radius():
+    # WFSim M104: Latron Prime Incarnon collision has independent GunCO and multiplying Compression.
+    latron,_=app.optimizer._select_fire_mode(weapon('Latron Prime'),1,weapon_type='rifle')
+    sc=Scenario(aiming=True,victim_status_count=2)
+    fx=[ModEffect('WEAPON_DAMAGE_AMOUNT','ADD',2.4),
+        ModEffect('WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE','ADD',1.2)]
+    without_comp=apply_mods(latron,fx,scenario=sc)
+    with_comp=apply_mods(latron,[*fx,*arcane_effects(compression(),rank=2)],scenario=sc)
+    assert with_comp.total_damage/without_comp.total_damage==pytest.approx(1.+.8*4.*.7)
+    # WFSim M118: Vectis Prime Incarnon reads_radius_m (0.1 m) scales with blast radius mods.
+    vectis,_=app.optimizer._select_fire_mode(weapon('Vectis Prime'),1,weapon_type='rifle')
+    plain_v=apply_mods(vectis,[ModEffect('WEAPON_EXPLOSION_RADIUS','STACKING_MULTIPLY',.44)],scenario=Scenario(aiming=True))
+    comp_v=apply_mods(vectis,[ModEffect('WEAPON_EXPLOSION_RADIUS','STACKING_MULTIPLY',.44),*arcane_effects(compression(),rank=5)],scenario=Scenario(aiming=True))
+    assert comp_v.total_damage/plain_v.total_damage==pytest.approx(1.+.1*1.44*.8*1.)

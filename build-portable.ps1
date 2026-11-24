@@ -2,7 +2,8 @@
 param(
     [string]$Snapshot,
     [string]$OutputDirectory,
-    [switch]$RequireBakedCache
+    [switch]$RequireBakedCache,
+    [switch]$NoCache
 )
 
 $ErrorActionPreference = "Stop"
@@ -30,6 +31,7 @@ if (Get-Command cargo -ErrorAction SilentlyContinue) {
 }
 $cacheArguments = @('tools/stage_portable_cache.py', $packageRoot)
 if ($RequireBakedCache) { $cacheArguments += '--require-cache' }
+if ($NoCache) { $cacheArguments += '--no-cache' }
 python @cacheArguments
 if ($LASTEXITCODE -ne 0) { throw "Runtime source identity or baked cache staging failed." }
 

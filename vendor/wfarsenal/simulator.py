@@ -26,6 +26,7 @@ from .damage import (
 )
 from .projectile_events import evaluate_projectile_events
 from .catalog_releases import released_mod_catalog
+from .mod_families import authoritative_mod_family, canonical_mod_family
 
 
 EXPORT_NAMES = ("weapons", "warframes", "mods", "enemies")
@@ -207,7 +208,10 @@ def _load_exports_uncached(root: Path) -> dict[str, Any]:
         "incarnonDefaults": incarnon_defaults,
         "rivenTemplates": riven_templates,
         **{name: payloads[name]["data"] for name in EXPORT_NAMES},
-        'mods': released_mod_catalog(payloads['mods']['data']),
+        'mods': [
+            {**row, "modFamily": authoritative_mod_family(row.get("path"), row.get("modFamily"))}
+            for row in released_mod_catalog(payloads['mods']['data'])
+        ],
     }))
 
 
@@ -646,6 +650,8 @@ def validate_loadout(
     assignments: list[dict[str, Any]] = []
     used = 0
     seen_slots: set[int] = set()
+    seen_families: dict[str, str] = {}
+    weapon_path = str(weapon.get("path") or "").strip() or None
     for index, mod in enumerate(cards):
         slot = mod.get("slot", index)
         if isinstance(slot, bool) or not isinstance(slot, int) or not 0 <= slot < slot_count:
@@ -653,6 +659,14 @@ def validate_loadout(
         if slot in seen_slots:
             raise SimulationError(f"loadout slot {slot} is assigned more than once")
         seen_slots.add(slot)
+        if mod.get("path") or mod.get("modFamily"):
+            fam = canonical_mod_family(mod.get("path"), mod.get("modFamily"), equip_path=weapon_path)
+            if fam:
+                if fam in seen_families:
+                    raise SimulationError(
+                        f"conflicting weapon modFamily ({fam}): {mod.get('path') or mod.get('nameEn')} conflicts with {seen_families[fam]}"
+                    )
+                seen_families[fam] = str(mod.get("path") or mod.get("nameEn") or index)
         rank = mod.get("rank")
         raw_drain = _ranked_mod_drain(mod, rank)
         effective, relation = _polarity_adjusted_drain(
@@ -687,13 +701,119 @@ def validate_loadout(
     }
 
 
+_SET_KEY_CACHE: dict[Any, str] = {None: "", "": ""}
+_SET_SHELLS_CACHE: dict[int, tuple[Any, dict[str, Mapping[str, Any]]]] = {}
+_SET_MOD_ALIASES: dict[str, str] = {
+    "aerosetmod": "hawksetmod",
+    "motussetmod": "raptorsetmod",
+    "protonsetmod": "spidersetmod",
+    "saxumsetmod": "femursetmod",
+    "jugulussetmod": "bonebladesetmod",
+    "carnissetmod": "ashensetmod",
+}
+
+
 def _set_key(value: Any) -> str:
     """Normalize an exported set/member identifier."""
+    if value is None or value == "":
+        return ""
+    if isinstance(value, str):
+        cached = _SET_KEY_CACHE.get(value)
+        if cached is not None:
+            return cached
+        norm = value.strip().replace("\\", "/").rstrip("/")
+        if "/" in norm:
+            norm = norm.rsplit("/", 1)[-1]
+        norm = norm.casefold()
+        norm = _SET_MOD_ALIASES.get(norm, norm)
+        if len(_SET_KEY_CACHE) >= 1024:
+            _SET_KEY_CACHE.clear()
+            _SET_KEY_CACHE[None] = ""
+            _SET_KEY_CACHE[""] = ""
+        _SET_KEY_CACHE[value] = norm
+        return norm
+    norm = str(value or "").strip().replace("\\", "/").rstrip("/")
+    if "/" in norm:
+        norm = norm.rsplit("/", 1)[-1]
+    norm = norm.casefold()
+    return _SET_MOD_ALIASES.get(norm, norm)
+
+
+def _norm_mod_path(value: Any) -> str:
     return str(value or "").strip().replace("\\", "/").rstrip("/").casefold()
+
+
+def _normalize_external_set_mods(
+    external_set_mods: Sequence[Any] | None,
+) -> dict[str, set[str]]:
+    if not external_set_mods:
+        return {}
+    by_set: dict[str, set[str]] = {}
+    for entry in external_set_mods:
+        if isinstance(entry, Mapping):
+            raw_path = entry.get("path")
+            raw_set = entry.get("setId") or entry.get("modSet")
+        elif isinstance(entry, (tuple, list)) and len(entry) >= 2:
+            raw_path, raw_set = entry[0], entry[1]
+        else:
+            continue
+        mod_path = _norm_mod_path(raw_path)
+        set_id = _set_key(raw_set)
+        if mod_path and set_id:
+            by_set.setdefault(set_id, set()).add(mod_path)
+    return by_set
+
+
+def _shell_applies_to_external_weapon(
+    shell: Mapping[str, Any] | None, weapon: Mapping[str, Any] | None
+) -> bool:
+    """True when an unequipped weapon still receives this set shell's bonus."""
+    if not shell or not weapon:
+        return False
+    all_effects = [
+        *(shell.get("effects") or ()),
+        *(
+            fx
+            for cond in (shell.get("conditionalEffects") or ())
+            if isinstance(cond, Mapping)
+            for fx in (cond.get("effects") or ())
+        ),
+    ]
+    weapon_fx = [
+        fx
+        for fx in all_effects
+        if isinstance(fx, Mapping)
+        and str(fx.get("upgradeType") or "").startswith("WEAPON_")
+    ]
+    if not weapon_fx:
+        return False
+    compat = str(shell.get("compatibility") or "").strip()
+    if compat and _mod_matches_weapon({"compatibility": compat}, weapon):
+        return True
+    ancestry = {
+        str(path).rstrip("/").casefold()
+        for path in (*tuple(weapon.get("ancestry") or ()), weapon.get("path"))
+        if path
+    }
+    return any(
+        str(fx.get("validType") or "").strip().rstrip("/").casefold() in ancestry
+        for fx in weapon_fx
+        if fx.get("validType")
+    )
+
+
+def cached_set_shells() -> dict[str, Mapping[str, Any]]:
+    if _SET_SHELLS_CACHE:
+        return dict(next(iter(_SET_SHELLS_CACHE.values()))[1])
+    return {}
 
 
 def _set_shells(mods: Sequence[Mapping[str, Any]]) -> dict[str, Mapping[str, Any]]:
     """Index exported non-selectable set shells by their member ``modSet`` id."""
+    if isinstance(mods, (list, tuple)):
+        hit = _SET_SHELLS_CACHE.get(id(mods))
+        if hit is not None and hit[0] is mods:
+            return dict(hit[1])
     shells: dict[str, Mapping[str, Any]] = {}
     for mod in mods:
         set_id = _set_key(mod.get("modSet"))
@@ -706,6 +826,11 @@ def _set_shells(mods: Sequence[Mapping[str, Any]]) -> dict[str, Mapping[str, Any
             not mod.get("selectable") and not mod.get("compatibility")
         ):
             shells[set_id] = mod
+    if isinstance(mods, (list, tuple)):
+        if len(_SET_SHELLS_CACHE) >= 8:
+            _SET_SHELLS_CACHE.clear()
+        _SET_SHELLS_CACHE[id(mods)] = (mods, shells)
+        return dict(shells)
     return shells
 
 
@@ -797,6 +922,7 @@ def simulate(
     enemy_override: Mapping[str, Any] | None = None,
     mods: Sequence[tuple[str, int | None] | tuple[str, int | None, int]] = (),
     set_pieces: Mapping[str, int] | None = None,
+    external_set_mods: Sequence[Any] | None = None,
     validate_loadout_slots: bool = False,
     slot_count: int = DEFAULT_LOADOUT_SLOTS,
     capacity_limit: int = DEFAULT_CAPACITY_LIMIT,
@@ -898,11 +1024,13 @@ def simulate(
     if set_pieces:
         raise SimulationError("set_pieces is derived from equipped MODs and cannot be overridden")
     shells = _set_shells(exports["mods"])
+    ext_sets = _normalize_external_set_mods(external_set_mods)
     selected_mods: list[dict[str, Any]] = []
     selected_cards: list[dict[str, Any]] = []
     effects = ModEffectList()
     resolved_mods: list[tuple[Mapping[str, Any], str, int | None, bool, int | None]] = []
     selected_counts: dict[str, int] = {}
+    weapon_set_paths: dict[str, set[str]] = {}
     for spec in mods:
         if isinstance(spec, Mapping):
             query = spec.get("path") or spec.get("query")
@@ -921,10 +1049,20 @@ def simulate(
         compatible = _mod_matches_weapon(mod, weapon_record)
         set_id = _set_key(mod.get("modSet"))
         if compatible and set_id:
-            selected_counts[set_id] = selected_counts.get(set_id, 0) + 1
+            if ext_sets:
+                m_path = _norm_mod_path(mod.get("path") or query)
+                weapon_set_paths.setdefault(set_id, set()).add(m_path)
+            else:
+                selected_counts[set_id] = selected_counts.get(set_id, 0) + 1
         if slot is not None and (isinstance(slot, bool) or not isinstance(slot, int) or not 0 <= slot < slot_count):
             raise SimulationError("mod slot must be an integer inside slot_count")
         resolved_mods.append((mod, query, rank, compatible, slot))
+
+    if ext_sets:
+        for set_id in set(weapon_set_paths) | set(ext_sets):
+            selected_counts[set_id] = len(
+                weapon_set_paths.get(set_id, set()) | ext_sets.get(set_id, set())
+            )
 
     scenario = _steady_state_scenario(
         (mod for mod, _query, _rank, compatible, _slot in resolved_mods if compatible),
@@ -1044,6 +1182,21 @@ def simulate(
 
     # Structured set shells are synthetic effects; runtime-script shells remain
     # explicit unsupported diagnostics instead of being guessed.
+    if ext_sets:
+        for set_id, ext_paths in ext_sets.items():
+            if set_id in active_set_pieces or not ext_paths:
+                continue
+            shell = shells.get(set_id)
+            if _shell_applies_to_external_weapon(shell, weapon_record):
+                pieces, clamp_note = _effective_set_pieces(
+                    {"modSet": set_id},
+                    selected_count=selected_counts.get(set_id, 0),
+                    shell=shell,
+                )
+                if pieces > 0:
+                    active_set_pieces[set_id] = pieces
+                    if clamp_note:
+                        set_diagnostics.append(clamp_note)
     for set_id, pieces in active_set_pieces.items():
         shell = shells.get(set_id)
         if shell:
@@ -1064,6 +1217,11 @@ def simulate(
     effects.extend(passive_list)
     effects.skipped.extend(getattr(passive_effects, "skipped", ()))
 
+    primed_types = tuple(
+        str(k)
+        for k, v in (((enemy_enhancements or {}).get("primingStacks") or {}).items() if isinstance(enemy_enhancements, Mapping) and isinstance((enemy_enhancements or {}).get("primingStacks"), Mapping) else ())
+        if isinstance(v, (int, float)) and not isinstance(v, bool) and v > 0
+    )
     try:
         probe_scenario = replace(scenario, victim_status_count=0)
         probe_stats = apply_mods(
@@ -1072,7 +1230,7 @@ def simulate(
         scenario = replace(
             scenario,
             victim_status_count=expected_victim_status_count(
-                probe_stats, forced_procs=forced_procs
+                probe_stats, forced_procs=forced_procs, primed_types=primed_types
             ),
         )
         stats = apply_mods(

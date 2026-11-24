@@ -38,7 +38,9 @@ print(json.dumps(dict(inputs=app._analysis_inputs_fingerprint(),buildLabel=app.E
     return json.loads(result.stdout.strip().splitlines()[-1])
 
 
-def stage(root: Path, destination: Path, *, require_cache: bool = False) -> dict:
+def stage(root: Path, destination: Path, *, require_cache: bool = False, no_cache: bool = False) -> dict:
+    if require_cache and no_cache:
+        raise ValueError('cannot combine --require-cache and --no-cache')
     root, destination = root.resolve(), destination.resolve()
     if root == destination or not (destination / 'data/source-lock.json').is_file():
         raise ValueError('destination must be a separately staged runtime with data/source-lock.json')
@@ -64,13 +66,16 @@ def stage(root: Path, destination: Path, *, require_cache: bool = False) -> dict
     metadata = _metadata(destination)
     source = root / '.local/cache/riven-analysis-statics.json'
     target = destination / 'data/riven-analysis-statics.json'
-    try:
-        raw = source.read_bytes()
-        payload = json.loads(raw)
-        matched = (isinstance(payload, dict) and all(payload.get(k) == v for k, v in metadata.items())
-                   and isinstance(payload.get('entries'), dict) and bool(payload['entries']))
-    except (OSError, ValueError):
+    if no_cache:
         matched = False
+    else:
+        try:
+            raw = source.read_bytes()
+            payload = json.loads(raw)
+            matched = (isinstance(payload, dict) and all(payload.get(k) == v for k, v in metadata.items())
+                       and isinstance(payload.get('entries'), dict) and bool(payload['entries']))
+        except (OSError, ValueError):
+            matched = False
     if matched:
         target.write_bytes(raw)
         metadata.update(cacheEntries=len(payload['entries']), cacheSha256=hashlib.sha256(raw).hexdigest())
@@ -89,8 +94,9 @@ def main():
     parser.add_argument('destination', type=Path)
     parser.add_argument('--root', type=Path, default=ROOT)
     parser.add_argument('--require-cache', action='store_true')
+    parser.add_argument('--no-cache', action='store_true', help='do not bundle any prebaked riven cache')
     args = parser.parse_args()
-    print(json.dumps(stage(args.root, args.destination, require_cache=args.require_cache), indent=2))
+    print(json.dumps(stage(args.root, args.destination, require_cache=args.require_cache, no_cache=args.no_cache), indent=2))
 
 
 if __name__ == '__main__':

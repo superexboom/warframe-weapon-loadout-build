@@ -10,7 +10,7 @@ name = "wfcore"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.27", features = ["extension-module", "abi3-py39"] }
+pyo3 = { version = "0.27", features = ["extension-module"] }
 indexmap = "2"
 
 [profile.release]
@@ -18,3 +18,4 @@ opt-level = 3
 lto = "fat"
 codegen-units = 1
 panic = "abort"
+strip = "symbols"
