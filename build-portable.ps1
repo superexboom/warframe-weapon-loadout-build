@@ -44,26 +44,32 @@ $moduleSourceArguments = foreach ($source in Get-ChildItem -LiteralPath (Join-Pa
     '--add-data'
     "$($source.FullName);wfarsenal"
 }
-python -m PyInstaller @nativeArguments @moduleSourceArguments `
-    --noconfirm `
-    --clean `
-    --noupx `
-    --onefile `
-    --name $appName `
-    --workpath (Join-Path $buildRoot "work") `
-    --specpath (Join-Path $buildRoot "spec") `
-    --distpath $distRoot `
-    --paths $packageRoot `
-    --add-data "$(Join-Path $packageRoot 'frontend');frontend" `
-    --add-data "$(Join-Path $packageRoot 'data');data" `
-    --add-data "$(Join-Path $packageRoot 'app.py');." `
-    --add-data "$(Join-Path $projectRoot 'README.md');." `
-    --add-data "$(Join-Path $projectRoot 'README.en.md');." `
-    --add-data "$(Join-Path $projectRoot 'LICENSE');." `
-    --add-data "$(Join-Path $projectRoot 'THIRD_PARTY_NOTICES.md');." `
-    --icon (Join-Path $projectRoot "frontend\assets\riven\riven-icon.ico") `
-    (Join-Path $packageRoot 'app.py')
-if ($LASTEXITCODE -ne 0) { throw "PyInstaller build failed." }
+$previousPythonPath = $env:PYTHONPATH
+$env:PYTHONPATH = $packageRoot
+try {
+    python -m PyInstaller @nativeArguments @moduleSourceArguments `
+        --noconfirm `
+        --clean `
+        --noupx `
+        --onefile `
+        --name $appName `
+        --workpath (Join-Path $buildRoot "work") `
+        --specpath (Join-Path $buildRoot "spec") `
+        --distpath $distRoot `
+        --paths $packageRoot `
+        --add-data "$(Join-Path $packageRoot 'frontend');frontend" `
+        --add-data "$(Join-Path $packageRoot 'data');data" `
+        --add-data "$(Join-Path $packageRoot 'app.py');." `
+        --add-data "$(Join-Path $projectRoot 'README.md');." `
+        --add-data "$(Join-Path $projectRoot 'README.en.md');." `
+        --add-data "$(Join-Path $projectRoot 'LICENSE');." `
+        --add-data "$(Join-Path $projectRoot 'THIRD_PARTY_NOTICES.md');." `
+        --icon (Join-Path $projectRoot "frontend\assets\riven\riven-icon.ico") `
+        (Join-Path $packageRoot 'app.py')
+    if ($LASTEXITCODE -ne 0) { throw "PyInstaller build failed." }
+} finally {
+    $env:PYTHONPATH = $previousPythonPath
+}
 
 New-Item -ItemType Directory -Path $releaseRoot -Force | Out-Null
 $executable = Join-Path $releaseRoot "$appName-win-x64.exe"
