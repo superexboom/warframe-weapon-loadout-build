@@ -16,10 +16,15 @@ export const shell = `
   <details id="arena-sceneParameters">
     <summary>场景参数</summary>
   <div class="arena-fields">
-    <label>战甲移动<select id="arena-movement"><option value="parkour">步行 / 子弹跳 / 直接下落</option><option value="walking">仅步行与短跨步（对照）</option><option value="fixed">固定点站桩 - 玩家不移动</option></select></label>
+    <label>战斗流派<select id="arena-combatStyle"><option value="weapon_only" selected>纯武器射击 (默认)</option><option value="hybrid_nuke">地图炮主清 + 枪械补刀</option><option value="ability_only">纯技能清场 (不开枪)</option></select></label>
+    <label id="arena-nukeSetupWrap" hidden>地图炮玩法路线<select id="arena-nukeSetup"></select></label>
+    <div id="arena-nukeGuide" class="arena-nuke-guide" hidden></div>
+    <label class="arena-check" id="arena-arbucepWrap" hidden><input id="arena-arbucepEmpowered" type="checkbox">携带空战武器「蕈菇」激活亮帽菇 200% 强化</label>
+    <label>战甲移动<select id="arena-movement"><option value="parkour">步行 / 子弹跳 / 直接下落</option><option value="walking">仅步行与短跨步（对照）</option><option value="objective">驻守防御核心 - 视野流派自动优选高台</option><option value="fixed">固定点站桩 - 默认自动高台 / 手动选点</option></select></label>
     <section id="arena-standingPanel" class="arena-standing-panel" aria-labelledby="arena-standingTitle" hidden>
       <h3 id="arena-standingTitle">固定站点</h3>
       <div class="arena-standing-actions">
+        <button type="button" id="arena-standingAuto" disabled>自动优选高台视野</button>
         <button type="button" id="arena-standingPick" aria-controls="arena-viewer" aria-pressed="false" disabled>进入选点模式</button>
         <button type="button" id="arena-standingClear" disabled>清除站点</button>
       </div>
@@ -27,13 +32,13 @@ export const shell = `
       <p id="arena-standingStatus" role="status">请等待地图可行走面加载。</p>
     </section>
     <div class="arena-pair">
-      <label>结束条件<select id="arena-budget"><option value="waves">20 波清场</option><option value="time">30 分钟模拟</option></select></label>
+      <label>结束条件<select id="arena-budget"><option value="waves">20 波清场</option><option value="time">30 分钟模拟</option><option value="time_3600">1 小时模拟</option><option value="time_7200">2 小时模拟</option></select></label>
       <label>瞄准部位<select id="arena-head"><option value="head">强制头部</option><option value="body">躯干</option></select></label>
     </div>
   </div>
 
   <div class="arena-fields arena-enemy-fields">
-    <label>刷怪规则<select id="arena-spawnProfile"><option value="custom">自定义固定工况</option><option value="defense">来源防御</option><option value="arbitration">来源仲裁防御</option><option value="interception">拦截定额清场</option><option value="arbitration_interception">仲裁拦截定额清场</option></select></label>
+    <label>刷怪规则<select id="arena-spawnProfile"><option value="custom">自定义固定工况</option><option value="defense">来源防御</option><option value="arbitration">来源仲裁防御</option><option value="interception">来源拦截</option><option value="arbitration_interception">来源仲裁拦截</option></select></label>
     <label><span class="arena-enemy-label">敌人来源<span class="arena-native-indicator">本图敌组</span></span><select id="arena-enemySpec"><option value="single">单一敌人 - 当前选择</option></select></label>
     <div id="arena-singleEnemy" class="arena-pair arena-single-fields">
       <label>搜索敌人<input id="arena-enemySearch" type="search" autocomplete="off" placeholder="名称、派系或路径"></label>
@@ -47,9 +52,14 @@ export const shell = `
       <label>起始等级<input id="arena-level" type="number" min="1" max="9999" value="160"></label>
       <label><span id="arena-quotaLabel">自定义每波目标数量</span><input id="arena-enemies" type="number" min="1" max="128" step="1" value="60"></label>
     </div>
+    <label class="arena-check"><input id="arena-steelPath" type="checkbox">钢铁之路（任务起始 +100 级 / 2.5×血盾甲 / 默认 4 人刷怪密度）</label>
     <div class="arena-pair" id="arena-sourceSpawnFields" hidden>
       <label>队伍人数<select id="arena-squadSize"><option value="1">1 人</option><option value="2">2 人</option><option value="3">3 人</option><option value="4">4 人</option></select></label>
-      <label id="arena-interceptionFields" hidden>固定拦截进度<input id="arena-interceptionProgress" type="number" min="0" max="1" step="0.05" value="0.5"></label>
+      <div id="arena-interceptionFields" class="arena-interception-box" hidden>
+        <label>总占领进度推进<select id="arena-interceptionTowers"><option value="1" selected>1 塔慢推 (0%→100% 拖慢涨级)</option><option value="2">2 塔推进 (0%→100% 均衡)</option><option value="3">3 塔推进 (0%→100% 偏快)</option><option value="4">4 塔满速 (0%→100% 速推)</option><option value="0">固定总进度 (卡点不结轮)</option></select></label>
+        <label id="arena-interceptionProgressWrap" hidden>固定总占领进度 (0–1)<input id="arena-interceptionProgress" type="number" min="0" max="1" step="0.05" value="0.5"></label>
+        <small id="arena-interceptionNote" class="arena-field-note">对应 Tenno 与敌方派系的总占领进度条（0%→100%）；不限定击杀数量，按所选时长连续刷怪。</small>
+      </div>
     </div>
   </div>
 
@@ -95,6 +105,7 @@ export const shell = `
     <div class="legend">
       <span><i class="blue"></i>战甲</span>
       <span id="arena-legendCompanion" hidden><i class="teal"></i>同伴</span>
+      <span id="arena-legendRanges" hidden><i class="cyan-ring"></i>技能范围圈</span>
       <span><i class="red"></i><i class="amber"></i>普通/卓越者</span>
       <span><i class="gold-ring"></i>无人机 (10m 护盾)</span>
       <span><i class="purple"></i>击杀</span>
@@ -131,6 +142,7 @@ export const shell = `
       <label>渲染档位<select id="arena-renderQuality"><option value="low">轻量 - 30帧 / 1×</option><option value="balanced" selected>均衡 - 60帧 / 1.5×</option><option value="high">高画质 - 屏幕帧率 / 2×</option></select></label>
       <label class="cut">剖切高度<input id="arena-cut" type="range" min="-21" max="20" step=".5" value="20"></label>
       <label class="arena-check"><input id="arena-showAvatars" type="checkbox" checked>地图圆形头像</label>
+      <label class="arena-check"><input id="arena-showAbilityRanges" type="checkbox" checked>战甲技能地面范围圈</label>
       <label class="arena-check"><input id="arena-droneAura" type="checkbox" checked>无人机 10m 保护圈</label>
       <label class="arena-check"><input id="arena-clearView" type="checkbox" disabled>角色周围遮挡半透明</label>
       <label class="arena-check"><input id="arena-occludedMarker" type="checkbox" checked>遮挡位置圆环</label>

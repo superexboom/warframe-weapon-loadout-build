@@ -138,6 +138,65 @@
       "/Lotus/Powersuits/Excalibur/ExcaliburUmbraPassiveAugmentCard",
       "/Lotus/Upgrades/Mods/Sets/Spider/SpiderModA",
       "/Lotus/Powersuits/Berserker/GrappleAugmentCard"
+    ],
+    "missingMods": [
+      {
+        "path": "/Lotus/Powersuits/Harlequin/PrismPvPAugmentCard",
+        "id": "/Lotus/Powersuits/Harlequin/PrismPvPAugmentCard",
+        "nameEn": "Prism Guard",
+        "nameZh": "棱镜护卫",
+        "maxRank": 3,
+        "baseDrain": 6,
+        "polarity": "AP_POWER",
+        "rarity": "RARE",
+        "effects": [
+          {
+            "upgradeType": "AVATAR_ABILITY_AUGMENT",
+            "operation": "ADD",
+            "value": 1,
+            "descriptionTag": "/Lotus/Language/Suits/PrismPvPAbilityAugment1Desc"
+          }
+        ],
+        "conditionalEffects": [],
+        "slotKind": "warframe",
+        "type": "warframe",
+        "category": "warframe",
+        "sourceType": "Warframe Mod",
+        "sourceCategory": "Mods",
+        "compatibilityType": "frame-specific",
+        "sourceCompatibility": "Mirage",
+        "rawItemCompatibility": "HarlequinBaseSuit",
+        "compatibilityTags": [
+          "WARFRAME"
+        ],
+        "compatibility": "Mirage",
+        "compatibleFrames": [
+          "Mirage"
+        ],
+        "isAugment": true,
+        "effectsZhByRank": [
+          [
+            "棱镜强化：棱镜盘旋在你的上方并跟随你，持续时间更改为 1 秒。"
+          ],
+          [
+            "棱镜强化：棱镜盘旋在你的上方并跟随你，持续时间更改为 2 秒。"
+          ],
+          [
+            "棱镜强化：棱镜盘旋在你的上方并跟随你，持续时间更改为 3 秒。"
+          ],
+          [
+            "棱镜强化：棱镜盘旋在你的上方并跟随你，持续时间更改为 4 秒。"
+          ]
+        ],
+        "effectsZh": [
+          "棱镜强化：棱镜盘旋在你的上方并跟随你，持续时间更改为 4 秒。"
+        ],
+        "description": "棱镜强化：棱镜盘旋在你的上方并跟随你，持续时间更改为 4 秒。",
+        "descriptionEn": "Prism Augment: Prism hovers above you, following you for 4s.",
+        "art": "/assets/warframes/abilities/HarlequinPrism.png",
+        "iconAsset": "/assets/warframes/abilities/HarlequinPrism.png",
+        "validForCalculation": true
+      }
     ]
   },
   "modFamilyOverrides": {},
@@ -215,6 +274,7 @@
     "/Lotus/Powersuits/Harlequin/IllusionAugmentCard": "/Lotus/Powersuits/Harlequin/Abilities/IllusionAbility",
     "/Lotus/Powersuits/Harlequin/LightAugmentCard": "/Lotus/Powersuits/Harlequin/Abilities/LightAbility",
     "/Lotus/Powersuits/Harlequin/ObjectChangeAugmentCard": "/Lotus/Powersuits/Harlequin/Abilities/HarlequinObjectChangeAbility",
+    "/Lotus/Powersuits/Harlequin/PrismPvPAugmentCard": "/Lotus/Powersuits/Harlequin/Abilities/Prism",
     "/Lotus/Powersuits/Hoplite/HopliteArmyAugmentCard": "/Lotus/Powersuits/Hoplite/Abilities/HopliteArmyAbility",
     "/Lotus/Powersuits/Hoplite/HopliteBashAugmentCard": "/Lotus/Powersuits/Hoplite/Abilities/HopliteBashAbility",
     "/Lotus/Powersuits/Hoplite/HopliteImpaleAugmentCard": "/Lotus/Powersuits/Hoplite/Abilities/HopliteImpaleAbility",
@@ -1086,7 +1146,9 @@
           ],
           "labelZh": "枪械基础伤害"
         }
-      ]
+      ],
+      "rotationExcluded": true,
+      "excludedReason": "excluded_form_switch"
     },
     {
       "id": "provoke",
@@ -1389,29 +1451,36 @@
       "requiresElementChoice": false,
       "effects": [
         {
-          "upgradeType": "RUNTIME_FINAL_DAMAGE",
+          "upgradeType": "MIRAGE_HOM_CLONES",
           "operation": "STACKING_MULTIPLY",
-          "base": 0.4,
+          "base": 0.8,
+          "perCloneBase": 0.4,
+          "cloneCount": 2,
           "scale": "strength",
           "validTypes": [
             "/Lotus/Weapons/Tenno/LotusLongGun",
-            "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+            "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+            "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyWeaponBase"
           ],
           "augmentMult": 1.5,
           "augmentModPath": "/Lotus/Powersuits/Harlequin/IllusionAugmentCard",
-          "labelZh": "幻影射击总伤害加成"
+          "totalEclipseModPath": "/Lotus/Powersuits/Harlequin/LightAugmentCard",
+          "labelZh": "2分身射击原始总伤"
         },
         {
-          "upgradeType": "RUNTIME_FINAL_DAMAGE",
+          "upgradeType": "MIRAGE_HOM_CLONES",
           "operation": "STACKING_MULTIPLY",
           "base": 0.8,
+          "perCloneBase": 0.2,
+          "cloneCount": 4,
           "scale": "strength",
           "validTypes": [
             "/Lotus/Types/Game/LotusMeleeWeapon"
           ],
           "augmentMult": 1.5,
           "augmentModPath": "/Lotus/Powersuits/Harlequin/IllusionAugmentCard",
-          "labelZh": "幻影近战总伤害加成"
+          "totalEclipseModPath": "/Lotus/Powersuits/Harlequin/LightAugmentCard",
+          "labelZh": "4分身近战原始总伤"
         }
       ]
     },

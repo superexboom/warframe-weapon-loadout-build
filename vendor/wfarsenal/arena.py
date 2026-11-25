@@ -21,8 +21,10 @@ from .arena_actors import (
     cold_slow_multiplier,
     resolve_enemy_icon,
 )
+from .arena_nuke import ArenaNukeDirector
 from .arena_scene import load_scene, distance, Edge, ROOT
 from .arena_combat import ArenaCombat, UnsupportedArenaCombat
+from .squad_buffs import evaluate_warframe_squad_buffs
 
 MODEL = "arena-world-v10"
 VITUS_DROP_CHANCE = 0.06
@@ -42,6 +44,7 @@ def defaults(enemy=""):
         squadSize=1,
         missionDifficulty=0.0,
         interceptionProgress=0.5,
+        interceptionTowers=0,
         missionTier=0,
         eximusMultiplier=1.0,
         aliveCap=64,
@@ -58,6 +61,9 @@ def defaults(enemy=""):
         enemy=enemy,
         headshots=True,
         movement="parkour",
+        combatStyle="weapon_only",
+        steelPath=False,
+        arbucepEmpowered=False,
         doorSight="open",
         npcShortGap=True,
         enemySpec="single",
@@ -73,11 +79,17 @@ def normalize_scenario(value):
         raise ValueError("scenario must be an object")
     c = {**defaults(), **value}
     c["mapId"] = str(c.get("mapId") or c.get("map") or "corpus-ship-defense")
+    is_interception = c.get("spawnProfile") in ("interception", "arbitration_interception")
+    if is_interception:
+        c["mode"] = "time"
     if c["waveWait"] is None:
         c["waveWait"] = 6.0 if c["spawnProfile"] == "defense" else 3.0
+    if bool(c.get("steelPath", False)) and "squadSize" not in value and c.get("spawnProfile") != "custom":
+        c["squadSize"] = 4
     for key, low, high in [
         ("waves", 1, 20),
         ("squadSize", 1, 4),
+        ("interceptionTowers", 0, 4),
         ("missionTier", 0, 99),
         ("enemies", 1, 128),
         ("aliveCap", 1, 128),
@@ -97,8 +109,10 @@ def normalize_scenario(value):
         ):
             raise ValueError(f"{key} outside {low}..{high}")
         c[key] = int(n)
+    if "wallSeconds" not in value and isinstance(c.get("seconds"), (int, float)) and float(c["seconds"]) > 1800.0:
+        c["wallSeconds"] = min(300.0, round(30.0 * (float(c["seconds"]) / 1800.0) * 1.25, 1))
     for key, low, high in [
-        ("seconds", 0.1, 1800),
+        ("seconds", 0.1, 7200),
         ("missionDifficulty", 0, 1),
         ("interceptionProgress", 0, 1),
         ("eximusMultiplier", 0, 10),
@@ -106,7 +120,7 @@ def normalize_scenario(value):
         ("waveWait", 0, 60),
         ("maxWave", 1, 600),
         ("noKill", 1, 180),
-        ("wallSeconds", 1, 120),
+        ("wallSeconds", 1, 300),
         ("rangeAssumption", 1, 500),
         ("movementStep", 0.02, 0.1),
     ]:
@@ -117,9 +131,10 @@ def normalize_scenario(value):
     if (
         c["mode"] not in ("waves", "time")
         or c["region"] not in ("focus", "full")
-        or c["movement"] not in ("parkour", "walking", "fixed")
+        or c["movement"] not in ("parkour", "walking", "fixed", "objective")
+        or c["combatStyle"] not in ("weapon_only", "hybrid_nuke", "ability_only")
     ):
-        raise ValueError("invalid arena mode/region/movement")
+        raise ValueError("invalid arena mode/region/movement/combatStyle")
     if c["spawnProfile"] not in ("custom", "defense", "arbitration",
                                   "interception", "arbitration_interception"):
         raise ValueError("invalid spawnProfile")
@@ -127,7 +142,9 @@ def normalize_scenario(value):
         raise ValueError("invalid doorSight")
     if c["movement"] == "fixed":
         point = c.get("fixedPosition")
-        if (
+        if point is None or point == "auto":
+            c["fixedPosition"] = "auto"
+        elif (
             not isinstance(point, dict)
             or isinstance(point.get("face"), bool)
             or not isinstance(point.get("face"), int)
@@ -135,7 +152,7 @@ def normalize_scenario(value):
             or len(point["position"]) != 3
         ):
             raise ValueError(
-                "fixed mode requires fixedPosition={face:int,position:[x,y,z]}"
+                "fixed mode requires fixedPosition={face:int,position:[x,y,z]} or 'auto'"
             )
     if not isinstance(c["npcShortGap"], bool):
         raise ValueError("npcShortGap must be boolean")
@@ -145,9 +162,11 @@ def normalize_scenario(value):
         raise ValueError("等级增长需要来源防御或来源仲裁防御规则")
     if not isinstance(c["headshots"], bool):
         raise ValueError("headshots must be boolean")
-    for opt_bool in ("enemyShieldRecharge", "strictSurvival", "vipStatusCap"):
+    for opt_bool in ("enemyShieldRecharge", "strictSurvival", "vipStatusCap", "steelPath", "arbucepEmpowered", "lockObjectiveFloor"):
         if opt_bool in c and not isinstance(c[opt_bool], bool):
             raise ValueError(f"{opt_bool} must be boolean")
+    if "nukeSetupId" in c and c["nukeSetupId"] is not None:
+        c["nukeSetupId"] = str(c["nukeSetupId"]).strip() or None
     return c
 
 
@@ -218,6 +237,8 @@ class World:
     wf_state = None
     companion = None
     enemy_attacks = None
+    nuke_director = None
+    enemy_speed_multiplier = 1.0
     next_synergy_tick = math.inf
 
     def __init__(self, context, cancelled=lambda: False, progress=lambda p: None):
@@ -314,17 +335,73 @@ class World:
         self.player = Actor(
             -1, self.scene.start["face"], tuple(self.scene.start["position"])
         )
+        self.vantage_info = None
+        enemy_prof = "enemy-gap" if self.c["npcShortGap"] else "enemy"
+        nuke_prev = (wf_ctx.get("nukePreview") or {}) if isinstance(wf_ctx, dict) else {}
+        primary_r = float(nuke_prev.get("primaryRadiusM") or 28.0)
         if self.c["movement"] == "fixed":
             point = self.c.get("fixedPosition")
-            if not isinstance(point, dict):
+            if point is None or point == "auto":
+                standing = self.scene.select_optimal_vantage(
+                    enemy_profile=enemy_prof,
+                    max_horizontal_radius=min(24.0, max(12.0, primary_r * 0.55)),
+                    prefer_high_ground=True,
+                )
+                self.vantage_info = standing
+            elif isinstance(point, dict):
+                standing = self.scene.validate_standing(
+                    point.get("position"),
+                    point.get("face"),
+                    enemy_profile=enemy_prof,
+                )
+                if point.get("autoSelected"):
+                    self.vantage_info = {
+                        **point,
+                        **standing,
+                        "autoSelected": True,
+                    }
+            else:
                 raise ValueError("fixed mode requires an explicit validated position")
-            standing = self.scene.validate_standing(
-                point.get("position"), point.get("face"),
-                enemy_profile="enemy-gap" if self.c["npcShortGap"] else "enemy",
-            )
             self.c["fixedPosition"] = standing
             self.player.node = standing["face"]
             self.player.pos = tuple(standing["position"])
+        elif self.c["movement"] == "objective":
+            uses_los = (
+                self.c.get("combatStyle") == "weapon_only"
+                or (wf_ctx is not None and not bool(nuke_prev.get("ignoresLoS", True)))
+            )
+            if uses_los and not self.c.get("lockObjectiveFloor"):
+                vantage = self.scene.select_optimal_vantage(
+                    enemy_profile=enemy_prof,
+                    max_horizontal_radius=min(20.0, max(10.0, primary_r * 0.50)),
+                    prefer_high_ground=True,
+                )
+                self.player.node = int(vantage["face"])
+                self.player.pos = tuple(vantage["position"])
+                self.vantage_info = vantage
+            else:
+                obj = self.scene.defense_objective
+                self.player.node = int(obj["face"])
+                self.player.pos = tuple(obj["position"])
+        ext_buffs = (context.get("loadout") or {}).get("externalBuffs")
+        if ext_buffs:
+            sq_eval = evaluate_warframe_squad_buffs(ext_buffs)
+            spd_delta = float(sq_eval.get("enemySpeedDelta") or 0.0)
+            if abs(spd_delta) > 1e-6:
+                self.enemy_speed_multiplier = max(0.15, min(2.0, 1.0 + spd_delta))
+        elif wf_ctx is not None and self.c.get("combatStyle") in ("hybrid_nuke", "ability_only"):
+            f_en = str((wf_ctx.get("frame") or {}).get("nameEn") or "").casefold()
+            if "nova" in f_en:
+                s_val = float((wf_ctx.get("finalPanel") or {}).get("strength") or 1.0)
+                self.enemy_speed_multiplier = max(0.15, min(1.75, 1.0 + min(0.75, 0.50 * s_val)))
+        if (
+            wf_ctx is not None
+            and self.wf_state is not None
+            and self.c.get("combatStyle") in ("hybrid_nuke", "ability_only")
+        ):
+            self.nuke_director = ArenaNukeDirector(
+                wf_ctx, self.wf_state, self.c, self.c["seed"]
+            )
         self.companion = (
             CompanionArenaDirector(
                 comp_ctx, context, self.combat, self.player.pos, self.c["seed"]
@@ -444,8 +521,18 @@ class World:
             self.diagnostics.append("任务difficulty/Eximus倍率为显式输入，当前地图几何不决定实时任务参数")
             self.diagnostics.append("已开启所选来源规则的等级增长：两个Director起始端点均取输入等级，特殊任务端点修正未套用" if self.c["levelGrowth"] else "等级增长未开启：敌人等级固定为用户配置")
             if self.interception:
-                self.diagnostics[0] = "拦截参数定额清场：使用来源小队间隔和条件上限；固定进度、不占点，配额清场结束周期，不代表原生拦截轮次"
-                self.diagnostics.append("拦截原始敌组按累计tier/权重和Agent存活限额抽取；native池合并、共享count-group、特殊override未完整恢复；不模拟占点突袭与进度阈值Boss")
+                towers = int(self.c.get("interceptionTowers", 0))
+                if towers > 0:
+                    self.diagnostics[0] = (
+                        f"来源拦截时间模式：按 {towers} 塔占领速率连续推进 Tenno 总占领进度（0%→100%），"
+                        "无单轮固定杀敌数量配额；满 100% 后清场进入下一轮并更新轮次等级与累计 tier"
+                    )
+                else:
+                    self.diagnostics[0] = (
+                        "来源拦截时间模式：固定 Tenno 总占领进度卡点不结轮，无单轮杀敌数量配额，"
+                        "按来源小队间隔与存活上限连续补员并压制轮次等级成长"
+                    )
+                self.diagnostics.append("拦截原始敌组按累计tier/权重和Agent存活限额抽取；native池合并、共享count-group、特殊override未完整恢复；不模拟单塔跑点争夺与进度阈值Boss")
             if self.c["spawnProfile"] in ("arbitration", "arbitration_interception"):
                 if DRONE not in self.enemies:
                     raise ValueError("当前敌人数据缺少仲裁无人机")
@@ -605,6 +692,20 @@ class World:
                 self.stats["kills"] += 1
                 self.last_kill = when
                 self.replay["kills"].append([round(when, 6), actor.id, *actor.pos])
+                if self.wf_state is not None and not actor.drone:
+                    custom_ex = bool(
+                        self.c["spawnProfile"] == "custom"
+                        and (self.context["common_options"].get("enemy_enhancements") or {}).get("eximus")
+                    )
+                    self.wf_state.on_enemy_kill_orbs(
+                        when,
+                        is_eximus=bool(actor.tape.get("eximus") or custom_ex),
+                        headshot=bool(event.get("headshot") or event.get("head")),
+                    )
+                    if self.nuke_director is not None:
+                        self.nuke_director.on_enemy_killed(
+                            actor, self.combat.targets[actor.id], when
+                        )
                 if actor.drone:
                     self.stats["droneKills"] += 1
                     self.stats["vitusExpected"] = self.stats["droneKills"] * VITUS_DROP_CHANCE
@@ -642,6 +743,27 @@ class World:
         self.spawn_draw_index += 1
         return value
 
+    def interception_capture_rate(self):
+        if not self.interception:
+            return 0.0
+        towers = int(self.c.get("interceptionTowers", 0))
+        if towers <= 0:
+            return 0.0
+        # TerritoryMission 4 塔满速约 104s 跑满 100% 总占领进度（单塔约 416s）；
+        # 仲裁拦截（ELITE_ALERT）占领进度速率减半（4 塔约 208s，单塔约 832s）。
+        full_single_tower_seconds = 832.0 if self.c["spawnProfile"] == "arbitration_interception" else 416.0
+        return towers / full_single_tower_seconds
+
+    def current_interception_progress(self):
+        if not self.interception:
+            return 0.0
+        rate = self.interception_capture_rate()
+        if rate <= 0.0:
+            return float(self.c["interceptionProgress"])
+        if getattr(self, "interception_round_captured", False):
+            return 1.0
+        return min(1.0, max(0.0, self.t - getattr(self, "wave_start", 0.0)) * rate)
+
     def start_wave(self):
         self.wave += 1
         self.generated = 0
@@ -657,24 +779,36 @@ class World:
                     enemyLevel=self.wave_level, levelGrowth=self.c["levelGrowth"])
         if self.interception:
             from .arena_spawns import interception_parameters
+            rate = self.interception_capture_rate()
+            self.interception_round_captured = False
+            cur_progress = 0.0 if rate > 0.0 else float(self.c["interceptionProgress"])
+            self.interception_progress = cur_progress
+            self.interception_capture_end = (self.t + 1.0 / rate) if rate > 0.0 else math.inf
             params = interception_parameters(
                 self.wave, self.c["squadSize"], self.c["missionDifficulty"],
-                self.c["interceptionProgress"], self.c["level"],
+                cur_progress, self.c["level"],
                 max_alive=min(self.c["aliveCap"], self.c["directorHardCap"]),
                 elapsed_seconds=self.t, eximus_multiplier=self.c["eximusMultiplier"],
             )
             self.interception_params = params
             self.wave_alive_cap = params["maxAlive"]
-            self.wave_target = self.c["enemies"]
+            self.wave_target = math.inf
             self.wave_pool = [r for r in self.spec_entries
                               if r["tier"] <= params["tier"] and r["probability"] > 0]
             self.squad_delay = params["initialDelay"]
             self.initial_squad = params["initialCount"]
             if not self.initial_squad:
                 self.next_spawn = self.t + self.squad_delay
-            info.update(spawnProfile=self.c["spawnProfile"], **{k:v for k,v in params.items() if k!="level"},
-                        formulaEnemyLevel=params["level"], targetCount=self.wave_target, fixedProgress=self.c["interceptionProgress"],
-                        roundEnd="scenario-quota-cleared", directorHardCap=self.c["directorHardCap"])
+            info.update(
+                spawnProfile=self.c["spawnProfile"],
+                **{k: v for k, v in params.items() if k != "level"},
+                formulaEnemyLevel=params["level"],
+                targetCount=None,
+                captureTowers=int(self.c.get("interceptionTowers", 0)),
+                fixedProgress=(cur_progress if rate <= 0.0 else None),
+                roundEnd=("total-progress-100-then-clear" if rate > 0.0 else "continuous-frozen-progress"),
+                directorHardCap=self.c["directorHardCap"],
+            )
             for q in params["qualifications"]:
                 self._diagnose(q)
         elif self.source_spawns:
@@ -829,12 +963,18 @@ class World:
         initial, squad_allowed = False, True
         if self.interception:
             from .arena_spawns import interception_parameters
-            params = self.interception_params
-            params["leaderChance"] = interception_parameters(
+            cur_progress = self.current_interception_progress()
+            self.interception_progress = cur_progress
+            params = interception_parameters(
                 self.wave, self.c["squadSize"], self.c["missionDifficulty"],
-                self.c["interceptionProgress"], self.c["level"], self.wave_alive_cap,
+                cur_progress, self.c["level"],
+                max_alive=min(self.c["aliveCap"], self.c["directorHardCap"]),
                 elapsed_seconds=self.t, eximus_multiplier=self.c["eximusMultiplier"],
-            )["leaderChance"]
+            )
+            self.interception_params = params
+            self.wave_alive_cap = params["maxAlive"]
+            self.wave_pool = [r for r in self.spec_entries
+                              if r["tier"] <= params["tier"] and r["probability"] > 0]
             initial = self.initial_squad > 0
             if initial:
                 batch = self.initial_squad
@@ -845,7 +985,8 @@ class World:
             else:
                 batch = int(params["minSquad"] + self.spawn_random()
                             * (params["maxSquad"] - params["minSquad"] + 1))
-        for _ in range(min(batch, self.wave_target - self.generated)):
+        spawn_limit = batch if math.isinf(self.wave_target) else min(batch, self.wave_target - self.generated)
+        for _ in range(int(max(0, spawn_limit))):
             admission_cap = self.c["directorHardCap"] if self.interception else self.wave_alive_cap
             if len(self.live) >= admission_cap:
                 break
@@ -1485,9 +1626,17 @@ class World:
         # enemies, while the movement planner correctly decides to stay put.
         targets = []
         candidates = []
+        hybrid_mode = self.c.get("combatStyle") == "hybrid_nuke"
         for actor in sorted(
-            self.live, key=lambda a: (a.id != getattr(self, "staging_target_id", None),
-                                      distance(a.pos, self.player.pos), a.id)
+            self.live,
+            key=lambda a: (
+                (not a.drone, self.combat.targets[a.id].overguard <= EPS)
+                if hybrid_mode
+                else (),
+                a.id != getattr(self, "staging_target_id", None),
+                distance(a.pos, self.player.pos),
+                a.id,
+            ),
         ):
             if self.combat.targets[actor.id].protected:
                 continue
@@ -3186,10 +3335,11 @@ class World:
                     actor.staging_since = self.t
             else:
                 actor.staging_since = None
-        if self.c["movement"] != "fixed" and not self.player.edge and self._plan_staged_target():
+        stationary = self.c["movement"] in ("fixed", "objective")
+        if not stationary and not self.player.edge and self._plan_staged_target():
             self.next_plan = self.t + .5
             return
-        if self.c["movement"] != "fixed" and not self.player.edge and self.player.route:
+        if not stationary and not self.player.edge and self.player.route:
             # A route targets a previous snapshot. Stop at a supported source
             # endpoint when enemies become shootable; never finish a long trip
             # to a dead target or cancel a jump while airborne.
@@ -3199,7 +3349,7 @@ class World:
                 self.next_plan = self.t + .5
                 return
         if (
-            self.c["movement"] != "fixed"
+            not stationary
             and not self.player.edge
             and not self.player.route
             and self.live
@@ -3663,7 +3813,7 @@ class World:
         return False
 
     def move_actor(self, actor, dt, start):
-        if actor.id == -1 and self.c["movement"] == "fixed":
+        if actor.id == -1 and self.c["movement"] in ("fixed", "objective"):
             actor.route.clear()
             actor.edge = None
             return 0.0
@@ -3827,6 +3977,8 @@ class World:
                         slow = cold_slow_multiplier(
                             cold_stacks, getattr(victim, "overguard", 0.0)
                         )
+                if self.enemy_speed_multiplier != 1.0 and not actor.drone:
+                    slow *= self.enemy_speed_multiplier
             speed = edge["speed"] * slow
             travel = min(length, speed * remaining)
             spent = travel / max(EPS, speed)
@@ -3891,8 +4043,15 @@ class World:
         reason = ""
         status = "completed"
         steps = 0
+        max_steps = max(2_000_000, int(self.c["seconds"] * 1500))
+        frame_step = 0.5 if self.c["seconds"] <= 1800.0 + EPS else (1.0 if self.c["seconds"] <= 3600.0 + EPS else 2.0)
         last_progress = started
-        synergy_active = self.wf_state is not None or self.companion is not None
+        synergy_active = (
+            self.wf_state is not None
+            or self.companion is not None
+            or self.nuke_director is not None
+        )
+        gun_enabled = self.c.get("combatStyle") != "ability_only"
         while not reason:
             steps += 1
             if self.cancelled():
@@ -3903,21 +4062,32 @@ class World:
                 status = "limited"
                 reason = "达到计算耗时预算"
                 break
-            if steps > 2_000_000:
+            if steps > max_steps:
                 status = "limited"
                 reason = "达到事件数量预算"
                 break
             if self.wave_pending and self.t >= self.wait_until - EPS:
                 self.start_wave()
-            if self.wave_target == 0:
+            if self.wave_target == 0 and not self.interception:
                 status, reason = "limited", "来源编波没有可运行名额"
                 break
+            if self.interception and not self.wave_pending and not getattr(self, "interception_round_captured", False):
+                self.interception_progress = self.current_interception_progress()
+                cap_end = getattr(self, "interception_capture_end", math.inf)
+                if self.t >= cap_end - EPS:
+                    self.interception_progress = 1.0
+                    self.interception_round_captured = True
+                    self.wave_target = self.generated
+                    self.next_spawn = math.inf
+                    if self.replay["waves"]:
+                        self.replay["waves"][-1]["capturedAt"] = round(self.t, 6)
+                        self.replay["waves"][-1]["targetCount"] = self.generated
             self.maintain_drones()
             self.protection()
             self.drain(self.combat.advance(self.t))
             while self.events and self.events[0][0] <= self.t + EPS:
                 steps += 1
-                if steps > 2_000_000:
+                if steps > max_steps:
                     status, reason = "limited", "达到事件数量预算"
                     break
                 _, _, kind, data = heapq.heappop(self.events)
@@ -3928,7 +4098,19 @@ class World:
             if reason:
                 break
             at_end = self.t >= self.c["seconds"] - EPS
+            if self.wf_state is not None and self.wf_state.rotation is not None and not at_end:
+                self.wf_state.rotation.active_enemies_near = len(self.live)
+                self.wf_state.advance(self.t, self.combat)
             if synergy_active and not at_end and self.t >= self.next_synergy_tick - EPS:
+                if self.nuke_director is not None:
+                    if not self.wave_pending:
+                        self.nuke_director.step(self, self.t)
+                    else:
+                        self.nuke_director.step_intermission(self, self.t)
+                    self.drain()
+                    if self.nuke_director.pending_kill_reactions:
+                        self.nuke_director.flush_kill_reactions(self, self.t)
+                        self.drain()
                 if self.companion is not None and not self.wave_pending:
                     self.companion.step(self, self.combat, self.wf_state, self.t)
                     self.drain()
@@ -3957,20 +4139,25 @@ class World:
                 ):
                     self.companion.step(self, self.combat, self.wf_state, self.t)
                     self.drain()
-                if self.t >= self.next_fire - EPS and self.live:
-                    aim = self.choose()
-                    if aim:
-                        self.fire(aim)
-                        while self.events and self.events[0][0] <= self.t + EPS:
-                            steps += 1
-                            if steps > 2_000_000:
-                                status, reason = "limited", "达到事件数量预算"
-                                break
-                            _, _, kind, data = heapq.heappop(self.events)
-                            if kind == "impact":
-                                self.impact(data)
-                    else:
-                        self.next_fire = self.t + 0.1
+                if gun_enabled:
+                    if self.wf_state is not None and self.wf_state.is_weapon_locked(self.t):
+                        self.next_fire = max(self.next_fire, self.wf_state.weapon_locked_until())
+                    if self.t >= self.next_fire - EPS and self.live:
+                        aim = self.choose()
+                        if aim:
+                            self.fire(aim)
+                            while self.events and self.events[0][0] <= self.t + EPS:
+                                steps += 1
+                                if steps > max_steps:
+                                    status, reason = "limited", "达到事件数量预算"
+                                    break
+                                _, _, kind, data = heapq.heappop(self.events)
+                                if kind == "impact":
+                                    self.impact(data)
+                        else:
+                            self.next_fire = self.t + 0.1
+                else:
+                    self.next_fire = math.inf
             if reason:
                 break
             # A durable target can take over a minute to kill. Only actual
@@ -4006,7 +4193,8 @@ class World:
                 reason = "达到模拟时间预算"
                 break
             if (
-                not self.wave_pending
+                not self.interception
+                and not self.wave_pending
                 and self.t - self.wave_start >= self.c["maxWave"] - EPS
             ):
                 status = "limited"
@@ -4026,18 +4214,19 @@ class World:
                     self.wf_state.record_frame(self.t)
                 if self.companion is not None:
                     self.companion.record_frame(self.t)
-                self.next_frame = self.t + 0.5
+                self.next_frame = self.t + frame_step
             now = time.perf_counter()
             if now - last_progress > 0.25:
-                self.progress(
-                    dict(
-                        t=round(self.t, 3),
-                        wave=self.wave,
-                        kills=self.stats["kills"],
-                        alive=len(self.live),
-                        elapsedSeconds=round(now - started, 2),
-                    )
+                prog_payload = dict(
+                    t=round(self.t, 3),
+                    wave=self.wave,
+                    kills=self.stats["kills"],
+                    alive=len(self.live),
+                    elapsedSeconds=round(now - started, 2),
                 )
+                if self.interception:
+                    prog_payload["interceptionProgress"] = round(self.current_interception_progress(), 4)
+                self.progress(prog_payload)
                 last_progress = now
             clocks = [
                 self.t + self.c["movementStep"],
@@ -4048,8 +4237,12 @@ class World:
                 clocks.append(self.events[0][0])
             if synergy_active:
                 clocks.append(self.next_synergy_tick)
+                if self.wf_state is not None:
+                    clocks.append(self.wf_state.next_event_time())
                 if self.companion is not None:
                     clocks.append(self.companion.next_event_time())
+                if self.nuke_director is not None:
+                    clocks.append(self.nuke_director.next_event_time())
             if self.wave_pending:
                 clocks.append(self.wait_until)
             else:
@@ -4058,10 +4251,14 @@ class World:
                         self.next_spawn,
                         self.next_plan,
                         self.next_fire,
-                        self.wave_start + self.c["maxWave"],
                         progress_deadline,
                     )
                 )
+                if self.interception:
+                    if not getattr(self, "interception_round_captured", False):
+                        clocks.append(getattr(self, "interception_capture_end", math.inf))
+                else:
+                    clocks.append(self.wave_start + self.c["maxWave"])
             next_time = min(t for t in clocks if t > self.t + EPS)
             self.move(next_time)
         self.record(self.player, self.t)
@@ -4114,6 +4311,22 @@ class World:
                 "frames": [],
             }
         )
+        if self.vantage_info is not None:
+            self.stats["vantagePoint"] = self.vantage_info
+            warframe_visual["vantagePoint"] = self.vantage_info
+        nuke_summary = None
+        if self.nuke_director is not None:
+            nuke_summary = self.nuke_director.summary_payload(self.combat)
+            self.stats.update(
+                abilityKills=nuke_summary["abilityKills"],
+                weaponKills=nuke_summary["weaponKills"],
+                abilityKillShare=nuke_summary["abilityKillShare"],
+                abilityDirectDamage=nuke_summary["abilityDirectDamage"],
+                abilityDotDamage=nuke_summary["abilityDotDamage"],
+                abilityCasts=nuke_summary["castsExecuted"],
+            )
+            warframe_visual["nukePulses"] = self.nuke_director.pulses
+            warframe_visual["nukeSummary"] = nuke_summary
         visuals = {
             "warframe": warframe_visual,
             "companion": (
@@ -4162,6 +4375,7 @@ class World:
                     if self.companion is not None
                     else None
                 ),
+                "nukeStats": nuke_summary,
             }
         return result
 

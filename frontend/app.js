@@ -115,6 +115,10 @@ const state = {
     helminthAbility: null,
     invigoration: [],
     applyConditionals: false,
+    arbucepEmpowered: false,
+    nukeSetupId: null,
+    syncSquadBuffs: true,
+    syncOperator: false,
     activeConfig: "A",
     activeForm: "main",
     configs: { A: null, B: null, C: null },
@@ -123,6 +127,7 @@ const state = {
     result: null,
   },
   synergyReturnTarget: null,
+  operatorReturnFrom: "build",
   synergyBridgeCache: {},
   warframeLink: {
     enabled: false,
@@ -131,12 +136,22 @@ const state = {
     activeAbilities: null,
     abilityElements: {},
     damageTriggerMode: "ai",
+    arbucepEmpowered: false,
+    nukeSetupId: null,
+    abilityRotation: { enabled: false },
   },
   companionLink: {
     enabled: false,
     companionId: null,
     configName: "A",
     weaponConfigName: "A",
+  },
+  operatorLink: {
+    enabled: false,
+    configName: "A",
+    triggerMode: "passive",
+    enableNaramonPreconditions: false,
+    enableTauronStrike: false,
   },
   companionCatalog: null,
   companionCatalogPromise: null,
@@ -174,6 +189,13 @@ const state = {
     primaryCc: 100,
     primarySc: 100,
     store: { bodies: {}, weapons: {} },
+    result: null,
+  },
+  operatorCatalog: null,
+  operatorBuild: {
+    activeConfig: "A",
+    selectedNodeId: null,
+    store: {},
     result: null,
   },
 };
@@ -384,6 +406,7 @@ function captureBuildConfig() {
     exaltedLink: captureExaltedLink(),
     warframeLink: captureSynergyWarframeLink(),
     companionLink: captureSynergyCompanionLink(),
+    operatorLink: captureSynergyOperatorLink(),
     riven: rivenMod ? { slot: rivenSlot, polarity: rivenFixedPolarity(rivenMod, rivenSlot), stats: rivenMod.stats.map((s) => ({ code: s.code, value: Number(s.value || 0), negative: Boolean(s.negative) })) } : null,
     enemy: get("build-enemy-select", "") || null,
     level: Number(get("build-enemy-level", 160) || 160),
@@ -879,6 +902,7 @@ function exportBuildConfig() {
 
   let bundledWarframe = undefined;
   let bundledCompanion = undefined;
+  let bundledOperator = undefined;
 
   if (!isCompanionWeapon() && state.warframeLink?.enabled && state.warframeLink.frameId) {
     const wfId = state.warframeLink.frameId;
@@ -958,15 +982,31 @@ function exportBuildConfig() {
     };
   }
 
+  if (!isCompanionWeapon() && state.operatorLink?.enabled) {
+    const opCfg = state.operatorLink.configName || state.operatorBuild?.activeConfig || "A";
+    const opStore = state.operatorBuild?.store && Object.keys(state.operatorBuild.store).length
+      ? state.operatorBuild.store
+      : readOperatorStore();
+    const preset = structuredClone(opStore[opCfg] || activeOperatorPreset());
+    nameParts.push(sanitizeFilenameSegment(preset.activeSchool || "Focus"));
+    bundledOperator = {
+      schema: 1,
+      kind: "wf-riven-operator-focus",
+      configName: opCfg,
+      preset,
+    };
+  }
+
   const payload = {
     schema: BUILD_CONFIG_SCHEMA,
-    kind: bundledWarframe || bundledCompanion ? "synergy-bundle" : "weapon-build",
+    kind: bundledWarframe || bundledCompanion || bundledOperator ? "synergy-bundle" : "weapon-build",
     buildLabel: state.catalog?.buildLabel || "OFFLINE",
     exportedAt: new Date().toISOString(),
     configId: state.activeConfig,
     config,
     ...(bundledWarframe ? { bundledWarframe } : {}),
     ...(bundledCompanion ? { bundledCompanion } : {}),
+    ...(bundledOperator ? { bundledOperator } : {}),
   };
   const filename = `${nameParts.filter(Boolean).join("+")}-${state.activeConfig}-${formatExportTimestamp()}.json`;
   triggerJsonDownload(payload, filename);
@@ -1038,6 +1078,20 @@ async function restoreBundledEntitiesFromJson(parsed) {
     const cRec = cPath ? companionByPath(cPath) : null;
     const wRec = wPath ? companionWeaponRecord(wPath, cRec) : null;
     restoredLabels.push(`同伴 ${cRec?.nameZh || bc.companionNameZh || cPath?.split("/").pop()}${wRec ? ` + ${wRec.nameZh || wRec.nameEn}` : ""}`);
+  }
+  if (parsed?.bundledOperator && typeof parsed.bundledOperator === "object") {
+    const bo = parsed.bundledOperator;
+    const oCfg = /^[ABC]$/.test(bo.configName || "") ? bo.configName : "A";
+    if (bo.preset && typeof bo.preset === "object") {
+      state.operatorBuild.store ||= readOperatorStore();
+      state.operatorBuild.store[oCfg] = bo.preset;
+      writeOperatorStore();
+      if (state.operatorCatalog) {
+        renderOperatorWorkbench();
+        scheduleOperatorEvaluate();
+      }
+      restoredLabels.push(`专精 ${bo.preset.activeSchool || "Focus"} (${oCfg})`);
+    }
   }
   return restoredLabels;
 }
@@ -5714,16 +5768,26 @@ function externalBuffSpec(id) {
 // 闪耀助燃的技能已移除）丢弃；旧的直接数值换算成强度 / 人数。
 function normalizeExternalBuffs(items) {
   const rows = [];
-  for (const raw of Array.isArray(items) ? items.slice(0, 40) : []) {
+  for (const raw of Array.isArray(items) ? items.slice(0, 96) : []) {
     const id = EXTERNAL_BUFF_ALIASES[raw?.id] || raw?.id;
     const spec = externalBuffSpec(id);
     if (!spec || rows.some((row) => row.id === id)) continue;
     const row = { id };
     const value = raw.value == null ? null : Number(raw.value);
-    if (spec.squad) row.count = clamp(Math.round(Number(raw.count ?? (value != null ? value / spec.base : 1)) || 1), 1, 4);
+    const maxCnt = Math.max(1, Number(spec.maxCount) || 4);
+    if (spec.squad) row.count = clamp(Math.round(Number(raw.count ?? (value != null ? value / spec.base : 1)) || 1), 1, maxCnt);
     else if (spec.strength) row.strength = clamp(Number(raw.strength ?? (value != null ? value / spec.base : 1)) || 0, 0, 10);
     else row.value = clamp(Number(value ?? spec.base) || 0, 0, spec.maximum ?? 50);
     if (spec.elements?.length) row.element = spec.elements.includes(raw.element) ? raw.element : spec.elements[0];
+    if (Array.isArray(spec.variants) && spec.variants.length) {
+      const vIds = spec.variants.map((v) => v.id);
+      row.variant = vIds.includes(raw.variant) ? raw.variant : "hold";
+      if (raw.casterStrength != null) row.casterStrength = clamp(Number(raw.casterStrength) || 1.5, 0.1, 10);
+    }
+    if (spec.arbucepToggle) {
+      row.arbucepEmpowered = Boolean(raw.arbucepEmpowered ?? raw.empowered ?? false);
+      row.count = clamp(Math.round(Number(raw.count ?? (row.arbucepEmpowered ? 2 : 1)) || 1), 1, 2);
+    }
     rows.push(row);
   }
   return rows;
@@ -5731,8 +5795,16 @@ function normalizeExternalBuffs(items) {
 
 function externalBuffValue(spec, item) {
   if (!spec || !item) return 0;
-  let value = spec.squad ? spec.base * (item.count || 1) : spec.strength ? spec.base * (item.strength ?? 1) : Number(item.value ?? spec.base);
-  if (spec.maximum != null) value = Math.min(value, spec.maximum);
+  const empMult = spec.arbucepToggle && item.arbucepEmpowered ? 2.0 : 1.0;
+  let value = spec.squad
+    ? spec.base * (item.count || 1)
+    : spec.strength
+      ? spec.base * (item.strength ?? 1) * empMult
+      : Number(item.value ?? spec.base);
+  if (spec.maximum != null) {
+    const cap = spec.arbucepToggle && !item.arbucepEmpowered ? spec.maximum * 0.5 : spec.maximum;
+    value = Math.min(value, cap);
+  }
   if (spec.group === "aura" && spec.id !== "coaction-drift") {
     const drift = state.externalBuffs.find((row) => row.id === "coaction-drift");
     value *= 1 + (drift ? externalBuffValue(externalBuffSpec("coaction-drift"), drift) : 0);
@@ -5760,7 +5832,7 @@ function externalBuffSummary(spec, item) {
     const amount = value * effect.scale;
     let label = effect.label;
     if (spec.elements?.length && item?.element) label = `${EXTERNAL_BUFF_ELEMENT_LABELS[item.element] || item.element}${label}`;
-    let text = `${label} ${externalBuffAmount(spec, amount)}`;
+    let text = effect.scale === 0 ? label : `${label} ${externalBuffAmount(spec, amount)}`;
     if (spec.meleeScale) text += `（近战 ${externalBuffAmount(spec, amount * spec.meleeScale)}）`;
     if (spec.sniperScale) text += `（狙击枪 ${externalBuffAmount(spec, amount * spec.sniperScale)}）`;
     return { text, applies: externalBuffApplies(effect) };
@@ -5771,7 +5843,16 @@ function renderExternalBuffs() {
   const target = document.getElementById("external-buff-list");
   if (!target) return;
   const catalog = externalBuffCatalog();
-  const touch = () => { persistActiveBuildConfig(); scheduleLiveManualSimulation(); renderExternalBuffs(); };
+  const touch = () => {
+    state.synergyBridgeCache = {};
+    persistActiveBuildConfig();
+    scheduleLiveManualSimulation();
+    renderExternalBuffs();
+    renderWarframeQuickSquad();
+    if (state.warframeBuild?.frame && state.warframeBuild.syncSquadBuffs !== false) {
+      scheduleWarframeCalculation();
+    }
+  };
   const groups = EXTERNAL_BUFF_GROUPS.map(([group, title]) => {
     const specs = catalog.filter((spec) => spec.group === group);
     if (!specs.length) return null;
@@ -5780,14 +5861,14 @@ function renderExternalBuffs() {
     for (const spec of specs) {
       const current = state.externalBuffs.find((item) => item.id === spec.id) || null;
       const summary = externalBuffSummary(spec, current || {});
-      const applies = summary.some((part) => part.applies);
+      const applies = summary.some((part) => part.applies) || (spec.warframeBenefiting && Boolean(state.warframeLink?.enabled));
       const row = create("div", `external-buff-row${current ? " is-enabled" : ""}${applies ? "" : " is-inapplicable"}`);
       const label = create("label", "external-buff-toggle");
       const check = document.createElement("input");
       check.type = "checkbox";
       check.checked = Boolean(current);
       check.addEventListener("change", () => {
-        if (check.checked) state.externalBuffs.push(normalizeExternalBuffs([{ id: spec.id }])[0]);
+        if (check.checked) state.externalBuffs.push(normalizeExternalBuffs([{ id: spec.id, strength: spec.strength ? 2.5 : undefined }])[0]);
         else state.externalBuffs = state.externalBuffs.filter((item) => item.id !== spec.id);
         touch();
       });
@@ -5795,6 +5876,7 @@ function renderExternalBuffs() {
       const head = create("strong", "", spec.label);
       if (!applies) head.append(create("em", "external-buff-tag", "当前武器不生效"));
       else if (synergyProvidesExternalBuff(spec)) head.append(create("em", "external-buff-tag is-synergy-overlap", "战甲协同已提供"));
+      if (spec.warframeBenefiting) head.append(create("em", "external-buff-tag is-wf-shared", "战甲/技能同享"));
       copy.append(head, create("span", "external-buff-effects", summary.map((part) => part.text).join(" · ")), create("small", "", spec.detail));
       label.append(check, copy);
       row.append(label);
@@ -5802,8 +5884,10 @@ function renderExternalBuffs() {
       if (current) {
         if (spec.squad) {
           const select = document.createElement("select");
-          select.title = "携带该光环的队员人数（同一光环可叠加）";
-          for (let n = 1; n <= 4; n += 1) select.append(new Option(`${n} 人`, String(n), false, n === current.count));
+          const maxCnt = Math.max(1, Number(spec.maxCount) || 4);
+          const unitLbl = spec.id === "electric-shield" ? "面盾" : "人";
+          select.title = spec.id === "electric-shield" ? "穿透电力屏障层数（1~6面）" : "携带该光环的队员人数";
+          for (let n = 1; n <= maxCnt; n += 1) select.append(new Option(`${n} ${unitLbl}`, String(n), false, n === current.count));
           select.addEventListener("change", () => { current.count = Number(select.value); touch(); });
           controls.append(select);
         } else if (spec.strength) {
@@ -5815,7 +5899,7 @@ function renderExternalBuffs() {
           input.addEventListener("change", () => { current.strength = clamp(Number(input.value) || 0, 0, 1000) / 100; touch(); });
           field.append(create("span", "", "强度"), input, create("span", "", "%"));
           controls.append(field);
-        } else {
+        } else if (!spec.variants?.length) {
           const field = create("label", "external-buff-number");
           const input = document.createElement("input");
           const scale = spec.unit === "percent" ? 100 : 1;
@@ -5826,9 +5910,29 @@ function renderExternalBuffs() {
           field.append(input, create("span", "", scale === 100 ? "%" : spec.unit === "multiplier" ? "倍" : ""));
           controls.append(field);
         }
+        if (spec.variants?.length) {
+          const select = document.createElement("select");
+          select.title = "选择技能变体形态";
+          for (const v of spec.variants) select.append(new Option(v.label, v.id, false, v.id === (current.variant || "hold")));
+          select.addEventListener("change", () => { current.variant = select.value; touch(); });
+          controls.append(select);
+        }
+        if (spec.arbucepToggle) {
+          const empLbl = create("label", "external-buff-arbucep-check");
+          const empChk = document.createElement("input");
+          empChk.type = "checkbox";
+          empChk.checked = Boolean(current.arbucepEmpowered);
+          empChk.addEventListener("change", () => {
+            current.arbucepEmpowered = empChk.checked;
+            current.count = empChk.checked ? 2 : 1;
+            touch();
+          });
+          empLbl.append(empChk, create("span", "", "蕈菇200%"));
+          controls.append(empLbl);
+        }
         if (spec.elements?.length) {
           const select = document.createElement("select");
-          select.title = "额外命中的元素";
+          select.title = "选择元素类型";
           for (const element of spec.elements) select.append(new Option(EXTERNAL_BUFF_ELEMENT_LABELS[element] || element, element, false, element === current.element));
           select.addEventListener("change", () => { current.element = select.value; touch(); });
           controls.append(select);
@@ -5886,7 +5990,9 @@ async function renderExternalBuffGain() {
 function externalBuffsPayload() {
   return state.externalBuffs.map((item) => {
     const row = { id: item.id };
-    for (const key of ["strength", "count", "value", "element"]) if (item[key] != null) row[key] = item[key];
+    for (const key of ["strength", "count", "value", "element", "variant", "arbucepEmpowered", "casterStrength"]) {
+      if (item[key] != null) row[key] = item[key];
+    }
     return row;
   });
 }
@@ -6003,18 +6109,44 @@ function linkedSynergyWarframeArcane(slotIndex) {
   if (!state.warframeLink?.enabled || isCompanionWeapon()) return null;
   const frameId = state.warframeLink.frameId;
   if (!frameId) return null;
+  if (!state.warframeCatalog && !state.warframeCatalogPromise) {
+    loadWarframeCatalog().then(() => {
+      renderArcaneSelections();
+      renderSynergyHub();
+    }).catch(() => {});
+  }
   const cfgName = state.warframeLink.configName || "A";
   const stored = warframeStoredConfig(frameId, cfgName);
   const raw = stored?.config?.arcanes?.[slotIndex];
   if (!raw) return null;
   const wfRow = warframeResolve(warframeRows("arcanes"), raw);
-  const path = wfRow?.path || raw?.path || raw?.id || "";
+  const rawPath = wfRow?.path || raw?.path || raw?.id || (typeof raw === "string" ? raw : "");
+  const cacheKey = synergyWarframeCacheKey(frameId, cfgName);
+  const bridgeArcanes = state.synergyBridgeCache?.[cacheKey]?.weaponBridge?.arcanes;
+  const bridgeRow = Array.isArray(bridgeArcanes)
+    ? (bridgeArcanes.find((a) => a && (a.path === rawPath || a.id === rawPath)) || null)
+    : null;
+  const path = wfRow?.path || bridgeRow?.path || rawPath;
   const weaponRow = path ? arcaneRecords().find((a) => a.path === path) : null;
-  const base = wfRow || weaponRow || (typeof raw === "object" ? raw : { path });
+  const assetRow = path ? state.modAssets?.arcanes?.[path] || null : null;
+  const base = wfRow || bridgeRow || weaponRow || (typeof raw === "object" ? raw : { path });
   if (!base?.path && !base?.nameZh && !base?.nameEn) return null;
-  const maxRank = Number(base.maxRank ?? weaponRow?.maxRank ?? 5);
-  const rank = clamp(Number(raw?.rank ?? base.rank ?? maxRank), 0, maxRank);
-  return { ...weaponRow, ...wfRow, ...base, path: path || base.path, rank, maxRank };
+  const maxRank = Number(wfRow?.maxRank ?? weaponRow?.maxRank ?? base.maxRank ?? 5);
+  const rank = clamp(Number(raw?.rank ?? bridgeRow?.rank ?? base.rank ?? maxRank), 0, maxRank);
+  return {
+    ...(assetRow || {}),
+    ...(weaponRow || {}),
+    ...(bridgeRow || {}),
+    ...(wfRow || {}),
+    ...(typeof raw === "object" ? raw : {}),
+    nameZh: wfRow?.nameZh || bridgeRow?.nameZh || weaponRow?.nameZh || base.nameZh,
+    nameEn: wfRow?.nameEn || bridgeRow?.nameEn || weaponRow?.nameEn || base.nameEn,
+    iconAsset: wfRow?.iconAsset || bridgeRow?.iconAsset || weaponRow?.iconAsset || assetRow?.iconAsset || base.iconAsset,
+    rarity: wfRow?.rarity || bridgeRow?.rarity || weaponRow?.rarity || assetRow?.rarity || base.rarity,
+    path: path || base.path,
+    rank,
+    maxRank,
+  };
 }
 
 function renderArcaneSlot(kind, slotIndex, item) {
@@ -6210,7 +6342,9 @@ function renderArcaneSelections() {
     const signature = [
       kind,
       slotIndex,
-      wfShielded && kind === "warframe" ? `shielded:${linked?.path || ""}:${linked?.rank ?? ""}` : "normal",
+      wfShielded && kind === "warframe"
+        ? `shielded:${linked?.path || ""}:${linked?.rank ?? ""}:${linked?.nameZh || linked?.nameEn || ""}:${linked?.iconAsset || ""}:${linked?.rarity || ""}`
+        : "normal",
       item?.path || "",
       item ? Number(item.rank ?? item.maxRank ?? 0) : "",
       item?.forceProc ? 1 : 0,
@@ -8947,6 +9081,7 @@ function emptyWarframeSnapshot(frame = activeWarframeRecord()) {
     helminthAbility: null,
     invigoration: [],
     applyConditionals: false,
+    nukeSetupId: null,
   };
 }
 
@@ -8973,6 +9108,7 @@ function captureWarframeConfig() {
     helminthAbility: build.helminthAbility ? warframeId(build.helminthAbility) : null,
     invigoration: alternate ? [] : build.invigoration.map(warframeId),
     applyConditionals: Boolean(build.applyConditionals),
+    nukeSetupId: build.nukeSetupId || null,
   };
 }
 
@@ -9006,6 +9142,11 @@ function notifyWarframeWorkbenchChanged() {
         }
         if (state.warframeLink.configName !== activeCfg) {
           state.warframeLink.configName = activeCfg;
+          wfLinkTouched = true;
+        }
+        const nextSetup = state.warframeBuild.nukeSetupId || null;
+        if ((state.warframeLink.nukeSetupId || null) !== nextSetup) {
+          state.warframeLink.nukeSetupId = nextSetup;
           wfLinkTouched = true;
         }
       }
@@ -9050,7 +9191,7 @@ function persistWarframeConfig() {
     activeConfig: build.activeConfig || "A",
   };
   try { localStorage.setItem(WARFRAME_CONFIG_STORAGE_KEY, JSON.stringify(build.store)); } catch (_error) { /* private mode */ }
-  notifyWarframeWorkbenchChanged();
+  if (typeof notifyWarframeWorkbenchChanged === "function") notifyWarframeWorkbenchChanged();
 }
 
 function applyWarframeConfig(config) {
@@ -9088,6 +9229,7 @@ function applyWarframeConfig(config) {
     invigoration: (Array.isArray(source.invigoration) ? source.invigoration : source.invigoration ? [source.invigoration] : [])
       .map((value) => warframeResolve(warframeRows("invigoration"), value)).filter(Boolean).slice(0, 2),
     applyConditionals: Boolean(source.applyConditionals),
+    nukeSetupId: typeof source.nukeSetupId === "string" && source.nukeSetupId ? source.nukeSetupId : null,
     result: null,
   });
   if (isAlternateWarframeForm()) {
@@ -9115,7 +9257,7 @@ function selectWarframeFrame(frame) {
   build.formConfigs = loadWarframeFormConfigs(frame);
   build.configs = build.formConfigs.main;
   applyWarframeConfig(build.configs.A);
-  notifyWarframeWorkbenchChanged();
+  if (typeof notifyWarframeWorkbenchChanged === "function") notifyWarframeWorkbenchChanged();
 }
 
 function switchWarframeForm(formId) {
@@ -9131,7 +9273,7 @@ function switchWarframeForm(formId) {
   applyWarframeConfig(build.configs[build.activeConfig]);
   const label = option.alternate ? `${option.label}第二套配装` : "本体配装";
   if (ui["warframe-config-status"]) ui["warframe-config-status"].textContent = `${label} · 配置 ${build.activeConfig}`;
-  notifyWarframeWorkbenchChanged();
+  if (typeof notifyWarframeWorkbenchChanged === "function") notifyWarframeWorkbenchChanged();
 }
 
 function switchWarframeConfig(name) {
@@ -9141,7 +9283,7 @@ function switchWarframeConfig(name) {
   build.activeConfig = name;
   applyWarframeConfig(build.configs[name]);
   if (ui["warframe-config-status"]) ui["warframe-config-status"].textContent = `配置 ${name}${build.configs[name] ? "已载入" : "为空"}`;
-  notifyWarframeWorkbenchChanged();
+  if (typeof notifyWarframeWorkbenchChanged === "function") notifyWarframeWorkbenchChanged();
 }
 
 function copyWarframeConfig() {
@@ -9902,7 +10044,9 @@ function renderWarframeProfile() {
 }
 
 function renderWarframeWorkbench() {
+  renderWarframeQuickSquad();
   renderWarframeExaltedCard();
+  renderWarframeNukeCard(state.warframeBuild.result);
   renderWarframeProfile();
   renderWarframeLoadout();
 }
@@ -9933,6 +10077,71 @@ function warframeSavedConfigLabels(row) {
   return ["A", "B", "C"].filter((c) => Boolean(slots?.[c]));
 }
 
+function wfPathToken(value) {
+  return String(value || "").trim().replaceAll("\\", "/").replace(/\/+$/, "").toLocaleLowerCase();
+}
+
+function helminthAbilityCompatibility(row, frame = activeWarframeRecord(), slot = state.warframeBuild.helminthSlot) {
+  if (!row || !frame) return { allowed: true };
+  if (Array.isArray(row.invalidSlots) && Number.isInteger(slot) && row.invalidSlots.includes(slot)) {
+    return { allowed: false, reason: "invalid-slot" };
+  }
+  const infusedPath = wfPathToken(row.path || row.id);
+  const nativeAbilities = Array.isArray(frame.abilities) ? frame.abilities.slice(0, 4) : [];
+  const nativePaths = new Set(nativeAbilities.map((ab) => wfPathToken(ab?.path || ab?.id)).filter(Boolean));
+  if (infusedPath && nativePaths.has(infusedPath)) {
+    return { allowed: false, reason: "duplicate-native" };
+  }
+  const hrules = state.warframeCatalog?.helminthRules || state.warframeCatalog?._synergy?.helminthRules || {};
+  const dmgBuffPaths = new Set((hrules.damageBuffAbilityPaths || []).map(wfPathToken));
+  if (infusedPath && dmgBuffPaths.has(infusedPath) && Number.isInteger(slot) && slot >= 0 && slot < 4) {
+    const framePath = wfPathToken(frame.path || frame.id);
+    const frameFamily = framePath.includes("/") ? framePath.slice(0, framePath.lastIndexOf("/")) : "";
+    const slotMap = hrules.damageBuffFrameSlotAbility || {};
+    let requiredNative = "";
+    for (const [k, v] of Object.entries(slotMap)) {
+      if (wfPathToken(k) === frameFamily) {
+        requiredNative = wfPathToken(v);
+        break;
+      }
+    }
+    if (requiredNative) {
+      const replacedNative = wfPathToken(nativeAbilities[slot]?.path || nativeAbilities[slot]?.id);
+      if (replacedNative !== requiredNative) {
+        const nativeIdx = nativeAbilities.findIndex((ab) => wfPathToken(ab?.path || ab?.id) === requiredNative);
+        const nativeObj = nativeIdx >= 0 ? nativeAbilities[nativeIdx] : null;
+        return {
+          allowed: false,
+          reason: "conflict-damage-buff",
+          nativeSlot: nativeIdx >= 0 ? nativeIdx + 1 : null,
+          nativeName: nativeObj ? warframeName(nativeObj) : "原有增伤技能",
+        };
+      }
+    }
+  }
+  return { allowed: true };
+}
+
+function invigorationAllowedForFrame(row, frame = activeWarframeRecord()) {
+  if (!row || !frame) return true;
+  const rawRestr = row.restrictions || row.ineligible || [];
+  const restrictions = Array.isArray(rawRestr) ? rawRestr : [rawRestr];
+  const frameTokens = new Set([frame.id, frame.path, frame.nameEn, frame.nameZh, frame.nameInternal].map((v) => String(v || "").trim().toLocaleLowerCase()).filter(Boolean));
+  const framePaths = new Set([frame.id, frame.path].map(wfPathToken).filter((v) => v.includes("/")));
+  const frameFamilies = new Set([...framePaths].map((p) => p.slice(0, p.lastIndexOf("/"))));
+  if (restrictions.some((v) => typeof v === "string" && frameTokens.has(v.trim().toLocaleLowerCase()))) return false;
+  const explicitPaths = Array.isArray(row.restrictionFramePaths) ? row.restrictionFramePaths : (row.restrictionFramePaths ? [row.restrictionFramePaths] : []);
+  if (explicitPaths.some((v) => typeof v === "string" && framePaths.has(wfPathToken(v)))) return false;
+  for (const v of restrictions) {
+    if (typeof v !== "string") continue;
+    const p = wfPathToken(v);
+    if (p.endsWith("basesuit") && p.includes("/") && frameFamilies.has(p.slice(0, p.lastIndexOf("/")))) return false;
+  }
+  const families = Array.isArray(row.restrictionFamilies) ? row.restrictionFamilies : (row.restrictionFamilies ? [row.restrictionFamilies] : []);
+  if (families.some((v) => typeof v === "string" && frameFamilies.has(wfPathToken(v)))) return false;
+  return true;
+}
+
 function warframePickerRowsBase() {
   const build = state.warframeBuild;
   const kind = state.warframePickerKind;
@@ -9943,8 +10152,10 @@ function warframePickerRowsBase() {
   if (kind === "frame") rows = warframeRows("warframes");
   else if (kind === "synergyFrame") rows = warframeEntityListWithForms(isExaltedWeapon());
   else if (kind === "companionFrame") rows = warframeEntityListWithForms(false);
-  else if (kind === "helminth") rows = warframeRows("helminth");
-  else if (kind === "helminthSlot") rows = [
+  else if (kind === "helminth") {
+    const frame = activeWarframeRecord();
+    rows = warframeRows("helminth").filter((row) => helminthAbilityCompatibility(row, frame, build.helminthSlot).allowed);
+  } else if (kind === "helminthSlot") rows = [
     { id: "", slot: null, nameZh: "不替换", nameEn: "None", description: "保留战甲原本的四个主动技能" },
     ...(activeWarframeRecord()?.abilities || []).slice(0, 4).map((ability, slot) => ({ ...ability, id: `helminth-slot-${slot}`, slot })),
   ];
@@ -9969,8 +10180,8 @@ function warframePickerRowsBase() {
     rows = rows.filter((row) => !usedArcanes.has(warframeId(row)));
   } else if (kind === "shard") rows = warframeRows("shards");
   else {
-    // 活化增幅：保留已选项在列表中（不过滤），后续渲染时标记 is-selected
-    rows = warframeRows("invigoration");
+    const frame = activeWarframeRecord();
+    rows = warframeRows("invigoration").filter((row) => invigorationAllowedForFrame(row, frame));
   }
   return rows.filter((row) => !query || [warframeName(row), row.nameEn, warframeId(row), warframeDescription(row), warframeSourceLabel(row)].filter(Boolean).join(" ").toLocaleLowerCase().includes(query));
 }
@@ -10003,20 +10214,8 @@ function renderWarframePicker() {
       }));
     } else categoryTarget.replaceChildren();
   }
-  ui["warframe-picker-list"].className = `mod-picker-grid${isMod ? "" : " is-warframe-image-list"}`;
-  const nodes = rows.slice(0, 240).map((row) => {
-    if (isMod) {
-      const option = create("button", "manual-mod-option");
-      option.type = "button";
-      option.dataset.modPath = warframeId(row);
-      const card = modPickerCard(row, kind);
-      card.classList.add("manual-option-card");
-      card.querySelector(".slot-number")?.remove();
-      option.append(card);
-      bindModPreview(option, row, kind);
-      option.addEventListener("click", () => applyWarframePickerRow(row));
-      return option;
-    }
+  ui["warframe-picker-list"].className = `mod-picker-grid${kind === "invigoration" ? " is-invigoration-grouped" : isMod ? "" : " is-warframe-image-list"}`;
+  const buildImageOptionNode = (row) => {
     const isFrameKind = ["frame", "synergyFrame", "companionFrame"].includes(kind);
     const rowId = warframeId(row);
     const isSelected = (kind === "invigoration" && state.warframeBuild.invigoration.some((selected) => warframeId(selected) === rowId))
@@ -10042,7 +10241,9 @@ function renderWarframePicker() {
     let sub;
     if (kind === "helminth") sub = warframeSourceLabel(row);
     else if (kind === "helminthSlot") sub = row.slot === null ? "保留原技能" : `原技能 ${Number(row.slot) + 1}`;
-    else if (isFrameKind) {
+    else if (kind === "invigoration") {
+      sub = String(row.category || "").toLocaleLowerCase() === "offensive" ? "攻势活化 · 第 1 项" : "辅助活化 · 第 2 项";
+    } else if (isFrameKind) {
       const savedSlots = warframeSavedConfigLabels(row);
       const formTag = row.isAlternateForm || row.parentFrameId ? "第二形态 · " : "";
       sub = `${formTag}满级 30${savedSlots.length ? ` · 已配装 ${savedSlots.join("/")}` : ""}`;
@@ -10053,6 +10254,72 @@ function renderWarframePicker() {
     option.append(visual, copy);
     option.addEventListener("click", () => applyWarframePickerRow(row));
     return option;
+  };
+  if (kind === "invigoration") {
+    const sectionNodes = [];
+    if (state.warframeBuild.invigoration.length) {
+      const clearWrap = create("div", "invigoration-clear-bar");
+      const clearBtn = create("button", "button button-quiet", "清空全部已选活化");
+      clearBtn.type = "button";
+      clearBtn.addEventListener("click", () => {
+        state.warframeBuild.invigoration = [];
+        closeWarframePicker();
+        renderWarframeWorkbench();
+        persistWarframeConfig();
+        scheduleWarframeCalculation();
+      });
+      clearWrap.append(clearBtn);
+      sectionNodes.push(clearWrap);
+    }
+    const groups = [
+      { key: "offensive", title: "攻势活化（第 1 槽）", hint: "技能面板 / 武器伤害 / 武器暴击（限选 1 项）" },
+      { key: "utility", title: "辅助活化（第 2 槽）", hint: "生命护盾护甲 / 能量装填 / 机动免疫（限选 1 项）" },
+    ];
+    for (const grp of groups) {
+      const grpRows = rows.filter((r) => String(r.category || "").toLocaleLowerCase() === grp.key);
+      if (!grpRows.length) continue;
+      const chosen = state.warframeBuild.invigoration.find((r) => String(r.category || "").toLocaleLowerCase() === grp.key);
+      const sec = create("section", `invigoration-group-section is-${grp.key}`);
+      const head = create("header", "invigoration-group-head");
+      const titleBox = create("div", "invigoration-group-title");
+      titleBox.append(create("strong", "", grp.title), create("small", "", `${grp.hint} · 共 ${grpRows.length} 项`));
+      const badge = create(
+        "span",
+        `invigoration-group-status${chosen ? " is-chosen" : ""}`,
+        chosen ? `已选：${warframeName(chosen)}` : "未选择",
+      );
+      head.append(titleBox, badge);
+      const grid = create("div", "invigoration-group-grid");
+      grid.append(...grpRows.map(buildImageOptionNode));
+      sec.append(head, grid);
+      sectionNodes.push(sec);
+    }
+    ui["warframe-picker-list"].replaceChildren(...(sectionNodes.length ? sectionNodes : [create("p", "empty-copy", "没有符合条件的记录")]));
+    const categories = new Set(state.warframeBuild.invigoration.map((row) => String(row.category || "").toLocaleLowerCase()));
+    const pending = !categories.has("offensive") && !categories.has("utility")
+      ? "请分别从「攻势活化」与「辅助活化」各选 1 项"
+      : !categories.has("offensive")
+        ? "已选辅助活化，还需选择 1 项攻势活化"
+        : !categories.has("utility")
+          ? "已选攻势活化，还需选择 1 项辅助活化"
+          : "攻势与辅助活化均已选齐（点击同区其他项可直接替换）";
+    ui["warframe-picker-sub"].textContent = `${pending} · 当前战甲可用 ${rows.length} 项`;
+    return;
+  }
+  const nodes = rows.slice(0, 240).map((row) => {
+    if (isMod) {
+      const option = create("button", "manual-mod-option");
+      option.type = "button";
+      option.dataset.modPath = warframeId(row);
+      const card = modPickerCard(row, kind);
+      card.classList.add("manual-option-card");
+      card.querySelector(".slot-number")?.remove();
+      option.append(card);
+      bindModPreview(option, row, kind);
+      option.addEventListener("click", () => applyWarframePickerRow(row));
+      return option;
+    }
+    return buildImageOptionNode(row);
   });
   if (kind === "companionFrame") {
     const query = String(ui["warframe-picker-search"]?.value || "").trim();
@@ -10100,24 +10367,18 @@ function renderWarframePicker() {
       nodes.unshift(autoBtn, neutralBtn);
     }
   }
-  if (kind === "invigoration" && state.warframeBuild.invigoration.length) {
-    const clear = create("button", "warframe-image-option is-clear");
-    clear.type = "button";
-    clear.append(create("span", "warframe-image-option-visual", "×"), create("span", "warframe-image-option-copy", "不应用活化增幅"));
-    clear.addEventListener("click", () => {
-      state.warframeBuild.invigoration = [];
-      closeWarframePicker();
-      renderWarframeWorkbench();
-      persistWarframeConfig();
-      scheduleWarframeCalculation();
-    });
-    nodes.unshift(clear);
-  }
   ui["warframe-picker-list"].replaceChildren(...(nodes.length ? nodes : [create("p", "empty-copy", "没有符合条件的记录")]));
-  if (kind === "invigoration") {
-    const categories = new Set(state.warframeBuild.invigoration.map((row) => String(row.category || "").toLocaleLowerCase()));
-    const pending = !categories.has("offensive") ? "还需选择攻势增幅" : !categories.has("utility") ? "还需选择辅助增幅" : "攻势与辅助均已选择";
-    ui["warframe-picker-sub"].textContent = `${pending} · ${rows.length} 条可选记录`;
+  if (kind === "helminth") {
+    const frame = activeWarframeRecord();
+    const conflictSample = warframeRows("helminth")
+      .map((r) => helminthAbilityCompatibility(r, frame, state.warframeBuild.helminthSlot))
+      .find((res) => res.reason === "conflict-damage-buff");
+    if (conflictSample) {
+      const slotHint = conflictSample.nativeSlot ? `第 ${conflictSample.nativeSlot} 技能槽` : "原增伤技能槽";
+      ui["warframe-picker-sub"].textContent = `${rows.length} 条可选技能 · 已自动屏蔽与本战甲「${conflictSample.nativeName}」冲突的增伤技能（仅替换${slotHint}时可选）`;
+    } else {
+      ui["warframe-picker-sub"].textContent = `${rows.length} 条可选技能（已自动过滤重复与槽位不兼容技能）`;
+    }
   } else if (kind === "shard") {
     // 组合源力石（翠绿/琥珀/紫红）说明：它们已在列表中，来源是 Helminth 的
     // 聚变合成——绯红+碧蓝→紫红、金黄+碧蓝→翠绿、3×绯红→琥珀。
@@ -10206,7 +10467,20 @@ function applyWarframePickerRow(row) {
   }
   if (kind === "helminthSlot") {
     build.helminthSlot = row.slot === null ? null : Number(row.slot);
-    if (build.helminthSlot === null) build.helminthAbility = null;
+    if (build.helminthSlot === null) {
+      build.helminthAbility = null;
+    } else if (build.helminthAbility) {
+      const check = helminthAbilityCompatibility(build.helminthAbility, activeWarframeRecord(), build.helminthSlot);
+      if (!check.allowed) {
+        const droppedName = warframeName(build.helminthAbility);
+        build.helminthAbility = null;
+        toast(
+          check.reason === "conflict-damage-buff"
+            ? `不允许双增伤：切换替换槽位后已清空「${droppedName}」（与本战甲「${check.nativeName}」冲突）`
+            : `切换替换槽位后已清空不兼容的「${droppedName}」`,
+        );
+      }
+    }
   } else if (kind === "helminth") {
     build.helminthAbility = selected;
   } else if (["aura", "exilus"].includes(kind)) {
@@ -10270,7 +10544,285 @@ function warframePayload() {
     helminthReplacement: build.helminthSlot !== null && build.helminthAbility ? { slot: build.helminthSlot, abilityId: warframeId(build.helminthAbility) } : null,
     invigoration: build.invigoration.map((row) => row.id ? { id: row.id } : { path: row.path }),
     applyConditionals: Boolean(build.applyConditionals),
+    arbucepEmpowered: Boolean(build.arbucepEmpowered),
+    nukeSetupId: build.nukeSetupId || null,
+    externalBuffs: build.syncSquadBuffs !== false ? externalBuffsPayload() : [],
+    operatorLink: build.syncOperator ? buildOperatorLinkPayload(true) : undefined,
   };
+}
+
+const WARFRAME_QUICK_SQUAD_PRESETS = [
+  { id: "parasitic-link", label: "寄生链接 (300%×总强度)", defaultItem: { id: "parasitic-link", strength: 3.0 } },
+  { id: "peaceful-provocation", label: "和平挑衅 (+80%强度)", defaultItem: { id: "peaceful-provocation", strength: 2.5 } },
+  { id: "jade-power-of-seven", label: "七人众之力 (+75%强度)", defaultItem: { id: "jade-power-of-seven", strength: 3.0 } },
+  { id: "brightbonnet-squad", label: "队友亮帽菇+蕈菇200%", defaultItem: { id: "brightbonnet-squad", strength: 3.0, arbucepEmpowered: true, count: 2 } },
+  { id: "roar", label: "战吼 (300% - DoT二次乘算)", defaultItem: { id: "roar", strength: 3.0 } },
+  { id: "molecular-prime", label: "分子填充 (加速+75% - 2×易伤)", defaultItem: { id: "molecular-prime", variant: "hold", casterStrength: 1.5 } },
+  { id: "dante-pageflight", label: "书页飞羽 (异常易伤)", defaultItem: { id: "dante-pageflight", strength: 2.5 } },
+];
+
+function renderWarframeQuickSquad() {
+  const host = ui["warframe-quick-squad"];
+  if (!host) return;
+  if (ui["warframe-sync-squad"]) ui["warframe-sync-squad"].checked = state.warframeBuild.syncSquadBuffs !== false;
+  if (ui["warframe-sync-operator"]) ui["warframe-sync-operator"].checked = Boolean(state.warframeBuild.syncOperator);
+  if (ui["warframe-arbucep-empowered"]) ui["warframe-arbucep-empowered"].checked = Boolean(state.warframeBuild.arbucepEmpowered);
+
+  const activeFrame = activeWarframeRecord();
+  const hasBrightbonnet = Boolean(
+    String(activeFrame?.nameEn || "").toLocaleLowerCase().includes("nokko")
+    || String(state.warframeBuild.helminthAbility?.nameEn || state.warframeBuild.helminthAbility?.id || "").toLocaleLowerCase().includes("shroom")
+    || String(state.warframeBuild.helminthAbility?.nameZh || "").includes("亮帽菇")
+  );
+  if (ui["warframe-arbucep-wrap"]) {
+    ui["warframe-arbucep-wrap"].style.opacity = hasBrightbonnet ? "1" : "0.72";
+  }
+
+  host.replaceChildren(...WARFRAME_QUICK_SQUAD_PRESETS.map((preset) => {
+    const active = state.externalBuffs.some((b) => b.id === preset.id);
+    const btn = create("button", `warframe-quick-buff-btn${active ? " is-active" : ""}`, `${active ? "✓ " : "+ "}${preset.label}`);
+    btn.type = "button";
+    btn.setAttribute("aria-pressed", String(active));
+    btn.addEventListener("click", () => {
+      if (active) {
+        state.externalBuffs = state.externalBuffs.filter((b) => b.id !== preset.id);
+      } else {
+        state.externalBuffs.push(normalizeExternalBuffs([preset.defaultItem])[0]);
+        state.warframeBuild.syncSquadBuffs = true;
+      }
+      state.synergyBridgeCache = {};
+      renderExternalBuffs();
+      renderWarframeQuickSquad();
+      persistActiveBuildConfig();
+      scheduleWarframeCalculation();
+      scheduleLiveManualSimulation();
+    });
+    return btn;
+  }));
+}
+
+function renderWarframeNukeCard(result) {
+  const card = ui["warframe-nuke-card"];
+  if (!card) return;
+  const nuke = result?.defenseNuke;
+  const ranges = Array.isArray(result?.abilityRanges) ? result.abilityRanges : (nuke?.abilityRanges || []);
+
+  // Also update active squad/focus pills under #warframe-synergy-bar
+  const squadHost = ui["warframe-squad-pills"];
+  if (squadHost) {
+    const sqPills = [
+      ...(result?.weaponBridge?.squadBuffSummary?.summaryPills || []),
+      ...(result?.weaponBridge?.operatorSummary?.summaryPills || []),
+    ];
+    squadHost.hidden = !sqPills.length;
+    squadHost.replaceChildren(...sqPills.map((t) => synergyPill(t, "good")));
+  }
+
+  const availableSetups = Array.isArray(nuke?.availableSetups) ? nuke.availableSetups : [];
+  const buildRouteSwitcher = () => {
+    if (availableSetups.length <= 1 && !availableSetups.some((r) => r.available === false)) return null;
+    const box = create("div", "warframe-nuke-routes");
+    box.append(
+      create(
+        "span",
+        "warframe-nuke-routes-label",
+        availableSetups.length > 1
+          ? "玩法流派路线切换（点击选择要评估并带入 3D 靶场的玩法）："
+          : "玩法路线状态检查：",
+      ),
+    );
+    const list = create("div", "warframe-nuke-routes-list");
+    for (const r of availableSetups) {
+      const isSelected = Boolean(nuke?.setupId && r.setupId === nuke.setupId);
+      const isAvail = r.available !== false;
+      const btn = create(
+        "button",
+        `warframe-nuke-route-btn${isSelected ? " is-active" : ""}${!isAvail ? " is-disabled" : ""}`,
+      );
+      btn.type = "button";
+      btn.disabled = !isAvail;
+      btn.setAttribute("aria-pressed", String(isSelected));
+      const tagText = !isAvail
+        ? "槽位已替换"
+        : isSelected
+          ? "当前选用"
+          : r.recommended
+            ? "推荐当前配卡"
+            : "点击切换";
+      btn.append(
+        create("strong", "", r.labelZh || r.setupId),
+        create("small", "", !isAvail ? (r.unavailableReasonZh || "核心槽位已被替换") : tagText),
+      );
+      if (r.unavailableReasonZh) btn.title = r.unavailableReasonZh;
+      if (isAvail) {
+        btn.addEventListener("click", () => {
+          if (state.warframeBuild.nukeSetupId === r.setupId && isSelected) return;
+          state.warframeBuild.nukeSetupId = r.setupId;
+          persistWarframeConfig();
+          scheduleWarframeCalculation();
+        });
+      }
+      list.append(btn);
+    }
+    box.append(list);
+    return box;
+  };
+
+  if (!nuke || !nuke.supported) {
+    if (!ranges.length && !availableSetups.length) {
+      card.hidden = true;
+      card.replaceChildren();
+      return;
+    }
+    card.hidden = false;
+    const head = create("div", "warframe-nuke-head");
+    const tBox = create("div", "warframe-nuke-title");
+    tBox.append(
+      create("span", "synergy-kicker", "ABILITY RANGE READOUT"),
+      create("strong", "", availableSetups.length ? "地图炮核心技能已被 Helminth 替换" : "技能作用范围总览（3D 靶场支持地面范围环）"),
+      create("small", "", nuke?.notesZh || "当前战甲不属于 16 套主流防御地图炮模板，但仍可在 3D 靶场开启地面范围圈辅助观测。"),
+    );
+    head.append(tBox);
+    const children = [head];
+    const switcher = buildRouteSwitcher();
+    if (switcher) children.push(switcher);
+    if (ranges.length) {
+      const rangeRow = create("div", "warframe-nuke-ranges");
+      for (const r of ranges) {
+        const chip = create("span", "warframe-range-chip");
+        chip.append(
+          create("span", "", `[${r.slot}技] ${r.nameZh || r.nameEn}`),
+          create("b", "", `${Number(r.moddedRadiusM || 0).toFixed(1)}m`),
+          create("small", "", r.ignoresLoS ? "穿墙" : "视线"),
+        );
+        rangeRow.append(chip);
+      }
+      children.push(rangeRow);
+    }
+    card.replaceChildren(...children);
+    return;
+  }
+
+  card.hidden = false;
+  const head = create("div", "warframe-nuke-head");
+  const titleBox = create("div", "warframe-nuke-title");
+  titleBox.append(
+    create("span", "synergy-kicker", "DEFENSE MAP NUKE SOLVER"),
+    create("strong", "", nuke.titleZh || "防御地图炮清场解算"),
+    create("small", "", `实战连招与分工：${nuke.comboSequenceZh || "--"}`),
+  );
+  const badges = create("div", "warframe-nuke-badges");
+  badges.append(
+    synergyPill(nuke.losLabelZh || (nuke.ignoresLoS ? "无视视线穿墙" : "受视线限制"), nuke.ignoresLoS ? "good" : "warn"),
+    synergyPill(nuke.energySelfSustaining ? "能量循环可自持" : "高耗蓝建议配亮帽菇/充沛/Z精", nuke.energySelfSustaining ? "good" : "warn"),
+  );
+  if (Number(nuke.effectiveArmorStrip) > 0) {
+    badges.append(synergyPill(`技能+光环净削甲 ${Math.round(Number(nuke.effectiveArmorStrip) * 100)}%`, "good"));
+  }
+  head.append(titleBox, badges);
+
+  const routeSwitcher = buildRouteSwitcher();
+
+  const checkItems = Array.isArray(nuke.buildChecks) ? nuke.buildChecks : [];
+  let checkBox = null;
+  if (checkItems.length) {
+    checkBox = create("div", "warframe-nuke-checks");
+    for (const item of checkItems) {
+      const st = item.status === "warn" ? "warn" : item.status === "ok" ? "ok" : "info";
+      const mark = st === "warn" ? "⚠ " : st === "ok" ? "✓ " : "ℹ ";
+      checkBox.append(create("div", `warframe-nuke-check is-${st}`, `${mark}${item.textZh || ""}`));
+    }
+  }
+
+  const rangeRow = create("div", "warframe-nuke-ranges");
+  for (const r of ranges) {
+    const chip = create("span", "warframe-range-chip");
+    chip.append(
+      create("span", "", `[${r.slot}技] ${r.nameZh || r.nameEn}`),
+      create("b", "", `${Number(r.moddedRadiusM || 0).toFixed(1)}m`),
+      create("small", "", r.ignoresLoS ? "穿墙" : "视线"),
+    );
+    rangeRow.append(chip);
+  }
+
+  const metrics = create("div", "warframe-nuke-metrics");
+  const addStat = (lbl, val, sub) => {
+    const st = create("div", "warframe-nuke-stat");
+    st.append(create("span", "", lbl), create("strong", "", val), create("small", "", sub));
+    metrics.append(st);
+  };
+  const totalCombo = Number(nuke.totalDamagePerCombo || 0);
+  const directCombo = Number(nuke.directDamagePerCombo || 0);
+  const dotCombo = Number(nuke.dotDamagePerCombo || 0);
+  addStat(
+    "单套连招期望总伤",
+    nuke.scalesWithEnemyMaxHp ? "75%敌血盾池" : formatMetric(totalCombo),
+    nuke.scalesWithEnemyMaxHp
+      ? "击杀2名同级杂兵即攒满整波斩杀线"
+      : `直伤 ${formatMetric(directCombo)}${dotCombo > 0 ? ` + 异常 ${formatMetric(dotCombo)}` : ""}`,
+  );
+  addStat(
+    "施放耗时 / 耗蓝与分段半径",
+    `${Number(nuke.comboTimingSec || 0).toFixed(2)}s / ${Math.round(Number(nuke.comboEnergyCost || 0))}蓝`,
+    `${nuke.radiusSummaryZh || `作用半径 ${Number(nuke.primaryRadiusM || 0).toFixed(1)}m`} | 等效泄蓝 ${Number(nuke.comboEnergyPerSec || 0).toFixed(1)}/s`,
+  );
+  const normWave = nuke.normalDefenseWave || {};
+  addStat(
+    "面板木桩单轮估算 (Lv30 常规)",
+    `~${Number(normWave.estimatedWaveClearSec || 0).toFixed(1)}s / 波`,
+    `无地形理论值 | 技能约 ${Math.round(Number(normWave.abilityKillShareEstimate || 0) * 100)}% / 补刀 ${Math.round(Number(normWave.gunCleanupShareEstimate || 0) * 100)}%`,
+  );
+  const spWave = nuke.steelPathDefenseWave || {};
+  addStat(
+    "面板木桩单轮估算 (Lv130 钢铁 2.5×)",
+    `~${Number(spWave.estimatedWaveClearSec || 0).toFixed(1)}s / 波`,
+    `无地形理论值 | 每批约 ${spWave.combosPerBatch ?? 1} 轮 (真实走廊与掉落请进 3D 靶场)`,
+  );
+
+  const guideLines = Array.isArray(nuke.workflowGuideZh) ? nuke.workflowGuideZh : [];
+  let guideBox = null;
+  if (guideLines.length) {
+    guideBox = create("div", "warframe-nuke-guide");
+    for (const line of guideLines) {
+      guideBox.append(create("p", "", line));
+    }
+  }
+
+  const foot = create("div", "warframe-nuke-foot");
+  foot.append(create("p", "", `${nuke.damageTypeZh ? `[${nuke.damageTypeZh}] ` : ""}${nuke.notesZh || ""}`));
+  const jumpBtn = create("button", "button button-fill", "应用当前路线并前往 3D 靶场模拟 ↗");
+  jumpBtn.type = "button";
+  jumpBtn.addEventListener("click", async () => {
+    const fid = warframeId(activeWarframeRecord());
+    const chosenSetupId = nuke.setupId || state.warframeBuild.nukeSetupId || null;
+    if (fid) {
+      state.warframeBuild.nukeSetupId = chosenSetupId;
+      persistWarframeConfig();
+      state.warframeLink.enabled = true;
+      state.warframeLink.frameId = fid;
+      state.warframeLink.configName = state.warframeBuild.activeConfig || "A";
+      state.warframeLink.arbucepEmpowered = Boolean(state.warframeBuild.arbucepEmpowered);
+      state.warframeLink.nukeSetupId = chosenSetupId;
+      state.warframeLink.abilityRotation = {
+        ...(state.warframeLink.abilityRotation || {}),
+        enabled: true,
+      };
+      if (state.warframeBuild.syncOperator) {
+        state.operatorLink.enabled = true;
+      }
+      renderSynergyHub();
+      persistActiveBuildConfig();
+    }
+    await openArenaFromBuild();
+    arenaView?.applyDefenseNukePreset?.({
+      steelPath: true,
+      arbucepEmpowered: Boolean(state.warframeBuild.arbucepEmpowered),
+      nukeSetupId: chosenSetupId,
+    });
+  });
+  foot.append(jumpBtn);
+
+  card.replaceChildren(...[head, routeSwitcher, checkBox, rangeRow, metrics, guideBox, foot].filter(Boolean));
 }
 
 function scheduleWarframeCalculation() {
@@ -10299,8 +10851,9 @@ async function calculateWarframeBuild() {
 }
 
 function setWarframeMessage(message) {
-  ui["warframe-message"].hidden = !message;
-  ui["warframe-message"].textContent = message || "";
+  const cleaned = String(message || "").replace(/\s*\([A-Za-z0-9 _./:-]+\)\s*$/, "").trim();
+  ui["warframe-message"].hidden = !cleaned;
+  ui["warframe-message"].textContent = cleaned;
 }
 
 function warframePanelValue(key, value) {
@@ -10524,10 +11077,16 @@ function renderWarframeResult(result) {
       if (finalNum > baseNum + tolerance) cell.classList.add("is-improved");
       else if (finalNum < baseNum - tolerance) cell.classList.add("is-worse");
     }
-    cell.append(create("span", "", label), create("strong", "", finalValue), create("small", "", `基础 ${baseValue}`));
+    const spawnEnergy = key === "energy" ? Number(result.weaponBridge?.energyEconomy?.spawnEnergy) : NaN;
+    const subNote = Number.isFinite(spawnEnergy)
+      ? `基础 ${baseValue} / 出生 ${Math.round(spawnEnergy)}`
+      : `基础 ${baseValue}`;
+    cell.append(create("span", "", label), create("strong", "", finalValue), create("small", "", subNote));
     return cell;
   }));
+  renderWarframeQuickSquad();
   renderWarframeExaltedCard();
+  renderWarframeNukeCard(result);
   const globalScale = `强度 ${warframePanelValue("abilityStrength", final.abilityStrength)} · 持续 ${warframePanelValue("abilityDuration", final.abilityDuration)} · 范围 ${warframePanelValue("abilityRange", final.abilityRange)} · 效率 ${warframePanelValue("abilityEfficiency", final.abilityEfficiency)}`;
   const sourceAbilities = Array.isArray(activeWarframeRecord()?.abilities) ? activeWarframeRecord().abilities : [];
   const abilities = Array.isArray(result.abilityScalars) ? result.abilityScalars : sourceAbilities;
@@ -10556,6 +11115,24 @@ function renderWarframeResult(result) {
       else if (costDelta === "worse") costRow.classList.add("is-worse");
       costRow.append(create("span", "", costDisplay.label), create("strong", "", costDisplay.text), create("small", "", costDisplay.note || (costDisplay.base ? `基础 ${costDisplay.base}` : "官方资源规则")));
       scalarList.append(costRow);
+    }
+    const castInfo = ability.castTime;
+    if (castInfo && Number.isFinite(Number(castInfo.baseSeconds))) {
+      const baseCast = Number(castInfo.baseSeconds);
+      const effCast = Number.isFinite(Number(castInfo.seconds)) ? Number(castInfo.seconds) : baseCast;
+      const castRow = create("div", baseCast <= 0 ? "is-static" : "");
+      if (baseCast > 0) {
+        if (effCast < baseCast - 1e-6) castRow.classList.add("is-improved");
+        else if (effCast > baseCast + 1e-6) castRow.classList.add("is-worse");
+      }
+      const castValText = baseCast <= 0
+        ? "0 秒（瞬发无硬直）"
+        : `${warframeNumber(effCast)} 秒${castInfo.oneHandedNonBlocking ? "（单手不停火）" : ""}`;
+      const castSubText = baseCast <= 0
+        ? "客户端动作瞬发"
+        : `施放速度缩放 / 基础 ${warframeNumber(baseCast)} 秒`;
+      castRow.append(create("span", "", "施放耗时"), create("strong", "", castValText), create("small", "", castSubText));
+      scalarList.append(castRow);
     }
     let currentGroup = "";
     if (scalars.length) scalars.forEach((scalar) => {
@@ -10624,8 +11201,9 @@ function setActiveTool(name, options = {}) {
   if (!ui[`${name}-tool`]) return;
   if (name === "arena" && !arenaView?.hasLoadout) { openArenaFromBuild(); return; }
   const previousTool = state.activeTool;
-  if (options.fromBuild && (name === "warframe" || name === "companion")) {
+  if (options.fromBuild && (name === "warframe" || name === "companion" || name === "operator")) {
     state.synergyReturnTarget = name;
+    state.operatorReturnFrom = options.returnTo || "build";
   } else if (name === "build" || name === "analysis" || (!options.preserveReturn && name !== state.synergyReturnTarget)) {
     state.synergyReturnTarget = null;
   }
@@ -10637,8 +11215,10 @@ function setActiveTool(name, options = {}) {
   ui["build-tool"].hidden = name !== "build";
   ui["warframe-tool"].hidden = name !== "warframe";
   if (ui["companion-tool"]) ui["companion-tool"].hidden = name !== "companion";
+  if (ui["operator-tool"]) ui["operator-tool"].hidden = name !== "operator";
   if (ui["warframe-return-bar"]) ui["warframe-return-bar"].hidden = !(name === "warframe" && state.synergyReturnTarget === "warframe");
   if (ui["companion-return-bar"]) ui["companion-return-bar"].hidden = !(name === "companion" && state.synergyReturnTarget === "companion");
+  if (ui["operator-return-bar"]) ui["operator-return-bar"].hidden = !(name === "operator" && state.synergyReturnTarget === "operator");
   if (ui["arena-tab-chip"]) {
     ui["arena-tab-chip"].hidden = name !== "arena";
     ui["arena-tab-chip"].classList.toggle("is-active", name === "arena");
@@ -10646,13 +11226,15 @@ function setActiveTool(name, options = {}) {
   if (name === "analysis") requestAnimationFrame(fitRivenCardText);
   ui["page-title"].textContent = name === "arena"
     ? "场景靶场"
-    : name === "companion"
-      ? "同伴配装"
-      : name === "warframe"
-        ? "战甲配装"
-        : name === "build"
-          ? "武器配装"
-          : "紫卡分析";
+    : name === "operator"
+      ? "指挥官专精"
+      : name === "companion"
+        ? "同伴配装"
+        : name === "warframe"
+          ? "战甲配装"
+          : name === "build"
+            ? "武器配装"
+            : "紫卡分析";
   for (const button of document.querySelectorAll("[data-tab]")) {
     const active = button.dataset.tab === name;
     button.classList.toggle("is-active", active);
@@ -10671,6 +11253,12 @@ function setActiveTool(name, options = {}) {
       syncLivePrimaryStatsIntoCompanion(false);
       renderCompanionControlPane();
       scheduleCompanionEvaluate();
+    }).catch(() => {});
+  }
+  if (name === "operator") {
+    loadOperatorCatalog().then(() => {
+      renderOperatorWorkbench();
+      scheduleOperatorEvaluate();
     }).catch(() => {});
   }
   if (name === "build" && (previousTool === "warframe" || previousTool === "companion")) {
@@ -11063,6 +11651,7 @@ function buildPayloadFromForm() {
     exaltedFrame: exaltedPayload(),
     warframeLink: buildWarframeLinkPayload(),
     companionLink: buildCompanionLinkPayload(),
+    operatorLink: buildOperatorLinkPayload(),
     companionPlayerStacks: isCompanionWeapon() && state.companionPlayerStacks ? true : undefined,
     minFill: scopeFillValue("build-min-fill"),
     maxFill: scopeFillValue("build-max-fill"),
@@ -13114,7 +13703,7 @@ function bindEvents() {
   ui["arena-tool"]?.addEventListener("arena-back", () => { location.hash = "build"; setActiveTool("build"); });
   window.addEventListener("hashchange", () => {
     const tool = location.hash.replace("#", "");
-    if (["analysis", "build", "warframe", "companion", "arena"].includes(tool)) setActiveTool(tool, { preserveReturn: true });
+    if (["analysis", "build", "warframe", "companion", "operator", "arena"].includes(tool)) setActiveTool(tool, { preserveReturn: true });
   });
   ui["build-enemy-open"]?.addEventListener("click", openEnemyPicker);
   ui["enemy-picker-close"]?.addEventListener("click", closeEnemyPicker);
@@ -13142,6 +13731,7 @@ function bindEvents() {
   bindWarframeEvents();
   bindCompanionWorkbenchEvents();
   bindSynergyHubEvents();
+  bindOperatorWorkbenchEvents();
   ui["weapon-build-form"]?.addEventListener("input", () => { updateCustomDamageControls(); persistActiveBuildConfig(); scheduleLiveManualSimulation(); });
   ui["weapon-build-form"]?.addEventListener("change", () => { refreshProjectileStrategyControls(); persistActiveBuildConfig(); scheduleLiveManualSimulation(); });
   ui["weapon-build-form"].addEventListener("submit", submitWeaponBuild);
@@ -16124,6 +16714,9 @@ function bindCompanionWorkbenchEvents() {
 // ── 武器配装页：双卡「协同配装中枢」 (#build-synergy-panel) ───────────────
 function captureSynergyWarframeLink() {
   const link = state.warframeLink || {};
+  const castOrder = Array.isArray(link.abilityRotation?.castOrder)
+    ? link.abilityRotation.castOrder.map((x) => String(x || "").trim()).filter(Boolean)
+    : [];
   return {
     enabled: Boolean(link.enabled),
     frameId: link.frameId || null,
@@ -16131,6 +16724,12 @@ function captureSynergyWarframeLink() {
     activeAbilities: Array.isArray(link.activeAbilities) ? [...link.activeAbilities] : null,
     abilityElements: { ...(link.abilityElements || {}) },
     damageTriggerMode: ["ai", "assumed", "off"].includes(link.damageTriggerMode) ? link.damageTriggerMode : "ai",
+    arbucepEmpowered: Boolean(link.arbucepEmpowered),
+    nukeSetupId: link.nukeSetupId || null,
+    abilityRotation: {
+      enabled: Boolean(link.abilityRotation?.enabled),
+      castOrder,
+    },
   };
 }
 
@@ -16144,8 +16743,22 @@ function captureSynergyCompanionLink() {
   };
 }
 
+function captureSynergyOperatorLink() {
+  const link = state.operatorLink || {};
+  return {
+    enabled: Boolean(link.enabled),
+    configName: /^[ABC]$/.test(link.configName || "") ? link.configName : "A",
+    triggerMode: ["passive", "cycle", "peak"].includes(link.triggerMode) ? link.triggerMode : "passive",
+    enableNaramonPreconditions: Boolean(link.enableNaramonPreconditions),
+    enableTauronStrike: Boolean(link.enableTauronStrike),
+  };
+}
+
 function restoreSynergyLinks(config) {
   const savedWf = config?.warframeLink;
+  const savedOrder = Array.isArray(savedWf?.abilityRotation?.castOrder)
+    ? savedWf.abilityRotation.castOrder.map((x) => String(x || "").trim()).filter(Boolean)
+    : [];
   state.warframeLink = {
     enabled: Boolean(savedWf?.enabled === true),
     frameId: savedWf?.frameId || null,
@@ -16153,6 +16766,12 @@ function restoreSynergyLinks(config) {
     activeAbilities: Array.isArray(savedWf?.activeAbilities) ? [...savedWf.activeAbilities] : null,
     abilityElements: savedWf?.abilityElements && typeof savedWf.abilityElements === "object" ? { ...savedWf.abilityElements } : {},
     damageTriggerMode: ["ai", "assumed", "off"].includes(savedWf?.damageTriggerMode) ? savedWf.damageTriggerMode : "ai",
+    arbucepEmpowered: Boolean(savedWf?.arbucepEmpowered ?? savedWf?.abilityRotation?.arbucepEmpowered ?? false),
+    nukeSetupId: typeof savedWf?.nukeSetupId === "string" && savedWf.nukeSetupId ? savedWf.nukeSetupId : null,
+    abilityRotation: {
+      enabled: Boolean(savedWf?.abilityRotation?.enabled === true),
+      castOrder: savedOrder,
+    },
   };
   const savedComp = config?.companionLink;
   state.companionLink = {
@@ -16161,6 +16780,20 @@ function restoreSynergyLinks(config) {
     configName: /^[ABC]$/.test(savedComp?.configName || "") ? savedComp.configName : "A",
     weaponConfigName: /^[ABC]$/.test(savedComp?.weaponConfigName || "") ? savedComp.weaponConfigName : "A",
   };
+  const savedOp = config?.operatorLink;
+  state.operatorLink = {
+    enabled: Boolean(savedOp?.enabled === true),
+    configName: /^[ABC]$/.test(savedOp?.configName || "") ? savedOp.configName : "A",
+    triggerMode: ["passive", "cycle", "peak"].includes(savedOp?.triggerMode) ? savedOp.triggerMode : "passive",
+    enableNaramonPreconditions: Boolean(savedOp?.enableNaramonPreconditions === true),
+    enableTauronStrike: Boolean(savedOp?.enableTauronStrike === true),
+  };
+  if (state.operatorLink.enabled) {
+    loadOperatorCatalog().then(() => {
+      renderSynergyHub();
+      scheduleLiveBuild();
+    }).catch(() => {});
+  }
   if (state.warframeLink.enabled) {
     loadWarframeCatalog().then(() => {
       ensureDefaultSynergyWarframeSelection();
@@ -16481,6 +17114,10 @@ async function applySynergyWarframeSelection(frameId, configName = state.warfram
   if (changedFrame) {
     state.warframeLink.activeAbilities = null;
     state.warframeLink.abilityElements = {};
+    state.warframeLink.nukeSetupId = null;
+    if (state.warframeLink.abilityRotation) {
+      state.warframeLink.abilityRotation.castOrder = [];
+    }
   }
   if (enforceExaltedSynergySync(false)) {
     renderExaltedPanel();
@@ -16517,9 +17154,38 @@ function buildWarframeLinkPayload() {
     ...(Array.isArray(state.warframeLink.activeAbilities) ? { activeAbilities: [...state.warframeLink.activeAbilities] } : {}),
     abilityElements: { ...(state.warframeLink.abilityElements || {}) },
     damageTriggerMode: state.warframeLink.damageTriggerMode || "ai",
+    arbucepEmpowered: Boolean(state.warframeLink.arbucepEmpowered),
+    nukeSetupId: state.warframeLink.nukeSetupId || stored.config?.nukeSetupId || null,
+    abilityRotation: {
+      enabled: Boolean(state.warframeLink.abilityRotation?.enabled),
+      arbucepEmpowered: Boolean(state.warframeLink.arbucepEmpowered),
+      castOrder: Array.isArray(state.warframeLink.abilityRotation?.castOrder)
+        ? [...state.warframeLink.abilityRotation.castOrder]
+        : [],
+    },
     nameZh: rec?.nameZh || undefined,
     nameEn: rec?.nameEn || undefined,
     portraitAsset: rec?.portraitAsset || rec?.iconAsset || "/assets/warframes/portraits/Excalibur.png",
+  };
+}
+
+function buildOperatorLinkPayload(forceEnable = false) {
+  if (!forceEnable && (isCompanionWeapon() || !state.operatorLink?.enabled)) return undefined;
+  const opStore = state.operatorBuild?.store && Object.keys(state.operatorBuild.store).length
+    ? state.operatorBuild.store
+    : readOperatorStore();
+  const cfgName = state.operatorLink?.configName || state.operatorBuild?.activeConfig || "A";
+  const preset = structuredClone(opStore[cfgName] || activeOperatorPreset());
+  return {
+    enabled: true,
+    configName: cfgName,
+    activeSchool: preset.activeSchool || "madurai",
+    schools: preset.schools || {},
+    unboundWayBounds: Array.isArray(preset.unboundWayBounds) ? [...preset.unboundWayBounds] : [],
+    activeTriggers: preset.activeTriggers || {},
+    triggerMode: state.operatorLink?.triggerMode || "passive",
+    enableNaramonPreconditions: Boolean(state.operatorLink?.enableNaramonPreconditions),
+    enableTauronStrike: Boolean(state.operatorLink?.enableTauronStrike),
   };
 }
 
@@ -16604,7 +17270,10 @@ function renderSynergyCompanionOptions() {
 
 function synergyWarframeCacheKey(frameId, configName) {
   const stored = warframeStoredConfig(frameId, configName);
-  return `${frameId}|${configName}|${JSON.stringify(stored.config || null)}|${JSON.stringify(stored.parentConfig || null)}`;
+  const extSig = JSON.stringify(externalBuffsPayload());
+  const opSig = state.operatorLink?.enabled ? JSON.stringify(buildOperatorLinkPayload()) : "";
+  const arbSig = state.warframeLink?.arbucepEmpowered ? "arb1" : "arb0";
+  return `${frameId}|${configName}|${arbSig}|${extSig}|${opSig}|${JSON.stringify(stored.config || null)}|${JSON.stringify(stored.parentConfig || null)}`;
 }
 
 async function ensureSynergyWarframeBridge(triggerSimAfter = false) {
@@ -16636,6 +17305,9 @@ async function ensureSynergyWarframeBridge(triggerSimAfter = false) {
         frameId,
         ...(stored.config || {}),
         ...(stored.parentConfig ? { parentConfig: stored.parentConfig } : {}),
+        arbucepEmpowered: Boolean(state.warframeLink.arbucepEmpowered),
+        externalBuffs: externalBuffsPayload(),
+        operatorLink: buildOperatorLinkPayload(),
       }),
     });
     const body = await response.json();
@@ -16655,8 +17327,16 @@ async function ensureSynergyWarframeBridge(triggerSimAfter = false) {
 }
 
 function syncSynergyAbilitiesWithBridge(calcResult) {
-  const abilities = calcResult?.weaponBridge?.availableAbilities || [];
+  const rawAbilities = calcResult?.weaponBridge?.availableAbilities || [];
+  const abilities = rawAbilities.filter((a) => a.rotationSpec?.excludedReason !== "excluded_form_switch");
+  const slotAbilities = calcResult?.weaponBridge?.energyEconomy?.slotAbilities || [];
   const validIds = new Set(abilities.map((a) => a.id));
+  for (const sa of slotAbilities) {
+    if (sa.rotationEligible !== false) {
+      if (sa.id) validIds.add(sa.id);
+      if (Number.isInteger(sa.slot)) validIds.add(`slot-${sa.slot + 1}`);
+    }
+  }
   if (!Array.isArray(state.warframeLink.activeAbilities)) {
     state.warframeLink.activeAbilities = abilities.filter((a) => a.defaultActive !== false).map((a) => a.id);
   } else {
@@ -16670,68 +17350,343 @@ function syncSynergyAbilitiesWithBridge(calcResult) {
   }
 }
 
+function buildSynergyElementSelect(ab) {
+  const elSelect = document.createElement("select");
+  elSelect.className = "synergy-ability-element";
+  elSelect.setAttribute("aria-label", `${ab.nameZh || ab.nameEn} 元素类型`);
+  const opts = Array.isArray(ab.elementOptions) && ab.elementOptions.length
+    ? ab.elementOptions
+    : ["DT_FIRE", "DT_FREEZE", "DT_ELECTRICITY", "DT_POISON"];
+  for (const dt of opts) {
+    const opt = document.createElement("option");
+    opt.value = dt;
+    opt.textContent = DAMAGE_TYPE_LABELS[dt] || dt;
+    elSelect.append(opt);
+  }
+  elSelect.value = state.warframeLink.abilityElements[ab.id] || opts[0];
+  elSelect.addEventListener("click", (ev) => ev.stopPropagation());
+  elSelect.addEventListener("change", (ev) => {
+    ev.stopPropagation();
+    state.warframeLink.abilityElements[ab.id] = elSelect.value;
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+  return elSelect;
+}
+
+function liveSynergyAbilitySummaryMap() {
+  const synWf = (state.buildResult?.synergySummary || state.buildResult?.simulation?.synergySummary)?.warframe;
+  const map = new Map();
+  if (!synWf || synWf.frame?.id !== state.warframeLink.frameId) return map;
+  for (const row of synWf.activeAbilities || []) {
+    if (row?.id && row.summaryZh) {
+      map.set(row.id, row.summaryZh);
+    }
+  }
+  return map;
+}
+
 function renderSynergyWarframeAbilities(calcResult) {
   const host = ui["synergy-wf-abilities"];
+  const titleEl = ui["synergy-wf-abilities-title"];
   const note = ui["synergy-wf-abilities-note"];
+  const orderHost = ui["synergy-wf-cast-order"];
   if (!host) return;
-  const abilities = calcResult?.weaponBridge?.availableAbilities || [];
-  if (!abilities.length) {
-    if (note) note.textContent = "当前战甲配置无直接作用于武器的主动增益或强化卡";
-    host.replaceChildren(create("span", "synergy-empty-pill", "无武器增益技能（面板/光环/源力石/赋能仍正常参与协同）"));
+  const rawAbilities = calcResult?.weaponBridge?.availableAbilities || [];
+  const abilities = rawAbilities.filter((a) => a.rotationSpec?.excludedReason !== "excluded_form_switch");
+  const slotAbilities = calcResult?.weaponBridge?.energyEconomy?.slotAbilities || [];
+  const liveSummaries = liveSynergyAbilitySummaryMap();
+  const activeSet = new Set(state.warframeLink.activeAbilities || []);
+  const rotEnabled = Boolean(state.warframeLink.abilityRotation?.enabled);
+
+  if (!rotEnabled) {
+    host.classList.remove("is-rotation-grid");
+    if (orderHost) {
+      orderHost.hidden = true;
+      orderHost.replaceChildren();
+    }
+    if (titleEl) titleEl.textContent = "本甲武器增益技能与强化";
+    if (!abilities.length) {
+      if (note) note.textContent = "当前战甲配置无直接作用于武器的主动增益或强化卡";
+      host.replaceChildren(create("span", "synergy-empty-pill", "无武器增益技能（面板/光环/源力石/赋能仍正常参与协同）"));
+      return;
+    }
+    const activeCount = abilities.filter((ab) => activeSet.has(ab.id)).length;
+    if (note) {
+      note.textContent = `已启用 ${activeCount} / ${abilities.length} 项武器增益`;
+    }
+    host.replaceChildren(...abilities.map((ab) => {
+      const isOn = activeSet.has(ab.id);
+      const group = create("div", `synergy-ability-chip${isOn ? " is-active" : ""}`);
+      const toggle = create("button", "synergy-ability-btn");
+      toggle.type = "button";
+      toggle.setAttribute("aria-pressed", String(isOn));
+      const summaryTxt = (isOn && liveSummaries.get(ab.id)) || ab.summaryZh || "";
+      toggle.title = [ab.nameZh || ab.nameEn, ab.isHelminth ? "Helminth 注入" : "", ab.isAugment ? "技能强化 MOD" : "", summaryTxt].filter(Boolean).join(" - ");
+      if (ab.iconAsset) {
+        toggle.append(imageNode(ab.iconAsset, "synergy-ability-icon", "", "lazy"));
+      }
+      toggle.append(create("span", "", `${ab.nameZh || ab.nameEn}${ab.isAugment ? " [强化]" : ab.isHelminth ? " [注入]" : ""}`));
+      if (summaryTxt) {
+        toggle.append(create("em", "", summaryTxt));
+      }
+      toggle.addEventListener("click", () => {
+        const current = new Set(state.warframeLink.activeAbilities || []);
+        if (current.has(ab.id)) current.delete(ab.id);
+        else current.add(ab.id);
+        state.warframeLink.activeAbilities = [...current];
+        renderSynergyWarframeAbilities(calcResult);
+        renderExternalBuffs();
+        persistActiveBuildConfig();
+        scheduleLiveBuild();
+      });
+      group.append(toggle);
+      if (ab.requiresElementChoice && isOn) {
+        group.append(buildSynergyElementSelect(ab));
+      }
+      return group;
+    }));
     return;
   }
-  const activeSet = new Set(state.warframeLink.activeAbilities || []);
-  if (note) note.textContent = `已启用 ${activeSet.size} / ${abilities.length} 项技能增益`;
-  host.replaceChildren(...abilities.map((ab) => {
-    const isOn = activeSet.has(ab.id);
-    const group = create("div", `synergy-ability-chip${isOn ? " is-active" : ""}`);
-    const toggle = create("button", "synergy-ability-btn");
-    toggle.type = "button";
-    toggle.setAttribute("aria-pressed", String(isOn));
-    toggle.title = [ab.nameZh || ab.nameEn, ab.isHelminth ? "Helminth 注入" : "", ab.isAugment ? "技能强化 MOD" : "", ab.summaryZh || ""].filter(Boolean).join(" - ");
-    if (ab.iconAsset) {
-      toggle.append(imageNode(ab.iconAsset, "synergy-ability-icon", "", "lazy"));
+
+  // Realistic Non-Damaging Ability Rotation Mode (4-Slot Selection + Custom Opening Cast Order)
+  host.classList.add("is-rotation-grid");
+  if (titleEl) titleEl.textContent = "非伤害技能循环选定（1~4 槽位）";
+
+  const slotTokenOf = (sa) => sa.id || `slot-${Number(sa.slot || 0) + 1}`;
+  const isSlotSelected = (sa) => {
+    if (sa.rotationEligible === false) return false;
+    const tok = slotTokenOf(sa);
+    const slotKey = `slot-${Number(sa.slot || 0) + 1}`;
+    if (activeSet.has(tok) || activeSet.has(slotKey)) return true;
+    return (sa.linkedWeaponBuffIds || []).some((bid) => activeSet.has(bid));
+  };
+
+  const eligibleSlots = slotAbilities.filter((sa) => sa.rotationEligible !== false);
+  const selectedSlots = eligibleSlots.filter((sa) => isSlotSelected(sa));
+  if (note) {
+    note.textContent = `已选 ${selectedSlots.length} / ${eligibleSlots.length} 项非伤害技能（纯伤害/双形态/显赫自动剔除）`;
+  }
+
+  const slotCards = slotAbilities.map((sa) => {
+    const slotNum = Number(sa.slot || 0) + 1;
+    const linkedBuffs = abilities.filter((ab) => ab.slot === sa.slot && !ab.rotationSpec?.passiveAlwaysOn);
+    const elemBuff = linkedBuffs.find((ab) => ab.requiresElementChoice) || null;
+
+    if (sa.rotationEligible === false) {
+      const card = create("div", "synergy-rot-slot-card is-excluded");
+      card.setAttribute("aria-disabled", "true");
+      const head = create("div", "synergy-rot-slot-head");
+      const tWrap = create("span", "synergy-rot-slot-title");
+      tWrap.append(create("span", "synergy-rot-slot-num", String(slotNum)));
+      if (sa.iconAsset) tWrap.append(imageNode(sa.iconAsset, "synergy-ability-icon", "", "lazy"));
+      tWrap.append(create("strong", "", `${sa.nameZh || sa.nameEn}${sa.isHelminth ? " [注入]" : ""}`));
+      head.append(tWrap, create("span", "synergy-rot-badge is-excluded", sa.excludedReasonZh || "已剔除"));
+      const explainMap = {
+        excluded_pure_damage: "纯伤害技能（装配对应增益/削甲强化卡后自动解锁）",
+        excluded_form_switch: "双形态切换技能已限制不参与循环",
+        excluded_exalted: "显赫武器变身技能已剔除",
+        excluded_slot1_special_exalted: "特殊显赫/伪显赫技能已剔除",
+        locks_weapons: "持续期间锁定武器开火，不参与后台循环",
+        non_combat_utility: "非战斗探索技能，不参与战斗循环",
+      };
+      card.append(head, create("div", "synergy-rot-slot-meta", explainMap[sa.excludedReason] || "不参与非伤害技能循环"));
+      return card;
     }
-    toggle.append(create("span", "", `${ab.nameZh || ab.nameEn}${ab.isAugment ? " [强化]" : ab.isHelminth ? " [注入]" : ""}`));
-    if (ab.summaryZh) {
-      toggle.append(create("em", "", ab.summaryZh));
+
+    const isOn = isSlotSelected(sa);
+    const card = create("button", `synergy-rot-slot-card${isOn ? " is-active" : ""}`);
+    card.type = "button";
+    card.setAttribute("aria-pressed", String(isOn));
+
+    const head = create("div", "synergy-rot-slot-head");
+    const tWrap = create("span", "synergy-rot-slot-title");
+    tWrap.append(create("span", "synergy-rot-slot-num", String(slotNum)));
+    if (sa.iconAsset) tWrap.append(imageNode(sa.iconAsset, "synergy-ability-icon", "", "lazy"));
+    tWrap.append(create("strong", "", `${sa.nameZh || sa.nameEn}${sa.isHelminth ? " [注入]" : ""}`));
+    const roleLabel = sa.promotedByAugment ? `强化:${sa.promotedByAugment}` : (sa.roleLabelZh || "战术技能");
+    head.append(tWrap, create("span", "synergy-rot-badge", isOn ? `✓ ${roleLabel}` : roleLabel));
+
+    const costParts = [];
+    if (sa.resource === "cooldown") {
+      costParts.push(`冷却 ${Number(sa.cooldownSec || 8).toFixed(0)}s`);
+    } else if (sa.resource === "shield") {
+      costParts.push(`${Math.round(Number(sa.activationCost || 0))}护盾`);
+    } else if (Number(sa.activationCost || 0) > 0 || Number(sa.drainPerSec || 0) > 0) {
+      if (Number(sa.activationCost || 0) > 0) costParts.push(`${Math.round(Number(sa.activationCost || 0))}蓝`);
+      if (sa.isChanneled && Number(sa.drainPerSec || 0) > 0) costParts.push(`${Number(sa.drainPerSec).toFixed(1)}/s`);
+    } else {
+      costParts.push("0蓝");
     }
-    toggle.addEventListener("click", () => {
+    if (sa.isChanneled) {
+      costParts.push("引导常驻");
+    } else if (Number.isFinite(Number(sa.durationSec)) && Number(sa.durationSec) > 0) {
+      costParts.push(`${sa.tacticalCadence ? "周期" : "持续"} ${Number(sa.durationSec).toFixed(1)}s`);
+    } else {
+      costParts.push("单次常驻");
+    }
+    costParts.push(`施放 ${Number(sa.effectiveCastTimeSec || 0).toFixed(2)}s${sa.oneHandedNonBlocking ? "(单手)" : ""}`);
+    if (sa.tapOnlyNoHoldFormSwap) costParts.push("仅点按");
+
+    card.append(head, create("div", "synergy-rot-slot-meta", costParts.join(" | ")));
+
+    const buffLines = linkedBuffs
+      .map((ab) => (isOn && liveSummaries.get(ab.id)) || ab.summaryZh || "")
+      .filter(Boolean);
+    if (buffLines.length) {
+      card.append(create("div", "synergy-rot-slot-buff", buffLines.join(" / ")));
+    }
+    if (elemBuff && isOn) {
+      card.append(buildSynergyElementSelect(elemBuff));
+    }
+
+    card.addEventListener("click", () => {
       const current = new Set(state.warframeLink.activeAbilities || []);
-      if (current.has(ab.id)) current.delete(ab.id);
-      else current.add(ab.id);
+      const slotTok = slotTokenOf(sa);
+      const slotAlias = `slot-${slotNum}`;
+      const allSlotIds = [slotTok, slotAlias, ...(sa.linkedWeaponBuffIds || [])].filter(Boolean);
+      const nextOn = !isOn;
+      for (const id of allSlotIds) {
+        if (nextOn) current.add(id);
+        else current.delete(id);
+      }
+      if (nextOn && !sa.linkedWeaponBuffIds?.length) {
+        current.add(slotTok);
+      }
       state.warframeLink.activeAbilities = [...current];
+
+      const prevOrder = Array.isArray(state.warframeLink.abilityRotation?.castOrder)
+        ? [...state.warframeLink.abilityRotation.castOrder]
+        : [];
+      const cleanedOrder = prevOrder.filter((x) => !allSlotIds.includes(x));
+      if (nextOn) cleanedOrder.push(slotTok);
+      state.warframeLink.abilityRotation = {
+        ...(state.warframeLink.abilityRotation || {}),
+        enabled: true,
+        castOrder: cleanedOrder,
+      };
       renderSynergyWarframeAbilities(calcResult);
       renderExternalBuffs();
       persistActiveBuildConfig();
       scheduleLiveBuild();
     });
-    group.append(toggle);
-    if (ab.requiresElementChoice && isOn) {
-      const elSelect = document.createElement("select");
-      elSelect.className = "synergy-ability-element";
-      elSelect.setAttribute("aria-label", `${ab.nameZh || ab.nameEn} 元素类型`);
-      const opts = Array.isArray(ab.elementOptions) && ab.elementOptions.length
-        ? ab.elementOptions
-        : ["DT_FIRE", "DT_FREEZE", "DT_ELECTRICITY", "DT_POISON"];
-      for (const dt of opts) {
-        const opt = document.createElement("option");
-        opt.value = dt;
-        opt.textContent = DAMAGE_TYPE_LABELS[dt] || dt;
-        elSelect.append(opt);
-      }
-      elSelect.value = state.warframeLink.abilityElements[ab.id] || opts[0];
-      elSelect.addEventListener("click", (ev) => ev.stopPropagation());
-      elSelect.addEventListener("change", (ev) => {
-        ev.stopPropagation();
-        state.warframeLink.abilityElements[ab.id] = elSelect.value;
-        persistActiveBuildConfig();
-        scheduleLiveBuild();
+
+    return card;
+  });
+
+  // Also keep passive always-on weapon augments (e.g. Frost Biting Frost) visible if equipped
+  const passiveAugs = abilities.filter((ab) => ab.rotationSpec?.passiveAlwaysOn);
+  for (const pAug of passiveAugs) {
+    const isOn = activeSet.has(pAug.id);
+    const pCard = create("button", `synergy-rot-slot-card${isOn ? " is-active" : ""}`);
+    pCard.type = "button";
+    pCard.setAttribute("aria-pressed", String(isOn));
+    const head = create("div", "synergy-rot-slot-head");
+    const tWrap = create("span", "synergy-rot-slot-title");
+    tWrap.append(create("span", "synergy-rot-slot-num", "被"));
+    if (pAug.iconAsset) tWrap.append(imageNode(pAug.iconAsset, "synergy-ability-icon", "", "lazy"));
+    tWrap.append(create("strong", "", `${pAug.nameZh || pAug.nameEn} [被动强化]`));
+    head.append(tWrap, create("span", "synergy-rot-badge", isOn ? "✓ 常驻生效" : "常驻强化"));
+    pCard.append(head, create("div", "synergy-rot-slot-buff", pAug.summaryZh || "0蓝耗无施放动作"));
+    pCard.addEventListener("click", () => {
+      const current = new Set(state.warframeLink.activeAbilities || []);
+      if (current.has(pAug.id)) current.delete(pAug.id);
+      else current.add(pAug.id);
+      state.warframeLink.activeAbilities = [...current];
+      renderSynergyWarframeAbilities(calcResult);
+      persistActiveBuildConfig();
+      scheduleLiveBuild();
+    });
+    slotCards.push(pCard);
+  }
+
+  host.replaceChildren(...slotCards);
+
+  // Opening Cast Order Bar
+  if (orderHost) {
+    if (!selectedSlots.length) {
+      orderHost.hidden = true;
+      orderHost.replaceChildren();
+    } else {
+      orderHost.hidden = false;
+      const rawOrder = Array.isArray(state.warframeLink.abilityRotation?.castOrder)
+        ? state.warframeLink.abilityRotation.castOrder
+        : [];
+      const rankOf = (sa) => {
+        const candidates = [slotTokenOf(sa), `slot-${Number(sa.slot || 0) + 1}`, ...(sa.linkedWeaponBuffIds || [])];
+        let best = Infinity;
+        for (const c of candidates) {
+          const idx = rawOrder.indexOf(c);
+          if (idx >= 0 && idx < best) best = idx;
+        }
+        return best;
+      };
+      const orderedSlots = [...selectedSlots].sort((a, b) => {
+        const ra = rankOf(a);
+        const rb = rankOf(b);
+        if (ra !== rb) return ra - rb;
+        return Number(a.slot || 0) - Number(b.slot || 0);
       });
-      group.append(elSelect);
+      const canonicalOrder = orderedSlots.map((sa) => slotTokenOf(sa));
+
+      const barHead = create("div", "synergy-cast-order-head");
+      barHead.append(
+        create("strong", "", "开局施放顺序"),
+        create("small", "", "仅决定开局起手与同刻到期先后；后续按各自持续时间独立补放"),
+      );
+
+      const listEl = create("div", "synergy-cast-order-list");
+      orderedSlots.forEach((sa, idx) => {
+        if (idx > 0) {
+          listEl.append(create("span", "synergy-cast-order-arrow", "→"));
+        }
+        const itemEl = create("span", "synergy-cast-order-item");
+        itemEl.append(
+          create("span", "synergy-cast-order-idx", `${idx + 1}.`),
+          create("span", "", `[${Number(sa.slot || 0) + 1}] ${sa.nameZh || sa.nameEn}`),
+        );
+        if (orderedSlots.length > 1) {
+          const prevBtn = create("button", "synergy-cast-order-move", "‹");
+          prevBtn.type = "button";
+          prevBtn.disabled = idx === 0;
+          prevBtn.title = "开局顺序前移";
+          prevBtn.addEventListener("click", () => {
+            const next = [...canonicalOrder];
+            [next[idx - 1], next[idx]] = [next[idx], next[idx - 1]];
+            state.warframeLink.abilityRotation = {
+              ...(state.warframeLink.abilityRotation || {}),
+              enabled: true,
+              castOrder: next,
+            };
+            renderSynergyWarframeAbilities(calcResult);
+            persistActiveBuildConfig();
+            scheduleLiveBuild();
+          });
+
+          const nextBtn = create("button", "synergy-cast-order-move", "›");
+          nextBtn.type = "button";
+          nextBtn.disabled = idx === orderedSlots.length - 1;
+          nextBtn.title = "开局顺序后移";
+          nextBtn.addEventListener("click", () => {
+            const next = [...canonicalOrder];
+            [next[idx], next[idx + 1]] = [next[idx + 1], next[idx]];
+            state.warframeLink.abilityRotation = {
+              ...(state.warframeLink.abilityRotation || {}),
+              enabled: true,
+              castOrder: next,
+            };
+            renderSynergyWarframeAbilities(calcResult);
+            persistActiveBuildConfig();
+            scheduleLiveBuild();
+          });
+          itemEl.append(prevBtn, nextBtn);
+        }
+        listEl.append(itemEl);
+      });
+
+      orderHost.replaceChildren(barHead, listEl);
     }
-    return group;
-  }));
+  }
 }
 
 function renderSynergyHub() {
@@ -16767,10 +17722,20 @@ function renderSynergyHub() {
       btn.classList.toggle("is-active", btn.dataset.synergyWfConfig === wfLink.configName);
     });
     if (ui["synergy-wf-trigger-mode"]) ui["synergy-wf-trigger-mode"].value = wfLink.damageTriggerMode || "ai";
+    if (ui["synergy-wf-rotation-enabled"]) ui["synergy-wf-rotation-enabled"].checked = Boolean(wfLink.abilityRotation?.enabled);
+    if (ui["synergy-wf-arbucep"]) ui["synergy-wf-arbucep"].checked = Boolean(wfLink.arbucepEmpowered);
     if (wfLink.frameId) {
       const cacheKey = synergyWarframeCacheKey(wfLink.frameId, wfLink.configName);
-      if (state.synergyBridgeCache[cacheKey]) {
-        renderSynergyWarframeAbilities(state.synergyBridgeCache[cacheKey]);
+      const cachedWf = state.synergyBridgeCache[cacheKey];
+      if (ui["synergy-wf-arbucep-wrap"]) {
+        const hasBb = Boolean(
+          String(rec?.nameEn || "").toLocaleLowerCase().includes("nokko")
+          || (cachedWf?.weaponBridge?.energyEconomy?.slotAbilities || []).some((sa) => sa.id === "brightbonnet")
+        );
+        ui["synergy-wf-arbucep-wrap"].hidden = !hasBb;
+      }
+      if (cachedWf) {
+        renderSynergyWarframeAbilities(cachedWf);
       } else {
         ensureSynergyWarframeBridge(false);
       }
@@ -16826,6 +17791,41 @@ function renderSynergyHub() {
     });
   }
 
+  // Card 3: Operator Focus Synergy
+  const opLink = state.operatorLink || { enabled: false, configName: "A", triggerMode: "passive" };
+  if (ui["synergy-op-enabled"]) ui["synergy-op-enabled"].checked = Boolean(opLink.enabled);
+  if (ui["synergy-op-body"]) ui["synergy-op-body"].hidden = !opLink.enabled;
+  ui["synergy-op-card"]?.classList.toggle("is-enabled", Boolean(opLink.enabled));
+  if (!opLink.enabled) {
+    if (ui["synergy-op-avatar"]) ui["synergy-op-avatar"].src = "/assets/focus/Focus.png";
+    if (ui["synergy-op-subtitle"]) ui["synergy-op-subtitle"].textContent = "默认关闭（未计入指挥官专精）";
+  } else {
+    const opStore = state.operatorBuild?.store && Object.keys(state.operatorBuild.store).length
+      ? state.operatorBuild.store
+      : readOperatorStore();
+    const cfgSlot = opLink.configName || "A";
+    const preset = opStore[cfgSlot] || activeOperatorPreset();
+    const activeScId = preset.activeSchool || "madurai";
+    const scRec = operatorSchoolRecord(activeScId);
+    if (ui["synergy-op-avatar"]) {
+      ui["synergy-op-avatar"].src = scRec?.iconAssets?.crest || "/assets/focus/Focus.png";
+    }
+    if (ui["synergy-op-school"]) ui["synergy-op-school"].value = activeScId;
+    if (ui["synergy-op-trigger-mode"]) ui["synergy-op-trigger-mode"].value = opLink.triggerMode || "passive";
+    if (ui["synergy-op-naramon-pre"]) ui["synergy-op-naramon-pre"].checked = Boolean(opLink.enableNaramonPreconditions);
+    if (ui["synergy-op-tauron"]) ui["synergy-op-tauron"].checked = Boolean(opLink.enableTauronStrike);
+    if (ui["synergy-op-naramon-wrap"]) {
+      ui["synergy-op-naramon-wrap"].style.opacity = activeScId === "naramon" ? "1" : "0.65";
+    }
+    ui["synergy-op-config-tabs"]?.querySelectorAll("[data-synergy-op-config]").forEach((btn) => {
+      btn.classList.toggle("is-active", btn.dataset.synergyOpConfig === cfgSlot);
+    });
+    const schoolTitle = scRec ? `${scRec.nameEn} (${scRec.theme?.motifZh || "专精"})` : activeScId.toUpperCase();
+    if (ui["synergy-op-subtitle"]) {
+      ui["synergy-op-subtitle"].textContent = `${schoolTitle} - 配置 ${cfgSlot}`;
+    }
+  }
+
   renderSynergySummaryFromResult(state.buildResult);
 }
 
@@ -16843,7 +17843,7 @@ function renderSynergySummaryFromResult(result) {
   if (wfHost) {
     if (!state.warframeLink.enabled) {
       wfHost.replaceChildren();
-    } else if (!syn?.warframe) {
+    } else if (!syn?.warframe || (state.warframeLink.frameId && syn.warframe.frame?.id && syn.warframe.frame.id !== state.warframeLink.frameId)) {
       wfHost.replaceChildren(synergyPill("等待实时解算返回战甲协同摘要...", "neutral"));
     } else {
       const wf = syn.warframe;
@@ -16858,10 +17858,14 @@ function renderSynergySummaryFromResult(result) {
         pills.push(synergyPill(`光环: ${wf.aura.nameZh || wf.aura.nameEn}${wf.aura.hasCoactionDrift ? " (+协力窜升)" : ""}`, wf.aura.buffId ? "good" : "neutral"));
       }
       if (Array.isArray(wf.shards) && wf.shards.length) {
-        pills.push(synergyPill(`源力石 ${wf.shards.length} 项`, "good", wf.shards.join(" | ")));
+        const shardTexts = wf.shards.map((s) => (typeof s === "string" ? s : [s?.labelZh || s?.nameZh || s?.nameEn, s?.detailZh].filter(Boolean).join(" "))).filter(Boolean);
+        pills.push(synergyPill(`源力石 ${wf.shards.length} 项`, "good", shardTexts.join(" | ")));
       }
       if (Array.isArray(wf.invigorations) && wf.invigorations.length) {
-        pills.push(synergyPill(`活化: ${wf.invigorations.join(" / ")}`, "good"));
+        const invigTexts = wf.invigorations.map((inv) => (typeof inv === "string" ? inv : [inv?.labelZh || inv?.nameZh || inv?.nameEn, inv?.detailZh].filter(Boolean).join(" "))).filter(Boolean);
+        if (invigTexts.length) {
+          pills.push(synergyPill(`活化: ${invigTexts.join(" / ")}`, "good"));
+        }
       }
       const arcs = Array.isArray(wf.arcanes) ? wf.arcanes : [];
       if (arcs.length) {
@@ -16875,7 +17879,36 @@ function renderSynergySummaryFromResult(result) {
         }).join(" / ");
         pills.push(synergyPill(`赋能: ${arcText}`, "good"));
       }
+      if (wf.abilityRotation?.enabled) {
+        const rot = wf.abilityRotation;
+        const upPct = (Number(rot.meanUptimeRatio || 0) * 100).toFixed(1);
+        const pauseSec = Number(rot.weaponCastPauseSeconds || 0).toFixed(2);
+        const vacSec = Number(rot.maxVacuumSeconds || 0).toFixed(2);
+        const orderSlots = Array.isArray(rot.castOrderSlots) && rot.castOrderSlots.length
+          ? `起手 ${rot.castOrderSlots.join("→")} | `
+          : "";
+        pills.push(synergyPill(
+          `技能循环: ${orderSlots}覆盖 ${upPct}% / 施放停火 ${pauseSec}s / 最长真空 ${vacSec}s`,
+          Number(rot.meanUptimeRatio || 0) >= 0.85 ? "good" : "warn",
+          "按选定开局顺序施放起手，后续按各自持续时间到期独立补放；蓝量不足时等待击杀掉球或回蓝满足后再施放",
+        ));
+        pills.push(synergyPill(
+          `能量经济: 出生 ${Math.round(rot.spawnEnergy || 0)}→末态 ${Math.round(rot.finalEnergy || 0)} / 施放 ${rot.totalCasts ?? 0} 次 / 蓝球 ${rot.energyOrbsPicked ?? 0} 血球 ${rot.healthOrbsPicked ?? 0}${rot.energizeProcs ? ` (充沛×${rot.energizeProcs})` : ""}${rot.innerMightProcs ? ` (内在之力免耗×${rot.innerMightProcs})` : ""}`,
+          Number(rot.maxVacuumSeconds || 0) <= 0.5 ? "good" : "neutral",
+        ));
+      }
+      if (Array.isArray(wf.squadBuffs?.summaryPills) && wf.squadBuffs.summaryPills.length) {
+        for (const sp of wf.squadBuffs.summaryPills) {
+          pills.push(synergyPill(`小队: ${sp}`, "good"));
+        }
+      }
       wfHost.replaceChildren(...pills);
+      if (state.warframeLink.frameId) {
+        const cacheKey = synergyWarframeCacheKey(state.warframeLink.frameId, state.warframeLink.configName || "A");
+        if (state.synergyBridgeCache[cacheKey]) {
+          renderSynergyWarframeAbilities(state.synergyBridgeCache[cacheKey]);
+        }
+      }
     }
   }
 
@@ -16928,6 +17961,35 @@ function renderSynergySummaryFromResult(result) {
         }
       }
       compHost.replaceChildren(...pills);
+    }
+  }
+
+  const opHost = ui["synergy-op-summary"];
+  if (opHost) {
+    if (!state.operatorLink?.enabled) {
+      opHost.replaceChildren();
+    } else if (!syn?.operator) {
+      opHost.replaceChildren(synergyPill("等待实时解算返回指挥官专精摘要...", "neutral"));
+    } else {
+      const op = syn.operator;
+      const pills = [];
+      const modeMap = { passive: "常驻被动口径", cycle: "周期穿插口径", peak: "峰值爆发口径" };
+      pills.push(synergyPill(
+        `${(op.activeSchool || "madurai").toUpperCase()} · ${modeMap[op.triggerMode] || "常驻被动口径"}`,
+        "good",
+      ));
+      const summaryPills = Array.isArray(op.summaryPills) ? op.summaryPills : [];
+      if (summaryPills.length) {
+        for (const txt of summaryPills) {
+          pills.push(synergyPill(txt, "good"));
+        }
+      } else {
+        pills.push(synergyPill("当前学派无额外已解锁增伤节点（点击「编辑专精」解锁节点）", "warn"));
+      }
+      if (Number(op.firingDutyMultiplier) < 0.999) {
+        pills.push(synergyPill(`传识切人动作折算射速系数 ${(Number(op.firingDutyMultiplier) * 100).toFixed(1)}%`, "neutral"));
+      }
+      opHost.replaceChildren(...pills);
     }
   }
 }
@@ -17013,6 +18075,16 @@ function bindSynergyHubEvents() {
     scheduleLiveBuild();
   });
 
+  ui["synergy-wf-rotation-enabled"]?.addEventListener("change", () => {
+    state.warframeLink.abilityRotation = {
+      ...(state.warframeLink.abilityRotation || {}),
+      enabled: Boolean(ui["synergy-wf-rotation-enabled"].checked),
+    };
+    renderSynergyHub();
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+
   ui["synergy-wf-edit"]?.addEventListener("click", () => {
     openWarframeFromSynergyHub();
   });
@@ -17067,6 +18139,805 @@ function bindSynergyHubEvents() {
   ui["synergy-comp-edit"]?.addEventListener("click", () => {
     openCompanionFromSynergyHub();
   });
+
+  ui["synergy-wf-arbucep"]?.addEventListener("change", () => {
+    state.warframeLink.arbucepEmpowered = Boolean(ui["synergy-wf-arbucep"].checked);
+    state.synergyBridgeCache = {};
+    ensureSynergyWarframeBridge(false);
+    renderSynergyHub();
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+
+  // Card 3: Operator Focus Synergy events
+  ui["synergy-op-enabled"]?.addEventListener("change", async () => {
+    state.operatorLink.enabled = Boolean(ui["synergy-op-enabled"].checked);
+    if (state.operatorLink.enabled) {
+      try { await loadOperatorCatalog(); } catch (_err) { /* handled */ }
+    }
+    state.synergyBridgeCache = {};
+    if (state.warframeLink.enabled) ensureSynergyWarframeBridge(false);
+    renderSynergyHub();
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+
+  ui["synergy-op-school"]?.addEventListener("change", async () => {
+    try { await loadOperatorCatalog(); } catch (_err) { /* ignore */ }
+    const cfgSlot = state.operatorLink.configName || "A";
+    state.operatorBuild.store ||= readOperatorStore();
+    state.operatorBuild.store[cfgSlot] ||= defaultOperatorPreset();
+    const preset = state.operatorBuild.store[cfgSlot];
+    preset.activeSchool = ui["synergy-op-school"].value || "madurai";
+    ensureOperatorSchoolState(preset, preset.activeSchool).schoolUnlocked = true;
+    writeOperatorStore();
+    if (state.operatorCatalog) {
+      renderOperatorWorkbench();
+      scheduleOperatorEvaluate();
+    }
+    state.synergyBridgeCache = {};
+    if (state.warframeLink.enabled) ensureSynergyWarframeBridge(false);
+    renderSynergyHub();
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+
+  ui["synergy-op-config-tabs"]?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-synergy-op-config]");
+    if (!btn) return;
+    const cfg = btn.dataset.synergyOpConfig;
+    if (!/^[ABC]$/.test(cfg) || cfg === state.operatorLink.configName) return;
+    state.operatorLink.configName = cfg;
+    state.operatorBuild.activeConfig = cfg;
+    state.synergyBridgeCache = {};
+    if (state.warframeLink.enabled) ensureSynergyWarframeBridge(false);
+    renderSynergyHub();
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+
+  ui["synergy-op-trigger-mode"]?.addEventListener("change", () => {
+    state.operatorLink.triggerMode = ui["synergy-op-trigger-mode"].value || "passive";
+    state.synergyBridgeCache = {};
+    if (state.warframeLink.enabled) ensureSynergyWarframeBridge(false);
+    renderSynergyHub();
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+
+  ui["synergy-op-naramon-pre"]?.addEventListener("change", () => {
+    state.operatorLink.enableNaramonPreconditions = Boolean(ui["synergy-op-naramon-pre"].checked);
+    state.synergyBridgeCache = {};
+    renderSynergyHub();
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+
+  ui["synergy-op-tauron"]?.addEventListener("change", () => {
+    state.operatorLink.enableTauronStrike = Boolean(ui["synergy-op-tauron"].checked);
+    state.synergyBridgeCache = {};
+    if (state.warframeLink.enabled) ensureSynergyWarframeBridge(false);
+    renderSynergyHub();
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+
+  ui["synergy-op-edit"]?.addEventListener("click", async () => {
+    state.operatorBuild.activeConfig = state.operatorLink.configName || "A";
+    setActiveTool("operator", { fromBuild: true, returnTo: "build" });
+    try { await loadOperatorCatalog(); } catch (_err) { return; }
+    renderOperatorWorkbench();
+    scheduleOperatorEvaluate();
+  });
+
+  // Warframe Workbench Squad/Focus/Arbucep synergy toggles
+  ui["warframe-sync-squad"]?.addEventListener("change", () => {
+    state.warframeBuild.syncSquadBuffs = Boolean(ui["warframe-sync-squad"].checked);
+    scheduleWarframeCalculation();
+  });
+  ui["warframe-sync-operator"]?.addEventListener("change", async () => {
+    state.warframeBuild.syncOperator = Boolean(ui["warframe-sync-operator"].checked);
+    if (state.warframeBuild.syncOperator) {
+      try { await loadOperatorCatalog(); } catch (_err) { /* ignore */ }
+    }
+    scheduleWarframeCalculation();
+  });
+  ui["warframe-arbucep-empowered"]?.addEventListener("change", () => {
+    state.warframeBuild.arbucepEmpowered = Boolean(ui["warframe-arbucep-empowered"].checked);
+    scheduleWarframeCalculation();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 独立「指挥官专精」工作台（游戏内 TennoWayTree 星图交互，框架先行不介入伤害计算）
+// ═══════════════════════════════════════════════════════════════════════════
+
+const OPERATOR_CONFIG_STORAGE_KEY = "wf-riven-portable-operator-configs-v1";
+const OPERATOR_ACTIVATION_LABELS = {
+  passive: "常驻被动",
+  ability_1: "1 技能主动",
+  ability_2: "2 技能主动",
+  void_sling: "虚空弹射触发",
+  transference: "传识切换触发",
+  last_gasp: "弥留复苏触发",
+  way_bound_unbound: "跨专精绑定",
+};
+let operatorCatalogPromise = null;
+let operatorEvalTimer = null;
+let operatorEvalSeq = 0;
+
+function defaultOperatorPreset() {
+  return {
+    activeSchool: "madurai",
+    schools: {
+      madurai: { schoolUnlocked: true, nodes: { madurai_phoenix_talons: { unlocked: true, rank: 3, enabled: true } } },
+      vazarin: { schoolUnlocked: false, nodes: {} },
+      naramon: { schoolUnlocked: false, nodes: {} },
+      unairu: { schoolUnlocked: false, nodes: {} },
+      zenurik: { schoolUnlocked: false, nodes: {} },
+    },
+    unboundWayBounds: [],
+    activeTriggers: {},
+  };
+}
+
+function readOperatorStore() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(OPERATOR_CONFIG_STORAGE_KEY) || "{}");
+    if (raw && typeof raw === "object") return raw;
+  } catch (_err) { /* ignore */ }
+  return {};
+}
+
+function writeOperatorStore() {
+  try {
+    localStorage.setItem(OPERATOR_CONFIG_STORAGE_KEY, JSON.stringify(state.operatorBuild.store || {}));
+  } catch (_err) { /* ignore */ }
+}
+
+function activeOperatorPreset() {
+  if (!state.operatorBuild.store || typeof state.operatorBuild.store !== "object") {
+    state.operatorBuild.store = readOperatorStore();
+  }
+  const cfg = state.operatorBuild.activeConfig || "A";
+  if (!state.operatorBuild.store[cfg] || typeof state.operatorBuild.store[cfg] !== "object") {
+    state.operatorBuild.store[cfg] = defaultOperatorPreset();
+  }
+  const preset = state.operatorBuild.store[cfg];
+  preset.activeSchool ||= "madurai";
+  preset.schools ||= {};
+  preset.unboundWayBounds ||= [];
+  preset.activeTriggers ||= {};
+  return preset;
+}
+
+async function loadOperatorCatalog() {
+  if (state.operatorCatalog) return state.operatorCatalog;
+  if (!operatorCatalogPromise) {
+    operatorCatalogPromise = fetch("/api/operator/catalog")
+      .then((res) => {
+        if (!res.ok) throw new Error("指挥官专精目录加载失败");
+        return res.json();
+      })
+      .then((cat) => {
+        state.operatorCatalog = cat;
+        state.operatorBuild.store = readOperatorStore();
+        const lastCfg = state.operatorBuild.store.__lastConfig;
+        if (/^[ABC]$/.test(lastCfg)) state.operatorBuild.activeConfig = lastCfg;
+        return cat;
+      })
+      .catch((err) => {
+        operatorCatalogPromise = null;
+        throw err;
+      });
+  }
+  return operatorCatalogPromise;
+}
+
+function operatorSchoolRecord(schoolId) {
+  return (state.operatorCatalog?.schools || []).find((s) => s.id === schoolId) || null;
+}
+
+function operatorNodeByIdOrPath(key) {
+  if (!key) return null;
+  for (const school of state.operatorCatalog?.schools || []) {
+    for (const node of school.nodes || []) {
+      if (node.id === key || node.path === key) return node;
+    }
+  }
+  return null;
+}
+
+function ensureOperatorSchoolState(preset, schoolId) {
+  preset.schools[schoolId] ||= { schoolUnlocked: schoolId === preset.activeSchool, nodes: {} };
+  preset.schools[schoolId].nodes ||= {};
+  return preset.schools[schoolId];
+}
+
+function operatorNodeLocalState(preset, school, node) {
+  const sState = ensureOperatorSchoolState(preset, school.id);
+  const raw = sState.nodes[node.id] || sState.nodes[node.path];
+  if (raw && typeof raw === "object") {
+    const unlocked = Boolean(raw.unlocked);
+    const rank = clamp(Number(raw.rank ?? 0), 0, Number(node.maxRank ?? 3));
+    const enabled = unlocked && raw.enabled !== false;
+    const unbound = Boolean(node.isWayBound && unlocked && rank >= Number(node.maxRank ?? 3) && (raw.unbound || preset.unboundWayBounds.includes(node.id) || preset.unboundWayBounds.includes(node.path)));
+    return { unlocked, rank, enabled, unbound };
+  }
+  const autoRoot = Boolean(node.isRoot && (sState.schoolUnlocked || school.id === preset.activeSchool));
+  return { unlocked: autoRoot, rank: 0, enabled: autoRoot, unbound: false };
+}
+
+function setOperatorNodeState(schoolId, node, patch) {
+  const school = operatorSchoolRecord(schoolId);
+  if (!school || !node) return;
+  const preset = activeOperatorPreset();
+  const sState = ensureOperatorSchoolState(preset, schoolId);
+  sState.schoolUnlocked = true;
+
+  // Unlock parent chain automatically when unlocking a child node!
+  if (patch.unlocked) {
+    let curParent = node.parentPath;
+    while (curParent) {
+      const pNode = (school.nodes || []).find((n) => n.path === curParent);
+      if (!pNode) break;
+      const prevP = operatorNodeLocalState(preset, school, pNode);
+      if (!prevP.unlocked) {
+        sState.nodes[pNode.id] = { unlocked: true, rank: prevP.rank || 0, enabled: true, unbound: prevP.unbound };
+      } else if (!prevP.enabled && patch.enabled !== false) {
+        sState.nodes[pNode.id] = { ...prevP, enabled: true };
+      }
+      curParent = pNode.parentPath;
+    }
+  }
+
+  const prev = operatorNodeLocalState(preset, school, node);
+  const next = { ...prev, ...patch };
+  if (!next.unlocked) {
+    next.rank = 0;
+    next.enabled = false;
+    next.unbound = false;
+  } else {
+    next.rank = clamp(Number(next.rank ?? 0), 0, Number(node.maxRank ?? 3));
+    if (next.rank < Number(node.maxRank ?? 3)) next.unbound = false;
+  }
+  sState.nodes[node.id] = next;
+
+  // Sync unboundWayBounds list
+  const wbSet = new Set(preset.unboundWayBounds || []);
+  if (node.isWayBound) {
+    if (next.unbound) wbSet.add(node.id);
+    else {
+      wbSet.delete(node.id);
+      wbSet.delete(node.path);
+    }
+  }
+  preset.unboundWayBounds = [...wbSet];
+
+  // If locking/disabling a parent, cascade disable/lock to descendants
+  if (!next.unlocked || !next.enabled) {
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const child of school.nodes || []) {
+        if (!child.parentPath) continue;
+        const pNode = (school.nodes || []).find((n) => n.path === child.parentPath);
+        if (!pNode) continue;
+        const pSt = operatorNodeLocalState(preset, school, pNode);
+        const cSt = operatorNodeLocalState(preset, school, child);
+        if (!pSt.unlocked && cSt.unlocked) {
+          sState.nodes[child.id] = { unlocked: false, rank: 0, enabled: false, unbound: false };
+          preset.unboundWayBounds = preset.unboundWayBounds.filter((x) => x !== child.id && x !== child.path);
+          changed = true;
+        } else if (!pSt.enabled && cSt.enabled) {
+          sState.nodes[child.id] = { ...cSt, enabled: false };
+          changed = true;
+        }
+      }
+    }
+  }
+
+  writeOperatorStore();
+  renderOperatorWorkbench();
+  scheduleOperatorEvaluate();
+}
+
+function scheduleOperatorEvaluate() {
+  clearTimeout(operatorEvalTimer);
+  operatorEvalTimer = setTimeout(runOperatorEvaluate, 60);
+  state.synergyBridgeCache = {};
+  if (state.operatorLink?.enabled) {
+    renderSynergyHub();
+    if (state.warframeLink?.enabled) ensureSynergyWarframeBridge(false);
+    scheduleLiveBuild();
+  }
+  if (state.warframeBuild?.frame && state.warframeBuild.syncOperator) {
+    scheduleWarframeCalculation();
+  }
+}
+
+async function runOperatorEvaluate() {
+  if (!state.operatorCatalog) return;
+  const seq = ++operatorEvalSeq;
+  const preset = activeOperatorPreset();
+  try {
+    const res = await fetch("/api/operator/evaluate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(preset),
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (seq !== operatorEvalSeq) return;
+    state.operatorBuild.result = data;
+    renderOperatorBuffSummary(data);
+  } catch (_err) { /* ignore */ }
+}
+
+function renderOperatorWorkbench() {
+  const cat = state.operatorCatalog;
+  if (!cat || !ui["operator-tool"]) return;
+  const preset = activeOperatorPreset();
+  const school = operatorSchoolRecord(preset.activeSchool) || cat.schools?.[0];
+  if (!school) return;
+  preset.activeSchool = school.id;
+  ui["operator-tool"].dataset.school = school.id;
+
+  // Config A/B/C tabs
+  ui["operator-config-tabs"]?.querySelectorAll("[data-operator-config]").forEach((btn) => {
+    const active = btn.dataset.operatorConfig === state.operatorBuild.activeConfig;
+    btn.classList.toggle("is-active", active);
+    btn.setAttribute("aria-selected", String(active));
+  });
+
+  // Ensure selectedNodeId belongs to active school
+  if (!state.operatorBuild.selectedNodeId || !(school.nodes || []).some((n) => n.id === state.operatorBuild.selectedNodeId)) {
+    const rootNode = (school.nodes || []).find((n) => n.isRoot) || school.nodes?.[0];
+    state.operatorBuild.selectedNodeId = rootNode?.id || null;
+  }
+
+  // 1. Render 5 School Crest Cards
+  const strip = ui["operator-school-strip"];
+  if (strip) {
+    strip.replaceChildren(...(cat.schools || []).map((sc) => {
+      const isActive = sc.id === school.id;
+      const unlockedCnt = (sc.nodes || []).filter((n) => operatorNodeLocalState(preset, sc, n).unlocked).length;
+      const card = create("button", `operator-school-card${isActive ? " is-active" : ""}`);
+      card.type = "button";
+      card.setAttribute("role", "tab");
+      card.setAttribute("aria-selected", String(isActive));
+      card.dataset.school = sc.id;
+      const crest = create("div", "operator-school-crest");
+      if (sc.iconAssets?.crest) crest.append(imageNode(sc.iconAssets.crest, "", sc.nameEn, "lazy"));
+      const meta = create("div", "operator-school-meta");
+      const top = create("div", "operator-school-meta-top");
+      top.append(create("strong", "", sc.nameEn));
+      if (isActive) top.append(create("span", "operator-school-badge", "主修"));
+      meta.append(top, create("small", "", `${sc.theme?.motifZh || ""} - 已解锁 ${unlockedCnt}/10`));
+      card.append(crest, meta);
+      card.addEventListener("click", () => {
+        if (preset.activeSchool === sc.id) return;
+        preset.activeSchool = sc.id;
+        ensureOperatorSchoolState(preset, sc.id).schoolUnlocked = true;
+        state.operatorBuild.selectedNodeId = ((sc.nodes || []).find((n) => n.isRoot) || sc.nodes?.[0])?.id || null;
+        writeOperatorStore();
+        renderOperatorWorkbench();
+        scheduleOperatorEvaluate();
+      });
+      return card;
+    }));
+  }
+
+  // 2. Header & Background Illustration
+  if (ui["operator-school-heading"]) {
+    ui["operator-school-heading"].textContent = `${school.nameEn}（${school.theme?.motifZh || "宗派"}）`;
+  }
+  if (ui["operator-school-desc"]) {
+    ui["operator-school-desc"].textContent = school.descriptionZh || school.descriptionEn || "";
+  }
+  if (ui["operator-tree-bg"]) {
+    ui["operator-tree-bg"].src = school.iconAssets?.backgroundIllustration || "";
+  }
+
+  // 3. Cross-School Way-Bound Rail (8 Way-Bounds from the other 4 schools)
+  const wbList = ui["operator-waybound-list"];
+  if (wbList) {
+    const otherWbs = [];
+    for (const sc of cat.schools || []) {
+      if (sc.id === school.id) continue;
+      for (const n of sc.nodes || []) {
+        if (n.isWayBound) otherWbs.push({ school: sc, node: n, st: operatorNodeLocalState(preset, sc, n) });
+      }
+    }
+    const activeWbCount = otherWbs.filter((x) => x.st.unbound).length;
+    if (ui["operator-waybound-count"]) ui["operator-waybound-count"].textContent = `${activeWbCount} / ${otherWbs.length} 已解绑生效`;
+    wbList.replaceChildren(...otherWbs.map(({ school: sc, node: n, st }) => {
+      const btn = create("button", `operator-wb-item${st.unbound ? " is-unbound" : ""}`);
+      btn.type = "button";
+      btn.title = `${sc.nameEn} - ${n.nameZh}：点击前往所属专精学派查看或解绑`;
+      const ic = create("div", "operator-wb-icon");
+      if (n.iconAsset) ic.append(imageNode(n.iconAsset, "", n.nameZh, "lazy"));
+      const cp = create("div", "operator-wb-copy");
+      cp.append(
+        create("strong", "", n.nameZh),
+        create("small", "", st.unbound ? `${sc.nameEn} - 已解绑生效` : (st.unlocked && st.rank >= (n.maxRank ?? 3) ? `${sc.nameEn} - 满阶可解绑` : `${sc.nameEn} - 未解绑`)),
+      );
+      btn.append(ic, cp);
+      btn.addEventListener("click", () => {
+        preset.activeSchool = sc.id;
+        ensureOperatorSchoolState(preset, sc.id).schoolUnlocked = true;
+        state.operatorBuild.selectedNodeId = n.id;
+        writeOperatorStore();
+        renderOperatorWorkbench();
+        scheduleOperatorEvaluate();
+      });
+      return btn;
+    }));
+  }
+
+  // 4. Star-Map SVG Lines + Interactive Nodes (760 x 660 coordinate space)
+  const nodes = school.nodes || [];
+  const xs = nodes.map((n) => Number(n.posX || 0));
+  const ys = nodes.map((n) => Number(n.posY || 0));
+  const minX = Math.min(...xs, -1.0), maxX = Math.max(...xs, 1.0);
+  const minY = Math.min(...ys, -0.8), maxY = Math.max(...ys, 0.8);
+  const midX = 0.5 * (minX + maxX), midY = 0.5 * (minY + maxY);
+  const spanX = Math.max(2.0, maxX - minX), spanY = Math.max(1.8, maxY - minY);
+  const scale = Math.min(540 / spanX, 450 / spanY);
+  const toScreen = (px, py) => ({
+    x: 380 + (Number(px || 0) - midX) * scale,
+    y: 325 - (Number(py || 0) - midY) * scale,
+  });
+
+  const coordsByPath = new Map();
+  const stateByPath = new Map();
+  for (const n of nodes) {
+    coordsByPath.set(n.path, toScreen(n.posX, n.posY));
+    stateByPath.set(n.path, operatorNodeLocalState(preset, school, n));
+  }
+
+  const svg = ui["operator-tree-lines"];
+  if (svg) {
+    svg.replaceChildren();
+    const ns = "http://www.w3.org/2000/svg";
+    for (const n of nodes) {
+      if (!n.parentPath || !coordsByPath.has(n.parentPath)) continue;
+      const p1 = coordsByPath.get(n.parentPath);
+      const p2 = coordsByPath.get(n.path);
+      const stParent = stateByPath.get(n.parentPath);
+      const stChild = stateByPath.get(n.path);
+      const line = document.createElementNS(ns, "line");
+      line.setAttribute("x1", p1.x.toFixed(1));
+      line.setAttribute("y1", p1.y.toFixed(1));
+      line.setAttribute("x2", p2.x.toFixed(1));
+      line.setAttribute("y2", p2.y.toFixed(1));
+      line.setAttribute("class", `operator-tree-line${stParent?.unlocked && stChild?.unlocked && stChild?.enabled ? " is-unlocked" : ""}`);
+      svg.append(line);
+    }
+  }
+
+  const nodesHost = ui["operator-tree-nodes"];
+  if (nodesHost) {
+    nodesHost.replaceChildren();
+    if (school.iconAssets?.crest) {
+      const centerPos = toScreen(0, 0);
+      const wm = imageNode(school.iconAssets.crest, "operator-center-watermark", "", "lazy");
+      wm.style.left = `${(centerPos.x / 760 * 100).toFixed(2)}%`;
+      wm.style.top = `${(centerPos.y / 660 * 100).toFixed(2)}%`;
+      nodesHost.append(wm);
+    }
+    for (const n of nodes) {
+      const pt = coordsByPath.get(n.path);
+      const st = stateByPath.get(n.path);
+      const isSelected = state.operatorBuild.selectedNodeId === n.id;
+      const btn = create("button", [
+        "operator-node",
+        n.isRoot ? "is-root" : "",
+        n.isWayBound ? "is-waybound" : "",
+        st.unlocked ? "is-unlocked" : "",
+        st.unlocked && !st.enabled ? "is-disabled" : "",
+        isSelected ? "is-selected" : "",
+      ].filter(Boolean).join(" "));
+      btn.type = "button";
+      btn.style.left = `${(pt.x / 760 * 100).toFixed(2)}%`;
+      btn.style.top = `${(pt.y / 660 * 100).toFixed(2)}%`;
+
+      const ring = create("div", "operator-node-ring");
+      if (n.iconAsset) ring.append(imageNode(n.iconAsset, "operator-node-icon", n.nameZh, "lazy"));
+
+      const pips = create("div", "operator-node-pips");
+      const maxR = Number(n.maxRank ?? 3);
+      for (let i = 0; i <= maxR; i += 1) {
+        pips.append(create("i", st.unlocked && i <= st.rank ? "is-filled" : ""));
+      }
+
+      btn.append(ring, pips, create("span", "operator-node-label", n.nameZh));
+      if (n.isWayBound) {
+        btn.append(create("span", "operator-node-wb-tag", st.unbound ? "已解绑" : "跨专精被动"));
+      }
+
+      btn.addEventListener("click", () => {
+        const alreadySelected = state.operatorBuild.selectedNodeId === n.id;
+        state.operatorBuild.selectedNodeId = n.id;
+        if (!st.unlocked) {
+          setOperatorNodeState(school.id, n, { unlocked: true, rank: 0, enabled: true });
+          return;
+        }
+        if (alreadySelected && st.rank < maxR) {
+          setOperatorNodeState(school.id, n, { unlocked: true, rank: st.rank + 1, enabled: true });
+          return;
+        }
+        renderOperatorWorkbench();
+      });
+      nodesHost.append(btn);
+    }
+  }
+
+  // 5. Selected Node Inspector
+  renderOperatorNodeInspector(school, preset);
+
+  // 6. Tauron Ultimate Branch Nodes (5 per school)
+  const tauronHost = ui["operator-tauron-list"];
+  const tauronCnt = ui["operator-tauron-count"];
+  if (tauronHost) {
+    const tNodes = school.ultimateBranchNodes || [];
+    const sState = ensureOperatorSchoolState(preset, school.id);
+    if (tauronCnt) tauronCnt.textContent = `${tNodes.length} 项`;
+    tauronHost.replaceChildren(...tNodes.map((tn) => {
+      const maxR = Number(tn.maxRank ?? 3);
+      const rawSt = sState.nodes[tn.id] || sState.nodes[tn.path];
+      const unlocked = Boolean(rawSt?.unlocked);
+      const rk = clamp(Number(rawSt?.rank ?? maxR), 0, maxR);
+      const card = create("article", `operator-buff-card${unlocked ? " is-active" : ""}`);
+      const head = create("div", "operator-buff-card-head");
+      const title = create("div", "operator-buff-card-title");
+      if (tn.iconAsset) title.append(imageNode(tn.iconAsset, "operator-buff-icon", tn.nameZh || tn.nameEn, "lazy"));
+      title.append(create("strong", "", `${tn.nameZh || tn.nameEn} (${unlocked ? `${rk}/${maxR}阶` : "未解锁"})`));
+      const chk = create("label", "check-field");
+      const inp = document.createElement("input");
+      inp.type = "checkbox";
+      inp.checked = unlocked;
+      inp.addEventListener("change", () => {
+        sState.schoolUnlocked = true;
+        sState.nodes[tn.id] = { unlocked: inp.checked, rank: inp.checked ? maxR : 0, enabled: inp.checked };
+        writeOperatorStore();
+        renderOperatorWorkbench();
+        scheduleOperatorEvaluate();
+      });
+      chk.append(inp, create("span", "", "满阶激活"));
+      head.append(title, chk);
+      const desc = (tn.descriptionsZh || [])[rk] || (tn.descriptionsByRank || [])[rk]?.zh || (tn.descriptionsEn || [])[rk] || "";
+      card.append(head, create("p", "", desc));
+      if (tn.combatRelevance?.notesZh) card.append(create("small", "", tn.combatRelevance.notesZh));
+      return card;
+    }));
+  }
+}
+
+function renderOperatorNodeInspector(school, preset) {
+  const box = ui["operator-node-inspector"];
+  if (!box) return;
+  const node = (school.nodes || []).find((n) => n.id === state.operatorBuild.selectedNodeId) || school.nodes?.[0];
+  if (!node) return;
+  const st = operatorNodeLocalState(preset, school, node);
+  const maxR = Number(node.maxRank ?? 3);
+
+  box.replaceChildren();
+  const head = create("div", "operator-inspector-head");
+  const iconBox = create("div", "operator-inspector-icon");
+  if (node.iconAsset) iconBox.append(imageNode(node.iconAsset, "", node.nameZh, "lazy"));
+  const titleBox = create("div", "operator-inspector-title");
+  const actLabel = OPERATOR_ACTIVATION_LABELS[node.activationType] || node.activationType || "专精节点";
+  titleBox.append(
+    create("strong", "", `${node.nameZh} (${node.nameEn})`),
+    create("small", "", `${school.nameEn} - ${actLabel}${node.isWayBound ? " - 跨专精绑定被动" : ""}`),
+  );
+  head.append(iconBox, titleBox);
+  box.append(head);
+
+  const controls = create("div", "operator-rank-controls");
+  if (!node.isRoot) {
+    const lockBtn = create("button", `operator-rank-btn${!st.unlocked ? " is-active" : ""}`, "未解锁");
+    lockBtn.type = "button";
+    lockBtn.addEventListener("click", () => setOperatorNodeState(school.id, node, { unlocked: false }));
+    controls.append(lockBtn);
+  }
+  for (let r = 0; r <= maxR; r += 1) {
+    const rBtn = create("button", `operator-rank-btn${st.unlocked && st.rank === r ? " is-active" : ""}`, r === maxR ? `${r} 阶 (满)` : `${r} 阶`);
+    rBtn.type = "button";
+    rBtn.addEventListener("click", () => setOperatorNodeState(school.id, node, { unlocked: true, rank: r, enabled: true }));
+    controls.append(rBtn);
+  }
+  if (st.unlocked && !node.isRoot) {
+    const toggleBtn = create("button", `operator-rank-btn${!st.enabled ? " is-active" : ""}`, st.enabled ? "已启用" : "已停用");
+    toggleBtn.type = "button";
+    toggleBtn.addEventListener("click", () => setOperatorNodeState(school.id, node, { enabled: !st.enabled }));
+    controls.append(toggleBtn);
+  }
+  if (node.isWayBound) {
+    const canUnbind = st.unlocked && st.rank >= maxR;
+    const wbBtn = create("button", `operator-rank-btn${st.unbound ? " is-active" : ""}`, st.unbound ? "★ 已解绑跨专精" : "解绑跨专精 (需满阶)");
+    wbBtn.type = "button";
+    wbBtn.disabled = !canUnbind;
+    wbBtn.addEventListener("click", () => setOperatorNodeState(school.id, node, { unbound: !st.unbound }));
+    controls.append(wbBtn);
+  }
+  box.append(controls);
+
+  const rankList = create("ul", "operator-rank-list");
+  (node.descriptionsByRank || []).forEach((item, idx) => {
+    const li = create("li", st.unlocked && st.rank === idx ? "is-current" : "");
+    const cost = node.focusPoints?.costsByRank?.[idx];
+    const costStr = Number.isFinite(cost) && cost > 0 ? `（升级消耗 ${cost.toLocaleString()} 专精）` : (idx === 0 && Number(node.focusPoints?.unlockFocusPoints) > 0 ? `（解锁 ${node.focusPoints.unlockFocusPoints.toLocaleString()} 专精）` : "");
+    li.textContent = `[${idx} 阶] ${item.zh || item.en}${costStr}`;
+    rankList.append(li);
+  });
+  box.append(rankList);
+
+  if (node.combatRelevance?.notesZh) {
+    box.append(create("p", "operator-inspector-note", node.combatRelevance.notesZh));
+  }
+}
+
+function renderOperatorBuffSummary(evalData) {
+  if (!evalData) return;
+  const inv = evalData.investment || {};
+  if (ui["operator-school-focus"]) ui["operator-school-focus"].textContent = Number(inv.activeSchoolFocusPoints || 0).toLocaleString();
+  if (ui["operator-total-focus"]) ui["operator-total-focus"].textContent = Number(inv.totalFocusPoints || 0).toLocaleString();
+  if (ui["operator-total-shards"]) ui["operator-total-shards"].textContent = String(inv.brilliantEidolonShards || 0);
+
+  const preview = evalData.buffPreview || {};
+  const preset = activeOperatorPreset();
+
+  const renderGroup = (host, countNode, items, emptyText, allowToggle = false) => {
+    if (countNode) countNode.textContent = `${items.length} 项`;
+    if (!host) return;
+    if (!items.length) {
+      host.replaceChildren(create("p", "empty-copy", emptyText));
+      return;
+    }
+    host.replaceChildren(...items.map((row) => {
+      const card = create("article", `operator-buff-card${row.previewEnabled ? " is-active" : ""}`);
+      const head = create("div", "operator-buff-card-head");
+      const title = create("div", "operator-buff-card-title");
+      if (row.iconAsset) title.append(imageNode(row.iconAsset, "operator-buff-icon", row.nameZh, "lazy"));
+      title.append(create("strong", "", `${row.nameZh} (${row.rank}/${row.maxRank}阶)`));
+      head.append(title);
+      if (allowToggle && row.isConditional) {
+        const chk = create("label", "check-field");
+        const inp = document.createElement("input");
+        inp.type = "checkbox";
+        inp.checked = Boolean(row.previewEnabled);
+        inp.addEventListener("change", () => {
+          preset.activeTriggers[row.id] = inp.checked;
+          writeOperatorStore();
+          scheduleOperatorEvaluate();
+        });
+        chk.append(inp, create("span", "", "预览激活"));
+        head.append(chk);
+      } else {
+        head.append(create("span", "operator-buff-tag", OPERATOR_ACTIVATION_LABELS[row.activationType] || "常驻被动"));
+      }
+      card.append(head, create("p", "", row.descriptionZh || ""));
+      if (row.notesZh) card.append(create("small", "", row.notesZh));
+      return card;
+    }));
+  };
+
+  renderGroup(ui["operator-weapon-buffs"], ui["operator-weapon-buff-count"], preview.weaponRelevant || [], "当前已启用节点暂无直接作用于战甲武器的词条。", true);
+  renderGroup(ui["operator-wf-buffs"], ui["operator-wf-buff-count"], preview.warframeAndEnergyRelevant || [], "当前已启用节点暂无战甲面板、能量或剥甲效果。", true);
+  renderGroup(ui["operator-only-buffs"], null, preview.operatorOnly || [], "当前无仅作用于指挥官/增幅器本体的节点。", false);
+}
+
+function bindOperatorWorkbenchEvents() {
+  ui["operator-return-btn"]?.addEventListener("click", () => {
+    setActiveTool(state.operatorReturnFrom || "build");
+  });
+  ui["operator-config-tabs"]?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-operator-config]");
+    if (!btn) return;
+    const cfg = btn.dataset.operatorConfig;
+    if (!/^[ABC]$/.test(cfg) || cfg === state.operatorBuild.activeConfig) return;
+    state.operatorBuild.activeConfig = cfg;
+    state.operatorBuild.store ||= readOperatorStore();
+    state.operatorBuild.store.__lastConfig = cfg;
+    writeOperatorStore();
+    renderOperatorWorkbench();
+    scheduleOperatorEvaluate();
+  });
+
+  ui["operator-max-school"]?.addEventListener("click", () => {
+    const preset = activeOperatorPreset();
+    const school = operatorSchoolRecord(preset.activeSchool);
+    if (!school) return;
+    const sState = ensureOperatorSchoolState(preset, school.id);
+    sState.schoolUnlocked = true;
+    for (const n of school.nodes || []) {
+      const maxR = Number(n.maxRank ?? 3);
+      sState.nodes[n.id] = { unlocked: true, rank: maxR, enabled: true, unbound: Boolean(n.isWayBound) };
+      if (n.isWayBound && !preset.unboundWayBounds.includes(n.id)) preset.unboundWayBounds.push(n.id);
+    }
+    writeOperatorStore();
+    renderOperatorWorkbench();
+    scheduleOperatorEvaluate();
+    toast(`已将 ${school.nameEn} 专精全部 10 个节点升至满阶`);
+  });
+
+  ui["operator-max-all"]?.addEventListener("click", () => {
+    const preset = activeOperatorPreset();
+    const wbIds = [];
+    for (const school of state.operatorCatalog?.schools || []) {
+      const sState = ensureOperatorSchoolState(preset, school.id);
+      sState.schoolUnlocked = true;
+      for (const n of school.nodes || []) {
+        const maxR = Number(n.maxRank ?? 3);
+        sState.nodes[n.id] = { unlocked: true, rank: maxR, enabled: true, unbound: Boolean(n.isWayBound) };
+        if (n.isWayBound) wbIds.push(n.id);
+      }
+    }
+    preset.unboundWayBounds = [...new Set(wbIds)];
+    writeOperatorStore();
+    renderOperatorWorkbench();
+    scheduleOperatorEvaluate();
+    toast("已将五大学派全部 50 个节点升满并解绑全部 10 项跨专精被动");
+  });
+
+  ui["operator-reset-school"]?.addEventListener("click", () => {
+    const preset = activeOperatorPreset();
+    const school = operatorSchoolRecord(preset.activeSchool);
+    if (!school) return;
+    const wbPaths = new Set((school.nodes || []).filter((n) => n.isWayBound).flatMap((n) => [n.id, n.path]));
+    preset.unboundWayBounds = (preset.unboundWayBounds || []).filter((x) => !wbPaths.has(x));
+    preset.schools[school.id] = { schoolUnlocked: true, nodes: {} };
+    writeOperatorStore();
+    renderOperatorWorkbench();
+    scheduleOperatorEvaluate();
+    toast(`已重置 ${school.nameEn} 专精配置`);
+  });
+
+  ui["operator-export-json"]?.addEventListener("click", () => {
+    const preset = activeOperatorPreset();
+    const cfg = state.operatorBuild.activeConfig || "A";
+    const stamp = typeof exportTimestampTag === "function" ? exportTimestampTag() : Date.now();
+    const payload = {
+      kind: "wf-riven-operator-focus",
+      version: 1,
+      configName: cfg,
+      preset,
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `wf-operator-${preset.activeSchool}-${cfg}-${stamp}.json`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  ui["operator-import-json"]?.addEventListener("click", () => {
+    ui["operator-import-file"]?.click();
+  });
+
+  ui["operator-import-file"]?.addEventListener("change", async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    try {
+      const parsed = JSON.parse(await file.text());
+      const incoming = parsed?.preset && typeof parsed.preset === "object" ? parsed.preset : parsed;
+      if (!incoming || typeof incoming !== "object" || !incoming.activeSchool) {
+        throw new Error("无效的指挥官专精 JSON 文件");
+      }
+      state.operatorBuild.store ||= readOperatorStore();
+      state.operatorBuild.store[state.operatorBuild.activeConfig || "A"] = incoming;
+      writeOperatorStore();
+      renderOperatorWorkbench();
+      scheduleOperatorEvaluate();
+      toast("已导入指挥官专精配置");
+    } catch (err) {
+      toast(err.message || "指挥官专精 JSON 导入失败");
+    }
+  });
 }
 
 async function bootstrap() {
@@ -17114,7 +18985,7 @@ async function bootstrap() {
     window.setTimeout(() => { ui["boot-screen"].hidden = true; }, 280);
     if (!state.modAssets) toast("MOD 素材索引加载失败，配装仍可计算");
     const hashTool = location.hash.replace("#", "");
-    if (["build", "analysis", "warframe", "companion", "arena"].includes(hashTool)) setActiveTool(hashTool);
+    if (["build", "analysis", "warframe", "companion", "operator", "arena"].includes(hashTool)) setActiveTool(hashTool);
   } catch (error) {
     ui["boot-screen"].querySelector("p").textContent = error.message || "本地数据加载失败";
     ui["boot-screen"].classList.add("has-error");

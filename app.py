@@ -3974,7 +3974,9 @@ def _exalted_context(payload: Mapping[str, Any], weapon: Mapping[str, Any]) -> d
 
 
 def warframe_calculate_payload(payload: Any) -> dict[str, Any]:
-    """Warframe build plus a live summary of the frame's exalted weapons."""
+    """Warframe build plus live exalted weapon summaries, ability ranges, and defense nuke preview."""
+    from wfarsenal import ability_nuke
+
     result = WARFRAME_ENGINE.calculate(payload)
     frame_id = (result.get("frame") or {}).get("id") or (payload.get("frameId") if isinstance(payload, Mapping) else None)
     summaries = []
@@ -3986,7 +3988,17 @@ def warframe_calculate_payload(payload: Any) -> dict[str, Any]:
         summaries.append({**exalted_weapons.frame_summary(weapon, context),
                           "nameZh": weapon.get("nameZh"), "nameEn": weapon.get("nameEn"),
                           "tier": block.get("tier")})
-    return {**result, "exalted": summaries}
+    nuke_preview = ability_nuke.evaluate_warframe_nuke_preview(
+        result,
+        payload if isinstance(payload, Mapping) else None,
+        exports=EXPORTS,
+    )
+    return {
+        **result,
+        "exalted": summaries,
+        "abilityRanges": nuke_preview.get("abilityRanges") or [],
+        "defenseNuke": nuke_preview,
+    }
 
 
 def _exalted_payload(payload: Mapping[str, Any], weapon: Mapping[str, Any]) -> Mapping[str, Any]:
@@ -5138,6 +5150,16 @@ _FRAME_PATHS = {
     "Cyte-09": "/Lotus/Powersuits/Frumentarius/Frumentarius", "Harrow": "/Lotus/Powersuits/Priest/Priest",
     "Kullervo": "/Lotus/Powersuits/PaxDuviricus/PaxDuviricus",
     "Narin": "/Lotus/Powersuits/Duelist/Duelist",
+    "Nidus": "/Lotus/Powersuits/Infestation/Infestation",
+    "Jade": "/Lotus/Powersuits/Choir/Choir",
+    "Nokko": "/Lotus/Powersuits/Nokko/Nokko",
+    "Dante": "/Lotus/Powersuits/Pagemaster/Pagemaster",
+    "Sevagoth": "/Lotus/Powersuits/Wraith/Wraith",
+    "Oraxia": "/Lotus/Powersuits/Oraxia/Oraxia",
+    "Caliban": "/Lotus/Powersuits/Sentient/Sentient",
+    "Citrine": "/Lotus/Powersuits/Geode/Geode",
+    "Gauss": "/Lotus/Powersuits/Runner/Runner",
+    "Nezha": "/Lotus/Powersuits/Nezha/Nezha",
 }
 
 
@@ -5159,17 +5181,63 @@ EXTERNAL_BUFFS: dict[str, dict[str, Any]] = {
     # 战甲技能（受技能强度的项按强度线性缩放；同族只取最强的一个）
     "roar": _ability("Rhino", "战吼", "Rhino/Abilities/RhinoRoarAbility", family="roar", base=0.5,
                      effects=[("faction", 1.0, None, "派系伤害")],
-                     detail="与灾祸 Mod 同一乘区、对所有派系生效；状态伤害按派系再乘一次。"),
+                     detail="与灾祸 Mod 同一乘区、对所有派系生效；武器与技能异常状态伤害均按派系二次乘算。"),
     "roar-helminth": _ability("Helminth", "战吼", "Rhino/Abilities/RhinoRoarAbility", family="roar", base=0.3, helminth=True,
                               effects=[("faction", 1.0, None, "派系伤害")], detail="注入版，乘区同原版；与原版同时开只取较强者。"),
     "eclipse": _ability("Mirage", "黯然失色", "Harlequin/Abilities/LightAbility", family="eclipse", base=2.0,
                         effects=[("final", 1.0, None, "最终伤害")],
                         detail="长按（光明）只加 Mirage 自身武器；独立乘区，直伤与状态伤害各乘一次。"),
+    "total-eclipse": _augment("Mirage", "全蚀", "Harlequin/LightAugmentCard", "Harlequin/Abilities/LightAbility", family="eclipse", base=2.0,
+                              effects=[("final", 1.0, None, "最终伤害")],
+                              detail="黯然失色强化：将光明形态独立最终增伤共享给范围内友军武器；与同族只取较强者。"),
     "eclipse-helminth": _ability("Helminth", "黯然失色", "Harlequin/Abilities/LightAbility", family="eclipse", base=0.3, helminth=True,
                                  effects=[("final", 1.0, None, "最终伤害")], detail="注入版，只加自身武器；与原版同时开只取较强者。"),
+    "parasitic-link": _ability("Nidus", "寄生链接", "Infestation/Abilities/InfestLinkAbility", base=0.25,
+                               effects=[("base", 1.0, None, "武器基础伤害"), ("wf-strength-mult", 1.0, None, "战甲总强度独立乘算")],
+                               detail="寄生链接友军：按 Nidus 强度提供武器基伤，并对受链战甲最终总技能强度独立乘算 ×(1 + 0.25×强度)。"),
+    "provoke": _ability("Equinox", "白昼 · 激怒", "YinYang/Abilities/YinYangAuraAbility", family="provoke", base=0.20, maximum=0.50,
+                        effects=[("wf-strength", 1.0, None, "战甲技能强度")],
+                        detail="白昼形态光环：为范围内友军提供最高 +50% 面板技能强度。"),
+    "peaceful-provocation": _augment("Equinox", "和平挑衅", "YinYang/YinYangAuraAugmentCard", "YinYang/Abilities/YinYangAuraAbility",
+                                     family="provoke", base=0.35, maximum=0.80,
+                                     effects=[("wf-strength", 1.0, None, "战甲技能强度")],
+                                     detail="白昼叠满强化：基础 +20% 加叠层 +15%（随强度缩放），最高提供 +80% 战甲技能强度。"),
+    "jade-power-of-seven": _ability("Jade", "圣歌 · 七人众之力", "Choir/Abilities/ChoirBuffAbility", base=0.25, maximum=1.50,
+                                    effects=[("wf-strength", 1.0, None, "战甲技能强度")],
+                                    detail="悲悯交响曲（技能强度曲目）：为全队提供最高 +150% 面板技能强度。"),
+    "jade-deathbringer": _ability("Jade", "圣歌 · 死亡使者", "Choir/Abilities/ChoirBuffAbility", base=1.0,
+                                  effects=[("base", 1.0, None, "武器基础伤害")],
+                                  detail="悲悯交响曲（武器伤害曲目）：按 Jade 强度提供与膛线同乘区的武器基础伤害加成。"),
+    "jade-judgments": _ability("Jade", "圣光审判", "Choir/Abilities/ChoirPoolAbility", base=0.50, strength=False,
+                               effects=[("final", 1.0, None, "敌人受到伤害")],
+                               detail="被圣光审判标记的敌人受到 +50% 全来源伤害易伤（固定值，武器与技能共享）。"),
+    "brightbonnet-squad": _ability("Nokko", "亮帽菇", "Nokko/Abilities/NokkoPowerShroomAbility", family="brightbonnet",
+                                   base=0.30, maximum=3.00, arbucepToggle=True,
+                                   effects=[("wf-strength", 1.0, None, "战甲技能强度与脉冲回蓝")],
+                                   detail="队友 Nokko 放置亮帽菇：提供非递归技能强度与无视引导锁脉冲回蓝；开启「蕈菇 200% 强化」时强度翻倍且脉冲缩短至 1.33s。"),
+    "brightbonnet-helminth": _ability("Helminth", "亮帽菇", "Nokko/Abilities/NokkoPowerShroomAbility", family="brightbonnet",
+                                      base=0.20, maximum=2.00, helminth=True, arbucepToggle=True,
+                                      effects=[("wf-strength", 1.0, None, "战甲技能强度与脉冲回蓝")],
+                                      detail="队友注入版亮帽菇：基础 +20% 强度与 10 脉冲回蓝；携带空战武器「蕈菇」命中激活 200% 强化。"),
     "molecular-prime": _ability("Nova", "分子填充", "AntiMatter/Abilities/MolecularPrimeAbility", base=1.0, strength=False,
+                                variants=[{"id": "tap", "label": "点按减速 (Slowva)"}, {"id": "hold", "label": "长按加速 +75% (Speedva)"}],
                                 effects=[("final", 1.0, None, "敌人受到伤害")],
-                                detail="被填充的敌人受到 +100% 伤害，固定值不受强度；直伤与状态伤害都翻倍。"),
+                                detail="U37 口径：被填充敌人受到 +100% 全来源易伤；点按减速（掉血球+15%），长按加速最高 +75% 聚怪（掉蓝球+15%）。"),
+    "dante-pageflight": _ability("Dante", "终章 · 书页飞羽", "Pagemaster/Abilities/PagemasterParagrimmAbility", base=0.50,
+                                 effects=[("status", 1.0, None, "异常触发几率"), ("proc-damage", 1.0, None, "异常状态伤害")],
+                                 detail="书页飞羽扑击敌人：使其受到的异常触发几率与异常状态伤害（含武器与技能流血/毒/火）提高。"),
+    "sevagoth-reap": _ability("Sevagoth", "收割", "Wraith/Abilities/WraithReapAbility", base=0.50,
+                              effects=[("final", 1.0, None, "敌人受到伤害")],
+                              detail="死亡收获易伤：被阴影触碰的敌人受到按强度缩放的全来源伤害易伤。"),
+    "shadow-haze": _augment("Sevagoth", "暗影迷雾", "Wraith/WraithReapAugmentCard", "Wraith/Abilities/WraithReapAbility", base=0.50,
+                            effects=[("crit-flat", 1.0, None, "最终暴击几率")],
+                            detail="收割强化：对受死亡收获影响的敌人提供按强度缩放的平坦最终暴击几率加成。"),
+    "webbed-embrace": _ability("Oraxia", "网缚之拥", "Oraxia/Abilities/OraxiaEntangleAbility", base=0.50,
+                               effects=[("final", 1.0, None, "敌人受到伤害")],
+                               detail="蛛网区域内的敌人受到按强度缩放的全来源伤害易伤。"),
+    "sentient-wrath": _ability("Caliban", "Sentient 之怒", "Sentient/Abilities/SentientStompAbility", base=0.35,
+                               effects=[("final", 1.0, None, "敌人受到伤害")],
+                               detail="被震荡波抬升的敌人受到按强度缩放的全来源伤害易伤。"),
     "vex-armor": _ability("Chroma", "怨怒护甲", "Dragon/Abilities/DragonScalesAbility", base=2.75,
                           effects=[("base", 1.0, None, "基础伤害")],
                           detail="愤怒（Fury）满层；与膛线 / 压迫点同一乘区相加。Chroma 与范围内队友。"),
@@ -5188,20 +5256,40 @@ EXTERNAL_BUFFS: dict[str, dict[str, Any]] = {
     "haste-mote": _ability("Wisp", "储能池 · 急速", "Wisp/Abilities/WispReservoirAbility", base=0.3,
                            effects=[("fire-rate", 1.0, _GUNS, "枪械射速"), ("fire-rate", 2.0 / 3.0, _MELEE, "近战攻速")],
                            detail="急速储能池：射速 +30%、近战攻速 +20%，与射速 / 攻速 Mod 相加。"),
+    "vitality-mote": _ability("Wisp", "储能池 · 活力", "Wisp/Abilities/WispReservoirAbility", base=300.0, unit="count",
+                              effects=[("wf-health", 1.0, None, "战甲最大生命")],
+                              detail="活力储能池：按强度提高战甲最大生命值与每秒回血（联动秘奥好战者与强固连结）。"),
+    "shock-mote": _ability("Wisp", "储能池 · 震荡", "Wisp/Abilities/WispReservoirAbility", base=2.0, unit="count", strength=False,
+                           effects=[("wf-energy", 1.0, None, "执刑官延伸回蓝")],
+                           detail="震荡储能池：电击周围敌人，若受增益战甲装备「执刑官延伸」则可持续触发每秒 2 点回蓝。"),
     "fireball-frenzy": _augment("Ember", "狂热火球", "Ember/FireBallAugmentCard", "Ember/Abilities/FireBallAbility", base=1.0,
                                 effects=[("post-element:DT_FIRE", 1.0, None, "附加火焰")], detail="按基础伤害的百分比附加独立火焰伤害，不与元素 Mod 复合。"),
     "freeze-force": _augment("Frost", "寒冰之力", "Frost/IcicleAugmentCard", "Frost/Abilities/IcicleAbility", base=1.0,
                              effects=[("post-element:DT_FREEZE", 1.0, None, "附加冰冻")], detail="按基础伤害的百分比附加独立冰冻伤害，不与元素 Mod 复合。"),
     "shock-trooper": _augment("Volt", "电击奇兵", "Volt/ShockAugmentCard", "Volt/Abilities/ShockAbility", base=1.0,
                               effects=[("post-element:DT_ELECTRICITY", 1.0, None, "附加电击")], detail="按基础伤害的百分比附加独立电击伤害，不与元素 Mod 复合。"),
+    "thermal-transfer": _augment("Gauss", "热能传递", "Runner/RunnerTransferAugmentCard", "Runner/Abilities/RunnerSunderAbility", base=0.75,
+                                 elements=("DT_FIRE", "DT_FREEZE", "DT_EXPLOSION"),
+                                 effects=[("post-element:select", 1.0, None, "附加独立元素")],
+                                 detail="热能抽离强化：为范围内友军武器附加独立火 / 冰 / 爆炸伤害（POST_COALESCE，不与元素 Mod 复合）。"),
     "smite-infusion": _augment("Oberon", "惩击洗礼", "Paladin/SmiteAugmentCard", "Paladin/Abilities/SmiteAbility", base=1.0,
-                               effects=[("element:DT_RADIATION", 1.0, None, "附加辐射")], detail="按基础伤害的百分比附加辐射，与元素 Mod 相加。"),
+                               effects=[("post-element:DT_RADIATION", 1.0, None, "附加独立辐射")],
+                               detail="按基础伤害的百分比附加独立辐射伤害（POST_COALESCE），不与元素 Mod 复合。"),
     "venom-dose": _augment("Saryn", "猛毒附加", "Saryn/PoisonAugmentCard", "Saryn/Abilities/PoisonAbility", base=1.0,
-                           effects=[("element:DT_CORROSIVE", 1.0, None, "附加腐蚀")], detail="按基础伤害的百分比附加腐蚀，与元素 Mod 相加。"),
+                           effects=[("post-element:DT_CORROSIVE", 1.0, None, "附加独立腐蚀")],
+                           detail="按基础伤害的百分比附加独立腐蚀伤害（POST_COALESCE），不与元素 Mod 复合。"),
     "nourish": _ability("Grendel", "消化滋养", "Devourer/Abilities/DevourerConsumeAbility", family="nourish", base=0.75,
-                        effects=[("element:DT_VIRAL", 1.0, None, "附加病毒")], detail="按基础伤害的百分比附加病毒，与元素 Mod 相加。"),
+                        effects=[("post-element:DT_VIRAL", 1.0, None, "附加独立病毒"), ("wf-energy", 1.0, None, "战甲回蓝倍率")],
+                        detail="按基伤附加独立病毒伤害（不与元素 Mod 复合），并按强度放大战甲所有能量获取倍率。"),
     "nourish-helminth": _ability("Helminth", "消化滋养", "Devourer/Abilities/DevourerConsumeAbility", family="nourish", base=0.45, helminth=True,
-                                 effects=[("element:DT_VIRAL", 1.0, None, "附加病毒")], detail="注入版；与原版同时开只取较强者。"),
+                                 effects=[("post-element:DT_VIRAL", 1.0, None, "附加独立病毒"), ("wf-energy", 1.0, None, "战甲回蓝倍率")],
+                                 detail="注入版：附加独立病毒伤害（不复合）并放大回蓝倍率；与原版同时开只取较强者。"),
+    "prismatic-gem": _ability("Citrine", "棱彩宝石", "Geode/Abilities/GeodeCrystalAbility", base=1.0,
+                              effects=[("status", 1.0, None, "触发几率"), ("proc-duration", 1.0, None, "异常持续时间")],
+                              detail="棱彩宝石光环：按强度提高友军异常触发几率与异常持续时间。"),
+    "electric-shield": _ability("Volt", "电力屏障", "Volt/Abilities/ShieldAbility", squad=True, strength=False, max_count=6, base=0.50,
+                                effects=[("post-element:DT_ELECTRICITY", 1.0, _GUNS, "附加独立电击"), ("electric-shield-cd", 0.0, _GUNS, "总暴击倍率翻倍")],
+                                detail="远程弹体穿透 1~6 面电力屏障：每面叠加 +50% 独立电击伤害，且总暴击倍率固定 ×2（多面不重复翻倍暴伤）。"),
     "toxic-lash": _ability("Saryn", "剧毒鞭笞", "Saryn/Abilities/WeaponPoisonAbility", base=0.3,
                            effects=[("extra-hit:DT_POISON", 1.0, None, "毒素额外命中")], forced=True, melee_scale=2.0,
                            detail="每次命中附加一次毒素额外命中（必定触发毒素），近战翻倍。额外命中按派系再乘一次。"),
@@ -5223,6 +5311,18 @@ EXTERNAL_BUFFS: dict[str, dict[str, Any]] = {
                         effects=[("final:DT_FREEZE", 1.0, None, "冰冻伤害易伤")],
                         detail="冰暴范围内的敌人受到的纯冰冻伤害提高（复合元素里的冰冻不算），按最终乘区只乘直伤的冰冻部分。"),
     # 小队光环（数值取 Mod 满级客户端值；同一光环可由 1–4 名队员叠加）
+    "growing-power": _aura("成长之力", "FairyQuest/FairyQuestCritToAbilityAuraMod", base=0.25,
+                           effects=[("wf-strength", 1.0, None, "战甲技能强度")],
+                           detail="武器造成异常状态后 6s 内，每位携带者提供 +25% 战甲技能强度。"),
+    "power-donation": _aura("献出力量", "AvatarAuraPowerMaxMod", max_count=3, base=0.30,
+                            effects=[("wf-strength", 1.0, None, "队友献出技能强度")],
+                            detail="1~3 名队友携带献出力量，每人献出 +30% 技能强度给当前战甲。"),
+    "energy-siphon": _aura("能量虹吸", "PlayerEnergyRegenAuraMod", base=0.60, unit="count",
+                           effects=[("wf-energy", 1.0, None, "每秒恢复能量")],
+                           detail="小队光环：每位携带者提供每秒 0.6 点持续能量恢复。"),
+    "brief-respite": _aura("快速休整", "FairyQuest/FairyQuestAbilityToShieldsAuraMod", base=1.50,
+                           effects=[("wf-shield", 1.0, None, "耗蓝转护盾比例")],
+                           detail="小队光环：施放技能消耗能量时按 150%×人数 转化为护盾（无超载护盾时生效）。"),
     "rifle-amp": _aura("步枪增幅", "PlayerRifleDamageAuraMod", base=0.27,
                        effects=[("base", 1.0, ("/Lotus/Weapons/Tenno/Rifle/LotusRifle",), "步枪类基础伤害")],
                        detail="步枪 Mod 池（含弓、狙击枪、发射器，不含霰弹枪）；与膛线同一乘区相加。"),
@@ -5287,6 +5387,8 @@ _EXTERNAL_BUFF_UPGRADES = {
     "crit-damage": ("WEAPON_CRIT_DAMAGE", "STACKING_MULTIPLY"),
     "final-crit-damage": ("RUNTIME_FINAL_CRIT_DAMAGE", "ADD"),
     "status": ("WEAPON_PROC_CHANCE", "STACKING_MULTIPLY"),
+    "proc-damage": ("WEAPON_PROC_DAMAGE", "STACKING_MULTIPLY"),
+    "proc-duration": ("WEAPON_PROC_TIME", "STACKING_MULTIPLY"),
     "multishot": ("WEAPON_FIRE_ITERATIONS", "STACKING_MULTIPLY"),
     "fire-rate": ("WEAPON_FIRE_RATE", "STACKING_MULTIPLY"),
     "reload": ("WEAPON_RELOAD_SPEED", "STACKING_MULTIPLY"),
@@ -5317,6 +5419,16 @@ def external_buff_catalog() -> list[dict[str, Any]]:
     """What the build page lists: the label, what each effect raises and where."""
     rows = []
     for buff_id, spec in EXTERNAL_BUFFS.items():
+        warframe_benefiting = any(
+            kind.startswith("wf-")
+            or buff_id in {
+                "roar", "roar-helminth", "parasitic-link", "molecular-prime",
+                "dante-pageflight", "sevagoth-reap", "webbed-embrace",
+                "sentient-wrath", "jade-judgments", "corrosive-projection",
+                "shield-disruption", "coaction-drift",
+            }
+            for kind, _scale, _applies, _label in spec["effects"]
+        )
         rows.append({
             "id": buff_id,
             "group": spec["group"],
@@ -5326,6 +5438,10 @@ def external_buff_catalog() -> list[dict[str, Any]]:
             "unit": spec.get("unit", "percent"),
             "strength": bool(spec.get("strength")),
             "squad": bool(spec.get("squad")),
+            "maxCount": int(spec.get("max_count") or (4 if spec.get("squad") else 1)),
+            "arbucepToggle": bool(spec.get("arbucepToggle")),
+            "variants": list(spec.get("variants") or ()),
+            "warframeBenefiting": warframe_benefiting,
             "family": spec.get("family"),
             "elements": list(spec.get("elements") or ()),
             "detail": spec["detail"],
@@ -5342,8 +5458,8 @@ def _external_buff_values(entries: Any) -> list[tuple[str, dict[str, Any], float
     """Validated (id, spec, resolved value, request) rows, one per family."""
     if entries is None:
         return []
-    if not isinstance(entries, list) or len(entries) > 40:
-        raise SimulationError("externalBuffs must be an array with at most 40 entries")
+    if not isinstance(entries, list) or len(entries) > 96:
+        raise SimulationError("externalBuffs must be an array with at most 96 entries")
     picked: list[tuple[str, dict[str, Any], float, Mapping[str, Any]]] = []
     drift = 0.0
     for index, item in enumerate(entries):
@@ -5361,15 +5477,20 @@ def _external_buff_values(entries: Any) -> list[tuple[str, dict[str, Any], float
             # the strength / squad controls) is the effect itself.
             value = _manual_number(item["value"], f"externalBuffs[{index}].value", low=0.0, high=50.0)
         elif spec.get("squad"):
-            count = _manual_int(item.get("count", 1), f"externalBuffs[{index}].count", low=1, high=4)
+            max_count = int(spec.get("max_count") or 4)
+            count = _manual_int(item.get("count", 1), f"externalBuffs[{index}].count", low=1, high=max_count)
             value = spec["base"] * count
         elif spec.get("strength"):
             strength = _manual_number(item.get("strength", 1.0), f"externalBuffs[{index}].strength", low=0.0, high=10.0)
-            value = spec["base"] * strength
+            emp_mult = 2.0 if (spec.get("arbucepToggle") and bool(item.get("arbucepEmpowered"))) else 1.0
+            value = spec["base"] * strength * emp_mult
         else:
             value = spec["base"]
         if spec.get("maximum") is not None:
-            value = min(value, float(spec["maximum"]))
+            max_cap = float(spec["maximum"])
+            if spec.get("arbucepToggle") and not bool(item.get("arbucepEmpowered")) and item.get("value") is None:
+                max_cap *= 0.5
+            value = min(value, max_cap)
         if buff_id == "coaction-drift":
             drift = value
             continue
@@ -5399,6 +5520,8 @@ def _external_buff_effects(entries: Any, weapon: Mapping[str, Any] | None = None
     effects: list[ModEffect] = []
     for buff_id, spec, value, item in rows:
         for kind, scale, applies, _label in spec["effects"]:
+            if kind.startswith("wf-"):
+                continue
             amount = value * scale
             source = f"external:{buff_id}"
             for valid in (applies or (None,)):
@@ -5409,8 +5532,15 @@ def _external_buff_effects(entries: Any, weapon: Mapping[str, Any] | None = None
                     effects.append(ModEffect(upgrade_type="WEAPON_PERCENT_BASE_DAMAGE_ADDED", operation="STACKING_MULTIPLY",
                                              value=amount, damage_type=kind.split(":", 1)[1], valid_type=valid, source_path=source))
                 elif kind.startswith("post-element:"):
+                    dtype = kind.split(":", 1)[1]
+                    if dtype == "select":
+                        chosen = str(item.get("element") or "")
+                        dtype = chosen if chosen in spec["elements"] else spec["elements"][0]
                     effects.append(ModEffect(upgrade_type="WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE", operation="STACKING_MULTIPLY",
-                                             value=amount, damage_type=kind.split(":", 1)[1], valid_type=valid, source_path=source))
+                                             value=amount, damage_type=dtype, valid_type=valid, source_path=source))
+                elif kind == "electric-shield-cd":
+                    effects.append(ModEffect(upgrade_type="WEAPON_CRIT_DAMAGE", operation="MULTIPLY",
+                                             value=2.0, valid_type=valid, source_path=source))
                 elif kind.startswith("extra-hit:"):
                     dtype = kind.split(":", 1)[1]
                     if dtype == "select":
@@ -5545,6 +5675,20 @@ def companion_optimize_weapon_payload(payload: Any) -> dict[str, Any]:
     if primary_stats is not None and "primaryWeaponStats" not in merged:
         merged["primaryWeaponStats"] = primary_stats
     return companion_loadout.optimize_companion_weapon(merged, exports=EXPORTS)
+
+
+def operator_catalog_payload() -> dict[str, Any]:
+    from wfarsenal import operator_focus
+
+    return operator_focus.get_focus_catalog()
+
+
+def operator_evaluate_payload(payload: Any) -> dict[str, Any]:
+    from wfarsenal import operator_focus
+
+    if not isinstance(payload, Mapping):
+        raise SimulationError("request body must be a JSON object")
+    return operator_focus.evaluate_focus(payload)
 
 
 def _external_enemy_enhancements(entries: Any, enhancements: Mapping[str, Any]) -> dict[str, Any]:
@@ -6804,20 +6948,23 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
             modded_stats.get("critMultiplier"),
             modded_stats.get("noncritDamageMultiplier"),
         )
+        rot_duty = float((ctx.get("combat_extras") or {}).get("abilityRotationDutyCycle") or 1.0)
         for dps_key in ("sustainedDps", "burstDps"):
             if isinstance(modded_stats.get(dps_key), (int, float)):
-                modded_stats[dps_key] = modded_stats[dps_key] * crit_factor * stance_multiplier
+                duty_mult = rot_duty if dps_key == "sustainedDps" else 1.0
+                modded_stats[dps_key] = modded_stats[dps_key] * crit_factor * stance_multiplier * duty_mult
         modded_stats["stanceMultiplier"] = stance_multiplier
         status_sustained = result.get("statusSustained") or {}
-        result["steadyDirectDps"] = float(status_sustained.get("directDps") or 0.0)
-        result["dotSustainedDps"] = float(status_sustained.get("dotDps") or 0.0)
-        result["nonDotStatusSustainedDps"] = float(status_sustained.get("nonDotDps") or 0.0)
-        result["statusSustainedDps"] = float(status_sustained.get("statusDps") or 0.0)
-        result["totalSustainedDps"] = float(status_sustained.get("totalDps") or 0.0)
+        result["steadyDirectDps"] = float(status_sustained.get("directDps") or 0.0) * rot_duty
+        result["dotSustainedDps"] = float(status_sustained.get("dotDps") or 0.0) * rot_duty
+        result["nonDotStatusSustainedDps"] = float(status_sustained.get("nonDotDps") or 0.0) * rot_duty
+        result["statusSustainedDps"] = float(status_sustained.get("statusDps") or 0.0) * rot_duty
+        result["totalSustainedDps"] = float(status_sustained.get("totalDps") or 0.0) * rot_duty
         result["statusRampSeconds"] = float(status_sustained.get("steadyStateSeconds") or 0.0)
         result["magneticBreakPotential"] = float(status_sustained.get("magneticBreakPotential") or 0.0)
     if isinstance(result.get("targetDamage"), dict) and isinstance(result["targetDamage"].get("dps"), (int, float)):
-        result["targetDamage"]["dps"] *= stance_multiplier
+        rot_duty_td = float((ctx.get("combat_extras") or {}).get("abilityRotationDutyCycle") or 1.0)
+        result["targetDamage"]["dps"] *= stance_multiplier * rot_duty_td
     kernel_mod_states = {
         str(item.get("path") or ""): item
         for item in result.get("selection", {}).get("mods") or ()
@@ -7074,10 +7221,11 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     eximus=bool((_replay_ctx['enemy_enhancements'] or {}).get('eximus')),
                     combat_extras=ctx.get('combat_extras'),
                 )
+                _rot_duty_win = float((ctx.get("combat_extras") or {}).get("abilityRotationDutyCycle") or 1.0)
                 windowed = replay_combat(
                     replay_stats,
                     _replay_ctx["target"],
-                    attacks_per_second=replay_stats.sustained_attack_rate,
+                    attacks_per_second=replay_stats.sustained_attack_rate * max(0.05, min(1.0, _rot_duty_win)),
                     headshot_chance=headshot_chance,
                     armour_strip=float(common.get('armour_strip') or 0.0),
                     elemental_armour_strip=float(common.get('elemental_armour_strip') or 0.0),
@@ -7348,9 +7496,14 @@ def _variant_measurer(payload: Mapping[str, Any]) -> SimpleNamespace:
     syn_data = ctx.get("synergy")
     has_dynamic_hunter_synergy = bool(
         syn_data is not None
-        and str((ctx.get("selected_weapon") or {}).get("slot") or "") == "primary"
-        and isinstance(syn_data.get("companion_result"), Mapping)
-        and ((syn_data["companion_result"].get("companion") or {}).get("category") == "beast")
+        and (
+            (
+                str((ctx.get("selected_weapon") or {}).get("slot") or "") == "primary"
+                and isinstance(syn_data.get("companion_result"), Mapping)
+                and ((syn_data["companion_result"].get("companion") or {}).get("category") == "beast")
+            )
+            or ("hall-of-mirrors" in (syn_data.get("active_ability_ids") or ()))
+        )
     )
 
     def _variant_passives(variant_mods: list[dict[str, Any]], skip_riven: bool) -> Any:
@@ -7772,19 +7925,51 @@ def part_values_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
 # Arena owns a single long-running world; all loadout parsing still goes through
 # the existing explicit-slot reducer. Entering its page never starts a search.
 def _arena_context(payload):
+    from wfarsenal import ability_nuke
     from wfarsenal.arena import normalize_scenario
     from wfarsenal.synergy import build_arena_contexts
     if not isinstance(payload, Mapping) or not isinstance(payload.get("loadout"), Mapping):
         raise SimulationError("arena requires a current equipped loadout")
-    scenario = normalize_scenario(payload.get("scenario") or {})
+    raw_scenario = payload.get("scenario") if isinstance(payload.get("scenario"), Mapping) else {}
+    scenario = normalize_scenario(raw_scenario)
     loadout = deepcopy(dict(payload["loadout"]))
+    if not (isinstance(scenario.get("enemy"), str) and scenario["enemy"].strip() in MANUAL_ENEMIES_BY_PATH):
+        fallback_enemy = loadout.get("enemy")
+        scenario["enemy"] = (
+            fallback_enemy.strip()
+            if isinstance(fallback_enemy, str) and fallback_enemy.strip() in MANUAL_ENEMIES_BY_PATH
+            else _BENCHMARK_ENEMY_PATH
+        )
     if isinstance(payload.get("warframeLink"), Mapping) and "warframeLink" not in loadout:
         loadout["warframeLink"] = deepcopy(dict(payload["warframeLink"]))
     if isinstance(payload.get("companionLink"), Mapping) and "companionLink" not in loadout:
         loadout["companionLink"] = deepcopy(dict(payload["companionLink"]))
+    if isinstance(payload.get("operatorLink"), Mapping) and "operatorLink" not in loadout:
+        loadout["operatorLink"] = deepcopy(dict(payload["operatorLink"]))
     loadout.update(mode="manual", autoArcane=False, autoIncarnon=False,
                    damageModel="target", enemy=scenario["enemy"], level=scenario["level"],
                    headshotChance=0., distance=None, windowSeconds=30.)
+    custom_single = (
+        scenario["spawnProfile"] == "custom"
+        and scenario.get("enemySpec", "single") in (None, "", "single")
+    )
+    if not custom_single:
+        # 非自选敌人模式下，隔离武器配装「战斗场景」中的单靶强化复选项与削甲滑块；
+        # 仅当竞技场自身开启「钢铁之路」时才按钢路倍率生成任务刷新敌人。
+        loadout.update(
+            steelPath=bool(scenario.get("steelPath", False)),
+            armourStrip=0.0,
+            enemyEnhancements={
+                "eximus": False,
+                "empowered": False,
+                "playerCount": None,
+                "archimedea": False,
+            },
+            customDefense=None,
+            defenseSnapshot=None,
+        )
+    elif "steelPath" in raw_scenario:
+        loadout["steelPath"] = bool(scenario.get("steelPath", False))
     ctx = _manual_resolve_sim_context(loadout)
     if ctx["weapon"].get("slot") not in {"primary", "secondary", "arch_gun"}:
         raise SimulationError("场景靶场只支持玩家远程武器")
@@ -7805,6 +7990,20 @@ def _arena_context(payload):
         payload=payload, loadout=loadout, scenario=scenario,
         synergy_data=ctx.get("synergy"), common=common, exports=EXPORTS,
     )
+    if wf_ctx is not None:
+        req_nuke_id = (
+            scenario.get("nukeSetupId")
+            or (loadout.get("warframeLink") or {}).get("nukeSetupId")
+            or (((loadout.get("warframeLink") or {}).get("config") or {}).get("nukeSetupId"))
+        )
+        nuke_preview = ability_nuke.evaluate_warframe_nuke_preview(
+            wf_ctx,
+            loadout.get("warframeLink"),
+            exports=EXPORTS,
+            requested_setup_id=str(req_nuke_id).strip() if req_nuke_id else None,
+        )
+        wf_ctx["abilityRanges"] = nuke_preview.get("abilityRanges") or []
+        wf_ctx["nukePreview"] = nuke_preview
     arena_enh = dict(ctx.get("replay_enemy_enhancements", common.get("enemy_enhancements")) or {})
     if comp_ctx is not None:
         arena_enh.pop("primingStacks", None)
@@ -7818,6 +8017,7 @@ def _arena_context(payload):
                 enemies={e["path"]:e for e in EXPORTS["enemies"]},
                 warframeContext=wf_ctx,
                 companionContext=comp_ctx,
+                operatorSummary=((ctx.get("synergy") or {}).get("summary") or {}).get("operator"),
                 enemyVisuals=enemy_visuals)
 
 
@@ -7834,11 +8034,11 @@ def arena_catalog_payload():
         specs.append(dict(**sources[spec["path"]], id=spec["path"], name=spec["path"].rsplit("/",1)[-1],tiers=sorted({r["tier"] for r in rows}),rows=rows))
     return {"enemySpecs":specs,"maps":maps, "missionCoverage":coverage,
             "materialPalette":json.loads((ROOT / "data/arena/material-palette.json").read_text(encoding="utf-8")),
-            "spawnProfiles":[{"id":"custom","name":"自定义工况 · 固定数量与层级"},
-                             {"id":"defense","name":"来源防御 · 累计层级与整波编组"},
-                             {"id":"arbitration","name":"来源仲裁防御 · 总量修正与独立无人机"},
-                             {"id":"interception","name":"拦截参数 · 定额清场"},
-                             {"id":"arbitration_interception","name":"仲裁拦截参数 · 定额清场与无人机"}],
+            "spawnProfiles":[{"id":"custom","name":"自定义工况 - 固定数量与层级"},
+                             {"id":"defense","name":"来源防御 - 累计层级与整波编组"},
+                             {"id":"arbitration","name":"来源仲裁防御 - 总量修正与独立无人机"},
+                             {"id":"interception","name":"来源拦截 - 总占领进度与连续补员"},
+                             {"id":"arbitration_interception","name":"来源仲裁拦截 - 总占领进度与独立无人机"}],
             "enemies":[{"path":e["path"], "nameZh":e.get("nameZh"), "name":e.get("nameZh") or e.get("name") or e.get("nameEn"),
             "nameEn":e.get("nameEn"), "faction":e.get("faction"), "hasHeadProxy":e.get("hasHeadProxy", False),
             "imageAsset":e.get("imageAsset"), "imageStatus":e.get("imageStatus")}
@@ -7867,8 +8067,16 @@ def arena_standing_point_payload(payload):
     if not isinstance(payload, Mapping):
         raise SimulationError("请选择地图上的可站立位置")
     scene = load_scene(str(payload.get("mapId") or ""))
+    prof = "enemy-gap" if payload.get("npcShortGap", True) else "enemy"
+    if payload.get("auto"):
+        max_r = float(payload.get("maxHorizontalRadius") or 20.0)
+        return scene.select_optimal_vantage(
+            enemy_profile=prof,
+            max_horizontal_radius=max(6.0, min(40.0, max_r)),
+            prefer_high_ground=bool(payload.get("preferHighGround", True)),
+        )
     return scene.validate_standing(payload.get("position"), payload.get("face"),
-                                   enemy_profile="enemy-gap" if payload.get("npcShortGap", True) else "enemy")
+                                   enemy_profile=prof)
 
 
 class PortableHandler(BaseHTTPRequestHandler):
@@ -7932,6 +8140,9 @@ class PortableHandler(BaseHTTPRequestHandler):
         if path == "/api/companion/catalog":
             self._send_json(HTTPStatus.OK, companion_catalog_payload(), cache="no-cache")
             return
+        if path == "/api/operator/catalog":
+            self._send_json(HTTPStatus.OK, operator_catalog_payload(), cache="no-cache")
+            return
         # 分析进度轮询：?id=<progressToken>（analyze 期间前端每 500ms 查询）。
         if path == "/api/analyze/progress":
             query = parse_qs(urlsplit(self.path).query)
@@ -7988,6 +8199,7 @@ class PortableHandler(BaseHTTPRequestHandler):
             "/api/sentinel/evaluate": sentinel_evaluate_payload,
             "/api/companion/evaluate": companion_evaluate_payload,
             "/api/companion/optimize-weapon": companion_optimize_weapon_payload,
+            "/api/operator/evaluate": operator_evaluate_payload,
         }
         analyze = analyzers.get(path)
         if analyze is None:
@@ -8085,6 +8297,14 @@ class PortableHandler(BaseHTTPRequestHandler):
         except ValueError:
             self._send_error(HTTPStatus.NOT_FOUND, "not_found", "resource not found")
             return
+        if not target.is_file() and request_path.startswith("/assets/focus/") and static_root != FRONTEND_DIR:
+            alt_target = (FRONTEND_DIR / relative).resolve()
+            try:
+                alt_target.relative_to(FRONTEND_DIR.resolve())
+                if alt_target.is_file():
+                    target = alt_target
+            except ValueError:
+                pass
         if not target.is_file():
             self._send_error(HTTPStatus.NOT_FOUND, "not_found", "resource not found")
             return

@@ -86,6 +86,7 @@ export function mountArena(host) {
     lensRadius: 18,
     avatars: true,
     droneAura: true,
+    abilityRanges: true,
   };
   try {
     const stored = JSON.parse(localStorage.getItem('arena-view-v1') || 'null');
@@ -102,7 +103,7 @@ export function mountArena(host) {
     try { localStorage.setItem('arena-view-v1', JSON.stringify(viewPrefs)); } catch {}
   };
 
-  let busyState = false, fixedPosition = null, pickingStanding = false, standingPending = false, standingRequest = 0, navPicker = null, pointerStart = null, regionBeforeFixed = null;
+  let busyState = false, fixedPosition = null, mapAutoVantage = null, autoVantageReq = 0, pickingStanding = false, standingPending = false, standingRequest = 0, navPicker = null, pointerStart = null, regionBeforeFixed = null;
   const $ = id => host.querySelector('[id="arena-' + id + '"]');
   const format = t => {
     const n = Math.round(t * 10);
@@ -265,6 +266,240 @@ export function mountArena(host) {
   const fieldGroup = new THREE.Group();
   scene.add(fieldGroup);
   const fieldMeshes = new Map();
+
+  // Warframe 3D Ground Ability Range Circles + Expanding Nuke Shockwaves
+  const abilityRangeGroup = new THREE.Group();
+  abilityRangeGroup.renderOrder = 5;
+  scene.add(abilityRangeGroup);
+  const abilityRangeMeshes = new Map();
+
+  const nukePulseGroup = new THREE.Group();
+  nukePulseGroup.renderOrder = 6;
+  scene.add(nukePulseGroup);
+  const nukePulsePool = [];
+  let previewAbilityRanges = [];
+  let previewNukeIgnoresLoS = null;
+  let previewNukeData = null;
+  let previewRangeReq = 0;
+
+  function syncArenaNukeControls() {
+    const isNuke = ($('combatStyle')?.value || 'weapon_only') !== 'weapon_only';
+    const wrap = $('nukeSetupWrap');
+    const sel = $('nukeSetup');
+    const guide = $('arena-nukeGuide') || $('nukeGuide');
+    const setups = Array.isArray(previewNukeData?.availableSetups) ? previewNukeData.availableSetups : [];
+
+    if (wrap && sel) {
+      wrap.hidden = !isNuke || !setups.length;
+      if (setups.length) {
+        const want = previewNukeData?.selectedSetupId || previewNukeData?.setupId || loadout?.warframeLink?.nukeSetupId || '';
+        sel.replaceChildren();
+        for (const r of setups) {
+          const o = document.createElement('option');
+          o.value = r.setupId;
+          o.disabled = r.available === false;
+          o.textContent = (r.labelZh || r.setupId) + (r.available === false ? ' - ' + (r.unavailableReasonZh || '不可用') : '');
+          sel.append(o);
+        }
+        if (want && [...sel.options].some(o => o.value === want && !o.disabled)) {
+          sel.value = want;
+        }
+      }
+    }
+
+    if (!guide) return;
+    guide.replaceChildren();
+    if (!isNuke) {
+      guide.hidden = true;
+      return;
+    }
+    guide.hidden = false;
+    if (!loadout?.warframeLink?.enabled) {
+      const w = document.createElement('span');
+      w.className = 'is-warn';
+      w.textContent = '⚠ 请先返回配装页在「协同配装中枢」启用战甲参与计算，或从战甲工坊地图炮面板一键跳转。';
+      guide.append(w);
+      return;
+    }
+    if (!previewNukeData) {
+      guide.textContent = '正在读取当前战甲的地图炮流派与范围参数…';
+      return;
+    }
+    if (!previewNukeData.supported) {
+      const w = document.createElement('span');
+      w.className = 'is-warn';
+      w.textContent = '⚠ ' + (previewNukeData.notesZh || '当前战甲未匹配可用地图炮流派。');
+      guide.append(w);
+      return;
+    }
+    const titleEl = document.createElement('b');
+    titleEl.textContent = '当前路线：' + (previewNukeData.titleZh || previewNukeData.setupId);
+    const seqEl = document.createElement('span');
+    seqEl.textContent = '实战分工：' + (previewNukeData.comboSequenceZh || '');
+    const radEl = document.createElement('span');
+    radEl.textContent = '分段半径：' + (previewNukeData.radiusSummaryZh || (Number(previewNukeData.primaryRadiusM || 0).toFixed(1) + 'm'));
+    guide.append(titleEl, seqEl, radEl);
+    for (const chk of previewNukeData.buildChecks || []) {
+      if (chk.status === 'warn' || chk.status === 'ok') {
+        const line = document.createElement('span');
+        line.className = chk.status === 'warn' ? 'is-warn' : 'is-ok';
+        line.textContent = (chk.status === 'warn' ? '⚠ ' : '✓ ') + chk.textZh;
+        guide.append(line);
+      }
+    }
+  }
+
+  function currentSetupUsesLoS() {
+    const cs = $('combatStyle')?.value || 'weapon_only';
+    if (cs === 'weapon_only') return true;
+    return previewNukeIgnoresLoS === false;
+  }
+
+  function slotRingColorHex(slot, light) {
+    const idx = Number(slot) || 4;
+    if (idx === 1) return light ? 0x0284c7 : 0x38bdf8;
+    if (idx === 2) return light ? 0x059669 : 0x34d399;
+    if (idx === 3) return light ? 0xd97706 : 0xfbbf24;
+    return light ? 0xdb2777 : 0xf472b6;
+  }
+  function slotRingCss(slot, light) {
+    const idx = Number(slot) || 4;
+    if (idx === 1) return light ? '#0284c7' : '#38bdf8';
+    if (idx === 2) return light ? '#059669' : '#34d399';
+    if (idx === 3) return light ? '#d97706' : '#fbbf24';
+    return light ? '#db2777' : '#f472b6';
+  }
+
+  function currentActiveRanges() {
+    if (result) return result.visuals?.warframe?.abilityRanges || [];
+    return previewAbilityRanges || [];
+  }
+
+  function syncAbilityRangeRings(anchorPos) {
+    const ranges = viewPrefs.abilityRanges !== false && anchorPos ? currentActiveRanges() : [];
+    if ($('legendRanges')) $('legendRanges').hidden = !ranges.length;
+    for (const [, m] of abilityRangeMeshes) m.visible = false;
+    if (!ranges.length || !anchorPos) return;
+    for (const r of ranges) {
+      const rad = Number(r.moddedRadiusM || 0);
+      if (!(rad > 0.5)) continue;
+      const key = `${r.slot}:${r.id || r.nameEn || r.slot}`;
+      let mesh = abilityRangeMeshes.get(key);
+      if (!mesh) {
+        const geom = new THREE.RingGeometry(0.985, 1.0, 72);
+        geom.rotateX(-Math.PI / 2);
+        const mat = new THREE.MeshBasicMaterial({
+          color: slotRingColorHex(r.slot, isLightTheme),
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: isLightTheme ? 0.62 : 0.52,
+          depthTest: true,
+          depthWrite: false,
+        });
+        mesh = new THREE.Mesh(geom, mat);
+        mesh.frustumCulled = false;
+        mesh.renderOrder = 5;
+        mesh.userData.slot = r.slot;
+        abilityRangeMeshes.set(key, mesh);
+        abilityRangeGroup.add(mesh);
+      }
+      mesh.material.color.setHex(slotRingColorHex(r.slot, isLightTheme));
+      mesh.material.opacity = isLightTheme ? 0.62 : 0.52;
+      mesh.position.set(anchorPos[0], anchorPos[1] + 0.10 + (Number(r.slot) || 1) * 0.015, anchorPos[2]);
+      mesh.scale.setScalar(rad);
+      mesh.visible = true;
+    }
+  }
+
+  function paintNukePulses(t) {
+    for (const m of nukePulsePool) m.visible = false;
+    if (!result) return;
+    const pulses = result.visuals?.warframe?.nukePulses || [];
+    if (!pulses.length) return;
+    let used = 0;
+    for (const p of pulses) {
+      const pt = p[0], dur = Math.max(0.25, p[6] || 0.65);
+      if (pt > t) break;
+      if (t - pt > dur) continue;
+      const progress = (t - pt) / dur;
+      const eased = 1 - Math.pow(1 - progress, 2.2);
+      const rad = Math.max(0.5, (p[5] || 15) * (0.18 + 0.82 * eased));
+      let mesh = nukePulsePool[used];
+      if (!mesh) {
+        const geom = new THREE.RingGeometry(0.94, 1.0, 64);
+        geom.rotateX(-Math.PI / 2);
+        const mat = new THREE.MeshBasicMaterial({
+          color: 0xf472b6,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0.6,
+          depthTest: true,
+          depthWrite: false,
+        });
+        mesh = new THREE.Mesh(geom, mat);
+        mesh.frustumCulled = false;
+        mesh.renderOrder = 6;
+        nukePulsePool.push(mesh);
+        nukePulseGroup.add(mesh);
+      }
+      mesh.material.color.setHex(slotRingColorHex(p[4], isLightTheme));
+      mesh.material.opacity = Math.max(0.04, (1 - progress) * (isLightTheme ? 0.78 : 0.70));
+      mesh.position.set(p[1], p[2] + 0.18, p[3]);
+      mesh.scale.setScalar(rad);
+      mesh.visible = true;
+      used += 1;
+      if (used >= 12) break;
+    }
+  }
+
+  async function refreshPreviewWarframeRanges() {
+    const wfLink = loadout?.warframeLink;
+    if (!wfLink?.enabled || !wfLink.frameId) {
+      previewAbilityRanges = [];
+      previewNukeIgnoresLoS = null;
+      previewNukeData = null;
+      if ($('arbucepWrap')) $('arbucepWrap').hidden = true;
+      syncArenaNukeControls();
+      if (!result && player.visible) syncPreviewActors();
+      return;
+    }
+    const reqId = ++previewRangeReq;
+    const desiredSetupId = $('nukeSetup')?.value || wfLink.nukeSetupId || wfLink.config?.nukeSetupId || null;
+    try {
+      const calcRes = await json('/api/warframe/calculate', {
+        frameId: wfLink.frameId,
+        ...(wfLink.config || {}),
+        ...(wfLink.parentConfig ? {parentConfig: wfLink.parentConfig} : {}),
+        nukeSetupId: desiredSetupId,
+        arbucepEmpowered: Boolean($('arbucepEmpowered')?.checked ?? wfLink.arbucepEmpowered),
+        externalBuffs: loadout?.externalBuffs || [],
+        operatorLink: loadout?.operatorLink || undefined,
+      });
+      if (reqId !== previewRangeReq) return;
+      previewAbilityRanges = Array.isArray(calcRes?.abilityRanges) ? calcRes.abilityRanges : [];
+      previewNukeData = calcRes?.defenseNuke || null;
+      previewNukeIgnoresLoS = typeof calcRes?.defenseNuke?.ignoresLoS === 'boolean' ? calcRes.defenseNuke.ignoresLoS : null;
+      if (previewNukeData?.setupId && loadout?.warframeLink) {
+        loadout.warframeLink.nukeSetupId = previewNukeData.setupId;
+      }
+      const hasBb = Boolean(
+        String(wfLink.nameEn || wfLink.frameId || '').toLowerCase().includes('nokko')
+        || (calcRes?.weaponBridge?.energyEconomy?.slotAbilities || []).some(sa => sa.id === 'brightbonnet')
+      );
+      if ($('arbucepWrap')) $('arbucepWrap').hidden = !hasBb;
+      syncArenaNukeControls();
+      syncStandingMode();
+      if (!result && loaded) syncPreviewActors();
+      avatarDirty = true;
+    } catch {
+      if (reqId === previewRangeReq) {
+        previewAbilityRanges = [];
+        previewNukeIgnoresLoS = null;
+        previewNukeData = null;
+        syncArenaNukeControls();
+      }
+    }
+  }
 
   const standingMarker = new THREE.Group();
   const standingRing = new THREE.Mesh(
@@ -541,6 +776,7 @@ export function mountArena(host) {
   $('occludedMarker').checked = viewPrefs.marker !== false;
   $('showAvatars').checked = viewPrefs.avatars !== false;
   $('droneAura').checked = viewPrefs.droneAura !== false;
+  if ($('showAbilityRanges')) $('showAbilityRanges').checked = viewPrefs.abilityRanges !== false;
 
   $('clearView').onchange = () => { viewPrefs.clearView = $('clearView').checked; saveViewPrefs(); syncScenery(); };
   $('lensRadius').value = viewPrefs.lensRadius;
@@ -576,6 +812,19 @@ export function mountArena(host) {
     lastPaint = -1;
     paintReplay(true);
   };
+  if ($('showAbilityRanges')) {
+    $('showAbilityRanges').onchange = () => {
+      viewPrefs.abilityRanges = $('showAbilityRanges').checked;
+      saveViewPrefs();
+      if (result) {
+        lastPaint = -1;
+        paintReplay(true);
+      } else {
+        syncPreviewActors();
+      }
+      avatarDirty = true;
+    };
+  }
 
   $('reset').onclick = reset;
   $('top').onclick = () => {
@@ -633,16 +882,18 @@ export function mountArena(host) {
         overguard: 0,
         avengerActive: 0,
         adaptationMax: 0,
+        energy: wfVis?.maxEnergy ?? 100,
+        isCasting: 0,
       };
     }
     const i = upper(framesList, t);
     if (!i) {
       const f = framesList[0];
-      return {hp: f[1], shield: f[2], overshield: f[3], overguard: f[4], avengerActive: f[5], adaptationMax: f[6]};
+      return {hp: f[1], shield: f[2], overshield: f[3], overguard: f[4], avengerActive: f[5], adaptationMax: f[6], energy: f[7] ?? 0, isCasting: f[8] ?? 0};
     }
     if (i >= framesList.length) {
       const f = framesList.at(-1);
-      return {hp: f[1], shield: f[2], overshield: f[3], overguard: f[4], avengerActive: f[5], adaptationMax: f[6]};
+      return {hp: f[1], shield: f[2], overshield: f[3], overguard: f[4], avengerActive: f[5], adaptationMax: f[6], energy: f[7] ?? 0, isCasting: f[8] ?? 0};
     }
     const a = framesList[i - 1], b = framesList[i];
     const k = (t - a[0]) / Math.max(.00001, b[0] - a[0]);
@@ -653,6 +904,8 @@ export function mountArena(host) {
       overguard: a[4] + (b[4] - a[4]) * k,
       avengerActive: a[5],
       adaptationMax: a[6],
+      energy: (a[7] ?? 0) + ((b[7] ?? 0) - (a[7] ?? 0)) * k,
+      isCasting: a[8] ?? 0,
     };
   }
 
@@ -782,7 +1035,9 @@ export function mountArena(host) {
     const wfName = wfEnabled
       ? (wfLink.nameZh || wfLink.nameEn || wfLink.frameId || 'Excalibur') + (wfLink.configName ? ' [配置 ' + wfLink.configName + ']' : '')
       : 'Excalibur';
-    const wfSub = wfEnabled ? '参战联动' : '默认中立（未参与计算）';
+    const wfSub = wfEnabled
+      ? (wfLink?.abilityRotation?.enabled ? '参战联动 + 拟真技能循环' : '参战联动')
+      : '默认中立（未参与计算）';
     box.append(
       makeRow(
         buildMiniAvatar(wfPortrait, '战', 'is-warframe'),
@@ -806,15 +1061,44 @@ export function mountArena(host) {
         ),
       );
     }
+    const opLink = loadout?.operatorLink;
+    if (opLink?.enabled) {
+      const scName = String(opLink.activeSchool || 'madurai').toUpperCase();
+      const modeZh = {passive: '常驻被动', cycle: '实战周期穿插', peak: '峰值爆发'}[opLink.triggerMode] || '常驻被动';
+      box.append(
+        makeRow(
+          buildMiniAvatar('/assets/focus/Focus.png', '专', 'is-warframe'),
+          '专精 ' + scName + (opLink.configName ? ' [配置 ' + opLink.configName + ']' : ''),
+          modeZh + (opLink.enableTauronStrike ? ' + Tauron终极' : ''),
+          'is-active',
+        ),
+      );
+    }
     syncCompanionLegend();
   }
 
   function syncPreviewActors() {
     if (!loaded || result || !raw?.start?.position) return;
-    const point = $('movement').value === 'fixed' && fixedPosition ? fixedPosition.position : raw.start.position;
+    const mv = $('movement').value;
+    const useObjAutoVantage = mv === 'objective' && currentSetupUsesLoS() && Array.isArray(mapAutoVantage?.position);
+    const point = mv === 'fixed' && fixedPosition
+      ? fixedPosition.position
+      : useObjAutoVantage
+        ? mapAutoVantage.position
+        : mv === 'objective' && raw?.defenseObjective?.position
+          ? raw.defenseObjective.position
+          : raw.start.position;
     player.position.fromArray(point);
     player.position.y += 1;
     player.visible = true;
+    if (useObjAutoVantage) {
+      standingMarker.position.fromArray(point);
+      standingMarker.position.y += .04;
+      standingMarker.visible = true;
+    } else if (mv !== 'fixed') {
+      standingMarker.visible = false;
+    }
+    syncAbilityRangeRings(point);
     const {compLink} = activeLinks();
     if (compLink?.enabled) {
       const beast = compLink.category === 'beast';
@@ -977,6 +1261,8 @@ export function mountArena(host) {
     linePositions(jumpTrail, air);
 
     paintFields(time);
+    syncAbilityRangeRings(pp);
+    paintNukePulses(time);
     $('clock').textContent = format(time);
     $('timeline').value = time;
     const done = r.kills.filter(k => k[0] <= time).length;
@@ -1227,7 +1513,9 @@ export function mountArena(host) {
           imgUrl: wfPortrait,
           fallback: '战',
           ringColor: overlayTheme.wfRing,
-          poolsText: wfEnabled ? '已启用战甲生存与受击赋能联动' : '中立基准姿态 / 不承受伤害与受击赋能',
+          poolsText: wfEnabled
+            ? (wfLink?.abilityRotation?.enabled ? '已启用战甲生存、受击赋能与拟真技能循环' : '已启用战甲生存与受击赋能联动')
+            : '中立基准姿态 / 不承受伤害与受击赋能',
         };
       }
       if (wfItem && compItem) {
@@ -1241,6 +1529,30 @@ export function mountArena(host) {
       }
       if (compItem) drawnAvatars.push(compItem);
       if (wfItem) drawnAvatars.push(wfItem);
+      if (viewPrefs.abilityRanges !== false) {
+        const ranges = currentActiveRanges();
+        ranges.forEach((rg, idx) => {
+          const rad = Number(rg.moddedRadiusM || 0);
+          if (!(rad > 0.5)) return;
+          const ang = -0.65 + idx * 0.52;
+          const rp = projectToOverlay(
+            player.position.x + Math.cos(ang) * rad,
+            player.position.y - 0.85,
+            player.position.z + Math.sin(ang) * rad,
+          );
+          if (rp) {
+            drawPillBadge(
+              avatarCtx,
+              rp.sx,
+              rp.sy,
+              `${rg.slot}技 ${rad.toFixed(1)}m${rg.ignoresLoS ? ' 穿墙' : ''}`,
+              overlayTheme.pillBg,
+              slotRingCss(rg.slot, isLightTheme),
+              slotRingCss(rg.slot, isLightTheme),
+            );
+          }
+        });
+      }
       const focusKey = pinnedActorKey ?? hoveredActorKey;
       for (const entry of drawnAvatars) drawAvatarItem(avatarCtx, entry, entry.key === focusKey);
       updateActorInspector();
@@ -1393,10 +1705,15 @@ export function mountArena(host) {
           }
         }
         if (wfSample.avengerActive) wfBuffBadge = '复';
+        else if (wfVis.abilityRotationEnabled && wfSample.isCasting) wfBuffBadge = '施';
         const parts = ['生命 ' + Math.round(wfSample.hp) + '/' + Math.round(maxHp)];
         if ((wfVis.maxShield || 0) > 0) parts.push('护盾 ' + Math.round(wfSample.shield));
         if (wfSample.overshield > 0) parts.push('过载 ' + Math.round(wfSample.overshield));
         if (wfSample.overguard > 0) parts.push('超宏 ' + Math.round(wfSample.overguard));
+        if (wfVis.abilityRotationEnabled) {
+          parts.push('能量 ' + Math.round(wfSample.energy) + '/' + Math.round(wfVis.maxEnergy || 100));
+          if (wfSample.isCasting) parts.push('施放技能中');
+        }
         if (wfSample.avengerActive) parts.push('复仇者激活');
         if (wfSample.adaptationMax > 0) parts.push('适应 ' + Math.round(wfSample.adaptationMax * 100) + '%');
         wfPoolsText = parts.join(' / ');
@@ -1433,6 +1750,31 @@ export function mountArena(host) {
     drawnAvatars = enemies;
     if (compItem) drawnAvatars.push(compItem);
     if (wfItem) drawnAvatars.push(wfItem);
+
+    if (viewPrefs.abilityRanges !== false) {
+      const ranges = currentActiveRanges();
+      ranges.forEach((rg, idx) => {
+        const rad = Number(rg.moddedRadiusM || 0);
+        if (!(rad > 0.5)) return;
+        const ang = -0.65 + idx * 0.52;
+        const rp = projectToOverlay(
+          pp[0] + Math.cos(ang) * rad,
+          pp[1] + 0.15,
+          pp[2] + Math.sin(ang) * rad,
+        );
+        if (rp) {
+          drawPillBadge(
+            avatarCtx,
+            rp.sx,
+            rp.sy,
+            `${rg.slot}技 ${rad.toFixed(1)}m`,
+            overlayTheme.pillBg,
+            slotRingCss(rg.slot, isLightTheme),
+            slotRingCss(rg.slot, isLightTheme),
+          );
+        }
+      });
+    }
 
     const focusKey = pinnedActorKey ?? hoveredActorKey;
     for (const entry of drawnAvatars) drawAvatarItem(avatarCtx, entry, entry.key === focusKey);
@@ -1617,18 +1959,78 @@ export function mountArena(host) {
     }
   }
 
+  function budgetSpec() {
+    const val = $('budget').value;
+    if (val === 'waves') return {mode: 'waves', seconds: 1800, wall: 30, label: '30 分钟'};
+    if (val === 'time_3600') return {mode: 'time', seconds: 3600, wall: 75, label: '1 小时'};
+    if (val === 'time_7200') return {mode: 'time', seconds: 7200, wall: 150, label: '2 小时'};
+    return {mode: 'time', seconds: 1800, wall: 30, label: '30 分钟'};
+  }
+
+  function isCustomSingleEnemy() {
+    return $('spawnProfile').value === 'custom' && ($('enemySpec').value || 'single') === 'single';
+  }
+
+  function defaultMissionStartLevel() {
+    const profile = $('spawnProfile').value;
+    const specId = $('enemySpec').value || 'single';
+    const wantInterception = profile.includes('interception');
+    const nodes = catalog?.missionCoverage?.nodes || [];
+    const matchesSpec = m => (m.enemySpecPaths || []).some(id => (typeof id === 'string' ? id : id.id || id.path) === specId);
+    const matchesMap = m => (m.mapIds || []).includes(mapId);
+    const pickBest = list => {
+      if (!list.length) return null;
+      const typed = list.filter(m => wantInterception ? m.missionType === 'Interception' : m.missionType === 'Defense');
+      const pool = typed.length ? typed : list;
+      return pool.find(m => Number.isFinite(Number(m.minEnemyLevel))) || pool[0];
+    };
+    let node = specId !== 'single' ? pickBest(nodes.filter(m => matchesMap(m) && matchesSpec(m))) : null;
+    if (!node && specId !== 'single') node = pickBest(nodes.filter(matchesSpec));
+    if (!node) node = pickBest(nodes.filter(matchesMap));
+    const nodeMin = Math.max(1, Number(node?.minEnemyLevel) || 30);
+    const spAdd = $('steelPath')?.checked ? 100 : 0;
+    if (profile === 'arbitration' || profile === 'arbitration_interception') {
+      return Math.max(60, nodeMin) + spAdd;
+    }
+    return nodeMin + spAdd;
+  }
+
+  let lastEnemyModeKey = 'custom|single|';
+  function syncMissionStartLevel(force = false) {
+    if (!catalog) return;
+    const customSingle = isCustomSingleEnemy();
+    const spBit = $('steelPath')?.checked ? 'sp1' : 'sp0';
+    const nextKey = customSingle
+      ? 'custom|single|'
+      : `${$('spawnProfile').value}|${$('enemySpec').value || 'single'}|${mapId || ''}|${spBit}`;
+    if (!force && nextKey === lastEnemyModeKey) return;
+    const wasCustomSingle = lastEnemyModeKey.startsWith('custom|single|');
+    lastEnemyModeKey = nextKey;
+    if (customSingle) {
+      if (!wasCustomSingle || force) {
+        $('level').value = loadout?.level || catalog?.defaults?.level || 160;
+      }
+    } else {
+      $('level').value = defaultMissionStartLevel();
+    }
+  }
+
   function updateRunState() {
     const missingFixed = $('movement').value === 'fixed' && !fixedPosition;
-    $('run').disabled = busyState || !catalog || !loadout || !loaded || missingFixed || standingPending || ($('spawnProfile').value !== 'custom' && $('enemySpec').value === 'single');
+    const nukeNeedsWf = ($('combatStyle')?.value && $('combatStyle').value !== 'weapon_only') && !loadout?.warframeLink?.enabled;
+    $('run').disabled = busyState || !catalog || !loadout || !loaded || missingFixed || standingPending || nukeNeedsWf || ($('spawnProfile').value !== 'custom' && $('enemySpec').value === 'single');
     $('cancel').disabled = !job?.id || job.cancelling;
     $('map').disabled = busyState;
     $('movement').disabled = busyState;
+    if ($('combatStyle')) $('combatStyle').disabled = busyState;
+    if ($('nukeSetup')) $('nukeSetup').disabled = busyState;
     $('doorSight').disabled = busyState;
-    for (const id of ['spawnProfile', 'squadSize', 'missionDifficulty', 'missionTier', 'eximusMultiplier', 'directorHardCap', 'interceptionProgress', 'npcShortGap', 'strictSurvival', 'enemyShieldRecharge']) {
-      $(id).disabled = busyState;
+    for (const id of ['spawnProfile', 'squadSize', 'steelPath', 'arbucepEmpowered', 'missionDifficulty', 'missionTier', 'eximusMultiplier', 'directorHardCap', 'interceptionTowers', 'interceptionProgress', 'npcShortGap', 'strictSurvival', 'enemyShieldRecharge']) {
+      if ($(id)) $(id).disabled = busyState;
     }
     $('levelGrowth').disabled = busyState || $('spawnProfile').value === 'custom';
-    $('region').disabled = busyState || $('movement').value === 'fixed';
+    $('region').disabled = busyState || ['fixed', 'objective'].includes($('movement').value);
+    if ($('standingAuto')) $('standingAuto').disabled = busyState || !loaded || standingPending;
     $('standingPick').disabled = busyState || !loaded || standingPending;
     $('standingClear').disabled = busyState || !fixedPosition || standingPending;
   }
@@ -1641,6 +2043,7 @@ export function mountArena(host) {
 
   function config() {
     const wait = $('wait').value;
+    const bSpec = budgetSpec();
     return {
       ...(catalog?.defaults || {}),
       map: mapId,
@@ -1649,12 +2052,13 @@ export function mountArena(host) {
       squadSize: Number($('squadSize').value),
       directorHardCap: Number($('directorHardCap').value),
       missionDifficulty: Number($('missionDifficulty').value),
+      interceptionTowers: Number($('interceptionTowers')?.value ?? 1),
       interceptionProgress: Number($('interceptionProgress').value),
       missionTier: Number($('missionTier').value),
       eximusMultiplier: Number($('eximusMultiplier').value),
-      mode: $('budget').value,
+      mode: bSpec.mode,
       waves: 20,
-      seconds: 1800,
+      seconds: bSpec.seconds,
       maxWave: $('spawnProfile').value.includes('interception') ? 600 : 180,
       waveWait: wait === '' ? null : Number(wait),
       seed: Number($('seed').value) || 20261116,
@@ -1668,6 +2072,12 @@ export function mountArena(host) {
       enemyShieldRecharge: $('enemyShieldRecharge').checked,
       tier: Number($('tier').value) || 0,
       level: Number($('level').value) || 160,
+      steelPath: Boolean($('steelPath')?.checked),
+      combatStyle: $('combatStyle')?.value || 'weapon_only',
+      nukeSetupId: ($('combatStyle')?.value && $('combatStyle').value !== 'weapon_only')
+        ? ($('nukeSetup')?.value || loadout?.warframeLink?.nukeSetupId || null)
+        : null,
+      arbucepEmpowered: Boolean($('arbucepEmpowered')?.checked),
       headshots: $('head').value === 'head',
       movement: $('movement').value,
       doorSight: $('doorSight').value,
@@ -1680,6 +2090,7 @@ export function mountArena(host) {
     bodies.count = 0;
     drones.count = 0;
     droneAuras.count = 0;
+    for (const m of nukePulsePool) m.visible = false;
     for (const object of [trails, playerTrail, rays, companionRays, enemyRays, killMarks, jumpTrail]) linePositions(object, []);
     for (const mesh of fieldMeshes.values()) {
       mesh.geometry.dispose();
@@ -1739,13 +2150,90 @@ export function mountArena(host) {
     box.replaceChildren();
     const wfStats = r?.synergy?.warframeStats;
     const compStats = r?.synergy?.companionStats;
-    if (!wfStats && !compStats) {
+    const nukeStats = r?.synergy?.nukeStats || r?.visuals?.warframe?.nukeSummary;
+    if (!wfStats && !compStats && !nukeStats) {
       box.hidden = true;
       return;
     }
     box.hidden = false;
 
     const wfVis = r.visuals?.warframe;
+    if (nukeStats) {
+      const nukeCard = document.createElement('article');
+      nukeCard.className = 'arena-synergy-card is-nuke';
+      const nHead = document.createElement('header');
+      nHead.className = 'arena-synergy-head';
+      const nTitle = document.createElement('div');
+      nTitle.className = 'arena-synergy-title';
+      const nH3 = document.createElement('h3');
+      nH3.textContent = '防御地图炮与枪械补刀统计';
+      const nSub = document.createElement('small');
+      nSub.textContent = (nukeStats.titleZh || wfVis?.nameZh || '战甲地图炮')
+        + ' / '
+        + (nukeStats.radiusSummaryZh || ('作用半径 ' + Number(nukeStats.primaryRadiusM || 0).toFixed(1) + 'm (' + (nukeStats.ignoresLoS ? '无视视线穿墙' : '受视野限制') + ')'));
+      nTitle.append(nH3, nSub);
+      const nTag = document.createElement('span');
+      nTag.className = 'arena-synergy-tag is-live';
+      nTag.textContent = nukeStats.combatStyle === 'ability_only' ? '纯技能清场' : '地图炮 + 枪械补刀';
+      nHead.append(makeSynergyAvatar(wfVis?.portraitAsset || DEFAULT_WARFRAME_PORTRAIT, '核'), nTitle, nTag);
+      nukeCard.append(nHead);
+
+      const nGrid = document.createElement('div');
+      nGrid.className = 'arena-synergy-metrics';
+      const sharePct = ((Number(nukeStats.abilityKillShare || 0)) * 100).toFixed(1);
+      nGrid.append(
+        makeSynergyMetric('技能击杀 / 枪械补刀', (nukeStats.abilityKills ?? 0) + ' 杀 (' + sharePct + '%) / ' + (nukeStats.weaponKills ?? 0) + ' 杀', 'is-good'),
+        makeSynergyMetric('连招施放 / 累计耗蓝', (nukeStats.castsExecuted ?? 0) + ' 次 / ' + fmtNum(nukeStats.energySpent, 1) + ' 蓝' + (nukeStats.innerMightFreeCasts ? ' (内在之力免耗×' + nukeStats.innerMightFreeCasts + ')' : '')),
+        makeSynergyMetric('技能直伤 / 技能异常伤害', fmtNum(nukeStats.abilityDirectDamage, 1) + ' / ' + fmtNum(nukeStats.abilityDotDamage, 1)),
+        makeSynergyMetric('缺蓝等待次数 / 冲击波脉冲', (nukeStats.starvedWaits ?? 0) + ' 次 / ' + (nukeStats.pulseCount ?? 0) + ' 次', (nukeStats.starvedWaits || 0) > 5 ? 'is-warn' : 'is-good'),
+      );
+      if (nukeStats.mainJewelsConjured != null) {
+        nGrid.append(
+          makeSynergyMetric(
+            '镜厅主副诱敌宝石 (1+2联动 20s)',
+            '主宝石 ' + (nukeStats.mainJewelsConjured ?? 0)
+              + ' 颗 / 镜厅分身小宝石 ' + (nukeStats.cloneMiniJewelsConjured ?? 0)
+              + ' 颗(50%伤害与范围) / 引爆 ' + (nukeStats.jewelsDetonated ?? 0) + ' 颗',
+            (nukeStats.jewelsDetonated || 0) > 0 ? 'is-good' : '',
+            true,
+          ),
+        );
+      }
+      if (nukeStats.legerdemainGemsConverted != null) {
+        nGrid.append(
+          makeSynergyMetric(
+            nukeStats.hasLegerdemainAugment === false
+              ? '爆炸戏法掉落转化 (集团卡检查)'
+              : '爆炸戏法宝石循环 (60s跨波+掩体视线)',
+            nukeStats.hasLegerdemainAugment === false
+              ? '未装配［爆炸戏法］集团卡：地面掉落物不转化地雷，仅生效上方 1+2 诱敌主副宝石'
+              : ('掉落 ' + (nukeStats.pickupsDropped ?? 0)
+                + ' / 转化 ' + (nukeStats.legerdemainGemsConverted ?? 0)
+                + ' / 刷新 ' + (nukeStats.legerdemainGemsRefreshed ?? 0)
+                + ' / 引爆 ' + (nukeStats.legerdemainGemsDetonated ?? 0)),
+            nukeStats.hasLegerdemainAugment === false
+              ? 'is-warn'
+              : ((nukeStats.legerdemainGemsDetonated || 0) > 0 ? 'is-good' : ''),
+            true,
+          ),
+        );
+      }
+      if (r.stats?.vantagePoint?.autoSelected) {
+        const vp = r.stats.vantagePoint;
+        nGrid.append(
+          makeSynergyMetric(
+            '自动优选可达高台视野站位',
+            '高差 +' + Number(vp.elevationGainM || 0).toFixed(2) + 'm / 无遮挡视野 '
+              + (Number(vp.visibilityRatio || 0) * 100).toFixed(1) + '% (底层核心 '
+              + (Number(vp.objectiveVisibilityRatio || 0) * 100).toFixed(1) + '%)',
+            'is-good',
+            true,
+          ),
+        );
+      }
+      nukeCard.append(nGrid);
+      box.append(nukeCard);
+    }
     const wfCard = document.createElement('article');
     wfCard.className = 'arena-synergy-card is-warframe';
     const wfHead = document.createElement('header');
@@ -1753,7 +2241,7 @@ export function mountArena(host) {
     const wfTitle = document.createElement('div');
     wfTitle.className = 'arena-synergy-title';
     const wfH3 = document.createElement('h3');
-    wfH3.textContent = '战甲生存与受击赋能';
+    wfH3.textContent = wfStats?.abilityRotation?.enabled ? '战甲生存、技能循环与吸球经济' : '战甲生存与受击赋能';
     const wfSub = document.createElement('small');
     wfSub.textContent = wfStats
       ? (wfVis?.nameZh || wfVis?.nameEn || 'Excalibur') + ' / 生命 ' + Math.round(wfVis?.maxHealth || 0) + ' / 护盾 ' + Math.round(wfVis?.maxShield || 0) + ' / 护甲 ' + Math.round(wfVis?.armor || 0)
@@ -1781,8 +2269,30 @@ export function mountArena(host) {
         makeSynergyMetric('倒地次数', downedText, downed > 0 ? (r.scenario?.strictSurvival ? 'is-danger' : 'is-warn') : 'is-good'),
         makeSynergyMetric('复仇者覆盖率', ((wfStats.avengerUptimeRatio || 0) * 100).toFixed(1) + '%'),
         makeSynergyMetric('保卫者覆盖率', ((wfStats.guardianUptimeRatio || 0) * 100).toFixed(1) + '%'),
-        makeSynergyMetric('战斗教条触发', (wfStats.combatDisciplineTriggers ?? 0) + ' 次', '', true),
+        makeSynergyMetric('战斗教条触发', (wfStats.combatDisciplineTriggers ?? 0) + ' 次', '', !wfStats.abilityRotation?.enabled),
       );
+      if (wfStats.abilityRotation?.enabled) {
+        const rot = wfStats.abilityRotation;
+        const orbDetail = '蓝球 ' + (rot.energyOrbsPicked ?? 0)
+          + ' / 血球 ' + (rot.healthOrbsPicked ?? 0)
+          + (rot.energizeProcs ? ' / 充沛×' + rot.energizeProcs : '')
+          + '（出生 ' + Math.round(rot.spawnEnergy || 0)
+          + ' → 末态 ' + Math.round(rot.finalEnergy || 0)
+          + '/' + Math.round(rot.maxEnergy || 0) + '）';
+        gridEl.append(
+          makeSynergyMetric(
+            '技能循环覆盖 / 施放停火',
+            ((rot.meanUptimeRatio || 0) * 100).toFixed(1) + '% / ' + Number(rot.weaponCastPauseSeconds || 0).toFixed(2) + 's',
+            (rot.meanUptimeRatio || 0) >= 0.85 ? 'is-good' : 'is-warn',
+          ),
+          makeSynergyMetric(
+            '缺蓝真空 / 施放次数',
+            Number(rot.maxVacuumSeconds || 0).toFixed(2) + 's / ' + (rot.totalCasts ?? 0) + ' 次',
+            (rot.maxVacuumSeconds || 0) > 0.5 ? 'is-warn' : 'is-good',
+          ),
+          makeSynergyMetric('全图吸球与能量状态', orbDetail, '', true),
+        );
+      }
       wfCard.append(gridEl);
     } else {
       const empty = document.createElement('p');
@@ -1973,7 +2483,8 @@ export function mountArena(host) {
         return;
       }
       const p = data.progress || {};
-      $('status').textContent = (submitted.cancelling ? '正在取消' : '后台 ' + (data.status || 'running')) + ' / 模拟 ' + format(p.t ?? p.seconds ?? 0) + ' / 第 ' + (p.wave || 0) + ' 波';
+      const progExtra = p.interceptionProgress != null ? ' (总占领 ' + Math.round(Number(p.interceptionProgress) * 100) + '%)' : '';
+      $('status').textContent = (submitted.cancelling ? '正在取消' : '后台 ' + (data.status || 'running')) + ' / 模拟 ' + format(p.t ?? p.seconds ?? 0) + ' / 第 ' + (p.wave || 0) + (submitted && config().spawnProfile?.includes('interception') ? ' 轮' : ' 波') + progExtra;
     } catch (e) {
       if (job !== submitted) return;
       if (e.status === 404) finishJob(submitted);
@@ -2066,9 +2577,12 @@ export function mountArena(host) {
     mapId = $('map').value;
     loaded = false;
     raw = null;
+    mapAutoVantage = null;
+    autoVantageReq++;
     showReplay(null);
     clearStandingPoint('地图已切换，请重新选择合法站点。');
     refreshSpecOptions();
+    syncMissionStartLevel();
     updateRunState();
     clipMode = viewPrefs.clipMode;
     clipStatusHeight = null;
@@ -2130,6 +2644,7 @@ export function mountArena(host) {
       syncClip();
       rebuildStandingNav();
       syncStandingMode();
+      refreshMapAutoVantage();
       updateRunState();
       $('sceneMeta').textContent = (raw.nav?.triangles?.length || 0).toLocaleString() + ' 导航面';
       const entry = replaysByMap.get(mapId);
@@ -2153,9 +2668,35 @@ export function mountArena(host) {
   }
 
   $('map').onchange = loadMap;
-  for (const id of ['region', 'budget', 'wait', 'movement', 'doorSight', 'enemies', 'seed', 'head', 'enemy', 'level', 'enemySpec', 'tier', 'spawnProfile', 'squadSize', 'missionDifficulty', 'missionTier', 'eximusMultiplier', 'levelGrowth', 'strictSurvival', 'enemyShieldRecharge', 'directorHardCap', 'interceptionProgress', 'npcShortGap']) {
-    $(id).addEventListener('change', () => { if (!job) $('status').textContent = '配置已修改，点击开始才重新计算。'; });
+  for (const id of ['region', 'budget', 'wait', 'movement', 'combatStyle', 'steelPath', 'arbucepEmpowered', 'doorSight', 'enemies', 'seed', 'head', 'enemy', 'level', 'enemySpec', 'tier', 'spawnProfile', 'squadSize', 'missionDifficulty', 'missionTier', 'eximusMultiplier', 'levelGrowth', 'strictSurvival', 'enemyShieldRecharge', 'directorHardCap', 'interceptionTowers', 'interceptionProgress', 'npcShortGap']) {
+    if ($(id)) $(id).addEventListener('change', () => { if (!job) $('status').textContent = '配置已修改，点击开始才重新计算。'; });
   }
+  $('budget').addEventListener('change', syncSpawnProfile);
+  $('interceptionTowers')?.addEventListener('change', syncSpawnProfile);
+  $('steelPath')?.addEventListener('change', () => {
+    if ($('steelPath').checked && $('spawnProfile').value !== 'custom') {
+      $('squadSize').value = '4';
+    }
+    syncMissionStartLevel();
+    updateRunState();
+  });
+  $('combatStyle')?.addEventListener('change', () => {
+    const cs = $('combatStyle').value;
+    if (cs !== 'weapon_only') {
+      if (!loadout?.warframeLink?.enabled) {
+        $('status').textContent = '地图炮与纯技能模式需要启用战甲参与计算；请先在武器配装或战甲配装中开启战甲协同。';
+      } else if ($('spawnProfile').value === 'defense' || $('spawnProfile').value === 'arbitration') {
+        if ($('movement').value === 'parkour') {
+          $('movement').value = 'objective';
+          syncStandingMode();
+        }
+      }
+    }
+    updateRunState();
+  });
+  $('arbucepEmpowered')?.addEventListener('change', () => {
+    refreshPreviewWarframeRanges();
+  });
 
   function missionPlanet(mission) { return mission.planetZh || mission.planet; }
   function missionNode(mission) { return mission.nodeNameZh && mission.nodeNameZh !== mission.nodeName ? mission.nodeNameZh + ' (' + mission.nodeName + ')' : mission.nodeName; }
@@ -2351,10 +2892,12 @@ export function mountArena(host) {
   }
 
   function syncStandingMode() {
-    const fixed = $('movement').value === 'fixed';
+    const mv = $('movement').value;
+    const fixed = mv === 'fixed';
+    const stationary = fixed || mv === 'objective';
     $('standingPanel').hidden = !fixed;
     previewStandingPoint();
-    if (fixed) {
+    if (stationary) {
       if (regionBeforeFixed === null) regionBeforeFixed = $('region').value;
       $('region').value = 'full';
     } else if (regionBeforeFixed !== null) {
@@ -2362,9 +2905,14 @@ export function mountArena(host) {
       regionBeforeFixed = null;
     }
     if (!fixed) setStandingPicking(false);
-    standingMarker.visible = fixed && !!fixedPosition;
+    standingMarker.visible = (fixed && !!fixedPosition) || (mv === 'objective' && currentSetupUsesLoS() && Array.isArray(mapAutoVantage?.position) && !result);
     if (fixed && !fixedPosition && !pickingStanding) {
-      $('standingStatus').textContent = loaded ? '点击“进入选点模式”，从可站立区域选择并验证。' : '请等待地图可行走面加载。';
+      if (loaded) {
+        if (mapAutoVantage) displayStandingPoint(mapAutoVantage);
+        else requestAutoStandingPoint();
+      } else {
+        $('standingStatus').textContent = '请等待地图可行走面加载。';
+      }
     }
     updateRunState();
   }
@@ -2388,13 +2936,66 @@ export function mountArena(host) {
   }
 
   function displayStandingPoint(response) {
-    fixedPosition = {face: response.face, position: [...response.position]};
+    fixedPosition = {
+      face: response.face,
+      position: [...response.position],
+      ...(response.autoSelected ? {
+        autoSelected: true,
+        elevationGainM: response.elevationGainM,
+        visibilityRatio: response.visibilityRatio,
+        objectiveVisibilityRatio: response.objectiveVisibilityRatio,
+      } : {}),
+    };
     standingMarker.position.fromArray(response.position);
     standingMarker.position.y += .04;
     standingMarker.visible = $('movement').value === 'fixed';
     previewStandingPoint();
-    $('standingPoint').textContent = 'X ' + response.position[0].toFixed(2) + ' / Y ' + response.position[1].toFixed(2) + ' / Z ' + response.position[2].toFixed(2);
-    $('standingStatus').textContent = '站点验证通过。普通地面敌人可接近的出生点 ' + response.enemyReachableSpawns + '/' + response.candidateSpawns + '。玩家保持该位置；固定站点可能限制敌人接近，不保证全图可达。';
+    $('standingPoint').textContent = 'X ' + response.position[0].toFixed(2) + ' / Y ' + response.position[1].toFixed(2) + ' / Z ' + response.position[2].toFixed(2)
+      + (response.autoSelected ? ' (自动高台 +' + Number(response.elevationGainM || 0).toFixed(2) + 'm)' : '');
+    $('standingStatus').textContent = response.autoSelected
+      ? '已自动优选可达低遮挡高台：无遮挡视野 ' + (Number(response.visibilityRatio || 0) * 100).toFixed(1) + '%（底层核心 ' + (Number(response.objectiveVisibilityRatio || 0) * 100).toFixed(1) + '%），地面敌人可接近出生点 ' + response.enemyReachableSpawns + '/' + response.candidateSpawns + '。也可点击“进入选点模式”手动改点。'
+      : '站点验证通过。普通地面敌人可接近的出生点 ' + response.enemyReachableSpawns + '/' + response.candidateSpawns + '。玩家保持该位置；固定站点可能限制敌人接近，不保证全图可达。';
+  }
+
+  async function refreshMapAutoVantage() {
+    if (!loaded || !mapId) return;
+    const req = ++autoVantageReq, map = mapId;
+    try {
+      const response = await json('/api/arena/standing-point', {mapId: map, auto: true, npcShortGap: $('npcShortGap').checked});
+      if (req !== autoVantageReq || map !== mapId) return;
+      mapAutoVantage = response;
+      if ($('movement').value === 'fixed' && !fixedPosition && !pickingStanding) {
+        displayStandingPoint(response);
+        updateRunState();
+      } else if (!result) {
+        syncPreviewActors();
+      }
+    } catch {
+      // Ignore silent background preview failure
+    }
+  }
+
+  async function requestAutoStandingPoint() {
+    if (!loaded || !mapId) return;
+    const request = ++standingRequest, map = mapId;
+    standingPending = true;
+    setStandingPicking(false);
+    updateRunState();
+    $('standingStatus').textContent = '正在扫描可达高台并计算全图视野遮挡率…';
+    try {
+      const response = await json('/api/arena/standing-point', {mapId: map, auto: true, npcShortGap: $('npcShortGap').checked});
+      if (request !== standingRequest || map !== mapId) return;
+      mapAutoVantage = response;
+      displayStandingPoint(response);
+    } catch {
+      if (request !== standingRequest || map !== mapId) return;
+      $('standingStatus').textContent = '自动优选高台未完成，请手动点击进入选点模式选择。';
+    } finally {
+      if (request === standingRequest) {
+        standingPending = false;
+        updateRunState();
+      }
+    }
   }
 
   async function validateStandingPoint(face, point) {
@@ -2418,10 +3019,17 @@ export function mountArena(host) {
     }
   }
 
-  $('npcShortGap').addEventListener('change', () => { if (fixedPosition) validateStandingPoint(fixedPosition.face, fixedPosition.position); });
+  $('npcShortGap').addEventListener('change', () => {
+    refreshMapAutoVantage();
+    if (fixedPosition) {
+      if (fixedPosition.autoSelected) requestAutoStandingPoint();
+      else validateStandingPoint(fixedPosition.face, fixedPosition.position);
+    }
+  });
   $('movement').addEventListener('change', syncStandingMode);
+  if ($('standingAuto')) $('standingAuto').onclick = () => requestAutoStandingPoint();
   $('standingPick').onclick = () => setStandingPicking(!pickingStanding);
-  $('standingClear').onclick = () => clearStandingPoint('已清除，请重新选择合法站点。');
+  $('standingClear').onclick = () => clearStandingPoint('已清除站点；可点击“自动优选高台视野”或“进入选点模式”手动选点。');
 
   renderer.domElement.addEventListener('pointerdown', event => {
     if (event.button !== 0) { pointerStart = null; avatarClickStart = null; return; }
@@ -2501,23 +3109,53 @@ export function mountArena(host) {
 
   function syncSpawnProfile() {
     const profile = $('spawnProfile').value, source = profile !== 'custom', interception = profile.includes('interception'), single = $('enemySpec').value === 'single';
+    const waveOpt = $('budget').querySelector('option[value="waves"]');
+    if (waveOpt) waveOpt.disabled = interception;
+    if (interception && $('budget').value === 'waves') {
+      $('budget').value = 'time';
+    }
+    const bSpec = budgetSpec();
+    const towers = Number($('interceptionTowers')?.value ?? 1);
     $('npcShortGap').disabled = busyState;
     $('levelGrowth').disabled = busyState || !source;
-    $('levelGrowthHelp').textContent = interception ? '默认关闭。按拦截轮次公式增长，受 difficulty 影响；20个清场周期可能明显涨级，不沿用防御第20波仅+11级的结论。' : source ? '默认关闭；单值起点前10波保持，第20波增加11级，仅作用于新出生敌人。' : '等级增长只用于来源规则；当前固定等级。';
-    $('limitsText').innerHTML = interception ? '单周期 600 秒 / 60 秒无伤害或击杀进展熔断<br>最长模拟 30 分钟 / 计算预算 30 秒' : '单波 180 秒 / 60 秒无伤害或击杀进展熔断<br>最长模拟 30 分钟 / 计算预算 30 秒';
+    $('levelGrowthHelp').textContent = interception
+      ? (towers > 0
+        ? '默认关闭。开启后每当总占领进度达到 100% 结轮时按拦截轮次公式涨级；选择 1 塔慢推可最大限度拖慢敌人等级成长。'
+        : '当前为固定总占领进度卡点不结轮，全程保持第 1 轮等级不增长。')
+      : source
+        ? '默认关闭；单值起点前10波保持，第20波增加11级，仅作用于新出生敌人。'
+        : '等级增长只用于来源规则；当前固定等级。';
+    $('limitsText').innerHTML = interception
+      ? '无单轮固定数量上限 / 60 秒无伤害或击杀进展熔断<br>模拟时长 ' + bSpec.label + ' / 计算预算 ' + bSpec.wall + ' 秒'
+      : '单波 180 秒 / 60 秒无伤害或击杀进展熔断<br>模拟上限 ' + bSpec.label + ' / 计算预算 ' + bSpec.wall + ' 秒';
     $('interceptionFields').hidden = !interception;
+    if ($('interceptionProgressWrap')) $('interceptionProgressWrap').hidden = !interception || towers > 0;
     $('sourceSpawnFields').hidden = !source;
-    $('enemies').disabled = source && !interception;
-    $('enemies').closest('label').hidden = source && !interception;
+    $('enemies').disabled = source;
+    $('enemies').closest('label').hidden = source;
     $('tier').disabled = source;
     $('tier').closest('label').hidden = source;
-    $('quotaLabel').textContent = interception ? '每清场周期目标数量' : '自定义每波目标数量';
+    $('quotaLabel').textContent = '自定义每波目标数量';
     $('missionTier').closest('label').hidden = interception;
-    $('spawnHelp').textContent = source ? (single ? '来源规则需要选择敌人编组；单一敌人请使用自定义工况。' : interception ? '使用来源小队间隔、人数上限与累计tier，固定所选进度并关闭占点突袭。按下方指定数量清场后进入下一周期；不是实际拦截得分轮次。原生池合并和空间计数仍有近似，详见结果说明。' : '每波数量由队伍人数、起始等级、波次及仲裁修正计算，再按累计层级编排配额；每0.25秒最多尝试生成1只。最终数量见回放波次记录。拦截图选择此规则仅是防御清怪实验，不等同原生拦截刷新。') : '当前固定数量/层级和每7只一只无人机为可复现测试工况，不等同游戏每波敌人数。';
+    $('spawnHelp').textContent = source
+      ? (single
+        ? '来源规则需要选择敌人编组；单一敌人请使用自定义工况。'
+        : interception
+          ? '按所选时长统计单位时间击杀与精华，不设单轮杀敌数量配额。总占领进度（Tenno 对敌方派系总占领条）随控塔速率推进或卡点固定，无需走位占点即可真实模拟控进度压级刷怪。'
+          : '每波数量由队伍人数、起始等级、波次及仲裁修正计算，再按累计层级编排配额；每0.25秒最多尝试生成1只。最终数量见回放波次记录。')
+      : '当前固定数量/层级和每7只一只无人机为可复现测试工况，不等同游戏每波敌人数。';
     updateRunState();
   }
 
-  $('spawnProfile').addEventListener('change', () => { specChanged(false); updateRunState(); syncSpawnProfile(); });
+  $('spawnProfile').addEventListener('change', () => { specChanged(false); syncMissionStartLevel(); updateRunState(); syncSpawnProfile(); });
+  $('combatStyle')?.addEventListener('change', () => { syncArenaNukeControls(); syncStandingMode(); updateRunState(); });
+  $('nukeSetup')?.addEventListener('change', () => {
+    if (loadout?.warframeLink) loadout.warframeLink.nukeSetupId = $('nukeSetup').value || null;
+    refreshPreviewWarframeRanges();
+  });
+  $('arbucepEmpowered')?.addEventListener('change', () => {
+    refreshPreviewWarframeRanges();
+  });
 
   function specChanged(resetTier = true) {
     const id = $('enemySpec').value || 'single', spec = (catalog?.enemySpecs || []).find(s => s.id === id);
@@ -2525,6 +3163,7 @@ export function mountArena(host) {
     $('specPanel').hidden = !spec;
     showSpecSource(spec);
     syncSpawnProfile();
+    syncMissionStartLevel();
     if (!spec) return;
     if (resetTier) {
       const prior = $('tier').value;
@@ -2606,6 +3245,7 @@ export function mountArena(host) {
     choose('doorSight', defaults.doorSight || 'open');
     choose('spawnProfile', defaults.spawnProfile || 'custom');
     choose('squadSize', defaults.squadSize || 1);
+    if ($('interceptionTowers')) choose('interceptionTowers', 1);
     $('interceptionProgress').value = defaults.interceptionProgress ?? 0.5;
     for (const [id, key] of [['enemies', 'enemies'], ['seed', 'seed']]) {
       if (defaults[key] != null) $(id).value = defaults[key];
@@ -2619,6 +3259,7 @@ export function mountArena(host) {
     selectedEnemy = loadout?.enemy || defaults.enemy || catalog.enemies[0]?.path || catalog.enemies[0]?.id || '';
     if (!enemyIndex.has(selectedEnemy)) selectedEnemy = enemyIndex.has(defaults.enemy) ? defaults.enemy : (catalog.enemies[0]?.path || catalog.enemies[0]?.id || '');
     choose('enemySpec', defaults.enemySpec || 'single');
+    syncMissionStartLevel(true);
     specChanged();
     choose('tier', defaults.tier);
     filterEnemies();
@@ -2717,17 +3358,28 @@ export function mountArena(host) {
         payload = null;
       }
       if (payload) {
+        const firstOpen = !loadout;
         loadout = structuredClone(payload);
         weaponLabel = label || payload.weaponName || weaponLabel || '当前远程武器';
         openMeta = meta ? structuredClone(meta) : null;
         renderLoadoutSnapshot();
-        $('level').value = payload.level || 160;
-        $('head').value = payload.headshotChance > 0 ? 'head' : 'body';
-        if (catalog && payload.enemy && enemyIndex.has(payload.enemy)) {
+        if (isCustomSingleEnemy()) {
+          $('level').value = payload.level || 160;
+        }
+        if (firstOpen) {
+          $('head').value = payload.headshotChance > 0 ? 'head' : 'body';
+        }
+        if (catalog && isCustomSingleEnemy() && payload.enemy && enemyIndex.has(payload.enemy)) {
           selectedEnemy = payload.enemy;
           filterEnemies();
         }
+        if ($('arbucepEmpowered') && firstOpen) {
+          $('arbucepEmpowered').checked = Boolean(payload?.warframeLink?.arbucepEmpowered);
+        }
+        if ($('nukeSetup')) $('nukeSetup').replaceChildren();
+        refreshPreviewWarframeRanges();
         syncPreviewActors();
+        updateRunState();
         if (result) $('status').textContent = '配装快照已更新；上一结果仍绑定原快照，点击开始才重算。';
       }
       active = true;
@@ -2751,6 +3403,43 @@ export function mountArena(host) {
       $('play').textContent = '播放';
       setStandingPicking(false);
       clearTimeout(pollTimer);
+    },
+    applyDefenseNukePreset(opts = {}) {
+      const applyNow = () => {
+        if (!catalog) return;
+        $('spawnProfile').value = 'defense';
+        refreshSpecOptions();
+        const hasTier0 = s => Array.isArray(s?.tiers) && s.tiers.includes(0);
+        const nativeSpec = (catalog.enemySpecs || []).find(s => specOnMap(s) && s.selectionEnabled !== false && hasTier0(s))
+          || (catalog.enemySpecs || []).find(s => s.selectionEnabled !== false && hasTier0(s));
+        if (nativeSpec) $('enemySpec').value = nativeSpec.id;
+        if ($('steelPath')) $('steelPath').checked = opts.steelPath !== false;
+        $('squadSize').value = '4';
+        if ($('combatStyle')) $('combatStyle').value = opts.combatStyle || 'hybrid_nuke';
+        $('movement').value = 'objective';
+        if (opts.nukeSetupId && loadout?.warframeLink) {
+          loadout.warframeLink.nukeSetupId = opts.nukeSetupId;
+          if ($('nukeSetup')) $('nukeSetup').replaceChildren();
+        }
+        if ($('arbucepEmpowered') && opts.arbucepEmpowered != null) {
+          $('arbucepEmpowered').checked = Boolean(opts.arbucepEmpowered);
+        }
+        specChanged(true);
+        syncMissionStartLevel(true);
+        syncStandingMode();
+        syncSpawnProfile();
+        refreshPreviewWarframeRanges();
+        $('status').textContent = '已切换为「钢铁之路来源防御 + 驻守核心 + 地图炮主清与枪械补刀」，点击开始即可模拟。';
+      };
+      if (catalog) applyNow();
+      else {
+        const waitCat = setInterval(() => {
+          if (catalog) {
+            clearInterval(waitCat);
+            applyNow();
+          }
+        }, 120);
+      }
     },
     get hasLoadout() {
       return !!loadout;

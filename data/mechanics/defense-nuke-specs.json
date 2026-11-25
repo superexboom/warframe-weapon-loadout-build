@@ -1,0 +1,770 @@
+{
+  "schemaVersion": "2026-11-25.defense-nuke-v1",
+  "provenance": {
+    "packagesBinH": "C:/Users/SuperExboom/.gemini/antigravity/brain/e0731e82-3e4e-43a7-be41-9137e15fb91e/scratch/pkg_live/Debug/Packages.bin_H",
+    "packagesSha256": "e74b5477f645ff5298ba9e8678aa68e2b1e3f58e9a31b855891bf2ab5f353f2c",
+    "clientLuauCache": "E:/warframe/Warframe/Downloaded/Public/Cache.Windows (Font Luau 9/3)",
+    "codebase": "C:/Users/SuperExboom/Documents/WF-Riven-Portable",
+    "wikiSnapshot": "wiki.warframe.com raw MediaWiki revisions through 2026-11"
+  },
+  "globalRules": {
+    "castTimeScaling": "castTimeSec = (baseCastTimeSec - fixedCastSec) / max(0.1, 1 + castingSpeedBonus) + fixedCastSec",
+    "activationEnergyScaling": "cost = baseCost * max(0.25, 2 - abilityEfficiency)",
+    "channelDrainScaling": "drainPerSec = baseDrainPerSec * max(0.25, (2 - abilityEfficiency) / abilityDuration)",
+    "pseudoExaltedComboRule": {
+      "comboWindowSec": 5.0,
+      "pointsPerCast": 20,
+      "directHitBonusPoints": 1,
+      "pointsPerTier": 20,
+      "maxPoints": 220,
+      "maxComboMultiplier": 12.0,
+      "damageMultiplierFormula": "ComboMult (1x at tier 1 up to 12x at 220+ points; 1:1 multiplicative on direct cast and Gara wall shatter)",
+      "modRestrictions": [
+        "No Riven Mods",
+        "No Exilus Slot",
+        "No Attack Speed Mods (Fury/Berserker Fury) -> Spoiled Strike (+100% Base Damage) has zero speed penalty",
+        "No Heavy Attack / Blocking / Finisher Mods (Melee Animosity, Reflex Coil, Finishing Touch, Melee Crescendo)",
+        "Melee Arcane Slot IS unlocked (Melee Exposure +240% Corrosive on ability cast works at full value without needing melee hits)"
+      ]
+    }
+  },
+  "codebaseAuditGotchas": [
+    {
+      "frame": "Gara",
+      "issue": "Exalted weapon path & zeroed package stats",
+      "detail": "Actual path is /Lotus/Powersuits/Glass/GaraShankWeapon (Prime: GaraShankWeaponPrime), NOT GlassShank. In Packages.bin_H / melee-mechanics.json, Amount=0, crit=0, procChance=0; GlassShank.lua (PseudoExaltedAdditionalStats) injects runtime base=400, critChance=0.20, critMult=2.0, procChance=0.30."
+    },
+    {
+      "frame": "Mesa",
+      "issue": "Exalted weapon & Exilus augment path",
+      "detail": "Actual weapon path is /Lotus/Powersuits/Cowgirl/SlingerPistols (Prime: PrimeSlingerPistols), parent SlingerPistolsBase -> LotusCustomAimWeapon, NOT CowgirlPistols. Mesa's Waltz is /Lotus/Powersuits/Cowgirl/GunFuPvPAugmentCard (IsUtility=1 Exilus)."
+    },
+    {
+      "frame": "Mirage",
+      "issue": "Prism Guard missing from warframe_build_data.json mods list + Eclipse-Prism hook",
+      "detail": "Prism Guard is /Lotus/Powersuits/Harlequin/PrismPvPAugmentCard (converted to PvE in U27.4, 4s*Duration follow above head), omitted from warframe_build_data.json due to PvP filename. Also Solar Eclipse does NOT give +200%*STR weapon mult to Prism; instead Light.lua/Prism.lua (lightAbilityState) doubles Prism's per-hit ramp from +25% to +50%, while Lunar Eclipse halves Prism activation/drain cost (25 + 5/s)."
+    },
+    {
+      "frame": "Mirage",
+      "issue": "Explosive Legerdemain 60s built-in gem lifetime, non-heavy pickup whitelist, static cover LoS & Hall of Mirrors 4 smaller jewels",
+      "detail": "HarlequinObjectChangeHelper.txt whitelists ONLY HealthIncrease, EnergyIncreaseSmall/Large, AffinityIncrease, and Pistol/Rifle/Shell/Sniper/AllAmmoPickup (excluding HeavyWeaponAmmoPickup and Universal Orbs). HarlequinObjectChange.lua Function #63 (AugmentMines) sets R8 := 60 (60.0s built-in lifetime unaffected by Ability Duration, refreshed on recast, persisting across waves) with 15m fixed explosion radius, 100% linear falloff, and checkForCover=true, staticCoverOnly=true LoS check. Simultaneously, Function #52 & Function #68 spawn 1 primary MiragePresentDeco jewel (20s fixed lifespan, 200*Strength DT_EXPLOSION, 8m*Range blast/blind, 12m*Range charm) PLUS 4 MiragePresentWeakDeco smaller jewels at 6m offset when Hall of Mirrors (harlequinLightClones) is active, scaled by packageWeakMultiplier = 0.5 (50% damage 100*Strength, 50% blast/blind radius 4m*Range, 50% charm radius 6m*Range, 50% blind duration 2.5s*Duration)."
+    },
+    {
+      "frame": "Equinox",
+      "issue": "Mend & Maim channel drain discrepancy",
+      "detail": "Packages.bin_H (EnergyConsumptionOverTime: 3.5) and Wiki both confirm 3.5 energy/s base drain, whereas warframe_build_data.json had 3.0."
+    },
+    {
+      "frame": "Khora",
+      "issue": "Exalted weapon placeholder base damage & 10m range cap bypass",
+      "detail": "Actual path is /Lotus/Powersuits/Khora/KhoraWhipclawWeapon[Prime] (Amount=10 placeholder in package; KhoraCrackAbility overrides base=150). Explosion radius is min(10m, 5m * AbilityRange) + MeleeRangeBonus (Primed Reach +3m bypasses the 10m Ability Range cap)."
+    }
+  ],
+  "primaryNukes": [
+    {
+      "id": "gara_mass_vitrify_shatter",
+      "warframe": "Gara",
+      "framePaths": [
+        "/Lotus/Powersuits/Glass/Glass",
+        "/Lotus/Powersuits/Glass/GaraPrime"
+      ],
+      "abilities": {
+        "shatteredLash": {
+          "slot": 0,
+          "abilityPath": "/Lotus/Powersuits/Glass/Abilities/GlassShankAbility",
+          "scriptPath": "/Lotus/Powersuits/Glass/Abilities/GlassShank.lua",
+          "exaltedWeaponPaths": [
+            "/Lotus/Powersuits/Glass/GaraShankWeapon",
+            "/Lotus/Powersuits/Glass/GaraShankWeaponPrime"
+          ],
+          "augmentPath": "/Lotus/Powersuits/Glass/GlassShankAugmentCard",
+          "augmentName": "Shattered Storm",
+          "energyCost": 25,
+          "baseCastTimeSec": 0.7,
+          "castAction": {
+            "tap": "100% DT_PUNCTURE linear thrust (12m * Range, 1.75m blade radius), one-handed non-blocking",
+            "hold": "100% DT_SLASH 225-deg horizontal arc sweep (12m * Range, 1.75m blade radius), two-handed movement-locking"
+          },
+          "exaltedStats": {
+            "baseDamageByRank": [
+              250,
+              300,
+              350,
+              400
+            ],
+            "critChance": 0.2,
+            "critMultiplier": 2.0,
+            "statusChance": 0.3,
+            "omegaAttenuation": 1.2,
+            "comboWindowSec": 5.0,
+            "comboPointsPerCast": 20
+          },
+          "directDamageFormula": "400 * AbilityStrength * (1 + BaseDmgMods + SteelCharge + ArcaneFury + CrimsonMeleeBonus) * (1 + ElementalMods + MeleeExposure) * ComboMult * CritFactor * Faction",
+          "los": "NONE (infinite innate punch-through; bypasses entities, walls, and terrain)"
+        },
+        "massVitrify": {
+          "slot": 3,
+          "abilityPath": "/Lotus/Powersuits/Glass/Abilities/GlassRingAbility",
+          "scriptPath": "/Lotus/Powersuits/Glass/Abilities/GlassRing.lua",
+          "energyActivation": 75,
+          "energyDrainPerSec": {
+            "start": 3.0,
+            "end": 5.0,
+            "scaling": "ramping linearly from 3/s to 5/s over expansion duration"
+          },
+          "baseCastTimeSec": 1.2,
+          "releaseCastTimeNote": "Solidify/release animation also scales with Casting Speed",
+          "ringGeometry": {
+            "initialHorizontalRadiusM": "2.0 * AbilityRange",
+            "expansionRateMps": "3.0 * AbilityRange",
+            "expansionDurationSecByRank": [
+              2.0,
+              2.25,
+              2.75,
+              3.0
+            ],
+            "maxExpansionDurationSec": "3.0 * AbilityDuration",
+            "maxWallOuterRadiusFormula": "(2.0 + 9.0 * AbilityDuration) * AbilityRange",
+            "maxWallOuterRadiusBaseM": 11.0,
+            "initialHeightM": 3.0,
+            "maxHeightM": 15.0,
+            "heightScaling": "unmoddable (expands downward from feet)",
+            "segments": 12,
+            "expansionLoS": "NONE (molten glass bypasses all obstacles and terrain)"
+          },
+          "vitrificationDebuff": {
+            "crystallizeDelaySec": 3.0,
+            "solidifiedDurationSec": "16.0 * AbilityDuration",
+            "damageVulnerability": "0.50 * AbilityStrength (+20%/30%/40%/50% by rank, applies to all damage sources)"
+          },
+          "segmentHealthFormula": "(1600 + 5 * TotalArmor) * AbilityStrength + sum_vitrified(max((320 + 5 * TotalArmor) * AbilityStrength, 0.10 * (EnemyMaxHP + EnemyMaxShields)))",
+          "singleDepletedSegmentExplosion": {
+            "damage": "400 * AbilityStrength",
+            "radiusM": "15.0 * AbilityRange",
+            "shares": {
+              "DT_IMPACT": 0.1875,
+              "DT_PUNCTURE": 0.375,
+              "DT_SLASH": 0.375
+            }
+          }
+        }
+      },
+      "wallShatterNuke": {
+        "trigger": "Cast 1 Shattered Lash from OUTSIDE an intact Mass Vitrify barrier segment",
+        "shatterExplosionFormula": "(800 * AbilityStrength) + 400 * AbilityStrength * (1 + BaseDmgMods + SteelCharge + ArcaneFury) * (1 + ElementalMods + MeleeExposure) * ComboMult * UniversalDmgMults(Roar, Nourish, VitrificationVuln)",
+        "damageType": "Inherits physical base from Shattered Lash mode used (100% Puncture on Tap or 100% Slash on Hold) + modded Elemental types (e.g. +240% Corrosive from Melee Exposure)",
+        "critChance": 0.0,
+        "statusChance": 0.0,
+        "excludedMultipliers": [
+          "Crit Mods",
+          "Status Mods",
+          "Condition Overload",
+          "Faction Mods",
+          "Vigorous Swap"
+        ],
+        "effectiveRadiusFormula": "Interior (0 to R_wall) + Exterior Ring (R_wall to R_wall + 15.0 * AbilityRange) => Total Outer Radius = (17.0 + 9.0 * AbilityDuration) * AbilityRange",
+        "baseTotalOuterRadiusM": 26.0,
+        "maxRangeExample280Pct": "At 280% Range & 100% Duration: R_wall = 30.8m, Exterior = +42.0m => 72.8m radial nuke (can be detonated early after minimal expansion for faster cadence: R_min = 2*R + 15*R = 17*R = 47.6m)",
+        "distanceFalloff": "NONE (0% falloff across entire interior and exterior explosion)",
+        "los": "NONE (ignores Line of Sight, walls, floors, and terrain)",
+        "splinterStormSynergy": "50% of shatter explosion damage is permanently added to Gara's / allies' active 2 Splinter Storm DPS if within explosion radius",
+        "shatteredStormAugment": "Inflicts enemy-version Splinter Storm at 100% modded Strength on all hit enemies (+35% * Strength Damage Vulnerability for subsequent casts + 250 * Strength IPS/s; does not buff the instigating shatter hit)"
+      },
+      "optimalDefenseCombo": [
+        "Pre-stack Melee Exposure (+240% Corrosive for 25s via 4 casts) and Initial Combo (Galvanized Reflex 5x-8x or 12x manual Lash combo)",
+        "Cast 4 Mass Vitrify -> tap 4 again immediately (or after desired expansion t_exp) to solidify barrier",
+        "Step outside wall and Tap 1 Shattered Lash (0.7s base, 1-handed) to detonate 360-deg LoS-ignoring 0%-falloff map nuke"
+      ]
+    },
+    {
+      "id": "mesa_peacemaker",
+      "warframe": "Mesa",
+      "framePaths": [
+        "/Lotus/Powersuits/Cowgirl/Cowgirl",
+        "/Lotus/Powersuits/Cowgirl/MesaPrime"
+      ],
+      "abilityPath": "/Lotus/Powersuits/Cowgirl/Abilities/GunFuAbility",
+      "scriptPath": "/Lotus/Powersuits/Cowgirl/Abilities/GunFu.lua",
+      "exaltedWeaponPaths": [
+        "/Lotus/Powersuits/Cowgirl/SlingerPistols",
+        "/Lotus/Powersuits/Cowgirl/PrimeSlingerPistols"
+      ],
+      "weaponParentChain": [
+        "/Lotus/Powersuits/Cowgirl/SlingerPistolsBase",
+        "/Lotus/Types/Weapon/LotusCustomAimWeapon",
+        "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+      ],
+      "augment": {
+        "name": "Mesa's Waltz",
+        "path": "/Lotus/Powersuits/Cowgirl/GunFuPvPAugmentCard",
+        "slotKind": "exilus (IsUtility=1)",
+        "effect": "Walk at 50% of zoomed speed (25% normal walk speed) and Dodge/Roll while channeling; focus ring gradually expands and ramp bonus decays while not firing"
+      },
+      "energy": {
+        "activation": 25,
+        "drainPerSecond": 15.0
+      },
+      "regulatorsBaseStats": {
+        "baseDamage": 50.0,
+        "damageShares": {
+          "DT_IMPACT": 0.5,
+          "DT_PUNCTURE": 0.25,
+          "DT_SLASH": 0.25
+        },
+        "critChance": 0.25,
+        "critMultiplier": 3.0,
+        "statusChance": 0.1,
+        "multishot": 1.0,
+        "fireRateMaxShotsPerSec": 14.8,
+        "fireRateRawRpm": 888,
+        "burstShots": 2,
+        "hitscan": true,
+        "ammoCost": 0
+      },
+      "damageFormula": {
+        "perShotFormula": "50 * (1 + 1.50 * min(BurstCount, 20) / 20) * (1 + 1.50 * AbilityStrength + ShootingGalleryBonus + BaseDamageMods) * (1 + ElementalMods) * Multishot * CritFactor * Faction",
+        "packageEncoding": "PlayerDamageMultiplier = 2.0 * FOVDamageMult [0.5 .. 1.25] => 1.0x at 0 bursts, 1.075x on Burst 1 (+7.5%/burst), capping at 2.50x (+150% multiplicative total damage) at Burst 20 (40 shots)",
+        "strengthScaling": "+100% / +115% / +133% / +150% * AbilityStrength (additive with Hornet Strike, Galvanized Shot, Cascadia Flare, Arcane Precision, Pistol Amp, Shooting Gallery +25% * Strength; snapshotted on Peacemaker activation)"
+      },
+      "fireRateAndCadence": {
+        "spoolMultiplier": "Ramps from 0.25x (3.70 shots/s) to 1.00x (14.80 shots/s = 7.4 two-shot bursts/s) over 3.5s (FireRateRampUpTime=4 in pkg) / 20 bursts",
+        "spoolReset": "Resets to 0.25x if fire input released or 2.0s pass without firing",
+        "modScaling": "Multiplicative with Fire Rate mods/arcanes (Lethal Torrent +60%, Anemic Agility +90%, Arcane Velocity +120%, Reinforced Bond +60%, Amalgam Furax Body Count +45%)",
+        "targetSwitchingDelaySec": 0.0
+      },
+      "rangeAndLoS": {
+        "maxRangeM": 50.0,
+        "rangeModifiable": false,
+        "verticalSearchAngleDeg": 75.0,
+        "focusRingFoVDeg": {
+          "initial": 120.0,
+          "minimumFormula": "arctan(sqrt(AbilityRange) * tan(15 deg))",
+          "minimumAt100PctRange": 15.0
+        },
+        "distanceFalloff": "NONE ([0, 0])",
+        "los": "CAMERA_LOS_REQUIRED (player camera must have unobstructed line of sight to target inside focus reticle)",
+        "headshotRule": "CANNOT_HEADSHOT (LotusCustomAimFireBehavior locks aimAtPart = TORSO)"
+      }
+    },
+    {
+      "id": "mirage_nuke_variants",
+      "warframe": "Mirage",
+      "framePaths": [
+        "/Lotus/Powersuits/Harlequin/Harlequin",
+        "/Lotus/Powersuits/Harlequin/MiragePrime"
+      ],
+      "variants": {
+        "explosiveLegerdemain": {
+          "slot": 1,
+          "abilityName": "Sleight of Hand",
+          "abilityPath": "/Lotus/Powersuits/Harlequin/Abilities/HarlequinObjectChangeAbility",
+          "scriptPath": "/Lotus/Powersuits/Harlequin/Abilities/HarlequinObjectChange.lua",
+          "helperPath": "/Lotus/Powersuits/Harlequin/HarlequinObjectChangeHelper",
+          "augmentName": "Explosive Legerdemain",
+          "augmentPath": "/Lotus/Powersuits/Harlequin/ObjectChangeAugmentCard",
+          "energyCost": 50,
+          "baseCastTimeSec": 0.8,
+          "oneHandedNonBlocking": false,
+          "conversionTrapRadiusM": "40.0 * AbilityRange (10 / 20 / 30 / 40m by rank)",
+          "mineTriggerRadiusM": 0.75,
+          "mineExplosionRadiusM": "15.0 FIXED (locked to unmoddable 15m in Update 33.0; unaffected by Ability Range)",
+          "mineLifespanSec": "60.0 FIXED (HarlequinObjectChange.lua AugmentMines R8 := 60; unaffected by Ability Duration, refreshed to 60s on Sleight of Hand recast, persists across waves, detonates on enemy proximity step or 60s expiry)",
+          "mineDamageFormula": "1000 * AbilityStrength * (1 - d / 15.0)",
+          "mineBaseDamageByAugmentRank": [
+            500,
+            600,
+            800,
+            1000
+          ],
+          "distanceFalloff": "100% linear falloff from 100% at 0m to 0% at 15m",
+          "eligiblePickupWhitelist": [
+            "/Lotus/Types/PickUps/HealthIncrease",
+            "/Lotus/Types/PickUps/EnergyIncreaseSmall",
+            "/Lotus/Types/PickUps/EnergyIncreaseLarge",
+            "/Lotus/Types/PickUps/AffinityIncrease",
+            "/Lotus/Weapons/Ammo/PistolAmmoPickup",
+            "/Lotus/Weapons/Ammo/RifleAmmoPickup",
+            "/Lotus/Weapons/Ammo/ShellAmmoPickup",
+            "/Lotus/Weapons/Ammo/SniperAmmoPickup",
+            "/Lotus/Weapons/Ammo/AllAmmoPickup"
+          ],
+          "excludedPickups": [
+            "HeavyWeaponAmmoPickup (not in HarlequinObjectChangeHelper._pickupExplosionPickupType)",
+            "Universal Orb (destroyed without spawning a gem mine)"
+          ],
+          "pickupElementAndProcs": {
+            "ammoPickup": {
+              "damageType": "DT_FREEZE (Cold)",
+              "statusChance": 1.0
+            },
+            "healthOrb": {
+              "damageType": "DT_FIRE (Heat)",
+              "statusChance": 1.0
+            },
+            "energyOrb": {
+              "damageType": "DT_ELECTRICITY (Electricity)",
+              "statusChance": 1.0,
+              "synergy": "Triggers Archon Stretch (+2 energy/s for 5s)"
+            },
+            "affinityOrb": {
+              "damageType": "DT_POISON (Toxin)",
+              "statusChance": 1.0,
+              "synergy": "Triggers Archon Continuity (+1 Corrosive proc)"
+            },
+            "universalOrb": {
+              "damageType": "NONE (destroyed without spawning a mine)",
+              "statusChance": 0.0
+            }
+          },
+          "statusScaling": "100% guaranteed status at Rank 3 augment (50%/65%/80%/100%, unaffected by Strength)",
+          "los": {
+            "pickupConversion": "NONE (FindEntitiesInRange converts all eligible pickups within 40m * Range across walls/floors)",
+            "mineDetonation": "STATIC_COVER_LOS (HarlequinObjectChange.lua RadialAttack checkForCover=true, staticCoverOnly=true; blocked by solid walls/obstacles from gem position)",
+            "jewelLureAndBlind": "DIRECT_LOS_REQUIRED (MiragePresent charm/blind requires unobstructed LoS)"
+          }
+        },
+        "eclipse": {
+          "slot": 2,
+          "abilityName": "Eclipse",
+          "abilityPath": "/Lotus/Powersuits/Harlequin/Abilities/LightAbility",
+          "scriptPath": "/Lotus/Powersuits/Harlequin/Abilities/Light.lua",
+          "augmentsOnSlot3": [
+            {
+              "name": "Total Eclipse",
+              "path": "/Lotus/Powersuits/Harlequin/LightAugmentCard",
+              "effect": "Shares Eclipse buff with allies, Companions, and Hall of Mirrors clones within 15m * AbilityRange (ONLY slot-3 augment for Mirage)"
+            }
+          ],
+          "energyCost": 25,
+          "baseCastTimeSec": 0.6667,
+          "durationSec": "25.0 * AbilityDuration",
+          "modes": {
+            "tapLunar": "75% * AbilityStrength Damage Reduction (capped at 90%; Helminth cap 75%)",
+            "holdSolar": "1 + 2.00 * AbilityStrength final multiplicative Weapon & Exalted Weapon damage bonus (Helminth: 1 + 0.30 * AbilityStrength; double-dips Glaive explosions & Exodia Contagion)"
+          },
+          "abilityInteractions": {
+            "sleightOfHandMines": "NONE (does NOT buff Explosive Legerdemain mine damage)",
+            "prismSynergy": "EXPLICIT_SCRIPT_HOOK (Light.lua / Prism.lua lightAbilityState): Lunar Eclipse halves Prism base energy cost (50 -> 25) and base drain (10/s -> 5/s); Solar Eclipse doubles Prism's per-hit damage ramp bonus from +25% to +50% per laser tick"
+          }
+        },
+        "prismAndPrismGuard": {
+          "slot": 3,
+          "abilityName": "Prism",
+          "abilityPath": "/Lotus/Powersuits/Harlequin/Abilities/Prism",
+          "scriptPath": "/Lotus/Powersuits/Harlequin/Abilities/Prism.lua",
+          "augmentName": "Prism Guard",
+          "augmentPath": "/Lotus/Powersuits/Harlequin/PrismPvPAugmentCard",
+          "energyActivation": "50 (25 with Lunar Eclipse)",
+          "energyDrainPerSec": "10.0 (5.0 with Lunar Eclipse)",
+          "baseCastTimeSec": 2.5667,
+          "laserCount": 20,
+          "laserCountByRank": [
+            10,
+            13,
+            16,
+            20
+          ],
+          "tickIntervalSec": 0.5,
+          "ticksPerSecPerLaser": 2.0,
+          "laserSeekRangeM": "30.0 * AbilityRange (15 / 20 / 25 / 30m by rank)",
+          "blindRadiusM": "25.0 * AbilityRange (for 15s * Duration on expiry/deactivation; requires LoS to Prism)",
+          "durationSec": {
+            "normal": "12.0 * AbilityDuration (orb travels forward at 5 m/s bouncing off surfaces)",
+            "prismGuard": "4.0 * AbilityDuration (1/2/3/4s base by augment rank; attaches above Mirage's head, retains 10/s channeled drain)"
+          },
+          "damageFormulaPerTick": "250 * AbilityStrength * (1 + RampPerHit * TotalLaserHitsSoFar) * RoarMult",
+          "rampPerHit": "0.25 (+25% per laser hit across ALL 20 lasers, applied BEFORE the hit so Hit 1 = 1.25x, Hit 2 = 1.50x; doubled to 0.50 [+50%/hit] while Solar Eclipse is active)",
+          "damageType": "100% DT_RADIATION (orb body contact PrismOne deals 75 Radiation + forced PT_STAGGERED)",
+          "distanceFalloff": "NONE along laser beam",
+          "los": "PER_LASER_RAYCAST_BLOCKED (lasers do NOT pierce walls/obstacles or enemy bodies, though a laser targeting a rear enemy hits front enemies in its line, and an orb overlapping an enemy hits with multiple lasers)"
+        }
+      }
+    },
+    {
+      "id": "equinox_day_maim",
+      "warframe": "Equinox (Day Form)",
+      "framePaths": [
+        "/Lotus/Powersuits/YinYang/YinYang",
+        "/Lotus/Powersuits/YinYang/EquinoxPrime"
+      ],
+      "abilityPath": "/Lotus/Powersuits/YinYang/Abilities/YinYangBurstAbility",
+      "subAbilityPath": "/Lotus/Powersuits/YinYang/YinYangMaimAbility",
+      "scriptPath": "/Lotus/Powersuits/YinYang/Abilities/YinYangBurst.lua",
+      "augment": {
+        "name": "Energy Transfer",
+        "path": "/Lotus/Powersuits/YinYang/YinYangBurstAugmentCard",
+        "effect": "Preserves 100% of accumulated Mend/Maim pool when switching forms with 1 Metamorphosis"
+      },
+      "energy": {
+        "activation": 50,
+        "drainPerSecond": 3.5
+      },
+      "timings": {
+        "activateCastTimeSec": 1.8,
+        "deactivateCastTimeSec": 1.0,
+        "scalesWithCastSpeed": true
+      },
+      "auraRadiusM": "18.0 * AbilityRange (10 / 12 / 15 / 18m by rank)",
+      "entrySlashHit": {
+        "damage": "150 * AbilityStrength (75 / 100 / 125 / 150 by rank)",
+        "damageType": "100% DT_SLASH",
+        "statusProc": "100% forced Slash (Bleed DoT) + brief stagger/stun (once per enemy per cast)",
+        "los": "NONE (hits through walls)"
+      },
+      "poolAccumulation": {
+        "conversionRatio": 0.75,
+        "conversionByRank": [
+          0.5,
+          0.55,
+          0.6,
+          0.75
+        ],
+        "scalesWithStrength": false,
+        "accumulatedStats": "0.75 * (KilledEnemyMaxHealth + KilledEnemyMaxShields)",
+        "includesOverguard": false,
+        "validKillSources": "ALL kills of enemies inside Equinox's aura radius (Equinox weapons/abilities + ally weapons/abilities; continues accumulating in Operator mode)"
+      },
+      "detonationFormula": {
+        "damageAtDistanceFormula": "StoredPool * max(0, 1 - DistanceToEnemy / AuraRadius)",
+        "damageType": "100% DT_SLASH (raw hit damage ONLY; 0% status chance, does NOT proc Bleed -> mitigated by enemy Armor unless armor-stripped via Terrify / Pillage / Corrosive Projection)",
+        "splitAcrossEnemies": false,
+        "affectsObjects": true,
+        "distanceFalloff": "100% linear falloff from 100% at 0m to 0% at AuraRadius (18m * Range)",
+        "los": "NONE (completely ignores Line of Sight, walls, floors, and ceilings)"
+      }
+    },
+    {
+      "id": "khora_whipclaw_strangledome",
+      "warframe": "Khora",
+      "framePaths": [
+        "/Lotus/Powersuits/Khora/Khora",
+        "/Lotus/Powersuits/Khora/KhoraPrime"
+      ],
+      "abilities": {
+        "whipclaw": {
+          "slot": 0,
+          "abilityPath": "/Lotus/Powersuits/Khora/Abilities/KhoraCrackAbility",
+          "scriptPath": "/Lotus/Powersuits/Khora/Abilities/KhoraCrack.lua",
+          "exaltedWeaponPaths": [
+            "/Lotus/Powersuits/Khora/KhoraWhipclawWeapon",
+            "/Lotus/Powersuits/Khora/KhoraWhipclawWeaponPrime"
+          ],
+          "augmentName": "Accumulating Whipclaw",
+          "augmentPath": "/Lotus/Powersuits/Khora/KhoraCrackAugmentCard",
+          "energyCost": 25,
+          "baseCastTimeSec": 1.1,
+          "fbxHeaderSec": 1.1333,
+          "castRangeM": "10.0 * AbilityRange (5 / 7 / 8 / 10m by rank)",
+          "aoeRadiusFormula": "min(10.0, 5.0 * AbilityRange) + MeleeRangeBonus (e.g. Primed Reach +3.0m increases radius past the 10m Ability Range cap to 13m+)",
+          "exaltedStats": {
+            "baseDamageByRank": [
+              100,
+              112,
+              125,
+              150
+            ],
+            "damageShares": {
+              "DT_IMPACT": 0.333,
+              "DT_PUNCTURE": 0.333,
+              "DT_SLASH": 0.334
+            },
+            "critChance": 0.25,
+            "critMultiplier": 2.0,
+            "statusChance": 0.25,
+            "omegaAttenuation": 1.2,
+            "comboWindowSec": 5.0,
+            "comboPointsPerCast": 20
+          },
+          "accumulatingWhipclaw": {
+            "trigger": "Hit >= 3 enemies directly with Whipclaw's own AoE in a single cast (Strangledome propagation hits do NOT count; max 1 stack/cast)",
+            "perStackBonus": 0.35,
+            "maxStacks": 10,
+            "maxBonus": 3.5,
+            "stackingRule": "Additive with Ability Strength: EffectiveStrengthMult = AbilityStrength + 0.35 * Stacks (e.g. 100% Strength + 10 stacks = 4.50x)",
+            "decay": "10s grace period after last >=3-hit cast, then decays linearly at -2.5%/s (-0.025/s)"
+          },
+          "directDamageFormula": "150 * (AbilityStrength + AccumulatingBonus) * (1 + BaseDmgMods + SteelCharge + ArcaneFury) * (1 + ElementalMods + MeleeExposure) * ComboMult * CritFactor * Faction * (2.0 if Ensnared else 1.0)",
+          "distanceFalloff": "NONE (0% falloff across AoE)",
+          "los": "EXPLOSION_ORIGIN_GENEROUS_LOS (post-U28.1/U29.10 LoS check from Whipclaw impact point: ignores small props/railings/stairs and pierces Arctic Eximus bubbles, blocked by solid heavy walls; Strangledome propagation ignores LoS)"
+        },
+        "strangledome": {
+          "slot": 3,
+          "abilityPath": "/Lotus/Powersuits/Khora/Abilities/KhoraCageAbility",
+          "scriptPath": "/Lotus/Powersuits/Khora/Abilities/KhoraCage.lua",
+          "energyCost": 100,
+          "baseCastTimeSec": 0.4267,
+          "maxActiveDomes": 2,
+          "durationSec": "20.0 * AbilityDuration",
+          "domeRadiusM": "5.0 * AbilityRange",
+          "grabRadiusM": "10.0 * AbilityRange",
+          "vertices": 26,
+          "grabLoS": "NONE (chains grab through walls/obstacles within 10m * Range of dome)",
+          "strangleDoT": "250 * AbilityStrength IPS/s",
+          "whipclawPropagation": {
+            "distributionMultiplier": 0.5,
+            "rule": "When Whipclaw hits AT LEAST 1 enemy held in Strangledome, initial AoE targets take 100% Whipclaw damage and ALL other ensnared enemies in that dome receive 50% of Whipclaw's modded base damage, rolling Critical Chance and Status Chance INDEPENDENTLY on each enemy",
+            "los": "NONE (chain transfer hits every enemy on the dome regardless of cover)"
+          }
+        }
+      }
+    }
+  ],
+  "additionalCoreDefenseNukes": [
+    {
+      "warframe": "Saryn",
+      "combo": "1 Spores + 3 Toxic Lash + 4 Miasma",
+      "paths": {
+        "spores": "/Lotus/Powersuits/Saryn/Abilities/PoisonAbility (Poison.lua)",
+        "miasma": "/Lotus/Powersuits/Saryn/Abilities/ExplosiveDissolveAbility (ExplosiveDissolve.lua)"
+      },
+      "castTimesSec": {
+        "spores": 0.8,
+        "toxicLash": 0.8667,
+        "miasma": 1.3333
+      },
+      "radiiM": {
+        "sporesCast": "60.0 * Range",
+        "sporesSpread": "16.0 * Range",
+        "miasma": "20.0 * Range"
+      },
+      "formulas": {
+        "sporesTick": "Up to 3 spores/enemy; starts at 10 * Strength Corrosive/s per spore, grows by +2 * Strength per infected enemy/s (capped at 7 enemies = +14 * Strength/s/spore); 50% * Strength Corrosive proc chance/s",
+        "miasma": "150 * Strength Viral/s for 6s * Duration (ticks every 1s + initial hit => (floor(6 * Duration) + 1) ticks), 100% guaranteed Viral proc on cast, 4.0x damage multiplier against enemies afflicted by Spores; enemies dying under Miasma auto-spread Spores (16m * Range)"
+      },
+      "falloff": "NONE (0% on Spores spread and Miasma)",
+      "los": "NONE (both Spores spread and Miasma completely ignore Line of Sight)"
+    },
+    {
+      "warframe": "Volt",
+      "combo": "4 Discharge (+ Capacitance)",
+      "paths": {
+        "discharge": "/Lotus/Powersuits/Volt/Abilities/OverLoadAbility (OverLoad.lua)",
+        "augment": "/Lotus/Powersuits/Volt/OverloadAugmentCard (Capacitance)"
+      },
+      "castTimesSec": {
+        "discharge": 2.0
+      },
+      "radiiM": {
+        "waveRadius": "20.0 * Range",
+        "teslaArcRadius": "8.0 * Range (around each stunned enemy)"
+      },
+      "formulas": {
+        "arcDps": "1200 * Strength Electricity/s (600 * Strength per 0.5s tick) arced from EACH stunned enemy to every other enemy within 8m * Range; N clustered enemies take (N - 1) * 1200 * Strength DPS immediately; isolated enemy takes self-damage after 4.5s delay; stun lasts 6s * Duration",
+        "capacitance": "3% of total Discharge damage dealt converted into Overshields split among Volt and allies"
+      },
+      "falloff": "Wave duration/self-damage has 100% -> 50% radial falloff from cast center; enemy-to-enemy 8m*Range arcs have 0% falloff",
+      "los": "NONE (expanding wave and 8m tesla arcs bypass walls and obstacles)"
+    },
+    {
+      "warframe": "Gauss (and Helminth Subsumed)",
+      "combo": "3 Thermal Sunder (Hold Heat x N -> Tap Cold Blast Condense)",
+      "paths": {
+        "thermalSunder": "/Lotus/Powersuits/Runner/Abilities/RunnerTransferAbility (RunnerTransfer.lua)",
+        "augment": "/Lotus/Powersuits/Runner/RunnerTransferAugmentCard (Thermal Transfer)"
+      },
+      "castTimesSec": {
+        "thermalSunder": 0.7
+      },
+      "radiiM": {
+        "initialRadius": "12.0 * Range (shrinks to 6.0 * Range over 15.0s * Duration; max 4 Cold + 4 Heat zones)"
+      },
+      "formulas": {
+        "coldTap": "150..750 * Strength Cold (0%..100% battery; Helminth fixed 50% = 450 * Strength) + 1 Cold proc (+9 Cold procs = freeze on already Cold-afflicted target; Redline >80% = 10 Cold procs instant freeze)",
+        "heatHoldExponential": "(BaseHeat[300..1500 * Strength; Helminth 900 * Strength] + CurrentActiveHeatProcDPS) * (2.0 if Redline > 80% else 1.0) + forced Heat proc (new Heat DoT inherits 50% * (1 + HeatMods/ArchonVitality) of total hit => 2^k exponential scaling; Helminth Heat bonus capped at 10x ability damage)",
+        "blastCondense": "Opposite cast consumes active DoT and deals Blast = ActiveHeatProcDPS * RemainingProcDuration + CancelingCastDamage; in Redline >80%, permanently strips ((Battery - 0.80) / 0.20) * 100% Armor BEFORE damage (100% strip at 100% battery, 96.4% with Corrosive Projection)"
+      },
+      "falloff": "NONE on cast burst; lingering ground DoT scales down with shrinking zone radius",
+      "los": "NONE / Environmental LoS generous check from caster (hits behind thin cover/floors within 12m * Range)"
+    },
+    {
+      "warframe": "Sevagoth",
+      "combo": "2 Sow + 1 Reap + Dark Propagation + Shadow Haze (% True HP Chain Nuke)",
+      "paths": {
+        "sow": "/Lotus/Powersuits/Wraith/Abilities/WraithSowAbility (WraithSow.lua)",
+        "reap": "/Lotus/Powersuits/Wraith/Abilities/WraithReapAbility (WraithReap.lua)",
+        "darkPropagation": "/Lotus/Powersuits/Wraith/WraithSowAugmentCard",
+        "shadowHaze": "/Lotus/Powersuits/Wraith/WraithReapAugmentCard"
+      },
+      "castTimesSec": {
+        "sow": 1.0333,
+        "reap": 0.8
+      },
+      "radiiM": {
+        "sowRadius": "16.0 * Range",
+        "reapHitRadius": "8.0 * Range (shadow travel 40m * Duration)",
+        "detonationBlastAoE": "4.0 * Range",
+        "darkPropagationSpread": "15.0 * Range"
+      },
+      "formulas": {
+        "step1TrueHpDetonation": "0.25 * EnemyCurrentHP as DT_TRUE (unscaled by Strength directly, BUT multiplied by Damage Vulnerability & Roar & Viral => reaches >=100% One-Shot True HP kill at 255% Strength + Roar [0.25 * (1 + 0.5*2.55) * (1 + 0.3*2.55) = 1.003] or 200% Strength + 1 Viral stack [0.25 * 2.0 * 2.0 = 1.00]!)",
+        "step2ReapHit": "250 * Strength DT_RADIATION",
+        "step3Debuff": "Applies +50% * Strength Damage Vulnerability (+50% * Strength flat final Crit Chance with Shadow Haze)",
+        "step4RadialBlast": "0.25 * PreDetonationEnemyHP * (1 + 0.50 * Strength) as DT_EXPLOSION (Blast) in 4m * Range",
+        "chainPropagation": "Enemies killed while afflicted by Sow spread Sow in 15m * Range (Dark Propagation) and spawn up to 3 autonomous Reap Shadows seeking 30m (Shadow Haze) => infinite map-wide chain detonation"
+      },
+      "falloff": "Sow DoT has 100%->25% falloff from 50%..100% radius; 25% True HP detonation has 0% falloff",
+      "los": "NONE (Sow, Dark Propagation spread, and Reap Shadow pass through walls/obstacles)"
+    },
+    {
+      "warframe": "Dante",
+      "combo": "3 Dark Verse x2 + 4 Final Verse: Tragedy (Slash/Heat/Toxin DoT Condense)",
+      "paths": {
+        "darkVerse": "/Lotus/Powersuits/Pagemaster/Abilities/PagemasterDeathAbility (PagemasterDeath.lua)",
+        "finalVerse": "/Lotus/Powersuits/Pagemaster/Abilities/PagemasterFinalChapterAbility (PagemasterFinalChapter.lua)"
+      },
+      "castTimesSec": {
+        "darkVerse": 1.4333,
+        "tragedy": 2.5
+      },
+      "radiiM": {
+        "darkVerse": "20.0 * Range (50-deg forward cone)",
+        "tragedy": "30.0 * Range (360-deg radial)"
+      },
+      "formulas": {
+        "darkVerse": "2 hits * 1250 * Strength = 2500 * Strength DT_SLASH + 2 forced Bleed procs per cast (Bleed tick = 0.35 * 1250 * Strength * Roar^2)",
+        "tragedy": "6500 * Strength DT_SLASH + (Sum of ALL remaining Slash + Heat + Toxin DoT damage on target) * (3.0 * Strength) * Roar (damage cap 1,000,000,000)"
+      },
+      "falloff": "NONE (0% falloff)",
+      "los": "HYBRID_RAYCAST_CAMERA_LOS (post-U35.5: ignores LoS within 5m of Dante; beyond 5m requires rendered on-screen or raycast LoS from Dante/enemies)"
+    },
+    {
+      "warframe": "Gyre",
+      "combo": "3 Cathode Grace + 4 Rotorswell + Cathode Current",
+      "paths": {
+        "cathodeGrace": "/Lotus/Powersuits/Gyre/Abilities/GyreEnergizedAbility (GyreEnergized.lua)",
+        "rotorswell": "/Lotus/Powersuits/Gyre/Abilities/GyreOverchargedAbility (GyreOvercharged.lua)",
+        "cathodeCurrent": "/Lotus/Powersuits/Gyre/GyreEnergizedAugmentCard",
+        "passive": "GyrePassive.lua (+10% Ability Crit Chance per Electricity status stack on target, up to 300% [red crits at 2.0x Ability Crit Mult])"
+      },
+      "castTimesSec": {
+        "cathodeGrace": 1.6333,
+        "rotorswell": 1.3
+      },
+      "radiiM": {
+        "rotorswellAura": "4.0 * Range",
+        "chainDischarge": "10.0 * Range (up to 5 nearby enemies per discharge)"
+      },
+      "formulas": {
+        "cathodeGrace": "+50% * Strength flat Ability Crit Chance + +50% * Strength modded Weapon Crit Chance + 1.5 * Strength energy/s; 8s * Duration (+3s * Duration per kill/assist up to 60s, removes 60s cooldown if maintained)",
+        "rotorswellAndAugment": "Normal crit discharge: 500 * Strength Electricity + 100% Elec proc (1.0s internal cooldown); Cathode Current kill discharge: 500 * Strength * 3.0 (+200% bonus = 1500 * Strength) Electricity + 100% Elec proc with ZERO cooldown + extends Rotorswell duration"
+      },
+      "falloff": "NONE (0% falloff on chain discharges)",
+      "los": "CHAIN_RAYCAST_LOS (10m * Range discharge chains require LoS from discharged enemy)"
+    },
+    {
+      "warframe": "Frost",
+      "combo": "4 Avalanche (+ Biting Frost / Icy Avalanche)",
+      "paths": {
+        "avalanche": "/Lotus/Powersuits/Frost/Abilities/AvalancheAbility (Avalanche.lua)",
+        "icyAvalanche": "/Lotus/Powersuits/Frost/AvalancheAugmentCard"
+      },
+      "castTimesSec": {
+        "avalanche": 2.6667,
+        "castSpeedCapNote": "Avalanche cast speed bonus is capped at +50% effective reduction"
+      },
+      "radiiM": {
+        "freezeAndStripRadius": "15.0 * Range",
+        "deathShatterRadius": "4.5 * Range"
+      },
+      "formulas": {
+        "armorStrip": "Permanently strips 60% * Strength Armor BEFORE dealing damage => 100% permanent full Armor Strip at 167% Strength (137% with 1x Corrosive Projection)",
+        "damage": "Applies 6 + 10 Cold procs (instant freeze for 8s * Duration, pauses status timers) -> deals 1500 * Strength Cold (can crit with Biting Frost +200% Crit Chance / +200% Crit Mult against frozen targets!) -> enemies killed while frozen explode for 400 * Strength Cold in 4.5m * Range"
+      },
+      "falloff": "Main 15m*Range burst has 0% falloff; 4.5m*Range shatter explosion has 100% linear falloff",
+      "los": "NONE (completely ignores Line of Sight)"
+    },
+    {
+      "warframe": "Ember",
+      "combo": "2 Immolation + 3 Fire Blast (strip) + 4 Inferno",
+      "paths": {
+        "immolation": "/Lotus/Powersuits/Ember/Abilities/EmberImmolationAbility (EmberImmolation.lua)",
+        "inferno": "/Lotus/Powersuits/Ember/Abilities/EmberInfernoAbility (EmberInferno.lua)",
+        "exothermic": "/Lotus/Powersuits/Ember/EmberInfernoAugmentCard"
+      },
+      "castTimesSec": {
+        "inferno": 1.1333,
+        "fireBlast": 0.6333
+      },
+      "energy": "0 base + 10 * Efficiency per target, CAPPED at 10 targets (max 100 * Efficiency energy even when hitting 30+ enemies)",
+      "radiiM": {
+        "targetingCone": "25.0 * Range within 67.5-deg camera cone",
+        "fireRing": "8.0m FIXED (unmoddable final ring radius; propagates to nearby unaffected enemies)"
+      },
+      "formulas": {
+        "meteorImpact": "2500 * Strength (50% DT_IMPACT / 50% DT_FIRE) + 100% guaranteed Heat proc",
+        "fireRingDoT": "350 * Strength * (1 + ImmolationHeatPct) DT_FIRE/s (up to 700 * Strength/s at max Immolation, snapshotted on cast) for 15s * Duration, 10% Heat proc/s"
+      },
+      "falloff": "Meteor AoE has 50% falloff (K37=0.5 in EmberInferno.lua); direct target & Fire Ring DoT have 0% falloff",
+      "los": "CAMERA_VIEW_ONLY (Inferno does NOT require physical LoS from Ember, ONLY that targets be inside the 67.5-deg camera frustum and not occluded from camera; off-screen enemies are never targeted)"
+    },
+    {
+      "warframe": "Mag",
+      "combo": "4 Crush + Fracturing Crush / 3 Polarize + Counter Pulse",
+      "paths": {
+        "crush": "/Lotus/Powersuits/Mag/Abilities/CrushAbility (Crush.lua)",
+        "fracturingCrush": "/Lotus/Powersuits/Mag/CrushAugmentCard",
+        "polarize": "/Lotus/Powersuits/Mag/Abilities/ShieldRegenAbility (ShieldRegen.lua)",
+        "counterPulse": "/Lotus/Powersuits/Mag/ShieldRegenAugmentCard"
+      },
+      "castTimesSec": {
+        "crush": 2.8667,
+        "crushWithFracturingAugment": "2.8667 / (1 + 0.50 + CastingSpeedBonus) (+50% additive Crush cast speed on augment)",
+        "polarize": 1.0333
+      },
+      "radiiM": {
+        "crush": "18.0 * Range",
+        "polarizeTotalRadius": "8.0 * Range + 5.9 * (5.0 * Duration) = 8*Range + 29.5*Duration (37.5m base)",
+        "polarizeEnemyBurstRadius": "4.0 * Range + 0.555 * PulseDistanceTraveled (up to 4*Range + 16.4*Duration)"
+      },
+      "formulas": {
+        "crush": "3 ticks * 500 * Strength = 1500 * Strength DT_MAGNETIC (+1500 * Strength bonus to Magnetized target) + 25 * Strength Overshields per hit per enemy; Fracturing Crush permanently strips 75% * Strength Max Armor AFTER Crush damage => 100% permanent full strip at 134% Strength (110% with 1x Corrosive Projection) + 7s * Duration root",
+        "polarize": "Drains 400 * Strength Shields or permanently strips 400 * Strength Armor (+ equal True damage); each drained enemy explodes for (DrainedAmount * 2.5 * Strength) DT_MAGNETIC to nearby enemies + drops Polarize Shards (50 * Strength + 0.25 * TotalDrained Puncture/Slash, 100% status)"
+      },
+      "falloff": "Crush: NONE (0% falloff); Polarize secondary enemy explosion: diminishes with distance",
+      "los": "Crush: NONE (ignores LoS); Polarize wave: NONE (bypasses obstacles), Polarize per-enemy secondary Magnetic burst: REQUIRES_LOS (blocked by obstacles)"
+    },
+    {
+      "warframe": "Nezha",
+      "combo": "4 Divine Spears + Divine Retribution (Slash/Heat/Toxin DoT Spread & Condense)",
+      "paths": {
+        "divineSpears": "/Lotus/Powersuits/Nezha/Abilities/NezhaSpearAbility",
+        "divineRetribution": "/Lotus/Powersuits/Nezha/NezhaSpearAugmentTwoCard"
+      },
+      "castTimesSec": {
+        "impale": 0.85,
+        "slam": 0.75
+      },
+      "radiiM": {
+        "spearsBase": "19.0 * Range",
+        "spearsWithAugment": "9.5 * Range (0.5x range mult on Divine Retribution)"
+      },
+      "formulas": {
+        "impaleAndSlam": "600 * Strength DT_PUNCTURE + 600 * Strength DT_IMPACT",
+        "retributionCondense": "Spreads Slash/Heat/Toxin status across all impaled enemies; spear slam condenses remaining DoTs * 1.5 * Strength"
+      },
+      "falloff": "NONE",
+      "los": "NONE"
+    },
+    {
+      "warframe": "Nokko",
+      "combo": "2 Brightbonnet (+ Arbucep 200%) + 4 Sporespring",
+      "paths": {
+        "brightbonnet": "/Lotus/Powersuits/Nokko/Abilities/NokkoPowerShroomAbility",
+        "sporespring": "/Lotus/Powersuits/Nokko/Abilities/NokkoBouncingShroomAbility"
+      },
+      "castTimesSec": {
+        "brightbonnet": 1.2,
+        "sporespring": 1.0
+      },
+      "radiiM": {
+        "brightbonnetPulse": "15.0 * Range",
+        "sporespringBounce": "12.0 * Range"
+      },
+      "formulas": {
+        "sporespring": "1200 * Strength DT_POISON/DT_GAS per bounce (up to 6 bounces) + forced Toxin proc; bouncing on Brightbonnet triggers immediate energy/strength pulse"
+      },
+      "falloff": "NONE",
+      "los": "NONE"
+    }
+  ]
+}

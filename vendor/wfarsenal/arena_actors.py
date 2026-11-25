@@ -15,6 +15,7 @@ import json
 import math
 from typing import Any, Callable, Mapping
 
+from . import ability_rotation
 from . import arcane_runtime
 from . import companion_loadout
 from . import damage as dm
@@ -306,6 +307,41 @@ class WarframeArenaState:
         self._persistence_damage_in_window = 0.0
         self._synced_fortifier_og = 0.0
 
+        # Optional Warframe Realistic Ability Rotation & Orb Economy
+        self.ability_ranges: list[dict[str, Any]] = list(
+            warframe_context.get("abilityRanges") or ()
+        )
+        self.nuke_preview: Mapping[str, Any] | None = (
+            warframe_context.get("nukePreview")
+            if isinstance(warframe_context.get("nukePreview"), Mapping)
+            else None
+        )
+        self.dynamic_ability_effects: list[dict[str, Any]] = list(
+            warframe_context.get("dynamicAbilityEffects") or ()
+        )
+        rot_cfg = dict(ability_rotation.parse_rotation_config(warframe_context))
+        if scenario.get("arbucepEmpowered") is not None:
+            rot_cfg["arbucepEmpowered"] = bool(scenario.get("arbucepEmpowered"))
+        if scenario.get("combatStyle") in ("hybrid_nuke", "ability_only"):
+            rot_cfg["enabled"] = True
+        self.rotation: ability_rotation.WarframeRotationSimulator | None = None
+        if rot_cfg.get("enabled"):
+            self.rotation = ability_rotation.WarframeRotationSimulator(
+                warframe_context,
+                uncond_warframe_result=warframe_context.get("uncondWarframeResult"),
+                active_ability_ids=warframe_context.get("activeAbilities") or (),
+                companion_eval=warframe_context.get("companionEval"),
+                rotation_config=rot_cfg,
+                seed=self.seed,
+                on_shield_restore=self._on_rotation_shield_restore,
+                on_health_restore=self._on_rotation_health_restore,
+            )
+            comp_eval_raw = warframe_context.get("companionEval")
+            if isinstance(comp_eval_raw, Mapping) and str((comp_eval_raw.get("companion") or {}).get("category") or "") != "beast":
+                # Robotic precepts in 3D Arena fire spatially via CompanionArenaDirector._step_precepts
+                self.rotation.next_companion_precept_at = math.inf
+            self.energy = self.rotation.energy
+
         # Telemetry & Synergy counters
         self.damage_taken = 0.0
         self.hits_taken = 0
@@ -317,6 +353,27 @@ class WarframeArenaState:
         self.combat_discipline_triggers = 0
         self.frames: list[list[Any]] = []
         self.record_frame(0.0)
+
+    def _on_rotation_shield_restore(self, amount: float) -> None:
+        if amount <= 0.0 or self.max_shield <= 0.0 or self.arcane_persistence or self.terminated:
+            return
+        room = max(0.0, self.max_shield - self.shield)
+        to_sh = min(room, amount)
+        self.shield += to_sh
+        self.peak_shield = max(self.peak_shield, self.shield)
+        if self.shield > EPS:
+            self.shield_depleted = False
+        rem = amount - to_sh
+        if rem > 0.0 and self.max_overshield > 0.0:
+            self.overshield = min(self.max_overshield, self.overshield + rem)
+
+    def _on_rotation_health_restore(self, heal_amount: float, max_hp_delta: float) -> None:
+        if self.terminated:
+            return
+        if max_hp_delta > 0.0:
+            self.max_health += max_hp_delta
+        if heal_amount > 0.0:
+            self.health = min(self.max_health, self.health + heal_amount)
 
     def _rng(self) -> float:
         val = _det_random(self.seed, self._rng_index, 31)
@@ -330,7 +387,45 @@ class WarframeArenaState:
         return self.guardian_equipped and t < self.guardian_until - 1e-9
 
     def current_armor(self, t: float) -> float:
-        return self.base_armor + (self.guardian_armor_bonus if self.is_guardian_active(t) else 0.0)
+        hc_bonus = (
+            self.rotation.health_conversion_stacks * self.rotation.health_conversion_armor
+            if self.rotation is not None
+            else 0.0
+        )
+        return self.base_armor + hc_bonus + (self.guardian_armor_bonus if self.is_guardian_active(t) else 0.0)
+
+    def is_weapon_locked(self, t: float) -> bool:
+        return self.rotation is not None and self.rotation.is_weapon_locked(t)
+
+    def weapon_locked_until(self) -> float:
+        return self.rotation.weapon_locked_until if self.rotation is not None else -math.inf
+
+    def next_event_time(self) -> float:
+        return self.rotation.next_event_time() if self.rotation is not None else math.inf
+
+    def on_companion_precept(self, t: float, *, electric: bool = False) -> None:
+        if self.rotation is not None and not self.terminated:
+            self.advance(t)
+            self.rotation.on_companion_precept(t, electric=electric)
+            self.energy = self.rotation.energy
+
+    def on_enemy_kill_orbs(
+        self,
+        t: float,
+        *,
+        is_eximus: bool = False,
+        companion_damaged: bool | None = None,
+        headshot: bool = False,
+    ) -> None:
+        if self.rotation is not None and not self.terminated:
+            self.advance(t)
+            self.rotation.on_enemy_kill(
+                t,
+                is_eximus=is_eximus,
+                companion_damaged=companion_damaged,
+                headshot=headshot,
+            )
+            self.energy = self.rotation.energy
 
     def max_adaptation_dr(self, t: float) -> float:
         if not self.has_adaptation or not self.adaptation_stacks:
@@ -387,6 +482,15 @@ class WarframeArenaState:
                                 self.shield_depleted = False
 
             self.last_step_t = t
+
+        if self.rotation is not None and not self.terminated:
+            self.rotation.health = self.health
+            self.rotation.max_health = self.max_health
+            self.rotation.shield = self.shield
+            self.rotation.overshield = self.overshield
+            self.rotation.molt_efficiency_bonus = self.molt_efficiency_bonus
+            self.rotation.advance(t)
+            self.energy = self.rotation.energy
 
         if combat is not None and combat.self_overguard > self._synced_fortifier_og + EPS:
             gain = combat.self_overguard - self._synced_fortifier_og
@@ -536,6 +640,10 @@ class WarframeArenaState:
                     self._persistence_damage_in_window += eff_hp
                 hp_dmg = eff_hp
                 self.health -= eff_hp
+                if self.rotation is not None and hp_dmg > EPS:
+                    self.rotation.health = max(0.0, self.health)
+                    self.rotation.on_health_damage_taken(hp_dmg, t)
+                    self.energy = self.rotation.energy
 
         applied = og_dmg + sh_dmg + hp_dmg
         self.damage_taken += applied
@@ -569,6 +677,8 @@ class WarframeArenaState:
             round(max(0.0, self.overguard), 2),
             1 if self.is_avenger_active(t) else 0,
             round(self.max_adaptation_dr(t), 2),
+            round(max(0.0, self.energy), 1),
+            1 if (self.rotation is not None and self.rotation.is_casting(t)) else 0,
         ]
         if self.frames and abs(self.frames[-1][0] - row[0]) < 1e-5:
             self.frames[-1] = row
@@ -598,6 +708,9 @@ class WarframeArenaState:
             "avengerUptimeRatio": round(self.avenger_uptime_ratio(total_t), 6),
             "guardianUptimeRatio": round(self.guardian_uptime_ratio(total_t), 6),
             "combatDisciplineTriggers": self.combat_discipline_triggers,
+            "abilityRotation": (
+                self.rotation.summary_payload(total_t) if self.rotation is not None else None
+            ),
         }
 
     def visuals_payload(self) -> dict[str, Any]:
@@ -610,7 +723,10 @@ class WarframeArenaState:
             "maxHealth": round(self.max_health, 2),
             "maxShield": round(self.max_shield, 2),
             "maxOvershield": int(round(self.max_overshield or 1200)),
+            "maxEnergy": round(self.max_energy, 2),
             "armor": round(self.base_armor, 2),
+            "abilityRotationEnabled": self.rotation is not None,
+            "abilityRanges": self.ability_ranges,
             "frames": self.frames,
         }
 
@@ -1391,7 +1507,13 @@ class CompanionArenaDirector:
         self.next_retarget_at = t + 1.0
         return best_actor
 
-    def _step_precepts(self, world: Any, player_combat: ArenaCombat, t: float) -> None:
+    def _step_precepts(
+        self,
+        world: Any,
+        player_combat: ArenaCombat,
+        wf_state: WarframeArenaState | None,
+        t: float,
+    ) -> None:
         if not self.precepts or not world.live:
             return
         origin = self._origin()
@@ -1418,6 +1540,11 @@ class CompanionArenaDirector:
             p_dmg = float(p.get("damage") or 0.0)
             p_dt = p.get("damageType")
             forced_proc = FORCED_PROC_TO_DAMAGE_TYPE.get(str(p.get("forcedProc") or ""), p_dt)
+            if wf_state is not None:
+                wf_state.on_companion_precept(
+                    t,
+                    electric=(p_dt == "DT_ELECTRICITY" or forced_proc == "DT_ELECTRICITY"),
+                )
             manifold_map = {dt: 1.0 for dt in self.manifold_status_types} if self.manifold_equipped else {}
             if forced_proc:
                 manifold_map[forced_proc] = max(manifold_map.get(forced_proc, 0.0), 1.0)
@@ -1460,6 +1587,12 @@ class CompanionArenaDirector:
                 self.kills += 1
                 v = player_combat.targets[actor.id]
                 self.on_any_kill(v, when)
+                if getattr(world, "wf_state", None) is not None and not actor.drone:
+                    world.wf_state.on_enemy_kill_orbs(
+                        when,
+                        is_eximus=bool(actor.tape.get("eximus")),
+                        companion_damaged=True,
+                    )
                 self._handle_contagious_kill(ev, world, player_combat)
                 if actor.drone:
                     world.stats["droneKills"] += 1
@@ -1514,7 +1647,7 @@ class CompanionArenaDirector:
         if self.category == "beast":
             return
 
-        self._step_precepts(world, player_combat, t)
+        self._step_precepts(world, player_combat, wf_state, t)
 
         if not self.can_attack or self.shooter is None or not world.live:
             return
@@ -1705,6 +1838,22 @@ def build_dynamic_synergy_sources(
         evaluators.append((key, fn))
 
     if wf_state is not None:
+        if wf_state.rotation is not None and wf_state.dynamic_ability_effects:
+            for d_ab in wf_state.dynamic_ability_effects:
+                d_id = str(d_ab.get("id") or "")
+                d_src = str(d_ab.get("sourcePath") or f"warframe:{d_id}")
+                d_lbl = str(d_ab.get("nameZh") or d_id)
+                d_fx = list(d_ab.get("effects") or ())
+                if d_id and d_fx:
+                    _add_dyn(
+                        d_src,
+                        f"__arena_wf_ab_{d_id}",
+                        d_lbl,
+                        6.0,
+                        d_fx,
+                        lambda t, aid=d_id: wf_state.rotation.ability_strength_ratio(aid, t) if wf_state.rotation else 1.0,
+                    )
+
         if wf_state.avenger_equipped and wf_state.avenger_crit_bonus > 0.0:
             _add_dyn(
                 ARCANE_AVENGER_PATH,

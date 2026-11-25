@@ -8,11 +8,11 @@
   <meta name="description" content="Warframe 紫卡、武器、战甲与同伴离线协同配装工具">
   <link rel="icon" href="/assets/riven/riven-icon.ico">
   <title>Warframe &amp; Weapon Loadout Build</title>
-<link rel="stylesheet" href="/app.css?v=20261124d">
-<link rel="stylesheet" href="/arena/arena.css?v=20261124d">
+<link rel="stylesheet" href="/app.css?v=20261124f">
+<link rel="stylesheet" href="/arena/arena.css?v=20261124f">
 <script src="/enemy-images.js" defer></script>
 <script src="/build-config-migrations.js" defer></script>
-<script src="/app.js?v=20261124d" defer></script>
+<script src="/app.js?v=20261124f" defer></script>
 </head>
 <body>
   <div class="boot-screen" id="boot-screen" aria-live="polite">
@@ -72,6 +72,9 @@
           </button>
           <button class="tool-tab" id="companion-tab" role="tab" aria-selected="false" aria-controls="companion-tool" data-tab="companion" type="button">
             <span class="tab-glyph" aria-hidden="true">◈</span><span>同伴配装</span>
+          </button>
+          <button class="tool-tab" id="operator-tab" role="tab" aria-selected="false" aria-controls="operator-tool" data-tab="operator" type="button">
+            <img src="/assets/focus/Focus.png" alt=""><span>指挥官专精</span>
           </button>
           <button class="tool-tab is-arena-chip" id="arena-tab-chip" type="button" hidden title="当前处于场景靶场，点击返回武器配装">
             <span class="tab-glyph" aria-hidden="true">◎</span><span>场景靶场</span>
@@ -572,13 +575,22 @@
                             <option value="off">不触发受击</option>
                           </select>
                         </label>
+                        <label class="check-field synergy-rotation-check" for="synergy-wf-rotation-enabled" title="开启后可自选参与开启的非伤害技能并设定开局施放顺序（纯伤害/双形态切换/显赫变身/特殊显赫自动剔除），模拟真实蓝耗、施放动画停火、缺蓝真空期与全图吸球转化；后续按各自持续时间到期独立补放">
+                          <input id="synergy-wf-rotation-enabled" type="checkbox">
+                          <span>拟真技能循环（自选非伤害技能 / 开局顺序 / 蓝耗停火 / 全图吸球）</span>
+                        </label>
+                        <label class="check-field synergy-arbucep-check" id="synergy-wf-arbucep-wrap" for="synergy-wf-arbucep" hidden title="携带空战重武器「蕈菇 (Arbucep)」射击命中亮帽菇可激活 200% 强化：强度加成翻倍且脉冲间隔由 2.86s 缩短至 1.33s（无视引导技能回蓝锁）">
+                          <input id="synergy-wf-arbucep" type="checkbox">
+                          <span>携带空战武器「蕈菇」激活亮帽菇 200% 强化</span>
+                        </label>
                       </div>
                       <div class="synergy-abilities-block" id="synergy-wf-abilities-wrap">
                         <div class="synergy-subhead">
-                          <span>本甲武器增益技能与强化</span>
+                          <span id="synergy-wf-abilities-title">本甲武器增益技能与强化</span>
                           <small id="synergy-wf-abilities-note">点击胶囊开关技能</small>
                         </div>
                         <div class="synergy-ability-pills" id="synergy-wf-abilities"></div>
+                        <div class="synergy-cast-order-bar" id="synergy-wf-cast-order" hidden></div>
                       </div>
                       <div class="synergy-status-pills" id="synergy-wf-summary" aria-live="polite"></div>
                     </div>
@@ -640,6 +652,66 @@
                         </div>
                       </div>
                       <div class="synergy-status-pills" id="synergy-comp-summary" aria-live="polite"></div>
+                    </div>
+                  </article>
+
+                  <article class="synergy-card synergy-card-wide" id="synergy-op-card">
+                    <div class="synergy-card-head">
+                      <div class="synergy-identity">
+                        <span class="synergy-avatar-wrap" id="synergy-op-avatar-wrap">
+                          <img id="synergy-op-avatar" src="/assets/focus/Focus.png" alt="专精徽章">
+                        </span>
+                        <div class="synergy-card-title">
+                          <strong>指挥官专精协同</strong>
+                          <small id="synergy-op-subtitle">默认关闭（未计入指挥官专精）</small>
+                        </div>
+                      </div>
+                      <label class="synergy-switch" for="synergy-op-enabled">
+                        <input id="synergy-op-enabled" type="checkbox">
+                        <span>启用专精参与计算</span>
+                      </label>
+                    </div>
+                    <div class="synergy-card-body" id="synergy-op-body" hidden>
+                      <div class="synergy-controls-row">
+                        <label class="field synergy-select-field">
+                          <span>主修学派</span>
+                          <select id="synergy-op-school" aria-label="主修指挥官专精学派">
+                            <option value="madurai">Madurai（猛攻 / 凤凰利爪 / 虚空重击 / 链式弹射）</option>
+                            <option value="zenurik">Zenurik（回蓝 / 内在之力免耗 / 硬化源泉）</option>
+                            <option value="naramon">Naramon（力量激增连击衰减 / 重前摇近战暴击）</option>
+                            <option value="unairu">Unairu（磁力闪耀破盾 / 腐蚀轰击削甲 / 沉着免疫击倒）</option>
+                            <option value="vazarin">Vazarin（经验共享范围 / 虚空护盾再生）</option>
+                          </select>
+                        </label>
+                        <div class="synergy-slot-group">
+                          <span>专精配置</span>
+                          <div class="segmented-control synergy-slot-tabs" id="synergy-op-config-tabs" role="group" aria-label="协同指挥官专精配置槽">
+                            <button class="is-active" type="button" data-synergy-op-config="A">A</button>
+                            <button type="button" data-synergy-op-config="B">B</button>
+                            <button type="button" data-synergy-op-config="C">C</button>
+                          </div>
+                        </div>
+                        <button class="button button-quiet synergy-jump-btn" id="synergy-op-edit" type="button">编辑专精 ↗</button>
+                      </div>
+                      <div class="synergy-controls-row synergy-op-options-row">
+                        <label class="field synergy-select-field">
+                          <span>主动节点触发口径</span>
+                          <select id="synergy-op-trigger-mode" aria-label="指挥官主动节点触发口径">
+                            <option value="passive" selected>仅常驻被动（默认零操作）</option>
+                            <option value="cycle">实战周期穿插（计入冷却与切人耗时）</option>
+                            <option value="peak">峰值爆发窗口预览（满额覆盖）</option>
+                          </select>
+                        </label>
+                        <label class="check-field" id="synergy-op-naramon-wrap" for="synergy-op-naramon-pre" title="Naramon 的致命悬浮、杀手冲刺与开局震地需要指挥官悬浮敌群、弹射处决切近战或指挥官切回震地等繁重前置；默认不自动触发">
+                          <input id="synergy-op-naramon-pre" type="checkbox">
+                          <span>满足 Naramon 前置（悬浮 / 处决 / 切回震地）</span>
+                        </label>
+                        <label class="check-field" for="synergy-op-tauron" title="计入当前学派已解锁的 Tauron 终极专精分支加成（增幅器专属项仍自动隔离）">
+                          <input id="synergy-op-tauron" type="checkbox">
+                          <span>计入 Tauron 终极专精分支</span>
+                        </label>
+                      </div>
+                      <div class="synergy-status-pills" id="synergy-op-summary" aria-live="polite"></div>
                     </div>
                   </article>
                 </div>
@@ -1068,9 +1140,34 @@
                 </div>
               </section>
               <section class="warframe-panel-section">
+                <div class="warframe-synergy-bar" id="warframe-synergy-bar">
+                  <div class="warframe-synergy-bar-head">
+                    <div>
+                      <span class="synergy-kicker">SQUAD BUFFS &amp; FOCUS SYNERGY</span>
+                      <strong>战甲外部小队增益与专精联动</strong>
+                    </div>
+                    <div class="warframe-synergy-toggles">
+                      <label class="check-field" title="同步应用已勾选的小队增益（如 Nidus 寄生链接最终总强度独立乘算、Equinox 和平挑衅、Jade 七人众之力、Nokko 亮帽菇、Rhino 战吼技能异常二次乘算等）">
+                        <input id="warframe-sync-squad" type="checkbox" checked>
+                        <span>计入小队增益</span>
+                      </label>
+                      <label class="check-field" title="同步应用指挥官专精对战甲强度、施放速度、护甲与回蓝的加成（自动同步当前专精配置槽）">
+                        <input id="warframe-sync-operator" type="checkbox">
+                        <span>计入指挥官专精</span>
+                      </label>
+                      <label class="check-field" id="warframe-arbucep-wrap" title="本甲为 Nokko 或注入亮帽菇时，携带空战武器「蕈菇」命中蘑菇激活 200% 非递归强度与 1.33s 脉冲回蓝">
+                        <input id="warframe-arbucep-empowered" type="checkbox">
+                        <span>本甲蕈菇 200% 强化</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="warframe-quick-squad" id="warframe-quick-squad" aria-label="常用战甲小队增益快捷开关"></div>
+                  <div class="synergy-status-pills" id="warframe-squad-pills" hidden></div>
+                </div>
                 <div class="result-section-title"><div><span>RANK 30 PANEL</span><h3>战甲面板</h3></div><small id="warframe-effect-status">触发效果关闭</small></div>
                 <div class="warframe-panel-grid" id="warframe-panel-grid"></div>
                 <section class="warframe-exalted-card" id="warframe-exalted-card" hidden aria-label="显赫武器"></section>
+                <section class="warframe-nuke-card" id="warframe-nuke-card" hidden aria-label="地图炮与防御清场预览"></section>
               </section>
               <section class="warframe-ability-section">
                 <div class="result-section-title"><div><span>ABILITY SCALING</span><h3>技能缩放</h3></div><small>强度 / 持续 / 范围 / 效率</small></div>
@@ -1428,6 +1525,106 @@
               </section>
             </div>
           </section>
+        </section>
+
+        <section class="operator-workspace" id="operator-tool" role="tabpanel" aria-labelledby="operator-tab" hidden>
+          <div class="synergy-return-bar" id="operator-return-bar" hidden>
+            <button class="button button-fill synergy-return-btn" id="operator-return-btn" type="button">← 返回配装页（已同步专精配置）</button>
+            <span class="synergy-return-hint">专精节点与跨专精解绑改动已实时保存并同步至协同结算</span>
+          </div>
+          <header class="operator-top-banner">
+            <div class="operator-banner-title">
+              <span class="section-index">05</span>
+              <div>
+                <h2>指挥官五大专精星图</h2>
+                <p id="operator-framework-note">五大专精学派 + Tauron 终极分支已接入协同计算 — 在「武器配装 / 战甲配装 / 3D 靶场」启用专精协同即可按常驻被动、实战周期或峰值爆发参与结算</p>
+              </div>
+            </div>
+            <div class="operator-preset-toolbar">
+              <div class="segmented-control" id="operator-config-tabs" role="tablist" aria-label="指挥官配置槽">
+                <button class="is-active" type="button" role="tab" aria-selected="true" data-operator-config="A">A</button>
+                <button type="button" role="tab" aria-selected="false" data-operator-config="B">B</button>
+                <button type="button" role="tab" aria-selected="false" data-operator-config="C">C</button>
+              </div>
+              <button class="button button-quiet" id="operator-max-school" type="button" title="将当前主修学派全部 10 个节点升至满阶">本系全满</button>
+              <button class="button button-fill" id="operator-max-all" type="button" title="解锁五大学派全部满级并解绑全部 10 个跨专精被动">五系全满+全解绑</button>
+              <button class="button button-quiet" id="operator-reset-school" type="button">重置本系</button>
+              <button class="button button-quiet" id="operator-import-json" type="button">导入 JSON</button>
+              <button class="button button-quiet" id="operator-export-json" type="button">导出 JSON</button>
+              <input id="operator-import-file" type="file" accept="application/json,.json" hidden>
+            </div>
+          </header>
+
+          <div class="operator-school-strip" id="operator-school-strip" role="tablist" aria-label="五大专精学派"></div>
+
+          <div class="operator-main-grid">
+            <section class="operator-starmap-pane" aria-label="专精节点星图">
+              <div class="operator-starmap-head">
+                <div class="operator-school-summary">
+                  <strong id="operator-school-heading">Madurai</strong>
+                  <span id="operator-school-desc">加载专精目录中…</span>
+                </div>
+                <div class="operator-investment-pills">
+                  <span class="operator-invest-pill"><img src="/assets/focus/Focus.png" alt="">本系投入 <b id="operator-school-focus">0</b></span>
+                  <span class="operator-invest-pill">总专精 <b id="operator-total-focus">0</b></span>
+                  <span class="operator-invest-pill">夜灵碎片 <b id="operator-total-shards">0</b></span>
+                </div>
+              </div>
+
+              <div class="operator-canvas-layout">
+                <aside class="operator-waybound-rail" aria-label="跨专精解绑被动">
+                  <div class="operator-rail-head">
+                    <strong>跨专精绑定被动</strong>
+                    <small id="operator-waybound-count">0 / 8 已激活</small>
+                  </div>
+                  <div class="operator-waybound-list" id="operator-waybound-list"></div>
+                </aside>
+
+                <div class="operator-tree-stage" id="operator-tree-stage">
+                  <img class="operator-tree-bg" id="operator-tree-bg" alt="" aria-hidden="true">
+                  <svg class="operator-tree-lines" id="operator-tree-lines" viewBox="0 0 760 660" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+                  <div class="operator-tree-nodes" id="operator-tree-nodes"></div>
+                </div>
+              </div>
+            </section>
+
+            <aside class="operator-detail-pane" aria-label="节点详情与增益预览">
+              <section class="operator-node-inspector" id="operator-node-inspector">
+                <p class="empty-copy">点击左侧星图中的任意专精节点查看阶梯数值、升级与跨专精解绑。</p>
+              </section>
+
+              <section class="operator-buff-summary">
+                <div class="subheading">
+                  <div><h3>影响武器增益预览</h3><span>增幅器专属节点已自动隔离，防止误算到战甲枪械与近战</span></div>
+                  <b class="pane-badge pane-badge-muted" id="operator-weapon-buff-count">0 项</b>
+                </div>
+                <div class="operator-buff-list" id="operator-weapon-buffs"></div>
+              </section>
+
+              <section class="operator-buff-summary" id="operator-tauron-section">
+                <div class="subheading">
+                  <div><h3>Tauron 终极专精分支</h3><span>本系 5 个终极分支节点（开启终极专精开关后纳入协同）</span></div>
+                  <b class="pane-badge pane-badge-muted" id="operator-tauron-count">5 项</b>
+                </div>
+                <div class="operator-buff-list" id="operator-tauron-list"></div>
+              </section>
+
+              <section class="operator-buff-summary">
+                <div class="subheading">
+                  <div><h3>战甲面板、双防剥离与能量经济</h3><span>施放速度 / 技能强度 / 回蓝 / 剥甲破盾</span></div>
+                  <b class="pane-badge pane-badge-muted" id="operator-wf-buff-count">0 项</b>
+                </div>
+                <div class="operator-buff-list" id="operator-wf-buffs"></div>
+              </section>
+
+              <section class="operator-buff-summary">
+                <div class="subheading">
+                  <div><h3>仅指挥官本体 / 防误算边界</h3><span>不对战甲武器产生面板加成的节点</span></div>
+                </div>
+                <div class="operator-buff-list" id="operator-only-buffs"></div>
+              </section>
+            </aside>
+          </div>
         </section>
 
         <div class="mod-picker-scrim" id="mod-picker-scrim" hidden></div>

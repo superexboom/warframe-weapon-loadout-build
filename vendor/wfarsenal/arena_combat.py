@@ -180,6 +180,7 @@ class ArenaTarget:
     blasts: list = field(default_factory=list)
     puncture_strip: float = 0.0
     vicious_strip: float = 0.0
+    ability_strip: float = 0.0
     vip_cap: int | None = None
     last_damaged_at: float = -math.inf
     shield_depleted_at: float = -math.inf
@@ -352,9 +353,13 @@ class ArenaCombat:
         self.reloads = 0
         self.shots = 0
         self.kills = 0
+        self.weapon_kills = 0
+        self.ability_kills = 0
         self.total_damage = 0.0
         self.direct_damage = 0.0
         self.dot_damage = 0.0
+        self.ability_direct_damage = 0.0
+        self.ability_dot_damage = 0.0
         self.blast_neighbour_damage = 0.0
         self.blast_fatal_hit_unresolved = False
         self.drone_explosion_damage = 0.0
@@ -793,14 +798,19 @@ class ArenaCombat:
                 )
                 if v.alive:
                     self._push(when + 1.0, "heat", v, payload)
-            elif kind in ("dot", "syndicate-dot"):
+            elif kind in ("dot", "syndicate-dot", "ability-dot"):
                 dtype, amount, end, st, mode = payload
                 if when <= end + EPS:
+                    dot_source = (
+                        "syndicate"
+                        if kind == "syndicate-dot"
+                        else ("ability-dot" if kind == "ability-dot" else "dot")
+                    )
                     self._take(
                         v,
                         {dtype: amount},
                         when,
-                        "syndicate" if kind == "syndicate-dot" else "dot",
+                        dot_source,
                         stats=st,
                         mode=mode,
                     )
@@ -2264,6 +2274,8 @@ class ArenaCombat:
         )
         if v.vicious_strip > 0.0:
             base *= max(0.0, 1.0 - v.vicious_strip)
+        if v.ability_strip > 0.0:
+            base *= max(0.0, 1.0 - v.ability_strip)
         corr_pool = v.pooled["DT_CORROSIVE"]
         max_corr_strip = 1.0 if corr_pool.cap > 10 else 0.8
         return sum(
@@ -2546,7 +2558,14 @@ class ArenaCombat:
     def _take(self, v, vector, t, source, head=0.0, stats=None, mode=None, extra=False):
         if not v.alive or v.protected:
             return False
-        weapon_source = source not in ("syndicate", "drone-explosion")
+        weapon_source = source not in (
+            "syndicate",
+            "drone-explosion",
+            "ability-direct",
+            "ability-dot",
+            "companion-direct",
+            "companion-dot",
+        )
         if (
             self.combat.get("onosCharge")
             and self.combat.get("onosCrits")
@@ -2661,6 +2680,10 @@ class ArenaCombat:
             self.arcane_damage += applied
         elif source == "drone-explosion":
             self.drone_explosion_damage += applied
+        elif source == "ability-direct":
+            self.ability_direct_damage += applied
+        elif source == "ability-dot":
+            self.ability_dot_damage += applied
         else:
             self.dot_damage += applied
             if source == "blast-area":
@@ -2674,6 +2697,10 @@ class ArenaCombat:
             v.alive = False
             v.death_time = t
             self.kills += 1
+            if source in ("ability-direct", "ability-dot"):
+                self.ability_kills += 1
+            elif weapon_source:
+                self.weapon_kills += 1
             kill_event = dict(
                 kind="kill",
                 target_id=v.id,
@@ -2782,6 +2809,134 @@ class ArenaCombat:
         victim = self.targets[target_id]
         self._clean(victim, t)
         return self._take(victim, {"DT_EXPLOSION": amount}, t, "drone-explosion")
+
+    def strip_target_armor(self, target_id, fraction, *, additive=False):
+        """Apply Warframe ability armor strip (Avalanche, Inferno, Crush, Sunder, Pillage)."""
+        victim = self.targets.get(target_id)
+        if victim is None or not victim.alive or victim.protected:
+            return
+        frac = max(0.0, min(1.0, float(fraction)))
+        if additive:
+            victim.ability_strip = min(1.0, victim.ability_strip + frac)
+        else:
+            victim.ability_strip = max(victim.ability_strip, frac)
+
+    def apply_ability_hit(
+        self,
+        target_id,
+        vector,
+        t,
+        *,
+        forced_procs=None,
+        roar_bonus=0.0,
+        vuln_mult=1.0,
+        status_dmg_vuln=0.0,
+        condense_dots_mult=0.0,
+    ):
+        """Apply a Warframe ability direct hit + optional Roar double-dipped DoTs / Tragedy DoT condense."""
+        v = self.targets.get(target_id)
+        if v is None or not v.alive or v.protected:
+            return False
+        self._clean(v, t)
+        roar_m = max(0.0, 1.0 + float(roar_bonus))
+        v_mult = max(0.0, float(vuln_mult))
+        raw_base_sum = sum(max(0.0, float(x)) for x in (vector or {}).values())
+        scaled_vec = {
+            dt: float(val) * roar_m * v_mult
+            for dt, val in (vector or {}).items()
+            if float(val) > EPS
+        }
+
+        if condense_dots_mult > 0.0:
+            condensed = 0.0
+            kept_q = []
+            for entry in self._queue:
+                when_q, _ser_q, kind_q, vid_q, pay_q = entry
+                if (
+                    vid_q == v.id
+                    and when_q > t + EPS
+                    and kind_q in ("dot", "ability-dot", "syndicate-dot")
+                ):
+                    dt_q, amt_q, end_q, _st_q, _md_q = pay_q
+                    if when_q <= end_q + EPS and dt_q in (
+                        "DT_CINEMATIC",
+                        "DT_SLASH",
+                        "DT_POISON",
+                        "DT_FIRE",
+                        "DT_ELECTRICITY",
+                        "DT_GAS",
+                    ):
+                        condensed += float(amt_q)
+                        continue
+                kept_q.append(entry)
+            if len(kept_q) != len(self._queue):
+                self._queue = kept_q
+                heapq.heapify(self._queue)
+            if v.heat.active():
+                condensed += v.heat.seed() * 4.5
+                v.heat.reset()
+            elec_pile = v.piles.get("DT_ELECTRICITY")
+            if elec_pile is not None:
+                m_elec = elec_pile.moments(t)
+                if m_elec[0] > EPS:
+                    condensed += m_elec[0] * 4.0
+                    v.piles["DT_ELECTRICITY"] = ProcPile(radial=True)
+            if condensed > EPS:
+                scaled_vec["DT_CINEMATIC"] = (
+                    scaled_vec.get("DT_CINEMATIC", 0.0)
+                    + condensed * float(condense_dots_mult) * roar_m * v_mult
+                )
+
+        died = False
+        if scaled_vec:
+            died = self._take(v, scaled_vec, t, "ability-direct")
+        if died or not v.alive or v.protected or v.status_immune or not forced_procs:
+            return died
+
+        dot_roar_double = (roar_m ** 2) * max(0.0, 1.0 + float(status_dmg_vuln)) * v_mult
+        for dt, raw_cnt in forced_procs.items():
+            cnt = float(raw_cnt or 0.0)
+            if cnt <= EPS:
+                continue
+            if dt == "DT_RADIATION" and dm.devourer_blocks_radiation(v.record):
+                continue
+            dur = DURATIONS.get(dt, 6.0)
+            absent = max(0.0, 1.0 - min(1.0, cnt))
+            v.presence.setdefault(dt, StatusPresence()).add(t + dur, absent)
+            if self.on_proc_applied is not None:
+                self.on_proc_applied(v, dt, cnt, t)
+            if dt in v.pooled:
+                v.pooled[dt].add(t + dur, absent, cnt)
+            elif dt == "DT_FREEZE":
+                st_q = v.states.setdefault(dt, deque())
+                st_q.append((t + dur, cnt))
+                cap = float(v.vip_cap) if v.vip_cap else (4.0 if v.overguard > 0 else 10.0)
+                excess = sum(n for _, n in st_q) - cap
+                while st_q and excess > EPS:
+                    end_t, n = st_q.popleft()
+                    rem = min(n, excess)
+                    excess -= rem
+                    if n > rem:
+                        st_q.appendleft((end_t, n - rem))
+                if not v.vip_cap and v.overguard <= EPS and sum(n for _, n in st_q) >= 10.0 - EPS:
+                    v.frozen_until = t + 3.0
+                    v.frozen_scale = 1.0
+            else:
+                v.states.setdefault(dt, deque()).append((t + dur, cnt))
+
+            if raw_base_sum > EPS and dt in ("DT_SLASH", "DT_POISON", "DT_FIRE", "DT_ELECTRICITY", "DT_GAS"):
+                coeff = 0.35 if dt == "DT_SLASH" else 0.50
+                tick_dt = "DT_CINEMATIC" if dt == "DT_SLASH" else dt
+                tick_amt = raw_base_sum * coeff * cnt * dot_roar_double
+                ticks = max(1, int(math.floor(dur + EPS)))
+                for j in range(1, ticks + 1):
+                    self._push(
+                        t + j,
+                        "ability-dot",
+                        v,
+                        (tick_dt, tick_amt, t + dur, None, "ability"),
+                    )
+        return False
 
     def _syndicate_kill(self, v, t):
         spec = self.combat.get("syndicate")

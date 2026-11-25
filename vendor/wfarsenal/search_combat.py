@@ -147,9 +147,10 @@ def window(stats, context, *, score_only=False):
         eximus=bool(enhancements.get("eximus")), resolve_cache=getattr(stats, "_resolve_cache", None),
         combat_extras=extras,
     )
+    rot_duty = float((extras or {}).get("abilityRotationDutyCycle") or 1.0)
     result = replay(
         stats, target, combat=combat, trigger_sources=combat["trigger_sources"],
-        attacks_per_second=stats.sustained_attack_rate,
+        attacks_per_second=stats.sustained_attack_rate * max(0.05, min(1.0, rot_duty)),
         window_seconds=float(context.get("windowSeconds") or 30.0),
         headshot_chance=float(context.get("headshotChance", 1.0 if context.get("hit_location") == "head" else 0.0)),
         status_rate_multiplier=float(context.get("statusRateMultiplier") or 1.0),
@@ -293,16 +294,22 @@ def body_ttk_health(stats, context, seconds):
     scenario = data["engine"]["scenario"]
     enhancements = dict(context.get("enemy_enhancements") or {})
     enhancements["healthScale"] = 1e9
+    extras = None
+    if data.get("combat_extras_json"):
+        import json as _json
+        extras = _json.loads(data["combat_extras_json"])
     combat = prepare(
         data["engine"], data["mods"], data["arcanes"],
         cycle_enabled=scenario.incarnon_cycle, assumed=scenario.trigger_policy == "assumed_max",
         incarnon_choices=data["choices"], affinity_target=target, level=context.get("level"),
         eximus=bool(enhancements.get("eximus")), resolve_cache=getattr(stats, "_resolve_cache", None),
+        combat_extras=extras,
     )
     curve = []
+    rot_duty = float((extras or {}).get("abilityRotationDutyCycle") or 1.0)
     result = replay(
         stats, target, combat=combat, trigger_sources=combat["trigger_sources"],
-        attacks_per_second=stats.sustained_attack_rate, window_seconds=max(seconds) + 2.0, headshot_chance=0.0,
+        attacks_per_second=stats.sustained_attack_rate * max(0.05, min(1.0, rot_duty)), window_seconds=max(seconds) + 2.0, headshot_chance=0.0,
         status_rate_multiplier=float(context.get("statusRateMultiplier") or 1.0),
         damage_rate_multiplier=float(context.get("stanceMultiplier") or 1.0),
         level=context.get("level"), armour_strip=float(context.get("armour_strip") or 0.0),

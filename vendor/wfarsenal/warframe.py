@@ -176,6 +176,17 @@ def _load_synergy_sidecar(catalog_path: Path | None = None) -> dict[str, Any]:
     return dict(payload) if isinstance(payload, Mapping) else {}
 
 
+def _load_rotation_sidecar(catalog_path: Path | None = None) -> dict[str, Any]:
+    path = _mechanics_path("ability-rotation-specs.json", catalog_path)
+    if not path.is_file():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8-sig"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return {}
+    return dict(payload) if isinstance(payload, Mapping) else {}
+
+
 def _apply_catalog_repairs(catalog: dict[str, Any], synergy: Mapping[str, Any]) -> None:
     """Apply in-memory display and metadata repairs without mutating frozen disk files."""
     repairs = synergy.get("catalogRepairs")
@@ -250,6 +261,18 @@ def _apply_catalog_repairs(catalog: dict[str, Any], synergy: Mapping[str, Any]) 
                         fx["valuePerRank"] = fx["value"]
             repaired_mods.append(updated)
         catalog["mods"] = repaired_mods
+
+    missing_mods = repairs.get("missingMods")
+    if isinstance(missing_mods, list) and missing_mods and isinstance(catalog.get("mods"), list):
+        existing_paths = {str(r.get("path") or r.get("id") or "") for r in catalog["mods"] if isinstance(r, Mapping)}
+        appended = list(catalog["mods"])
+        for mrow in missing_mods:
+            if isinstance(mrow, Mapping):
+                mpath = str(mrow.get("path") or mrow.get("id") or "")
+                if mpath and mpath not in existing_paths:
+                    appended.append(copy.deepcopy(dict(mrow)))
+                    existing_paths.add(mpath)
+        catalog["mods"] = appended
 
 
 def _number(value: Any) -> float | None:
@@ -529,6 +552,7 @@ def load_warframe_catalog(path: str | Path, *, fallback: Mapping[str, Any] | Non
     }
     result["mods"] = _enrich_warframe_mods(result.get("mods") or (), ovr)
     result["equipmentAdditionalBases"] = equipment_additional_bases()
+    result["helminthRules"] = dict((synergy or {}).get("helminthRules") or {})
     result["_synergy"] = synergy
     result["counts"] = {
         key: len(result.get(key) or ())
@@ -892,6 +916,7 @@ class WarframeEngine:
         if not isinstance(synergy, Mapping) or not synergy:
             synergy = _load_synergy_sidecar()
         self.synergy: dict[str, Any] = dict(synergy)
+        self.rotation_specs: dict[str, Any] = _load_rotation_sidecar()
         self.forms = [row for row in self.catalog.get("warframeForms") or () if isinstance(row, Mapping)]
         self.frames = [
             *[row for row in self.catalog.get("warframes") or () if isinstance(row, Mapping)],
@@ -919,6 +944,7 @@ class WarframeEngine:
             if isinstance(k, str) and isinstance(v, str)
         }
         hrules = self.synergy.get("helminthRules") if isinstance(self.synergy.get("helminthRules"), Mapping) else {}
+        self.catalog.setdefault("helminthRules", dict(hrules))
         self.damage_buff_ability_paths = {_path_token(p) for p in (hrules.get("damageBuffAbilityPaths") or ())}
         self.damage_buff_frame_slot_ability: dict[str, str] = {
             _path_token(k): _path_token(v)
@@ -964,9 +990,9 @@ class WarframeEngine:
         slot_kind = str(row.get("slotKind") or row.get("kind") or row.get("compatibility") or "").casefold()
         aliases = {"normal": {"normal", "warframe", "exilus"}, "aura": {"aura"}, "exilus": {"exilus"}}
         if slot_kind not in aliases.get(kind, {kind}):
-            raise SimulationError(f"{kind} requires a {kind} MOD")
+            raise SimulationError(f"槽位类型不匹配：{kind} 槽需要对应类型的 MOD ({kind} requires a {kind} MOD)")
         if not self._mod_compatible(row, frame, active_ability_paths):
-            raise SimulationError(f"{kind} is not compatible with the selected Warframe")
+            raise SimulationError(f"该 MOD 与当前所选战甲或技能配置不兼容 ({kind} is not compatible)")
         rank = _rank(row, choice.get("rank"), kind)
         raw, _base = _card_drain(row, rank, slot_kind=slot_kind)
         return row, rank, raw, slot_kind
@@ -986,22 +1012,22 @@ class WarframeEngine:
         if inheritance.get("helminth") is False:
             raise SimulationError("该第二形态使用固定技能组，不能进行 Helminth 替换")
         if not isinstance(replacement, Mapping):
-            raise SimulationError("helminthReplacement must be an object or null")
+            raise SimulationError("Helminth 替换配置格式无效 (helminthReplacement must be an object or null)")
         slot = replacement.get("slot", replacement.get("index"))
         if isinstance(slot, bool) or not isinstance(slot, int) or not 0 <= slot < ABILITY_SLOT_COUNT:
-            raise SimulationError("helminthReplacement.slot must be an integer from 0 to 3")
+            raise SimulationError("Helminth 替换槽位必须是 1 至 4 技能槽 (helminthReplacement.slot 0..3)")
         query = replacement.get("abilityId") or replacement.get("ability") or replacement.get("id") or replacement.get("path")
         if isinstance(query, Mapping):
             query = query.get("id") or query.get("path")
         ability = dict(_resolve(self.helminth, query, "helminthReplacement"))
         invalid_slots = ability.get("invalidSlots") or ()
         if slot in invalid_slots:
-            raise SimulationError("the selected Helminth ability cannot replace that slot")
+            raise SimulationError("所选 Helminth 技能不能替换该技能槽位 (invalid slot)")
 
         infused_path = _path_token(ability.get("path") or ability.get("id"))
         native_paths = {_path_token(row.get("path") or row.get("id")) for row in native_abilities}
         if infused_path and infused_path in native_paths:
-            raise SimulationError("cannot infuse a duplicate ability that the Warframe already possesses")
+            raise SimulationError("不能重复注入本战甲自身已拥有的同名技能 (duplicate ability)")
 
         if infused_path in self.damage_buff_ability_paths:
             frame_path = _path_token(frame.get("path") or frame.get("id"))
@@ -1010,8 +1036,13 @@ class WarframeEngine:
             if required_native:
                 replaced_native = _path_token((native_abilities[slot] if slot < len(native_abilities) else {}).get("path"))
                 if replaced_native != required_native:
+                    native_obj = next(
+                        (row for row in native_abilities if _path_token(row.get("path") or row.get("id")) == required_native),
+                        None,
+                    )
+                    native_label = (native_obj or {}).get("nameZh") or (native_obj or {}).get("nameEn") or "原有增伤技能"
                     raise SimulationError(
-                        "Helminth damage-buff abilities can only replace this Warframe's own damage-buff ability slot"
+                        f"不允许同时拥有两个伤害增幅技能：本战甲已自带「{native_label}」，注入增伤技能时只能替换该技能所在槽位 (Helminth damage-buff conflict)"
                     )
 
         altered = ability.get("altered")
@@ -1049,13 +1080,13 @@ class WarframeEngine:
         def register_mod(row: Mapping[str, Any]) -> str:
             path = _row_id(row)
             if path in seen:
-                raise SimulationError("the same MOD cannot occupy more than one Warframe slot")
+                raise SimulationError("同一张 MOD 不能重复安装在多个战甲槽位中 (duplicate MOD)")
             fam = self._mod_family(row, frame_path=frame_path)
             if fam is not None:
                 fam_key = fam.casefold()
                 if fam_key in seen_families:
                     raise SimulationError(
-                        f"conflicting modFamily: {path} cannot be equipped together with {seen_families[fam_key]}"
+                        f"已装备同系列互斥变体 MOD，不能同时安装 ({path} conflicts with modFamily {seen_families[fam_key]})"
                     )
                 seen_families[fam_key] = path
             seen.add(path)
@@ -1221,11 +1252,11 @@ class WarframeEngine:
             row = _resolve(self.invigoration, choice.get("id") or choice.get("path") or choice.get("query"), f"invigoration[{index}]")
             category = str(row.get("category") or "").casefold()
             if category and category in invigoration_categories:
-                raise SimulationError("invigoration allows one offensive and one utility effect")
+                raise SimulationError("战甲活化最多只能选择一项攻势增幅与一项辅助增幅 (one offensive and one utility)")
             if category:
                 invigoration_categories.add(category)
             if _invigoration_restricted(row, frame):
-                raise SimulationError("the selected Invigoration is not compatible with this Warframe")
+                raise SimulationError("所选活化增幅与当前战甲不兼容 (not compatible)")
             for effect in _effects(row, 0, conditionals=False, source=_row_id(row)):
                 _apply_effect(panel, effect, active)
             selected_invigorations.append(_row_id(row))
@@ -1350,6 +1381,113 @@ class WarframeEngine:
                         active,
                     )
 
+        # External Operator Focus & Squad Buff evaluation (opt-in; zero-impact when omitted).
+        from . import operator_focus as _op_focus_mod
+        from . import squad_buffs as _squad_buffs_mod
+
+        arbucep_empowered = bool(payload.get("arbucepEmpowered", False))
+        op_link_raw = payload.get("operatorLink")
+        focus_eval: dict[str, Any] | None = None
+        focus_bridge: dict[str, Any] = {}
+        if isinstance(op_link_raw, Mapping) and op_link_raw.get("enabled") is True:
+            if isinstance(op_link_raw.get("_evaluated"), Mapping):
+                focus_eval = dict(op_link_raw["_evaluated"])
+            else:
+                focus_eval = _op_focus_mod.evaluate_focus(op_link_raw)
+            focus_bridge = dict(focus_eval.get("combatBridge") or {})
+        focus_wf = dict(focus_bridge.get("warframeModifiers") or {})
+
+        self_aura_id: str | None = None
+        if aura_row is not None:
+            aura_pt = _path_token(_row_id(aura_row))
+            if aura_pt.endswith("fairyquestcrittoabilityauramod"):
+                self_aura_id = "growing-power"
+            elif aura_pt.endswith("playerenergyregenauramod"):
+                self_aura_id = "energy-siphon"
+            elif aura_pt == _path_token(BRIEF_RESPITE_PATH):
+                self_aura_id = "brief-respite"
+        squad_eval = _squad_buffs_mod.evaluate_warframe_squad_buffs(
+            payload.get("externalBuffs") if isinstance(payload.get("externalBuffs"), (list, tuple)) else None,
+            exclude_self_aura_id=self_aura_id,
+        )
+
+        if float(focus_wf.get("flatArmorAdd") or 0.0) != 0.0:
+            _apply_effect(
+                panel,
+                {
+                    "stat": "armor",
+                    "value": float(focus_wf["flatArmorAdd"]),
+                    "operation": "ADD_BASE",
+                    "unit": "flat",
+                    "source": "focus:armor",
+                    "label": "Operator Focus Armor",
+                },
+                active,
+            )
+        if float(squad_eval.get("flatHealthAdd") or 0.0) != 0.0:
+            _apply_effect(
+                panel,
+                {
+                    "stat": "health",
+                    "value": float(squad_eval["flatHealthAdd"]),
+                    "operation": "ADD_BASE",
+                    "unit": "flat",
+                    "source": "external:vitality-mote",
+                    "label": "Squad Vitality Mote",
+                },
+                active,
+            )
+        if float(focus_wf.get("abilityStrengthAdd") or 0.0) != 0.0:
+            _apply_effect(
+                panel,
+                {
+                    "stat": "abilityStrength",
+                    "value": float(focus_wf["abilityStrengthAdd"]),
+                    "operation": "STACKING_MULTIPLY",
+                    "source": "focus:abilityStrength",
+                    "label": "Operator Focus Strength",
+                },
+                active,
+            )
+        if float(squad_eval.get("additiveStrength") or 0.0) != 0.0:
+            _apply_effect(
+                panel,
+                {
+                    "stat": "abilityStrength",
+                    "value": float(squad_eval["additiveStrength"]),
+                    "operation": "STACKING_MULTIPLY",
+                    "source": "external:squadStrength",
+                    "label": "Squad Ability Strength",
+                },
+                active,
+            )
+        if float(focus_wf.get("castingSpeedAdd") or 0.0) != 0.0:
+            _apply_effect(
+                panel,
+                {
+                    "stat": "castingSpeed",
+                    "value": float(focus_wf["castingSpeedAdd"]),
+                    "operation": "STACKING_MULTIPLY",
+                    "source": "focus:castingSpeed",
+                    "label": "Operator Focus Casting Speed",
+                },
+                active,
+            )
+        extra_hp_regen = float(focus_wf.get("healthRegenPerSec") or 0.0) + float(squad_eval.get("healthRegenPerSec") or 0.0)
+        if extra_hp_regen != 0.0:
+            _apply_effect(
+                panel,
+                {
+                    "stat": "healthRegen",
+                    "value": extra_hp_regen,
+                    "operation": "ADD_BASE",
+                    "unit": "flat",
+                    "source": "synergy:healthRegen",
+                    "label": "Focus/Squad Health Regen",
+                },
+                active,
+            )
+
         # Update 34+ Rank-30 stat scaling + ordered conversion passes.
         seed = _panel_seed(frame)
         base_panel = dict(seed)
@@ -1384,15 +1522,70 @@ class WarframeEngine:
         for stat in ("abilityStrength", "abilityRange", "abilityEfficiency", *panel_extras):
             state = panel[stat]
             final_panel[stat] = round(state["flat"] + state["percent"], 6)
-        final_panel["abilityStrength"] = round(1.0 + final_panel["abilityStrength"], 6)
-        final_panel["abilityRange"] = round(1.0 + final_panel["abilityRange"], 6)
-        final_panel["abilityEfficiency"] = round(min(1.75, max(0.0, 1.0 + final_panel["abilityEfficiency"])), 6)
+
+        base_str_before_bb = 1.0 + final_panel["abilityStrength"]
+        # Self Brightbonnet (Nokko native or Helminth subsumed): non-recursive Strength buff + optional Arbucep 200% empowerment!
+        self_bb_slot: int | None = None
+        for s_idx, ab_row in enumerate(abilities[:ABILITY_SLOT_COUNT]):
+            if isinstance(ab_row, Mapping) and _path_token(ab_row.get("path") or ab_row.get("id")) == _path_token("/Lotus/Powersuits/Nokko/Abilities/NokkoPowerShroomAbility"):
+                self_bb_slot = s_idx
+                break
+        self_bb_strength_add = 0.0
+        self_bb_active = conditionals or (arbucep_empowered and payload.get("applyConditionals") is not False)
+        if self_bb_slot is not None and self_bb_active and not payload.get("disableSelfBrightbonnet"):
+            is_helm_bb = helminth_slot is not None and self_bb_slot == helminth_slot
+            emp_mult = 2.0 if arbucep_empowered else 1.0
+            # Base S excludes any Squad Brightbonnet bonus so NokkoPowerBuff never recurses
+            squad_bb_already = 0.0
+            if int(squad_eval.get("brightbonnetCount") or 0) > 0:
+                # Squad Brightbonnet already applied inside squad_eval["additiveStrength"]
+                for p_txt in squad_eval.get("summaryPills") or ():
+                    if p_txt.startswith("亮帽菇"):
+                        m = re.search(r"\+([0-9.]+)%强度", p_txt)
+                        if m:
+                            squad_bb_already = float(m.group(1)) / 100.0
+            clean_base_s = max(0.10, base_str_before_bb - squad_bb_already)
+            raw_self_bb = min(
+                (1.00 if is_helm_bb else 1.50) * emp_mult,
+                (0.20 if is_helm_bb else 0.30) * emp_mult * clean_base_s,
+            )
+            self_bb_strength_add = max(0.0, raw_self_bb - squad_bb_already)
+            if self_bb_strength_add > 0.0:
+                active.append({
+                    "source": "ability:brightbonnet",
+                    "stat": "abilityStrength",
+                    "value": round(self_bb_strength_add, 6),
+                    "label": "Brightbonnet (Arbucep Empowered)" if arbucep_empowered else "Brightbonnet",
+                    "conditional": True,
+                })
 
         precision_bonus = 0.0
         if _path_token(PRECISION_INTENSIFY_PATH) in mod_by_path:
             _pi_row, pi_rank = mod_by_path[_path_token(PRECISION_INTENSIFY_PATH)]
             precision_bonus = 0.15 * (pi_rank + 1)
-        final_panel["abilityFourStrength"] = round(final_panel["abilityStrength"] + precision_bonus, 6)
+
+        parasitic_mult = max(1.0, float(squad_eval.get("parasiticLinkMultiplier") or 1.0))
+        additive_total_str = base_str_before_bb + self_bb_strength_add
+        final_panel["abilityStrength"] = round(additive_total_str * parasitic_mult, 6)
+        final_panel["abilityRange"] = round(1.0 + final_panel["abilityRange"], 6)
+        uncapped_efficiency = round(max(0.0, 1.0 + final_panel["abilityEfficiency"]), 6)
+        final_panel["uncappedAbilityEfficiency"] = uncapped_efficiency
+        final_panel["abilityEfficiency"] = round(min(1.75, uncapped_efficiency), 6)
+        final_panel["abilityFourStrength"] = round((additive_total_str + precision_bonus) * parasitic_mult, 6)
+
+        if float(focus_wf.get("flatEnergyBonus") or 0.0) != 0.0 and seed["energy"] > 0:
+            _apply_effect(
+                panel,
+                {
+                    "stat": "energy",
+                    "value": float(focus_wf["flatEnergyBonus"]),
+                    "operation": "ADD_BASE",
+                    "unit": "flat",
+                    "source": "focus:energy",
+                    "label": "Operator Focus Energy",
+                },
+                active,
+            )
 
         # Pass 3: Arcane Battery (post-Armor -> flat Max Energy, before Violet Shard >500 Energy check).
         if _path_token(ARCANE_BATTERY_PATH) in arcane_by_path and seed["energy"] > 0:
@@ -1474,6 +1667,19 @@ class WarframeEngine:
                 active,
             )
 
+        if float(focus_wf.get("abilityDurationAdd") or 0.0) != 0.0:
+            _apply_effect(
+                panel,
+                {
+                    "stat": "abilityDuration",
+                    "value": float(focus_wf["abilityDurationAdd"]),
+                    "operation": "STACKING_MULTIPLY",
+                    "source": "focus:abilityDuration",
+                    "label": "Operator Focus Duration",
+                },
+                active,
+            )
+
         dur_state = panel["abilityDuration"]
         final_panel["abilityDuration"] = round(1.0 + dur_state["flat"] + dur_state["percent"], 6)
 
@@ -1485,6 +1691,9 @@ class WarframeEngine:
             final_panel["damageReduction"] = 0.0
             final_panel["ehp"] = final_panel["health"]
 
+        shield_recharge_rate_pct += float(focus_wf.get("shieldRechargeRateAdd") or 0.0) + float(squad_eval.get("shieldRechargeRateAdd") or 0.0)
+        shield_delay_pct += float(focus_wf.get("shieldRechargeDelayAdd") or 0.0) + float(squad_eval.get("shieldRechargeDelayAdd") or 0.0)
+
         survivability = self._build_survivability(
             final_panel=final_panel,
             mod_by_path=mod_by_path,
@@ -1494,6 +1703,8 @@ class WarframeEngine:
             persistence_rank=persistence_rank,
             shield_recharge_rate_pct=shield_recharge_rate_pct,
             shield_delay_pct=shield_delay_pct,
+            extra_energy_to_shield_ratio=float(squad_eval.get("briefRespiteRatioAdd") or 0.0),
+            knockdown_immune=bool(focus_wf.get("knockdownImmune")),
         )
         final_panel.update(survivability)
 
@@ -1541,7 +1752,7 @@ class WarframeEngine:
                     "duration": final_panel["abilityDuration"],
                     "range": final_panel["abilityRange"],
                     "efficiency": max(0.25, 2.0 - final_panel["abilityEfficiency"]),
-                    "drain": max(0.25, (2.0 - final_panel["abilityEfficiency"]) / max(0.01, final_panel["abilityDuration"])),
+                    "drain": max(0.25, (2.0 - uncapped_efficiency) / max(0.01, final_panel["abilityDuration"])),
                 }.get(scale, 1.0)
                 base_values = [float(value) for value in values if _number(value) is not None] if isinstance(values, (list, tuple)) else [float(base)]
                 scaled_values = [round(value * factor, 6) for value in base_values]
@@ -1571,7 +1782,7 @@ class WarframeEngine:
             cost = row.get("energyCost")
             if isinstance(cost, Mapping):
                 efficiency_factor = max(0.25, 2.0 - final_panel["abilityEfficiency"])
-                channel_factor = max(0.25, efficiency_factor / max(0.01, final_panel["abilityDuration"]))
+                channel_factor = max(0.25, (2.0 - uncapped_efficiency) / max(0.01, final_panel["abilityDuration"]))
                 resource = str(cost.get("resource") or "energy")
                 energy: dict[str, Any] = dict(cost)
                 energy["resource"] = resource
@@ -1587,6 +1798,18 @@ class WarframeEngine:
                         factor = channel_factor if field in channel_fields else efficiency_factor
                         energy[field] = round(value * factor, 6)
                 row["energyCost"] = energy
+            cast_times_map = self.rotation_specs.get("abilityCastTimes") if isinstance(self.rotation_specs.get("abilityCastTimes"), Mapping) else {}
+            ab_norm_path = str(row.get("path") or row.get("id") or "").strip().replace("\\", "/").rstrip("/")
+            cast_meta = cast_times_map.get(ab_norm_path)
+            if isinstance(cast_meta, Mapping) and _number(cast_meta.get("baseCastTimeSec")) is not None:
+                base_cast = float(cast_meta["baseCastTimeSec"])
+                cast_speed_mult = max(0.1, 1.0 + float(final_panel.get("castingSpeed") or 0.0))
+                row["castTime"] = {
+                    "baseSeconds": round(base_cast, 4),
+                    "seconds": round(base_cast / cast_speed_mult, 4) if base_cast > 0.0 else 0.0,
+                    "oneHandedNonBlocking": bool(cast_meta.get("oneHandedNonBlocking", False)),
+                    "recastableWhileActive": bool(cast_meta.get("recastableWhileActive", True)),
+                }
             return row
 
         ability_scalars = [scale_ability(ability, idx) for idx, ability in enumerate(abilities[:ABILITY_SLOT_COUNT])]
@@ -1612,6 +1835,10 @@ class WarframeEngine:
             selected_invigoration_rows=selected_invigoration_rows,
             abilities=abilities[:ABILITY_SLOT_COUNT],
             helminth_slot=helminth_slot,
+            unused_capacity=max(0, capacity - used),
+            focus_bridge=focus_bridge,
+            squad_eval=squad_eval,
+            arbucep_empowered=arbucep_empowered,
         )
 
         return {
@@ -1650,7 +1877,7 @@ class WarframeEngine:
             },
             "validation": {
                 "valid": used <= capacity,
-                "errors": ([] if used <= capacity else ["MOD capacity exceeded"]),
+                "errors": ([] if used <= capacity else ["MOD 容量超出上限"]),
                 "warnings": list(self.catalog.get("gaps") or ()),
             },
             "selected": {
@@ -1660,6 +1887,9 @@ class WarframeEngine:
                 "shards": [_row_id(row) for row, _ in shard_rows],
                 "invigoration": selected_invigorations,
             },
+            "arbucepEmpowered": arbucep_empowered,
+            "focusBridge": focus_bridge or None,
+            "squadBuffSummary": squad_eval,
             "weaponBridge": weapon_bridge,
         }
 
@@ -1674,6 +1904,8 @@ class WarframeEngine:
         persistence_rank: int | None,
         shield_recharge_rate_pct: float,
         shield_delay_pct: float,
+        extra_energy_to_shield_ratio: float = 0.0,
+        knockdown_immune: bool = False,
     ) -> dict[str, Any]:
         shield = float(final_panel["shield"])
         armor = float(final_panel["armor"])
@@ -1694,7 +1926,7 @@ class WarframeEngine:
         brief_entry = mod_by_path.get(_path_token(BRIEF_RESPITE_PATH))
         brief_ratio = 0.25 * (brief_entry[1] + 1) if brief_entry is not None else 0.0
         augur_pieces = int(set_counts.get("augursetmod", 0))
-        energy_to_shield_ratio = 0.0 if shield <= 0 else round(brief_ratio + 0.40 * augur_pieces, 6)
+        energy_to_shield_ratio = 0.0 if shield <= 0 else round(brief_ratio + 0.40 * augur_pieces + max(0.0, extra_energy_to_shield_ratio), 6)
 
         cd_entry = mod_by_path.get(_path_token(COMBAT_DISCIPLINE_PATH))
         self_damage_on_kill = COMBAT_DISCIPLINE_SELF_DAMAGE[min(cd_entry[1], 5)] if cd_entry is not None else 0.0
@@ -1721,6 +1953,7 @@ class WarframeEngine:
             "adaptationMaxDr": 0.90 if has_adaptation else 0.0,
             "hasRollingGuard": has_rolling_guard,
             "statusImmune": status_immune,
+            "knockdownImmune": knockdown_immune,
         }
 
     def _build_weapon_bridge(
@@ -1739,6 +1972,10 @@ class WarframeEngine:
         selected_invigoration_rows: Sequence[Mapping[str, Any]],
         abilities: Sequence[Mapping[str, Any]],
         helminth_slot: int | None,
+        unused_capacity: int = 0,
+        focus_bridge: Mapping[str, Any] | None = None,
+        squad_eval: Mapping[str, Any] | None = None,
+        arbucep_empowered: bool = False,
     ) -> dict[str, Any]:
         # 1. Frame identity
         frame_bridge = {
@@ -1762,11 +1999,13 @@ class WarframeEngine:
                 "abilityDuration",
                 "abilityRange",
                 "abilityEfficiency",
+                "uncappedAbilityEfficiency",
                 "castingSpeed",
                 "abilityFourStrength",
                 "healthRegen",
                 "energyRegen",
             )
+            if key in final_panel
         }
 
         # 3. Shards
@@ -2198,6 +2437,23 @@ class WarframeEngine:
             mod_by_path=mod_by_path,
         )
 
+        # 9. Energy & Orb Economy metadata for Realistic Ability Rotation
+        energy_economy = self._build_energy_economy(
+            frame=frame,
+            final_panel=final_panel,
+            mod_by_path=mod_by_path,
+            arcane_rows=arcane_rows,
+            shard_rows=shard_rows,
+            abilities=abilities,
+            helminth_slot=helminth_slot,
+            coaction_self_product=coaction_self_product,
+            unused_capacity=unused_capacity,
+            available_abilities=available_abilities,
+            focus_bridge=focus_bridge,
+            squad_eval=squad_eval,
+            arbucep_empowered=arbucep_empowered,
+        )
+
         return {
             "frame": frame_bridge,
             "panel": panel_bridge,
@@ -2209,6 +2465,480 @@ class WarframeEngine:
             "modBonuses": mod_bonuses_bridge,
             "setModPaths": set_mod_paths,
             "availableAbilities": available_abilities,
+            "energyEconomy": energy_economy,
+            "arbucepEmpowered": arbucep_empowered,
+            "focusBridge": dict(focus_bridge) if isinstance(focus_bridge, Mapping) and focus_bridge else None,
+            "squadBuffSummary": dict(squad_eval) if isinstance(squad_eval, Mapping) else None,
+        }
+
+    def _resolve_rotation_spec_for_entry(
+        self,
+        *,
+        entry_id: str,
+        ability: Mapping[str, Any] | None,
+        slot_idx: int | None,
+        is_helminth: bool,
+        final_panel: Mapping[str, Any],
+        mod_by_path: Mapping[str, tuple[Mapping[str, Any], int]] | None = None,
+    ) -> dict[str, Any]:
+        rot_map = self.rotation_specs.get("rotationAbilities") if isinstance(self.rotation_specs.get("rotationAbilities"), Mapping) else {}
+        cast_map = self.rotation_specs.get("abilityCastTimes") if isinstance(self.rotation_specs.get("abilityCastTimes"), Mapping) else {}
+        policy_map = self.rotation_specs.get("abilityPolicies") if isinstance(self.rotation_specs.get("abilityPolicies"), Mapping) else {}
+        raw_spec = rot_map.get(entry_id)
+        ab_norm_path = str((ability or {}).get("path") or (ability or {}).get("id") or "").strip().replace("\\", "/").rstrip("/")
+        if not isinstance(raw_spec, Mapping) and ab_norm_path:
+            raw_spec = next(
+                (v for v in rot_map.values() if isinstance(v, Mapping) and v.get("abilityPath") == ab_norm_path and v.get("category") != "weapon_augment"),
+                None,
+            )
+        raw_spec = dict(raw_spec) if isinstance(raw_spec, Mapping) else {}
+        if not ab_norm_path and raw_spec.get("abilityPath"):
+            ab_norm_path = str(raw_spec["abilityPath"]).strip().replace("\\", "/").rstrip("/")
+        cast_meta = cast_map.get(ab_norm_path) if ab_norm_path and isinstance(cast_map.get(ab_norm_path), Mapping) else {}
+        policy = policy_map.get(ab_norm_path) if ab_norm_path and isinstance(policy_map.get(ab_norm_path), Mapping) else {}
+
+        subrole_labels_zh = {
+            "weapon_buff": "武器增益",
+            "ability_buff": "技能增益",
+            "defense_strip": "削甲破防",
+            "vulnerability_debuff": "易伤减益",
+            "energy_orb_economy": "能量补给",
+            "shield_overguard": "护盾超宏",
+            "survivability_dr_invuln": "生存减伤",
+            "invisibility": "隐身潜行",
+            "crowd_control": "控场牵制",
+            "heal_cleanse": "治疗净化",
+            "summon_decoy": "召唤诱饵",
+            "speed_mobility": "机动加速",
+            "non_combat_utility": "非战斗探索",
+        }
+
+        cls = str(
+            policy.get("classification")
+            or ("excluded_form_switch" if raw_spec.get("rotationExcluded") else "eligible_non_damaging")
+        )
+        sub_role = str(policy.get("subRole") or "") or None
+        promoted_by_aug: str | None = None
+        promoted_dur: float | None = None
+        if cls == "excluded_pure_damage" and mod_by_path:
+            for caug in policy.get("conditionalAugments") or ():
+                if isinstance(caug, Mapping) and _path_token(caug.get("modPath")) in mod_by_path:
+                    cls = "eligible_non_damaging"
+                    sub_role = str(caug.get("promotedRole") or "weapon_buff")
+                    promoted_by_aug = str(caug.get("nameZh") or caug.get("nameEn") or "") or None
+                    promoted_dur = _number(caug.get("baseDurationSec"))
+                    break
+
+        locks_weapons = bool(policy.get("locksWeaponsWhileActive", False))
+        tap_only = bool(policy.get("tapOnlyNoHoldFormSwap", False))
+        excluded_reason: str | None = None
+        excluded_reason_zh: str | None = None
+        if cls == "excluded_form_switch":
+            excluded_reason = "excluded_form_switch"
+            excluded_reason_zh = "双形态切换剔除"
+        elif cls == "excluded_exalted":
+            excluded_reason = "excluded_exalted"
+            excluded_reason_zh = "显赫变身剔除"
+        elif cls == "excluded_slot1_special_exalted":
+            excluded_reason = "excluded_slot1_special_exalted"
+            excluded_reason_zh = "特殊显赫剔除"
+        elif cls == "excluded_pure_damage":
+            excluded_reason = "excluded_pure_damage"
+            excluded_reason_zh = "纯伤害剔除"
+        elif locks_weapons:
+            excluded_reason = "locks_weapons"
+            excluded_reason_zh = "锁枪状态剔除"
+        elif sub_role == "non_combat_utility":
+            excluded_reason = "non_combat_utility"
+            excluded_reason_zh = "非战斗技能剔除"
+        rotation_eligible = excluded_reason is None
+
+        cost_obj = (ability or {}).get("energyCost") if isinstance((ability or {}).get("energyCost"), Mapping) else {}
+        resource = str(cost_obj.get("resource") or policy.get("resource") or raw_spec.get("resource") or "energy")
+        if resource == "cooldown":
+            base_cost = 0.0
+        elif _number(cost_obj.get("activation")) is not None:
+            base_cost = float(cost_obj["activation"])
+        elif _number(raw_spec.get("baseEnergyCost")) is not None:
+            base_cost = float(raw_spec["baseEnergyCost"])
+        else:
+            base_cost = float(_number(policy.get("baseCost")) or 0.0)
+
+        eff = float(final_panel.get("abilityEfficiency") or 1.0)
+        uncapped_eff = float(final_panel.get("uncappedAbilityEfficiency") or eff)
+        dur_mult = max(0.01, float(final_panel.get("abilityDuration") or 1.0))
+        eff_factor = max(0.25, 2.0 - eff)
+        chan_factor = max(0.25, (2.0 - uncapped_eff) / dur_mult)
+
+        is_channeled = bool(raw_spec.get("isChanneled", policy.get("isChanneled", False)))
+        base_drain = float(_number(raw_spec.get("energyDrainPerSec")) if _number(raw_spec.get("energyDrainPerSec")) is not None else (_number(policy.get("drainPerSec")) or 0.0))
+        if not raw_spec and _number(cost_obj.get("drainPerSecond")) is not None and float(cost_obj["drainPerSecond"]) > 0.0:
+            is_channeled = True
+            base_drain = float(cost_obj["drainPerSecond"])
+
+        activation_cost = round(base_cost * eff_factor, 4) if resource in {"energy", "shield"} else 0.0
+        drain_per_sec = round(base_drain * chan_factor, 4) if (is_channeled and resource in {"energy", "shield"}) else 0.0
+
+        cooldown_sec = _number(raw_spec.get("cooldownSec"))
+        if cooldown_sec is None:
+            cooldown_sec = _number(policy.get("cooldownSec"))
+        if cooldown_sec is None and resource == "cooldown":
+            cooldown_sec = _number(cost_obj.get("cooldown")) or 8.0
+
+        base_dur = _number(raw_spec.get("helminthBaseDurationSec")) if (is_helminth and _number(raw_spec.get("helminthBaseDurationSec")) is not None) else _number(raw_spec.get("baseDurationSec"))
+        if _number(raw_spec.get("augmentBuffDurationSec")) is not None:
+            base_dur = _number(raw_spec.get("augmentBuffDurationSec"))
+        if base_dur is None and promoted_dur is not None:
+            base_dur = promoted_dur
+        if base_dur is None:
+            base_dur = (
+                _number(policy.get("helminthBaseDurationSec"))
+                if (is_helminth and _number(policy.get("helminthBaseDurationSec")) is not None)
+                else _number(policy.get("baseDurationSec"))
+            )
+
+        fixed_dur = bool(raw_spec.get("fixedDuration", False))
+        duration_model = str(policy.get("durationModel") or ("channeled" if is_channeled else "timed"))
+        special_econ = dict(raw_spec["specialEconomy"]) if isinstance(raw_spec.get("specialEconomy"), Mapping) else None
+        is_next_cast = bool(special_econ and "nextCastStrengthBonus" in special_econ) or duration_model == "next_cast"
+        tactical_cadence = False
+        if (
+            base_dur is None
+            and not is_channeled
+            and not raw_spec.get("passiveAlwaysOn")
+            and not is_next_cast
+            and duration_model not in {"persistent", "persistent_toggle"}
+        ):
+            if duration_model == "charges_or_pool":
+                base_dur = 25.0
+                fixed_dur = True
+                tactical_cadence = True
+            elif duration_model in {"instant_one_shot", "cooldown_instant", "magazine", "next_shot"}:
+                base_dur = float(cooldown_sec) if (cooldown_sec is not None and cooldown_sec > 0) else 15.0
+                fixed_dur = True
+                tactical_cadence = True
+
+        invuln_dur = float(_number(raw_spec.get("invulnerabilityDurationSec")) or 0.0)
+        if base_dur is not None and base_dur > 0.0:
+            eff_dur = round(float(base_dur) * (1.0 if fixed_dur else dur_mult), 4)
+            eff_cycle_dur = round((float(base_dur) + invuln_dur) * (1.0 if fixed_dur else dur_mult), 4)
+        else:
+            eff_dur = None
+            eff_cycle_dur = None
+
+        if _number(raw_spec.get("baseCastTimeSec")) is not None:
+            base_cast = float(raw_spec["baseCastTimeSec"])
+        elif _number(cast_meta.get("baseCastTimeSec")) is not None:
+            base_cast = float(cast_meta["baseCastTimeSec"])
+        elif _number(policy.get("baseCastTimeSec")) is not None:
+            base_cast = float(policy["baseCastTimeSec"])
+        else:
+            base_cast = 0.0
+        cast_speed_mult = max(0.1, 1.0 + float(final_panel.get("castingSpeed") or 0.0))
+        eff_cast = round(base_cast / cast_speed_mult, 4) if base_cast > 0.0 else 0.0
+
+        return {
+            "id": entry_id,
+            "abilityPath": ab_norm_path or raw_spec.get("abilityPath"),
+            "slot": slot_idx,
+            "classification": cls,
+            "subRole": sub_role,
+            "roleLabelZh": subrole_labels_zh.get(sub_role or "", "战术技能"),
+            "rotationEligible": rotation_eligible,
+            "excludedReason": excluded_reason,
+            "excludedReasonZh": excluded_reason_zh,
+            "promotedByAugment": promoted_by_aug,
+            "locksWeaponsWhileActive": locks_weapons,
+            "tapOnlyNoHoldFormSwap": tap_only,
+            "durationModel": duration_model,
+            "tacticalCadence": tactical_cadence,
+            "resource": resource,
+            "passiveAlwaysOn": bool(raw_spec.get("passiveAlwaysOn", False)),
+            "baseEnergyCost": round(base_cost, 4),
+            "activationCost": activation_cost,
+            "isChanneled": is_channeled,
+            "baseDrainPerSec": round(base_drain, 4),
+            "drainPerSec": drain_per_sec,
+            "maxEnemiesDrain": raw_spec.get("maxEnemiesDrain"),
+            "preventsPassiveEnergyRegen": bool(raw_spec.get("preventsPassiveEnergyRegen", is_channeled and base_drain > 0.0)),
+            "baseDurationSec": round(float(base_dur), 4) if base_dur is not None else None,
+            "durationSec": eff_dur,
+            "cycleDurationSec": eff_cycle_dur,
+            "fixedDuration": fixed_dur,
+            "bonusSecPer100Shields": raw_spec.get("bonusSecPer100Shields"),
+            "killExtendSec": raw_spec.get("killExtendSec"),
+            "cooldownSec": round(float(cooldown_sec), 4) if cooldown_sec is not None else None,
+            "baseCastTimeSec": round(base_cast, 4),
+            "effectiveCastTimeSec": eff_cast,
+            "oneHandedNonBlocking": bool(raw_spec.get("oneHandedNonBlocking", cast_meta.get("oneHandedNonBlocking", policy.get("oneHandedNonBlocking", False)))),
+            "recastableWhileActive": bool(raw_spec.get("recastableWhileActive", cast_meta.get("recastableWhileActive", policy.get("recastableWhileActive", True)))),
+            "specialEconomy": special_econ,
+        }
+
+    def _build_energy_economy(
+        self,
+        *,
+        frame: Mapping[str, Any],
+        final_panel: Mapping[str, Any],
+        mod_by_path: Mapping[str, tuple[Mapping[str, Any], int]],
+        arcane_rows: Sequence[tuple[Mapping[str, Any], int]],
+        shard_rows: Sequence[tuple[Mapping[str, Any], int]],
+        abilities: Sequence[Mapping[str, Any]],
+        helminth_slot: int | None,
+        coaction_self_product: float,
+        unused_capacity: int,
+        available_abilities: Sequence[Mapping[str, Any]] = (),
+        focus_bridge: Mapping[str, Any] | None = None,
+        squad_eval: Mapping[str, Any] | None = None,
+        arbucep_empowered: bool = False,
+    ) -> dict[str, Any]:
+        suit_map = self.rotation_specs.get("suitInitialEnergy") if isinstance(self.rotation_specs.get("suitInitialEnergy"), Mapping) else {}
+        full_spawn_set = {
+            _path_token(p) for p in (self.rotation_specs.get("fullSpawnEnergyFrames") or ())
+        }
+        frame_norm = str(frame.get("path") or _row_id(frame) or "").strip().replace("\\", "/").rstrip("/")
+        frame_tok = _path_token(frame_norm)
+        max_energy = float(final_panel.get("energy") or 0.0)
+
+        if frame_norm in suit_map and _number(suit_map.get(frame_norm)) is not None:
+            base_initial_energy = float(suit_map[frame_norm])
+        else:
+            base_initial_energy = 0.0 if max_energy <= 0.0 else 50.0
+
+        full_spawn_passive = frame_tok in full_spawn_set or "/priest/" in frame_tok
+
+        prep_entry = mod_by_path.get(_path_token("/Lotus/Upgrades/Mods/Warframe/AvatarSpawnEnergyMod"))
+        prep_beg_entry = mod_by_path.get(_path_token("/Lotus/Upgrades/Mods/Warframe/Beginner/AvatarSpawnEnergyModBeginner"))
+        prep_pct = 0.0
+        if prep_entry is not None:
+            prep_pct += min(1.0, (prep_entry[1] + 1) / 11.0)
+        elif prep_beg_entry is not None:
+            prep_pct += min(1.0, (prep_beg_entry[1] + 1) * 0.083333)
+
+        amber_spawn_pct = 0.0
+        amber_energy_orb_bonus = 0.0
+        amber_health_orb_bonus = 0.0
+        violet_eq_bonus = 0.0
+        for row, _ in shard_rows:
+            leaf = str(row.get("path") or _row_id(row)).rsplit("/", 1)[-1]
+            tau = bool(row.get("tau")) or leaf.endswith("Mythic")
+            base_leaf = leaf[:-6] if leaf.endswith("Mythic") else leaf
+            if base_leaf == "ArchonCrystalUpgradeWarframeStartingEnergy":
+                amber_spawn_pct += 0.45 if tau else 0.30
+            elif base_leaf == "ArchonCrystalUpgradeWarframeGlobeEffectEnergy":
+                amber_energy_orb_bonus += 0.75 if tau else 0.50
+            elif base_leaf == "ArchonCrystalUpgradeWarframeGlobeEffectHealth":
+                amber_health_orb_bonus += 1.50 if tau else 1.00
+            elif base_leaf == "ArchonCrystalUpgradeEquilibrium":
+                violet_eq_bonus += 0.30 if tau else 0.20
+
+        if max_energy <= 0.0:
+            spawn_energy = 0.0
+        elif full_spawn_passive:
+            spawn_energy = max_energy
+        else:
+            spawn_energy = min(
+                max_energy,
+                base_initial_energy + 5.0 * max(0, int(unused_capacity)) + max_energy * (prep_pct + amber_spawn_pct),
+            )
+
+        eq_entry = mod_by_path.get(_path_token("/Lotus/Upgrades/Mods/Warframe/AvatarPickupBonusMod"))
+        eq_beg_entry = mod_by_path.get(_path_token("/Lotus/Upgrades/Mods/Warframe/Beginner/AvatarPickupBonusModBeginner"))
+        eq_mod_ratio = 0.0
+        if eq_entry is not None:
+            eq_mod_ratio = 0.10 * (eq_entry[1] + 1)
+        elif eq_beg_entry is not None:
+            eq_mod_ratio = (0.32 / 6.0) * (eq_beg_entry[1] + 1)
+        equinox_passive = 0.10 if "/yinyang/" in frame_tok else 0.0
+        equilibrium_ratio = round(eq_mod_ratio + violet_eq_bonus + equinox_passive, 6)
+
+        # Unconditional passive energy regen (Energy Siphon, Energy Nexus, Dreamer's Bond + Squad Energy Siphon + Focus Wellspring)
+        focus_econ = dict((focus_bridge or {}).get("energyEconomy") or {})
+        sq_eval = squad_eval or {}
+        passive_energy_regen = 0.0
+        es_entry = mod_by_path.get(_path_token("/Lotus/Upgrades/Mods/Aura/PlayerEnergyRegenAuraMod"))
+        if es_entry is not None:
+            passive_energy_regen += 0.10 * (es_entry[1] + 1) * coaction_self_product
+        db_entry = mod_by_path.get(_path_token("/Lotus/Upgrades/Mods/Aura/PlayerEnergyHealthRegenAuraMod"))
+        if db_entry is not None:
+            passive_energy_regen += 0.05 * (db_entry[1] + 1) * coaction_self_product
+        en_entry = mod_by_path.get(_path_token("/Lotus/Upgrades/Mods/Warframe/AvatarEnergyRegenMod"))
+        if en_entry is not None:
+            passive_energy_regen += 0.50 * (en_entry[1] + 1)
+        passive_energy_regen += float(sq_eval.get("energySiphonPerSec") or 0.0)
+        passive_energy_regen += float(focus_econ.get("wellspringEnergyPerSec") or 0.0)
+
+        astretch_entry = mod_by_path.get(_path_token("/Lotus/Upgrades/Mods/Warframe/Kahl/KahlAvatarAbilityRangeMod"))
+        aflow_entry = mod_by_path.get(_path_token("/Lotus/Upgrades/Mods/Warframe/Kahl/KahlAvatarPowerMaxMod"))
+        econv_entry = mod_by_path.get(_path_token("/Lotus/Upgrades/Mods/Warframe/EnergyPickupGivesStrengthMod"))
+        hconv_entry = mod_by_path.get(_path_token("/Lotus/Upgrades/Tau/HealthPickupGivesArmourMax"))
+        rage_entry = mod_by_path.get(_path_token("/Lotus/Upgrades/Mods/Warframe/AvatarConvertDamageToEnergyMod"))
+        hadren_entry = mod_by_path.get(_path_token("/Lotus/Upgrades/Mods/Sets/Hunter/WarframeHunterAdrenalineMod"))
+
+        rage_ratio = 0.0
+        if rage_entry is not None:
+            rage_ratio += 0.10 * (rage_entry[1] + 1)
+        if hadren_entry is not None:
+            rage_ratio += 0.075 * (hadren_entry[1] + 1)
+
+        arcane_map = {_path_token(_row_id(r)): rank for r, rank in arcane_rows}
+
+        def _arc_rank(p: str) -> int | None:
+            return arcane_map.get(_path_token(p))
+
+        ez_rank = _arc_rank("/Lotus/Upgrades/CosmeticEnhancers/Utility/GolemArcaneRadialEnergyOnEnergyPickup")
+        sf_rank = _arc_rank("/Lotus/Upgrades/CosmeticEnhancers/Utility/NoCostCastChanceOnCast")
+        pu_rank = _arc_rank("/Lotus/Upgrades/CosmeticEnhancers/Utility/RadialHealOnHealthPickup")
+        bl_rank = _arc_rank("/Lotus/Upgrades/CosmeticEnhancers/Defensive/IncreaseMaxHealthOnHealthPickup")
+        mr_rank = _arc_rank("/Lotus/Upgrades/CosmeticEnhancers/Utility/HealAlliesOnEnergySpent")
+        ma_rank = _arc_rank("/Lotus/Upgrades/CosmeticEnhancers/Offensive/PowerStrengthOnKill")
+        me_rank = _arc_rank(MOLT_EFFICIENCY_PATH)
+        uf_rank = _arc_rank("/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityRadiationProcsCreateUniversalOrbsOnKill")
+
+        slot_abilities: list[dict[str, Any]] = []
+        rot_by_path = {
+            str(v.get("abilityPath") or ""): v
+            for v in ((self.rotation_specs.get("rotationAbilities") or {}).values() if isinstance(self.rotation_specs.get("rotationAbilities"), Mapping) else ())
+            if isinstance(v, Mapping) and v.get("abilityPath") and v.get("category") != "weapon_augment" and not v.get("isHelminthVariant")
+        }
+        for idx, ab in enumerate(abilities[:ABILITY_SLOT_COUNT]):
+            ap = str(ab.get("path") or ab.get("id") or "").strip().replace("\\", "/").rstrip("/")
+            is_helm = helminth_slot is not None and idx == helminth_slot
+            base_rot = rot_by_path.get(ap)
+            linked_buffs = [
+                a for a in available_abilities
+                if isinstance(a, Mapping) and a.get("slot") == idx and not (a.get("rotationSpec") or {}).get("passiveAlwaysOn")
+            ]
+            if linked_buffs:
+                primary_buff = next((a for a in linked_buffs if not a.get("isAugment")), linked_buffs[0])
+                sid = str(primary_buff.get("id") or f"slot-{idx+1}")
+            elif isinstance(base_rot, Mapping):
+                sid = str((base_rot.get("helminthId") if is_helm and base_rot.get("helminthId") else base_rot["id"]))
+            else:
+                sid = f"slot-{idx+1}"
+            rspec = self._resolve_rotation_spec_for_entry(
+                entry_id=sid,
+                ability=ab,
+                slot_idx=idx,
+                is_helminth=is_helm,
+                final_panel=final_panel,
+                mod_by_path=mod_by_path,
+            )
+            linked_ids = [str(a["id"]) for a in linked_buffs if a.get("id")]
+            linked_summaries = [str(a["summaryZh"]) for a in linked_buffs if a.get("summaryZh")]
+            slot_abilities.append({
+                "slot": idx,
+                "nameZh": ab.get("nameZh") or (base_rot or {}).get("nameZh") or ab.get("nameEn"),
+                "nameEn": ab.get("nameEn") or (base_rot or {}).get("nameEn"),
+                "iconAsset": ab.get("iconAsset"),
+                "isHelminth": is_helm,
+                "linkedWeaponBuffIds": linked_ids,
+                "weaponSummaryZh": " / ".join(linked_summaries) if linked_summaries else None,
+                "defaultRotationActive": bool(
+                    rspec.get("rotationEligible")
+                    and any(a.get("defaultActive") is not False for a in linked_buffs)
+                ),
+                **rspec,
+            })
+
+        return {
+            "baseInitialEnergy": round(base_initial_energy, 3),
+            "fullSpawnEnergyPassive": full_spawn_passive,
+            "unusedCapacity": max(0, int(unused_capacity)),
+            "preparationPercent": round(prep_pct, 6),
+            "amberSpawnPercent": round(amber_spawn_pct, 6),
+            "spawnEnergy": round(spawn_energy, 3),
+            "maxEnergy": round(max_energy, 3),
+            "passiveEnergyRegen": round(passive_energy_regen, 6),
+            "archonStretchRegen": 2.0 if astretch_entry is not None else 0.0,
+            "archonFlowEquipped": aflow_entry is not None,
+            "equilibriumRatio": equilibrium_ratio,
+            "equilibriumModRatio": round(eq_mod_ratio, 6),
+            "violetShardEquilibrium": round(violet_eq_bonus, 6),
+            "amberEnergyOrbBonus": round(amber_energy_orb_bonus, 6),
+            "amberHealthOrbBonus": round(amber_health_orb_bonus, 6),
+            "castingSpeedBonus": round(float(final_panel.get("castingSpeed") or 0.0), 6),
+            "castingSpeedMultiplier": round(max(0.1, 1.0 + float(final_panel.get("castingSpeed") or 0.0)), 6),
+            "energyConversionBonus": round((25.0 + 5.0 * econv_entry[1]) / 100.0, 6) if econv_entry is not None else 0.0,
+            "healthConversionArmorPerStack": round(75.0 * (hconv_entry[1] + 1), 3) if hconv_entry is not None else 0.0,
+            "rageDamageToEnergyRatio": round(rage_ratio, 6),
+            "arcaneEnergize": (
+                {
+                    "rank": ez_rank,
+                    "chance": round(0.10 * (ez_rank + 1), 6),
+                    "energy": round(25.0 * (ez_rank + 1), 3),
+                    "cooldown": 15.0,
+                }
+                if ez_rank is not None
+                else None
+            ),
+            "arcaneSteadfast": (
+                {
+                    "rank": sf_rank,
+                    "chance": round((sf_rank + 1) / 30.0, 6),
+                    "freeCasts": 3,
+                }
+                if sf_rank is not None
+                else None
+            ),
+            "arcanePulse": (
+                {
+                    "rank": pu_rank,
+                    "chance": round(0.10 * (pu_rank + 1), 6),
+                    "heal": round((500.0 / 6.0) * (pu_rank + 1), 3),
+                    "cooldown": 15.0,
+                }
+                if pu_rank is not None
+                else None
+            ),
+            "arcaneBlessing": (
+                {
+                    "rank": bl_rank,
+                    "hpPerOrb": round(4.0 * (bl_rank + 1), 3),
+                    "maxStacks": 50,
+                }
+                if bl_rank is not None
+                else None
+            ),
+            "moltReconstruct": (
+                {"rank": mr_rank, "healPerEnergy": round(1.0 * (mr_rank + 1), 3)}
+                if mr_rank is not None
+                else None
+            ),
+            "moltAugmented": (
+                {
+                    "rank": ma_rank,
+                    "strengthPerKill": round(0.0004 * (ma_rank + 1), 6),
+                    "maxStacks": 250,
+                }
+                if ma_rank is not None
+                else None
+            ),
+            "moltEfficiency": (
+                {
+                    "rank": me_rank,
+                    "ratePerSec": 0.06,
+                    "maxDurationBonus": round(0.06 * (me_rank + 1), 6),
+                }
+                if me_rank is not None
+                else None
+            ),
+            "arcaneUniversalFallout": (
+                {"rank": uf_rank, "chancePerRadStack": round(0.01 * (uf_rank + 1), 6)}
+                if uf_rank is not None
+                else None
+            ),
+            "arbucepEmpowered": bool(arbucep_empowered),
+            "focusInnerMightCooldownSec": round(float(focus_econ.get("innerMightCooldownSec") or 0.0), 4),
+            "focusEnergyPulseBonus": round(float(focus_econ.get("energyPulseBonusFraction") or 0.0), 6),
+            "focusKillEnergyOrbChance": round(float(focus_econ.get("tauronKillEnergyOrbChance") or 0.0), 6),
+            "focusFiringDutyMultiplier": round(float((focus_bridge or {}).get("firingDutyMultiplier") or 1.0), 6),
+            "squadNourishMultiplier": round(float(sq_eval.get("nourishEnergyMultiplier") or 1.0), 6),
+            "squadBrightbonnetEnergyPerSec": round(float(sq_eval.get("brightbonnetEnergyPerSec") or 0.0), 4),
+            "squadKillEnergyOrbChance": round(float(sq_eval.get("killEnergyOrbBonusChance") or 0.0), 6),
+            "squadKillHealthOrbChance": round(float(sq_eval.get("killHealthOrbBonusChance") or 0.0), 6),
+            "squadTriggersArchonStretch": bool(sq_eval.get("triggersArchonStretch", False)),
+            "slotAbilities": slot_abilities,
         }
 
     def _build_available_abilities(
@@ -2280,9 +3010,25 @@ class WarframeEngine:
                         "stripsArmor",
                         "stripsShield",
                         "perSecond",
+                        "perCloneBase",
+                        "cloneCount",
+                        "augmentMult",
+                        "augmentModPath",
+                        "totalEclipseModPath",
                     ):
                         if fx.get(opt_key) is not None:
                             fx_entry[opt_key] = fx.get(opt_key)
+                    if fx.get("upgradeType") == "MIRAGE_HOM_CLONES":
+                        per_clone_base = float(_number(fx.get("perCloneBase")) or 0.4)
+                        per_clone_mult = round(per_clone_base * factor, 6)
+                        fx_entry["perCloneMult"] = per_clone_mult
+                        fx_entry["cloneCcScScale"] = round(min(1.0, per_clone_mult), 6)
+                        fx_entry["augmentEquipped"] = bool(
+                            fx.get("augmentModPath") and _path_token(fx["augmentModPath"]) in mod_by_path
+                        )
+                        fx_entry["totalEclipseEquipped"] = bool(
+                            fx.get("totalEclipseModPath") and _path_token(fx["totalEclipseModPath"]) in mod_by_path
+                        )
                     fx_list.append(fx_entry)
                     label_zh = str(fx.get("labelZh") or fx.get("upgradeType") or "")
                     if fx.get("operation") == "MULTIPLY":
@@ -2306,6 +3052,14 @@ class WarframeEngine:
                     "elementOptions": list(spec.get("elementOptions") or ()),
                     "effectsSpec": fx_list,
                     "summaryZh": " / ".join(summary_parts),
+                    "rotationSpec": self._resolve_rotation_spec_for_entry(
+                        entry_id=entry_id,
+                        ability=ability,
+                        slot_idx=slot_idx,
+                        is_helminth=is_helminth,
+                        final_panel=final_panel,
+                        mod_by_path=mod_by_path,
+                    ),
                 })
 
         # Equipped weapon-affecting augments
@@ -2362,12 +3116,15 @@ class WarframeEngine:
                 label_zh = str(fx.get("labelZh") or fx.get("upgradeType") or "")
                 summary_parts.append(f"{label_zh} +{_fmt_pct(resolved)}%")
 
+            host_ability = abilities[slot_idx] if (slot_idx is not None and 0 <= slot_idx < len(abilities)) else None
+            is_helm_aug = slot_idx is not None and helminth_slot is not None and slot_idx == helminth_slot
+            aug_id_str = str(aug.get("id"))
             out.append({
-                "id": str(aug.get("id")),
+                "id": aug_id_str,
                 "abilityPath": None if target_ability_path == "PASSIVE" else target_ability_path,
                 "modPath": mod_path,
                 "slot": slot_idx,
-                "isHelminth": slot_idx is not None and helminth_slot is not None and slot_idx == helminth_slot,
+                "isHelminth": is_helm_aug,
                 "isAugment": True,
                 "rank": mod_rank,
                 "maxRank": int(mod_row.get("maxRank") or 0),
@@ -2379,6 +3136,14 @@ class WarframeEngine:
                 "elementOptions": list(aug.get("elementOptions") or ()),
                 "effectsSpec": fx_list,
                 "summaryZh": " / ".join(summary_parts),
+                "rotationSpec": self._resolve_rotation_spec_for_entry(
+                    entry_id=aug_id_str,
+                    ability=host_ability,
+                    slot_idx=slot_idx,
+                    is_helminth=is_helm_aug,
+                    final_panel=final_panel,
+                    mod_by_path=mod_by_path,
+                ),
             })
 
         return out

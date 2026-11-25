@@ -365,6 +365,7 @@ class ArenaScene:
         self.nodes = self.points
         self.spawns = raw.get("spawns", [])
         self.start = raw["start"]
+        self.defense_objective = raw.get("defenseObjective") or raw["start"]
         self.graph = [[] for _ in self.points]
         self.incoming = [[] for _ in self.points]
         self.disabled: set[str] = set()
@@ -839,6 +840,180 @@ class ArenaScene:
             "groundConnectivityQualification": "current ordinary-enemy directed graph; missing native offmesh/ladder source links remain unreachable; no player-parkour substitution",
             "qualification": "explicit source NAV triangle, proxy footprint radius .22/body clearance1.8; vertical correction<=.2; no nearest-face relocation",
         }
+
+    def select_optimal_vantage(
+        self,
+        *,
+        enemy_profile: str = "enemy",
+        max_horizontal_radius: float = 20.0,
+        prefer_high_ground: bool = True,
+    ) -> dict[str, Any]:
+        """Select a player-reachable, footprint-validated NAV standing point near the
+        defense objective that minimizes sightline occlusion and leverages reachable high ground.
+
+        Purely read-only: never mutates ``self.metrics``, ``self.disabled``, or ``self._search_cache``.
+        """
+        max_r = max(6.0, min(36.0, float(max_horizontal_radius or 20.0)))
+        cache_key = (
+            self.door_sight,
+            enemy_profile,
+            round(max_r, 1),
+            bool(prefer_high_ground),
+            frozenset(self.disabled),
+        )
+        cache = getattr(self, "_optimal_vantage_cache", None)
+        if isinstance(cache, dict) and cache_key in cache:
+            return copy.deepcopy(cache[cache_key])
+
+        obj = self.defense_objective or self.start
+        obj_pos = _vec(obj["position"])
+        obj_face = int(obj["face"])
+        start_face = int(self.start["face"])
+
+        # 1. Read-only forward reachability under player parkour graph
+        p_reach: set[int] = {start_face}
+        stack = [start_face]
+        while stack:
+            u = stack.pop()
+            for edge in self.graph[u]:
+                if edge.key in self.disabled or not math.isfinite(edge.time("player")):
+                    continue
+                if edge.to_node not in p_reach:
+                    p_reach.add(edge.to_node)
+                    stack.append(edge.to_node)
+
+        def _clear_los(a: Vec3, b: Vec3) -> bool:
+            delta = _sub(b, a)
+            length = math.sqrt(_dot(delta, delta))
+            if length <= 2e-4:
+                return True
+            if self.collision.raycast(a, delta, length - 1e-4, min_distance=1e-4) is not None:
+                return False
+            if self.door_sight == "closed" and self._door_hits(a, delta, length - 1e-4, 1e-4):
+                return False
+            return True
+
+        # 2. Build deterministic sightline sample targets (approach corridors + nearby spawns)
+        approach_faces = [
+            f for f in sorted(p_reach)
+            if distance(self.points[f], obj_pos) <= max(28.0, max_r + 10.0)
+        ]
+        step_a = max(1, len(approach_faces) // 72)
+        sample_targets: list[Vec3] = [
+            (self.points[f][0], self.points[f][1] + 1.0, self.points[f][2])
+            for f in approach_faces[::step_a][:72]
+        ]
+        accepted_spawns = [s for s in self.spawns if s.get("accepted")]
+        near_spawns = sorted(
+            accepted_spawns,
+            key=lambda s: (distance(_vec(s["position"]), obj_pos), int(s.get("face", 0))),
+        )[:24]
+        for sp in near_spawns:
+            spos = _vec(sp["position"])
+            sample_targets.append((spos[0], spos[1] + 1.0, spos[2]))
+        if not sample_targets:
+            sample_targets.append((obj_pos[0], obj_pos[1] + 1.0, obj_pos[2]))
+
+        def _vis_ratio(pos: Vec3) -> float:
+            eye = (pos[0], pos[1] + 1.55, pos[2])
+            vis = sum(1 for tgt in sample_targets if _clear_los(eye, tgt))
+            return vis / len(sample_targets)
+
+        obj_vis = _vis_ratio(obj_pos)
+        try:
+            obj_standing = self.validate_standing(obj_pos, obj_face, enemy_profile=enemy_profile)
+        except ValueError:
+            obj_standing = {
+                "face": obj_face,
+                "position": list(obj_pos),
+                "enemyReachableSpawns": len(accepted_spawns),
+                "candidateSpawns": len(accepted_spawns),
+                "enemyReachableSpawnRatio": 1.0 if accepted_spawns else 0.0,
+                "groundConnectivityQualification": "defense objective fallback",
+                "qualification": "defense objective fallback",
+            }
+        base_enemy_ratio = float(obj_standing.get("enemyReachableSpawnRatio") or 0.0)
+
+        # 3. Pre-filter reachable standing candidates within horizontal combat radius
+        raw_candidates: list[tuple[float, float, int, Vec3]] = []
+        for f in sorted(p_reach):
+            pt = self.points[f]
+            d_xz = math.hypot(pt[0] - obj_pos[0], pt[2] - obj_pos[2])
+            if d_xz > max_r:
+                continue
+            elev = pt[1] - obj_pos[1]
+            if elev < -1.5 or elev > 12.0:
+                continue
+            raw_candidates.append((elev, -d_xz, f, pt))
+
+        # Evaluate up to 160 best-positioned candidates (prioritizing elevated & central faces + objective neighborhood)
+        raw_candidates.sort(key=lambda r: (1 if r[0] >= 0.6 else 0, round(r[0], 1), r[1]), reverse=True)
+        central_candidates = sorted(raw_candidates, key=lambda r: (-r[1], -r[0]))[:48]
+        seen_faces: set[int] = set()
+        eval_pool: list[tuple[float, float, int, Vec3]] = []
+        for item in (*raw_candidates[:120], *central_candidates):
+            if item[2] not in seen_faces:
+                seen_faces.add(item[2])
+                eval_pool.append(item)
+
+        best_score = -1e9
+        best_result: dict[str, Any] | None = None
+
+        for elev, neg_dxz, f, pt in eval_pool:
+            d_xz = -neg_dxz
+            try:
+                st = self.validate_standing(pt, f, enemy_profile=enemy_profile)
+            except ValueError:
+                continue
+            c_pos = _vec(st["position"])
+            elev_actual = c_pos[1] - obj_pos[1]
+            v_ratio = _vis_ratio(c_pos)
+            e_ratio = float(st.get("enemyReachableSpawnRatio") or 0.0)
+
+            # High-ground bonus rewards +0.8m .. +7.5m vantage decks overlooking cover
+            elev_term = (
+                0.032 * max(-1.5, min(7.0, elev_actual))
+                if prefer_high_ground
+                else -0.01 * abs(elev_actual)
+            )
+            reach_term = (
+                0.08 * min(1.0, e_ratio / max(0.05, base_enemy_ratio))
+                if base_enemy_ratio > 0.02
+                else 0.0
+            )
+            # Small penalty if completely enemy-unreachable AND far horizontally from objective staging
+            perch_penalty = 0.09 if (base_enemy_ratio > 0.10 and e_ratio < 0.02 and d_xz > 14.0) else 0.0
+            dist_penalty = 0.0045 * d_xz
+            score = v_ratio + elev_term + reach_term - dist_penalty - perch_penalty
+
+            if score > best_score + 1e-9:
+                best_score = score
+                best_result = {
+                    **st,
+                    "autoSelected": True,
+                    "visibilityRatio": round(v_ratio, 4),
+                    "objectiveVisibilityRatio": round(obj_vis, 4),
+                    "elevationGainM": round(elev_actual, 2),
+                    "distanceFromObjectiveM": round(d_xz, 2),
+                }
+
+        if best_result is None:
+            best_result = {
+                **obj_standing,
+                "autoSelected": True,
+                "visibilityRatio": round(obj_vis, 4),
+                "objectiveVisibilityRatio": round(obj_vis, 4),
+                "elevationGainM": 0.0,
+                "distanceFromObjectiveM": 0.0,
+            }
+
+        if not isinstance(cache, dict):
+            cache = {}
+            self._optimal_vantage_cache = cache
+        if len(cache) >= 32:
+            cache.pop(next(iter(cache)))
+        cache[cache_key] = best_result
+        return copy.deepcopy(best_result)
 
     def source_nav_support(self, hit, allowed_faces):
         """The actual hit is a source NAV face already admitted by this walk."""
