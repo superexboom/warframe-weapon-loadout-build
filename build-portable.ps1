@@ -3,7 +3,8 @@ param(
     [string]$Snapshot,
     [string]$OutputDirectory,
     [switch]$RequireBakedCache,
-    [switch]$NoCache
+    [switch]$NoCache,
+    [switch]$SkipNative
 )
 
 $ErrorActionPreference = "Stop"
@@ -21,9 +22,11 @@ $bundleArguments = @('tools/data_pipeline.py', 'bundle', $packageRoot)
 if ($Snapshot) { $bundleArguments += @('--snapshot', $Snapshot) }
 python @bundleArguments
 if ($LASTEXITCODE -ne 0) { throw "Frozen runtime validation failed." }
-# Native engine core (Rust, native/wfcore). Without a Rust toolchain the build
-# can reuse an existing core or package the Python reference.
-if (Get-Command cargo -ErrorAction SilentlyContinue) {
+# Native engine core (Rust, native/wfcore). Without a Rust toolchain (or with
+# -SkipNative when wfcore.pyd is already current) the build stages the existing core.
+if ($SkipNative) {
+    Write-Host "Skipping native rebuild (-SkipNative); staging existing native core."
+} elseif (Get-Command cargo -ErrorAction SilentlyContinue) {
     python tools/build_native.py
     if ($LASTEXITCODE -ne 0) { throw "Native core build failed." }
 } else {
