@@ -4,7 +4,8 @@ param(
     [string]$OutputDirectory,
     [switch]$RequireBakedCache,
     [switch]$NoCache,
-    [switch]$SkipNative
+    [switch]$SkipNative,
+    [switch]$NoSlim
 )
 
 $ErrorActionPreference = "Stop"
@@ -37,6 +38,10 @@ if ($RequireBakedCache) { $cacheArguments += '--require-cache' }
 if ($NoCache) { $cacheArguments += '--no-cache' }
 python @cacheArguments
 if ($LASTEXITCODE -ne 0) { throw "Runtime source identity or baked cache staging failed." }
+if (-not $NoSlim) {
+    python tools/slim_portable_bundle.py $packageRoot
+    if ($LASTEXITCODE -ne 0) { throw "Bundle asset slimming failed." }
+}
 
 $nativeArguments = @()
 $nativeCore = Join-Path $packageRoot "wfarsenal\wfcore.pyd"

@@ -15,6 +15,7 @@ import json
 import math
 import os
 import copy
+import struct
 import sys
 from pathlib import Path
 from typing import Any, Iterable, Sequence
@@ -1127,10 +1128,81 @@ def list_maps(*, root: Path | None = None):
 def _asset_name(name):
     # Normalize known API suffixes only; lookup still uses catalog allowlist.
     name = str(name)
-    for suffix in (".json.gz", ".json"):
+    for suffix in (".json.gz", ".json", ".bin.gz", ".bin"):
         if name.endswith(suffix):
             return name[: -len(suffix)]
     return name
+
+
+def _unpack_navigation_bin(raw: bytes) -> dict[str, Any]:
+    if len(raw) < 16 or raw[:4] != b"WFNV":
+        raise ValueError("invalid navigation binary header")
+    version, scale, header_len = struct.unpack_from("<III", raw, 4)
+    if version != 1 or scale == 0:
+        raise ValueError("unsupported navigation binary version")
+    header_end = 16 + header_len
+    header = json.loads(raw[16:header_end].decode("utf-8"))
+    kinds = header.pop("kinds")
+    link_meta = header.pop("linkMeta")
+    scale_f = float(scale)
+    offset = header_end
+    links = []
+    unpack_hdr = struct.Struct("<HB").unpack_from
+    unpack_3i = struct.Struct("<3i").unpack_from
+    for meta in link_meta:
+        from_node, to_node, kind_idx, seconds, flags, enemy_seconds, source, extra = meta
+        n_pts, mode = unpack_hdr(raw, offset)
+        offset += 3
+        pts: list[list[float]] = []
+        if n_pts >= 1:
+            x0, y0, z0 = unpack_3i(raw, offset)
+            offset += 12
+            pts.append([x0 / scale_f, y0 / scale_f, z0 / scale_f])
+        if n_pts >= 2:
+            dx, dy, dz = unpack_3i(raw, offset)
+            offset += 12
+            px, py, pz = x0 + dx, y0 + dy, z0 + dz
+            pts.append([px / scale_f, py / scale_f, pz / scale_f])
+            prev2_x, prev2_y, prev2_z = x0, y0, z0
+            prev1_x, prev1_y, prev1_z = px, py, pz
+            rem = n_pts - 2
+            if rem > 0:
+                if mode == 1:
+                    step_fmt = f"<{rem * 3}b"
+                    step_bytes = rem * 3
+                elif mode == 2:
+                    step_fmt = f"<{rem * 3}h"
+                    step_bytes = rem * 6
+                else:
+                    step_fmt = f"<{rem * 3}i"
+                    step_bytes = rem * 12
+                d2s = struct.unpack_from(step_fmt, raw, offset)
+                offset += step_bytes
+                for idx in range(0, rem * 3, 3):
+                    cx = 2 * prev1_x - prev2_x + d2s[idx]
+                    cy = 2 * prev1_y - prev2_y + d2s[idx + 1]
+                    cz = 2 * prev1_z - prev2_z + d2s[idx + 2]
+                    pts.append([cx / scale_f, cy / scale_f, cz / scale_f])
+                    prev2_x, prev2_y, prev2_z = prev1_x, prev1_y, prev1_z
+                    prev1_x, prev1_y, prev1_z = cx, cy, cz
+        entry: dict[str, Any] = {
+            "from": from_node,
+            "to": to_node,
+            "kind": kinds[kind_idx],
+            "points": pts,
+            "seconds": seconds,
+        }
+        if flags & 2:
+            entry["enemy"] = bool(flags & 1)
+        if flags & 4:
+            entry["enemySeconds"] = enemy_seconds
+        if flags & 8:
+            entry["source"] = source
+        if extra:
+            entry.update(extra)
+        links.append(entry)
+    header["links"] = links
+    return header
 
 
 def asset_path(map_id=DEFAULT_MAP, asset="scene", *, root: Path | None = None):
@@ -1148,6 +1220,8 @@ def asset_path(map_id=DEFAULT_MAP, asset="scene", *, root: Path | None = None):
 
 def load_asset(map_id=DEFAULT_MAP, asset="scene", *, root: Path | None = None):
     path = asset_path(map_id, asset, root=root)
+    if path.name.endswith(".bin.gz"):
+        return _unpack_navigation_bin(gzip.decompress(path.read_bytes()))
     with gzip.open(path, "rt", encoding="utf-8") as stream:
         return json.load(stream)
 
@@ -1212,4 +1286,6 @@ def load_scene(map_id=DEFAULT_MAP, *, root: Path | None = None, native=True):
 def asset_bytes(map_id=DEFAULT_MAP, name="scene", *, root: Path | None = None):
     """Compressed original asset for HTTP: bytes, content type, content encoding."""
     path = asset_path(map_id, name, root=root)
-    return path.read_bytes(), "application/json", "gzip"
+    media = "application/octet-stream" if path.name.endswith((".bin.gz", ".bin")) else "application/json"
+    encoding = "gzip" if path.suffix == ".gz" else None
+    return path.read_bytes(), media, encoding

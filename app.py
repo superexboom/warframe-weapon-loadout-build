@@ -26,6 +26,9 @@ import webbrowser
 from data_sources import active_build, dataset_root, load_source_lock
 from enemy_assets import EnemyVisualCatalog
 
+mimetypes.add_type("image/webp", ".webp")
+mimetypes.add_type("text/javascript", ".js")
+
 # WF_RIVEN_ROOT: data root for an embedded runtime (the Bot bundle keeps the
 # Python sources under src/ and data/ beside it). Defaults to this checkout.
 ROOT = Path(os.environ.get("WF_RIVEN_ROOT") or Path(__file__).resolve().parent).resolve()
@@ -521,6 +524,14 @@ _UTILITY_FIXUP_ICONS: dict[str, str] = {
 }
 
 
+def _mod_art_file_exists(art_file: Path) -> bool:
+    return (
+        art_file.is_file()
+        or art_file.with_suffix(".bg.jpg").is_file()
+        or art_file.with_suffix(".bg.webp").is_file()
+    )
+
+
 def _resolve_fixup_icon_asset(path: str) -> str | None:
     """Resolve the card art for one fixup mod (art index, then explicit icon map)."""
     art = _MOD_ART_INDEX.get(path)
@@ -530,7 +541,7 @@ def _resolve_fixup_icon_asset(path: str) -> str | None:
     if not icon:
         return None
     asset = "/assets/mods/art/" + icon.lstrip("/")
-    if (ROOT / "frontend" / "assets" / "mods" / "art" / icon.lstrip("/")).is_file():
+    if _mod_art_file_exists(ROOT / "frontend" / "assets" / "mods" / "art" / icon.lstrip("/")):
         return asset
     return None
 
@@ -2361,7 +2372,7 @@ def build_catalog() -> dict[str, Any]:
             face = faces.get(row["code"]) or {}
             icon = str(face.get("icon") or "")
             art_file = ROOT / "frontend" / "assets" / "mods" / "art" / icon.lstrip("/")
-            row["art"] = "/assets/mods/art/" + icon.lstrip("/") if icon and art_file.is_file() else None
+            row["art"] = "/assets/mods/art/" + icon.lstrip("/") if icon and _mod_art_file_exists(art_file) else None
             row["namePrefix"] = face.get("prefix")
             row["nameSuffix"] = face.get("suffix")
         stats_by_type[weapon_type] = rows

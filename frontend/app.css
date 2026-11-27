@@ -480,6 +480,7 @@ button.fire-mode-item:hover, button.fire-mode-item:focus-visible { background: r
    .mod-glare 高光跟随形成景深。仅非 compact 卡挂载这两层（选择器网格保持轻量）。 */
 .mod-art-bg { width: 100%; max-height: 174px; object-fit: cover; object-position: center; filter: grayscale(.8) brightness(.4); transform: translate(calc(var(--par-x, 0) * 2.5px), calc(var(--par-y, 0) * 2.5px)) scale(1.05); transition: filter .12s ease; }
 .mod-art-fg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: 0; filter: grayscale(.8) brightness(.4); transform: translate(calc(var(--par-x, 0) * -7px), calc(var(--par-y, 0) * -7px)); transition: filter .12s ease, opacity .12s ease; }
+.mod-art-fg.is-masked { -webkit-mask-size: cover; mask-size: cover; -webkit-mask-position: center; mask-position: center; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
 /* 高光盖整张内容（立绘+文字），z-index 5 在框体(10)之下、描述列(1)之上 */
 .mod-glare { position: absolute; z-index: 5; inset: 0; opacity: 0; background: radial-gradient(circle at calc(50% + var(--par-x, 0) * 42%) calc(42% + var(--par-y, 0) * 42%), rgba(255,255,255,.16), transparent 58%); mix-blend-mode: screen; transition: opacity .15s ease; pointer-events: none; }
 /* 整卡倾斜的承载层：卡框自身 transform 被展开/收起动画占用，倾斜只能包一层。

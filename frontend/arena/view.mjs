@@ -44,6 +44,11 @@ function factionInitial(enemyInfo, enemyPath = '') {
 }
 
 function weaponIconCandidates(weaponPath, weaponNameEn = '') {
+  const mapped = (typeof window !== 'undefined' && window.__WF_BUNDLE_PROFILE__?.weaponIconMap) || null;
+  if (mapped && weaponPath && Object.prototype.hasOwnProperty.call(mapped, weaponPath)) {
+    const resolved = mapped[weaponPath];
+    return resolved ? ['/assets/weapons/' + resolved] : [];
+  }
   const internal = String(weaponPath || '').split('/').pop() || '';
   const name = String(weaponNameEn || '');
   const raw = [];
@@ -1834,17 +1839,51 @@ export function mountArena(host) {
     syncClip();
   }
 
+  function unpackVisualMapBinary(buffer) {
+    const view = new DataView(buffer);
+    if (buffer.byteLength < 12 || view.getUint32(0, true) !== 0x4d564657 || view.getUint32(4, true) !== 1) {
+      throw new Error('invalid visual-map binary header');
+    }
+    const headerLen = view.getUint32(8, true);
+    const data = JSON.parse(new TextDecoder('utf-8').decode(new Uint8Array(buffer, 12, headerLen)));
+    let offset = (12 + headerLen + 3) & ~3;
+    for (const mesh of data.meshes) {
+      const vFloats = (mesh.vertexCount || 0) * 3;
+      mesh.positions = new Float32Array(buffer, offset, vFloats);
+      offset += vFloats * 4;
+      const iCount = mesh.indexCount || 0;
+      if (mesh.indexBits === 16) {
+        mesh.indices = new Uint16Array(buffer, offset, iCount);
+        offset = (offset + iCount * 2 + 3) & ~3;
+      } else {
+        mesh.indices = new Uint32Array(buffer, offset, iCount);
+        offset += iCount * 4;
+      }
+    }
+    return data;
+  }
+
+  async function fetchVisualMap(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(response.status + ' ' + response.statusText);
+    const contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('application/octet-stream')) {
+      return unpackVisualMapBinary(await response.arrayBuffer());
+    }
+    return response.json();
+  }
+
   async function loadVisual() {
     const token = loadToken, url = visualUrl;
     try {
-      const data = await json(url);
+      const data = await fetchVisualMap(url);
       if (token !== loadToken) return;
       detailedGroup = new THREE.Group();
       scene.add(detailedGroup);
       const geometries = data.meshes.map(mesh => {
         const geometry = new THREE.BufferGeometry();
         geometry.setAttribute('position', new THREE.Float32BufferAttribute(mesh.positions, 3));
-        geometry.setIndex(mesh.indices);
+        geometry.setIndex(ArrayBuffer.isView(mesh.indices) ? new THREE.BufferAttribute(mesh.indices, 1) : mesh.indices);
         geometry.computeVertexNormals();
         mesh.groups.forEach((group, index) => geometry.addGroup(group.start, group.count, index));
         return geometry;

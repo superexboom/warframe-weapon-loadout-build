@@ -3421,11 +3421,21 @@ function rankPips(rank, maxRank, frames = {}, loading = "lazy") {
   return wrap;
 }
 
-// 立绘伪 3D 分层路径推导：仅 mods/stances art 目录下的 PNG 有拆分素材
-// （split_mod_art.py 生成 X.bg.jpg / X.fg.png）；其余来源（图标等）返回 null。
+// 立绘伪 3D 分层路径推导：mods/stances art 与 companions/mods 目录下的 PNG 有拆分素材
+// （开发态使用 X.bg.jpg + X.fg.png；便携包构建期转换为 X.bg.webp + X.mask.png 灰度透明遮罩）。
+const BUNDLE_PROFILE = (typeof window !== "undefined" && window.__WF_BUNDLE_PROFILE__) || null;
+
 function splitArtLayers(artSource) {
-  if (!artSource || !/^\/assets\/(mods|stances)\/art\/.+\.png$/i.test(artSource)) return null;
-  return { bg: artSource.replace(/\.png$/i, ".bg.jpg"), fg: artSource.replace(/\.png$/i, ".fg.png") };
+  if (!artSource || !/^\/assets\/(?:(?:mods|stances)\/art|companions\/mods)\/.+\.png$/i.test(artSource)) return null;
+  if (BUNDLE_PROFILE?.cardMask) {
+    const bgExt = BUNDLE_PROFILE.cardBgExt || ".bg.webp";
+    return {
+      bg: artSource.replace(/\.png$/i, bgExt),
+      fg: null,
+      mask: artSource.replace(/\.png$/i, ".mask.png"),
+    };
+  }
+  return { bg: artSource.replace(/\.png$/i, ".bg.jpg"), fg: artSource.replace(/\.png$/i, ".fg.png"), mask: null };
 }
 
 // —— 紫卡卡面 ——
@@ -3522,11 +3532,27 @@ function rivenFaceCanvases(arts, bgClass = "mod-art mod-art-bg", fgClass = "mod-
   return [bg, fg];
 }
 
+const rivenMaskedFgCache = new Map();
+
+function rivenFaceLayerPair(art) {
+  const split = splitArtLayers(art);
+  if (split?.mask) {
+    const key = `${split.bg}|${split.mask}`;
+    if (!rivenMaskedFgCache.has(key)) {
+      rivenMaskedFgCache.set(key, Promise.all([rivenFacePixels(split.bg), rivenFacePixels(split.mask)]).then(([bg, mask]) => {
+        if (!bg || !mask) return [bg, null];
+        const fg = new Uint8ClampedArray(bg);
+        for (let p = 3; p < fg.length; p += 4) fg[p] = mask[p];
+        return [bg, fg];
+      }));
+    }
+    return rivenMaskedFgCache.get(key);
+  }
+  return Promise.all([rivenFacePixels(split?.bg || art), rivenFacePixels(split?.fg || art)]);
+}
+
 async function animateRivenFace(canvases, arts) {
-  const layers = await Promise.all(arts.map((art) => {
-    const split = splitArtLayers(art);
-    return Promise.all([rivenFacePixels(split?.bg || art), rivenFacePixels(split?.fg || art)]);
-  }));
+  const layers = await Promise.all(arts.map((art) => rivenFaceLayerPair(art)));
   const faces = layers.filter(([bg, fg]) => bg && fg);
   if (!faces.length) return;
   const contexts = canvases.map((canvas) => canvas.getContext("2d"));
@@ -3602,7 +3628,7 @@ function modContentLayers(frames, metadata, mod, artClass = "mod-art", loading =
   const artWindow = create("div", "mod-art-window");
   if (artSource) {
     const bg = imageNode(layers?.bg || artSource, split ? `${artClass} mod-art-bg` : artClass, metadata?.nameZh || mod?.nameZh || "MOD 素材", loading);
-    if (layers) {
+    if (layers && !BUNDLE_PROFILE?.cardMask) {
       // 拆分素材缺失时回退原始整图：只损失分层视差，不影响卡面显示
       bg.addEventListener("error", () => {
         delete bg.dataset.assetError;
@@ -3612,7 +3638,17 @@ function modContentLayers(frames, metadata, mod, artClass = "mod-art", loading =
       }, { once: true });
     }
     artWindow.append(bg);
-    if (split) artWindow.append(imageNode(split.fg, "mod-art-fg", "", loading));
+    if (split) {
+      if (split.mask) {
+        const fg = imageNode(split.bg, "mod-art-fg is-masked", "", loading);
+        const maskCss = `url("${split.mask}")`;
+        fg.style.webkitMaskImage = maskCss;
+        fg.style.maskImage = maskCss;
+        artWindow.append(fg);
+      } else if (split.fg) {
+        artWindow.append(imageNode(split.fg, "mod-art-fg", "", loading));
+      }
+    }
   } else artWindow.append(create("div", "mod-art-missing", "素材缺失"));
   artWindow.append(create("span", "mod-art-shade"));
   nodes.push(artWindow);
@@ -5174,6 +5210,11 @@ function weaponPickerRows() {
 // nameEn 造成大面积缺图、「Prime 有图普通版没图」的观感），nameEn 变体
 // 兜底；全部候选失败时 img onerror 降级到类型色块占位。
 function weaponIconCandidates(weapon) {
+  const mapped = BUNDLE_PROFILE?.weaponIconMap;
+  if (mapped && weapon?.path && Object.prototype.hasOwnProperty.call(mapped, weapon.path)) {
+    const resolved = mapped[weapon.path];
+    return resolved ? [resolved] : [];
+  }
   const internal = String(weapon.path || "").split("/").pop() || "";
   const name = String(weapon.nameEn || "");
   const raw = [];
